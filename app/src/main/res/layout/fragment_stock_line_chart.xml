@@ -81,14 +81,17 @@
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintVertical_weight="2"
             app:layout_constraintTop_toBottomOf="@id/radio_group_chart_option"
             app:layout_constraintBottom_toTopOf="@+id/chart_kospi"
             />
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_kospi"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
             android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintVertical_weight="1"
             app:layout_constraintTop_toBottomOf="@id/lineChart"
             app:layout_constraintBottom_toBottomOf="parent"
             />

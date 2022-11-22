@@ -100,6 +100,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             labelCount = 5
             valueFormatter = xAxisFormatter
         }
+        mKospiChart.legend.isEnabled = false
+        mKospiChart.xAxis.run {
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            labelRotationAngle = -45F
+            granularity = 1f // only intervals of 1 day
+            labelCount = 5
+            valueFormatter = xAxisFormatter
+        }
 
         val yAxisFormatter = WeightYAxisValueFormatter(context)
         mLineChart.axisLeft.run {
