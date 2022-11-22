@@ -50,9 +50,11 @@ import java.util.Locale
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentStockLineChartBinding
     private lateinit var mLineChart: LineChart
+    private lateinit var mKospiChart: LineChart
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
     private val mDataSets = ArrayList<ILineDataSet>()
+    private val mKospiDataSets = ArrayList<ILineDataSet>()
     private var mChartMode = "C"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,6 +71,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         mLineChart = mBinding.lineChart
         mLineChart.description.isEnabled = false
+
+
+        mKospiChart = mBinding.chartKospi
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -194,10 +199,12 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun drawChart() {
+        mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
             mLineChart.highlightValue(null)
             mDataSets.clear()
+            mKospiChart.clear()
             setData()
             if (sumDataSetSize > 0) {
                 withContext(Dispatchers.Main) {
@@ -207,6 +214,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     lineData.setDrawValues(false)
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
+
+                    val kospiData = LineData(mKospiDataSets)
+                    kospiData.setValueTextSize(10f)
+                    kospiData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                    kospiData.setDrawValues(false)
+                    mKospiChart.data = kospiData
+                    mKospiChart.animateY(600)
                 }
             }
 
@@ -243,6 +257,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val totalTradingProfitEntries = arrayListOf<Entry>()
         val totalColors = arrayListOf<Int>()
 
+        val kospiEntries = arrayListOf<Entry>()
+
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
             var index = 0
@@ -275,6 +291,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             diff = krEvaluatedPrice.plus(usEvaluatedPrice).minus(krPrincipal.plus(usPrincipal))
                             if (diff >= 0) totalColors.add(plusColor) else totalColors.add(minusColor)
                             totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
+
+                            if (amountArray.size > 4) kospiEntries.add(Entry(index.toFloat(), amountArray[4].toFloat()))
 
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
@@ -344,11 +362,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     fillColor = requireContext().config.primaryColor
                 }
 
+                val kospiDataSet = LineDataSet(kospiEntries, "KOSPI").apply {
+                    color = dark
+                    setCircleColor(dark)
+                }
+
                 when (mChartMode) {
                     "A" -> {
                         mDataSets.add(krPrincipalDataSet)
                         mDataSets.add(krEvaluatedPriceDataSet)
                         mDataSets.add(krTradingProfitPositiveDataSet)
+                        mKospiDataSets.add(kospiDataSet)
                         mLineChart.axisLeft.axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
                         mLineChart.axisRight.axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
                         mLineChart.axisLeft.axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
