@@ -164,7 +164,7 @@ class DiaryMainItemAdapter(
                     textTitle.visibility = View.VISIBLE
                 }
                 textTitle.text = diary.title
-                activity.applyMarkDownPolicy(textContents, diary.contents!!)
+                activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
 
                 // highlight current query
                 if (StringUtils.isNotEmpty(currentQuery)) {

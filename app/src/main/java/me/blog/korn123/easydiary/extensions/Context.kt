@@ -51,7 +51,9 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
@@ -921,14 +923,14 @@ fun Context.getPermissionString(id: Int) = when (id) {
     else -> ""
 }
 
-fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf()) {
+fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf(), isRecyclerItem: Boolean = false) {
     when (config.enableDebugMode) {
         true -> {
             val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$contents" else contents
-            Markwon.builder(this)
-                .usePlugin(MovementMethodPlugin.none())
-                .build()
-                .apply { setMarkdown(contentsView, boldDate) }
+            when (isRecyclerItem) {
+                true -> Markwon.builder(this).usePlugin(MovementMethodPlugin.none()).build().apply { setMarkdown(contentsView, boldDate) }
+                false -> Markwon.builder(this).build().apply { setMarkdown(contentsView, boldDate) }
+            }
         }
         false -> {
             contentsView.text = if (isTimeline) applyBoldToDate(lineBreakStrings[0], contents) else contents
