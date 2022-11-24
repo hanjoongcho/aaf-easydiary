@@ -55,7 +55,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCoroutineJob: Job? = null
     private val mDataSets = ArrayList<ILineDataSet>()
     private val mKospiDataSets = ArrayList<ILineDataSet>()
-    private var mChartMode = "C"
+    private var mChartMode = "A"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentStockLineChartBinding.inflate(layoutInflater)
@@ -72,8 +72,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart = mBinding.lineChart
         mLineChart.description.isEnabled = false
 
-
         mKospiChart = mBinding.chartKospi
+        mKospiChart.description.isEnabled = false
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -95,25 +95,19 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
-            labelRotationAngle = -45F
+            labelRotationAngle = -65F
             granularity = 1f // only intervals of 1 day
             labelCount = 5
             valueFormatter = xAxisFormatter
         }
+        mKospiChart.axisLeft.isEnabled = false
+        mKospiChart.axisRight.isEnabled = false
+        mKospiChart.xAxis.isEnabled = false
         mKospiChart.legend.isEnabled = false
-        mKospiChart.xAxis.run {
-            position = XAxis.XAxisPosition.BOTTOM
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            labelRotationAngle = -45F
-            granularity = 1f // only intervals of 1 day
-            labelCount = 5
-            valueFormatter = xAxisFormatter
-        }
 
         val yAxisFormatter = WeightYAxisValueFormatter(context)
         mLineChart.axisLeft.run {
+            isEnabled = false
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
@@ -127,7 +121,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mLineChart.axisRight.run {
-//            isEnabled = false
+            isEnabled = false
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP

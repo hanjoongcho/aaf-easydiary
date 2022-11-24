@@ -61,7 +61,7 @@
             <RadioButton
                 android:id="@+id/radio_button_option_a"
                 android:text="KR/JP"
-                android:checked="false"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
@@ -73,7 +73,7 @@
             <RadioButton
                 android:id="@+id/radio_button_option_c"
                 android:text="Total"
-                android:checked="true"
+                android:checked="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RadioGroup>
