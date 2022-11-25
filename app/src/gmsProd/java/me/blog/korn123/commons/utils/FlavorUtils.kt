@@ -1,6 +1,7 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.view.RoundedCorner
 import android.view.View
@@ -343,23 +344,24 @@ object FlavorUtils {
             if (weatherFlag < SYMBOL_USER_CUSTOM_START) {
                 setImageResource(sequenceToSymbolResourceId(weatherFlag))
             } else {
-//                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
                 // FIXME: WIP START
+//                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
                 if (context.config.enableDebugMode) {
                     val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
                     val filePath = if (getCustomSymbolPaths(SYMBOL_EASTER_EGG).size > targetIndex) getCustomSymbolPaths(SYMBOL_EASTER_EGG)[targetIndex].getFilePath() else ""
-                    Glide.with(this)
-                        .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                return false
-                            }
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                return false
-                            }
-                        })
-                        .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                        .into(this)
+                    setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath))
+//                    Glide.with(this)
+//                        .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+//                        .listener(object : RequestListener<Drawable> {
+//                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+//                                return false
+//                            }
+//                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+//                                return false
+//                            }
+//                        })
+//                        .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+//                        .into(this)
                 }
                 // FIXME: WIP END
             }

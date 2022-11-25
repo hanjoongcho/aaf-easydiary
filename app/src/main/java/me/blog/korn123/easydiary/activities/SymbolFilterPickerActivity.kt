@@ -11,6 +11,7 @@ import me.blog.korn123.easydiary.adapters.SymbolFilterAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivitySymbolFilterPickerBinding
 import me.blog.korn123.easydiary.extensions.addCategory
+import me.blog.korn123.easydiary.extensions.addUserCustomSymbols
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import java.util.*
@@ -78,6 +79,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
         addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
         addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
+        addUserCustomSymbols(categoryList, itemList)
 
         val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
             if (symbolSequence > 0) {

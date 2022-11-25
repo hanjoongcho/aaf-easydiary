@@ -12,7 +12,8 @@
         <ImageView
             android:id="@+id/symbol"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_sunny" />
 

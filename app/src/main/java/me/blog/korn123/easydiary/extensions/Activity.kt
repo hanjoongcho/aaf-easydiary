@@ -377,18 +377,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
     // Append user customization symbols
-    // FIXME: WIP START
-    var customSymbolSequence = SYMBOL_USER_CUSTOM_START
-    if (config.enableDebugMode) {
-        val customSymbols = arrayListOf<String>()
-        categoryList.add("Custom")
-        getCustomSymbolPaths(SYMBOL_EASTER_EGG).forEach { item ->
-//            item.getFilePath()
-            customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
-        }
-        itemList.add(arrayOf(getUncheckedSymbolItem(), "$SYMBOL_EASTER_EGG|Easter Egg", *customSymbols.toTypedArray()))
-    }
-    // FIXME: WIP END
+    addUserCustomSymbols(categoryList, itemList)
 
     val currentItem = when (selectedSymbolSequence) {
         in 1..39 -> tabIndex
@@ -434,6 +423,21 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     }
 
     dialog.show()
+}
+
+fun Activity.addUserCustomSymbols(categoryList: ArrayList<String>, itemList: ArrayList<Array<String>>) {
+    // FIXME: WIP START
+    var customSymbolSequence = SYMBOL_USER_CUSTOM_START
+    if (config.enableDebugMode) {
+        val customSymbols = arrayListOf<String>()
+        categoryList.add("Custom")
+        getCustomSymbolPaths(SYMBOL_EASTER_EGG).forEach { item ->
+//            item.getFilePath()
+            customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
+        }
+        itemList.add(arrayOf(getUncheckedSymbolItem(), "$SYMBOL_EASTER_EGG|Easter Egg", *customSymbols.toTypedArray()))
+    }
+    // FIXME: WIP END
 }
 
 fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: ArrayList<String>, resourceName: String, categoryName: String) {
