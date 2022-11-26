@@ -71,7 +71,7 @@ class TimelineItemAdapter(
                 false -> lineBreakStrings.add(if (context.config.enableDebugMode) "[${diaryDto.originSequence}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
             }
             if (StringUtils.isNotEmpty(diaryDto.title)) lineBreakStrings.add(diaryDto.title!!)
-            activity.applyMarkDownPolicy(text1, diaryDto.contents!!, true, lineBreakStrings)
+            activity.applyMarkDownPolicy(text1, diaryDto.contents!!, true, lineBreakStrings, true)
             itemHolder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)

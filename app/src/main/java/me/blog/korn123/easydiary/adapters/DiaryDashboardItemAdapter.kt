@@ -45,7 +45,7 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
             context.updateCardViewPolicy(this)
             FontUtils.setFontsTypeface(context, null, this)
             binding.run {
-                activity.applyMarkDownPolicy(textContents, diary.contents!!)
+                activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
