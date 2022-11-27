@@ -4,7 +4,7 @@
     android:padding="3dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_title"
+    android:background="@drawable/bg_card_chart_marker"
     android:orientation="vertical">
     <TextView
         android:id="@+id/textLabelX"

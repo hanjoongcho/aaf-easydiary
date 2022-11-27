@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -498,5 +499,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 super.refreshContent(entry, highlight)
             }
         }
+
+//        override fun getOffset(): MPPointF {
+//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+//        }
     }
 }
