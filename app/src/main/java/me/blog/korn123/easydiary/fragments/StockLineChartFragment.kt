@@ -150,7 +150,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //            xOffset = 5F
         }
 
-        val mv = WeightMarkerView(requireContext(), xAxisFormatter)
+        val mv = StockMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = mLineChart // For bounds control
         mLineChart.marker = mv // Set the marker to the chart
 
@@ -478,7 +478,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    inner class WeightMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_marker_view_stock) {
+    inner class StockMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_marker_view_stock) {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
 
@@ -500,8 +500,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-//        override fun getOffset(): MPPointF {
-//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
-//        }
+        override fun getOffset(): MPPointF {
+            return MPPointF(10F, 10F)
+        }
     }
 }
