@@ -65,7 +65,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
-        mLineChart.setMaxVisibleValueCount(60)
+        mLineChart.setMaxVisibleValueCount(10)
 
         // scaling can now only be done on x- and y-axis separately
         mLineChart.setPinchZoom(false)
