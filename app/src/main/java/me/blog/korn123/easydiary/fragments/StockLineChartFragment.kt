@@ -20,11 +20,9 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.MPPointF
-import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -460,24 +458,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    inner class WeightIValueFormatter(private var context: Context?) : IValueFormatter {
-
-        /**
-         * Called when a value (from labels inside the chart) is formatted
-         * before being drawn. For performance reasons, avoid excessive calculations
-         * and memory allocations inside this method.
-         *
-         * @param value           the value to be formatted
-         * @param entry           the entry the value belongs to - in e.g. BarChart, this is of class BarEntry
-         * @param dataSetIndex    the index of the DataSet the entry in focus belongs to
-         * @param viewPortHandler provides information about the current chart state (scale, translation, ...)
-         * @return the formatted label ready for being drawn
-         */
-        override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
-            return getCurrencyFormat().format(value)
-        }
-    }
-
     inner class StockMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_marker_view_stock) {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
@@ -500,8 +480,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        override fun getOffset(): MPPointF {
-            return MPPointF(10F, 10F)
+        override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
+            return if (mLineChart.width.div(2) > posX) MPPointF(10F, 10F) else MPPointF(width.plus(10F).unaryMinus(), 10F)
         }
     }
 }
