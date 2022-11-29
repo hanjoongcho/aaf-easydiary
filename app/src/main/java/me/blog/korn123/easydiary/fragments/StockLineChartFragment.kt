@@ -73,6 +73,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         mKospiChart = mBinding.chartKospi
         mKospiChart.description.isEnabled = false
+        mKospiChart.extraBottomOffset = 30F
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -85,7 +86,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
-        val xAxisFormatter = WeightXAxisValueFormatter(context)
         mLineChart.extraBottomOffset = 10F
         mLineChart.extraRightOffset = 10F
         mLineChart.xAxis.run {
@@ -97,7 +97,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             labelRotationAngle = -65F
             granularity = 1f // only intervals of 1 day
             labelCount = 5
-            valueFormatter = xAxisFormatter
+            valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
         }
         mKospiChart.axisLeft.isEnabled = false
         mKospiChart.axisRight.isEnabled = false
@@ -148,9 +148,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //            xOffset = 5F
         }
 
-        val mv = StockMarkerView(requireContext(), xAxisFormatter)
-        mv.chartView = mLineChart // For bounds control
-        mLineChart.marker = mv // Set the marker to the chart
+        StockMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).run {
+            chartView = mLineChart   // For bounds control
+            mLineChart.marker = this // Set the marker to the chart
+        }
+
+        KospiMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).run {
+            chartView = mKospiChart
+            mKospiChart.marker = this
+        }
 
         // determine title parameter
         arguments?.let { bundle ->
@@ -406,8 +412,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun xAxisTimeMillisToDate(timeMillis: Long): String =
-        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A"
+    private fun xAxisTimeMillisToDate(timeMillis: Long, dateFormat: Int = SimpleDateFormat.LONG): String =
+        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, dateFormat) else "N/A"
 
     private fun fillValueForward(averageInfo: ArrayList<Float>) {
         Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
@@ -444,10 +450,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         const val CHART_TITLE = "chartTitle"
     }
 
-    inner class WeightXAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
+    inner class StockXAxisValueFormatter(private var context: Context?, private val dateFormat: Int) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
             val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
-            return xAxisTimeMillisToDate(timeMillis)
+            return xAxisTimeMillisToDate(timeMillis, dateFormat)
         }
 
     }
@@ -473,6 +479,34 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
                 textLabelY.run {
                     text = getCurrencyFormat().format(entry.y)
+                    typeface = FontUtils.getCommonTypeface(context)
+                    textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                }
+                super.refreshContent(entry, highlight)
+            }
+        }
+
+        override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
+            return if (mLineChart.width.div(2) > posX) MPPointF(10F, 10F) else MPPointF(width.plus(10F).unaryMinus(), 10F)
+        }
+
+    }
+
+    inner class KospiMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_marker_view_stock) {
+        private val textLabelX: TextView = findViewById(R.id.textLabelX)
+        private val textLabelY: TextView = findViewById(R.id.textLabelY)
+
+        // callbacks everytime the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        override fun refreshContent(e: Entry?, highlight: Highlight?) {
+            e?.let { entry ->
+                textLabelX.run {
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)
+                    typeface = FontUtils.getCommonTypeface(context)
+                    textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                }
+                textLabelY.run {
+                    text = entry.y.toString()
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
