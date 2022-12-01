@@ -74,7 +74,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         mKospiChart = mBinding.chartKospi
         mKospiChart.description.isEnabled = false
-        mKospiChart.extraBottomOffset = 30F
+//        mKospiChart.extraBottomOffset = 30F
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -515,7 +515,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
-            return if (mLineChart.width.div(2) > posX) MPPointF(10F, 10F) else MPPointF(width.plus(10F).unaryMinus(), 10F)
+            val pointX = if (mKospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
+            val pointY = if (mKospiChart.height.div(2) > posY) 10F else height.plus(10F).unaryMinus()
+            return MPPointF(pointX, pointY)
         }
     }
 }
