@@ -54,6 +54,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCoroutineJob: Job? = null
     private val mDataSets = ArrayList<ILineDataSet>()
     private val mKospiDataSets = ArrayList<ILineDataSet>()
+    private var mTotalDataSetCnt = 0
     private var mChartMode = "A"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,7 +105,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart.xAxis.isEnabled = false
         mKospiChart.legend.isEnabled = false
 
-        val yAxisFormatter = WeightYAxisValueFormatter(context)
+        val yAxisFormatter = StockYAxisValueFormatter(context)
         mLineChart.axisLeft.run {
             isEnabled = false
             typeface = FontUtils.getCommonTypeface(requireContext())
@@ -216,7 +217,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             mDataSets.clear()
             mKospiChart.clear()
             setData()
-            if (sumDataSetSize > 0) {
+            if (mTotalDataSetCnt > 0) {
                 withContext(Dispatchers.Main) {
                     val lineData = LineData(mDataSets)
                     lineData.setValueTextSize(10f)
@@ -245,7 +246,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mCoroutineJob?.run { if (isActive) cancel() }
     }
 
-    var sumDataSetSize = 0
     private fun setData() {
         val dark = Color.rgb(26, 26, 26)
         val plusColor = Color.rgb(204, 31, 8)
@@ -311,7 +311,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
             if (index > 0) {
-                sumDataSetSize = totalEvaluatedPriceEntries.size
+                mTotalDataSetCnt = totalEvaluatedPriceEntries.size
 
                 val krPrincipalDataSet = LineDataSet(krPrincipalEntries, "KR/JP Principal").apply {
                     color = colorPrincipal
@@ -458,7 +458,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     }
 
-    inner class WeightYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
+    inner class StockYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
             return getCurrencyFormat().format(value)
         }
