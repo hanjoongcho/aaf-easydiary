@@ -72,8 +72,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart = mBinding.lineChart
         mLineChart.description.isEnabled = false
 
-        mKospiChart = mBinding.chartKospi
-        mKospiChart.description.isEnabled = false
+        mKospiChart = mBinding.chartKospi.apply {
+            description.isEnabled = false
+        }
 //        mKospiChart.extraBottomOffset = 30F
 
         // if more than 60 entries are displayed in the chart, no values will be
@@ -250,7 +251,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val dark = Color.rgb(26, 26, 26)
         val plusColor = Color.rgb(204, 31, 8)
         val minusColor = Color.rgb(6, 57, 112)
-        val colorPrincipal = Color.argb(255, 135, 62, 35)
+        val colorPrincipal = Color.argb(255, 77, 77, 77)
 
         val krPrincipalEntries = arrayListOf<Entry>()
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
