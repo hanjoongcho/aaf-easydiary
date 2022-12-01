@@ -173,7 +173,7 @@ class DiaryFragment : Fragment() {
             }
             create(mDiaryList)
         }
-        if (mDiaryList.isNotEmpty()) mBinding.layoutDiaryContainer.visibility = View.VISIBLE
+        mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     companion object {
