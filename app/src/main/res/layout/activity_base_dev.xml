@@ -177,6 +177,12 @@
                             android:text="Check Force Release URL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
+                        <Button
+                            app:layout_flexGrow="1"
+                            android:id="@+id/button_in_app_browser"
+                            android:text="InApp Browser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView

@@ -134,13 +134,14 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.activity:activity-ktx:1.6.0'
-    implementation 'androidx.fragment:fragment-ktx:1.5.3'
+    implementation 'androidx.activity:activity-ktx:1.6.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.4'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation ('androidx.work:work-runtime-ktx:2.7.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    implementation "androidx.browser:browser:1.4.0"
 
     // google components for develop package (not foss)
-    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.3.0'
+    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.4.0'
     gmsDevImplementation 'com.google.android.play:core:1.10.3'
     gmsDevImplementation 'com.google.android.play:core-ktx:1.8.1'
     gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
@@ -148,7 +149,7 @@ dependencies {
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components for production package (not foss)
-    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.3.0'
+    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.4.0'
     gmsProdImplementation 'com.google.android.play:core:1.10.3'
     gmsProdImplementation 'com.google.android.play:core-ktx:1.8.1'
     gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
@@ -156,7 +157,7 @@ dependencies {
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components common
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.google.guava:guava:27.0.1-android'
@@ -200,21 +201,21 @@ dependencies {
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // android test
-    androidTestImplementation 'androidx.test:core:1.4.0'
-    androidTestImplementation 'androidx.test:core-ktx:1.4.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.5.0-beta01'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test:core-ktx:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.4'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     // test
-    testImplementation 'androidx.test:core:1.4.0'
-    testImplementation 'androidx.test.ext:junit:1.1.3'
-    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-beta01'
-    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-beta01'
-    testImplementation 'androidx.test.ext:truth:1.5.0-beta01'
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'androidx.test.ext:junit:1.1.4'
+    testImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0'
+    testImplementation 'androidx.test.ext:truth:1.5.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
 }

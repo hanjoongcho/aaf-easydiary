@@ -11,11 +11,13 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
@@ -39,7 +41,8 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-open class BaseDevActivity : EasyDiaryActivity() {  
+
+open class BaseDevActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   global properties
      *
@@ -170,8 +173,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     httpConn.disconnect()
                 }
             }
+            buttonInAppBrowser.setOnClickListener {
+                val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
+            }
         }
-
     }
 
     private fun setupNotification() {
