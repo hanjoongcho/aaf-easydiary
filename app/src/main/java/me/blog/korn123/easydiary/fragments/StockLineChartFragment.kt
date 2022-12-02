@@ -8,32 +8,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.MarkerView
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.CombinedData
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.components.*
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.MPPointF
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -43,18 +28,14 @@ import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
-import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.CHART_LABEL_FONT_SIZE_DEFAULT_DP
-import me.blog.korn123.easydiary.helper.DAILY_STOCK
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentStockLineChartBinding
-    private lateinit var mCombileChart: CombinedChart
+    private lateinit var mCombineChart: CombinedChart
     private lateinit var mKospiChart: LineChart
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
@@ -65,9 +46,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mChartMode = "A"
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         mBinding = FragmentStockLineChartBinding.inflate(layoutInflater)
         return mBinding.root
@@ -80,98 +59,89 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mBinding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         mBinding.root.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
 
-        mCombileChart = mBinding.lineChart
-        mCombileChart.description.isEnabled = false
-
-        mKospiChart = mBinding.chartKospi.apply {
-            description.isEnabled = false
-        }
-//        mKospiChart.extraBottomOffset = 30F
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        mCombileChart.setMaxVisibleValueCount(60)
-
-        // scaling can now only be done on x- and y-axis separately
-        mCombileChart.setPinchZoom(false)
-
-//        barChart.setDrawGridBackground(true)
-        // mChart.setDrawYLabels(false);
-//        barChart.zoom(1.5F, 0F, 0F, 0F)
-
-        mCombileChart.extraBottomOffset = 10F
-        mCombileChart.extraRightOffset = 10F
-        mCombileChart.xAxis.run {
-            setDrawGridLines(false)
-            position = XAxis.XAxisPosition.BOTTOM
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            labelRotationAngle = -65F
-            granularity = 1f // only intervals of 1 day
-            labelCount = 5
-            valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
-        }
-        mKospiChart.axisLeft.isEnabled = false
-        mKospiChart.axisRight.isEnabled = false
-        mKospiChart.xAxis.isEnabled = false
-        mKospiChart.legend.isEnabled = false
-
+        // Default setting combine chart
         val yAxisFormatter = StockYAxisValueFormatter(context)
-        mCombileChart.axisLeft.run {
-            isEnabled = false
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            valueFormatter = yAxisFormatter
-            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-            spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
-            labelCount = 8
-            setDrawGridLines(true)
-        }
+        mCombineChart = mBinding.lineChart.apply {
+            // if more than 60 entries are displayed in the chart, no values will be drawn
+            setMaxVisibleValueCount(60)
+            // scaling can now only be done on x- and y-axis separately
+            setPinchZoom(false)
 
-        mCombileChart.axisRight.run {
-            isEnabled = false
-            setDrawGridLines(false)
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            valueFormatter = yAxisFormatter
-            spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
-            labelCount = 8
-        }
-
-        mCombileChart.legend.run {
-            isEnabled = false
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            description.isEnabled = false
+            extraBottomOffset = 10F
+            extraRightOffset = 10F
+            xAxis.run {
+                setDrawGridLines(false)
+                position = XAxis.XAxisPosition.BOTTOM
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                labelRotationAngle = -65F
+                granularity = 1f // only intervals of 1 day
+                labelCount = 5
+                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
+            }
+            axisLeft.run {
+                isEnabled = false
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                setLabelCount(8, false)
+                valueFormatter = yAxisFormatter
+                setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+                spaceTop = 0f
+                axisMinimum = 0f // this replaces setStartAtZero(true)
+                labelCount = 8
+                setDrawGridLines(true)
+            }
+            axisRight.run {
+                isEnabled = false
+                setDrawGridLines(false)
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                setLabelCount(8, false)
+                valueFormatter = yAxisFormatter
+                spaceTop = 0f
+                axisMinimum = 0f // this replaces setStartAtZero(true)
+                labelCount = 8
+            }
+            legend.run {
+                isEnabled = false
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                verticalAlignment = Legend.LegendVerticalAlignment.TOP
 //            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.HORIZONTAL
+                orientation = Legend.LegendOrientation.HORIZONTAL
 //            setDrawInside(false)
-            form = Legend.LegendForm.CIRCLE
+                form = Legend.LegendForm.CIRCLE
 //            formSize = 9f
 //            xEntrySpace = 4f
-            isWordWrapEnabled = true
+                isWordWrapEnabled = true
 //            xOffset = 5F
+            }
+        }
+
+        // Default setting kospi chart
+        mKospiChart = mBinding.chartKospi.apply {
+            description.isEnabled = false
+            axisLeft.isEnabled = false
+            axisRight.isEnabled = false
+            xAxis.isEnabled = false
+            legend.isEnabled = false
+//            extraBottomOffset = 5F
         }
 
         StockMarkerView(
-            requireContext(),
-            StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
+            requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
         ).run {
-            chartView = mCombileChart   // For bounds control
-            mCombileChart.marker = this // Set the marker to the chart
+            chartView = mCombineChart   // For bounds control
+            mCombineChart.marker = this // Set the marker to the chart
         }
 
         KospiMarkerView(
-            requireContext(),
-            StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
+            requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
         ).run {
             chartView = mKospiChart
             mKospiChart.marker = this
@@ -181,28 +151,28 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         arguments?.let { bundle ->
             val title = bundle.getString(CHART_TITLE)
             if (title != null) {
-                mBinding.chartTitle.text = title
-                mBinding.chartTitle.visibility = View.VISIBLE
-                getView()?.findViewById<ImageView>(R.id.image_stock_symbol)?.let {
-                    it.visibility = View.VISIBLE
-                    FlavorUtils.initWeatherView(requireActivity(), it, DAILY_STOCK)
-                }
-                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
-                    it.visibility = View.VISIBLE
-                    requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
-                    it.setOnClickListener { view ->
-                        view.postDelayed({
-                            TransitionHelper.startActivityWithTransition(
-                                requireActivity(),
-                                Intent(
-                                    requireActivity(),
-                                    StatisticsActivity::class.java
-                                ).putExtra(
-                                    StatisticsActivity.CHART_MODE,
-                                    StatisticsActivity.MODE_SINGLE_LINE_CHART_STOCK
+                mBinding.run {
+                    chartTitle.text = title
+                    chartTitle.visibility = View.VISIBLE
+                    imageStockSymbol.run {
+                        visibility = View.VISIBLE
+                        FlavorUtils.initWeatherView(requireActivity(), this, DAILY_STOCK)
+                    }
+                    imageExpendChart.run {
+                        visibility = View.VISIBLE
+                        requireActivity().updateDrawableColorInnerCardView(this, config.textColor)
+                        setOnClickListener { view ->
+                            view.postDelayed({
+                                TransitionHelper.startActivityWithTransition(
+                                    requireActivity(), Intent(
+                                        requireActivity(), StatisticsActivity::class.java
+                                    ).putExtra(
+                                        StatisticsActivity.CHART_MODE,
+                                        StatisticsActivity.MODE_SINGLE_LINE_CHART_STOCK
+                                    )
                                 )
-                            )
-                        }, 300)
+                            }, 300)
+                        }
                     }
                 }
             }
@@ -236,21 +206,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            mCombileChart.highlightValue(null)
+            mCombineChart.highlightValue(null)
             mStockLineDataSets.clear()
             mStockBarDataSets.clear()
             mKospiChart.clear()
             setData()
             if (mTotalDataSetCnt > 0) {
                 withContext(Dispatchers.Main) {
-                    mCombileChart.data = CombinedData().apply {
+                    mCombineChart.data = CombinedData().apply {
 //                        setValueTextSize(10f)
 //                        setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
 //                        setDrawValues(false)
                         setData(LineData(mStockLineDataSets).apply { setDrawValues(false) })
                         setData(BarData(mStockBarDataSets).apply { setDrawValues(false) })
                     }
-                    mCombileChart.animateY(600)
+                    mCombineChart.animateY(600)
 
                     val kospiData = LineData(mKospiDataSets)
                     kospiData.setValueTextSize(10f)
@@ -273,10 +243,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setData() {
-        val dark = Color.rgb(26, 26, 26)
-        val plusColor = Color.rgb(204, 31, 8)
-        val minusColor = Color.rgb(6, 57, 112)
-        val colorPrincipal = Color.argb(255, 77, 77, 77)
+        val colorKospi = Color.rgb(26, 26, 26)
+        val colorPlus = Color.rgb(204, 31, 8)
+        val colorMinus = Color.rgb(6, 57, 112)
+        val colorPrincipal = Color.argb(100, 77, 77, 77)
 
         val krPrincipalEntries = arrayListOf<BarEntry>()
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
@@ -297,12 +267,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                DAILY_STOCK,
-                realmInstance = realmInstance
+                null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance
             )
             var index = 0
             var totalSum = 0F
@@ -323,32 +288,30 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
                             krEvaluatedPriceEntries.add(Entry(index.toFloat(), krEvaluatedPrice))
                             krTradingProfitEntries.add(Entry(index.toFloat(), diff))
-                            if (diff >= 0) krColors.add(plusColor) else krColors.add(minusColor)
+                            if (diff >= 0) krColors.add(colorPlus) else krColors.add(colorMinus)
 
                             usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
                             usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
                             diff = usEvaluatedPrice.minus(usPrincipal)
-                            if (diff >= 0) usColors.add(plusColor) else usColors.add(minusColor)
+                            if (diff >= 0) usColors.add(colorPlus) else usColors.add(colorMinus)
                             usTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                             totalPrincipalEntries.add(
                                 BarEntry(
-                                    index.toFloat(),
-                                    krPrincipal.plus(usPrincipal)
+                                    index.toFloat(), krPrincipal.plus(usPrincipal)
                                 )
                             )
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
                             diff = krEvaluatedPrice.plus(usEvaluatedPrice)
                                 .minus(krPrincipal.plus(usPrincipal))
-                            if (diff >= 0) totalColors.add(plusColor) else totalColors.add(
-                                minusColor
+                            if (diff >= 0) totalColors.add(colorPlus) else totalColors.add(
+                                colorMinus
                             )
                             totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                             if (amountArray.size > 4) kospiEntries.add(
                                 Entry(
-                                    index.toFloat(),
-                                    amountArray[4].toFloat()
+                                    index.toFloat(), amountArray[4].toFloat()
                                 )
                             )
 
@@ -430,8 +393,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
 
                 val kospiDataSet = LineDataSet(kospiEntries, "KOSPI").apply {
-                    color = dark
-                    setCircleColor(dark)
+                    color = colorKospi
+                    setCircleColor(colorKospi)
                 }
 
                 when (mChartMode) {
@@ -440,38 +403,46 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         mStockLineDataSets.add(krEvaluatedPriceDataSet)
                         mStockLineDataSets.add(krTradingProfitPositiveDataSet)
                         mKospiDataSets.add(kospiDataSet)
-                        mCombileChart.axisLeft.axisMinimum =
-                            krTradingProfitPositiveDataSet.yMin.minus(100000)
-                        mCombileChart.axisRight.axisMinimum =
-                            krTradingProfitPositiveDataSet.yMin.minus(100000)
-                        mCombileChart.axisLeft.axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
-                        mCombileChart.axisRight.axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
+                        mCombineChart.run {
+                            axisLeft.run {
+                                axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
+                                axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
+                            }
+                            axisRight.run {
+                                axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
+                                axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
+                            }
+                        }
                     }
-
                     "B" -> {
                         mStockBarDataSets.add(usPrincipalDataSet)
                         mStockLineDataSets.add(usEvaluatedPriceDataSet)
                         mStockLineDataSets.add(usTradingProfitDataSet)
-                        mCombileChart.axisLeft.axisMinimum =
-                            usTradingProfitDataSet.yMin.minus(100000)
-                        mCombileChart.axisRight.axisMinimum =
-                            usTradingProfitDataSet.yMin.minus(100000)
-                        mCombileChart.axisLeft.axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
-                        mCombileChart.axisRight.axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
+                        mCombineChart.run {
+                            axisLeft.run {
+                                axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
+                                axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
+                            }
+                            axisRight.run {
+                                axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
+                                axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
+                            }
+                        }
                     }
-
                     "C" -> {
                         mStockBarDataSets.add(totalPrincipalDataSet)
                         mStockLineDataSets.add(totalEvaluatedPriceDataSet)
                         mStockLineDataSets.add(totalTradingProfitDataSet)
-                        mCombileChart.axisLeft.axisMinimum =
-                            totalTradingProfitDataSet.yMin.minus(100000)
-                        mCombileChart.axisRight.axisMinimum =
-                            totalTradingProfitDataSet.yMin.minus(100000)
-                        mCombileChart.axisLeft.axisMaximum =
-                            totalPrincipalDataSet.yMax.plus(2000000)
-                        mCombileChart.axisRight.axisMaximum =
-                            totalPrincipalDataSet.yMax.plus(2000000)
+                        mCombineChart.run {
+                            axisLeft.run {
+                                axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
+                                axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
+                            }
+                            axisRight.run {
+                                axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
+                                axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
+                            }
+                        }
                     }
                 }
             }
@@ -480,39 +451,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun xAxisTimeMillisToDate(
-        timeMillis: Long,
-        dateFormat: Int = SimpleDateFormat.LONG
+        timeMillis: Long, dateFormat: Int = SimpleDateFormat.LONG
     ): String =
         if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, dateFormat) else "N/A"
-
-    private fun fillValueForward(averageInfo: ArrayList<Float>) {
-        Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
-        averageInfo.forEachIndexed { index, fl ->
-            if (fl == 0f) {
-                up@ for (seq in index..averageInfo.size.minus(1)) {
-                    if (averageInfo[seq] > 0F) {
-                        averageInfo[index] = averageInfo[seq]
-                        break@up
-                    }
-                }
-            }
-        }
-        Log.i(AAF_TEST, "앞 ${averageInfo.joinToString(",")}")
-    }
-
-    private fun fillValueBackward(averageInfo: ArrayList<Float>) {
-        averageInfo.forEachIndexed { index, fl ->
-            if (fl == 0f) {
-                down@ for (seq in index.minus(1) downTo 0) {
-                    if (averageInfo[seq] > 0F) {
-                        averageInfo[index] = averageInfo[seq]
-                        break@down
-                    }
-                }
-            }
-        }
-        Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
-    }
 
     private fun getCurrencyFormat() = NumberFormat.getCurrencyInstance(Locale.KOREA)
 
@@ -521,8 +462,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     inner class StockXAxisValueFormatter(
-        private var context: Context?,
-        private val dateFormat: Int
+        private var context: Context?, private val dateFormat: Int
     ) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
             val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
@@ -538,8 +478,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     inner class StockMarkerView(
-        context: Context,
-        private val xAxisValueFormatter: IAxisValueFormatter
+        context: Context, private val xAxisValueFormatter: IAxisValueFormatter
     ) : MarkerView(context, R.layout.partial_marker_view_stock) {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
@@ -549,7 +488,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         override fun refreshContent(e: Entry?, highlight: Highlight?) {
             e?.let { entry ->
                 textLabelX.run {
-                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombileChart.xAxis)
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombineChart.xAxis)
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
@@ -563,17 +502,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
-            return if (mCombileChart.width.div(2) > posX) MPPointF(
-                10F,
-                10F
+            return if (mCombineChart.width.div(2) > posX) MPPointF(
+                10F, 10F
             ) else MPPointF(width.plus(10F).unaryMinus(), 10F)
         }
 
     }
 
     inner class KospiMarkerView(
-        context: Context,
-        private val xAxisValueFormatter: IAxisValueFormatter
+        context: Context, private val xAxisValueFormatter: IAxisValueFormatter
     ) : MarkerView(context, R.layout.partial_marker_view_stock) {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
@@ -583,7 +520,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         override fun refreshContent(e: Entry?, highlight: Highlight?) {
             e?.let { entry ->
                 textLabelX.run {
-                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombileChart.xAxis)
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombineChart.xAxis)
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
