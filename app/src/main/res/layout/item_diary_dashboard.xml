@@ -6,9 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView style="@style/AppCard">
+    <androidx.cardview.widget.CardView
+        style="@style/AppCard"
+        android:layout_height="match_parent"
+        >
 
-        <LinearLayout style="@style/LinearLayoutVertical">
+        <LinearLayout style="@style/LinearLayoutVertical"
+            android:layout_height="match_parent"
+            >
 
             <LinearLayout style="@style/LinearLayoutHorizontal">
 
@@ -33,10 +38,13 @@
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/text_contents"
                 style="@style/text_diary_main_item_inner_contents"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:ellipsize="end"
+                android:singleLine="true"
                 android:gravity="start"
-                android:maxLines="3" />
+                android:maxLines="1" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/photoViews"

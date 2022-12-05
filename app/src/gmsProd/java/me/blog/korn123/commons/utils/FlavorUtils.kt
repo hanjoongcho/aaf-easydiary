@@ -362,6 +362,8 @@ object FlavorUtils {
 //                        })
 //                        .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
 //                        .into(this)
+                } else {
+                    setImageResource(0)
                 }
                 // FIXME: WIP END
             }

@@ -110,10 +110,10 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                         }
                     }
 
-                    textContents.maxLines = when (config.enableContentsSummary) {
-                        true -> config.summaryMaxLines
-                        false -> Integer.MAX_VALUE
-                    }
+//                    textContents.maxLines = when (config.enableContentsSummary) {
+//                        true -> config.summaryMaxLines
+//                        false -> Integer.MAX_VALUE
+//                    }
                 }
             }
         }
