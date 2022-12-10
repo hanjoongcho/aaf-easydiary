@@ -327,7 +327,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mTotalDataSetCnt = totalEvaluatedPriceEntries.size
 
                 val krPrincipalDataSet = BarDataSet(krPrincipalEntries, "KR/JP Principal").apply {
-                    color = colorPrincipal
+                    color = requireContext().config.textColor
 //                    setCircleColor(colorPrincipal)
 //                    setCircleColorHole(colorPrincipal)
                 }
@@ -349,7 +349,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
 
                 val usPrincipalDataSet = BarDataSet(usPrincipalEntries, "US Principal").apply {
-                    color = colorPrincipal
+                    color = requireContext().config.textColor
 //                    setCircleColor(colorPrincipal)
 //                    setCircleColorHole(colorPrincipal)
                 }
@@ -372,7 +372,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
                 val totalPrincipalDataSet =
                     BarDataSet(totalPrincipalEntries, "Total Principal").apply {
-                        color = colorPrincipal
+                        color = requireContext().config.textColor
 //                    setCircleColor(colorPrincipal)
                     }
                 val totalEvaluatedPriceDataSet =
