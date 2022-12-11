@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.286.202212110 (date: 2022.12.11)
+  * Fixed an error in which the timeline filter was activated abnormally
+
 # Changes in 1.4.285.202211170 (date: 2022.11.17)
   * Changed not to check storage access permission in TIRAMISU (Android 13) version
 
