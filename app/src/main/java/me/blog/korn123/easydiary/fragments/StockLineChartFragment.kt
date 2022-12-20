@@ -465,10 +465,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         private var context: Context?, private val dateFormat: Int
     ) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
+            val timeMillis = if (mTimeMillisMap.size > value) mTimeMillisMap[value.toInt()] ?: 0 else 0
             return xAxisTimeMillisToDate(timeMillis, dateFormat)
         }
-
     }
 
     inner class StockYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
