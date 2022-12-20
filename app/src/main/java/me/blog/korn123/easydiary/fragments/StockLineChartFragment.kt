@@ -206,10 +206,12 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            mCombineChart.clear()
+            mKospiChart.clear()
             mCombineChart.highlightValue(null)
             mStockLineDataSets.clear()
             mStockBarDataSets.clear()
-            mKospiChart.clear()
+            mKospiDataSets.clear()
             setData()
             if (mTotalDataSetCnt > 0) {
                 withContext(Dispatchers.Main) {
