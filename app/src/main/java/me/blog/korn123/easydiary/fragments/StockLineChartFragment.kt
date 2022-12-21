@@ -144,16 +144,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             legend.isEnabled = false
 //            extraBottomOffset = 5F
 
-            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-                override fun onValueSelected(e: Entry?, h: Highlight?) {
-                    Log.i(AAF_TEST, h.toString())
-                    h?.run {
-                        if (mCombineChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
-                    }
-                }
-
-                override fun onNothingSelected() {}
-            })
+//            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+//                override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                    h?.run {
+//                        if (mBinding.checkSyncMarker.isChecked) mCombineChart.highlightValue(Highlight(x, y, 0))
+//                    }
+//                }
+//
+//                override fun onNothingSelected() {}
+//            })
         }
 
         StockMarkerView(
