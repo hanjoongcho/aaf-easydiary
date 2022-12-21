@@ -17,6 +17,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
@@ -121,6 +122,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 isWordWrapEnabled = true
 //            xOffset = 5F
             }
+
+            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    Log.i(AAF_TEST, h.toString())
+                    h?.run {
+                        if (mKospiChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
+                    }
+                }
+
+                override fun onNothingSelected() {}
+            })
         }
 
         // Default setting kospi chart
@@ -131,6 +143,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             xAxis.isEnabled = false
             legend.isEnabled = false
 //            extraBottomOffset = 5F
+
+            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    Log.i(AAF_TEST, h.toString())
+                    h?.run {
+                        if (mCombineChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
+                    }
+                }
+
+                override fun onNothingSelected() {}
+            })
         }
 
         StockMarkerView(

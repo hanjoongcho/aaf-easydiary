@@ -52,30 +52,34 @@
 
         <RadioGroup
             android:id="@+id/radio_group_chart_option"
-            android:padding="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
-            >
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintStart_toEndOf="@+id/check_sync_marker"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
+
             <RadioButton
                 android:id="@+id/radio_button_option_a"
-                android:text="KR/JP"
-                android:checked="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="KR/JP" />
+
             <RadioButton
                 android:id="@+id/radio_button_option_b"
-                android:text="US"
-                android:checked="false"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="US" />
+
             <RadioButton
                 android:id="@+id/radio_button_option_c"
-                android:text="Total"
-                android:checked="false"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Total" />
+
         </RadioGroup>
         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/lineChart"
@@ -105,5 +109,17 @@
             android:id="@+id/barChartProgressBar"
             android:layout_width="30dp"
             android:layout_height="30dp"/>
+
+        <CheckBox
+            android:id="@+id/check_sync_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sync"
+            android:checked="true"
+            app:layout_constraintEnd_toStartOf="@+id/radio_group_chart_option"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/radio_group_chart_option"
+            app:layout_constraintBottom_toBottomOf="@+id/radio_group_chart_option"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
