@@ -501,6 +501,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         }
                     }
                 }
+
+                mKospiChart.run {
+                    axisLeft.run {
+                        axisMinimum = kospiDataSet.yMin.minus(500)
+                        axisMaximum = kospiDataSet.yMax.plus(500)
+                    }
+                }
             }
             realmInstance.close()
         }
