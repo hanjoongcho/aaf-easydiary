@@ -72,6 +72,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             extraBottomOffset = 10F
             extraRightOffset = 10F
             xAxis.run {
+                isEnabled = false
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -83,7 +84,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
             }
             axisLeft.run {
-                isEnabled = false
+                isEnabled = true
                 typeface = FontUtils.getCommonTypeface(requireContext())
                 textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 textColor = requireContext().config.textColor
@@ -92,8 +93,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
                 spaceTop = 0f
                 axisMinimum = 0f // this replaces setStartAtZero(true)
-                labelCount = 8
                 setDrawGridLines(true)
+                minWidth = 60F
+                maxWidth = 60F
             }
             axisRight.run {
                 isEnabled = false
@@ -138,9 +140,33 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         // Default setting kospi chart
         mKospiChart = mBinding.chartKospi.apply {
             description.isEnabled = false
-            axisLeft.isEnabled = false
+            axisLeft.run {
+                isEnabled = true
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                setLabelCount(8, false)
+                valueFormatter = yAxisFormatter
+                setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+                spaceTop = 0f
+                axisMinimum = 0f // this replaces setStartAtZero(true)
+                setDrawGridLines(true)
+                minWidth = 60F
+                maxWidth = 60F
+            }
             axisRight.isEnabled = false
-            xAxis.isEnabled = false
+            xAxis.run {
+                isEnabled = false
+                setDrawGridLines(false)
+                position = XAxis.XAxisPosition.BOTTOM
+                typeface = FontUtils.getCommonTypeface(requireContext())
+                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                textColor = requireContext().config.textColor
+                labelRotationAngle = -65F
+                granularity = 1f // only intervals of 1 day
+                labelCount = 5
+                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
+            }
             legend.isEnabled = false
 //            extraBottomOffset = 5F
 
@@ -218,6 +244,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         drawChart()
                     }
                 }
+            }
+
+            checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
+                mCombineChart.xAxis.isEnabled = isChecked
+                mKospiChart.xAxis.isEnabled = isChecked
             }
         }
 
