@@ -72,7 +72,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             extraBottomOffset = 10F
             extraRightOffset = 10F
             xAxis.run {
-                isEnabled = false
+                isEnabled = true
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -156,7 +156,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             axisRight.isEnabled = false
             xAxis.run {
-                isEnabled = false
+                isEnabled = true
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -249,6 +249,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
                 mCombineChart.xAxis.isEnabled = isChecked
                 mKospiChart.xAxis.isEnabled = isChecked
+                drawChart()
             }
         }
 
@@ -556,11 +557,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
-            return if (mCombineChart.width.div(2) > posX) MPPointF(
-                10F, 10F
-            ) else MPPointF(width.plus(10F).unaryMinus(), 10F)
+            val pointX = if (mKospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
+            val pointY =
+                if (mKospiChart.height.div(2) > posY) 20F else height.plus(20F).unaryMinus()
+            return MPPointF(pointX, pointY)
         }
-
     }
 
     inner class KospiMarkerView(
@@ -590,7 +591,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
             val pointX = if (mKospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
             val pointY =
-                if (mKospiChart.height.div(2) > posY) 10F else height.plus(10F).unaryMinus()
+                if (mKospiChart.height.div(2) > posY) 20F else height.plus(20F).unaryMinus()
             return MPPointF(pointX, pointY)
         }
     }
