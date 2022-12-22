@@ -293,7 +293,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             val listDiary = EasyDiaryDbHelper.findDiary(
                 null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance
             )
-            var index = 0
+            var index = 0 
             var totalSum = 0F
             listDiary.reversed().forEach { diaryDto ->
                 diaryDto.title?.let {
