@@ -57,36 +57,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
-        mBinding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        mBinding.root.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-
-        // Default setting combine chart
         val yAxisFormatter = StockYAxisValueFormatter(context)
-        mCombineChart = mBinding.lineChart.apply {
-            // if more than 60 entries are displayed in the chart, no values will be drawn
-            setMaxVisibleValueCount(60)
-            // scaling can now only be done on x- and y-axis separately
-            setPinchZoom(false)
-
-            description.isEnabled = false
-            extraBottomOffset = 10F
-            extraRightOffset = 10F
-            xAxis.run {
-                isEnabled = !requireActivity().isLandScape()
-                setDrawGridLines(false)
-                position = XAxis.XAxisPosition.BOTTOM
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                labelRotationAngle = -65F
-                granularity = 1f // only intervals of 1 day
-                labelCount = 5
-                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
-
-            }
-            axisLeft.run {
-                isEnabled = true
+        val initializeXAxis = fun(yAxis: YAxis, isEnable: Boolean) {
+            yAxis.run {
+                isEnabled = isEnable
                 typeface = FontUtils.getCommonTypeface(requireContext())
                 textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 textColor = requireContext().config.textColor
@@ -99,18 +73,39 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 minWidth = 60F
                 maxWidth = 60F
             }
-            axisRight.run {
-                isEnabled = false
+        }
+
+        // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
+        mBinding.root.layoutParams.run {
+            height = ViewGroup.LayoutParams.MATCH_PARENT
+            width = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+
+        // Default setting combine chart
+        mCombineChart = mBinding.lineChart.apply {
+            // if more than 60 entries are displayed in the chart, no values will be drawn
+            setMaxVisibleValueCount(60)
+            // scaling can now only be done on x- and y-axis separately
+            setPinchZoom(false)
+
+            description.isEnabled = false
+
+            xAxis.run {
+                isEnabled = !requireActivity().isLandScape()
                 setDrawGridLines(false)
+                position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
                 textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 textColor = requireContext().config.textColor
-                setLabelCount(8, false)
-                valueFormatter = yAxisFormatter
-                spaceTop = 0f
-                axisMinimum = 0f // this replaces setStartAtZero(true)
-                labelCount = 8
+                labelRotationAngle = -65F
+                granularity = 1f // only intervals of 1 day
+                labelCount = 5
+                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
             }
+
+            initializeXAxis(axisLeft, true)
+            initializeXAxis(axisRight, false)
+
             legend.run {
                 isEnabled = false
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -148,7 +143,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 textColor = requireContext().config.textColor
                 setLabelCount(8, false)
-                valueFormatter = yAxisFormatter
+//                valueFormatter = yAxisFormatter
                 setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
                 spaceTop = 0f
                 axisMinimum = 0f // this replaces setStartAtZero(true)
