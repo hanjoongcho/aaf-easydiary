@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.blog.korn123.easydiary.views.FixedCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/card_dashboard"
+    android:layout_height="match_parent"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_stock_symbol"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/dashboard_title_padding"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
+             />
+        <me.blog.korn123.easydiary.views.FixedTextView
+            android:id="@+id/chartTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dashboard_title_padding"
+            android:textSize="@dimen/basic_text_large"
+            android:visibility="gone"
+            app:applyGlobalColor="true"
+            app:applyGlobalSize="false"
+            app:applyHighLight="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
+            app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"
+            tools:text="Weight"
+            tools:visibility="visible" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_expend_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/dashboard_title_padding"
+            android:padding="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            tools:visibility="visible"
+            app:srcCompat="@drawable/ic_expand"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
+            />
+
+        <RadioGroup
+            android:id="@+id/radio_group_chart_option"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical
+"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
+
+            <RadioButton
+                android:id="@+id/radio_button_option_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="KR/JP" />
+
+            <RadioButton
+                android:id="@+id/radio_button_option_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="US" />
+
+            <RadioButton
+                android:id="@+id/radio_button_option_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Total" />
+
+        </RadioGroup>
+
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:layout_marginStart="5dp"
+            android:id="@+id/lineChart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/chart_kospi"
+            app:layout_constraintStart_toEndOf="@+id/radio_group_chart_option"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
+            app:layout_constraintVertical_weight="1" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:layout_marginStart="5dp"
+            android:id="@+id/chart_kospi"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/radio_group_chart_option"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineChart"
+            app:layout_constraintVertical_weight="1"
+            tools:visibility="visible" />
+        <androidx.core.widget.ContentLoadingProgressBar
+            style="?android:progressBarStyleLarge"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="center"
+            android:id="@+id/barChartProgressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+
+        <CheckBox
+            android:id="@+id/check_sync_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Sync"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radio_group_chart_option" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</me.blog.korn123.easydiary.views.FixedCardView>

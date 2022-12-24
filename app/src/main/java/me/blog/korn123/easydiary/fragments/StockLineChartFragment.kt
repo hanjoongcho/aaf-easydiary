@@ -28,6 +28,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.*
 import java.text.NumberFormat
@@ -72,7 +73,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             extraBottomOffset = 10F
             extraRightOffset = 10F
             xAxis.run {
-                isEnabled = true
+                isEnabled = !requireActivity().isLandScape()
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -82,6 +83,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 granularity = 1f // only intervals of 1 day
                 labelCount = 5
                 valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
+
             }
             axisLeft.run {
                 isEnabled = true
@@ -156,7 +158,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             axisRight.isEnabled = false
             xAxis.run {
-                isEnabled = true
+                isEnabled = !requireActivity().isLandScape()
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 typeface = FontUtils.getCommonTypeface(requireContext())
@@ -383,7 +385,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mTotalDataSetCnt = totalEvaluatedPriceEntries.size
 
                 val krPrincipalDataSet = BarDataSet(krPrincipalEntries, "KR/JP Principal").apply {
-                    color = requireContext().config.textColor
+                    setColor(requireContext().config.textColor, 100)
 //                    setCircleColor(colorPrincipal)
 //                    setCircleColorHole(colorPrincipal)
                 }
