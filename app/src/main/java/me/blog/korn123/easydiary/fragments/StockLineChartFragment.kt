@@ -54,26 +54,58 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    private fun initializeCombineChartYAxis(yAxis: YAxis, isEnable: Boolean = false, stockYAxisValueFormatter: IAxisValueFormatter? = null) {
+        yAxis.run {
+            isEnabled = isEnable
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            setLabelCount(8, false)
+            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+            spaceTop = 0f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+            setDrawGridLines(true)
+            minWidth = 60F
+            maxWidth = 60F
+            stockYAxisValueFormatter?.let { valueFormatter = it }
+        }
+    }
+
+    private fun initializeXAxis(xAxis: XAxis, stockXAxisValueFormatter: IAxisValueFormatter? = null) {
+        xAxis.run {
+            isEnabled = !requireActivity().isLandScape()
+            setDrawGridLines(false)
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            labelRotationAngle = -65F
+            granularity = 1f // only intervals of 1 day
+            labelCount = 5
+            stockXAxisValueFormatter?.let { valueFormatter = it }
+        }
+    }
+
+    private fun initializeCombineChartLegend(legend: Legend, isEnable: Boolean = false) {
+        legend.run {
+            isEnabled = isEnable
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            orientation = Legend.LegendOrientation.HORIZONTAL
+//            setDrawInside(false)
+            form = Legend.LegendForm.CIRCLE
+//            formSize = 9f
+//            xEntrySpace = 4f
+            isWordWrapEnabled = true
+//            xOffset = 5F
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val yAxisFormatter = StockYAxisValueFormatter(context)
-        val initializeXAxis = fun(yAxis: YAxis, isEnable: Boolean) {
-            yAxis.run {
-                isEnabled = isEnable
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                setLabelCount(8, false)
-                valueFormatter = yAxisFormatter
-                setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-                spaceTop = 0f
-                axisMinimum = 0f // this replaces setStartAtZero(true)
-                setDrawGridLines(true)
-                minWidth = 60F
-                maxWidth = 60F
-            }
-        }
 
         // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
         mBinding.root.layoutParams.run {
@@ -81,46 +113,16 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             width = ViewGroup.LayoutParams.MATCH_PARENT
         }
 
-        // Default setting combine chart
+        // Default setting Combine chart
         mCombineChart = mBinding.lineChart.apply {
-            // if more than 60 entries are displayed in the chart, no values will be drawn
-            setMaxVisibleValueCount(60)
-            // scaling can now only be done on x- and y-axis separately
-            setPinchZoom(false)
-
+            setMaxVisibleValueCount(60) // if more than 60 entries are displayed in the chart, no values will be drawn
+            setPinchZoom(false) // scaling can now only be done on x- and y-axis separately
             description.isEnabled = false
 
-            xAxis.run {
-                isEnabled = !requireActivity().isLandScape()
-                setDrawGridLines(false)
-                position = XAxis.XAxisPosition.BOTTOM
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                labelRotationAngle = -65F
-                granularity = 1f // only intervals of 1 day
-                labelCount = 5
-                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
-            }
-
-            initializeXAxis(axisLeft, true)
-            initializeXAxis(axisRight, false)
-
-            legend.run {
-                isEnabled = false
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                verticalAlignment = Legend.LegendVerticalAlignment.TOP
-//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-                orientation = Legend.LegendOrientation.HORIZONTAL
-//            setDrawInside(false)
-                form = Legend.LegendForm.CIRCLE
-//            formSize = 9f
-//            xEntrySpace = 4f
-                isWordWrapEnabled = true
-//            xOffset = 5F
-            }
+            initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
+            initializeCombineChartYAxis(axisLeft, true, StockYAxisValueFormatter(context))
+            initializeCombineChartYAxis(axisRight, false)
+            initializeCombineChartLegend(legend, false)
 
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -129,44 +131,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         if (mKospiChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
                     }
                 }
-
                 override fun onNothingSelected() {}
             })
         }
 
-        // Default setting kospi chart
+        // Default setting KOSPI chart
         mKospiChart = mBinding.chartKospi.apply {
             description.isEnabled = false
-            axisLeft.run {
-                isEnabled = true
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                setLabelCount(8, false)
-//                valueFormatter = yAxisFormatter
-                setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-                spaceTop = 0f
-                axisMinimum = 0f // this replaces setStartAtZero(true)
-                setDrawGridLines(true)
-                minWidth = 60F
-                maxWidth = 60F
-            }
-            axisRight.isEnabled = false
-            xAxis.run {
-                isEnabled = !requireActivity().isLandScape()
-                setDrawGridLines(false)
-                position = XAxis.XAxisPosition.BOTTOM
-                typeface = FontUtils.getCommonTypeface(requireContext())
-                textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-                textColor = requireContext().config.textColor
-                labelRotationAngle = -65F
-                granularity = 1f // only intervals of 1 day
-                labelCount = 5
-                valueFormatter = StockXAxisValueFormatter(context, SimpleDateFormat.SHORT)
-            }
             legend.isEnabled = false
-//            extraBottomOffset = 5F
-
+            initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
+            initializeCombineChartYAxis(axisLeft, true, null)
+            initializeCombineChartYAxis(axisRight, false)
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     h?.run {
