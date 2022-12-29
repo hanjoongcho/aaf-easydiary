@@ -55,6 +55,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private lateinit var mBinding: FragmentStockLineChartBinding
     private lateinit var mCombineChart: CombinedChart
     private lateinit var mKospiChart: LineChart
@@ -66,61 +70,16 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mTotalDataSetCnt = 0
     private var mChartMode = "A"
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentStockLineChartBinding.inflate(layoutInflater)
         return mBinding.root
-    }
-
-    private fun initializeCombineChartYAxis(yAxis: YAxis, isEnable: Boolean = false, stockYAxisValueFormatter: IAxisValueFormatter? = null) {
-        yAxis.run {
-            isEnabled = isEnable
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-            spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
-            setDrawGridLines(true)
-            minWidth = 60F
-            maxWidth = 60F
-            stockYAxisValueFormatter?.let { valueFormatter = it }
-        }
-    }
-
-    private fun initializeXAxis(xAxis: XAxis, stockXAxisValueFormatter: IAxisValueFormatter? = null) {
-        xAxis.run {
-            isEnabled = !requireActivity().isLandScape()
-            setDrawGridLines(false)
-            position = XAxis.XAxisPosition.BOTTOM
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            labelRotationAngle = -65F
-            granularity = 1f // only intervals of 1 day
-            labelCount = 5
-            stockXAxisValueFormatter?.let { valueFormatter = it }
-        }
-    }
-
-    private fun initializeCombineChartLegend(legend: Legend, isEnable: Boolean = false) {
-        legend.run {
-            isEnabled = isEnable
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.TOP
-//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.HORIZONTAL
-//            setDrawInside(false)
-            form = Legend.LegendForm.CIRCLE
-//            formSize = 9f
-//            xEntrySpace = 4f
-            isWordWrapEnabled = true
-//            xOffset = 5F
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -266,6 +225,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         drawChart()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mCoroutineJob?.run { if (isActive) cancel() }
+    }
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     private fun drawChart() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
@@ -301,11 +269,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mBinding.barChartProgressBar.visibility = View.GONE
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mCoroutineJob?.run { if (isActive) cancel() }
     }
 
     private fun setData() {
@@ -528,6 +491,61 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun getCurrencyFormat() = NumberFormat.getCurrencyInstance(Locale.KOREA)
 
+    private fun initializeCombineChartYAxis(yAxis: YAxis, isEnable: Boolean = false, stockYAxisValueFormatter: IAxisValueFormatter? = null) {
+        yAxis.run {
+            isEnabled = isEnable
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            setLabelCount(8, false)
+            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+            spaceTop = 0f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+            setDrawGridLines(true)
+            minWidth = 60F
+            maxWidth = 60F
+            stockYAxisValueFormatter?.let { valueFormatter = it }
+        }
+    }
+
+    private fun initializeXAxis(xAxis: XAxis, stockXAxisValueFormatter: IAxisValueFormatter? = null) {
+        xAxis.run {
+            isEnabled = !requireActivity().isLandScape()
+            setDrawGridLines(false)
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            labelRotationAngle = -65F
+            granularity = 1f // only intervals of 1 day
+            labelCount = 5
+            stockXAxisValueFormatter?.let { valueFormatter = it }
+        }
+    }
+
+    private fun initializeCombineChartLegend(legend: Legend, isEnable: Boolean = false) {
+        legend.run {
+            isEnabled = isEnable
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+            textColor = requireContext().config.textColor
+            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            orientation = Legend.LegendOrientation.HORIZONTAL
+//            setDrawInside(false)
+            form = Legend.LegendForm.CIRCLE
+//            formSize = 9f
+//            xEntrySpace = 4f
+            isWordWrapEnabled = true
+//            xOffset = 5F
+        }
+    }
+
+
+    /***************************************************************************************************
+     *   inner class
+     *
+     ***************************************************************************************************/
     companion object {
         const val CHART_TITLE = "chartTitle"
     }
