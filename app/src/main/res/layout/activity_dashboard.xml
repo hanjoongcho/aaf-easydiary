@@ -156,33 +156,33 @@
                     <LinearLayout
                         android:id="@+id/statistics5"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:orientation="vertical"
                         android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/statistics4"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:orientation="vertical"
                         android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/statistics3"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:orientation="vertical" />
 
                     <LinearLayout
                         android:id="@+id/statistics1"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:orientation="vertical" />
 
                     <LinearLayout
                         android:id="@+id/statistics2"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:orientation="vertical" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </HorizontalScrollView>

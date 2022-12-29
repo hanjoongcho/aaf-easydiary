@@ -9,17 +9,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.marginBottom
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.*
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.CombinedData
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -30,10 +45,14 @@ import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.CHART_LABEL_FONT_SIZE_DEFAULT_DP
+import me.blog.korn123.easydiary.helper.DAILY_STOCK
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentStockLineChartBinding
@@ -118,6 +137,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setMaxVisibleValueCount(60) // if more than 60 entries are displayed in the chart, no values will be drawn
             setPinchZoom(false) // scaling can now only be done on x- and y-axis separately
             description.isEnabled = false
+            extraBottomOffset = 10f
 
             initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
             initializeCombineChartYAxis(axisLeft, true, StockYAxisValueFormatter(context))
@@ -139,6 +159,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart = mBinding.chartKospi.apply {
             description.isEnabled = false
             legend.isEnabled = false
+            extraBottomOffset = 10f
             initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
             initializeCombineChartYAxis(axisLeft, true, null)
             initializeCombineChartYAxis(axisRight, false)
@@ -219,12 +240,29 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
 
             checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
-                mCombineChart.xAxis.isEnabled = isChecked
-                mKospiChart.xAxis.isEnabled = isChecked
-                drawChart()
+                mCombineChart.run {
+//                    xAxis.isEnabled = isChecked
+//                    invalidate()
+                }
+                mKospiChart.run {
+//                    xAxis.isEnabled = isChecked
+//                    invalidate()
+                }
+//                drawChart()
             }
-        }
 
+            checkMarker.setOnCheckedChangeListener { _, isChecked ->
+                mCombineChart.run {
+                    setDrawMarkers(isChecked)
+                    invalidate()
+                }
+                mKospiChart.run {
+                    setDrawMarkers(isChecked)
+                    invalidate()
+                }
+            }
+
+        }
         drawChart()
     }
 
@@ -284,6 +322,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val usPrincipalEntries = arrayListOf<BarEntry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
         val usTradingProfitEntries = arrayListOf<Entry>()
+        val usTradingProfitFillEntries = arrayListOf<Entry>()
         val usColors = arrayListOf<Int>()
 
         val totalPrincipalEntries = arrayListOf<BarEntry>()
@@ -297,7 +336,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             val listDiary = EasyDiaryDbHelper.findDiary(
                 null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance
             )
-            var index = 0 
+            var index = 0
             var totalSum = 0F
             listDiary.reversed().forEach { diaryDto ->
                 diaryDto.title?.let {
@@ -354,6 +393,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             if (index > 0) {
                 mTotalDataSetCnt = totalEvaluatedPriceEntries.size
 
+
+                fun setDefaultLineChartColor(lineDataSet: LineDataSet) {
+                    lineDataSet.run {
+                        // setDrawFilled(true)
+                        setDrawCircles(true)
+                        setDrawCircleHole(true)
+                        // colors = krColors
+                        // circleColors = krColors
+                        color = requireContext().config.primaryColor
+                        setCircleColor(requireContext().config.primaryColor)
+                        setCircleColorHole(requireContext().config.primaryColor)
+                        // fillColor = requireContext().config.primaryColor
+                    }
+                }
+
                 val krPrincipalDataSet = BarDataSet(krPrincipalEntries, "KR/JP Principal").apply {
                     setColor(requireContext().config.textColor, 100)
 //                    setCircleColor(colorPrincipal)
@@ -367,13 +421,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 val krTradingProfitPositiveDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
-                        setDrawFilled(true)
-                        setDrawCircles(true)
-                        setDrawCircleHole(true)
-                        colors = krColors
-                        circleColors = krColors
-                        setCircleColorHole(requireContext().config.primaryColor)
-                        fillColor = requireContext().config.primaryColor
+                        setDefaultLineChartColor(this)
                     }
 
                 val usPrincipalDataSet = BarDataSet(usPrincipalEntries, "US Principal").apply {
@@ -389,13 +437,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 val usTradingProfitDataSet =
                     LineDataSet(usTradingProfitEntries, "US Trading Profit").apply {
-                        setDrawFilled(true)
-                        setDrawCircles(true)
-                        setDrawCircleHole(true)
-                        colors = usColors
-                        circleColors = usColors
-                        setCircleColorHole(requireContext().config.primaryColor)
-                        fillColor = requireContext().config.primaryColor
+                        setDefaultLineChartColor(this)
                     }
 
                 val totalPrincipalDataSet =
@@ -411,13 +453,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 val totalTradingProfitDataSet =
                     LineDataSet(totalTradingProfitEntries, "Total Trading Profit").apply {
-                        setDrawFilled(true)
-                        setDrawCircles(true)
-                        setDrawCircleHole(true)
-                        colors = totalColors
-                        circleColors = totalColors
-                        setCircleColorHole(requireContext().config.primaryColor)
-                        fillColor = requireContext().config.primaryColor
+                        setDefaultLineChartColor(this)
                     }
 
                 val kospiDataSet = LineDataSet(kospiEntries, "KOSPI").apply {

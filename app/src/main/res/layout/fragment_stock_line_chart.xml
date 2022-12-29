@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.blog.korn123.easydiary.views.FixedCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<me.blog.korn123.easydiary.views.FixedCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/card_dashboard"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_stock_symbol"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:visibility="gone"
             android:layout_marginStart="@dimen/dashboard_title_padding"
-            tools:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
-             />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/chartTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dashboard_title_padding"
             android:textSize="@dimen/basic_text_large"
             android:visibility="gone"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Weight"
             tools:visibility="visible" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_expend_chart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_marginTop="@dimen/dashboard_title_padding"
             android:layout_marginEnd="@dimen/dashboard_title_padding"
-            android:padding="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            tools:visibility="visible"
-            app:srcCompat="@drawable/ic_expand"
-            app:layout_constraintTop_toTopOf="parent"
+            android:padding="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_expand"
+            tools:visibility="visible" />
 
         <RadioGroup
             android:id="@+id/radio_group_chart_option"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintStart_toEndOf="@+id/check_sync_marker"
-            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_sync_marker">
 
             <RadioButton
                 android:id="@+id/radio_button_option_a"
@@ -81,45 +81,54 @@
                 android:text="Total" />
 
         </RadioGroup>
+
         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintVertical_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/radio_group_chart_option"
             app:layout_constraintBottom_toTopOf="@+id/chart_kospi"
-            />
+            app:layout_constraintTop_toBottomOf="@id/radio_group_chart_option"
+            app:layout_constraintVertical_weight="1" />
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_kospi"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintVertical_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/lineChart"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/lineChart"
+            app:layout_constraintVertical_weight="1"
+            tools:visibility="visible" />
+
         <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/barChartProgressBar"
             style="?android:progressBarStyleLarge"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_gravity="center"
-            android:id="@+id/barChartProgressBar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/check_sync_marker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sync"
             android:checked="true"
-            app:layout_constraintEnd_toStartOf="@+id/radio_group_chart_option"
+            android:text="Sync"
+            app:layout_constraintStart_toEndOf="@+id/check_marker"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart" />
+
+        <CheckBox
+            android:id="@+id/check_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Marker"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/radio_group_chart_option"
-            app:layout_constraintBottom_toBottomOf="@+id/radio_group_chart_option"/>
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
