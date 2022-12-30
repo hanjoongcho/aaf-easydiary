@@ -112,6 +112,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
                     h?.run {
+                        // Toggle marker when data y value zero
+                        mCombineChart.setDrawMarkers(e?.y != 0f && mBinding.checkMarker.isChecked)
+
+                        // Sync Marker
                         if (mKospiChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
                     }
                 }
