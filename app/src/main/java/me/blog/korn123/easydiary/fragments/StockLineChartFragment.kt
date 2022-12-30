@@ -424,6 +424,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 val krTradingProfitDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
                         setDefaultLineChartColor(this)
+                        setDrawCircles(false)
                     }
                 // split entry
                 splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
@@ -501,7 +502,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     "A" -> {
                         mStockBarDataSets.add(krPrincipalDataSet)
                         mStockLineDataSets.add(krEvaluatedPriceDataSet)
-//                        mStockLineDataSets.add(krTradingProfitDataSet)
+                        mStockLineDataSets.add(krTradingProfitDataSet)
                         mStockLineDataSets.add(krTradingProfitPositiveDataSet)
                         mStockLineDataSets.add(krTradingProfitNegativeDataSet)
                         mKospiDataSets.add(kospiDataSet)
@@ -519,7 +520,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     "B" -> {
                         mStockBarDataSets.add(usPrincipalDataSet)
                         mStockLineDataSets.add(usEvaluatedPriceDataSet)
-//                        mStockLineDataSets.add(usTradingProfitDataSet)
+                        mStockLineDataSets.add(usTradingProfitDataSet)
                         mStockLineDataSets.add(usTradingProfitNegativeDataSet)
                         mStockLineDataSets.add(usTradingProfitPositiveDataSet)
                         mCombineChart.run {
@@ -536,7 +537,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     "C" -> {
                         mStockBarDataSets.add(totalPrincipalDataSet)
                         mStockLineDataSets.add(totalEvaluatedPriceDataSet)
-//                        mStockLineDataSets.add(totalTradingProfitDataSet)
+                        mStockLineDataSets.add(totalTradingProfitDataSet)
                         mStockLineDataSets.add(totalTradingProfitPositiveDataSet)
                         mStockLineDataSets.add(totalTradingProfitNegativeDataSet)
                         mCombineChart.run {
