@@ -24,7 +24,9 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -68,6 +70,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private val mKospiDataSets = ArrayList<ILineDataSet>()
     private var mTotalDataSetCnt = 0
     private var mChartMode = "A"
+    private val mColorKospi = Color.rgb(26, 26, 26)
+    private val mColorPlus = Color.rgb(204, 31, 8)
+    private val mColorMinus = Color.rgb(6, 57, 112)
+    private val mColorPrincipal = Color.argb(100, 77, 77, 77)
 
 
     /***************************************************************************************************
@@ -271,11 +277,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setData() {
-        val colorKospi = Color.rgb(26, 26, 26)
-        val colorPlus = Color.rgb(204, 31, 8)
-        val colorMinus = Color.rgb(6, 57, 112)
-        val colorPrincipal = Color.argb(100, 77, 77, 77)
-
         val krPrincipalEntries = arrayListOf<BarEntry>()
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
         val krTradingProfitEntries = arrayListOf<Entry>()
@@ -284,7 +285,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val usPrincipalEntries = arrayListOf<BarEntry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
         val usTradingProfitEntries = arrayListOf<Entry>()
-        val usTradingProfitFillEntries = arrayListOf<Entry>()
+        val usTradingProfitPositiveEntries = arrayListOf<Entry>()
+        val usTradingProfitNegativeEntries = arrayListOf<Entry>()
         val usColors = arrayListOf<Int>()
 
         val totalPrincipalEntries = arrayListOf<BarEntry>()
@@ -317,12 +319,12 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
                             krEvaluatedPriceEntries.add(Entry(index.toFloat(), krEvaluatedPrice))
                             krTradingProfitEntries.add(Entry(index.toFloat(), diff))
-                            if (diff >= 0) krColors.add(colorPlus) else krColors.add(colorMinus)
+                            if (diff >= 0) krColors.add(mColorPlus) else krColors.add(mColorMinus)
 
                             usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
                             usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
                             diff = usEvaluatedPrice.minus(usPrincipal)
-                            if (diff >= 0) usColors.add(colorPlus) else usColors.add(colorMinus)
+                            if (diff >= 0) usColors.add(mColorPlus) else usColors.add(mColorMinus)
                             usTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                             totalPrincipalEntries.add(
@@ -333,8 +335,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
                             diff = krEvaluatedPrice.plus(usEvaluatedPrice)
                                 .minus(krPrincipal.plus(usPrincipal))
-                            if (diff >= 0) totalColors.add(colorPlus) else totalColors.add(
-                                colorMinus
+                            if (diff >= 0) totalColors.add(mColorPlus) else totalColors.add(
+                                mColorMinus
                             )
                             totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
@@ -377,15 +379,18 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
                 val krEvaluatedPriceDataSet =
                     LineDataSet(krEvaluatedPriceEntries, "KR/JP Evaluated Price").apply {
-                        setDrawCircles(true)
-                        colors = krColors
-                        circleColors = krColors
+//                        setDrawCircles(true)
+//                        colors = krColors
+//                        circleColors = krColors
+//                        enableDashedLine(0f, 1f, 0f)
+                        setDefaultLineChartColor(this)
                     }
                 val krTradingProfitPositiveDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
                         setDefaultLineChartColor(this)
                     }
 
+                // START US Data
                 val usPrincipalDataSet = BarDataSet(usPrincipalEntries, "US Principal").apply {
                     color = requireContext().config.textColor
 //                    setCircleColor(colorPrincipal)
@@ -393,14 +398,45 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
                 val usEvaluatedPriceDataSet =
                     LineDataSet(usEvaluatedPriceEntries, "US Evaluated Price").apply {
-                        setDrawCircles(true)
-                        colors = usColors
-                        circleColors = usColors
+                        setDefaultLineChartColor(this)
                     }
                 val usTradingProfitDataSet =
                     LineDataSet(usTradingProfitEntries, "US Trading Profit").apply {
                         setDefaultLineChartColor(this)
                     }
+                // split entry
+                var start = 0F
+                var splitIndex = 0f
+                val splitCnt = 10
+                usTradingProfitEntries.forEachIndexed { index, entry ->
+                    if (index > 0 && index < usTradingProfitEntries.size) {
+                        val offset = entry.y.minus(start).div(splitCnt)
+                        for(i in 1..splitCnt) {
+                            val y = offset.times(i).plus(start)
+                            usTradingProfitNegativeEntries.add(Entry(splitIndex, if (y > 0) 0f else y))
+                            usTradingProfitPositiveEntries.add(Entry(splitIndex, if (y < 0) 0f else y))
+                            splitIndex += 0.1f
+                        }
+                    }
+                    start = entry.y
+                }
+                val usTradingProfitNegativeDataSet =
+                    LineDataSet(usTradingProfitNegativeEntries, "").apply {
+                        fillColor = mColorMinus
+                        enableDashedLine(0f, 1f, 0f)
+                        setDrawFilled(true)
+                        setDrawCircleHole(false)
+                        setDrawCircles(false)
+                    }
+                val usTradingProfitPositiveDataSet =
+                    LineDataSet(usTradingProfitPositiveEntries, "").apply {
+                        fillColor = mColorPlus
+                        enableDashedLine(0f, 1f, 0f)
+                        setDrawFilled(true)
+                        setDrawCircleHole(false)
+                        setDrawCircles(false)
+                    }
+                // END US Data
 
                 val totalPrincipalDataSet =
                     BarDataSet(totalPrincipalEntries, "Total Principal").apply {
@@ -419,8 +455,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
 
                 val kospiDataSet = LineDataSet(kospiEntries, "KOSPI").apply {
-                    color = colorKospi
-                    setCircleColor(colorKospi)
+                    color = mColorKospi
+                    setCircleColor(mColorKospi)
                 }
 
                 when (mChartMode) {
@@ -443,7 +479,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     "B" -> {
                         mStockBarDataSets.add(usPrincipalDataSet)
                         mStockLineDataSets.add(usEvaluatedPriceDataSet)
-                        mStockLineDataSets.add(usTradingProfitDataSet)
+//                        mStockLineDataSets.add(usTradingProfitDataSet)
+                        mStockLineDataSets.add(usTradingProfitNegativeDataSet)
+                        mStockLineDataSets.add(usTradingProfitPositiveDataSet)
                         mCombineChart.run {
                             axisLeft.run {
                                 axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
