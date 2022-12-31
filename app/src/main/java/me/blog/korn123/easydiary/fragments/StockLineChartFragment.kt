@@ -396,7 +396,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     originEntry.forEachIndexed { index, entry ->
                         if (index > 0 && index < originEntry.size) {
                             val offset = entry.y.minus(start).div(splitCnt)
-                            for(i in 1..splitCnt) {
+                            for(i in 0..splitCnt.minus(1)) {
                                 val y = offset.times(i).plus(start)
                                 negative.add(Entry(splitIndex, if (y > 0) 0f else y))
                                 positive.add(Entry(splitIndex, if (y < 0) 0f else y))
@@ -423,8 +423,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 val krTradingProfitDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
-                        setDefaultLineChartColor(this)
-                        setDrawCircles(false)
+                        color = config.primaryColor
+                        setCircleColor(config.primaryColor)
                     }
                 // split entry
                 splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
@@ -451,6 +451,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 val usTradingProfitDataSet =
                     LineDataSet(usTradingProfitEntries, "US Trading Profit").apply {
                         setDefaultLineChartColor(this)
+                        setDrawCircles(false)
                     }
                 // split entry
                 splitEntry(usTradingProfitEntries, usTradingProfitPositiveEntries, usTradingProfitNegativeEntries)
