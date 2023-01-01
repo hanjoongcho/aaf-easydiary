@@ -24,9 +24,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -70,10 +68,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private val mKospiDataSets = ArrayList<ILineDataSet>()
     private var mTotalDataSetCnt = 0
     private var mChartMode = "A"
-    private val mColorKospi = Color.rgb(26, 26, 26)
     private val mColorPlus = Color.rgb(204, 31, 8)
     private val mColorMinus = Color.rgb(6, 57, 112)
-    private val mColorPrincipal = Color.argb(100, 77, 77, 77)
 
 
     /***************************************************************************************************
@@ -367,15 +363,16 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
                 fun setDefaultLineChartColor(lineDataSet: LineDataSet) {
                     lineDataSet.run {
-                        // setDrawFilled(true)
-                        setDrawCircles(true)
-                        setDrawCircleHole(true)
-                        // colors = krColors
-                        // circleColors = krColors
                         color = requireContext().config.primaryColor
                         setCircleColor(requireContext().config.primaryColor)
-                        setCircleColorHole(requireContext().config.primaryColor)
-                        // fillColor = requireContext().config.primaryColor
+                        setCircleColorHole(requireContext().config.textColor)
+                    }
+                }
+
+                fun setGhostLineChartColor(lineDataSet: LineDataSet) {
+                    lineDataSet.run {
+                        setDrawCircles(false)
+                        enableDashedLine(0f, 1f, 0f)
                     }
                 }
 
@@ -410,21 +407,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 // START KR Data
                 val krPrincipalDataSet = BarDataSet(krPrincipalEntries, "KR/JP Principal").apply {
                     setColor(requireContext().config.textColor, 100)
-//                    setCircleColor(colorPrincipal)
-//                    setCircleColorHole(colorPrincipal)
                 }
                 val krEvaluatedPriceDataSet =
                     LineDataSet(krEvaluatedPriceEntries, "KR/JP Evaluated Price").apply {
-//                        setDrawCircles(true)
-//                        colors = krColors
-//                        circleColors = krColors
-//                        enableDashedLine(0f, 1f, 0f)
                         setDefaultLineChartColor(this)
                     }
                 val krTradingProfitDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
-                        color = config.primaryColor
-                        setCircleColor(config.primaryColor)
+                        setGhostLineChartColor(this)
                     }
                 // split entry
                 splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
@@ -441,8 +431,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 // START US Data
                 val usPrincipalDataSet = BarDataSet(usPrincipalEntries, "US Principal").apply {
                     color = requireContext().config.textColor
-//                    setCircleColor(colorPrincipal)
-//                    setCircleColorHole(colorPrincipal)
                 }
                 val usEvaluatedPriceDataSet =
                     LineDataSet(usEvaluatedPriceEntries, "US Evaluated Price").apply {
@@ -450,8 +438,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 val usTradingProfitDataSet =
                     LineDataSet(usTradingProfitEntries, "US Trading Profit").apply {
-                        setDefaultLineChartColor(this)
-                        setDrawCircles(false)
+                        setGhostLineChartColor(this)
                     }
                 // split entry
                 splitEntry(usTradingProfitEntries, usTradingProfitPositiveEntries, usTradingProfitNegativeEntries)
@@ -469,18 +456,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 val totalPrincipalDataSet =
                     BarDataSet(totalPrincipalEntries, "Total Principal").apply {
                         color = requireContext().config.textColor
-//                    setCircleColor(colorPrincipal)
                     }
                 val totalEvaluatedPriceDataSet =
                     LineDataSet(totalEvaluatedPriceEntries, "Total Evaluated Price").apply {
-//                        setDrawCircles(true)
-//                        colors = totalColors
-//                        circleColors = totalColors
                         setDefaultLineChartColor(this)
                     }
                 val totalTradingProfitDataSet =
                     LineDataSet(totalTradingProfitEntries, "Total Trading Profit").apply {
-                        setDefaultLineChartColor(this)
+                        setGhostLineChartColor(this)
                     }
                 // split entry
                 splitEntry(totalTradingProfitEntries, totalTradingProfitPositiveEntries, totalTradingProfitNegativeEntries)
@@ -495,8 +478,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 // END Total Data
 
                 val kospiDataSet = LineDataSet(kospiEntries, "KOSPI").apply {
-                    color = mColorKospi
-                    setCircleColor(mColorKospi)
+                    setDefaultLineChartColor(this)
                 }
 
                 when (mChartMode) {
