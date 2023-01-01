@@ -103,7 +103,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             initializeCombineChartYAxis(axisLeft, true, StockYAxisValueFormatter(context))
             initializeCombineChartYAxis(axisRight, false)
             initializeCombineChartLegend(legend, false)
-
+            marker = StockMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).also { it.chartView = this }
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
@@ -124,9 +124,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             description.isEnabled = false
             legend.isEnabled = false
             extraBottomOffset = 10f
+
             initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
             initializeCombineChartYAxis(axisLeft, true, null)
             initializeCombineChartYAxis(axisRight, false)
+            marker = KospiMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).also { it.chartView = this }
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     h?.run {
@@ -138,21 +140,22 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             })
         }
 
-        StockMarkerView(
-            requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
-        ).run {
-            chartView = mCombineChart   // For bounds control
-            mCombineChart.marker = this // Set the marker to the chart
-        }
+        setupTitle() // determine title parameter
+        setupChartOptions()
+        drawChart()
+    }
 
-        KospiMarkerView(
-            requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)
-        ).run {
-            chartView = mKospiChart
-            mKospiChart.marker = this
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        mCoroutineJob?.run { if (isActive) cancel() }
+    }
+    
 
-        // determine title parameter
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private fun setupTitle() {
         arguments?.let { bundle ->
             val title = bundle.getString(CHART_TITLE)
             if (title != null) {
@@ -182,7 +185,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
+    }
 
+    private fun setupChartOptions() {
         mBinding.run {
             radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {
@@ -205,14 +210,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
             checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
                 mCombineChart.run {
-//                    xAxis.isEnabled = isChecked
-//                    invalidate()
+                    //                    xAxis.isEnabled = isChecked
+                    //                    invalidate()
                 }
                 mKospiChart.run {
-//                    xAxis.isEnabled = isChecked
-//                    invalidate()
+                    //                    xAxis.isEnabled = isChecked
+                    //                    invalidate()
                 }
-//                drawChart()
+                //                drawChart()
             }
 
             checkMarker.setOnCheckedChangeListener { _, isChecked ->
@@ -227,18 +232,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
 
         }
-        drawChart()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mCoroutineJob?.run { if (isActive) cancel() }
-    }
-
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     private fun drawChart() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
