@@ -149,7 +149,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         super.onDestroy()
         mCoroutineJob?.run { if (isActive) cancel() }
     }
-    
+
 
     /***************************************************************************************************
      *   etc functions
@@ -238,30 +238,25 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            mCombineChart.clear()
-            mKospiChart.clear()
-            mCombineChart.highlightValue(null)
-            mStockLineDataSets.clear()
-            mStockBarDataSets.clear()
-            mKospiDataSets.clear()
+            clearChart()
             setData()
             if (mTotalDataSetCnt > 0) {
                 withContext(Dispatchers.Main) {
-                    mCombineChart.data = CombinedData().apply {
-//                        setValueTextSize(10f)
-//                        setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-//                        setDrawValues(false)
-                        setData(LineData(mStockLineDataSets).apply { setDrawValues(false) })
-                        setData(BarData(mStockBarDataSets).apply { setDrawValues(false) })
+                    mCombineChart.run {
+                        data = CombinedData().apply {
+                            setData(LineData(mStockLineDataSets).apply { setDrawValues(false) })
+                            setData(BarData(mStockBarDataSets).apply { setDrawValues(false) })
+                        }
+                        animateY(600)
                     }
-                    mCombineChart.animateY(600)
-
-                    val kospiData = LineData(mKospiDataSets)
-                    kospiData.setValueTextSize(10f)
-                    kospiData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    kospiData.setDrawValues(false)
-                    mKospiChart.data = kospiData
-                    mKospiChart.animateY(600)
+                    mKospiChart.run {
+                        data = LineData(mKospiDataSets).apply {
+                            setValueTextSize(10f)
+                            setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                            setDrawValues(false)
+                        }
+                        animateY(600)
+                    }
                 }
             }
 
@@ -269,6 +264,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mBinding.barChartProgressBar.visibility = View.GONE
             }
         }
+    }
+
+    private fun clearChart() {
+        mCombineChart.clear()
+        mKospiChart.clear()
+        mCombineChart.highlightValue(null)
+        mStockLineDataSets.clear()
+        mStockBarDataSets.clear()
+        mKospiDataSets.clear()
     }
 
     private fun setData() {
