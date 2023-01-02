@@ -664,6 +664,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     ) : MarkerView(context, R.layout.partial_marker_view_stock) {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
+        private val markerOffset = 20f
 
         // callbacks everytime the MarkerView is redrawn, can be used to update the
         // content (user-interface)
@@ -684,9 +685,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
-            val pointX = if (mKospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
+            val pointX = if (mKospiChart.width.div(2) > posX) markerOffset else width.plus(markerOffset).unaryMinus()
             val pointY =
-                if (mKospiChart.height.div(2) > posY) 20F else height.plus(20F).unaryMinus()
+                if (mKospiChart.height.div(2) > posY) markerOffset else height.plus(markerOffset).unaryMinus()
             return MPPointF(pointX, pointY)
         }
     }

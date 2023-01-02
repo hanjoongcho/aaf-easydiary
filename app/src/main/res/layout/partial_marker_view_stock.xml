@@ -8,7 +8,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card_chart_marker"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:alpha="0.5"
+    >
     <TextView
         android:id="@+id/textLabelX"
         android:layout_width="wrap_content"
