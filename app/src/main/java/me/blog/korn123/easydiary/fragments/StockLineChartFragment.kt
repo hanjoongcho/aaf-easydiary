@@ -231,6 +231,23 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
 
+            checkDrawCircle.setOnCheckedChangeListener { _, isChecked ->
+                mCombineChart.run {
+//                    combinedData.lineData.dataSets.forEach {
+//                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+//                    }
+                    combinedData.lineData.dataSets[0]?.also {
+                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+                    }
+                    invalidate()
+                }
+                mKospiChart.run {
+                    lineData.dataSets[0]?.also {
+                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+                    }
+                    invalidate()
+                }
+            }
         }
     }
 

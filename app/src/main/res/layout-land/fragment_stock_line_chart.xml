@@ -54,8 +54,7 @@
             android:id="@+id/radio_group_chart_option"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical
-"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
@@ -135,5 +134,15 @@
             android:checked="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/check_sync_marker" />
+
+        <CheckBox
+            android:id="@+id/check_draw_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Circle"
+            android:checked="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_marker" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>

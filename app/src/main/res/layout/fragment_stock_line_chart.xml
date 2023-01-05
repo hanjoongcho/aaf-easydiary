@@ -122,6 +122,16 @@
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart" />
 
         <CheckBox
+            android:id="@+id/check_draw_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Circle"
+            app:layout_constraintStart_toEndOf="@+id/check_sync_marker"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart" />
+
+        <CheckBox
             android:id="@+id/check_marker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
