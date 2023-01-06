@@ -382,6 +382,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         color = requireContext().config.primaryColor
                         setCircleColor(requireContext().config.primaryColor)
                         setCircleColorHole(requireContext().config.textColor)
+                        setDrawCircles(mBinding.checkDrawCircle.isChecked)
                     }
                 }
 
