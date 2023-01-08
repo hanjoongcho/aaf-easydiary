@@ -96,55 +96,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             width = ViewGroup.LayoutParams.MATCH_PARENT
         }
 
-        mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
-            setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
-        }
-        mUsEvaluatedPriceDataSet = LineDataSet(null, "US Evaluated Price").apply {
-            setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
-        }
-        mTotalEvaluatedPriceDataSet = LineDataSet(null, "Total Evaluated Price").apply {
-            setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
-        }
-        mKrPrincipalDataSet = BarDataSet(listOf(), "KR/JP Principal").apply {
-            setColor(requireContext().config.textColor, 100)
-        }
-        mKrTradingProfitDataSet = LineDataSet(null, "KR/JP Trading Profit").apply {
-            setGhostLineChartColor(this)
-        }
-        mKrTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorMinus)
-        }
-        mKrTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorPlus)
-        }
-        mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
-            color = requireContext().config.textColor
-        }
-        mUsTradingProfitDataSet =  LineDataSet(null, "US Trading Profit").apply {
-            setGhostLineChartColor(this)
-        }
-        mUsTradingProfitNegativeDataSet =  LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorMinus)
-        }
-        mUsTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorPlus)
-        }
-        mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
-            color = requireContext().config.textColor
-        }
-        mTotalTradingProfitDataSet = LineDataSet(null, "Total Trading Profit").apply {
-            setGhostLineChartColor(this)
-        }
-        mTotalTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorMinus)
-        }
-        mTotalTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
-            setDefaultFillChartColor(this, mColorPlus)
-        }
-
         // Default setting Combine chart
         mCombineChart = mBinding.lineChart.apply {
             setMaxVisibleValueCount(60) // if more than 60 entries are displayed in the chart, no values will be drawn
@@ -227,6 +178,57 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun initDataSet() {
+        mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
+            setDefaultLineChartColor(this)
+            isVisible = mBinding.checkEvaluatePrice.isChecked
+        }
+        mUsEvaluatedPriceDataSet = LineDataSet(null, "US Evaluated Price").apply {
+            setDefaultLineChartColor(this)
+            isVisible = mBinding.checkEvaluatePrice.isChecked
+        }
+        mTotalEvaluatedPriceDataSet = LineDataSet(null, "Total Evaluated Price").apply {
+            setDefaultLineChartColor(this)
+            isVisible = mBinding.checkEvaluatePrice.isChecked
+        }
+        mKrPrincipalDataSet = BarDataSet(listOf(), "KR/JP Principal").apply {
+            setColor(requireContext().config.textColor, 100)
+        }
+        mKrTradingProfitDataSet = LineDataSet(null, "KR/JP Trading Profit").apply {
+            setGhostLineChartColor(this)
+        }
+        mKrTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorMinus)
+        }
+        mKrTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorPlus)
+        }
+        mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
+            color = requireContext().config.textColor
+        }
+        mUsTradingProfitDataSet = LineDataSet(null, "US Trading Profit").apply {
+            setGhostLineChartColor(this)
+        }
+        mUsTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorMinus)
+        }
+        mUsTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorPlus)
+        }
+        mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
+            color = requireContext().config.textColor
+        }
+        mTotalTradingProfitDataSet = LineDataSet(null, "Total Trading Profit").apply {
+            setGhostLineChartColor(this)
+        }
+        mTotalTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorMinus)
+        }
+        mTotalTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
+            setDefaultFillChartColor(this, mColorPlus)
+        }
+    }
+
     private fun setupTitle() {
         arguments?.let { bundle ->
             val title = bundle.getString(CHART_TITLE)
@@ -336,6 +338,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            initDataSet()
             clearChart()
             setData()
             if (mTotalDataSetCnt > 0) {
