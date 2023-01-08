@@ -327,12 +327,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     if (EasyDiaryUtils.isStockNumber(it)) {
                         try {
                             val amountArray = it.split(",")
+                            if (amountArray.size != 5) return@forEach
                             val krEvaluatedPrice = amountArray[0].toFloat()
                             val usEvaluatedPrice = amountArray[1].toFloat()
-                            val krPrincipal =
-                                if (amountArray.size > 2) amountArray[2].toFloat() else 4000000F
-                            val usPrincipal =
-                                if (amountArray.size > 3) amountArray[3].toFloat() else 4000000F
+                            val krPrincipal = amountArray[2].toFloat()
+                            val usPrincipal = amountArray[3].toFloat()
                             val sum = krEvaluatedPrice.plus(usEvaluatedPrice)
                             totalSum += sum
                             var diff = krEvaluatedPrice.minus(krPrincipal)
@@ -359,8 +358,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                                 mColorMinus
                             )
                             totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
-
-                            if (amountArray.size > 4) kospiEntries.add(
+                            kospiEntries.add(
                                 Entry(
                                     index.toFloat(), amountArray[4].toFloat()
                                 )
