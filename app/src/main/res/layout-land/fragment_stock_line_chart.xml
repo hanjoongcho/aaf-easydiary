@@ -50,36 +50,75 @@
             app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             />
 
-        <RadioGroup
-            android:id="@+id/radio_group_chart_option"
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flex_toolbox"
+            app:layout_constraintHorizontal_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/lineChart"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
-            <RadioButton
-                android:id="@+id/radio_button_option_a"
+            <RadioGroup
+                android:id="@+id/radio_group_chart_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_button_option_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="KR/JP" />
+
+                <RadioButton
+                    android:id="@+id/radio_button_option_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="US" />
+
+                <RadioButton
+                    android:id="@+id/radio_button_option_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Total" />
+
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/check_sync_marker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="KR/JP" />
+                android:text="Sync" />
 
-            <RadioButton
-                android:id="@+id/radio_button_option_b"
+            <CheckBox
+                android:id="@+id/check_draw_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="US" />
+                android:text="Circle"/>
 
-            <RadioButton
-                android:id="@+id/radio_button_option_c"
+            <CheckBox
+                android:id="@+id/check_marker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Marker" />
+
+            <CheckBox
+                android:id="@+id/check_evaluate_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Total" />
-
-        </RadioGroup>
+                android:ellipsize="none"
+                android:text="Evaluate Price" />
+        </com.google.android.flexbox.FlexboxLayout>
 
         <com.github.mikephil.charting.charts.CombinedChart
             android:layout_marginStart="5dp"
@@ -87,9 +126,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/chart_kospi"
-            app:layout_constraintStart_toEndOf="@+id/radio_group_chart_option"
+            app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintVertical_weight="1" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -99,9 +139,10 @@
             android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/radio_group_chart_option"
+            app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lineChart"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintVertical_weight="1"
             tools:visibility="visible" />
         <androidx.core.widget.ContentLoadingProgressBar
@@ -114,35 +155,5 @@
             android:id="@+id/barChartProgressBar"
             android:layout_width="30dp"
             android:layout_height="30dp"/>
-
-        <CheckBox
-            android:id="@+id/check_sync_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Sync"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radio_group_chart_option" />
-
-        <CheckBox
-            android:id="@+id/check_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Marker"
-            android:checked="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/check_sync_marker" />
-
-        <CheckBox
-            android:id="@+id/check_draw_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Circle"
-            android:checked="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/check_marker" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>

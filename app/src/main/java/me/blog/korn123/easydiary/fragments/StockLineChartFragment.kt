@@ -61,6 +61,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentStockLineChartBinding
     private lateinit var mCombineChart: CombinedChart
     private lateinit var mKospiChart: LineChart
+    private lateinit var mKrEvaluatedPriceDataSet: LineDataSet
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
     private val mStockLineDataSets = ArrayList<ILineDataSet>()
@@ -90,6 +91,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mBinding.root.layoutParams.run {
             height = ViewGroup.LayoutParams.MATCH_PARENT
             width = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+
+        mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
+            setDefaultLineChartColor(this)
+            isVisible = mBinding.checkEvaluatePrice.isChecked
         }
 
         // Default setting Combine chart
@@ -248,6 +254,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     invalidate()
                 }
             }
+
+            checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
+                mKrEvaluatedPriceDataSet.isVisible = isChecked
+                mCombineChart.invalidate()
+            }
         }
     }
 
@@ -374,33 +385,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             if (index > 0) {
                 mTotalDataSetCnt = totalEvaluatedPriceEntries.size
-
-                fun setDefaultLineChartColor(lineDataSet: LineDataSet) {
-                    lineDataSet.run {
-                        color = requireContext().config.primaryColor
-                        setCircleColor(requireContext().config.primaryColor)
-                        setCircleColorHole(requireContext().config.textColor)
-                        setDrawCircles(mBinding.checkDrawCircle.isChecked)
-                    }
-                }
-
-                fun setGhostLineChartColor(lineDataSet: LineDataSet) {
-                    lineDataSet.run {
-                        setDrawCircles(false)
-                        enableDashedLine(0f, 1f, 0f)
-                    }
-                }
-
-                fun setDefaultFillChartColor(lineDataSet: LineDataSet, color: Int) {
-                    lineDataSet.run {
-                        fillColor = color
-                        enableDashedLine(0f, 1f, 0f)
-                        setDrawFilled(true)
-                        setDrawCircleHole(false)
-                        setDrawCircles(false)
-                    }
-                }
-
                 fun splitEntry(originEntry: ArrayList<Entry>, positive: ArrayList<Entry>, negative: ArrayList<Entry>) {
                     var start = 0F
                     var splitIndex = 0f
@@ -423,10 +407,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 val krPrincipalDataSet = BarDataSet(krPrincipalEntries, "KR/JP Principal").apply {
                     setColor(requireContext().config.textColor, 100)
                 }
-                val krEvaluatedPriceDataSet =
-                    LineDataSet(krEvaluatedPriceEntries, "KR/JP Evaluated Price").apply {
-                        setDefaultLineChartColor(this)
-                    }
+                mKrEvaluatedPriceDataSet.run {
+//                    clear()
+                    values = krEvaluatedPriceEntries
+                }
                 val krTradingProfitDataSet =
                     LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
                         setGhostLineChartColor(this)
@@ -499,7 +483,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 when (mChartMode) {
                     "A" -> {
                         mStockBarDataSets.add(krPrincipalDataSet)
-                        mStockLineDataSets.add(krEvaluatedPriceDataSet)
+                        mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
                         mStockLineDataSets.add(krTradingProfitDataSet)
                         mStockLineDataSets.add(krTradingProfitPositiveDataSet)
                         mStockLineDataSets.add(krTradingProfitNegativeDataSet)
@@ -616,6 +600,32 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //            xEntrySpace = 4f
             isWordWrapEnabled = true
 //            xOffset = 5F
+        }
+    }
+
+    private fun setDefaultLineChartColor(lineDataSet: LineDataSet) {
+        lineDataSet.run {
+            color = requireContext().config.primaryColor
+            setCircleColor(requireContext().config.primaryColor)
+            setCircleColorHole(requireContext().config.textColor)
+            setDrawCircles(mBinding.checkDrawCircle.isChecked)
+        }
+    }
+
+    private fun setGhostLineChartColor(lineDataSet: LineDataSet) {
+        lineDataSet.run {
+            setDrawCircles(false)
+            enableDashedLine(0f, 1f, 0f)
+        }
+    }
+
+    private fun setDefaultFillChartColor(lineDataSet: LineDataSet, color: Int) {
+        lineDataSet.run {
+            fillColor = color
+            enableDashedLine(0f, 1f, 0f)
+            setDrawFilled(true)
+            setDrawCircleHole(false)
+            setDrawCircles(false)
         }
     }
 
