@@ -114,7 +114,7 @@
                 android:id="@+id/check_evaluate_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
+                android:checked="true"
                 android:text="Evaluate Price" />
         </com.google.android.flexbox.FlexboxLayout>
 

@@ -155,7 +155,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     h?.run {
-                        if (mBinding.checkSyncMarker.isChecked) mCombineChart.highlightValue(Highlight(x, 1, 0).apply { dataIndex = 0 })
+
+                        // dataSetIndex: 0-TradingProfitDataSet
+                        // dataIndex: 0-LineData, 1-BarData
+                        if (mBinding.checkSyncMarker.isChecked) mCombineChart.highlightValue(Highlight(x, 0, 0).apply { dataIndex = 0 })
                     }
                 }
 
@@ -181,15 +184,12 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun initDataSet() {
         mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
             setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
         }
         mUsEvaluatedPriceDataSet = LineDataSet(null, "US Evaluated Price").apply {
             setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
         }
         mTotalEvaluatedPriceDataSet = LineDataSet(null, "Total Evaluated Price").apply {
             setDefaultLineChartColor(this)
-            isVisible = mBinding.checkEvaluatePrice.isChecked
         }
         mKrPrincipalDataSet = BarDataSet(listOf(), "KR/JP Principal").apply {
             setColor(requireContext().config.textColor, 100)
@@ -204,7 +204,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setDefaultFillChartColor(this, mColorPlus)
         }
         mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
-            color = requireContext().config.textColor
+            setColor(requireContext().config.textColor, 100)
         }
         mUsTradingProfitDataSet = LineDataSet(null, "US Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -216,7 +216,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setDefaultFillChartColor(this, mColorPlus)
         }
         mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
-            color = requireContext().config.textColor
+            setColor(requireContext().config.textColor, 100)
         }
         mTotalTradingProfitDataSet = LineDataSet(null, "Total Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -310,10 +310,12 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                    combinedData.lineData.dataSets.forEach {
 //                        if (it is LineDataSet) it.setDrawCircles(isChecked)
 //                    }
-                    combinedData.lineData.dataSets[0]?.also {
-                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+                    if (combinedData.lineData.dataSets.size == 4) {
+                        combinedData.lineData.dataSets[3].also {
+                            if (it is LineDataSet) it.setDrawCircles(isChecked)
+                        }
+                        invalidate()
                     }
-                    invalidate()
                 }
                 mKospiChart.run {
                     if (visibility == View.VISIBLE) {
@@ -326,9 +328,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
 
             checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
-                mKrEvaluatedPriceDataSet.isVisible = isChecked
-                mUsEvaluatedPriceDataSet.isVisible = isChecked
-                mTotalEvaluatedPriceDataSet.isVisible = isChecked
+                when (mChartMode) {
+                    "A" ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
+                    "B" ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
+                    "C" ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
+                }
                 mCombineChart.invalidate()
             }
         }
@@ -510,10 +514,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 when (mChartMode) {
                     "A" -> {
                         mStockBarDataSets.add(mKrPrincipalDataSet)
-                        mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
                         mStockLineDataSets.add(mKrTradingProfitDataSet)
                         mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
                         mStockLineDataSets.add(mKrTradingProfitNegativeDataSet)
+                        mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
                         mKospiDataSets.add(kospiDataSet)
                         mCombineChart.run {
                             axisLeft.run {
@@ -528,10 +532,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                     "B" -> {
                         mStockBarDataSets.add(mUsPrincipalDataSet)
-                        mStockLineDataSets.add(mUsEvaluatedPriceDataSet)
                         mStockLineDataSets.add(mUsTradingProfitDataSet)
                         mStockLineDataSets.add(mUsTradingProfitNegativeDataSet)
                         mStockLineDataSets.add(mUsTradingProfitPositiveDataSet)
+                        mStockLineDataSets.add(mUsEvaluatedPriceDataSet)
                         mCombineChart.run {
                             axisLeft.run {
                                 axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
@@ -545,10 +549,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                     "C" -> {
                         mStockBarDataSets.add(mTotalPrincipalDataSet)
-                        mStockLineDataSets.add(mTotalEvaluatedPriceDataSet)
                         mStockLineDataSets.add(mTotalTradingProfitDataSet)
                         mStockLineDataSets.add(mTotalTradingProfitPositiveDataSet)
                         mStockLineDataSets.add(mTotalTradingProfitNegativeDataSet)
+                        mStockLineDataSets.add(mTotalEvaluatedPriceDataSet)
                         mCombineChart.run {
                             axisLeft.run {
                                 axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
