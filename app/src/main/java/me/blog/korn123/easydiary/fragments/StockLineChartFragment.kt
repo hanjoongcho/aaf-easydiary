@@ -112,27 +112,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
                     h?.run {
-                        when (e) {
-                            is StockLineEntry -> {
-                                when (e.stockDataType) {
-                                    StockDataType.KR_EVALUATE_PRICE -> {
-                                        mCombineChart.setDrawMarkers(mBinding.checkMarker.isChecked && mKrEvaluatedPriceDataSet.isVisible)
-                                    }
-                                    StockDataType.US_EVALUATE_PRICE -> {
-                                        mCombineChart.setDrawMarkers(mBinding.checkMarker.isChecked && mUsEvaluatedPriceDataSet.isVisible)
-                                    }
-                                    StockDataType.TOTAL_EVALUATE_PRICE -> {
-                                        mCombineChart.setDrawMarkers(mBinding.checkMarker.isChecked && mTotalEvaluatedPriceDataSet.isVisible)
-                                    }
-                                    else -> {
-                                         mCombineChart.setDrawMarkers(e.y != 0f && mBinding.checkMarker.isChecked)
-                                    }
-                                }
-                            }
-                            else -> {
-                                mCombineChart.setDrawMarkers(mBinding.checkMarker.isChecked)
-                            }
-                        }
+                        mCombineChart.setDrawMarkers(e?.y != 0f && mBinding.checkMarker.isChecked)
 
                         // Sync Marker
                         if (mKospiChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
