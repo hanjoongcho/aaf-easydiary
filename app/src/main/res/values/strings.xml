@@ -675,6 +675,10 @@
         v1.4.286.202212110 / 2022.12.11\n
         Fixed an error in which the timeline filter was activated abnormally
     </string>
+    <string name="release_287">
+        v1.4.287.202301140 / 2023.01.14\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
