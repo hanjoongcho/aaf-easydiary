@@ -58,7 +58,7 @@
             app:flexDirection="row"
             app:flexWrap="wrap"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lineChart"
+            app:layout_constraintEnd_toStartOf="@+id/chart_container"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
             <RadioGroup
@@ -130,31 +130,32 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
         </com.google.android.flexbox.FlexboxLayout>
 
-        <com.github.mikephil.charting.charts.CombinedChart
-            android:layout_marginStart="5dp"
-            android:id="@+id/lineChart"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/chart_kospi"
-            app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
-            app:layout_constraintEnd_toEndOf="parent"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/chart_container"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintVertical_weight="1" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:layout_marginStart="5dp"
-            android:id="@+id/chart_kospi"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lineChart"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintVertical_weight="1"
-            tools:visibility="visible" />
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="0dp" >
+            <com.github.mikephil.charting.charts.CombinedChart
+                android:layout_marginStart="5dp"
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_marginStart="5dp"
+                android:id="@+id/chart_kospi"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:visibility="visible" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.core.widget.ContentLoadingProgressBar
             style="?android:progressBarStyleLarge"
             app:layout_constraintTop_toTopOf="parent"
