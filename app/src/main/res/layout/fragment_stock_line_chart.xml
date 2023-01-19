@@ -116,6 +116,16 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="Evaluate Price" />
+
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/card_multi_chart_mode"
+                style="@style/card_dashboard_inner"
+                app:contentPadding="@dimen/dashboard_card_padding">
+                <TextView
+                    android:text="Multi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </com.google.android.flexbox.FlexboxLayout>
 
         <com.github.mikephil.charting.charts.CombinedChart

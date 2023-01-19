@@ -65,7 +65,7 @@
                 android:id="@+id/radio_group_chart_option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/radio_button_option_a"
@@ -118,6 +118,16 @@
                 android:checked="true"
                 android:ellipsize="none"
                 android:text="Evaluate Price" />
+
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/card_multi_chart_mode"
+                style="@style/card_dashboard_inner"
+                app:contentPadding="@dimen/dashboard_card_padding">
+                <TextView
+                    android:text="Multi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </com.google.android.flexbox.FlexboxLayout>
 
         <com.github.mikephil.charting.charts.CombinedChart
@@ -129,7 +139,7 @@
             app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
-            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintVertical_weight="1" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -142,7 +152,7 @@
             app:layout_constraintStart_toEndOf="@+id/flex_toolbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lineChart"
-            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintVertical_weight="1"
             tools:visibility="visible" />
         <androidx.core.widget.ContentLoadingProgressBar
