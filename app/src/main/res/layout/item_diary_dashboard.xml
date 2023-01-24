@@ -42,9 +42,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="start"
-                android:maxLines="1" />
+                android:gravity="start"/>
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/photoViews"
