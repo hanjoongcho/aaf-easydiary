@@ -31,6 +31,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
+import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -74,7 +75,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private val mStockBarDataSets = ArrayList<IBarDataSet>()
     private val mKospiDataSets = ArrayList<ILineDataSet>()
     private var mTotalDataSetCnt = 0
-    private var mChartMode = "A"
+    private var mChartMode = R.id.radio_button_option_a
     private val mColorPlus = Color.rgb(204, 31, 8)
     private val mColorMinus = Color.rgb(6, 57, 112)
     private var mMultiChartModeSelectedValue = 1F
@@ -246,24 +247,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun setupChartOptions() {
         mBinding.run {
-            radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
-                when (checkedId) {
-                    R.id.radio_button_option_a -> {
-                        mChartMode = "A"
-                        drawChart()
-                    }
 
-                    R.id.radio_button_option_b -> {
-                        mChartMode = "B"
-                        drawChart()
-                    }
-
-                    R.id.radio_button_option_c -> {
-                        mChartMode = "C"
-                        drawChart()
-                    }
-                }
-            }
 
             checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
                 mCombineChart.run {
@@ -312,9 +296,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
             checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
                 when (mChartMode) {
-                    "A" ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
-                    "B" ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
-                    "C" ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
+                    R.id.radio_button_option_a ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
+                    R.id.radio_button_option_b ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
+                    R.id.radio_button_option_c ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
                 }
                 mCombineChart.invalidate()
             }
@@ -323,33 +307,47 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 requireActivity().run {
                     var alertDialog: AlertDialog? = null
                     val builder = AlertDialog.Builder(this)
-                    builder.setNegativeButton(getString(android.R.string.cancel), null)
-                    val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
-                    val listView = containerView.findViewById<ListView>(R.id.listView)
+                    builder.setPositiveButton(getString(android.R.string.ok), null)
+                    builder.setCancelable(false)
+                    val dialogStockChartOptionBinding = DialogStockChartOptionBinding.inflate(layoutInflater)
 
+                    dialogStockChartOptionBinding.root.run {
+                        setBackgroundColor(config.backgroundColor)
+                        initTextSize(this)
+                        updateTextColors(this)
+                        updateAppViews(this)
+                        FontUtils.setFontsTypeface(requireContext(), null, this)
+                    }
 
-                    val listMultiChartMode = ArrayList<Map<String, String>>()
-                    listMultiChartMode.add(mapOf("optionTitle" to "ALL", "optionValue" to "1"))
-                    listMultiChartMode.add(mapOf("optionTitle" to "KR/JP", "optionValue" to "2"))
-                    listMultiChartMode.add(mapOf("optionTitle" to "KOSPI", "optionValue" to "3"))
+                    dialogStockChartOptionBinding.run {
+                        radioGroupChartOption.check(mChartMode)
+                        radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
+                            mChartMode = checkedId
+                            drawChart()
+                        }
+                    }
+
+//                    val listMultiChartMode = ArrayList<Map<String, String>>()
+//                    listMultiChartMode.add(mapOf("optionTitle" to "ALL", "optionValue" to "1"))
+//                    listMultiChartMode.add(mapOf("optionTitle" to "KR/JP", "optionValue" to "2"))
+//                    listMultiChartMode.add(mapOf("optionTitle" to "KOSPI", "optionValue" to "3"))
 
 //                    listMultiChartMode.mapIndexed { index, map ->
 //                        val size = map["optionValue"] ?: "0"
 //                        if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
 //                    }
 
-                    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMultiChartMode, mMultiChartModeSelectedValue)
-                    listView.adapter = arrayAdapter
-                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-                        @Suppress("UNCHECKED_CAST") val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        itemInfo["optionValue"]?.let {
-                            mMultiChartModeSelectedValue = it.toFloat()
-                            drawChart()
-                        }
-                        alertDialog?.cancel()
-                    }
-                    alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, "Multi Chart Mode") }
+//                    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMultiChartMode, mMultiChartModeSelectedValue)
+//                    listView.adapter = arrayAdapter
+//                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+//                        @Suppress("UNCHECKED_CAST") val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
+//                        itemInfo["optionValue"]?.let {
+//                            mMultiChartModeSelectedValue = it.toFloat()
+//                            drawChart()
+//                        }
+//                        alertDialog?.cancel()
+//                    }
+                    alertDialog = builder.create().apply { updateAlertDialog(this, null, dialogStockChartOptionBinding.root, "Chart Options") }
 
 //                    listView.setSelection(multiChartModeIndex)
                 }
@@ -361,7 +359,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         when (mMultiChartModeSelectedValue) {
             1F -> {
                 mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
+                mKospiChart.visibility = if (mChartMode === R.id.radio_button_option_a) View.VISIBLE else View.GONE
             }
             2F -> {
                 mCombineChart.visibility = View.VISIBLE
@@ -369,7 +367,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             3F -> {
                 mCombineChart.visibility = View.GONE
-                mKospiChart.visibility = if (mChartMode === "A") View.VISIBLE else View.GONE
+                mKospiChart.visibility = if (mChartMode === R.id.radio_button_option_b) View.VISIBLE else View.GONE
             }
         }
 
@@ -545,7 +543,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
 
                 when (mChartMode) {
-                    "A" -> {
+                    R.id.radio_button_option_a -> {
                         mStockBarDataSets.add(mKrPrincipalDataSet)
                         mStockLineDataSets.add(mKrTradingProfitDataSet)
                         mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
@@ -563,7 +561,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                     }
-                    "B" -> {
+                    R.id.radio_button_option_b -> {
                         mStockBarDataSets.add(mUsPrincipalDataSet)
                         mStockLineDataSets.add(mUsTradingProfitDataSet)
                         mStockLineDataSets.add(mUsTradingProfitNegativeDataSet)
@@ -580,7 +578,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                     }
-                    "C" -> {
+                    R.id.radio_button_option_c -> {
                         mStockBarDataSets.add(mTotalPrincipalDataSet)
                         mStockLineDataSets.add(mTotalTradingProfitDataSet)
                         mStockLineDataSets.add(mTotalTradingProfitPositiveDataSet)

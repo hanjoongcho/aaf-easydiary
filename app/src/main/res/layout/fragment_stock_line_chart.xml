@@ -60,35 +60,6 @@
             app:layout_constraintBottom_toTopOf="@+id/lineChart"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
-            <RadioGroup
-                android:id="@+id/radio_group_chart_option"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/radio_button_option_a"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="KR/JP" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_option_b"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="US" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_option_c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="Total" />
-
-            </RadioGroup>
-
             <CheckBox
                 android:id="@+id/check_sync_marker"
                 android:layout_width="wrap_content"
@@ -124,7 +95,7 @@
                 app:contentPaddingBottom="5dp"
                 app:contentPadding="@dimen/dashboard_card_padding">
                 <TextView
-                    android:text="Multi"
+                    android:text="Chart Options"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </me.blog.korn123.easydiary.views.FixedCardView>
