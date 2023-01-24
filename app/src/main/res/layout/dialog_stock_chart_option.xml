@@ -22,14 +22,28 @@
                 android:id="@+id/radio_group_chart_option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/radio_button_option_a"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="KR/JP" />
+                    android:text="KR/JP (Mix)" />
+
+                <RadioButton
+                    android:id="@+id/radio_button_option_a_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="KR/JP (KR/JP Only)" />
+
+                <RadioButton
+                    android:id="@+id/radio_button_option_a_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="KR/JP (Kospi Only)" />
 
                 <RadioButton
                     android:id="@+id/radio_button_option_b"
