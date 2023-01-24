@@ -8,11 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.*
@@ -30,7 +27,6 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
-import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -78,7 +74,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mChartMode = R.id.radio_button_option_a
     private val mColorPlus = Color.rgb(204, 31, 8)
     private val mColorMinus = Color.rgb(6, 57, 112)
-    private var mMultiChartModeSelectedValue = 1F
+    private var mCheckedSyncMarker = true
+    private var mCheckedDrawCircle = false
+    private var mCheckedDrawMarker = true
+
 
     /***************************************************************************************************
      *   override functions
@@ -116,10 +115,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
                     h?.run {
-                        mCombineChart.setDrawMarkers(e?.y != 0f && mBinding.checkMarker.isChecked)
+                        mCombineChart.setDrawMarkers(e?.y != 0f && mCheckedDrawMarker)
 
                         // Sync Marker
-                        if (mKospiChart.visibility == View.VISIBLE && mBinding.checkSyncMarker.isChecked) mKospiChart.highlightValue(Highlight(x, y, 0))
+                        if (mKospiChart.visibility == View.VISIBLE && mCheckedSyncMarker) mKospiChart.highlightValue(Highlight(x, y, 0))
                     }
                 }
                 override fun onNothingSelected() {}
@@ -142,7 +141,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
                         // dataSetIndex: 0-TradingProfitDataSet
                         // dataIndex: 0-LineData, 1-BarData
-                        if (mBinding.checkSyncMarker.isChecked) mCombineChart.highlightValue(Highlight(x, 0, 0).apply { dataIndex = 0 })
+                        if (mCheckedSyncMarker) mCombineChart.highlightValue(Highlight(x, 0, 0).apply { dataIndex = 0 })
                     }
                 }
 
@@ -247,53 +246,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun setupChartOptions() {
         mBinding.run {
-
-
-            checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
-                mCombineChart.run {
-                    //                    xAxis.isEnabled = isChecked
-                    //                    invalidate()
-                }
-                mKospiChart.run {
-                    //                    xAxis.isEnabled = isChecked
-                    //                    invalidate()
-                }
-                //                drawChart()
-            }
-
-            checkMarker.setOnCheckedChangeListener { _, isChecked ->
-                mCombineChart.run {
-                    setDrawMarkers(isChecked)
-                    invalidate()
-                }
-                mKospiChart.run {
-                    setDrawMarkers(isChecked)
-                    invalidate()
-                }
-            }
-
-            checkDrawCircle.setOnCheckedChangeListener { _, isChecked ->
-                mCombineChart.run {
-//                    combinedData.lineData.dataSets.forEach {
-//                        if (it is LineDataSet) it.setDrawCircles(isChecked)
-//                    }
-                    if (combinedData.lineData.dataSets.size == 4) {
-                        combinedData.lineData.dataSets[3].also {
-                            if (it is LineDataSet) it.setDrawCircles(isChecked)
-                        }
-                        invalidate()
-                    }
-                }
-                mKospiChart.run {
-                    if (visibility == View.VISIBLE) {
-                        lineData.dataSets[0]?.also {
-                            if (it is LineDataSet) it.setDrawCircles(isChecked)
-                        }
-                        invalidate()
-                    }
-                }
-            }
-
             checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
                 when (mChartMode) {
                     R.id.radio_button_option_a ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
@@ -321,9 +273,49 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
                     dialogStockChartOptionBinding.run {
                         radioGroupChartOption.check(mChartMode)
+                        checkSyncMarker.isChecked = mCheckedSyncMarker
+                        checkDrawCircle.isChecked = mCheckedDrawCircle
+                        checkMarker.isChecked = mCheckedDrawMarker
+
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                             mChartMode = checkedId
                             drawChart()
+                        }
+                        checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
+                            mCheckedSyncMarker = isChecked
+                        }
+                        checkDrawCircle.setOnCheckedChangeListener { _, isChecked ->
+                            mCheckedDrawCircle = isChecked
+                            mCombineChart.run {
+//                    combinedData.lineData.dataSets.forEach {
+//                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+//                    }
+                                if (combinedData.lineData.dataSets.size == 4) {
+                                    combinedData.lineData.dataSets[3].also {
+                                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+                                    }
+                                    invalidate()
+                                }
+                            }
+                            mKospiChart.run {
+                                if (visibility == View.VISIBLE) {
+                                    lineData.dataSets[0]?.also {
+                                        if (it is LineDataSet) it.setDrawCircles(isChecked)
+                                    }
+                                    invalidate()
+                                }
+                            }
+                        }
+                        checkMarker.setOnCheckedChangeListener { _, isChecked ->
+                            mCheckedDrawMarker = isChecked
+                            mCombineChart.run {
+                                setDrawMarkers(isChecked)
+                                invalidate()
+                            }
+                            mKospiChart.run {
+                                setDrawMarkers(isChecked)
+                                invalidate()
+                            }
                         }
                     }
 
@@ -356,18 +348,26 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun drawChart() {
-        when (mMultiChartModeSelectedValue) {
-            1F -> {
+        when (mChartMode) {
+            R.id.radio_button_option_a -> {
                 mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = if (mChartMode === R.id.radio_button_option_a) View.VISIBLE else View.GONE
+                mKospiChart.visibility = View.VISIBLE
             }
-            2F -> {
+            R.id.radio_button_option_a_1 -> {
                 mCombineChart.visibility = View.VISIBLE
                 mKospiChart.visibility = View.GONE
             }
-            3F -> {
+            R.id.radio_button_option_a_2 -> {
                 mCombineChart.visibility = View.GONE
-                mKospiChart.visibility = if (mChartMode === R.id.radio_button_option_b) View.VISIBLE else View.GONE
+                mKospiChart.visibility = View.VISIBLE
+            }
+            R.id.radio_button_option_b -> {
+                mCombineChart.visibility = View.VISIBLE
+                mKospiChart.visibility = View.GONE
+            }
+            R.id.radio_button_option_c -> {
+                mCombineChart.visibility = View.VISIBLE
+                mKospiChart.visibility = View.GONE
             }
         }
 
@@ -543,7 +543,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
 
                 when (mChartMode) {
-                    R.id.radio_button_option_a -> {
+                    R.id.radio_button_option_a, R.id.radio_button_option_a_1, R.id.radio_button_option_a_2 -> {
                         mStockBarDataSets.add(mKrPrincipalDataSet)
                         mStockLineDataSets.add(mKrTradingProfitDataSet)
                         mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
@@ -670,7 +670,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             color = requireContext().config.primaryColor
             setCircleColor(requireContext().config.primaryColor)
             setCircleColorHole(requireContext().config.textColor)
-            setDrawCircles(mBinding.checkDrawCircle.isChecked)
+            setDrawCircles(mCheckedDrawCircle)
         }
     }
 
