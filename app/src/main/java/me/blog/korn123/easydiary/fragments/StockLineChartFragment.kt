@@ -77,7 +77,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = false
     private var mCheckedDrawMarker = true
-
+    private var mcheckedEvaluatePrice = true
 
     /***************************************************************************************************
      *   override functions
@@ -246,15 +246,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun setupChartOptions() {
         mBinding.run {
-            checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
-                when (mChartMode) {
-                    R.id.radio_button_option_a ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
-                    R.id.radio_button_option_b ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
-                    R.id.radio_button_option_c ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
-                }
-                mCombineChart.invalidate()
-            }
-
             cardMultiChartMode.setOnClickListener {
                 requireActivity().run {
                     var alertDialog: AlertDialog? = null
@@ -276,6 +267,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkSyncMarker.isChecked = mCheckedSyncMarker
                         checkDrawCircle.isChecked = mCheckedDrawCircle
                         checkMarker.isChecked = mCheckedDrawMarker
+                        checkEvaluatePrice.isChecked = mcheckedEvaluatePrice
 
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                             mChartMode = checkedId
@@ -316,6 +308,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                                 setDrawMarkers(isChecked)
                                 invalidate()
                             }
+                        }
+                        checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
+                            mcheckedEvaluatePrice = isChecked
+                            when (mChartMode) {
+                                R.id.radio_button_option_a, R.id.radio_button_option_a_1 ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
+                                R.id.radio_button_option_b ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
+                                R.id.radio_button_option_c ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
+                            }
+                            mCombineChart.invalidate()
                         }
                     }
 
