@@ -60,13 +60,6 @@
             app:layout_constraintBottom_toTopOf="@+id/lineChart"
             app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
-            <CheckBox
-                android:id="@+id/check_evaluate_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Evaluate Price" />
-
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/card_multi_chart_mode"
                 style="@style/card_dashboard_inner"
