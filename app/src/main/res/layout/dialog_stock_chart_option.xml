@@ -89,6 +89,19 @@
                 android:checked="true"
                 android:text="Evaluate Price" />
 
+            <View
+                android:background="?attr/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_margin="3dp"
+                android:layout_height="2dp" />
+
+            <CheckBox
+                android:id="@+id/check_principal_highlight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Principal Highlight" />
+
         </com.google.android.flexbox.FlexboxLayout>
     </androidx.cardview.widget.CardView>
 
