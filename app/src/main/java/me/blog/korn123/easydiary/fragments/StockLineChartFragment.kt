@@ -71,14 +71,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private val mStockBarDataSets = ArrayList<IBarDataSet>()
     private val mKospiDataSets = ArrayList<ILineDataSet>()
     private var mTotalDataSetCnt = 0
-    private var mChartMode = R.id.radio_button_option_a
     private val mColorPlus = Color.rgb(204, 31, 8)
     private val mColorMinus = Color.rgb(6, 57, 112)
+
+
+    /***************************************************************************************************
+     *   chart options
+     *
+     ***************************************************************************************************/
+    private var mChartMode = R.id.radio_button_option_a
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = false
     private var mCheckedDrawMarker = true
     private var mCheckedEvaluatePrice = true
     private var mCheckedPrincipalHighlight = true
+
 
     /***************************************************************************************************
      *   override functions
@@ -177,6 +184,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mKrPrincipalDataSet = BarDataSet(listOf(), "KR/JP Principal").apply {
             setColor(requireContext().config.textColor, 100)
+            isHighlightEnabled = mCheckedPrincipalHighlight
         }
         mKrTradingProfitDataSet = LineDataSet(null, "KR/JP Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -197,9 +205,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mUsTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorMinus)
+            isHighlightEnabled = false
         }
         mUsTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorPlus)
+            isHighlightEnabled = false
         }
         mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
             setColor(requireContext().config.textColor, 100)
@@ -209,9 +219,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mTotalTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorMinus)
+            isHighlightEnabled = false
         }
         mTotalTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorPlus)
+            isHighlightEnabled = false
         }
     }
 
