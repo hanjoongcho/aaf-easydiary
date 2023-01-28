@@ -77,7 +77,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = false
     private var mCheckedDrawMarker = true
-    private var mcheckedEvaluatePrice = true
+    private var mCheckedEvaluatePrice = true
+    private var mCheckedPrincipalHighlight = true
 
     /***************************************************************************************************
      *   override functions
@@ -115,7 +116,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
                     h?.run {
-                        mCombineChart.setDrawMarkers(e?.y != 0f && mCheckedDrawMarker)
+                        mCombineChart.setDrawMarkers(mCheckedDrawMarker)
 
                         // Sync Marker
                         if (mKospiChart.visibility == View.VISIBLE && mCheckedSyncMarker) mKospiChart.highlightValue(Highlight(x, y, 0))
@@ -182,9 +183,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mKrTradingProfitNegativeDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorMinus)
+            isHighlightEnabled = false
         }
         mKrTradingProfitPositiveDataSet = LineDataSet(null, "").apply {
             setDefaultFillChartColor(this, mColorPlus)
+            isHighlightEnabled = false
         }
         mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
             setColor(requireContext().config.textColor, 100)
@@ -267,7 +270,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkSyncMarker.isChecked = mCheckedSyncMarker
                         checkDrawCircle.isChecked = mCheckedDrawCircle
                         checkMarker.isChecked = mCheckedDrawMarker
-                        checkEvaluatePrice.isChecked = mcheckedEvaluatePrice
+                        checkEvaluatePrice.isChecked = mCheckedEvaluatePrice
+                        checkPrincipalHighlight.isChecked = mCheckedPrincipalHighlight
 
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                             mChartMode = checkedId
@@ -279,9 +283,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkDrawCircle.setOnCheckedChangeListener { _, isChecked ->
                             mCheckedDrawCircle = isChecked
                             mCombineChart.run {
-//                    combinedData.lineData.dataSets.forEach {
-//                        if (it is LineDataSet) it.setDrawCircles(isChecked)
-//                    }
                                 if (combinedData.lineData.dataSets.size == 4) {
                                     combinedData.lineData.dataSets[3].also {
                                         if (it is LineDataSet) it.setDrawCircles(isChecked)
@@ -310,13 +311,32 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                         checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
-                            mcheckedEvaluatePrice = isChecked
+                            mCheckedEvaluatePrice = isChecked
                             when (mChartMode) {
-                                R.id.radio_button_option_a, R.id.radio_button_option_a_1 ->  if (isChecked) mStockLineDataSets.add(mKrEvaluatedPriceDataSet) else mStockLineDataSets.remove(mKrEvaluatedPriceDataSet)
-                                R.id.radio_button_option_b ->  if (isChecked) mStockLineDataSets.add(mUsEvaluatedPriceDataSet) else mStockLineDataSets.remove(mUsEvaluatedPriceDataSet)
-                                R.id.radio_button_option_c ->  if (isChecked) mStockLineDataSets.add(mTotalEvaluatedPriceDataSet) else mStockLineDataSets.remove(mTotalEvaluatedPriceDataSet)
+                                R.id.radio_button_option_a, R.id.radio_button_option_a_1 -> {
+                                    mKrEvaluatedPriceDataSet.run {
+                                        isVisible = isChecked
+                                        isHighlightEnabled = isChecked
+                                    }
+                                }
+                                R.id.radio_button_option_b ->  {
+                                    mUsEvaluatedPriceDataSet.run {
+                                        isVisible = isChecked
+                                        isHighlightEnabled = isChecked
+                                    }
+                                }
+                                R.id.radio_button_option_c -> {
+                                    mTotalEvaluatedPriceDataSet.run {
+                                        isVisible = isChecked
+                                        isHighlightEnabled = isChecked
+                                    }
+                                }
                             }
                             mCombineChart.invalidate()
+                        }
+                        checkPrincipalHighlight.setOnCheckedChangeListener { _, isChecked ->
+                            mCheckedPrincipalHighlight = isChecked
+                            mKrPrincipalDataSet.isHighlightEnabled = isChecked
                         }
                     }
 
