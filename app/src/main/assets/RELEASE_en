@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.288.202302030 (date: 2023.02.03)
+  * Fixed an error where Photo Multi-Picker did not work in TIRAMISU (Android 13) version
+
 # Changes in 1.4.287.202301140 (date: 2023.01.14)
   * User Experience (UX) Optimization
 
