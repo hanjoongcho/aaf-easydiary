@@ -13,6 +13,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -159,10 +160,20 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         hideSoftInputFromWindow()
 
         when (view.id) {
-            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                callImagePicker()
-            } else {
-                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+            R.id.photoView -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (checkPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES))) {
+                        callImagePicker()
+                    } else {
+                        confirmPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), REQUEST_CODE_EXTERNAL_STORAGE)
+                    }
+                } else {
+                    if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        callImagePicker()
+                    } else {
+                        confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    }
+                }
             }
             R.id.captureCamera -> {
                 val captureFile = createTemporaryPhotoFile()
@@ -273,13 +284,25 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         )
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) arrayOf(
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    ) else EXTERNAL_STORAGE_PERMISSIONS
+                )
+            ) {
                 callImagePicker()
             } else {
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(
+                    findViewById(android.R.id.content),
+                    getString(R.string.guide_message_3)
+                )
             }
             else -> {
             }
