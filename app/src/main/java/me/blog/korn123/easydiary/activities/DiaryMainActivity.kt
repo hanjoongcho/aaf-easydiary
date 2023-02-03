@@ -1,8 +1,10 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +22,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.constants.PageStyle
+import io.github.aafactory.commons.extensions.makeToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -127,6 +130,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupReviewFlow()
         setupPhotoHighlight()
         checkIntent()
+        confirmPrePermissions()
 //        clearLockSettingsTemporary()
 
         // test code
@@ -162,8 +166,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             config.previousActivity = -1
         }
 
-        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding =
-            false
+        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
     }
 
     override fun onRequestPermissionsResult(
@@ -181,6 +184,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     getString(R.string.guide_message_3)
                 )
             }
+
+            REQUEST_CODE_NOTIFICATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (!checkPermission(
+                        arrayOf(
+                            Manifest.permission.POST_NOTIFICATIONS
+                        )
+                    )
+                ) {
+                    makeSnackBar(
+                        findViewById(android.R.id.content),
+                        getString(R.string.guide_message_3)
+                    )
+                }
+
+            }
+
             else -> {
             }
         }
@@ -438,6 +457,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             settings.setOnClickListener(customItemClickListener)
             devConsole.setOnClickListener(customItemClickListener)
             gridLayout.setOnClickListener(customItemClickListener)
+        }
+    }
+
+    private fun confirmPrePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!checkPermission(arrayOf(Manifest.permission.POST_NOTIFICATIONS))) {
+                confirmPermission(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION)
+            }
         }
     }
 
