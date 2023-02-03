@@ -122,6 +122,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         initDummyData()
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)
         bindEvent()
+        confirmPrePermissions()
+
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData(mBinding)
@@ -130,7 +132,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupReviewFlow()
         setupPhotoHighlight()
         checkIntent()
-        confirmPrePermissions()
 //        clearLockSettingsTemporary()
 
         // test code
