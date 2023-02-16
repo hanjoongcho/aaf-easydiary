@@ -500,7 +500,7 @@ const val MIME_TYPE_HTML = "text/html"
  *   Theme Color
  *
  ***************************************************************************************************/
-const val AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR = -30
+const val AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLOR = -30
 const val EASYDIARY_THEME_PRIMARY_COLOR = "#07ABB3"
 const val EASYDIARY_THEME_BACKGROUND_COLOR = "#FFFFFF"
 const val EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR = "#EAEAEA"

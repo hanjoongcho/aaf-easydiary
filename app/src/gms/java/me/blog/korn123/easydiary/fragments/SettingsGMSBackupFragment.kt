@@ -350,6 +350,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                     }
+                    true -> {}
                 }
             }
             R.id.signOutGoogleOAuth -> {

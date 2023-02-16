@@ -332,6 +332,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
                 DashboardDialogFragment().apply { show(supportFragmentManager, "DashboardDialog") }
             }
+            false -> {}
         }
     }
 

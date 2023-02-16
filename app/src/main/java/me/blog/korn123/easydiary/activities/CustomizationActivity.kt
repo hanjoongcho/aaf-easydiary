@@ -190,7 +190,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun setCurrentPrimaryColor(color: Int) {
         curPrimaryColor = color
-        setCurrentScreenBackgroundColor(color.darkenColor(AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR))
+        setCurrentScreenBackgroundColor(color.darkenColor(AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLOR))
         updateActionbarColor(color)
     }
 

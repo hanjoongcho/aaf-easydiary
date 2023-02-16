@@ -160,6 +160,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         }
                     }
                 }
+                false -> {}
             }
         } else {
             // init default settings

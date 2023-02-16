@@ -12,14 +12,17 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
+import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
@@ -91,6 +94,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@activity, Intent(this@activity, CustomizationActivity::class.java))
                     R.id.thumbnailSetting -> {
                         openThumbnailSettingDialog()
+                    }
+                    cardDatetimeSettings.id -> {
+                        openDatetimeFormattingSettingDialog()
                     }
                     R.id.contentsSummary -> {
                         contentsSummarySwitcher.toggle()
@@ -172,6 +178,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         mBinding.run {
             primaryColor.setOnClickListener(mOnClickListener)
             thumbnailSetting.setOnClickListener(mOnClickListener)
+            cardDatetimeSettings.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
             multiPickerOption.setOnClickListener(mOnClickListener)
@@ -269,6 +276,43 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title)) }
 
             listView.setSelection(selectedIndex)
+        }
+    }
+
+    private fun openDatetimeFormattingSettingDialog() {
+        requireActivity().run {
+            var alertDialog: AlertDialog? = null
+            val builder = AlertDialog.Builder(this)
+            builder.setNegativeButton(getString(android.R.string.cancel), null)
+            val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+            val listView = containerView.findViewById<ListView>(R.id.listView)
+
+            var selectedIndex = 0
+            val listThumbnailSize = ArrayList<Map<String, String>>()
+            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.FULL, SimpleDateFormat.FULL), "optionValue" to DateTimeFormat.DATE_LONG_AND_TIME_LONG.indexChar))
+            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_MEDIUM.indexChar))
+            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_SHORT.indexChar))
+            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.SHORT, SimpleDateFormat.SHORT), "optionValue" to DateTimeFormat.DATE_SHORT_AND_TIME_SHORT.indexChar))
+
+//            listThumbnailSize.mapIndexed { index, map ->
+//                val size = map["optionValue"] ?: "0"
+//                if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
+//            }
+
+            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listThumbnailSize, config.settingThumbnailSize)
+            listView.adapter = arrayAdapter
+            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                fontInfo["optionValue"]?.let {
+//                    config.settingThumbnailSize = it.toFloat()
+//                    initPreference()
+                }
+                alertDialog?.cancel()
+            }
+            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, "Datetime formatting") }
+
+//            listView.setSelection(selectedIndex)
         }
     }
 

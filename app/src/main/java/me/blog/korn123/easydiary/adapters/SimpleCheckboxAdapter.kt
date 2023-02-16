@@ -38,7 +38,7 @@ class SimpleCheckboxAdapter (
     ) : RecyclerView.ViewHolder(itemSimpleCheckboxBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
             if (itemView is ViewGroup) {
-                itemView.run {
+                (itemView as ViewGroup).run {
                     activity.updateTextColors(this)
                     activity.initTextSize(this)
                     activity.updateAppViews(this)

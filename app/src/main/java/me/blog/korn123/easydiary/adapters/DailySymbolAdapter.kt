@@ -32,11 +32,11 @@ class DailySymbolAdapter(
         init {
             if (itemView is ViewGroup) {
                 activity.run {
-                    initTextSize(itemView)
-                    updateTextColors(itemView)
-                    updateAppViews(itemView)
-                    updateCardViewPolicy(itemView)
-                    FontUtils.setFontsTypeface(this, null, itemView)
+                    initTextSize(itemView as ViewGroup)
+                    updateTextColors(itemView as ViewGroup)
+                    updateAppViews(itemView as ViewGroup)
+                    updateCardViewPolicy(itemView as ViewGroup)
+                    FontUtils.setFontsTypeface(this, null, itemView as ViewGroup)
                 }
             }
         }

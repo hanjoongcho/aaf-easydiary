@@ -16,7 +16,7 @@ import me.blog.korn123.easydiary.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.databinding.DialogLineColorPickerBinding
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.getThemeId
-import me.blog.korn123.easydiary.helper.AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR
+import me.blog.korn123.easydiary.helper.AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLOR
 
 /**
  * Created by Hanjoong Cho on 2017-12-18.
@@ -71,7 +71,7 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         activity.updateActionbarColor(color)
         activity.setTheme(activity.getThemeId(color))
-        activity.updateBackgroundColor(color.darkenColor(AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR))
+        activity.updateBackgroundColor(color.darkenColor(AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLOR))
         mDialogLineColorPickerBinding.run {
             hexCode.text = color.toHex()
             switchStatusBarDarkenColor.run {
