@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager
 import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import java.util.*
 
@@ -238,6 +239,10 @@ class Config(val context: Context) {
     var enableDDayFlexboxLayout: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, false)
         set(enableDDayFlexboxLayout) = prefs.edit().putBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, enableDDayFlexboxLayout).apply()
+
+    var settingDatetimeFormat: String
+        get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
+        set(settingDatetimeFormat) = prefs.edit().putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat).apply()
 
     companion object {
         fun newInstance(context: Context) = Config(context)

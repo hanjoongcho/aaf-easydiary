@@ -945,4 +945,6 @@
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">हाल ही में उपयोग किया गया</string>
+    <string name="datetime_setting_title">Datetime Formatting</string>
+    <string name="datetime_setting_summary">Set the date and time display format.</string>
 </resources>

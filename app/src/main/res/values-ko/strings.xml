@@ -945,4 +945,6 @@
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">최근사용</string>
+    <string name="datetime_setting_title">날짜 표시형식 설정</string>
+    <string name="datetime_setting_summary">다이어리에 표시되는 날짜와 시간 표시형식을 설정합니다.</string>
 </resources>

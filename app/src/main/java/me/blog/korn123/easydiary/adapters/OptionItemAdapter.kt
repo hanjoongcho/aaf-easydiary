@@ -23,7 +23,8 @@ class OptionItemAdapter(
         val activity: Activity,
         private val layoutResourceId: Int,
         private val list: List<Map<String, String>>,
-        private val selectedValue: Float
+        private val selectedValueFloat: Float?,
+        private val selectedValueString: String? = null
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -44,8 +45,8 @@ class OptionItemAdapter(
                 viewHolder
             }
         }.run {
-            val size = list[position]["optionValue"] ?: "0"
-            if (selectedValue == size.toFloat()) {
+            val optionValue = list[position]["optionValue"] ?: "0"
+            if ((selectedValueFloat != null && selectedValueFloat == optionValue.toFloat()) || selectedValueString == optionValue) {
                 activity.updateDrawableColorInnerCardView(R.drawable.ic_check_mark)
                 ContextCompat.getDrawable(context, R.drawable.ic_check_mark).run {
                     imageView.setImageDrawable(this)

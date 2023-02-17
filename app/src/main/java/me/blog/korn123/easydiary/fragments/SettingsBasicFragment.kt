@@ -95,7 +95,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     R.id.thumbnailSetting -> {
                         openThumbnailSettingDialog()
                     }
-                    cardDatetimeSettings.id -> {
+                    cardDatetimeSetting.id -> {
                         openDatetimeFormattingSettingDialog()
                     }
                     R.id.contentsSummary -> {
@@ -178,7 +178,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         mBinding.run {
             primaryColor.setOnClickListener(mOnClickListener)
             thumbnailSetting.setOnClickListener(mOnClickListener)
-            cardDatetimeSettings.setOnClickListener(mOnClickListener)
+            cardDatetimeSetting.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
             multiPickerOption.setOnClickListener(mOnClickListener)
@@ -239,6 +239,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
                 maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
                 maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
+
+                val datetimeFormat = DateTimeFormat.valueOf(config.settingDatetimeFormat)
+                textDatetimeSettingDescription.text = DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), datetimeFormat.getDateKey().toInt(), datetimeFormat.getTimeKey().toInt())
             }
         }
     }
@@ -288,31 +291,80 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
-            var selectedIndex = 0
             val listThumbnailSize = ArrayList<Map<String, String>>()
-            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.FULL, SimpleDateFormat.FULL), "optionValue" to DateTimeFormat.DATE_LONG_AND_TIME_LONG.indexChar))
-            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_MEDIUM.indexChar))
-            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_SHORT.indexChar))
-            listThumbnailSize.add(mapOf("optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.SHORT, SimpleDateFormat.SHORT), "optionValue" to DateTimeFormat.DATE_SHORT_AND_TIME_SHORT.indexChar))
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.FULL,
+                        SimpleDateFormat.FULL
+                    ), "optionValue" to DateTimeFormat.DATE_FULL_AND_TIME_FULL.toString()
+                )
+            )
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.FULL,
+                        SimpleDateFormat.SHORT
+                    ), "optionValue" to DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString()
+                )
+            )
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.LONG,
+                        SimpleDateFormat.LONG
+                    ), "optionValue" to DateTimeFormat.DATE_LONG_AND_TIME_LONG.toString()
+                )
+            )
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.MEDIUM,
+                        SimpleDateFormat.MEDIUM
+                    ), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_MEDIUM.toString()
+                )
+            )
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.MEDIUM,
+                        SimpleDateFormat.SHORT
+                    ), "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_SHORT.toString()
+                )
+            )
+            listThumbnailSize.add(
+                mapOf(
+                    "optionTitle" to DateUtils.getDateTimeStringFromTimeMillis(
+                        System.currentTimeMillis(),
+                        SimpleDateFormat.SHORT,
+                        SimpleDateFormat.SHORT
+                    ), "optionValue" to DateTimeFormat.DATE_SHORT_AND_TIME_SHORT.toString()
+                )
+            )
 
-//            listThumbnailSize.mapIndexed { index, map ->
-//                val size = map["optionValue"] ?: "0"
-//                if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
-//            }
-
-            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listThumbnailSize, config.settingThumbnailSize)
+            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listThumbnailSize, null, config.settingDatetimeFormat)
             listView.adapter = arrayAdapter
             listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
                 @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
                 fontInfo["optionValue"]?.let {
-//                    config.settingThumbnailSize = it.toFloat()
-//                    initPreference()
+                    config.settingDatetimeFormat = it
+                    initPreference()
                 }
                 alertDialog?.cancel()
             }
             alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, "Datetime formatting") }
 
-//            listView.setSelection(selectedIndex)
+            var selectedIndex = 0
+            listThumbnailSize.mapIndexed { index, map ->
+                val optionValue = map["optionValue"] ?: "0"
+                if (config.settingDatetimeFormat == optionValue) selectedIndex = index
+            }
+            listView.setSelection(selectedIndex)
         }
     }
 

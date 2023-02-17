@@ -170,15 +170,18 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_datetime_settings"
+            android:id="@+id/card_datetime_setting"
             style="@style/AppCard.Settings">
             <LinearLayout
                 style="@style/LinearLayoutVertical">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Date &amp; Time Formatting"
+                    android:text="@string/datetime_setting_title"
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Set the date and time display format."
+                    android:text="@string/datetime_setting_summary"
+                    style="@style/SettingsSummary" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/text_datetime_setting_description"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
