@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.Calculation
+import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
@@ -40,6 +41,7 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
+import java.util.Locale
 
 class DiaryMainItemAdapter(
     val activity: Activity,
@@ -182,7 +184,7 @@ class DiaryMainItemAdapter(
 
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
+                    false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis, -1, -1, DateTimeFormat.valueOf(activity.config.settingDatetimeFormat))
                 }
                 if (activity.config.enableDebugMode) textDateTime.text =
                     "[${diary.originSequence}] ${textDateTime.text}"

@@ -1,5 +1,7 @@
 package me.blog.korn123.commons.utils
 
+import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.extensions.config
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,9 +18,12 @@ object DateUtils {
         return simpleDateFormat.format(date)
     }
 
-    fun getDateTimeStringFromTimeMillis(timeMillis: Long, dateFormat: Int = SimpleDateFormat.FULL, timeFormat: Int = SimpleDateFormat.SHORT, locale: Locale = Locale.getDefault()): String {
+    fun getDateTimeStringFromTimeMillis(timeMillis: Long, dateFormat: Int = SimpleDateFormat.FULL, timeFormat: Int = SimpleDateFormat.SHORT, dateTimeFormat: DateTimeFormat? = null, locale: Locale = Locale.getDefault()): String {
         val date = Date(timeMillis)
-        val simpleDateFormat = SimpleDateFormat.getDateTimeInstance(dateFormat, timeFormat, locale)
+        val simpleDateFormat = when (dateTimeFormat == null) {
+            true -> SimpleDateFormat.getDateTimeInstance(dateFormat, timeFormat, locale)
+            false -> SimpleDateFormat.getDateTimeInstance(dateTimeFormat.getDateKey().toInt(), dateTimeFormat.getTimeKey().toInt(), locale)
+        }
         return simpleDateFormat.format(date)
     }
 

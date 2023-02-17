@@ -16,6 +16,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
@@ -52,7 +53,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             setTextViewText(R.id.text2,context.parsedMarkdownString(diaryDto.contents!!))
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
+                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis, -1, -1, DateTimeFormat.valueOf(context.config.settingDatetimeFormat))
             })
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
