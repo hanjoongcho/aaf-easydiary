@@ -199,6 +199,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
             setColor(requireContext().config.textColor, 100)
+            isHighlightEnabled = mCheckedPrincipalHighlight
         }
         mUsTradingProfitDataSet = LineDataSet(null, "US Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -213,6 +214,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
             setColor(requireContext().config.textColor, 100)
+            isHighlightEnabled = mCheckedPrincipalHighlight
         }
         mTotalTradingProfitDataSet = LineDataSet(null, "Total Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -349,6 +351,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkPrincipalHighlight.setOnCheckedChangeListener { _, isChecked ->
                             mCheckedPrincipalHighlight = isChecked
                             mKrPrincipalDataSet.isHighlightEnabled = isChecked
+                            mUsPrincipalDataSet.isHighlightEnabled = isChecked
+                            mTotalPrincipalDataSet.isHighlightEnabled = isChecked
                         }
                     }
 
