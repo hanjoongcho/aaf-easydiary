@@ -240,8 +240,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
                 maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
 
-                val datetimeFormat = DateTimeFormat.valueOf(config.settingDatetimeFormat)
-                textDatetimeSettingDescription.text = DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), datetimeFormat.getDateKey().toInt(), datetimeFormat.getTimeKey().toInt())
+                textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
+                    System.currentTimeMillis(), requireContext()
+                )
             }
         }
     }

@@ -1,7 +1,9 @@
 package me.blog.korn123.commons.utils
 
+import android.content.Context
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,14 +20,29 @@ object DateUtils {
         return simpleDateFormat.format(date)
     }
 
-    fun getDateTimeStringFromTimeMillis(timeMillis: Long, dateFormat: Int = SimpleDateFormat.FULL, timeFormat: Int = SimpleDateFormat.SHORT, dateTimeFormat: DateTimeFormat? = null, locale: Locale = Locale.getDefault()): String {
+    fun getDateTimeStringFromTimeMillis(
+        timeMillis: Long,
+        dateFormat: Int = SimpleDateFormat.FULL,
+        timeFormat: Int = SimpleDateFormat.SHORT,
+        dateTimeFormat: DateTimeFormat? = null,
+        locale: Locale = Locale.getDefault()
+    ): String {
         val date = Date(timeMillis)
         val simpleDateFormat = when (dateTimeFormat == null) {
             true -> SimpleDateFormat.getDateTimeInstance(dateFormat, timeFormat, locale)
-            false -> SimpleDateFormat.getDateTimeInstance(dateTimeFormat.getDateKey().toInt(), dateTimeFormat.getTimeKey().toInt(), locale)
+            false -> SimpleDateFormat.getDateTimeInstance(
+                dateTimeFormat.getDateKey(),
+                dateTimeFormat.getTimeKey(),
+                locale
+            )
         }
         return simpleDateFormat.format(date)
     }
+
+    fun getDateTimeStringForceFormatting(
+        timeMillis: Long,
+        context: Context
+    ) = getDateTimeStringFromTimeMillis(timeMillis, -1, -1, context.storedDatetimeFormat())
 
 
     /// ------------------------------------------------------------------

@@ -33,6 +33,7 @@ import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -184,7 +185,9 @@ class DiaryMainItemAdapter(
 
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis, -1, -1, DateTimeFormat.valueOf(activity.config.settingDatetimeFormat))
+                    false -> DateUtils.getDateTimeStringForceFormatting(
+                        diary.currentTimeMillis, activity
+                    )
                 }
                 if (activity.config.enableDebugMode) textDateTime.text =
                     "[${diary.originSequence}] ${textDateTime.text}"

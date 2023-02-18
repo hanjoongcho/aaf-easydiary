@@ -640,7 +640,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
                 date.text = when (diaryDto.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
+                    false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, requireContext())
                 }
                 initBottomContainer()
 

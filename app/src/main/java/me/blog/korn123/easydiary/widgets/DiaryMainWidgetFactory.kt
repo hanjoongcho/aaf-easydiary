@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
 import me.blog.korn123.easydiary.extensions.parsedMarkdownString
+import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
@@ -53,7 +54,9 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             setTextViewText(R.id.text2,context.parsedMarkdownString(diaryDto.contents!!))
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis, -1, -1, DateTimeFormat.valueOf(context.config.settingDatetimeFormat))
+                false -> DateUtils.getDateTimeStringForceFormatting(
+                    diaryDto.currentTimeMillis, context
+                )
             })
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

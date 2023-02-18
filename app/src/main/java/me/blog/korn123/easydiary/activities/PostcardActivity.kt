@@ -78,7 +78,7 @@ class PostcardActivity : EasyDiaryActivity() {
             applyMarkDownPolicy(contents, diaryDto.contents!!)
             date.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
+                false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, this@PostcardActivity)
             }
             EasyDiaryUtils.boldString(applicationContext, diaryTitle)
 

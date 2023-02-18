@@ -49,7 +49,7 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
+                    false -> DateUtils.getDateTimeStringForceFormatting(diary.currentTimeMillis, activity)
                 }
 
                 context.run {

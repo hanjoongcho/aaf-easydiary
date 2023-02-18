@@ -7,6 +7,6 @@ enum class DateTimeFormat(val keys: String) {
     DATE_MEDIUM_AND_TIME_MEDIUM("2|2"),
     DATE_MEDIUM_AND_TIME_SHORT("2|3"),
     DATE_SHORT_AND_TIME_SHORT("3|3");
-    fun getDateKey() = keys.split("|")[0]
-    fun getTimeKey() = keys.split("|")[1]
+    fun getDateKey() = keys.split("|")[0].toInt()
+    fun getTimeKey() = keys.split("|")[1].toInt()
 }
