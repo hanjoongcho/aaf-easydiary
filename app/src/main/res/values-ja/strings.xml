@@ -686,6 +686,10 @@
         v1.4.289.202302031 / 2023.02.03\n
         ティラミス(Android 13)版でダイアリー通知が機能しない不具合を修正
     </string>
+    <string name="release_290">
+        v1.4.290.202302191 / 2023.02.19\n
+        日付と時刻形式の設定機能を追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -945,6 +949,6 @@
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">最近使用</string>
-    <string name="datetime_setting_title">Datetime Formatting</string>
-    <string name="datetime_setting_summary">Set the date and time display format.</string>
+    <string name="datetime_setting_title">日時のフォーマット</string>
+    <string name="datetime_setting_summary">日付と時刻の表示形式を設定します。（タイムラインと日記作成画面を除くほとんどの画面に設定された表示形式が適用されます。）</string>
 </resources>

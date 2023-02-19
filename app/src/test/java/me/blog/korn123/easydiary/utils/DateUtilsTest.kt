@@ -37,7 +37,7 @@ class DateUtilsTest {
 
     @Test
     fun getFullPatternDateWithTimeAndSeconds02() {
-        Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(TIME_MILLIS, SimpleDateFormat.FULL, SimpleDateFormat.FULL, Locale.FRANCE))
+        Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(TIME_MILLIS, SimpleDateFormat.FULL, SimpleDateFormat.FULL, null, Locale.FRANCE))
     }
 
     @Test
