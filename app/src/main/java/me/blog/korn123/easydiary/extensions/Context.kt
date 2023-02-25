@@ -53,7 +53,7 @@ import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
-import io.noties.markwon.core.CorePlugin
+import io.noties.markwon.core.MarkwonTheme
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
@@ -80,7 +80,6 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 
@@ -929,9 +928,27 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
     when (config.enableDebugMode) {
         true -> {
             val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$contents" else contents
+            val codeBlockTheme = object : AbstractMarkwonPlugin() {
+                override fun configureTheme(builder: MarkwonTheme.Builder) {
+                    builder
+                        .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
+                        .codeTextSize(config.settingFontSize.times(0.7).toInt())
+                }
+            }
             when (isRecyclerItem) {
-                true -> Markwon.builder(this).usePlugin(MovementMethodPlugin.none()).build().apply { setMarkdown(contentsView, boldDate) }
-                false -> Markwon.builder(this).build().apply { setMarkdown(contentsView, boldDate) }
+                true -> Markwon.builder(this)
+                    .usePlugin(MovementMethodPlugin.none())
+                    .usePlugin(codeBlockTheme)
+                    .build()
+                    .apply {
+                        setMarkdown(contentsView, boldDate)
+                    }
+                false -> Markwon.builder(this)
+                    .usePlugin(codeBlockTheme)
+                    .build()
+                    .apply {
+                        setMarkdown(contentsView, boldDate)
+                    }
             }
         }
         false -> {
