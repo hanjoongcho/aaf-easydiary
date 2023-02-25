@@ -686,8 +686,8 @@
         v1.4.289.202302031 / 2023.02.03\n
         Fixed an error where diary notifications did not work in TIRAMISU (Android 13) version
     </string>
-    <string name="release_290">
-        v1.4.290.202302191 / 2023.02.19\n
+    <string name="release_291">
+        v1.4.291.202302260 / 2023.02.26\n
         Added date and time formatting settings
     </string>
 
