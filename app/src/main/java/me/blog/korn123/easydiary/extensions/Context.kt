@@ -54,7 +54,11 @@ import com.simplemobiletools.commons.views.*
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tables.TableTheme
+import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
+import io.noties.markwon.utils.Dip
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -935,16 +939,35 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                         .codeTextSize(config.settingFontSize.times(0.7).toInt())
                 }
             }
+            val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
+                val dip: Dip = Dip.create(this)
+                builder
+                    .tableBorderWidth(dip.toPx(2))
+                    .tableBorderColor(Color.BLACK)
+                    .tableCellPadding(dip.toPx(4))
+                    .tableHeaderRowBackgroundColor(
+                        io.noties.markwon.utils.ColorUtils.applyAlpha(
+                            Color.BLUE,
+                            80
+                        )
+                    )
+//                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
+//                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+            }
             when (isRecyclerItem) {
                 true -> Markwon.builder(this)
                     .usePlugin(MovementMethodPlugin.none())
                     .usePlugin(codeBlockTheme)
+                    .usePlugin(ImagesPlugin.create())
+                    .usePlugin(tablePlugin)
                     .build()
                     .apply {
                         setMarkdown(contentsView, boldDate)
                     }
                 false -> Markwon.builder(this)
                     .usePlugin(codeBlockTheme)
+                    .usePlugin(ImagesPlugin.create())
+                    .usePlugin(tablePlugin)
                     .build()
                     .apply {
                         setMarkdown(contentsView, boldDate)
