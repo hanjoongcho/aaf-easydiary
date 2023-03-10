@@ -244,6 +244,10 @@ class Config(val context: Context) {
         get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
         set(settingDatetimeFormat) = prefs.edit().putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat).apply()
 
+    var enableMarkdown: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)
+        set(enableMarkdown) = prefs.edit().putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

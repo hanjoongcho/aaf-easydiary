@@ -951,4 +951,6 @@
     <string name="recently_used_symbol">最近使用</string>
     <string name="datetime_setting_title">日時のフォーマット</string>
     <string name="datetime_setting_summary">日付と時刻の表示形式を設定します。（タイムラインと日記作成画面を除くほとんどの画面に設定された表示形式が適用されます。）</string>
+    <string name="markdown_setting_title">マークダウン文法</string>
+    <string name="markdown_setting_summary">マークダウンオプションを有効にすると、ダイアリー作成時にマークダウン文法を利用して様々な書式を入力できます。</string>
 </resources>
