@@ -690,6 +690,10 @@
         v1.4.291.202302260 / 2023.02.26\n
         Added date and time formatting settings
     </string>
+    <string name="release_292">
+        v1.4.292.202303100 / 2023.03.10\n
+        マークダウン構文のサポートを追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
