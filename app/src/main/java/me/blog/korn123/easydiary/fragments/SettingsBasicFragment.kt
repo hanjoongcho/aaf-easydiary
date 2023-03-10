@@ -169,6 +169,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         enableWelcomeDashboardPopupSwitcher.toggle()
                         config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopupSwitcher.isChecked
                     }
+                    R.id.card_markdown_setting -> {
+                        switchMarkdownSetting.toggle()
+                        config.enableMarkdown = switchMarkdownSetting.isChecked
+                    }
                 }
             }
         }
@@ -191,6 +195,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             enableReviewFlow.setOnClickListener(mOnClickListener)
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
             enableWelcomeDashboardPopup.setOnClickListener(mOnClickListener)
+            cardMarkdownSetting.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
                 requireActivity().config.calendarStartDay = when (i) {
                     R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -243,6 +248,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
                     System.currentTimeMillis(), requireContext()
                 )
+                switchMarkdownSetting.isChecked = config.enableMarkdown
             }
         }
     }

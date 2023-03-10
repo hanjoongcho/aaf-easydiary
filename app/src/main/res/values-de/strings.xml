@@ -951,4 +951,6 @@
     <string name="recently_used_symbol">Recently Used</string>
     <string name="datetime_setting_title">Datetime Formatting</string>
     <string name="datetime_setting_summary">Set the date and time display format. (The set display format is applied to most screens except for the timeline and diary creation screens.)</string>
+    <string name="markdown_setting_title">Markdown Syntax</string>
+    <string name="markdown_setting_summary">If you activate the Markdown Syntax option, you can enter various formats using MarkDown syntax when writing a diary.</string>
 </resources>

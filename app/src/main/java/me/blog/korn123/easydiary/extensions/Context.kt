@@ -929,9 +929,10 @@ fun Context.getPermissionString(id: Int) = when (id) {
 }
 
 fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf(), isRecyclerItem: Boolean = false) {
-    when (config.enableDebugMode) {
+    when (config.enableMarkdown) {
         true -> {
-            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$contents" else contents
+            val transformLineBreak = contents.replace("\n", "  \n")
+            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$transformLineBreak" else transformLineBreak
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
