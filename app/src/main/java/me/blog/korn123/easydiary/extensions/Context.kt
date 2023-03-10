@@ -932,7 +932,8 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
     when (config.enableMarkdown) {
         true -> {
             val transformLineBreak = contents.replace("\n", "  \n")
-            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$transformLineBreak" else transformLineBreak
+            val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}\n$transformLineBreak" else transformLineBreak
+            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$mergedContents" else mergedContents
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
@@ -976,7 +977,13 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
             }
         }
         false -> {
-            contentsView.text = if (isTimeline) applyBoldToDate(lineBreakStrings[0], contents) else contents
+            contentsView.text = when (isTimeline) {
+                true -> {
+                    val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}\n$contents" else contents
+                    applyBoldToDate(lineBreakStrings[0], mergedContents)
+                }
+                false -> contents
+            }
         }
     }
 }
