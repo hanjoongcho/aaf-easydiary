@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -7,6 +8,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
@@ -14,13 +16,16 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
@@ -143,68 +148,99 @@ open class BaseDevActivity : EasyDiaryActivity() {
             buttonDebugLauncher.setOnClickListener {
                 toggleLauncher(Launcher.DEBUG)
             }
-            buttonResetFontSize.setOnClickListener {
-                config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
-                makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
+            val flexboxLayoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT).apply {
+                flexGrow = 1F
             }
-            buttonHttpConnection.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val url = URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
-                    val httpConn = url.openConnection() as HttpURLConnection
-                    val responseCode = httpConn.responseCode
-
-                    withContext(Dispatchers.Main) {
-                        makeToast("Response Code: $responseCode")
+            flexDefaultContainer.run {
+                addView(Button(this@BaseDevActivity).apply {
+                    text = "Reset Font Size"
+                    layoutParams = flexboxLayoutParams
+                    setOnClickListener {
+                        config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+                        makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
                     }
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // opens input stream from the HTTP connection
-                        val inputStream = httpConn.inputStream
-                        val lines = IOUtils.readLines(inputStream, "UTF-8")
-                        withContext(Dispatchers.Main) {
-                            makeToast(lines[0])
+                })
+                addView(Button(this@BaseDevActivity).apply {
+                    text = "Check Force Release URL"
+                    layoutParams = flexboxLayoutParams
+                    setOnClickListener {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val url =
+                                URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
+                            val httpConn = url.openConnection() as HttpURLConnection
+                            val responseCode = httpConn.responseCode
+
+                            withContext(Dispatchers.Main) {
+                                makeToast("Response Code: $responseCode")
+                            }
+                            if (responseCode == HttpURLConnection.HTTP_OK) {
+                                // opens input stream from the HTTP connection
+                                val inputStream = httpConn.inputStream
+                                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                                withContext(Dispatchers.Main) {
+                                    makeToast(lines[0])
 //                            if (lines[0].contains("true")) {
 //                                config.aafPinLockEnable = false
 //                                config.fingerprintLockEnable = false
 //                                finish()
 //                            }
+                                }
+                                inputStream.close()
+                            }
+                            httpConn.disconnect()
                         }
-                        inputStream.close()
                     }
-                    httpConn.disconnect()
-                }
-            }
-            buttonInAppBrowser.setOnClickListener {
-                val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
+                })
+                addView(Button(this@BaseDevActivity).apply {
+                    text = "InApp Browser"
+                    layoutParams = flexboxLayoutParams
+                    setOnClickListener {
+                        val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                        customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
+                    }
+                })
+                addView(Button(this@BaseDevActivity).apply {
+                    text = "Debug-Option1"
+                    layoutParams = flexboxLayoutParams
+                    setOnClickListener {
+                        makeSnackBar("Apple: On")
+                    }
+                })
             }
         }
     }
 
     private fun setupNotification() {
-        mBinding.buttonNotification01.setOnClickListener {
-            val notification = NotificationInfo(
-                R.drawable.ic_diary_writing,
-                useActionButton = true,
-                useCustomContentView = false,
-                id = mNotificationCount++
-            )
-            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
-        }
-        mBinding.buttonNotification02.setOnClickListener {
-            val notification = NotificationInfo(
-                R.drawable.ic_diary_backup_local,
-                useActionButton = true,
-                useCustomContentView = true,
-                mNotificationCount++)
-            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
-        }
-        mBinding.buttonNotification03.setOnClickListener {
-            val notification = NotificationInfo(
-                R.drawable.ic_done,
-                useActionButton = true,
-                useCustomContentView = false,
-                100)
-            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mBinding.buttonNotification01.setOnClickListener {
+                val notification = NotificationInfo(
+                    R.drawable.ic_diary_writing,
+                    useActionButton = true,
+                    useCustomContentView = false,
+                    id = mNotificationCount++
+                )
+                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
+            }
+            mBinding.buttonNotification02.setOnClickListener {
+                val notification = NotificationInfo(
+                    R.drawable.ic_diary_backup_local,
+                    useActionButton = true,
+                    useCustomContentView = true,
+                    mNotificationCount++)
+                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
+            }
+            mBinding.buttonNotification03.setOnClickListener {
+                val notification = NotificationInfo(
+                    R.drawable.ic_done,
+                    useActionButton = true,
+                    useCustomContentView = false,
+                    100)
+                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
+            }
         }
     }
 

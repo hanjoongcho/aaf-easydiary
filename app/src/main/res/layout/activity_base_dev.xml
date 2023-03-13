@@ -83,6 +83,7 @@
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/flex_default_container"
                         app:flexDirection="row"
                         app:flexWrap="wrap"
                         android:layout_width="match_parent"
@@ -171,18 +172,7 @@
                             android:text="Reset Font Size"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_http_connection"
-                            android:text="Check Force Release URL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_in_app_browser"
-                            android:text="InApp Browser"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
