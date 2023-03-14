@@ -66,7 +66,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugMode) makeToast("Network location has been updated")
+            if (config.enableDebugOptionLocationToast) makeToast("Network location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
@@ -75,7 +75,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
     private val mGPSLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugMode) makeToast("GPS location has been updated")
+            if (config.enableDebugOptionLocationToast) makeToast("GPS location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
@@ -669,7 +669,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         // When checkTemporaryDiary is called in edit mode, the already loaded attached photo must be cleared.
         // Start clearing
         val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
-        if (config.enableDebugMode) makeToast("attachedPhotos: $attachedPhotos, ${mPhotoUris.size}")
+        if (config.enableDebugOptionAttachedPhotoToast) makeToast("attachedPhotos: $attachedPhotos, ${mPhotoUris.size}")
         if (attachedPhotos > 1) {
             for (i in attachedPhotos downTo 2) {
                 mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeViewAt(i.minus(2))

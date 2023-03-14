@@ -248,6 +248,14 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)
         set(enableMarkdown) = prefs.edit().putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown).apply()
 
+    var enableDebugOptionLocationToast: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_LOCATION_TOAST, false)
+        set(enableDebugOptionLocationToast) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_LOCATION_TOAST, enableDebugOptionLocationToast).apply()
+
+    var enableDebugOptionAttachedPhotoToast: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, false)
+        set(enableDebugOptionAttachedPhotoToast) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, enableDebugOptionAttachedPhotoToast).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

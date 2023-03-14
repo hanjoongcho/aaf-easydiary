@@ -519,6 +519,8 @@ const val GREEN_THEME_TEXT_COLOR = "#4D4C4C"
  *   Debug Options
  *
  ***************************************************************************************************/
+const val SETTING_DEBUG_OPTION_LOCATION_TOAST = "setting_debug_option_toast"
+const val SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST = "setting_debug_option_attached_photo_toast"
 
 
 /***************************************************************************************************

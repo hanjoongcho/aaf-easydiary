@@ -54,6 +54,7 @@ import com.simplemobiletools.commons.views.*
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
 import io.noties.markwon.image.ImagesPlugin
@@ -956,12 +957,14 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
 //                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
 //                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
             }
+            val strikeoutPlugin = StrikethroughPlugin.create()
             when (isRecyclerItem) {
                 true -> Markwon.builder(this)
                     .usePlugin(MovementMethodPlugin.none())
                     .usePlugin(codeBlockTheme)
                     .usePlugin(ImagesPlugin.create())
                     .usePlugin(tablePlugin)
+                    .usePlugin(strikeoutPlugin)
                     .build()
                     .apply {
                         setMarkdown(contentsView, boldDate)
@@ -970,6 +973,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .usePlugin(codeBlockTheme)
                     .usePlugin(ImagesPlugin.create())
                     .usePlugin(tablePlugin)
+                    .usePlugin(strikeoutPlugin)
                     .build()
                     .apply {
                         setMarkdown(contentsView, boldDate)

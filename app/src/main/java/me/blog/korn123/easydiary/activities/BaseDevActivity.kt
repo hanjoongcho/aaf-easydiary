@@ -200,10 +200,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                 })
                 addView(Button(this@BaseDevActivity).apply {
-                    text = "Debug-Option1"
+                    text = "Location Toast"
                     layoutParams = flexboxLayoutParams
                     setOnClickListener {
-                        makeSnackBar("Apple: On")
+                        config.enableDebugOptionLocationToast = !config.enableDebugOptionLocationToast
+                        makeSnackBar("Status: ${config.enableDebugOptionLocationToast}")
+                    }
+                })
+                addView(Button(this@BaseDevActivity).apply {
+                    text = "Attached Photo Toast"
+                    layoutParams = flexboxLayoutParams
+                    setOnClickListener {
+                        config.enableDebugOptionAttachedPhotoToast = !config.enableDebugOptionAttachedPhotoToast
+                        makeSnackBar("Status: ${config.enableDebugOptionAttachedPhotoToast}")
                     }
                 })
             }
