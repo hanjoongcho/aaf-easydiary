@@ -71,12 +71,10 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         } else {
             saveTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
         }
-        if (config.enableDebugMode) makeToast("onPause")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (config.enableDebugMode) makeToast("onDestroy")
     }
 
 

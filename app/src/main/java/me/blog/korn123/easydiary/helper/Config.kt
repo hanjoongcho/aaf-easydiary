@@ -256,6 +256,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, false)
         set(enableDebugOptionAttachedPhotoToast) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, enableDebugOptionAttachedPhotoToast).apply()
 
+    var enableDebugOptionDisplayDiarySequence: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_DIARY_SEQUENCE, false)
+        set(enableDebugOptionDisplayDiarySequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_DIARY_SEQUENCE, enableDebugOptionDisplayDiarySequence).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

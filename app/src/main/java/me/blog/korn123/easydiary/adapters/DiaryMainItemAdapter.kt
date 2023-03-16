@@ -189,7 +189,7 @@ class DiaryMainItemAdapter(
                         diary.currentTimeMillis, activity
                     )
                 }
-                if (activity.config.enableDebugMode) textDateTime.text =
+                if (activity.config.enableDebugOptionDisplayDiarySequence) textDateTime.text =
                     "[${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
 

@@ -792,19 +792,19 @@ fun Context.getLastKnownLocation(): Location? {
             when {
                 gpsLocation != null && networkLocation != null -> {
                     if (gpsLocation.elapsedRealtimeNanos - networkLocation.elapsedRealtimeNanos > 0) {
-                        if (config.enableDebugMode) toast("GPS Location > Network Location")
+                        if (config.enableDebugOptionLocationToast) toast("GPS Location > Network Location")
                         gpsLocation
                     } else {
-                        if (config.enableDebugMode) toast("Network Location > GPS Location")
+                        if (config.enableDebugOptionLocationToast) toast("Network Location > GPS Location")
                         networkLocation
                     }
                 }
                 gpsLocation != null -> {
-                    if (config.enableDebugMode) toast("GPS Location")
+                    if (config.enableDebugOptionLocationToast) toast("GPS Location")
                     gpsLocation
                 }
                 networkLocation != null -> {
-                    if (config.enableDebugMode) toast("Network Location")
+                    if (config.enableDebugOptionLocationToast) toast("Network Location")
                     networkLocation
                 }
                 else -> null
