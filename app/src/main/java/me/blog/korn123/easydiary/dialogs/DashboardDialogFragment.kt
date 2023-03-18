@@ -198,14 +198,16 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                if (config.enableDebugMode) {
+                if (config.enableDebugOptionVisibleChartWeight) {
                     mBinding.statistics4.visibility = View.VISIBLE
                     replace(R.id.statistics4, WeightLineChartFragment().apply {
                         val args = Bundle()
                         args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
                         arguments = args
                     })
+                }
 
+                if (config.enableDebugOptionVisibleChartWeight) {
                     mBinding.statistics5.visibility = View.VISIBLE
                     replace(R.id.statistics5, StockLineChartFragment().apply {
                         val args = Bundle()

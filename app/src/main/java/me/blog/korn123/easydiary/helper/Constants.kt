@@ -519,9 +519,11 @@ const val GREEN_THEME_TEXT_COLOR = "#4D4C4C"
  *   Debug Options
  *
  ***************************************************************************************************/
-const val SETTING_DEBUG_OPTION_LOCATION_TOAST = "setting_debug_option_toast"
-const val SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST = "setting_debug_option_attached_photo_toast"
-const val SETTING_DEBUG_OPTION_DISPLAY_DIARY_SEQUENCE = "setting_debug_option_display_diary_sequence"
+const val SETTING_DEBUG_OPTION_TOAST_LOCATION                 = "setting_debug_option_toast_location"
+const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO           = "setting_debug_option_toast_attached_photo"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE = "setting_debug_option_visible_diary_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT   = "setting_debug_option_visible_chart_weight"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK    = "setting_debug_option_visible_chart_stock"
 
 
 /***************************************************************************************************

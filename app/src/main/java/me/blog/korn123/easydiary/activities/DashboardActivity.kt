@@ -149,7 +149,7 @@ class DashboardActivity : EasyDiaryActivity() {
             commit()
         }
 
-        if (config.enableDebugMode) {
+        if (config.enableDebugOptionVisibleChartWeight) {
             mBinding.statistics4.visibility = View.VISIBLE
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.statistics4, WeightLineChartFragment().apply {
@@ -159,7 +159,9 @@ class DashboardActivity : EasyDiaryActivity() {
                 })
                 commit()
             }
+        }
 
+        if (config.enableDebugOptionVisibleChartStock) {
             mBinding.statistics5.visibility = View.VISIBLE
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.statistics5, StockLineChartFragment().apply {

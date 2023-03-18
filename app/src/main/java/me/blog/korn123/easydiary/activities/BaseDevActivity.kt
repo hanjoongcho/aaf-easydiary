@@ -57,7 +57,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugOptionLocationToast) makeToast("Network location has been updated")
+            if (config.enableDebugOptionToastLocation) makeToast("Network location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
@@ -66,7 +66,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
     private val mGPSLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugOptionLocationToast) makeToast("GPS location has been updated")
+            if (config.enableDebugOptionToastLocation) makeToast("GPS location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
@@ -203,24 +203,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     text = "Location Toast"
                     layoutParams = flexboxLayoutParams
                     setOnClickListener {
-                        config.enableDebugOptionLocationToast = !config.enableDebugOptionLocationToast
-                        makeSnackBar("Status: ${config.enableDebugOptionLocationToast}")
+                        config.enableDebugOptionToastLocation = !config.enableDebugOptionToastLocation
+                        makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
                     }
                 })
                 addView(Button(this@BaseDevActivity).apply {
                     text = "Attached Photo Toast"
                     layoutParams = flexboxLayoutParams
                     setOnClickListener {
-                        config.enableDebugOptionAttachedPhotoToast = !config.enableDebugOptionAttachedPhotoToast
-                        makeSnackBar("Status: ${config.enableDebugOptionAttachedPhotoToast}")
+                        config.enableDebugOptionToastAttachedPhoto = !config.enableDebugOptionToastAttachedPhoto
+                        makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
                     }
                 })
                 addView(Button(this@BaseDevActivity).apply {
                     text = "Display Diary Sequence"
                     layoutParams = flexboxLayoutParams
                     setOnClickListener {
-                        config.enableDebugOptionDisplayDiarySequence = !config.enableDebugOptionDisplayDiarySequence
-                        makeSnackBar("Status: ${config.enableDebugOptionDisplayDiarySequence}")
+                        config.enableDebugOptionVisibleDiarySequence = !config.enableDebugOptionVisibleDiarySequence
+                        makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
                     }
                 })
             }

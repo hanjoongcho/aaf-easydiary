@@ -14,8 +14,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import io.noties.markwon.Markwon
-import io.noties.markwon.movement.MovementMethodPlugin
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -26,14 +24,12 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.Calculation
-import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -42,7 +38,6 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
-import java.util.Locale
 
 class DiaryMainItemAdapter(
     val activity: Activity,
@@ -189,7 +184,7 @@ class DiaryMainItemAdapter(
                         diary.currentTimeMillis, activity
                     )
                 }
-                if (activity.config.enableDebugOptionDisplayDiarySequence) textDateTime.text =
+                if (activity.config.enableDebugOptionVisibleDiarySequence) textDateTime.text =
                     "[${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
 

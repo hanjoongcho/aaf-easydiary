@@ -248,17 +248,25 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)
         set(enableMarkdown) = prefs.edit().putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown).apply()
 
-    var enableDebugOptionLocationToast: Boolean
-        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_LOCATION_TOAST, false)
-        set(enableDebugOptionLocationToast) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_LOCATION_TOAST, enableDebugOptionLocationToast).apply()
+    var enableDebugOptionToastLocation: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_LOCATION, false)
+        set(enableDebugOptionToastLocation) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_LOCATION, enableDebugOptionToastLocation).apply()
 
-    var enableDebugOptionAttachedPhotoToast: Boolean
-        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, false)
-        set(enableDebugOptionAttachedPhotoToast) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_ATTACHED_PHOTO_TOAST, enableDebugOptionAttachedPhotoToast).apply()
+    var enableDebugOptionToastAttachedPhoto: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, false)
+        set(enableDebugOptionToastAttachedPhoto) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, enableDebugOptionToastAttachedPhoto).apply()
 
-    var enableDebugOptionDisplayDiarySequence: Boolean
-        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_DIARY_SEQUENCE, false)
-        set(enableDebugOptionDisplayDiarySequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_DIARY_SEQUENCE, enableDebugOptionDisplayDiarySequence).apply()
+    var enableDebugOptionVisibleDiarySequence: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, false)
+        set(enableDebugOptionVisibleDiarySequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, enableDebugOptionVisibleDiarySequence).apply()
+
+    var enableDebugOptionVisibleChartWeight: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, false)
+        set(enableDebugOptionVisibleChartWeight) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, enableDebugOptionVisibleChartWeight).apply()
+
+    var enableDebugOptionVisibleChartStock: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, false)
+        set(enableDebugOptionVisibleChartStock) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, enableDebugOptionVisibleChartStock).apply()
 
     companion object {
         fun newInstance(context: Context) = Config(context)
