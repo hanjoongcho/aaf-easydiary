@@ -82,6 +82,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
+    private val mFlexboxLayoutParams = FlexboxLayout.LayoutParams(
+        FlexboxLayout.LayoutParams.WRAP_CONTENT
+        , FlexboxLayout.LayoutParams.WRAP_CONTENT
+    )
     protected lateinit var mBinding: ActivityBaseDevBinding
 
 
@@ -122,112 +126,167 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   test functions
      *
      ***************************************************************************************************/
-    private fun setupTestFunction() {
+    private fun createBaseCardView(cardTitle: String, vararg buttons: Button): CardView {
         val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
         val cardContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.AppCard_Settings)
         val linearContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
-        val flexboxLayoutParams = FlexboxLayout.LayoutParams(
-            FlexboxLayout.LayoutParams.WRAP_CONTENT
-            , FlexboxLayout.LayoutParams.WRAP_CONTENT
-        )
-        mBinding.run {
-            // Setting Toast
-            linearDevContainer.addView(
-                CardView(cardContextTheme).apply {
-                    addView(
-                        LinearLayout(linearContextTheme).apply {
-                            addView(MyTextView(titleContextTheme).apply {
-                                text = "Toast Message"
-                            })
-                            addView(FlexboxLayout(this@BaseDevActivity).apply {
-                                flexDirection = FlexDirection.ROW
-                                flexWrap = FlexWrap.WRAP
-                                addView(Button(this@BaseDevActivity).apply {
-                                    text = "Location Toast"
-                                    layoutParams = flexboxLayoutParams
-                                    setOnClickListener {
-                                        config.enableDebugOptionToastLocation = !config.enableDebugOptionToastLocation
-                                        makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
-                                    }
-                                })
-                                addView(Button(this@BaseDevActivity).apply {
-                                    text = "Attached Photo Toast"
-                                    layoutParams = flexboxLayoutParams
-                                    setOnClickListener {
-                                        config.enableDebugOptionToastAttachedPhoto = !config.enableDebugOptionToastAttachedPhoto
-                                        makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
-                                    }
-                                })
-                            })
-                        }
-                    )
+        return CardView(cardContextTheme).apply {
+            addView(
+                LinearLayout(linearContextTheme).apply {
+                    addView(MyTextView(titleContextTheme).apply {
+                        text = cardTitle
+                    })
+                    addView(FlexboxLayout(this@BaseDevActivity).apply {
+                        flexDirection = FlexDirection.ROW
+                        flexWrap = FlexWrap.WRAP
+                        buttons.forEach { addView(it) }
+                    })
                 }
             )
-            flexDefaultContainer.run {
-                FlexboxLayout.LayoutParams(
-                    FlexboxLayout.LayoutParams.WRAP_CONTENT
-                    , FlexboxLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    flexGrow = 1F
-                }.also { flexboxLayoutParams ->
-                    addView(Button(this@BaseDevActivity).apply {
+        }
+    }
+
+
+    private fun setupTestFunction() {
+        mBinding.run {
+            linearDevContainer.addView(
+                // Setting Toast
+                createBaseCardView(
+                    "Toast Message", Button(this@BaseDevActivity).apply {
+                        text = "Location Toast"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionToastLocation =
+                                !config.enableDebugOptionToastLocation
+                            makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Attached Photo Toast"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionToastAttachedPhoto =
+                                !config.enableDebugOptionToastAttachedPhoto
+                            makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
+                        }
+                    }
+                )
+            )
+            linearDevContainer.addView(
+                // Setting Custom Launcher
+                createBaseCardView(
+                    "Custom Launcher"
+                    , Button(this@BaseDevActivity).apply {
+                        text = "EasyDiary Launcher"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.EASY_DIARY) }
+                    },
+                    Button(this@BaseDevActivity).apply {
+                        text = "Dark Launcher"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.DARK) }
+                    },
+                    Button(this@BaseDevActivity).apply {
+                        text = "Green Launcher"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.GREEN) }
+                    },
+                    Button(this@BaseDevActivity).apply {
+                        text = "Debug Launcher"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.DEBUG) }
+                    }
+                )
+            )
+            linearDevContainer.addView(
+                // Biometric authentication
+                createBaseCardView(
+                    "Finger Print"
+                    , Button(this@BaseDevActivity).apply {
+                        text = "Fingerprint"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { startListeningFingerprint(this@BaseDevActivity) }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "Biometric"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener { startListeningBiometric(this@BaseDevActivity) }
+                    }
+                )
+            )
+            linearDevContainer.addView(
+                // Setting Custom Chart
+                createBaseCardView(
+                    "Custom Chart", Button(this@BaseDevActivity).apply {
+                        text = "Stock"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleChartStock =
+                                !config.enableDebugOptionVisibleChartStock
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartStock}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Weight"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleChartWeight =
+                                !config.enableDebugOptionVisibleChartWeight
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartWeight}")
+                        }
+                    }
+                )
+            )
+            linearDevContainer.addView(
+                // ETC.
+                createBaseCardView(
+                    "ETC.",
+                    Button(this@BaseDevActivity).apply {
                         text = "ReviewFlow"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener { startReviewFlow() }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
+                    }, Button(this@BaseDevActivity).apply {
                         text = "Reset Showcase"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
-                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
-                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false).apply()
-                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false).apply()
-                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
+                                edit().putBoolean(
+                                    "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
+                                    false
+                                ).apply()
+                                edit().putBoolean(
+                                    "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
+                                    false
+                                ).apply()
+                                edit().putBoolean(
+                                    "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
+                                    false
+                                ).apply()
+                                edit().putBoolean(
+                                    "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
+                                    false
+                                ).apply()
                             }
                         }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Fingerprint"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { startListeningFingerprint(this@BaseDevActivity) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Biometric"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { startListeningBiometric(this@BaseDevActivity) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "EasyDiary Launcher"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.EASY_DIARY) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Dark Launcher"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.DARK) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Green Launcher"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.GREEN) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Debug Launcher"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.DEBUG) }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
+                    }, Button(this@BaseDevActivity).apply {
                         text = "Reset Font Size"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
-                            makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
+                            config.settingFontSize =
+                                spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+                            makeToast(
+                                "DP:${
+                                    dpToPixelFloatValue(
+                                        UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                                    )
+                                } , SP:${
+                                    spToPixelFloatValue(
+                                        UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                                    )
+                                }"
+                            )
                         }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
+                    }, Button(this@BaseDevActivity).apply {
                         text = "Check Force Release URL"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val url =
@@ -255,42 +314,28 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 httpConn.disconnect()
                             }
                         }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
+                    }, Button(this@BaseDevActivity).apply {
                         text = "InApp Browser"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                            customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
+                            val customTabsIntent =
+                                CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                            customTabsIntent.launchUrl(
+                                this@BaseDevActivity,
+                                Uri.parse("https://github.com/AAFactory/aafactory-commons")
+                            )
                         }
-                    })
-
-                    addView(Button(this@BaseDevActivity).apply {
+                    }, Button(this@BaseDevActivity).apply {
                         text = "Display Diary Sequence"
-                        layoutParams = flexboxLayoutParams
+                        layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            config.enableDebugOptionVisibleDiarySequence = !config.enableDebugOptionVisibleDiarySequence
+                            config.enableDebugOptionVisibleDiarySequence =
+                                !config.enableDebugOptionVisibleDiarySequence
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
                         }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Stock"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleChartStock = !config.enableDebugOptionVisibleChartStock
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartStock}")
-                        }
-                    })
-                    addView(Button(this@BaseDevActivity).apply {
-                        text = "Weight"
-                        layoutParams = flexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleChartWeight = !config.enableDebugOptionVisibleChartWeight
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartWeight}")
-                        }
-                    })
-                }
-            }
+                    }
+                )
+            )
         }
     }
 
