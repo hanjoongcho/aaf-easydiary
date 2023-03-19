@@ -345,31 +345,46 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            mBinding.buttonNotification01.setOnClickListener {
-                val notification = NotificationInfo(
-                    R.drawable.ic_diary_writing,
-                    useActionButton = true,
-                    useCustomContentView = false,
-                    id = mNotificationCount++
+            mBinding.linearDevContainer.addView(
+                // Notification
+                createBaseCardView(
+                    "Notification", Button(this@BaseDevActivity).apply {
+                        text = "Notification-01"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val notification = NotificationInfo(
+                                R.drawable.ic_diary_writing,
+                                useActionButton = true,
+                                useCustomContentView = false,
+                                id = mNotificationCount++
+                            )
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification))
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Notification-02"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val notification = NotificationInfo(
+                                R.drawable.ic_diary_backup_local,
+                                useActionButton = true,
+                                useCustomContentView = true,
+                                mNotificationCount++)
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification))
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Notification-03"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val notification = NotificationInfo(
+                                R.drawable.ic_done,
+                                useActionButton = true,
+                                useCustomContentView = false,
+                                100)
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification))
+                        }
+                    }
                 )
-                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
-            }
-            mBinding.buttonNotification02.setOnClickListener {
-                val notification = NotificationInfo(
-                    R.drawable.ic_diary_backup_local,
-                    useActionButton = true,
-                    useCustomContentView = true,
-                    mNotificationCount++)
-                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
-            }
-            mBinding.buttonNotification03.setOnClickListener {
-                val notification = NotificationInfo(
-                    R.drawable.ic_done,
-                    useActionButton = true,
-                    useCustomContentView = false,
-                    100)
-                NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
-            }
+            )
         }
     }
 

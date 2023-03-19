@@ -103,24 +103,6 @@
                             android:text="Clear-Unused-Photo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_notification_01"
-                            android:text="Notification-01"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_notification_02"
-                            android:text="Notification-02"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_notification_03"
-                            android:text="Notification-03"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
