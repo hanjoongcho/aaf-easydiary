@@ -33,10 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <LinearLayout
-                android:padding="@dimen/component_margin_small"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                style="@style/LinearLayoutVertical"
+                android:id="@+id/linear_dev_container"
+                android:paddingTop="@dimen/component_margin_small"
+                android:paddingLeft="@dimen/component_margin_small"
+                android:paddingRight="@dimen/component_margin_small"
+                android:paddingBottom="35dp"
+                >
                 <androidx.cardview.widget.CardView
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
@@ -118,61 +121,6 @@
                             android:text="Notification-03"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_review_flow"
-                            android:text="ReviewFlow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_reset_showcase"
-                            android:text="Reset Showcase"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_fingerprint"
-                            android:text="Fingerprint"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_biometric"
-                            android:text="Biometric"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_easy_diary_launcher"
-                            android:text="EasyDiary Launcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_dark_launcher"
-                            android:text="Dark Launcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_green_launcher"
-                            android:text="Green Launcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_debug_launcher"
-                            android:text="Debug Launcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_reset_font_size"
-                            android:text="Reset Font Size"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView

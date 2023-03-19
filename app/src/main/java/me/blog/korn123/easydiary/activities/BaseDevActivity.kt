@@ -15,18 +15,24 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
@@ -117,112 +123,173 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupTestFunction() {
+        val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
+        val cardContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.AppCard_Settings)
+        val linearContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
+        val flexboxLayoutParams = FlexboxLayout.LayoutParams(
+            FlexboxLayout.LayoutParams.WRAP_CONTENT
+            , FlexboxLayout.LayoutParams.WRAP_CONTENT
+        )
         mBinding.run {
-            buttonReviewFlow.setOnClickListener { startReviewFlow() }
-            buttonResetShowcase.setOnClickListener {
-                getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
-                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
-                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false).apply()
-                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false).apply()
-                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
+            // Setting Toast
+            linearDevContainer.addView(
+                CardView(cardContextTheme).apply {
+                    addView(
+                        LinearLayout(linearContextTheme).apply {
+                            addView(MyTextView(titleContextTheme).apply {
+                                text = "Toast Message"
+                            })
+                            addView(FlexboxLayout(this@BaseDevActivity).apply {
+                                flexDirection = FlexDirection.ROW
+                                flexWrap = FlexWrap.WRAP
+                                addView(Button(this@BaseDevActivity).apply {
+                                    text = "Location Toast"
+                                    layoutParams = flexboxLayoutParams
+                                    setOnClickListener {
+                                        config.enableDebugOptionToastLocation = !config.enableDebugOptionToastLocation
+                                        makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
+                                    }
+                                })
+                                addView(Button(this@BaseDevActivity).apply {
+                                    text = "Attached Photo Toast"
+                                    layoutParams = flexboxLayoutParams
+                                    setOnClickListener {
+                                        config.enableDebugOptionToastAttachedPhoto = !config.enableDebugOptionToastAttachedPhoto
+                                        makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
+                                    }
+                                })
+                            })
+                        }
+                    )
                 }
-            }
-            buttonFingerprint.setOnClickListener {
-                startListeningFingerprint(this@BaseDevActivity)
-            }
-            buttonBiometric.setOnClickListener {
-                startListeningBiometric(this@BaseDevActivity)
-            }
-            buttonEasyDiaryLauncher.setOnClickListener {
-                toggleLauncher(Launcher.EASY_DIARY)
-            }
-
-            buttonDarkLauncher.setOnClickListener {
-                toggleLauncher(Launcher.DARK)
-            }
-
-            buttonGreenLauncher.setOnClickListener {
-                toggleLauncher(Launcher.GREEN)
-            }
-
-            buttonDebugLauncher.setOnClickListener {
-                toggleLauncher(Launcher.DEBUG)
-            }
-            val flexboxLayoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT).apply {
-                flexGrow = 1F
-            }
+            )
             flexDefaultContainer.run {
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "Reset Font Size"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
-                        makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
-                    }
-                })
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "Check Force Release URL"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val url =
-                                URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
-                            val httpConn = url.openConnection() as HttpURLConnection
-                            val responseCode = httpConn.responseCode
-
-                            withContext(Dispatchers.Main) {
-                                makeToast("Response Code: $responseCode")
+                FlexboxLayout.LayoutParams(
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT
+                    , FlexboxLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    flexGrow = 1F
+                }.also { flexboxLayoutParams ->
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "ReviewFlow"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { startReviewFlow() }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Reset Showcase"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
+                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
+                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false).apply()
+                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false).apply()
+                                edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
                             }
-                            if (responseCode == HttpURLConnection.HTTP_OK) {
-                                // opens input stream from the HTTP connection
-                                val inputStream = httpConn.inputStream
-                                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                        }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Fingerprint"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { startListeningFingerprint(this@BaseDevActivity) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Biometric"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { startListeningBiometric(this@BaseDevActivity) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "EasyDiary Launcher"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.EASY_DIARY) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Dark Launcher"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.DARK) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Green Launcher"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.GREEN) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Debug Launcher"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener { toggleLauncher(Launcher.DEBUG) }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Reset Font Size"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+                            makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
+                        }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Check Force Release URL"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val url =
+                                    URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
+                                val httpConn = url.openConnection() as HttpURLConnection
+                                val responseCode = httpConn.responseCode
+
                                 withContext(Dispatchers.Main) {
-                                    makeToast(lines[0])
+                                    makeToast("Response Code: $responseCode")
+                                }
+                                if (responseCode == HttpURLConnection.HTTP_OK) {
+                                    // opens input stream from the HTTP connection
+                                    val inputStream = httpConn.inputStream
+                                    val lines = IOUtils.readLines(inputStream, "UTF-8")
+                                    withContext(Dispatchers.Main) {
+                                        makeToast(lines[0])
 //                            if (lines[0].contains("true")) {
 //                                config.aafPinLockEnable = false
 //                                config.fingerprintLockEnable = false
 //                                finish()
 //                            }
+                                    }
+                                    inputStream.close()
                                 }
-                                inputStream.close()
+                                httpConn.disconnect()
                             }
-                            httpConn.disconnect()
                         }
-                    }
-                })
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "InApp Browser"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                        customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
-                    }
-                })
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "Location Toast"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        config.enableDebugOptionToastLocation = !config.enableDebugOptionToastLocation
-                        makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
-                    }
-                })
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "Attached Photo Toast"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        config.enableDebugOptionToastAttachedPhoto = !config.enableDebugOptionToastAttachedPhoto
-                        makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
-                    }
-                })
-                addView(Button(this@BaseDevActivity).apply {
-                    text = "Display Diary Sequence"
-                    layoutParams = flexboxLayoutParams
-                    setOnClickListener {
-                        config.enableDebugOptionVisibleDiarySequence = !config.enableDebugOptionVisibleDiarySequence
-                        makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
-                    }
-                })
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "InApp Browser"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            val customTabsIntent = CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                            customTabsIntent.launchUrl(this@BaseDevActivity, Uri.parse("https://github.com/AAFactory/aafactory-commons"))
+                        }
+                    })
+
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Display Diary Sequence"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleDiarySequence = !config.enableDebugOptionVisibleDiarySequence
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
+                        }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Stock"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleChartStock = !config.enableDebugOptionVisibleChartStock
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartStock}")
+                        }
+                    })
+                    addView(Button(this@BaseDevActivity).apply {
+                        text = "Weight"
+                        layoutParams = flexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleChartWeight = !config.enableDebugOptionVisibleChartWeight
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartWeight}")
+                        }
+                    })
+                }
             }
         }
     }
