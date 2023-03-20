@@ -17,6 +17,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
@@ -82,7 +83,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
-    private val mFlexboxLayoutParams = FlexboxLayout.LayoutParams(
+    protected val mFlexboxLayoutParams = FlexboxLayout.LayoutParams(
         FlexboxLayout.LayoutParams.WRAP_CONTENT
         , FlexboxLayout.LayoutParams.WRAP_CONTENT
     )
@@ -107,7 +108,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
         setupActionLog()
         setupNotification()
-        setupClearUnusedPhoto()
         setupLocation()
         setupCoroutine()
         setupTestFunction()
@@ -126,8 +126,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   test functions
      *
      ***************************************************************************************************/
-    private fun createBaseCardView(cardTitle: String, vararg buttons: Button): CardView {
+    protected fun createBaseCardView(cardTitle: String, descriptionTag: String? = null, vararg buttons: Button): CardView {
         val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
+        val descriptionContextTheme = ContextThemeWrapper(this, R.style.SettingsSummary)
         val cardContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.AppCard_Settings)
         val linearContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
         return CardView(cardContextTheme).apply {
@@ -141,6 +142,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         flexWrap = FlexWrap.WRAP
                         buttons.forEach { addView(it) }
                     })
+                    descriptionTag?.let {
+                        addView(MyTextView(descriptionContextTheme).apply {
+                            tag = descriptionTag
+                        })
+                    }
                 }
             )
         }
@@ -152,7 +158,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             linearDevContainer.addView(
                 // Setting Toast
                 createBaseCardView(
-                    "Toast Message", Button(this@BaseDevActivity).apply {
+                    "Toast Message", null, Button(this@BaseDevActivity).apply {
                         text = "Location Toast"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -175,7 +181,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 // Setting Custom Launcher
                 createBaseCardView(
                     "Custom Launcher"
-                    , Button(this@BaseDevActivity).apply {
+                    , null, Button(this@BaseDevActivity).apply {
                         text = "EasyDiary Launcher"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener { toggleLauncher(Launcher.EASY_DIARY) }
@@ -201,7 +207,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 // Biometric authentication
                 createBaseCardView(
                     "Finger Print"
-                    , Button(this@BaseDevActivity).apply {
+                    , null, Button(this@BaseDevActivity).apply {
                         text = "Fingerprint"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener { startListeningFingerprint(this@BaseDevActivity) }
@@ -216,7 +222,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             linearDevContainer.addView(
                 // Setting Custom Chart
                 createBaseCardView(
-                    "Custom Chart", Button(this@BaseDevActivity).apply {
+                    "Custom Chart", null, Button(this@BaseDevActivity).apply {
                         text = "Stock"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -238,7 +244,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             linearDevContainer.addView(
                 // ETC.
                 createBaseCardView(
-                    "ETC.",
+                    "ETC.", null,
                     Button(this@BaseDevActivity).apply {
                         text = "ReviewFlow"
                         layoutParams = mFlexboxLayoutParams
@@ -333,6 +339,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 !config.enableDebugOptionVisibleDiarySequence
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
                         }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="Clear-Unused-Photo"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val localPhotoBaseNames = arrayListOf<String>()
+                            val unUsedPhotos = arrayListOf<String>()
+                            val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this@BaseDevActivity) + DIARY_PHOTO_DIRECTORY)
+                            targetFiles.listFiles()?.map {
+                                localPhotoBaseNames.add(it.name)
+                            }
+
+                            EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
+                                if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
+                                    unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
+                                }
+                            }
+                            showAlertDialog(unUsedPhotos.size.toString(), null, true)
+                        }
                     }
                 )
             )
@@ -348,7 +372,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             mBinding.linearDevContainer.addView(
                 // Notification
                 createBaseCardView(
-                    "Notification", Button(this@BaseDevActivity).apply {
+                    "Notification", null, Button(this@BaseDevActivity).apply {
                         text = "Notification-01"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -405,48 +429,57 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mBinding.actionLog.text = sb.toString()
     }
 
-    private fun setupClearUnusedPhoto() {
-        mBinding.buttonClearUnusedPhoto.setOnClickListener {
-            val localPhotoBaseNames = arrayListOf<String>()
-            val unUsedPhotos = arrayListOf<String>()
-            val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
-            targetFiles.listFiles()?.map {
-                localPhotoBaseNames.add(it.name)
-            }
-
-            EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
-                if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
-                    unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
-                }
-            }
-            showAlertDialog(unUsedPhotos.size.toString(), null, true)
-        }
-    }
-
     @SuppressLint("MissingPermission")
     private fun setupLocation() {
-        mBinding.buttonRequestLastLocation.setOnClickListener {
-            updateLocation()
-        }
+        mBinding.linearDevContainer.addView(
+            // Location Manager
+            createBaseCardView(
+                "Location Manager", TAG_LOCATION_MANAGER,
+                Button(this@BaseDevActivity).apply {
+                    text = "Last-Location"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener { updateLocation() }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "Update-GPS"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            true -> {
+                                mLocationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    0,
+                                    0F,
+                                    mGPSLocationListener
+                                )
+                            }
 
-        mBinding.buttonUpdateGpsProvider.setOnClickListener {
-            when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                true -> {
-                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
-                }
-                false -> makeSnackBar("GPS Provider is not available.")
-            }
-        }
+                            false -> makeSnackBar("GPS Provider is not available.")
+                        }
+                    }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "Update-Network"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        val locationManager =
+                            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                        when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                            true -> {
+                                mLocationManager.requestLocationUpdates(
+                                    LocationManager.NETWORK_PROVIDER,
+                                    0,
+                                    0F,
+                                    mNetworkLocationListener
+                                )
+                            }
 
-        mBinding.buttonUpdateNetworkProvider.setOnClickListener {
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                true -> {
-                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
-                }
-                false -> makeSnackBar("Network Provider is not available.")
-            }
-        }
+                            false -> makeSnackBar("Network Provider is not available.")
+                        }
+                    }
+                },
+            )
+        )
     }
 
     private var mCoroutineJob1: Job? = null
@@ -455,79 +488,112 @@ open class BaseDevActivity : EasyDiaryActivity() {
             mBinding.textCoroutine1Console.append("$tag: $message\n")
             mBinding.scrollCoroutine.post { mBinding.scrollCoroutine.fullScroll(View.FOCUS_DOWN) }
         }
-//        suspend fun doWorld() {
-//            delay(1000)
-//        }
 
-        mBinding.buttonCoroutineBasicStart.setOnClickListener {
-            if (mCoroutineJob1?.isActive == true) {
-                updateConsole("Job has already started.")
-            } else {
-                mCoroutineJob1 = GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                    for (i in 1..50) {
-                        if (isActive) {
-                            val currentThreadName = Thread.currentThread().name
-                            withContext(Dispatchers.Main) { updateConsole(i.toString(), currentThreadName) }
-                            delay(500)
+        mBinding.linearDevContainer.addView(
+            // Coroutine
+            createBaseCardView(
+                "Coroutine", null,
+                Button(this@BaseDevActivity).apply {
+                    text = "[T1] Start"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        if (mCoroutineJob1?.isActive == true) {
+                            updateConsole("Job has already started.")
+                        } else {
+                            mCoroutineJob1 =
+                                GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                                    for (i in 1..50) {
+                                        if (isActive) {
+                                            val currentThreadName = Thread.currentThread().name
+                                            withContext(Dispatchers.Main) {
+                                                updateConsole(
+                                                    i.toString(),
+                                                    currentThreadName
+                                                )
+                                            }
+                                            delay(500)
+                                        }
+                                    }
+                                }
                         }
                     }
-                }
-            }
-        }
-
-        mBinding.buttonCoroutineBasicStop.setOnClickListener {
-            if (mCoroutineJob1?.isActive == true) {
-                runBlocking { mCoroutineJob1?.cancelAndJoin() }
-            } else {
-                updateConsole("The job has been canceled")
-            }
-        }
-
-        mBinding.buttonCoroutineBasicStatus.setOnClickListener {
-            mCoroutineJob1?.let {
-                when (it.isActive) {
-                    true -> updateConsole("On")
-                    false -> updateConsole("Off")
-                }
-            } ?: run {
-                updateConsole("Coroutine is not initialized.")
-            }
-        }
-
-        mBinding.buttonCoroutineMultiple.setOnClickListener {
-            for (k in 1..3) {
-                GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                    for (i in 1..10) {
-                        val currentThreadName = Thread.currentThread().name
-                        runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                        delay(100)
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "[T1] Stop"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        if (mCoroutineJob1?.isActive == true) {
+                            runBlocking { mCoroutineJob1?.cancelAndJoin() }
+                        } else {
+                            updateConsole("The job has been canceled")
+                        }
                     }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "[T1] Job Status"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        mCoroutineJob1?.let {
+                            when (it.isActive) {
+                                true -> updateConsole("On")
+                                false -> updateConsole("Off")
+                            }
+                        } ?: run {
+                            updateConsole("Coroutine is not initialized.")
+                        }
+                    }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "[T2] Multiple"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        for (k in 1..3) {
+                            GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                                for (i in 1..10) {
+                                    val currentThreadName = Thread.currentThread().name
+                                    runOnUiThread { updateConsole(i.toString(), currentThreadName) }
+                                    delay(100)
+                                }
+                            }
+                        }
+                    }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "[T3] runBlocking"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        updateConsole("1")
+                        runBlocking {
+                            launch {
+                                updateConsole("3")
+                                delay(2000)
+                                updateConsole("4")
+                            }
+                            updateConsole("2")
+                        }
+                    }
+                },
+                Button(this@BaseDevActivity).apply {
+                    text = "[T4] CoroutineScope"
+                    layoutParams = mFlexboxLayoutParams
+                    setOnClickListener {
+                        updateConsole("1")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val name = Thread.currentThread().name
+                            withContext(Dispatchers.Main) { updateConsole("3", name) }
+                            delay(2000)
+                            withContext(Dispatchers.Main) { updateConsole("4", name) }
+                        }
+                        updateConsole("2")
+                    }
+                },
+            ).also {
+                mBinding.scrollCoroutine.run {
+                    (parent as ViewGroup).removeView(this)
+                    (it.getChildAt(0) as ViewGroup).addView(this)
                 }
             }
-        }
-
-        mBinding.buttonRunBlocking.setOnClickListener {
-            updateConsole("1")
-            runBlocking {
-                launch {
-                    updateConsole("3")
-                    delay(2000)
-                    updateConsole("4")
-                }
-                updateConsole("2")
-            }
-        }
-
-        mBinding.buttonCoroutineScope.setOnClickListener {
-            updateConsole("1")
-            CoroutineScope(Dispatchers.IO).launch {
-                val name = Thread.currentThread().name
-                withContext(Dispatchers.Main) { updateConsole("3", name) }
-                delay(2000)
-                withContext(Dispatchers.Main) { updateConsole("4", name) }
-            }
-            updateConsole("2")
-        }
+        )
     }
 
 
@@ -544,7 +610,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         info += fullAddress(address[0])
                     }
                 }
-                mBinding.textLocationConsole.text = info
+                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
             }
         }
         when (hasGPSPermissions()) {
@@ -618,6 +684,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     companion object {
         const val NOTIFICATION_ID = "notification_id"
         const val NOTIFICATION_INFO = "notification_info"
+        const val TAG_LOCATION_MANAGER = "tag_location_manager"
     }
 }
 

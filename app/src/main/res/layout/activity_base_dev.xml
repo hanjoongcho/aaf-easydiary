@@ -82,128 +82,15 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <com.google.android.flexbox.FlexboxLayout
-                        android:id="@+id/flex_default_container"
-                        app:flexDirection="row"
-                        app:flexWrap="wrap"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_execute_full_backup_service"
-                            android:text="Full-Backup"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_clear_unused_photo"
-                            android:text="Clear-Unused-Photo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.flexbox.FlexboxLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        android:id="@+id/linear_coroutine1"
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Coroutine"
-                            style="@style/SettingsTitle" />
-                        <com.google.android.flexbox.FlexboxLayout
-                            app:flexWrap="wrap"
-                            app:flexDirection="row"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_coroutine_basic_start"
-                                android:text="[T1] Start"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_coroutine_basic_stop"
-                                android:text="[T1] Stop"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_coroutine_basic_status"
-                                android:text="[T1] Job Status"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_coroutine_multiple"
-                                android:text="[T2] Multiple"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_run_blocking"
-                                android:text="[T3] runBlocking"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_coroutine_scope"
-                                android:text="[T4] CoroutineScope"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </com.google.android.flexbox.FlexboxLayout>
-
-                        <androidx.core.widget.NestedScrollView
-                            android:id="@+id/scroll_coroutine"
-                            android:fillViewport="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:id="@+id/text_coroutine1_console"
-                                style="@style/SettingsSummary" />
-                        </androidx.core.widget.NestedScrollView>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Location Manager"
-                            style="@style/SettingsTitle" />
-                        <com.google.android.flexbox.FlexboxLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <Button
-                                android:id="@+id/button_request_lastLocation"
-                                android:text="Last-Location"
-                                app:layout_flexGrow="1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                android:id="@+id/button_update_gps_provider"
-                                android:text="Update-GPS"
-                                app:layout_flexGrow="1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                android:id="@+id/button_update_network_provider"
-                                android:text="Update-Network"
-                                app:layout_flexGrow="1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </com.google.android.flexbox.FlexboxLayout>
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:layout_below="@+id/locationToolbar"
-                            android:id="@+id/text_location_console"
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scroll_coroutine"
+                    android:fillViewport="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/text_coroutine1_console"
+                        style="@style/SettingsSummary" />
+                </androidx.core.widget.NestedScrollView>
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

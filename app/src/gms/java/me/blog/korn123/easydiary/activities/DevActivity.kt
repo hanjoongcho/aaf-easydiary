@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
@@ -16,22 +17,30 @@ class DevActivity : BaseDevActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.buttonExecuteFullBackupService.setOnClickListener {
-            GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
-                DriveServiceHelper(this, account).run {
-                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                        if (photoFolderId != null) {
-                            Intent(context, FullBackupService::class.java).apply {
-                                putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                                ContextCompat.startForegroundService(context, this)
+
+        mBinding.linearDevContainer.addView(
+            // GMSP
+            createBaseCardView("GMSP", null, Button(this).apply {
+                text = "Full-Backup"
+                layoutParams = mFlexboxLayoutParams
+                setOnClickListener {
+                    GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
+                        DriveServiceHelper(this@DevActivity, account).run {
+                            initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                                if (photoFolderId != null) {
+                                    Intent(context, FullBackupService::class.java).apply {
+                                        putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                                        ContextCompat.startForegroundService(context, this)
+                                    }
+                                } else {
+                                    makeSnackBar("Failed start a service.")
+                                }
                             }
-                        } else {
-                            makeSnackBar("Failed start a service.")
                         }
                     }
                 }
-            }
-        }
+            })
+        )
     }
 
 
