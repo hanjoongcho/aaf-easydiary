@@ -150,7 +150,7 @@ object EasyDiaryDbHelper {
         }
 
         // Exclude -1 or greater than 0
-        if (EasyDiaryApplication.context?.config?.enableDebugMode == false) {
+        if (EasyDiaryApplication.context?.config?.enableDebugOptionVisibleTemporaryDiary == false) {
             results = results.where().equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).findAll()
         }
 

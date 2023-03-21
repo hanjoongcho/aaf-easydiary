@@ -67,8 +67,8 @@ class TimelineItemAdapter(
             FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
             val lineBreakStrings = arrayListOf<String>()
             when (diaryDto.isAllDay) {
-                true -> lineBreakStrings.add(if (context.config.enableDebugMode) "[${diaryDto.originSequence}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
-                false -> lineBreakStrings.add(if (context.config.enableDebugMode) "[${diaryDto.originSequence}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
+                true -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originSequence}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
+                false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originSequence}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
             }
             if (StringUtils.isNotEmpty(diaryDto.title)) lineBreakStrings.add(diaryDto.title!!)
             activity.applyMarkDownPolicy(text1, diaryDto.contents!!, true, lineBreakStrings, true)

@@ -72,7 +72,7 @@ class AlarmAdapter(
                 alarmDescription.text = alarm.label
                 editAlarmTime.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
 
-                val prefix = if (activity.config.enableDebugMode) "[${alarm.sequence}] " else ""
+                val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
                 alarmLabel.text = when (alarm.workMode) {
                     Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
                     Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"

@@ -256,9 +256,25 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, false)
         set(enableDebugOptionToastAttachedPhoto) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, enableDebugOptionToastAttachedPhoto).apply()
 
+    var enableDebugOptionToastNotificationInfo: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO, false)
+        set(enableDebugOptionToastNotificationInfo) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO, enableDebugOptionToastNotificationInfo).apply()
+
+    var enableDebugOptionToastReviewFlowInfo: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO, false)
+        set(enableDebugOptionToastReviewFlowInfo) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO, enableDebugOptionToastReviewFlowInfo).apply()
+
+    var enableDebugOptionToastPhotoHighlightUpdateTime: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME, false)
+        set(enableDebugOptionToastPhotoHighlightUpdateTime) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME, enableDebugOptionToastPhotoHighlightUpdateTime).apply()
+
     var enableDebugOptionVisibleDiarySequence: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, false)
         set(enableDebugOptionVisibleDiarySequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, enableDebugOptionVisibleDiarySequence).apply()
+
+    var enableDebugOptionVisibleAlarmSequence: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, false)
+        set(enableDebugOptionVisibleAlarmSequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, enableDebugOptionVisibleAlarmSequence).apply()
 
     var enableDebugOptionVisibleChartWeight: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, false)
@@ -267,6 +283,14 @@ class Config(val context: Context) {
     var enableDebugOptionVisibleChartStock: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, false)
         set(enableDebugOptionVisibleChartStock) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, enableDebugOptionVisibleChartStock).apply()
+
+    var enableDebugOptionVisibleFontPreviewEmoji: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI, false)
+        set(enableDebugOptionVisibleFontPreviewEmoji) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI, enableDebugOptionVisibleFontPreviewEmoji).apply()
+
+    var enableDebugOptionVisibleTemporaryDiary: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, false)
+        set(enableDebugOptionVisibleTemporaryDiary) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, enableDebugOptionVisibleTemporaryDiary).apply()
 
     companion object {
         fun newInstance(context: Context) = Config(context)

@@ -98,11 +98,11 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
                     holder.textView.run {
                         val tf = FontUtils.getTypeface(context, list[position]["fontName"])
                         withContext(Dispatchers.Main) {
-                            val label = if (activity.config.enableDebugMode) "\uD83C\uDF0E\uD83D\uDCF1${list[position]["disPlayFontName"]}" else list[position]["disPlayFontName"]
+                            val label = if (activity.config.enableDebugOptionVisibleFontPreviewEmoji) "\uD83C\uDF0E\uD83D\uDCF1${list[position]["disPlayFontName"]}" else list[position]["disPlayFontName"]
                             typeface = tf
                             text = label
                         }
-                        if (activity.config.enableDebugMode) EasyDiaryUtils.highlightString(this)
+                        if (activity.config.enableDebugOptionVisibleFontPreviewEmoji) EasyDiaryUtils.highlightString(this)
                     }
                     Log.i(AAF_TEST, "${holder.position} End")
                 }

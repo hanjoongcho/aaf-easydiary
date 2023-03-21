@@ -174,6 +174,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 !config.enableDebugOptionToastAttachedPhoto
                             makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
                         }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Notification Info"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionToastNotificationInfo =
+                                !config.enableDebugOptionToastNotificationInfo
+                            makeSnackBar("Status: ${config.enableDebugOptionToastNotificationInfo}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "ReviewFlow Info"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionToastReviewFlowInfo =
+                                !config.enableDebugOptionToastReviewFlowInfo
+                            makeSnackBar("Status: ${config.enableDebugOptionToastReviewFlowInfo}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text = "Photo-Highlight Update Time"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionToastPhotoHighlightUpdateTime =
+                                !config.enableDebugOptionToastPhotoHighlightUpdateTime
+                            makeSnackBar("Status: ${config.enableDebugOptionToastPhotoHighlightUpdateTime}")
+                        }
                     }
                 )
             )
@@ -340,6 +364,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
                         }
                     }, Button(this@BaseDevActivity).apply {
+                        text = "Display Alarm Sequence"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleAlarmSequence =
+                                !config.enableDebugOptionVisibleAlarmSequence
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleAlarmSequence}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
                         text ="Clear-Unused-Photo"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -356,6 +388,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 }
                             }
                             showAlertDialog(unUsedPhotos.size.toString(), null, true)
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="Font Preview Emoji"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleFontPreviewEmoji =
+                                !config.enableDebugOptionVisibleFontPreviewEmoji
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="Display Temporary Diary"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            config.enableDebugOptionVisibleTemporaryDiary =
+                                !config.enableDebugOptionVisibleTemporaryDiary
+                            makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
                         }
                     }
                 )

@@ -135,7 +135,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //        clearLockSettingsTemporary()
 
         // test code
-        if (config.enableDebugMode) {
+        if (config.enableDebugOptionToastNotificationInfo) {
             makeToast(
                 "Notification id is ${
                     intent.getIntExtra(
@@ -349,7 +349,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (config.enableReviewFlow) {
             config.appExecutionCount = config.appExecutionCount.plus(1)
             if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
-            if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
+            if (config.enableDebugOptionToastReviewFlowInfo) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
     }
 
@@ -370,7 +370,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun togglePhotoHighlight(isVisible: Boolean) {
-        if (config.enableDebugMode) makeToast(
+        if (config.enableDebugOptionToastPhotoHighlightUpdateTime) makeToast(
             "History Highlight Last updated time: ${
                 System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000
             }seconds ago"

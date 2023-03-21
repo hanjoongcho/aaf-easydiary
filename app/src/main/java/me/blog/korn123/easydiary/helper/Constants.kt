@@ -519,11 +519,17 @@ const val GREEN_THEME_TEXT_COLOR = "#4D4C4C"
  *   Debug Options
  *
  ***************************************************************************************************/
-const val SETTING_DEBUG_OPTION_TOAST_LOCATION                 = "setting_debug_option_toast_location"
-const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO           = "setting_debug_option_toast_attached_photo"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE = "setting_debug_option_visible_diary_sequence"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT   = "setting_debug_option_visible_chart_weight"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK    = "setting_debug_option_visible_chart_stock"
+const val SETTING_DEBUG_OPTION_TOAST_LOCATION                     = "setting_debug_option_toast_location"
+const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO               = "setting_debug_option_toast_attached_photo"
+const val SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO            = "setting_debug_option_toast_notification_info"
+const val SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO             = "setting_debug_option_toast_review_flow_info"
+const val SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME  = "setting_debug_option_toast_photo_highlight_update_time"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE     = "setting_debug_option_visible_diary_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE     = "setting_debug_option_visible_alarm_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT       = "setting_debug_option_visible_chart_weight"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK        = "setting_debug_option_visible_chart_stock"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI = "setting_debug_option_visible_font_preview_emoji"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY    = "setting_debug_option_visible_temporary_diary"
 
 
 /***************************************************************************************************
