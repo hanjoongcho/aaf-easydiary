@@ -93,6 +93,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         super.onResume()
         initModule()
         mSectionsPagerAdapter.notifyDataSetChanged()
+        mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem).run {
+            if (this is PlaceholderFragment) {
+                if (this.isAdded) this.initContents()
+            }
+        }
     }
     
     override fun onPause() {
@@ -581,10 +586,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             initContents()
         }
 
-        override fun onResume() {
-            super.onResume()
-            initContents()
-        }
+//        override fun onResume() {
+//            super.onResume()
+//            initContents()
+//        }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
 
@@ -629,7 +634,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-        private fun initContents() {
+        fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
                 if (StringUtils.isEmpty(diaryDto.title)) {

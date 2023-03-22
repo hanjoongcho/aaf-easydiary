@@ -945,13 +945,13 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
             val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
                 val dip: Dip = Dip.create(this)
                 builder
-                    .tableBorderWidth(dip.toPx(2))
+                    .tableBorderWidth(dip.toPx(1))
                     .tableBorderColor(Color.BLACK)
                     .tableCellPadding(dip.toPx(4))
                     .tableHeaderRowBackgroundColor(
                         io.noties.markwon.utils.ColorUtils.applyAlpha(
-                            Color.BLUE,
-                            80
+                            config.primaryColor,
+                            50
                         )
                     )
 //                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
