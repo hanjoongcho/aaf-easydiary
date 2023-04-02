@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import me.blog.korn123.easydiary.R
@@ -44,14 +45,13 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.fragment_settings_schedule, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val scheduleFragment = mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem)
         when (item.itemId) {
-//            R.id.addSchedule -> {
-//                if (scheduleFragment is SettingsScheduleFragment) {
-//                    scheduleFragment.openAlarmDialog(EasyDiaryDbHelper.makeTemporaryAlarm())
-//                }
-//            }
             R.id.openManual -> {
                 val customTabsIntent =
                     CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
