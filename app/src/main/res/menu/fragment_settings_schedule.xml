@@ -4,7 +4,7 @@
     <item
         android:id="@+id/openManual"
         android:visible="true"
-        android:icon="@drawable/ic_note"
+        android:icon="@drawable/ic_idea"
         android:orderInCategory="100"
         android:title="Add Schedule"
         app:showAsAction="always" />
