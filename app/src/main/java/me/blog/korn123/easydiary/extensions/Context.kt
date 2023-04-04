@@ -933,8 +933,13 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
     when (config.enableMarkdown) {
         true -> {
             val transformLineBreak = contents.replace("\n", "  \n")
-            val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}\n$transformLineBreak" else transformLineBreak
-            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$mergedContents" else mergedContents
+            val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}  \n$transformLineBreak" else transformLineBreak
+            val timelineTitle = when {
+                isTimeline && config.boldStyleEnable -> "**${lineBreakStrings[0]}**"
+                isTimeline -> lineBreakStrings[0]
+                else -> ""
+            }
+            val markdownContents = if (isTimeline) "$timelineTitle  \n$mergedContents" else mergedContents
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
@@ -967,7 +972,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .usePlugin(strikeoutPlugin)
                     .build()
                     .apply {
-                        setMarkdown(contentsView, boldDate)
+                        setMarkdown(contentsView, markdownContents)
                     }
                 false -> Markwon.builder(this)
                     .usePlugin(codeBlockTheme)
@@ -976,7 +981,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .usePlugin(strikeoutPlugin)
                     .build()
                     .apply {
-                        setMarkdown(contentsView, boldDate)
+                        setMarkdown(contentsView, markdownContents)
                     }
             }
         }
