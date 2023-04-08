@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/addSchedule"
-        android:visible="false"
-        android:icon="@drawable/ic_signs"
+        android:id="@+id/openManual"
+        android:visible="true"
+        android:icon="@drawable/ic_idea_w"
         android:orderInCategory="100"
         android:title="Add Schedule"
         app:showAsAction="always" />

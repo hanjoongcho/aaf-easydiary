@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -28,33 +29,39 @@ class SettingsActivity : BaseSettingsActivity() {
                             0 -> {
                                 title = getString(R.string.preferences_category_settings)
                                 subtitle = ""
+                                buttonAddSchedule.visibility = View.GONE
                             }
                             1 -> {
                                 title = getString(R.string.preferences_category_font)
                                 subtitle = ""
+                                buttonAddSchedule.visibility = View.GONE
                             }
                             2 -> {
                                 title = getString(R.string.preferences_category_lock)
                                 subtitle = ""
+                                buttonAddSchedule.visibility = View.GONE
                             }
                             3 -> {
                                 title = getString(R.string.preferences_category_backup_restore)
                                 subtitle = getString(R.string.preferences_category_backup_restore_sub)
                                 pauseLock()
                                 updateUI()
+                                buttonAddSchedule.visibility = View.GONE
                             }
                             4 -> {
                                 title = getString(R.string.preferences_category_backup_restore_device)
                                 subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                                buttonAddSchedule.visibility = View.GONE
                             }
                             5 -> {
                                 title = getString(R.string.preferences_category_schedule)
                                 subtitle = ""
-
+                                buttonAddSchedule.visibility = View.VISIBLE
                             }
                             else -> {
                                 title = getString(R.string.preferences_category_information)
                                 subtitle = ""
+                                buttonAddSchedule.visibility = View.GONE
                             }
                         }
                     }
@@ -68,9 +75,28 @@ class SettingsActivity : BaseSettingsActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.fragment_settings_schedule, menu)
-        if (mCurrentPosition == 5) menu.findItem(R.id.addSchedule).isVisible = true
-        return true
+    override fun manualUrl(): String = when (mCurrentPosition) {
+        0 -> {
+            getString(R.string.user_manual_url_basic)
+        }
+        1 -> {
+            getString(R.string.user_manual_url_font)
+        }
+        2 -> {
+            getString(R.string.user_manual_url_lock)
+        }
+        3 -> {
+            getString(R.string.user_manual_url_backup_restore_goodle_dirve)
+        }
+        4 -> {
+            getString(R.string.user_manual_url_backup_restore_device)
+        }
+        5 -> {
+            getString(R.string.user_manual_url_schedule)
+
+        }
+        else -> {
+            getString(R.string.user_manual_url_application_information)
+        }
     }
 }

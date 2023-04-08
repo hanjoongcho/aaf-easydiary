@@ -698,6 +698,10 @@
         v1.4.293.202303240 / 2023.03.24\n
         マークダウンモードスタイルの改善
     </string>
+    <string name="release_294">
+        v1.4.294.202304080 / 2023.04.08\n
+        ユーザーマニュアルリンクの追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -961,4 +965,12 @@
     <string name="datetime_setting_summary">日付と時刻の表示形式を設定します。（タイムラインと日記作成画面を除くほとんどの画面に設定された表示形式が適用されます。）</string>
     <string name="markdown_setting_title">マークダウン文法</string>
     <string name="markdown_setting_summary">マークダウンオプションを有効にすると、ダイアリー作成時にマークダウン文法を利用して様々な書式を入力できます。</string>
+    <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/7289069c812a451fbc005e61d954daab?v=96f57f603b1243a082a89b0879857cf3</string>
+    <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/f53504ba72bf47f7994c6379f07a7f3e?v=73179304834d4e1694282a9662e1848f</string>
+    <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/b749aae2ff5e4be8804bf99a547b8133?v=b2f88ff5a1874559ad590aab7882627d</string>
+    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/1aa23fd0ef0b4ff0b7f1f23fd3b0cf28?v=7a1cc79ac4d44342924b1b30f7a77c7b</string>
+    <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/542dd8092cf1436fa31e4c261a88f806?v=328c08a2c6e44dd7ad0ab6a166bb765b</string>
+    <string name="user_manual_url_backup_restore_goodle_dirve">https://spiced-skirt-15c.notion.site/1752515fb5474552a21f71b5c3848141?v=eca4b11dfb2a4dfabb695ad100b767a2</string>
+    <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/76a227d81c5a4b9798c1f0dda674eb98?v=dc6394089b00429da6ed65eb1040757c</string>
+    <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/adfb4abc125f460e8cfc3580de2c6179?v=8dde7dca24b24b9bb883507892524e96</string>
 </resources>

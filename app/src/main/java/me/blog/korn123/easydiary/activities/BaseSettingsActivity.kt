@@ -1,14 +1,17 @@
 package me.blog.korn123.easydiary.activities
 
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
+import androidx.browser.customtabs.CustomTabsIntent
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
-open class BaseSettingsActivity : EasyDiaryActivity() {
+abstract class BaseSettingsActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -32,15 +35,30 @@ open class BaseSettingsActivity : EasyDiaryActivity() {
             setTitle(R.string.preferences_category_settings)
             setDisplayHomeAsUpEnabled(true)
         }
+
+        mBinding.run {
+            buttonAddSchedule.setOnClickListener {
+                mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem).run {
+                    if (this is SettingsScheduleFragment) openAlarmDialog(EasyDiaryDbHelper.makeTemporaryAlarm())
+                }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.fragment_settings_schedule, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val scheduleFragment = mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem)
         when (item.itemId) {
-            R.id.addSchedule -> {
-                if (scheduleFragment is SettingsScheduleFragment) {
-                    scheduleFragment.openAlarmDialog(EasyDiaryDbHelper.makeTemporaryAlarm())
-                }
+            R.id.openManual -> {
+                val customTabsIntent =
+                    CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                customTabsIntent.launchUrl(
+                    this@BaseSettingsActivity,
+                    Uri.parse(manualUrl())
+                )
             }
         }
         return super.onOptionsItemSelected(item)
@@ -51,6 +69,8 @@ open class BaseSettingsActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    abstract fun manualUrl(): String
+
     fun updateUI() {
         super.onResume()
     }

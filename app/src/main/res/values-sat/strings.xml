@@ -698,6 +698,10 @@
         v1.4.293.202303240 / 2023.03.24\n
         Improved markdown mode style
     </string>
+    <string name="release_294">
+        v1.4.294.202304080 / 2023.04.08\n
+        Added user manual link
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -961,4 +965,12 @@
     <string name="datetime_setting_summary">Set the date and time display format. (The set display format is applied to most screens except for the timeline and diary creation screens.)</string>
     <string name="markdown_setting_title">Markdown Syntax</string>
     <string name="markdown_setting_summary">If you activate the Markdown Syntax option, you can enter various formats using MarkDown syntax when writing a diary.</string>
+    <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
+    <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
+    <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
+    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/211eb91805ea439dbb51ab4049a62496?v=c7b9af3abbf94271ba082d79a3f958e0</string>
+    <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/d188abcfdaaa47a186875a52876f5b3e?v=b4c3f9a2624d4a6a8b9b658d5d58679b</string>
+    <string name="user_manual_url_backup_restore_goodle_dirve">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
+    <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
+    <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
 </resources>

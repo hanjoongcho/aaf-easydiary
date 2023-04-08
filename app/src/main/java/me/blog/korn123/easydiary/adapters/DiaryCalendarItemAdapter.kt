@@ -41,19 +41,20 @@ class DiaryCalendarItemAdapter(
             FontUtils.setFontsTypeface(context, null, item_holder)
             val diaryDto = list[position]
             textView1.run {
-                text = when (StringUtils.isNotEmpty(diaryDto.title)) {
-                    true -> "${diaryDto.title}\n${diaryDto.contents}"
-                    false -> "${diaryDto.contents}"
+                when (StringUtils.isNotEmpty(diaryDto.title)) {
+                    true -> context.applyMarkDownPolicy(this, "${diaryDto.title}\n${diaryDto.contents}", false, arrayListOf(), true)
+                    false -> context.applyMarkDownPolicy(this, "${diaryDto.contents}", false, arrayListOf(), true)
                 }
 
-                when (context.config.enableContentsSummary) {
+                maxLines = when (context.config.enableContentsSummary) {
                     true -> {
-                        maxLines = context.config.summaryMaxLines
-//                        ellipsize = TextUtils.TruncateAt.valueOf("END")
+                        context.config.summaryMaxLines
+        //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
                     }
+
                     false -> {
-                        maxLines = Integer.MAX_VALUE
-//                        ellipsize = null
+                        Integer.MAX_VALUE
+        //                        ellipsize = null
                     }
                 }
             }
