@@ -227,7 +227,7 @@ fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
 }
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
-    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
+    val fullString = String.format("Time remaining till the alarm goes off: %s", formatMinutesToTimeString(totalMinutes))
     toast(fullString, Toast.LENGTH_LONG)
 }
 
