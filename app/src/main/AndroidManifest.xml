@@ -98,6 +98,7 @@
         <activity android:name=".activities.PostcardActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.PostcardViewerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity android:name=".activities.GalleryActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DashboardActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.PostcardViewPagerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:hardwareAccelerated="false" android:launchMode="singleTask" />
         <activity android:name=".activities.FingerprintLockActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />

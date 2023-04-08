@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.realm.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.extensions.config
@@ -185,6 +186,18 @@ object EasyDiaryDbHelper {
     fun findDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): Diary? {
         return realmInstance.where(Diary::class.java)
                 .equalTo("sequence", sequence).findFirst()
+    }
+
+    fun findDiaryBy(photoUri: String, realmInstance: Realm = getInstance()): Diary? {
+        val result = realmInstance.where(PhotoUri::class.java).equalTo("photoUri", photoUri).findFirst()?.diary
+        var diary: Diary? = null
+        result?.let {
+            if (it.isValid && it.isNotEmpty()) {
+                diary = it.first()
+            }
+        }
+
+        return diary
     }
 
     fun findDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<Diary> {

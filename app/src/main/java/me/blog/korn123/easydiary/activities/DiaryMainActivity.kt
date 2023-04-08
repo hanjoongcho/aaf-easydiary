@@ -424,6 +424,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
                     }
                 }
+                R.id.attachedPhotoGallery -> {
+                    Intent(this@DiaryMainActivity, GalleryActivity::class.java).run {
+                        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, this)
+                    }
+                }
 //                R.id.dashboard -> TransitionHelper.startActivityWithTransition(
 //                    this@DiaryMainActivity,
 //                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
@@ -455,6 +460,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             FontUtils.setFontsTypeface(this@DiaryMainActivity, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
 //            dashboard.setOnClickListener(customItemClickListener)
+            attachedPhotoGallery.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
             devConsole.setOnClickListener(customItemClickListener)
@@ -482,6 +488,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             updateDrawableColorInnerCardView(imgDevConsole)
             updateDrawableColorInnerCardView(imgPostcard)
 //            updateDrawableColorInnerCardView(imgDashboard)
+            updateDrawableColorInnerCardView(imgAttachedPhotoGallery)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgSettings)
             updateDrawableColorInnerCardView(imgGridLayout)

@@ -55,6 +55,17 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/attachedPhotoGallery">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/ic_stack_of_photos"
+                    android:id="@+id/imgAttachedPhotoGallery"
+                    style="@style/image_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="Attached Photo Gallery" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:id="@+id/chart">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_combo"

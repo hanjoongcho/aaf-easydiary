@@ -1,16 +1,22 @@
 package me.blog.korn123.easydiary.models
 
+import com.google.api.services.drive.model.User
 import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
 import me.blog.korn123.easydiary.helper.CONTENT_URI_PREFIX
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
+
 
 /**
  * Created by hanjoong on 2017-06-08.
  */
 
 open class PhotoUri : RealmObject {
+    @LinkingObjects("photoUris")
+    val diary: RealmResults<Diary>? = null
     var photoUri: String? = null
     var mimeType: String? = null
 
