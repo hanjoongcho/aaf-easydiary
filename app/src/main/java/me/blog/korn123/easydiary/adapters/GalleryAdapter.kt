@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
+import me.blog.korn123.easydiary.models.Diary
 import java.io.File
 import java.util.*
 
@@ -71,9 +72,13 @@ class GalleryAdapter(
             val timeStampView = itemGalleryBinding.createdDate
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, activity.dpToPixelFloatValue(10F))
             itemGalleryBinding.checkItem.isChecked = attachedPhoto.isItemChecked
-            timeStampView.text = when (attachedPhoto.currentTimeMillis) {
-                0L -> GUIDE_MESSAGE
-                else -> DateUtils.getDateTimeStringForceFormatting(attachedPhoto.currentTimeMillis, activity)
+            when (attachedPhoto.diary == null) {
+                true -> {
+                    timeStampView.text = GUIDE_MESSAGE
+                }
+                false -> {
+                    timeStampView.text = "${DateUtils.getDateTimeStringForceFormatting(attachedPhoto.diary.currentTimeMillis, activity)}\n${attachedPhoto.diary.photoUris!![0]!!.photoUri}"
+                }
             }
 
             activity.run {
@@ -99,7 +104,7 @@ class GalleryAdapter(
         }
     }
 
-    data class AttachedPhoto(val file: File, var isItemChecked: Boolean, val currentTimeMillis: Long)
+    data class AttachedPhoto(val file: File, var isItemChecked: Boolean, val diary: Diary?)
 
     companion object {
         const val GUIDE_MESSAGE = "No information"

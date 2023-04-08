@@ -116,10 +116,10 @@ class GalleryActivity : EasyDiaryActivity() {
             val realm = EasyDiaryDbHelper.getTemporaryInstance()
             val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this@GalleryActivity) + DIARY_PHOTO_DIRECTORY)
                     .listFiles()
-                    .map { file -> GalleryAdapter.AttachedPhoto(file, false, when (val diary = EasyDiaryDbHelper.findDiaryBy(FILE_URI_PREFIX + EasyDiaryUtils.getApplicationDataDirectory(this@GalleryActivity) + DIARY_PHOTO_DIRECTORY + file.name, realm)) {
-                        null -> 0
-                        else -> diary.currentTimeMillis
-                    }) }.sortedBy { item -> item.currentTimeMillis }
+                    .map { file ->
+                        val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
+                        GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
+                    }.sortedBy { item -> item.diary?.currentTimeMillis ?: 0 }
             realm.close()
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()
