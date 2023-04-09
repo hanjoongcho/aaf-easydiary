@@ -72,7 +72,7 @@ class GalleryActivity : EasyDiaryActivity() {
                 this@GalleryActivity,
                 mAttachedPhotos,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    val intent = Intent(this@GalleryActivity, PostcardViewPagerActivity::class.java)
+                    val intent = Intent(this@GalleryActivity, GalleryViewPagerActivity::class.java)
                     intent.putExtra(POSTCARD_SEQUENCE, position)
                     TransitionHelper.startActivityWithTransition(this@GalleryActivity, intent)
                 }
@@ -89,6 +89,26 @@ class GalleryActivity : EasyDiaryActivity() {
 
         initPostCard()
         mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
+        mBinding.deletePostCard.setOnClickListener {
+            val selectedItems = arrayListOf<GalleryAdapter.AttachedPhoto>()
+            mAttachedPhotos.forEachIndexed { _, item ->
+                if (item.isItemChecked) selectedItems.add(item)
+            }
+
+            when (selectedItems.size) {
+                0 -> showAlertDialog("No photo selected.", null)
+                else -> {
+                    showAlertDialog(getString(R.string.delete_confirm),
+                            DialogInterface.OnClickListener { _, _ ->
+//                                selectedItems.forEachIndexed { _, item ->
+//                                    FileUtils.forceDelete(item.file)
+//                                }
+//                                initPostCard()
+                            }
+                    )
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -119,7 +139,7 @@ class GalleryActivity : EasyDiaryActivity() {
                     .map { file ->
                         val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
                         GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
-                    }.sortedBy { item -> item.diary?.currentTimeMillis ?: 0 }
+                    }.sortedByDescending { item -> item.diary?.currentTimeMillis ?: 0 }
             realm.close()
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()

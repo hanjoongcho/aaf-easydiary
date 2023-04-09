@@ -45,7 +45,10 @@ class GalleryAdapter(
     @SuppressLint("DefaultLocale")
     @NonNull
     override fun getSectionName(position: Int): String {
-        return String.format("%d. %s", position + 1, listPostcard[position].file.name)
+        val attachedPhoto = listPostcard[position]
+        return attachedPhoto.diary?.let {
+            DateUtils.getDateTimeStringForceFormatting(it.currentTimeMillis, activity)
+        } ?: run { GUIDE_MESSAGE }
     }
 
     fun onItemHolderClick(itemHolder: GalleryViewHolder) {
@@ -68,18 +71,15 @@ class GalleryAdapter(
             }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bindTo(attachedPhoto: AttachedPhoto) {
             val timeStampView = itemGalleryBinding.createdDate
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, activity.dpToPixelFloatValue(10F))
             itemGalleryBinding.checkItem.isChecked = attachedPhoto.isItemChecked
-            when (attachedPhoto.diary == null) {
-                true -> {
-                    timeStampView.text = GUIDE_MESSAGE
-                }
-                false -> {
-                    timeStampView.text = "${DateUtils.getDateTimeStringForceFormatting(attachedPhoto.diary.currentTimeMillis, activity)}\n${attachedPhoto.diary.photoUris!![0]!!.photoUri}"
-                }
-            }
+            timeStampView.text = attachedPhoto.diary?.let {
+                "${DateUtils.getDateTimeStringForceFormatting(it.currentTimeMillis, activity)}\n${it.photoUris!![0]!!.photoUri}"
+            } ?: run { GUIDE_MESSAGE }
+
 
             activity.run {
                 val point =  getDefaultDisplay()

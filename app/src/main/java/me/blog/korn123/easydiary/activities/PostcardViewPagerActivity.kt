@@ -20,7 +20,8 @@ import java.io.File
  * Created by hanjoong on 2017-06-08.
  */
 
-class PostcardViewPagerActivity : EasyDiaryActivity() {
+class
+PostcardViewPagerActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityPhotoViewPagerBinding
     private var mPostcardCount: Int = 0
     private lateinit var mListPostcard: List<File>

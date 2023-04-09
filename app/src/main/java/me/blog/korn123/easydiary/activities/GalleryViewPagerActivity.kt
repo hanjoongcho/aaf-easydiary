@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.shareFile
-import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
-import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import java.io.File
 
@@ -22,8 +26,8 @@ import java.io.File
 
 class GalleryViewPagerActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityPhotoViewPagerBinding
-    private var mPostcardCount: Int = 0
-    private lateinit var mListPostcard: List<File>
+    private var mAttachedPhotoCount: Int = 0
+    private var mAttachedPhotos: ArrayList<GalleryAdapter.AttachedPhoto> = arrayListOf()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,30 +37,38 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
+        CoroutineScope(Dispatchers.IO).launch {
+            val realm = EasyDiaryDbHelper.getTemporaryInstance()
+            val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this@GalleryViewPagerActivity) + DIARY_PHOTO_DIRECTORY)
+                    .listFiles()
+                    .map { file ->
+                        val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
+                        GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
+                    }.sortedByDescending { item -> item.diary?.currentTimeMillis ?: 0 }
+            realm.close()
+            withContext(Dispatchers.Main) {
+                mAttachedPhotos.clear()
+                mAttachedPhotos.addAll(listPostcard)
 
-        mListPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
-                .listFiles()
-                .filter { it.extension.equals("jpg", true)}
-                .sortedDescending()
-        mPostcardCount = mListPostcard.size
+                mAttachedPhotoCount = mAttachedPhotos.size
 
-        supportActionBar?.run {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)
-            title = "1 / $mPostcardCount"
-        }
-
-        mBinding.run {
-            viewPager.adapter = PostcardPagerAdapter(mListPostcard)
-            viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-                override fun onPageSelected(position: Int) {
-                    toolbar.title = "${position + 1} / $mPostcardCount"
+                supportActionBar?.run {
+                    setDisplayHomeAsUpEnabled(true)
+                    setHomeAsUpIndicator(R.drawable.ic_cross)
+                    title = "1 / $mAttachedPhotoCount"
                 }
 
-                override fun onPageScrollStateChanged(state: Int) {}
-            })
+                mBinding.run {
+                    viewPager.adapter = GalleryPagerAdapter(mAttachedPhotos)
+                    viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+                        override fun onPageSelected(position: Int) {
+                            toolbar.title = "${position + 1} / $mAttachedPhotoCount"
+                        }
+
+                        override fun onPageScrollStateChanged(state: Int) {}
+                    })
 
 //        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
 //        closeIcon?.let {
@@ -64,8 +76,13 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 //            close.setImageDrawable(closeIcon)
 //        }
 
-            viewPager.setCurrentItem(sequence, false)
+                    viewPager.setCurrentItem(sequence, false)
+                }
+            }
         }
+
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -73,21 +90,21 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.share -> shareFile(mListPostcard[mBinding.viewPager.currentItem], MIME_TYPE_JPEG)
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.share -> shareFile(mListPostcard[mBinding.viewPager.currentItem], MIME_TYPE_JPEG)
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
-    internal class PostcardPagerAdapter(var listPostcard: List<File>) : androidx.viewpager.widget.PagerAdapter() {
+    internal class GalleryPagerAdapter(private val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
-            return listPostcard.size
+            return attachedPhotos.size
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
-            val bitmap = BitmapFactory.decodeFile(listPostcard[position].path)
+            val bitmap = BitmapFactory.decodeFile(attachedPhotos[position].file.path)
             when (bitmap == null) {
                 true -> {
                     val textView = TextView(container.context)
