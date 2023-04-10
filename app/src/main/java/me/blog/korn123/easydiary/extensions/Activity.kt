@@ -63,6 +63,7 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
@@ -586,7 +587,7 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     return image64
 }
 
-fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (spanCount: Int) -> Unit) {
+fun Activity.openGridSettingDialog(rootView: ViewGroup, gridSpanMode: GridSpanMode, callback: (spanCount: Int) -> Unit) {
     var alertDialog: AlertDialog? = null
     val builder = AlertDialog.Builder(this)
     builder.setNegativeButton(getString(android.R.string.cancel), null)
@@ -595,10 +596,11 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
     val listView = containerView.findViewById<ListView>(R.id.listView)
 
     val maxSpanCount = when {
-        !isLandScape() && mode == 0 -> 5
-        !isLandScape() && mode == 1 -> 3
-        isLandScape() && mode == 0 -> 10
-        else -> 5
+        isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 5
+        !isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 3
+        isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 10
+        !isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 5
+        else -> 2
     }
     val optionItems = mutableListOf<Map<String, String>>()
     for (i in 1..maxSpanCount) {
@@ -612,12 +614,16 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
         when (isLandScape()) {
              true -> {
                 when {
-                    mode == 0 && config.postcardSpanCountLandscape == size.toInt() -> {
+                    gridSpanMode == GridSpanMode.POSTCARD && config.postcardSpanCountLandscape == size.toInt() -> {
                         spanCount = config.postcardSpanCountLandscape
                         selectedIndex = index
                     }
-                    mode == 1 && config.diaryMainSpanCountLandscape == size.toInt() -> {
+                    gridSpanMode == GridSpanMode.DIARY_MAIN && config.diaryMainSpanCountLandscape == size.toInt() -> {
                         spanCount = config.diaryMainSpanCountLandscape
+                        selectedIndex = index
+                    }
+                    gridSpanMode == GridSpanMode.GALLERY && config.gallerySpanCountLandscape == size.toInt() -> {
+                        spanCount = config.gallerySpanCountLandscape
                         selectedIndex = index
                     }
                 }
@@ -625,12 +631,16 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
             }
             false -> {
                 when {
-                    mode == 0 && config.postcardSpanCountPortrait == size.toInt() -> {
+                    gridSpanMode == GridSpanMode.POSTCARD && config.postcardSpanCountPortrait == size.toInt() -> {
                         spanCount = config.postcardSpanCountPortrait
                         selectedIndex = index
                     }
-                    mode == 1 && config.diaryMainSpanCountPortrait == size.toInt() -> {
+                    gridSpanMode == GridSpanMode.DIARY_MAIN && config.diaryMainSpanCountPortrait == size.toInt() -> {
                         spanCount = config.diaryMainSpanCountPortrait
+                        selectedIndex = index
+                    }
+                    gridSpanMode == GridSpanMode.GALLERY && config.gallerySpanCountPortrait == size.toInt() -> {
+                        spanCount = config.gallerySpanCountPortrait
                         selectedIndex = index
                     }
                 }
@@ -647,15 +657,17 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
 //                initPreference()
             when (isLandScape()) {
                 true -> {
-                    when (mode) {
-                        0 -> config.postcardSpanCountLandscape = it.toInt()
-                        1 -> config.diaryMainSpanCountLandscape = it.toInt()
+                    when (gridSpanMode) {
+                        GridSpanMode.POSTCARD -> config.postcardSpanCountLandscape = it.toInt()
+                        GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountLandscape = it.toInt()
+                        GridSpanMode.GALLERY -> config.gallerySpanCountLandscape = it.toInt()
                     }
                 }
                 false -> {
-                    when (mode) {
-                        0 -> config.postcardSpanCountPortrait = it.toInt()
-                        1 -> config.diaryMainSpanCountPortrait = it.toInt()
+                    when (gridSpanMode) {
+                        GridSpanMode.POSTCARD -> config.postcardSpanCountPortrait = it.toInt()
+                        GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountPortrait = it.toInt()
+                        GridSpanMode.GALLERY -> config.gallerySpanCountPortrait = it.toInt()
                     }
                 }
             }

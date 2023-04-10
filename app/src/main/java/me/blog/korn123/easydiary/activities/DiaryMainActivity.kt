@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
 import me.blog.korn123.easydiary.enums.DiaryMode
+import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 import me.blog.korn123.easydiary.helper.*
@@ -445,7 +446,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     this,
                     Intent(this, DevActivity::class.java)
                 )
-                R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, 1) { spanCount ->
+                R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, GridSpanMode.DIARY_MAIN) { spanCount ->
                     mGridLayoutManager.spanCount = spanCount
                     mBinding.diaryListView.invalidateItemDecorations()
 //                    mDiaryMainItemAdapter?.notifyDataSetChanged()

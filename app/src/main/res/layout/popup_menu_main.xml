@@ -62,7 +62,7 @@
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
-                    android:text="Attached Photo Gallery" />
+                    android:text="@string/attached_photo_gallery" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"

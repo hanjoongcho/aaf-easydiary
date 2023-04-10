@@ -14,6 +14,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
+import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
@@ -112,7 +113,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.layout -> openGridSettingDialog(mBinding.root, 0) {
+            R.id.layout -> openGridSettingDialog(mBinding.root, GridSpanMode.POSTCARD) {
                 mGridLayoutManager.spanCount = it.toInt()
                 mPostcardAdapter.notifyDataSetChanged()
             }

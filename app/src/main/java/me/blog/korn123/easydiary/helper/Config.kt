@@ -292,6 +292,14 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, false)
         set(enableDebugOptionVisibleTemporaryDiary) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, enableDebugOptionVisibleTemporaryDiary).apply()
 
+    var gallerySpanCountLandscape: Int
+        get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, 5)
+        set(gallerySpanCountLandscape) = prefs.edit().putInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, gallerySpanCountLandscape).apply()
+
+    var gallerySpanCountPortrait: Int
+        get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, 2)
+        set(gallerySpanCountPortrait) = prefs.edit().putInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, gallerySpanCountPortrait).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

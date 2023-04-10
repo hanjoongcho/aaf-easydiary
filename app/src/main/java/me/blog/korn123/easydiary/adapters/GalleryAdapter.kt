@@ -2,13 +2,13 @@ package me.blog.korn123.easydiary.adapters
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
 import android.widget.ImageView
+import android.widget.Toolbar.LayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
@@ -17,7 +17,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemGalleryBinding
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.models.Diary
 import java.io.File
@@ -83,10 +82,11 @@ class GalleryAdapter(
 
             activity.run {
                 val point =  getDefaultDisplay()
-                val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                val spanCount = if (activity.isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
                 val targetX = point.x / spanCount
                 itemGalleryBinding.imageContainer.layoutParams.height = targetX
                 itemGalleryBinding.imageview.layoutParams.height = targetX
+                itemGalleryBinding.imageview.layoutParams.width = targetX
                 itemGalleryBinding.imageview.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(itemGalleryBinding.imageview.context)
                         .load(if (attachedPhoto.diary?.isEncrypt == true)  null else attachedPhoto.file)

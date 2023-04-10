@@ -38,6 +38,7 @@ limitations under the License.
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/check_item"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:buttonTint="?attr/colorPrimary" />

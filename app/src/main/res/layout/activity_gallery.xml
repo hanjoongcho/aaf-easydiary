@@ -34,7 +34,7 @@
             <!--suppress AndroidDomInspection -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:title="Attached Photo Gallery"
+                app:title="@string/attached_photo_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@null"
@@ -66,5 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_delete_w" />
+        app:srcCompat="@drawable/ic_delete_link" />
+
+    <include android:id="@+id/progress_loading_container" layout="@layout/partial_progress_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

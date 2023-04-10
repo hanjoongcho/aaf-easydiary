@@ -2,7 +2,11 @@ package me.blog.korn123.easydiary.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.coroutines.CoroutineScope
@@ -16,8 +20,6 @@ import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.shareFile
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import java.io.File
@@ -40,17 +42,10 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
         CoroutineScope(Dispatchers.IO).launch {
-            val realm = EasyDiaryDbHelper.getTemporaryInstance()
-            val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this@GalleryViewPagerActivity) + DIARY_PHOTO_DIRECTORY)
-                    .listFiles()
-                    .map { file ->
-                        val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
-                        GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
-                    }.sortedByDescending { item -> item.diary?.currentTimeMillis ?: 0 }
-            realm.close()
+            val attachedPhotos = GalleryActivity.getAttachedPhotos(this@GalleryViewPagerActivity)
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()
-                mAttachedPhotos.addAll(listPostcard)
+                attachedPhotos?.let { mAttachedPhotos.addAll(it) }
 
                 mAttachedPhotoCount = mAttachedPhotos.size
 
@@ -97,14 +92,13 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
             when (item.itemId) {
                 R.id.share -> {
                     val diary = (viewPager.adapter as PhotoViewPagerActivity.PhotoPagerAdapter).diary
+                    mAttachedPhotos[viewPager.currentItem]
                     diary.photoUris?.let {
-                        it[viewPager.currentItem]?.let { photoUri ->
-                            when (diary.isEncrypt) {
-                                true -> {}
-                                false -> {
-                                    val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@GalleryViewPagerActivity) + photoUri.getFilePath()
-                                    shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
-                                }
+                        when (diary.isEncrypt) {
+                            true -> {}
+                            false -> {
+                                // FIXME: Check mimetype from PhotoUri Model
+                                shareFile(mAttachedPhotos[viewPager.currentItem].file, MIME_TYPE_JPEG)
                             }
                         }
                     }
@@ -112,7 +106,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                 else -> {}
             }
         }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     internal class GalleryPagerAdapter(private val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
