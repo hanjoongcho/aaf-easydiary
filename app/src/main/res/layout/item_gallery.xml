@@ -19,28 +19,27 @@ limitations under the License.
     android:id="@+id/imageContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <androidx.appcompat.widget.AppCompatImageView
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/imageview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    
-    <androidx.appcompat.widget.AppCompatCheckBox
-        app:buttonTint="?attr/colorPrimary"
-        android:id="@+id/check_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackgroundBorderless" />
 
     <TextView
         android:id="@+id/createdDate"
-        tools:text="20190820"
-        android:padding="5dp"
-        android:layout_gravity="bottom|right"
-        android:background="@drawable/bg_card_stamp"
-        android:layout_margin="5dp"
-        android:textColor="?attr/colorPrimary"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:padding="5dp"
+        android:background="@drawable/bg_card_stamp"
+        android:textColor="?attr/colorPrimary"
+        tools:text="20190820" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/check_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:buttonTint="?attr/colorPrimary" />
 </FrameLayout>
 

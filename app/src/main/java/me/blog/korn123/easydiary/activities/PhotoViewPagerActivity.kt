@@ -79,10 +79,16 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     }
                 }
                 R.id.share -> {
-                    (viewPager.adapter as PhotoPagerAdapter).diary.photoUris?.let {
+                    val diary = (viewPager.adapter as PhotoPagerAdapter).diary
+                    diary.photoUris?.let {
                         it[viewPager.currentItem]?.let { photoUri ->
-                            val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
-                            shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
+                            when (diary.isEncrypt) {
+                                true -> {}
+                                false -> {
+                                    val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
+                                    shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
+                                }
+                            }
                         }
                     }
                 }

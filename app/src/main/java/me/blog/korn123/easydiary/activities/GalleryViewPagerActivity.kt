@@ -15,8 +15,10 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import java.io.File
 
@@ -90,12 +92,28 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.share -> shareFile(mListPostcard[mBinding.viewPager.currentItem], MIME_TYPE_JPEG)
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        mBinding.run {
+            when (item.itemId) {
+                R.id.share -> {
+                    val diary = (viewPager.adapter as PhotoViewPagerActivity.PhotoPagerAdapter).diary
+                    diary.photoUris?.let {
+                        it[viewPager.currentItem]?.let { photoUri ->
+                            when (diary.isEncrypt) {
+                                true -> {}
+                                false -> {
+                                    val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@GalleryViewPagerActivity) + photoUri.getFilePath()
+                                    shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
+                                }
+                            }
+                        }
+                    }
+                }
+                else -> {}
+            }
+        }
+        return true
+    }
 
     internal class GalleryPagerAdapter(private val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
@@ -104,15 +122,17 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
-            val bitmap = BitmapFactory.decodeFile(attachedPhotos[position].file.path)
+            val attachedPhoto = attachedPhotos[position]
+            val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) "" else attachedPhoto.file.path)
+
             when (bitmap == null) {
                 true -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
                     val padding = container.context.dpToPixel(10F)
                     textView.setPadding(padding, padding, padding, padding)
-                    FontUtils.setTypefaceDefault(textView)
-                    textView.text = container.context.getString(R.string.photo_view_error_info)
+                    textView.typeface = FontUtils.getCommonTypeface(container.context)
+                    textView.text = if (attachedPhoto.diary?.isEncrypt == true) "The diary is encrypted. You will need to decrypt the diary to see the attached photos." else container.context.getString(R.string.photo_view_error_info)
                     container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     return textView    
                 }
