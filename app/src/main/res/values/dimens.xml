@@ -8,6 +8,9 @@
     <dimen name="dashboard_card_margin">10dp</dimen>
     <dimen name="settings_summary_margin_top">5dp</dimen>
     <dimen name="card_layout_margin">1dp</dimen>
+    <dimen name="layout_margin_medium">10dp</dimen>
+    <dimen name="layout_margin_large">15dp</dimen>
+
 
     <!-- Padding -->
     <dimen name="card_contents_padding">15dp</dimen>

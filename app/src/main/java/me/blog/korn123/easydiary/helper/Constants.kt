@@ -599,6 +599,7 @@ const val SETTING_ENABLE_WELCOME_DASHBOARD_POPUP = "setting_enable_welcome_dashb
 const val SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT = "setting_enable_dday_flexbox_layout"
 const val SETTING_DATETIME_FORMAT = "setting_datetime_format"
 const val SETTING_ENABLE_MARKDOWN = "setting_enable_markdown"
+const val SETTING_VISIBLE_UNLINKED_PHOTOS = "setting_visible_unlinked_photos"
 const val SELECTED_SYMBOLS_DEFAULT = "1,2,3,4,5"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"

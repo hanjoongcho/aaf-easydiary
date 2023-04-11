@@ -14,7 +14,9 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityGalleryBinding
 import me.blog.korn123.easydiary.databinding.DialogSettingGalleryBinding
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
@@ -96,29 +99,42 @@ class GalleryActivity : EasyDiaryActivity() {
 
         initPostCard()
         mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
-        mBinding.deletePostCard.setOnClickListener {
+        mBinding.imgOpenGalleryOptions.setOnClickListener {
             var dialog: Dialog? = null
             val dialogSettingGalleryBinding = DialogSettingGalleryBinding.inflate(layoutInflater).apply {
-                closeBottomSheet.setOnClickListener { dialog?.dismiss() }
+                closeBottomSheet.setOnClickListener { view -> view.postDelayed({ dialog?.dismiss() }, 200L) }
                 updateAppViews(root)
+                changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
                 FontUtils.setFontsTypeface(applicationContext, null, root, true)
 
                 val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
-                val validPhotos = totalPhotos?.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null }
-                textValidPhotoCount.text = "${totalPhotos.size - (validPhotos?.size ?: 0)}"
-                textInvalidPhotoCount.text = "${validPhotos?.size ?: 0}"
-                switchShowInvalidPhoto.setOnCheckedChangeListener { buttonView, isChecked ->
-                    val attachedPhotos = getAttachedPhotos(this@GalleryActivity, isChecked)
-                    mAttachedPhotos.clear()
-                    attachedPhotos?.let { mAttachedPhotos.addAll(it) }
-                    mGalleryAdapter.notifyDataSetChanged()
+                totalPhotos?.let {
+                    val validPhotos = totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null }
+                    textLinkedPhotoCount.text = (totalPhotos.size - validPhotos.size).toString()
+                    textUnlinkedPhotoCount.text = "${validPhotos.size}"
+                    textTotalPhotoCount.text = totalPhotos.size.toString()
+                    switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
+                    switchShowUnlinkedPhoto.setOnCheckedChangeListener { _, isChecked ->
+                        config.visibleUnlinkedPhotos = isChecked
+                        val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
+                        mAttachedPhotos.clear()
+                        attachedPhotos?.let { mAttachedPhotos.addAll(it) }
+                        mGalleryAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                imgDeleteUnlinkedPhoto.setOnClickListener {
+                    showAlertDialog("Are you sure you want to delete unlink attachments?" , { dialog, which ->
+                        toast("OK!!!")
+                    })
                 }
             }
             dialog = BottomSheetDialog(this).apply {
                 setContentView(dialogSettingGalleryBinding.root)
-                setCancelable(false)
+                setCancelable(true)
                 setCanceledOnTouchOutside(true)
                 show()
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
 //            val selectedItems = arrayListOf<GalleryAdapter.AttachedPhoto>()
@@ -183,14 +199,14 @@ class GalleryActivity : EasyDiaryActivity() {
     }
 
     companion object {
-        fun getAttachedPhotos(context: Context, isContainInvalidPhotos: Boolean = false): List<GalleryAdapter.AttachedPhoto>? {
+        fun getAttachedPhotos(context: Context): List<GalleryAdapter.AttachedPhoto>? {
             val realm = EasyDiaryDbHelper.getTemporaryInstance()
             val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
                     .listFiles()
                     ?.map { file ->
                         val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
                         GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
-                    }?.filter { attachedPhoto -> attachedPhoto.diary != null || isContainInvalidPhotos}?.sortedByDescending { item ->
+                    }?.filter { attachedPhoto -> attachedPhoto.diary != null || context.config.visibleUnlinkedPhotos}?.sortedByDescending { item ->
                         item.diary?.currentTimeMillis ?: 0
                     }
             realm.close()

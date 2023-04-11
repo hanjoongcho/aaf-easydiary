@@ -138,7 +138,7 @@
     <style name="image_custom_toolbar_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:padding">8dp</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
     <style name="image_floating_icon_medium">

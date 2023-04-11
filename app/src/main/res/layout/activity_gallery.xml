@@ -61,7 +61,7 @@
     </LinearLayout>
 
     <com.simplemobiletools.commons.views.MyFloatingActionButton
-        android:id="@+id/deletePostCard"
+        android:id="@+id/img_open_gallery_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

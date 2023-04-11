@@ -300,6 +300,10 @@ class Config(val context: Context) {
         get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, 2)
         set(gallerySpanCountPortrait) = prefs.edit().putInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, gallerySpanCountPortrait).apply()
 
+    var visibleUnlinkedPhotos: Boolean
+        get() = prefs.getBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, false)
+        set(visibleUnlinkedPhotos) = prefs.edit().putBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, visibleUnlinkedPhotos).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }
