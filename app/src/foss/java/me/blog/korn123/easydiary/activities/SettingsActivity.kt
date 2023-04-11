@@ -1,11 +1,16 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.view.Menu
+import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.fragments.*
+import me.blog.korn123.easydiary.fragments.SettingsAppInfoFragment
+import me.blog.korn123.easydiary.fragments.SettingsBasicFragment
+import me.blog.korn123.easydiary.fragments.SettingsFontFragment
+import me.blog.korn123.easydiary.fragments.SettingsLocalBackupFragment
+import me.blog.korn123.easydiary.fragments.SettingsLockFragment
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 
 class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
