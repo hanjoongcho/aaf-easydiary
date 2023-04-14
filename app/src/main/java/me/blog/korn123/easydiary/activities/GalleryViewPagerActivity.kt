@@ -91,14 +91,13 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         mBinding.run {
             when (item.itemId) {
                 R.id.share -> {
-                    val diary = (viewPager.adapter as PhotoViewPagerActivity.PhotoPagerAdapter).diary
-                    mAttachedPhotos[viewPager.currentItem]
-                    diary.photoUris?.let {
-                        when (diary.isEncrypt) {
+                    val attachedPhoto = mAttachedPhotos[viewPager.currentItem]
+                    attachedPhoto.diary?.let {
+                        when (it.isEncrypt) {
                             true -> {}
                             false -> {
                                 // FIXME: Check mimetype from PhotoUri Model
-                                shareFile(mAttachedPhotos[viewPager.currentItem].file, MIME_TYPE_JPEG)
+                                shareFile(attachedPhoto.file, MIME_TYPE_JPEG)
                             }
                         }
                     }
@@ -109,7 +108,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    internal class GalleryPagerAdapter(private val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
+    internal class GalleryPagerAdapter(val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
             return attachedPhotos.size
         }
