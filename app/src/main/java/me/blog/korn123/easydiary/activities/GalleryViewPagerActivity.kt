@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Gravity
@@ -20,8 +21,12 @@ import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.shareFile
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
+import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
+import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.io.File
 
 /**
@@ -83,16 +88,16 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_postcard_view_pager, menu)
+        menuInflater.inflate(R.menu.activity_gallery_view_pager, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         mBinding.run {
-            when (item.itemId) {
-                R.id.share -> {
-                    val attachedPhoto = mAttachedPhotos[viewPager.currentItem]
-                    attachedPhoto.diary?.let {
+            val attachedPhoto = mAttachedPhotos[viewPager.currentItem]
+            attachedPhoto.diary?.let {
+                when (item.itemId) {
+                    R.id.share -> {
                         when (it.isEncrypt) {
                             true -> {}
                             false -> {
@@ -101,8 +106,18 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                             }
                         }
                     }
+                    R.id.diary -> {
+                        TransitionHelper.startActivityWithTransition(
+                            this@GalleryViewPagerActivity,
+                            Intent(
+                                this@GalleryViewPagerActivity,
+                                DiaryReadingActivity::class.java
+                            ).apply {
+                                putExtra(DIARY_SEQUENCE, it.sequence)
+                            }
+                        )
+                    }
                 }
-                else -> {}
             }
         }
         return super.onOptionsItemSelected(item)
