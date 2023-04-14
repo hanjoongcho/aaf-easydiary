@@ -3,20 +3,16 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,14 +28,12 @@ import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecoration
-import me.blog.korn123.easydiary.helper.GridItemDecorationPostcardViewer
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.io.File
@@ -107,27 +101,45 @@ class GalleryActivity : EasyDiaryActivity() {
                 changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
                 FontUtils.setFontsTypeface(applicationContext, null, root, true)
 
-                val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
-                totalPhotos?.let {
-                    val validPhotos = totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null }
-                    textLinkedPhotoCount.text = (totalPhotos.size - validPhotos.size).toString()
-                    textUnlinkedPhotoCount.text = "${validPhotos.size}"
-                    textTotalPhotoCount.text = totalPhotos.size.toString()
-                    switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
-                    switchShowUnlinkedPhoto.setOnCheckedChangeListener { _, isChecked ->
-                        config.visibleUnlinkedPhotos = isChecked
-                        val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
-                        mAttachedPhotos.clear()
-                        attachedPhotos?.let { mAttachedPhotos.addAll(it) }
-                        mGalleryAdapter.notifyDataSetChanged()
+                val unlinkedPhotos = arrayListOf<File>()
+                fun updateInfo() {
+                    val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
+                    totalPhotos?.let {
+                        unlinkedPhotos.clear()
+                        unlinkedPhotos.addAll(totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null })
+                        textLinkedPhotoCount.text = (totalPhotos.size - unlinkedPhotos.size).toString()
+                        textUnlinkedPhotoCount.text = "${unlinkedPhotos.size}"
+                        textTotalPhotoCount.text = totalPhotos.size.toString()
                     }
+                }
+                fun reloadPhotos() {
+                    val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
+                    mAttachedPhotos.clear()
+                    attachedPhotos?.let { mAttachedPhotos.addAll(it) }
+                    mGalleryAdapter.notifyDataSetChanged()
+                }
+
+                switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
+                switchShowUnlinkedPhoto.setOnCheckedChangeListener { _, isChecked ->
+                    config.visibleUnlinkedPhotos = isChecked
+                    reloadPhotos()
                 }
 
                 imgDeleteUnlinkedPhoto.setOnClickListener {
                     showAlertDialog("Are you sure you want to delete unlink attachments?" , { dialog, which ->
-                        toast("OK!!!")
+                        mBinding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
+                        CoroutineScope(Dispatchers.IO).launch {
+                            unlinkedPhotos.forEach { item -> item.delete() }
+                            withContext(Dispatchers.Main) {
+                                updateInfo()
+                                reloadPhotos()
+                                mBinding.progressLoadingContainer.progressLoading.visibility = View.GONE
+                            }
+                        }
+
                     })
                 }
+                updateInfo()
             }
             dialog = BottomSheetDialog(this).apply {
                 setContentView(dialogSettingGalleryBinding.root)
@@ -136,26 +148,6 @@ class GalleryActivity : EasyDiaryActivity() {
                 show()
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
-
-//            val selectedItems = arrayListOf<GalleryAdapter.AttachedPhoto>()
-//            mAttachedPhotos.forEachIndexed { _, item ->
-//                if (item.isItemChecked) selectedItems.add(item)
-//            }
-//
-//            when (selectedItems.size) {
-//                0 -> showAlertDialog("No photo selected.", null)
-//                else -> {
-//                    showAlertDialog(getString(R.string.delete_confirm),
-//                            DialogInterface.OnClickListener { _, _ ->
-////                                selectedItems.forEachIndexed { _, item ->
-////                                    FileUtils.forceDelete(item.file)
-////                                }
-////                                initPostCard()
-//                            }
-//                    )
-//                }
-//            }
-
         }
     }
 
