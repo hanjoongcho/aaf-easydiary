@@ -70,6 +70,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
+import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.Launcher
@@ -533,7 +534,7 @@ fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
     }
 }
 
-fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255) {
+fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255, customTitleIcon: Int? = null) {
     alertDialog.run {
         when (customView == null) {
             true -> {
@@ -564,17 +565,24 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         customTitle?.let {
-            val titleView = TextView(this@updateAlertDialog).apply {
-                text = customTitle
-                if (!isNightMode()) setTextColor(config.textColor)
-//                setBackgroundColor(ContextCompat.getColor(this@updateAlertDialog, R.color.white))
-                typeface = globalTypeface
-                val padding = dpToPixel(15F)
-                setPadding(padding * 2, padding, padding * 2, padding)
-                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
-//                        setBackgroundColor(resources.getColor(android.R.color.white))
+            PartialDialogTitleBinding.inflate(layoutInflater).apply {
+                textDialogTitle.run {
+                    text = customTitle
+                    if (!isNightMode()) setTextColor(config.textColor)
+                    typeface = globalTypeface
+//                    val padding = dpToPixel(15F)
+//                    setPadding(padding * 2, padding, padding * 2, padding)
+                    setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+                }
+                customTitleIcon?.let {
+                    imgDialogTitle.run {
+                        visibility = View.VISIBLE
+                        setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
+                        changeDrawableIconColor(config.textColor, this)
+                    }
+                }
+                setCustomTitle(this.root)
             }
-            setCustomTitle(titleView)
         }
         show()
         getButton(AlertDialog.BUTTON_POSITIVE).run {

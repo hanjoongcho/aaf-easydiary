@@ -126,7 +126,7 @@ class GalleryActivity : EasyDiaryActivity() {
                 }
 
                 imgDeleteUnlinkedPhoto.setOnClickListener {
-                    showAlertDialog(getString(R.string.delete_unlinked_photo_confirm_message) , { dialog, which ->
+                    showAlertDialog("Info", getString(R.string.delete_unlinked_photo_confirm_message) , { _, _ ->
                         mBinding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
                         CoroutineScope(Dispatchers.IO).launch {
                             unlinkedPhotos.forEach { item -> item.delete() }
@@ -137,7 +137,7 @@ class GalleryActivity : EasyDiaryActivity() {
                             }
                         }
 
-                    }, null)
+                    }, null, false, R.drawable.ic_info)
                 }
                 updateInfo()
             }

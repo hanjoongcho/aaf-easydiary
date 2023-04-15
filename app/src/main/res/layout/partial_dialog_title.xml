@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/alarm_day_textview"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:layout_marginEnd="@dimen/small_margin"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center"
-    tools:text="M"/>
+    android:id="@+id/layout_dialog_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/text_dialog_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_dialog_title"
+        tools:src="@drawable/ic_check_mark" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_dialog_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_dialog_title"
+        tools:ignore="MissingConstraints"
+        tools:text="INFO" />
+</androidx.constraintlayout.widget.ConstraintLayout>

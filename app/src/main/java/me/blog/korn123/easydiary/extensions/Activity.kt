@@ -125,13 +125,13 @@ fun Activity.makeSnackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
 }
 
-fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true, customTitleIcon: Int? = null) {
     val builder = AlertDialog.Builder(this)
     builder.setCancelable(cancelable)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
     builder.setPositiveButton(getString(R.string.ok), positiveListener)
     builder.create().apply {
-        updateAlertDialog(this, message, null, title)
+        updateAlertDialog(this, message, null, title, 255, customTitleIcon)
     }
 }
 
