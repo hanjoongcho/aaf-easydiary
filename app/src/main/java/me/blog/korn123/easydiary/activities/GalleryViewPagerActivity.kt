@@ -14,20 +14,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
-import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
-import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import java.io.File
 
 /**
  * Created by hanjoong on 2017-06-08.
@@ -61,7 +58,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                 }
 
                 mBinding.run {
-                    viewPager.adapter = GalleryPagerAdapter(mAttachedPhotos)
+                    viewPager.adapter = GalleryPagerAdapter()
                     viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -71,20 +68,10 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 
                         override fun onPageScrollStateChanged(state: Int) {}
                     })
-
-//        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
-//        closeIcon?.let {
-//            it.setColorFilter(this.config.primaryColor, PorterDuff.Mode.SRC_IN)
-//            close.setImageDrawable(closeIcon)
-//        }
-
                     viewPager.setCurrentItem(sequence, false)
                 }
             }
         }
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -95,18 +82,25 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         mBinding.run {
             val attachedPhoto = mAttachedPhotos[viewPager.currentItem]
-            attachedPhoto.diary?.let {
-                when (item.itemId) {
-                    R.id.share -> {
-                        when (it.isEncrypt) {
-                            true -> {}
-                            false -> {
-                                // FIXME: Check mimetype from PhotoUri Model
-                                shareFile(attachedPhoto.file, MIME_TYPE_JPEG)
-                            }
+            when (item.itemId) {
+                R.id.share -> {
+                    when (attachedPhoto.diary == null) {
+                        true -> {
+                            // FIXME: Check mimetype from PhotoUri Model
+                            shareFile(attachedPhoto.file, MIME_TYPE_JPEG)
+                        }
+
+                        false -> {
+                            if (attachedPhoto.diary.isEncrypt) makeToast("Encrypted files cannot be shared.") else shareFile(
+                                attachedPhoto.file,
+                                MIME_TYPE_JPEG
+                            )
                         }
                     }
-                    R.id.diary -> {
+                }
+
+                R.id.diary -> {
+                    attachedPhoto.diary?.let {
                         TransitionHelper.startActivityWithTransition(
                             this@GalleryViewPagerActivity,
                             Intent(
@@ -116,21 +110,23 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                                 putExtra(DIARY_SEQUENCE, it.sequence)
                             }
                         )
-                    }
+                    } ?: run { makeToast("There is no linked diary information.") }
                 }
+
+                else -> {}
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    internal class GalleryPagerAdapter(val attachedPhotos: List<GalleryAdapter.AttachedPhoto>) : androidx.viewpager.widget.PagerAdapter() {
+    inner class GalleryPagerAdapter : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
-            return attachedPhotos.size
+            return mAttachedPhotos.size
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
-            val attachedPhoto = attachedPhotos[position]
+            val attachedPhoto = mAttachedPhotos[position]
             val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) "" else attachedPhoto.file.path)
 
             when (bitmap == null) {
