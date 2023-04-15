@@ -126,7 +126,7 @@ class GalleryActivity : EasyDiaryActivity() {
                 }
 
                 imgDeleteUnlinkedPhoto.setOnClickListener {
-                    showAlertDialog("Are you sure you want to delete unlink attachments?" , { dialog, which ->
+                    showAlertDialog(getString(R.string.delete_unlinked_photo_confirm_message) , { dialog, which ->
                         mBinding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
                         CoroutineScope(Dispatchers.IO).launch {
                             unlinkedPhotos.forEach { item -> item.delete() }
@@ -137,7 +137,7 @@ class GalleryActivity : EasyDiaryActivity() {
                             }
                         }
 
-                    })
+                    }, null)
                 }
                 updateInfo()
             }

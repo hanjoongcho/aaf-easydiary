@@ -980,4 +980,5 @@
     <string name="unlinked_photo_count">Number of invalid photos</string>
     <string name="total_photo_count">Number of total photos</string>
     <string name="delete_unlinked_photo">Delete unlinked photos</string>
+    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage? Even if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
 </resources>

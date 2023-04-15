@@ -980,4 +980,5 @@
     <string name="unlinked_photo_count">링크정보 없는 첨부사진 수</string>
     <string name="total_photo_count">전체 첨부사진 수</string>
     <string name="delete_unlinked_photo">링크정보 없는 첨부사진 삭제</string>
+    <string name="delete_unlinked_photo_confirm_message">링크정보가 없는 사진을 디바이스 저장소에서 삭제하시겠습니까? 디바이스 저장소에서 삭제되어도 구글드라이브 또는 디바이스에 별도로 백업된 파일에서는 삭제되지 않습니다.</string>
 </resources>

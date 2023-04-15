@@ -980,4 +980,5 @@
     <string name="unlinked_photo_count">リンク情報のない添付写真数</string>
     <string name="total_photo_count">全体添付写真数</string>
     <string name="delete_unlinked_photo">リンク情報のない添付写真を削除</string>
+    <string name="delete_unlinked_photo_confirm_message">リンク情報のない写真をデバイス ストアから削除しますか？ デバイス ストアから削除されても、Google ドライブまたはデバイスに個別にバックアップされたファイルからは削除されません。</string>
 </resources>
