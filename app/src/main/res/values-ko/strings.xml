@@ -970,8 +970,14 @@
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/a83b8d7711b74535bd867564f4bc96e6?v=3a75330322074292a8e9758396f503a8</string>
     <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/85e42eedb673470e88b7363253f17451?v=854ebf884dc04c31b73f941116e8a39a</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/c457dab45b7d406f99d9a37f4a7be5a3?v=6f76b62475a04004aabc69b584457540</string>
-    <string name="user_manual_url_backup_restore_goodle_dirve">https://spiced-skirt-15c.notion.site/0563cf22eb764a14b1164a567cb99769?v=2b9c5ac07885447fae98e7ed4407fafc</string>
+    <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/0563cf22eb764a14b1164a567cb99769?v=2b9c5ac07885447fae98e7ed4407fafc</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/702ca8510d3740d79ac2427181e8f6de?v=6c5b9ed6edf341d2a545679b3f1c07d6</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/2b0a0d96a62e4ad2bde5c5ee61214bfd?v=ac76b160225644cab20295125e272044</string>
     <string name="attached_photo_gallery">첨부사진 갤러리</string>
+    <string name="visible_unlinked_photo">링크정보 없는 첨부사진 보기</string>
+    <string name="visible_unlinked_photo_description">사진 첨부 후 다이어리를 저장하지 않거나 저장된 다이어리를 지우는 경우 첨부했던 사진은 삭제되지 않고 디바이스 저장소에 남게되는데 이 옵션을 활성화 시키면 해당 첨부 사진을 열람 할 수 있습니다.</string>
+    <string name="linked_photo_count">유효첨부 사진 수</string>
+    <string name="unlinked_photo_count">링크정보 없는 첨부사진 수</string>
+    <string name="total_photo_count">전체 첨부사진 수</string>
+    <string name="delete_unlinked_photo">링크정보 없는 첨부사진 삭제</string>
 </resources>

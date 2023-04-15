@@ -970,8 +970,14 @@
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/b749aae2ff5e4be8804bf99a547b8133?v=b2f88ff5a1874559ad590aab7882627d</string>
     <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/1aa23fd0ef0b4ff0b7f1f23fd3b0cf28?v=7a1cc79ac4d44342924b1b30f7a77c7b</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/542dd8092cf1436fa31e4c261a88f806?v=328c08a2c6e44dd7ad0ab6a166bb765b</string>
-    <string name="user_manual_url_backup_restore_goodle_dirve">https://spiced-skirt-15c.notion.site/1752515fb5474552a21f71b5c3848141?v=eca4b11dfb2a4dfabb695ad100b767a2</string>
+    <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/1752515fb5474552a21f71b5c3848141?v=eca4b11dfb2a4dfabb695ad100b767a2</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/76a227d81c5a4b9798c1f0dda674eb98?v=dc6394089b00429da6ed65eb1040757c</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/adfb4abc125f460e8cfc3580de2c6179?v=8dde7dca24b24b9bb883507892524e96</string>
     <string name="attached_photo_gallery">添付写真ギャラリー</string>
+    <string name="visible_unlinked_photo">リンク情報のない添付写真を見る</string>
+    <string name="visible_unlinked_photo_description">写真添付後、ダイアリーを保存しなかったり、保存されたダイアリーを削除したりする場合、添付した写真は削除されずにデバイスストレージに残りますが、このオプションを有効にすると、該当の添付写真を閲覧できます。</string>
+    <string name="linked_photo_count">有効添付写真数</string>
+    <string name="unlinked_photo_count">リンク情報のない添付写真数</string>
+    <string name="total_photo_count">全体添付写真数</string>
+    <string name="delete_unlinked_photo">リンク情報のない添付写真を削除</string>
 </resources>

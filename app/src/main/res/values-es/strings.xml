@@ -970,8 +970,14 @@
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
     <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/211eb91805ea439dbb51ab4049a62496?v=c7b9af3abbf94271ba082d79a3f958e0</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/d188abcfdaaa47a186875a52876f5b3e?v=b4c3f9a2624d4a6a8b9b658d5d58679b</string>
-    <string name="user_manual_url_backup_restore_goodle_dirve">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
+    <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
-    <string name="attached_photo_gallery">Attached Photo Gallery</string>
+    <string name="attached_photo_gallery">Photo Gallery</string>
+    <string name="visible_unlinked_photo">View photos without diary references</string>
+    <string name="visible_unlinked_photo_description">If you do not save the diary after attaching a photo or delete the saved diary, the attached photo is not deleted and remains in the device storage. If you activate this option, you can view the attached photo.</string>
+    <string name="linked_photo_count">Number of valid photos</string>
+    <string name="unlinked_photo_count">Number of invalid photos</string>
+    <string name="total_photo_count">Number of total photos</string>
+    <string name="delete_unlinked_photo">Delete unlinked photos</string>
 </resources>

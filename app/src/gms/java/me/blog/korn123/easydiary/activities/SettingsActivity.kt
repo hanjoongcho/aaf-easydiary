@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
@@ -86,7 +85,7 @@ class SettingsActivity : BaseSettingsActivity() {
             getString(R.string.user_manual_url_lock)
         }
         3 -> {
-            getString(R.string.user_manual_url_backup_restore_goodle_dirve)
+            getString(R.string.user_manual_url_backup_restore_google_drive)
         }
         4 -> {
             getString(R.string.user_manual_url_backup_restore_device)
