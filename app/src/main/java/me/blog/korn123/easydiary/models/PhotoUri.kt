@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.models
 
-import com.google.api.services.drive.model.User
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
