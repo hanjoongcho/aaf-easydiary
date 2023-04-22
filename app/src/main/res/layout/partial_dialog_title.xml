@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/text_dialog_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/text_dialog_title"
@@ -19,11 +20,12 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_dialog_title"
+        android:textStyle="bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_dialog_title"
-        tools:ignore="MissingConstraints"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="INFO" />
 </androidx.constraintlayout.widget.ConstraintLayout>

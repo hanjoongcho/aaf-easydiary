@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.os.Build
+import android.text.style.BulletSpan
+import android.text.style.StyleSpan
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.appcompat.content.res.AppCompatResources
@@ -12,24 +15,57 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.simplemobiletools.commons.extensions.setVisibleIf
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.RenderProps
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
-import me.blog.korn123.easydiary.extensions.parsedMarkdownString
-import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.models.Diary
+import org.commonmark.node.Emphasis
+import org.commonmark.node.ListItem
+import org.commonmark.node.StrongEmphasis
+
 
 class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
     private val diaryItems: ArrayList<Diary> = arrayListOf()
+    private val bulletGapWidth = (8 * context.resources.displayMetrics.density + 0.5f).toInt()
+    private val mMarkwon = Markwon.builder(context)
+        .usePlugin(StrikethroughPlugin.create())
+        .usePlugin(object : AbstractMarkwonPlugin() {
+            override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                builder
+                    .setFactory<StrongEmphasis>(
+                        StrongEmphasis::class.java
+                    ) { _: MarkwonConfiguration?, _: RenderProps? ->
+                        StyleSpan(
+                            Typeface.BOLD
+                        )
+                    }
+                    .setFactory<Emphasis>(
+                        Emphasis::class.java
+                    ) { _: MarkwonConfiguration?, _: RenderProps? ->
+                        StyleSpan(
+                            Typeface.ITALIC
+                        )
+                    }
+                    .setFactory(ListItem::class.java) { _, _ ->
+                        BulletSpan(bulletGapWidth)
+                    }
+            }
+        })
+        .build()
 
     override fun onCreate() {
         setData()
@@ -51,7 +87,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
 
         widgetItem.run {
             setTextViewText(R.id.text1, diaryDto.title)
-            setTextViewText(R.id.text2,context.parsedMarkdownString(diaryDto.contents!!))
+            setTextViewText(R.id.text2, mMarkwon.toMarkdown(diaryDto.contents!!))
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 false -> DateUtils.getDateTimeStringForceFormatting(
