@@ -1,5 +1,4 @@
 # Easy Diary
-## [README of Korean(한국어)][README_ko.md]
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/unicodeveloper/awesome-opensource-apps)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [![License][licensesvg]][THIRDPARTY.md]
@@ -8,20 +7,20 @@
 
 This is a diary application optimized for user experience.
 
-<a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
-<a href='https://f-droid.org/en/packages/me.blog.korn123.easydiary'><img alt='Get it on F-Droid' src='screenshots/fdroid.png' height="98"/></a>
-     
-<img src="screenshots/00.jpg">&nbsp;
-<img src="screenshots/showcase_en.gif" width="288" height="512">   
-# Easy Diary User Manual  
-> Since 2023, we have been using notion and YouTube to create Easy Diary user manuals.  
-[Easy Diary Manual v0.1](https://spiced-skirt-15c.notion.site/User-Manual-v0-1-909b1fc94f5e40ccb8e8e560911c2e52)
+## Download
+Go to the Releases and download latest apk or click badges below.  
 
-# Demo videos
-## Basic function preview
+<a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
+<a href='https://f-droid.org/en/packages/me.blog.korn123.easydiary'><img alt='Get it on F-Droid' src='screenshots/fdroid.png' height="98"/></a>     
+
+## Easy Diary User Manual  
+Since 2023, we have been using notion and YouTube to create Easy Diary user manuals.  
+* [Easy Diary Manual v0.1](https://spiced-skirt-15c.notion.site/User-Manual-v0-1-909b1fc94f5e40ccb8e8e560911c2e52)
+
+## Easy Diary Preview
 [![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
 
-# Support Features
+## Support Features
 ```
 01. Write diary (voice or keypad)
 02. Search diary
