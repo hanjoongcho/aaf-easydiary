@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import io.noties.markwon.Markwon
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.easydiary.R
@@ -558,6 +557,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private lateinit var mBinding: FragmentDiaryReadBinding
         private val mViewModel: DiaryReadViewModel by viewModels()
         private var mPrimaryColor = 0
+        private var mStoredContents: String? = null
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
             mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
@@ -641,8 +641,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     diaryTitle.visibility = View.GONE
                 }
                 diaryTitle.text = diaryDto.title
+
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-                requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
+                if (mStoredContents != diaryDto.contents) {
+                    requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
+                    mStoredContents = diaryDto.contents
+                    Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
+                }
                 date.text = when (diaryDto.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, requireContext())
