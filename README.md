@@ -17,62 +17,69 @@ Go to the Releases and download latest apk or click badges below.
 Since 2023, we have been using notion and YouTube to create Easy Diary user manuals.  
 * [Easy Diary Manual v0.1](https://spiced-skirt-15c.notion.site/User-Manual-v0-1-909b1fc94f5e40ccb8e8e560911c2e52)
 
-## Easy Diary Preview
-[![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
-
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=hanjoongcho/aaf-easydiary&type=Date)](https://star-history.com/#hanjoongcho/aaf-easydiary&Date)
 
 ## Support Features
-```
-01. Write diary (voice or keypad)
-02. Search diary
-03. Read Diary
-04. Edit Diary
-05. Chart
-06. Calendar
-07. Diary Card
-08. Time Line
-09. Advanced Settings
-     - Font Setting
-     - Lock Setting(PIN or Fingerprint)
-     - Theme Setting
-     - Backup and Recovery
-```
-# Screen Shot
-## Write diary (voice or keypad)
+### ✍ Diary writing & editing
+* You can create or edit content using the keypad and voice recognition function.
+### 🔍 Diary search
+* Saved content can be quickly retrieved. Words that match the searched keywords are highlighted and can be recognized at a glance.
+### 📅 Calendar
+* Saved content can be checked on a daily basis using the calendar.
+### 🕒 Timeline
+* Saved content can be checked in the form of a timeline according to the time it was created.
+### 🃏 Diary Postcard
+* You can create a diary postcard using saved content (including attached photos) and share it with your friends.
+* Share anniversary or holiday greetings by making them pretty as postcards.
+### 🔒 Lock
+* The application can be locked or unlocked using a PIN (Personal Identification Number) or fingerprint recognition function.
+### 🎨 Application Theme
+* You can set 171 color themes and use the color picker to change text and text background colors to your liking.
+### 🔤 Font
+* If you have TTF fonts, you can use them by adding them to the Easy Diary font directory.
+### 📊 Chart
+* You can see at a glance the status of diary creation by time period in a bar chart.
+###  💾 Backup & Restore
+* All content, including attached photos, can be backed up and restored using Google Drive.
+
+## Preview 2018 ~ Now
+[![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
+
+## Preview ~ 2018
+### Write diary (voice or keypad)
 <p align="left">
 <img src="screenshots/01_1.jpg">
 <img src="screenshots/01_2.jpg">
 </p>
 
-## Search diary
+### Search diary
 <p align="left">
 <img src="screenshots/02.jpg">
 </p>
 
-## Read Diary
+### Read Diary
 <p align="left">
 <img src="screenshots/03_1.jpg">
 <img src="screenshots/03_2.jpg">
 </p>
 
-## Edit Diary
+### Edit Diary
 <p align="left">
 <img src="screenshots/04.jpg">
 </p>
 
-## Chart
+### Chart
 <p align="left">
 <img src="screenshots/05.jpg">
 </p>
 
-## Calendar
+### Calendar
 <p align="left">
 <img src="screenshots/06.jpg">
 </p>
 
-## Diary Card
+### Diary Card
 <p align="left">
 <img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">
 <img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">
@@ -83,14 +90,14 @@ Since 2023, we have been using notion and YouTube to create Easy Diary user manu
 <img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">
 </p>
 
-## Time Line
+### Time Line
 <p align="left">
 <img src="screenshots/08_1.jpg">
 <img src="screenshots/08_2.jpg">
 <img src="screenshots/08_3.jpg">
 </p>
 
-## Advanced Settings
+### Advanced Settings
 <p align="left">
 <img src="screenshots/app_easydiary09_01_en.png" width="288" height="512">
 <img src="screenshots/app_easydiary09_03_en.png" width="288" height="512">
