@@ -44,7 +44,28 @@ Since 2023, we have been using notion and YouTube to create Easy Diary user manu
 * All content, including attached photos, can be backed up and restored using Google Drive.
 
 ## Preview 2018 ~ Now
-[![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
+### Preview
+[![Video Label](https://user-images.githubusercontent.com/7098851/236051294-2977764f-8878-4b3f-a1b2-e66e22daa99a.png)](https://youtu.be/7Lg8o-RHFhY)
+### Custom Theme
+[![Video Label](https://user-images.githubusercontent.com/7098851/236051470-ca8585ec-2552-4d89-8385-63f8b60a40a6.png)](https://youtu.be/hqdfXEfhvxQ)
+### Markdown Syntax
+[![Video Label](https://user-images.githubusercontent.com/7098851/236051854-5a71dec5-ef8d-4555-bbfd-fad54450c810.png)](https://youtu.be/dViTBSIHpwU)
+### Welcom Dashboard popup
+[![Video Label](https://user-images.githubusercontent.com/7098851/236052799-2d4fad30-30df-4698-8d53-96d0a19e3ca4.png)](https://youtu.be/wzSXtfg_JEs)
+### Attached photo highlights
+[![Video Label](https://user-images.githubusercontent.com/7098851/236053272-be8f0682-03c7-41b6-b490-8eae065b7236.png)](https://youtu.be/9AuGKZwZEB0)
+### Location information display
+[![Video Label](https://user-images.githubusercontent.com/7098851/236053735-f5ba6818-9ccd-439d-87ca-81cfbcde76f4.png)](https://youtu.be/DqJadC7YqKQ)
+### Optimize card view design
+[![Video Label](https://user-images.githubusercontent.com/7098851/236054115-895f0795-f50c-4553-b4ce-108ed14f270b.png)](https://youtu.be/T-9l0Q1GmF4)
+### Calendar start day
+[![Video Label](https://user-images.githubusercontent.com/7098851/236054537-e768d899-230b-43bd-9bb6-7cc98d9d95d0.png)](https://youtu.be/8JBuV5pHyXY)
+### Font setting
+[![Video Label](https://user-images.githubusercontent.com/7098851/236054817-c28de2ce-4ce9-477f-acac-ccaa91067e21.png)](https://youtu.be/o4RUw3lBEtc)
+### Link Google Drive account
+[![Video Label](https://user-images.githubusercontent.com/7098851/236055151-cbb8d709-9d90-4c26-85f1-dc945aaeb118.png)](https://youtu.be/vS9aszhEhwk)
+### Easter egg (User defined symbol registration)
+[![Video Label](https://user-images.githubusercontent.com/7098851/236055835-87247600-9b85-4a7e-9765-e3741b8c7c0e.png)](https://youtu.be/2vLxdrQTAio)
 
 ## Preview ~ 2018
 ### Write diary (voice or keypad)
