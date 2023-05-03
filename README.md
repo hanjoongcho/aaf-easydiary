@@ -20,6 +20,9 @@ Since 2023, we have been using notion and YouTube to create Easy Diary user manu
 ## Easy Diary Preview
 [![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
 
+## Star History
+[![Star History Chart](https://api.star-history.com/svg?repos=hanjoongcho/aaf-easydiary&type=Date)](https://star-history.com/#hanjoongcho/aaf-easydiary&Date)
+
 ## Support Features
 ```
 01. Write diary (voice or keypad)
