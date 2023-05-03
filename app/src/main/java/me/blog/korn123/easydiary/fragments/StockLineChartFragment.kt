@@ -663,8 +663,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
             setDrawGridLines(true)
-            minWidth = 60F
-            maxWidth = 60F
+            minWidth = 65F
+            maxWidth = 65F
             stockYAxisValueFormatter?.let { valueFormatter = it }
         }
     }
