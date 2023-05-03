@@ -105,8 +105,8 @@ Since 2023, we have been using notion and YouTube to create Easy Diary user manu
 <img src="screenshots/app_easydiary06_en.png" width="288" height="512">
 </p>
 
-# How to build
-## GMS Flavor
+## How to build
+### GMS Flavor
 To build the gms flavor build, you need to add your Google Mobile Service settings and download the weather icons from Flaticon and import them directly.
 ```
 Step1. Fork or download 'aaf-easydiary' project.
@@ -150,7 +150,7 @@ Step9. Build 'aaf-easydiary' project with android studio.
 ```
 [Download 'weather-set-2' svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
 
-## FOSS Flavor
+### FOSS Flavor
 For the foss flavor build, no further action is required. However, because we do not use Google Mobile Service, we can not use the backup function with Google Drive, and we will use simpler weather icons than weather icons provided by gms flavor.  
 ※ Since we are developing the GMS Flavor package first, the merging of the latest features may be delayed in the FOSS Flavor package.
 ```
@@ -172,60 +172,50 @@ Step4. Build 'aaf-easydiary' project with android studio.
        b. Select 'fossRelease' from the Build Variant setting and run
 ```
 
-# Translation
+## Translation
 Thanks for someone help me to translate this app.   
 
 Currently supported languages are listed below:   
 
-> Korean Translation contributor   
+### Korean Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)     
 * hanjoongcho (https://github.com/hanjoongcho)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)  
 
-> English Translation contributor 
+### English Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
 * Google translation robot  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
 
-> Japanese Translation contributor  
+### Japanese Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)   
 * ScratchBuild (https://github.com/ScratchBuild)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)  
 
-> German Translation contributor
+### German Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-de/strings.xml)  
 * fulmeek (https://github.com/fulmeek)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-de/strings.xml)  
 
-> Italian Translation contributor
+### Italian Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-it/strings.xml)  
 * FrancescoFernicola (https://github.com/FrancescoFernicola)
 * margherita-martinelli (https://github.com/margherita-martinelli)
 * antcont (https://github.com/antcont)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-it/strings.xml)  
 
-> French Translation contributor
+### French Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-fr/strings.xml)  
 * Larnicone (https://github.com/Larnicone)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-fr/strings.xml)  
 
-> Hindi Translation contributor
+### Hindi Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-hi/strings.xml)  
 * Prasanta-Hembram (https://github.com/Prasanta-Hembram)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-hi/strings.xml)  
 
-> Santali Translation contributor
+### Santali Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-sat/strings.xml)  
 * Prasanta-Hembram (https://github.com/Prasanta-Hembram)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-sat/strings.xml)  
 
-> Russian Translation contributor
+### Russian Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ru/strings.xml)  
 * stikice (https://github.com/stikice)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ru/strings.xml)  
 
-> Chinese Translation contributor
+### Chinese Translation contributor [(strings.xml)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-zh-rCN/strings.xml)  
 * liuteng-sy (https://github.com/liuteng-sy)  
 * WAining (https://github.com/WAining)  
-[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-zh-rCN/strings.xml)  
 
-# Contributing
-[Contributing](Contributing.md)
+## Contributing
+* [Contributing](Contributing.md)
 
-# License
-[Easy Diary License][LICENSE]  
-[Third-Party License][THIRDPARTY.md]
+## License
+* [Easy Diary License][LICENSE]  
+* [Third-Party License][THIRDPARTY.md]
 
 [licensesvg]: https://img.shields.io/badge/License-GPL--3.0-brightgreen.svg
 [LICENSE]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE
