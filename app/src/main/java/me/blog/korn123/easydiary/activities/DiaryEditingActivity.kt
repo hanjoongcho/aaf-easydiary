@@ -78,6 +78,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
+        mSymbolSequence = diaryDto.weather
         initData(diaryDto)
     }
 

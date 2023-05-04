@@ -130,6 +130,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var mYear = mCalendar.get(Calendar.YEAR)
     protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
     protected var mIsDiarySaved = false
+    protected var mSymbolSequence = 0
 
     /**
      * mMonth is not Calendar.MONTH
@@ -759,8 +760,9 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     inner class PhotoClickListener(var index: Int) : View.OnClickListener {
         override fun onClick(v: View) {
-            val targetIndex = index
-            showAlertDialog(
+            if (mSymbolSequence != SYMBOL_EASTER_EGG) {
+                val targetIndex = index
+                showAlertDialog(
                     getString(R.string.delete_photo_confirm_message),
                     { _, _ ->
                         mRemoveIndexes.add(targetIndex)
@@ -768,7 +770,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         initBottomToolbar()
                     },
                     { _, _ -> }
-            )
+                )
+            }
         }
     }
 
