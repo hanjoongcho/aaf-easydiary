@@ -83,41 +83,45 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
     }
 
     override fun saveContents() {
-        hideSoftInputFromWindow()
-        if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-            mBinding.partialEditContents.diaryContents.requestFocus()
-            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        if (isExistEasterEggDiary(mSelectedItemPosition)) {
+            duplicatedEasterEggWarning()
         } else {
-            val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-            val diaryDto = when (encryptionPass == null) {
-                true -> {
-                    Diary(
+            hideSoftInputFromWindow()
+            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                mBinding.partialEditContents.diaryContents.requestFocus()
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+            } else {
+                val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+                val diaryDto = when (encryptionPass == null) {
+                    true -> {
+                        Diary(
                             mSequence,
                             mCurrentTimeMillis,
                             mBinding.partialEditContents.diaryTitle.text.toString(),
                             mBinding.partialEditContents.diaryContents.text.toString()
-                    )
-                }
-                false -> {
-                    Diary(
+                        )
+                    }
+                    false -> {
+                        Diary(
                             mSequence,
                             mCurrentTimeMillis,
                             JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),
                             JasyptUtils.encrypt(mBinding.partialEditContents.diaryContents.text.toString(), encryptionPass),
                             true,
                             JasyptUtils.sha256(encryptionPass)
-                    )
+                        )
+                    }
                 }
-            }
 
-            if (mLocation != null) diaryDto.location = mLocation
-            diaryDto.weather = mSelectedItemPosition
-            diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
-            applyRemoveIndex()
-            diaryDto.photoUris = mPhotoUris
-            EasyDiaryDbHelper.updateDiaryBy(diaryDto)
-            TransitionHelper.finishActivityWithTransition(this)
-            mIsDiarySaved = true
+                if (mLocation != null) diaryDto.location = mLocation
+                diaryDto.weather = mSelectedItemPosition
+                diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
+                applyRemoveIndex()
+                diaryDto.photoUris = mPhotoUris
+                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
+                TransitionHelper.finishActivityWithTransition(this)
+                mIsDiarySaved = true
+            }
         }
     }
 

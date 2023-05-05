@@ -148,31 +148,35 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     }
 
     override fun saveContents() {
-        hideSoftInputFromWindow()
-        setLocationInfo()
-        if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-            mBinding.partialEditContents.diaryContents.requestFocus()
-            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        if (isExistEasterEggDiary(mSelectedItemPosition)) {
+            duplicatedEasterEggWarning()
         } else {
-            val diaryDto = Diary(
+            hideSoftInputFromWindow()
+            setLocationInfo()
+            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                mBinding.partialEditContents.diaryContents.requestFocus()
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+            } else {
+                val diaryDto = Diary(
                     DIARY_SEQUENCE_INIT,
                     mCurrentTimeMillis,
                     mBinding.partialEditContents.diaryTitle.text.toString(),
                     mBinding.partialEditContents.diaryContents.text.toString(),
                     mSelectedItemPosition,
                     mBinding.partialEditContents.allDay.isChecked
-            )
-            if (mLocation != null) diaryDto.location = mLocation
-            applyRemoveIndex()
-            diaryDto.photoUris = mPhotoUris
-            EasyDiaryDbHelper.insertDiary(diaryDto)
-            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-            if (isAccessFromOutside()) {
-                startMainActivityWithClearTask()
-            } else {
-                TransitionHelper.finishActivityWithTransition(this)
+                )
+                if (mLocation != null) diaryDto.location = mLocation
+                applyRemoveIndex()
+                diaryDto.photoUris = mPhotoUris
+                EasyDiaryDbHelper.insertDiary(diaryDto)
+                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+                if (isAccessFromOutside()) {
+                    startMainActivityWithClearTask()
+                } else {
+                    TransitionHelper.finishActivityWithTransition(this)
+                }
+                mIsDiarySaved = true
             }
-            mIsDiarySaved = true
         }
     }
 

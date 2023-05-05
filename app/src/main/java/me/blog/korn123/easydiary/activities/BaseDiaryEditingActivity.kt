@@ -50,7 +50,6 @@ import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
@@ -746,13 +745,32 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
+    protected fun isExistEasterEggDiary(symbolSequence: Int) = mSelectedItemPosition == SYMBOL_EASTER_EGG && EasyDiaryDbHelper.findDiary(
+        null,
+        false,
+        0,
+        0,
+        SYMBOL_EASTER_EGG
+    ).isNotEmpty()
+
+    protected fun duplicatedEasterEggWarning() {
+        showAlertDialog(
+            "Info",
+            "A diary set to the easter egg symbol already exists.",
+            null,
+            null,
+            true,
+            R.drawable.ic_info
+        )
+    }
+
 
     /***************************************************************************************************
      *   abstract functions
      *
      ***************************************************************************************************/
     abstract fun setVisiblePhotoProgress(isVisible: Boolean)
-    
+
 
     /***************************************************************************************************
      *   inner class
@@ -783,3 +801,4 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         const val DIARY_ORIGIN_SEQUENCE_INIT = 0
     }
 }
+
