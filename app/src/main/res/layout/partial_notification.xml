@@ -4,19 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="256dp"
-        android:src="@drawable/bg_london"
-        android:scaleType="centerCrop"/>
-
-    <TextView
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
+        android:layout_gravity="end"
+        android:id="@+id/img_notification_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/bg_london_flat" />
+
+    <TextView
+        android:layout_gravity="end"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:text="CustomBigContentView "/>
 </FrameLayout>

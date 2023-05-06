@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
+import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_DECOMPRESS_ID
@@ -17,7 +18,11 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
             when (it.action) {
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
-                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, 0))
+                ACTION_DEV_DISMISS -> NotificationManagerCompat.from(applicationContext).cancel(intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, 0))
+                ACTION_DEV_TOAST -> {
+                    NotificationManagerCompat.from(applicationContext).cancel(intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, 0))
+                    applicationContext.toast("Notification ID: ${intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, 0)}")
+                }
                 ACTION_FULL_BACKUP_CANCEL -> handleActionFullBackupCancel()
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }
@@ -34,7 +39,8 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
 
     companion object {
         /*BaseDevActivity*/
-        const val ACTION_DISMISS_DEV = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DEV"
+        const val ACTION_DEV_DISMISS = "me.blog.korn123.easydiary.services.ACTION_DEV_DISMISS"
+        const val ACTION_DEV_TOAST = "me.blog.korn123.easydiary.services.ACTION_DEV_TOAST"
 
         /*ZipHelper*/
         const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
