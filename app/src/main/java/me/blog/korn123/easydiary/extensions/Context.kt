@@ -163,7 +163,7 @@ fun Context.openSnoozeNotification(alarm: Alarm) {
         .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
         .setOngoing(false)
         .setAutoCancel(true)
-        .setContentTitle(getString(R.string.schedule_gms_error_title))
+        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${getString(R.string.schedule_gms_error_title)}" else getString(R.string.schedule_gms_error_title))
         .setContentText(getString(R.string.schedule_gms_error_message))
         .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
         .setContentIntent(
@@ -278,7 +278,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         .setLargeIcon(largeIcon)
         .setOngoing(false)
         .setAutoCancel(true)
-        .setContentTitle(alarm.label)
+        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$alarm.id] ${alarm.label}" else alarm.label)
         .setContentText(description)
         .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
         .setContentIntent(pendingIntent)

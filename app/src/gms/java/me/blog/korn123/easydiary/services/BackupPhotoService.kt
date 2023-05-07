@@ -156,7 +156,7 @@ class BackupPhotoService : Service() {
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
-                    .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
+                    .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID] ${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}" else "${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID, notificationBuilder.build())
 
@@ -185,7 +185,7 @@ class BackupPhotoService : Service() {
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOngoing(false)
                 .setAutoCancel(true)
-                .setContentTitle(getString(R.string.backup_attach_photo_title))
+                .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_GMS_BACKUP_COMPLETE_ID] ${getString(R.string.backup_attach_photo_title)}" else getString(R.string.backup_attach_photo_title))
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                 )

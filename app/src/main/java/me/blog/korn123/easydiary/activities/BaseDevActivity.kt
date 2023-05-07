@@ -727,6 +727,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationBuilder
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                     .setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
+                        setTextViewText(R.id.text_notification_content, "[${notificationInfo.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
                         setImageViewBitmap(R.id.img_notification_content, bitmap)
                     })
                     .setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {

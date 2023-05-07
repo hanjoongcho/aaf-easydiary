@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
@@ -50,7 +51,7 @@ class ZipHelper(val context: Context) {
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
                 .setProgress(0, 0, true)
-                .setContentTitle(title)
+                .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$notificationId] $title" else title)
                 .setContentText(message)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(title))
 //                .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -70,7 +71,7 @@ class ZipHelper(val context: Context) {
             val message = mFileNames[progress]
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
-                    .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
+                    .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_COMPRESS_ID] ${progress.plus(1)}/${mFileNames.size}" else "${progress.plus(1)}/${mFileNames.size}")
                     .setContentText(message)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText("Compressing"))
             notificationManager.notify(NOTIFICATION_COMPRESS_ID, mBuilder.build())
@@ -81,7 +82,7 @@ class ZipHelper(val context: Context) {
         if (isOnProgress) {
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.setProgress(totalCount, progress.plus(1), false)
-                    .setContentTitle("${progress.plus(1)}/$totalCount")
+                    .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_COMPRESS_ID] ${progress.plus(1)}/$totalCount" else "${progress.plus(1)}/$totalCount")
                     .setContentText(fileName)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText("Decompressing"))
             notificationManager.notify(NOTIFICATION_DECOMPRESS_ID, mBuilder.build())
@@ -95,7 +96,7 @@ class ZipHelper(val context: Context) {
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.mActions.clear()
             mBuilder/*.setProgress(0, 0, false)*/
-                    .setContentTitle(title)
+                    .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[${notificationId}] $title" else title)
                     .setContentText(message)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                     .addAction(

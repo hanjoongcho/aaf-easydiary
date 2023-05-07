@@ -20,6 +20,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -186,7 +187,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
-                    .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetItems.size}")
+                    .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID] ${getString(R.string.notification_msg_download_progress)} ${successCount + failCount}/${targetItems.size}" else "${getString(R.string.notification_msg_download_progress)} ${successCount + failCount}/${targetItems.size}")
                     .setProgress(targetItems.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
 
@@ -218,7 +219,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setOnlyAlertOnce(true)
                 .setOngoing(false)
                 .setAutoCancel(true)
-                .setContentTitle(getString(R.string.recover_attach_photo_title))
+                .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_GMS_RECOVERY_COMPLETE_ID] ${getString(R.string.recover_attach_photo_title)}" else getString(R.string.recover_attach_photo_title))
                 .setContentIntent(
                         PendingIntent.getActivity(this, NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

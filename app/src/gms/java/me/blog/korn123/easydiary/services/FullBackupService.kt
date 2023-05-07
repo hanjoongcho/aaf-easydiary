@@ -190,7 +190,7 @@ class FullBackupService : Service() {
                         .setStyle(NotificationCompat.BigTextStyle()
                                 .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)).setSummaryText(alarm.label)
                         )
-                        .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${workStatus.successCount + workStatus.failCount}/${workStatus.targetFilenames.size}")
+                        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${getString(R.string.notification_msg_upload_progress)} ${workStatus.successCount + workStatus.failCount}/${workStatus.targetFilenames.size}" else "${getString(R.string.notification_msg_upload_progress)} ${workStatus.successCount + workStatus.failCount}/${workStatus.targetFilenames.size}")
                         .setProgress(workStatus.targetFilenames.size, workStatus.successCount + workStatus.failCount, false)
                 mNotificationManager.notify(alarm.id, mNotificationBuilder.build())
 
@@ -246,7 +246,7 @@ class FullBackupService : Service() {
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .setContentTitle(alarm.label)
+                    .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID] ${alarm.label}" else alarm.label)
 //                .setContentText(getString(R.string.schedule_backup_gms_complete))
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
