@@ -278,7 +278,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         .setLargeIcon(largeIcon)
         .setOngoing(false)
         .setAutoCancel(true)
-        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$alarm.id] ${alarm.label}" else alarm.label)
+        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${alarm.label}" else alarm.label)
         .setContentText(description)
         .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
         .setContentIntent(pendingIntent)

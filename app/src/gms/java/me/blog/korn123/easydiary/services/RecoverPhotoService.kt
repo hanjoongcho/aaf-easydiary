@@ -83,7 +83,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setSmallIcon(R.drawable.ic_easydiary)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_download))
                 .setOnlyAlertOnce(true)
-                .setContentTitle(getString(R.string.task_progress_message))
+                .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID] ${getString(R.string.task_progress_message)}" else getString(R.string.task_progress_message))
 //                .setContentText(getString(R.string.task_progress_message))
                 .setProgress(0, 0, true)
                 .addAction(
