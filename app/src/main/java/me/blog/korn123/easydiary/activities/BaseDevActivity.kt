@@ -63,7 +63,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private var mNotificationCount = 0
+    private var mNotificationCount = 9000
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -434,7 +434,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 useCustomContentView = false,
                                 id = mNotificationCount++
                             )
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification))
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).build())
                         }
                     }, Button(this@BaseDevActivity).apply {
                         text = "Notification-02"
@@ -457,7 +457,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             )
                                             .submit(200, 200).get()
                                 withContext(Dispatchers.Main) {
-                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap))
+                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).build())
                                 }
                             }
                         }
@@ -469,8 +469,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 R.drawable.ic_done,
                                 useActionButton = true,
                                 useCustomContentView = false,
-                                100)
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification))
+                                mNotificationCount)
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also{
+                                val contentTitle = "[${notification.id}] BigTextStyle Title"
+                                val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                                it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
+                            }.build())
                         }
                     }
                 )
@@ -690,7 +694,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun createNotification(notificationInfo: NotificationInfo, bitmap: Bitmap? = null): Notification {
+    private fun createNotification(notificationInfo: NotificationInfo, bitmap: Bitmap? = null): NotificationCompat.Builder {
         if (isOreoPlus()) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_HIGH
@@ -748,7 +752,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationBuilder
                     .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
         }
-        if (notificationInfo.id == 100) notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText("[BigTextStyle] $contentText").setSummaryText("[BigTextStyle] $contentTitle"))
 
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
@@ -761,7 +764,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             )
         }
 
-        return notificationBuilder.build()
+        return notificationBuilder
     }
 
     companion object {
