@@ -148,7 +148,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     }
 
     override fun saveContents() {
-        if (isExistEasterEggDiary(mSelectedItemPosition)) {
+        if (isExistEasterEggDiary(0)) {
             duplicatedEasterEggWarning()
         } else {
             hideSoftInputFromWindow()

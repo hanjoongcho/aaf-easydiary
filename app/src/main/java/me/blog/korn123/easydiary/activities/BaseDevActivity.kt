@@ -425,27 +425,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 // Notification
                 createBaseCardView(
                     "Notification", null, Button(this@BaseDevActivity).apply {
-                        text = "Notification-01"
+                        text = "Basic"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             val notification = NotificationInfo(
                                 R.drawable.ic_diary_writing,
                                 useActionButton = true,
-                                useCustomContentView = false,
                                 id = mNotificationCount++
                             )
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).build())
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                                val contentTitle = "[${notification.id}] Basic Notification"
+                                val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                it.setContentTitle(contentTitle)
+                                it.setContentText(contentText)
+                                it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                            }.build())
                         }
                     }, Button(this@BaseDevActivity).apply {
-                        text = "Notification-02"
+                        text = "CustomContentView"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             val notification = NotificationInfo(
                                 R.drawable.ic_diary_backup_local,
                                 useActionButton = true,
-                                useCustomContentView = true,
                                 mNotificationCount++)
-
                             CoroutineScope(Dispatchers.IO).launch {
                                 val bitmap =
                                         Glide
@@ -457,23 +460,43 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             )
                                             .submit(200, 200).get()
                                 withContext(Dispatchers.Main) {
-                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).build())
+                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
+                                        setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                                        setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
+                                            setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
+                                            setImageViewBitmap(R.id.img_notification_content, bitmap)
+                                        })
+                                        setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
+                                            setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
+                                        })
+//                                        setColor(config.primaryColor)
+//                                        setColorized(true)
+//                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                                        addAction(
+                                            R.drawable.ic_easydiary,
+                                            "Toast",
+                                            PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
+                                                action = BaseNotificationService.ACTION_DEV_TOAST
+                                                putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
+                                            }, pendingIntentFlag())
+                                        )
+                                    }.build())
                                 }
                             }
                         }
                     }, Button(this@BaseDevActivity).apply {
-                        text = "Notification-03"
+                        text = "BigTextStyle"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             val notification = NotificationInfo(
                                 R.drawable.ic_done,
                                 useActionButton = true,
-                                useCustomContentView = false,
                                 mNotificationCount)
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also{
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
                                 val contentTitle = "[${notification.id}] BigTextStyle Title"
                                 val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
                                 it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
+                                it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
                             }.build())
                         }
                     }
@@ -707,60 +730,46 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val contentTitle = "[${notificationInfo.id}] contentTitle 영역"
-        val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
-        notificationBuilder
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_easydiary)
-                .setOnlyAlertOnce(true)
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setContentTitle("[Base] $contentTitle")
-                .setContentText("[Base] $contentText")
-                .setContentIntent(
-                        PendingIntent.getActivity(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, DiaryMainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            putExtra(NOTIFICATION_ID, notificationInfo.id)
-                            putExtra(NOTIFICATION_INFO, "Test Notification Count: $mNotificationCount")
-                        }, pendingIntentFlag())
+        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
+            setDefaults(Notification.DEFAULT_ALL)
+            setWhen(System.currentTimeMillis())
+            setSmallIcon(R.drawable.ic_easydiary)
+            setOnlyAlertOnce(true)
+            setOngoing(false)
+            setAutoCancel(true)
+            setContentIntent(
+                PendingIntent.getActivity(
+                    this@BaseDevActivity,
+                    notificationInfo.id /*Private request code for the sender*/,
+                    Intent(this@BaseDevActivity, DiaryMainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        putExtra(NOTIFICATION_ID, notificationInfo.id)
+                        putExtra(
+                            NOTIFICATION_INFO,
+                            "Test Notification Count: $mNotificationCount"
+                        )
+                    },
+                    pendingIntentFlag()
                 )
-
-        if (notificationInfo.useCustomContentView) {
-            notificationBuilder
-                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                    .setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
-                        setTextViewText(R.id.text_notification_content, "[${notificationInfo.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
-                        setImageViewBitmap(R.id.img_notification_content, bitmap)
-                    })
-                    .setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
-                        setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
-                    })
-//                    .setColor(config.primaryColor)
-//                    .setColorized(true)
-//                    .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
-                    .addAction(
-                        R.drawable.ic_easydiary,
-                        "Toast",
-                        PendingIntent.getService(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, NotificationService::class.java).apply {
-                            action = BaseNotificationService.ACTION_DEV_TOAST
-                            putExtra(NOTIFICATION_ID, notificationInfo.id /*An identifier for this notification unique within your application.*/)
-                        }, pendingIntentFlag())
-                    )
-        } else {
-            notificationBuilder
-                    .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
+            )
         }
 
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
-                    R.drawable.ic_easydiary,
-                    getString(R.string.dismiss),
-                    PendingIntent.getService(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, NotificationService::class.java).apply {
+                R.drawable.ic_easydiary,
+                getString(R.string.dismiss),
+                PendingIntent.getService(
+                    this,
+                    notificationInfo.id /*Private request code for the sender*/,
+                    Intent(this, NotificationService::class.java).apply {
                         action = BaseNotificationService.ACTION_DEV_DISMISS
-                        putExtra(NOTIFICATION_ID, notificationInfo.id /*An identifier for this notification unique within your application.*/)
-                    }, pendingIntentFlag())
+                        putExtra(
+                            NOTIFICATION_ID,
+                            notificationInfo.id /*An identifier for this notification unique within your application.*/
+                        )
+                    },
+                    pendingIntentFlag()
+                )
             )
         }
 
@@ -782,7 +791,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 data class NotificationInfo(
     var largeIconResourceId: Int,
     var useActionButton: Boolean = false,
-    var useCustomContentView: Boolean = false,
     var id: Int = 0
 )
 

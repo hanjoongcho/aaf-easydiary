@@ -745,13 +745,13 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun isExistEasterEggDiary(symbolSequence: Int) = mSelectedItemPosition == SYMBOL_EASTER_EGG && EasyDiaryDbHelper.findDiary(
+    protected fun isExistEasterEggDiary(allowStoredCnt: Int) = mSelectedItemPosition == SYMBOL_EASTER_EGG && EasyDiaryDbHelper.findDiary(
         null,
         false,
         0,
         0,
         SYMBOL_EASTER_EGG
-    ).isNotEmpty()
+    ).filter { diary -> diary.originSequence == DIARY_ORIGIN_SEQUENCE_INIT }.size > allowStoredCnt
 
     protected fun duplicatedEasterEggWarning() {
         showAlertDialog(
