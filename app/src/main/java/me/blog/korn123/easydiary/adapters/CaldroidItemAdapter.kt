@@ -48,7 +48,7 @@ class CaldroidItemAdapter(
         val calendarDate = binding.calendarDate.apply {
 //            changeDateColor(binding, dateTime)
             text = datetimeList[position].day.toString()
-            if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")
+            if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(activity , paint, "22", 1.3F)
             layoutParams?.width = mDiameter
             layoutParams?.height = mDiameter
         }
@@ -104,15 +104,15 @@ class CaldroidItemAdapter(
                         mDiaryList.isEmpty() -> {
                             item1.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                             item2.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                             item3.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                         }
                         mDiaryList.size == 1 -> {
@@ -123,11 +123,11 @@ class CaldroidItemAdapter(
                             }
                             item2.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                             item3.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                         }
                         mDiaryList.size == 2 -> {
@@ -143,10 +143,10 @@ class CaldroidItemAdapter(
                             }
                             item3.run {
                                 (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = null
+                                (getChildAt(1) as TextView).text = " "
                             }
                         }
-                        mDiaryList.size > 2 -> {
+                        else -> {
                             item1.run {
                                 val item = mDiaryList[0]
                                 FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)

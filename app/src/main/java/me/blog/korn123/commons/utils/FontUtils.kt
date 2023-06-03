@@ -132,7 +132,9 @@ object FontUtils {
         return displayName ?: FilenameUtils.getBaseName(fontFileName)
     }
 
-    fun measureTextWidth(paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.measureText(text).toInt().times(scaleFactor).toInt()
+    fun measureTextWidth(context: Context, paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.apply {
+        typeface = getCommonTypeface(context)
+    }.measureText(text).toInt().times(scaleFactor).toInt()
 
     fun checkFontSetting(activity: Activity) {
         activity.run {
