@@ -41,6 +41,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -244,9 +245,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
-                showAlertDialog("Info", getString(R.string.back_pressed_confirm),
-                        DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
-                        null
+                showAlertDialog(
+                    DialogMode.INFO
+                    , getString(R.string.back_pressed_confirm)
+                    , { _, _ -> super.onBackPressed() }
+                    , null
+                    , true
                 )
             R.id.saveContents -> saveContents()
             R.id.datePicker -> {

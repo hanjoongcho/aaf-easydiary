@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -63,6 +64,7 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -111,54 +113,11 @@ fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activi
  *   Messages
  *
  ***************************************************************************************************/
-fun Activity.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
 fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar
         .make(findViewById(android.R.id.content), message, duration)
         .setAction("Action", null).show()
 }
-
-fun Activity.makeSnackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-}
-
-fun Activity.showAlertDialog(
-    title: String?,
-    message: String,
-    positiveListener: DialogInterface.OnClickListener?,
-    negativeListener: DialogInterface.OnClickListener?,
-    cancelable: Boolean = true,
-    customTitleIcon: Int? = null
-) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title, 255, customTitleIcon)
-    }
-}
-
-fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
-}
-
-fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title)
-    }
-}
-
-fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, cancelable)
-}
-
 
 /***************************************************************************************************
  *   Screen Dimension

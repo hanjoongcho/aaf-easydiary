@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.ComponentName
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -45,6 +46,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
+import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -73,6 +75,7 @@ import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
@@ -532,6 +535,65 @@ fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
     }
+}
+
+
+/***************************************************************************************************
+ *   Messages
+ *
+ ***************************************************************************************************/
+fun Context.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.makeSnackBar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+}
+
+fun Context.showAlertDialog(
+    dialogMode: DialogMode,
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    negativeListener: DialogInterface.OnClickListener?,
+    cancelable: Boolean = true
+) {
+    when (dialogMode) {
+        DialogMode.INFO -> showAlertDialog(getString(R.string.ok), message, positiveListener, negativeListener, cancelable, R.drawable.ic_info)
+    }
+}
+
+fun Context.showAlertDialog(
+    title: String?,
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    negativeListener: DialogInterface.OnClickListener?,
+    cancelable: Boolean = true,
+    customTitleIcon: Int? = null
+) {
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    builder.create().apply {
+        updateAlertDialog(this, message, null, title, 255, customTitleIcon)
+    }
+}
+
+fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
+}
+
+fun Context.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    builder.create().apply {
+        updateAlertDialog(this, message, null, title)
+    }
+}
+
+fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    showAlertDialog(null, message, positiveListener, cancelable)
 }
 
 fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255, customTitleIcon: Int? = null) {
