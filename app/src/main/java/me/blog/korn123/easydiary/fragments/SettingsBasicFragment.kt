@@ -283,7 +283,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 }
                 alertDialog?.cancel()
             }
-            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title)) }
+            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title), 255, R.drawable.ic_settings_7) }
 
             listView.setSelection(selectedIndex)
         }

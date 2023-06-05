@@ -568,7 +568,8 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             PartialDialogTitleBinding.inflate(layoutInflater).apply {
                 textDialogTitle.run {
                     text = customTitle
-                    if (!isNightMode()) setTextColor(config.textColor)
+//                    if (!isNightMode()) setTextColor(config.textColor)
+                    if (!isNightMode()) setTextColor(Color.WHITE)
                     typeface = globalTypeface
 //                    val padding = dpToPixel(15F)
 //                    setPadding(padding * 2, padding, padding * 2, padding)
@@ -578,7 +579,8 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                     imgDialogTitle.run {
                         visibility = View.VISIBLE
                         setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
-                        changeDrawableIconColor(config.textColor, this)
+//                        changeDrawableIconColor(config.textColor, this)
+                        changeDrawableIconColor(Color.WHITE, this)
                     }
                 }
                 setCustomTitle(this.root)

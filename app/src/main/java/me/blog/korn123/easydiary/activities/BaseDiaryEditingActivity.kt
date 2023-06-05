@@ -244,7 +244,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
-                showAlertDialog(getString(R.string.back_pressed_confirm),
+                showAlertDialog("Info", getString(R.string.back_pressed_confirm),
                         DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
                         null
                 )
