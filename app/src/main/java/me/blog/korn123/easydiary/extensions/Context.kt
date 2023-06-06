@@ -550,16 +550,24 @@ fun Context.makeSnackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
 }
 
-fun Context.showAlertDialog(
+fun Context.showAlertDialogWithIcon(
     dialogMode: DialogMode,
     message: String,
     positiveListener: DialogInterface.OnClickListener?,
     negativeListener: DialogInterface.OnClickListener?,
     cancelable: Boolean = true
 ) {
-    when (dialogMode) {
-        DialogMode.INFO -> showAlertDialog(getString(io.github.aafactory.commons.R.string.ok), message, positiveListener, negativeListener, cancelable, R.drawable.ic_info)
-    }
+    showAlertDialog(
+        getString(R.string.ok),
+        message,
+        positiveListener,
+        negativeListener,
+        cancelable,
+        when (dialogMode) {
+            DialogMode.INFO -> R.drawable.ic_info
+            else -> 0
+        }
+    )
 }
 
 fun Context.showAlertDialog(
@@ -594,6 +602,20 @@ fun Context.showAlertDialog(title: String?, message: String, positiveListener: D
 
 fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
     showAlertDialog(null, message, positiveListener, cancelable)
+}
+
+fun Context.updateAlertDialogWithIcon(dialogMode: DialogMode, alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
+    updateAlertDialog(
+        alertDialog,
+        message,
+        customView,
+        customTitle,
+        255,
+        when (dialogMode) {
+            DialogMode.INFO -> R.drawable.ic_info
+            DialogMode.SETTING -> R.drawable.ic_settings_7
+        }
+    )
 }
 
 fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255, customTitleIcon: Int? = null) {

@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.text.SimpleDateFormat
@@ -283,7 +284,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 }
                 alertDialog?.cancel()
             }
-            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title), 255, R.drawable.ic_settings_7) }
+            alertDialog = builder.create().apply {
+                updateAlertDialogWithIcon(DialogMode.SETTING, this, null, containerView, getString(R.string.thumbnail_setting_title))
+            }
 
             listView.setSelection(selectedIndex)
         }
@@ -364,7 +367,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 }
                 alertDialog?.cancel()
             }
-            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, "Datetime formatting") }
+            alertDialog = builder.create().apply {
+                updateAlertDialogWithIcon(DialogMode.SETTING, this, null, containerView, "Datetime formatting")
+            }
 
             var selectedIndex = 0
             listThumbnailSize.mapIndexed { index, map ->

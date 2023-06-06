@@ -245,7 +245,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
-                showAlertDialog(
+                showAlertDialogWithIcon(
                     DialogMode.INFO
                     , getString(R.string.back_pressed_confirm)
                     , { _, _ -> super.onBackPressed() }
@@ -276,15 +276,17 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     override fun onBackPressed() {
-        showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { _, _ ->
+        showAlertDialogWithIcon(
+            DialogMode.INFO
+            , getString(R.string.back_pressed_confirm)
+            , { _, _ ->
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
                     } else {
                         super.onBackPressed()
                     }
-                },
-                null
+              }
+            , null
         )
     }
 
@@ -536,7 +538,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     protected fun setupDialog() {
-        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
+        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                datePicker.firstDayOfWeek = when (config.calendarStartDay) {
+                    CALENDAR_START_DAY_MONDAY -> Calendar.MONDAY
+                    CALENDAR_START_DAY_SATURDAY -> Calendar.SATURDAY
+                    else -> CALENDAR_START_DAY_SUNDAY
+                }
+            }
+        }
         mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
     }
 
