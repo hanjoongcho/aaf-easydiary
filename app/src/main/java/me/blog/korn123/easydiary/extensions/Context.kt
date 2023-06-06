@@ -558,7 +558,7 @@ fun Context.showAlertDialog(
     cancelable: Boolean = true
 ) {
     when (dialogMode) {
-        DialogMode.INFO -> showAlertDialog(getString(R.string.ok), message, positiveListener, negativeListener, cancelable, R.drawable.ic_info)
+        DialogMode.INFO -> showAlertDialog(getString(io.github.aafactory.commons.R.string.ok), message, positiveListener, negativeListener, cancelable, R.drawable.ic_info)
     }
 }
 
