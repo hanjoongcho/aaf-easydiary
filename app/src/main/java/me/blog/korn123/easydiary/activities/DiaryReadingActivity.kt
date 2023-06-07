@@ -25,6 +25,7 @@ import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -199,7 +200,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             root.run {
                                 updateTextColors(this)
                                 FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
-                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
+//                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
+                                updateAlertDialogWithIcon(DialogMode.INFO, mDialogSearch!!, null, this, null)
                             }
                             updateLabel()
                         }

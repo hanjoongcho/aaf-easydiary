@@ -557,16 +557,23 @@ fun Context.showAlertDialogWithIcon(
     negativeListener: DialogInterface.OnClickListener?,
     cancelable: Boolean = true
 ) {
+    var title: String? = null
+    var iconResourceId: Int? = null
+    when (dialogMode) {
+        DialogMode.INFO -> {
+            title = getString(R.string.ok)
+            iconResourceId = R.drawable.ic_info
+        }
+        else -> {}
+    }
+
     showAlertDialog(
-        getString(R.string.ok),
+        title,
         message,
         positiveListener,
         negativeListener,
         cancelable,
-        when (dialogMode) {
-            DialogMode.INFO -> R.drawable.ic_info
-            else -> 0
-        }
+        iconResourceId
     )
 }
 
@@ -604,17 +611,34 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
     showAlertDialog(null, message, positiveListener, cancelable)
 }
 
-fun Context.updateAlertDialogWithIcon(dialogMode: DialogMode, alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
+fun Context.updateAlertDialogWithIcon(
+    dialogMode: DialogMode,
+    alertDialog: AlertDialog,
+    message: String? = null,
+    customView: View? = null,
+    customTitle: String? = null
+) {
+    var title: String? = null
+    var iconResourceId: Int? = null
+    when (dialogMode) {
+        DialogMode.INFO -> {
+            title = "Info"
+            iconResourceId = R.drawable.ic_info
+        }
+
+        DialogMode.SETTING -> {
+            title = getString(R.string.settings)
+            iconResourceId = R.drawable.ic_settings_7
+        }
+    }
+
     updateAlertDialog(
         alertDialog,
         message,
         customView,
-        customTitle,
+        customTitle ?: title,
         255,
-        when (dialogMode) {
-            DialogMode.INFO -> R.drawable.ic_info
-            DialogMode.SETTING -> R.drawable.ic_settings_7
-        }
+        iconResourceId
     )
 }
 

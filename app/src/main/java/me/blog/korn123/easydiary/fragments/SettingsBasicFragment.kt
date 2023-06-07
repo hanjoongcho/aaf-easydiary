@@ -411,7 +411,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 alertDialog?.cancel()
             }
 
-            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.max_lines_title)) }
+            alertDialog = builder.create().apply {
+                updateAlertDialogWithIcon(DialogMode.SETTING, this, null, containerView, getString(R.string.max_lines_title))
+            }
             listView.setSelection(selectedIndex)
         }
     }

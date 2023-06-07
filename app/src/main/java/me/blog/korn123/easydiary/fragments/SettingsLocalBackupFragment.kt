@@ -31,6 +31,7 @@ import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.workers.BackupOperations
@@ -177,7 +178,9 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         alertDialog?.cancel()
                     }
 
-                    alertDialog = builder.create().apply { requireActivity().updateAlertDialog(this, null, rootView, "${getString(R.string.open_realm_file_title)} (Total: ${it.size})") }
+                    alertDialog = builder.create().apply {
+                        requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, rootView, "${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
+                    }
                 }
                 false -> {}
             }
@@ -538,7 +541,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             modeExternalDescription.text = externalDescription
 
             root.setBackgroundColor(requireActivity().config.backgroundColor)
-            closePopup.setOnClickListener { dialog?.dismiss() }
+//            closePopup.setOnClickListener { dialog?.dismiss() }
             modeInternal.setOnClickListener {
                 when (popupMode) {
                     MODE_BACKUP -> exportRealmFile()
@@ -567,7 +570,8 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         FontUtils.setFontsTypeface(requireActivity(), null, popupView.root, true)
         builder.setView(popupView.root)
         dialog = builder.create().apply {
-            requireActivity().updateAlertDialog(this, null, popupView.root)
+//            requireActivity().updateAlertDialog(this, null, popupView.root)
+            requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, popupView.root)
         }
     }
 

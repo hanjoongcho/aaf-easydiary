@@ -5,18 +5,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        style="@style/image_custom_toolbar_icon"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_gravity="end"
-        android:id="@+id/closePopup"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:contentDescription=""
-        android:src="@drawable/ic_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
