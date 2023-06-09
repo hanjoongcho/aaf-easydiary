@@ -894,7 +894,7 @@
     <string name="max_lines_summary">다이어리 요약 보기 옵션이 활성화되는 경우 요약하여 표시될 최대 라인수를 설정합니다.</string>
     <string name="max_lines_value">%d줄</string>
     <string name="diary_encryption_title">다이어리 암호화</string>
-    <string name="diary_encryption_guide">다이어리 암호화에 사용될 핀번호를 입력하세요.\n입력된 핀번호를 이용하여 현재 선택된 다이어리의 제목 및 본문 내용을 암호화합니다.\n핀번호는 복구할 수 없기 때문에 설정한 핀번호를 잊어버리지 않게 주의하세요.</string>
+    <string name="diary_encryption_guide">다이어리 암호화에 사용될 핀번호를 입력하세요.\n입력된 핀번호를 이용하여 현재 선택된 다이어리의 제목 및 본문 내용을 암호화합니다. (첨부 사진의 경우 파일 자체가 암호화 되지는 않지만 다이어리가 암호화 되는 경우 첨부 사진 열람은 제한됩니다.)\n핀번호는 복구할 수 없기 때문에 설정한 핀번호를 잊어버리지 않게 주의하세요.</string>
     <string name="diary_decryption_title">다이어리 복호화</string>
     <string name="diary_decryption_guide">다이어리 복호화에 사용될 핀번호를 입력하세요.\n입력된 핀번호를 이용하여 다이어리의 제목 및 본문내용을 복호화합니다.</string>
     <string name="diary_pin_number_confirm_guide">다이어리 암호화에 사용될 핀번호를 한번 더 입력하세요</string>

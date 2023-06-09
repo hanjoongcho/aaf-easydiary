@@ -894,7 +894,7 @@
     <string name="max_lines_summary">Set the maximum number of lines to be displayed when the content summary option is activated.</string>
     <string name="max_lines_value">%d 行</string>
     <string name="diary_encryption_title">日記加密</string>
-    <string name="diary_encryption_guide">Please enter the pin number to be used for diary encryption.\nEncrypt the title and body of the currently selected diary using the entered pin number.\nThe pin number cannot be recovered, so be careful not to forget the set pin number.</string>
+    <string name="diary_encryption_guide">Please enter the pin number to be used for diary encryption.\nEncrypt the title and body of the currently selected diary using the entered pin number. (In the case of attached photos, the file itself is not encrypted, but if the diary is encrypted, viewing of the attached photos is restricted.)\nThe pin number cannot be recovered, so be careful not to forget the set pin number.</string>
     <string name="diary_decryption_title">日記解密</string>
     <string name="diary_decryption_guide">Enter the pin number to be used for diary decoding.\nDecrypt the diary\'s title and body content using the entered pin number.</string>
     <string name="diary_pin_number_confirm_guide">Enter the pin number to be used for diary encryption once more.</string>

@@ -894,7 +894,7 @@
     <string name="max_lines_summary">设置激活内容摘要选项时要显示的最大行数</string>
     <string name="max_lines_value">%d 行</string>
     <string name="diary_encryption_title">日记加密</string>
-    <string name="diary_encryption_guide">输入用于日记加密的密码。\n使用输入的密码对当前选定日记的标题和正文进行加密。\n密码无法恢复，所以要注意不要忘记设置的密码。</string>
+    <string name="diary_encryption_guide">输入用于日记加密的密码。\n使用输入的密码对当前选定日记的标题和正文进行加密。（如果是附加照片，文件本身没有加密，但如果日记是加密的，附加照片的查看将受到限制。）\n密码无法恢复，所以要注意不要忘记设置的密码。</string>
     <string name="diary_decryption_title">日记解密</string>
     <string name="diary_decryption_guide">输入用于日记解密的密码。\n使用输入的密码解密日记的标题和正文内容。</string>
     <string name="diary_pin_number_confirm_guide">重复用于日记加密的密码。</string>
