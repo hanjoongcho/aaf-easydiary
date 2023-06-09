@@ -598,6 +598,10 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
     showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
 }
 
+fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    showAlertDialog(null, message, positiveListener, cancelable)
+}
+
 fun Context.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
     val builder = AlertDialog.Builder(this)
     builder.setCancelable(cancelable)
@@ -607,16 +611,13 @@ fun Context.showAlertDialog(title: String?, message: String, positiveListener: D
     }
 }
 
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, cancelable)
-}
-
 fun Context.updateAlertDialogWithIcon(
     dialogMode: DialogMode,
     alertDialog: AlertDialog,
     message: String? = null,
     customView: View? = null,
-    customTitle: String? = null
+    customTitle: String? = null,
+    backgroundAlpha: Int = 255
 ) {
     var title: String? = null
     var iconResourceId: Int? = null
@@ -637,7 +638,7 @@ fun Context.updateAlertDialogWithIcon(
         message,
         customView,
         customTitle ?: title,
-        255,
+        backgroundAlpha,
         iconResourceId
     )
 }
