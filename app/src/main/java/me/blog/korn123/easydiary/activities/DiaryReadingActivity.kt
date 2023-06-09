@@ -55,7 +55,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
-    var mIsEncryptData: Boolean = false
 
     companion object {
         const val ENCRYPTION = "encryption"
@@ -514,7 +513,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
             pmrBinding.run {
-                when (mIsEncryptData) {
+                when (fragment.isEncryptContents()) {
                     true -> decryptData.visibility = View.VISIBLE
                     false -> encryptData.visibility = View.VISIBLE
                 }
@@ -705,11 +704,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                        background = getLabelBackground()
                             text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                         }
-                    }
-
-                    (this as DiaryReadingActivity).run {
-                        mIsEncryptData = diaryDto.isEncrypt
-                        invalidateOptionsMenu()
                     }
                 }
             }

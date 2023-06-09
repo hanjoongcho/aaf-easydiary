@@ -714,6 +714,10 @@
         v1.4.298.202306010 / 2023.06.01\n
         ユーザーエクスペリエンス（UX）の最適化
     </string>
+    <string name="release_299">
+        v1.4.299.202306100 / 2023.06.10\n
+        ユーザーエクスペリエンス（UX）の最適化
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -894,7 +898,7 @@
     <string name="max_lines_summary">コンテンツサマリーオプションがアクティブになったときに表示される最大行数を設定します。</string>
     <string name="max_lines_value">%d行</string>
     <string name="diary_encryption_title">日記の暗号化</string>
-    <string name="diary_encryption_guide">日記暗号化に使用する暗証番号を入力してください。\n入力されたピン番号を利用して、現在選択されてダイアリーのタイトルと本文の内容を暗号化します。\nピン番号は回復することができないため、設定したピン番号を忘れてしまわないように注意してください。</string>
+    <string name="diary_encryption_guide">日記暗号化に使用する暗証番号を入力してください。\n入力されたピン番号を利用して、現在選択されてダイアリーのタイトルと本文の内容を暗号化します。(添付写真の場合、ファイル自体は暗号化されませんが、日記が暗号化されている場合は添付写真の閲覧が制限されます。)\nピン番号は回復することができないため、設定したピン番号を忘れてしまわないように注意してください。</string>
     <string name="diary_decryption_title">日記復号化</string>
     <string name="diary_decryption_guide">日記のデコードに使用するピン番号を入力します。\n入力したピン番号を使用して、日記のタイトルと本文の内容を解読します。</string>
     <string name="diary_pin_number_confirm_guide">日記の暗号化に使用する暗証番号をもう一度入力してください。</string>
