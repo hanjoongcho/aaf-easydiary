@@ -242,14 +242,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     abstract fun saveContents()
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
-                showAlertDialogWithIcon(
-                    getString(R.string.back_pressed_confirm)
-                    , { _, _ -> super.onBackPressed() }
-                    , {_, _ -> }
-                    , DialogMode.INFO
+                showAlertDialog(
+                    getString(R.string.back_pressed_confirm), { _, _ -> super.onBackPressed() }, {_, _ -> }, DialogMode.INFO
                 )
             R.id.saveContents -> saveContents()
             R.id.datePicker -> {
@@ -275,17 +273,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     override fun onBackPressed() {
-        showAlertDialogWithIcon(
-            getString(R.string.back_pressed_confirm)
-            , { _, _ ->
-                    if (isAccessFromOutside()) {
-                        startMainActivityWithClearTask()
-                    } else {
-                        super.onBackPressed()
-                    }
-              }
-            , {_, _ -> }
-            , DialogMode.INFO
+        showAlertDialog(
+            getString(R.string.back_pressed_confirm), { _, _ ->
+                if (isAccessFromOutside()) {
+                    startMainActivityWithClearTask()
+                } else {
+                    super.onBackPressed()
+                }
+            }, {_, _ -> }, DialogMode.INFO
         )
     }
 
@@ -397,14 +392,16 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun checkTemporaryDiary(originSequence: Int) {
         EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence)?.let {
             showAlertDialog(
-                    getString(R.string.load_auto_save_diary_title),
-                    getString(R.string.load_auto_save_diary_description),
-                    { _, _ ->
-                        initData(it)
-                        initBottomToolbar()
-                        EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
-                    },
-                    { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DIARY_SEQUENCE_TEMPORARY) }, false
+                getString(R.string.load_auto_save_diary_description),
+                { _, _ ->
+                    initData(it)
+                    initBottomToolbar()
+                    EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
+                },
+                { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DIARY_SEQUENCE_TEMPORARY) },
+                DialogMode.INFO,
+                false,
+                getString(R.string.load_auto_save_diary_title)
             )
         }
     }
@@ -768,12 +765,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected fun duplicatedEasterEggWarning() {
         showAlertDialog(
-            "Info",
             "A diary set to the easter egg symbol already exists.",
             null,
             null,
-            true,
-            R.drawable.ic_info
+            DialogMode.INFO,
         )
     }
 

@@ -23,6 +23,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityGalleryBinding
 import me.blog.korn123.easydiary.databinding.DialogSettingGalleryBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
@@ -125,18 +126,26 @@ class GalleryActivity : EasyDiaryActivity() {
                 }
 
                 imgDeleteUnlinkedPhoto.setOnClickListener {
-                    showAlertDialog("Info", getString(R.string.delete_unlinked_photo_confirm_message) , { _, _ ->
-                        mBinding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
-                        CoroutineScope(Dispatchers.IO).launch {
-                            unlinkedPhotos.forEach { item -> item.delete() }
-                            withContext(Dispatchers.Main) {
-                                updateInfo()
-                                reloadPhotos()
-                                mBinding.progressLoadingContainer.progressLoading.visibility = View.GONE
+                    showAlertDialog(
+                        getString(R.string.delete_unlinked_photo_confirm_message),
+                        { _, _ ->
+                            mBinding.progressLoadingContainer.progressLoading.visibility =
+                                View.VISIBLE
+                            CoroutineScope(Dispatchers.IO).launch {
+                                unlinkedPhotos.forEach { item -> item.delete() }
+                                withContext(Dispatchers.Main) {
+                                    updateInfo()
+                                    reloadPhotos()
+                                    mBinding.progressLoadingContainer.progressLoading.visibility =
+                                        View.GONE
+                                }
                             }
-                        }
 
-                    }, null, false, R.drawable.ic_info)
+                        },
+                        { _, _ -> },
+                        DialogMode.WARNING,
+                        false
+                    )
                 }
                 updateInfo()
             }

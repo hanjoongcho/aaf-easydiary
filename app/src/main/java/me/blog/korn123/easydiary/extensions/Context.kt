@@ -550,15 +550,30 @@ fun Context.makeSnackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
 }
 
-fun Context.showAlertDialogWithIcon(
+/**
+ * TODO
+ *
+ * @param message
+ * @param positiveListener
+ * @param negativeListener
+ * @param dialogMode
+ * @param cancelable
+ * @param paramTitle
+ * @param positiveButtonLabel
+ * @param negativeButtonLabel
+ */
+fun Context.showAlertDialog(
     message: String,
     positiveListener: DialogInterface.OnClickListener?,
     negativeListener: DialogInterface.OnClickListener?,
-    dialogMode: DialogMode = DialogMode.DEFAULT ,
-    cancelable: Boolean = true
+    dialogMode: DialogMode = DialogMode.DEFAULT,
+    cancelable: Boolean = true,
+    paramTitle: String? = null,
+    positiveButtonLabel: String = getString(R.string.ok),
+    negativeButtonLabel: String = getString(R.string.cancel)
 ) {
-    var title: String? = null
     var iconResourceId: Int? = null
+    var title: String? = null
     when (dialogMode) {
         DialogMode.INFO -> {
             title = getString(R.string.ok)
@@ -582,14 +597,13 @@ fun Context.showAlertDialogWithIcon(
         }
     }
 
-    showAlertDialog(
-        title,
-        message,
-        positiveListener,
-        negativeListener,
-        cancelable,
-        iconResourceId
-    )
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setPositiveButton(positiveButtonLabel, positiveListener)
+    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
+    builder.create().apply {
+        updateAlertDialog(this, message, null, paramTitle ?: title, 255, iconResourceId)
+    }
 }
 
 @Deprecated(
@@ -604,7 +618,7 @@ fun Context.showAlertDialog(
     positiveListener: DialogInterface.OnClickListener?,
     cancelable: Boolean = true
 ) {
-    showAlertDialog(null, message, positiveListener, null, cancelable)
+    showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
 }
 
 @Deprecated(
@@ -620,26 +634,7 @@ fun Context.showAlertDialog(
     negativeListener: DialogInterface.OnClickListener?,
     cancelable: Boolean = true
 ) {
-    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
-}
-
-fun Context.showAlertDialog(
-    title: String?,
-    message: String,
-    positiveListener: DialogInterface.OnClickListener?,
-    negativeListener: DialogInterface.OnClickListener?,
-    cancelable: Boolean = true,
-    customTitleIcon: Int? = null,
-    positiveButtonLabel: String = getString(R.string.ok),
-    negativeButtonLabel: String = getString(R.string.cancel)
-) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(positiveButtonLabel, positiveListener)
-    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title, 255, customTitleIcon)
-    }
+    showAlertDialog(message, positiveListener, negativeListener, DialogMode.INFO, cancelable)
 }
 
 fun Context.updateAlertDialogWithIcon(

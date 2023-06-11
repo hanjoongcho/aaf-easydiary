@@ -23,6 +23,7 @@ import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsFontBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
@@ -69,7 +70,14 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                             }).start()
                             progressContainer.visibility = View.VISIBLE
                         } else {
-                            showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null, null)
+                            showAlertDialog(
+                                "$fileName is not ttf file.",
+                                null,
+                                null,
+                                DialogMode.INFO,
+                                false,
+                                getString(R.string.add_ttf_fonts_title),
+                            )
                         }
                     }
                 }

@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -15,14 +14,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Point
-import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -43,8 +39,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
-import io.noties.markwon.Markwon
-import io.noties.markwon.movement.MovementMethodPlugin
 import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +58,6 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
-import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary

@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsScheduleBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -148,14 +149,19 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     true -> { imageDeleteAlarm.visibility = View.GONE }
                     false -> {
                         imageDeleteAlarm.setOnClickListener {
-                            showAlertDialog("Are you sure you want to delete the selected schedule?", DialogInterface.OnClickListener { _, _ ->
-                                cancelAlarmClock(temporaryAlarm)
-                                alertDialog?.dismiss()
-                                EasyDiaryDbHelper.beginTransaction()
-                                storedAlarm.deleteFromRealm()
-                                EasyDiaryDbHelper.commitTransaction()
-                                updateAlarmList()
-                            }, null)
+                            showAlertDialog(
+                                "Are you sure you want to delete the selected schedule?",
+                                DialogInterface.OnClickListener { _, _ ->
+                                    cancelAlarmClock(temporaryAlarm)
+                                    alertDialog?.dismiss()
+                                    EasyDiaryDbHelper.beginTransaction()
+                                    storedAlarm.deleteFromRealm()
+                                    EasyDiaryDbHelper.commitTransaction()
+                                    updateAlarmList()
+                                },
+                                { _, _ -> },
+                                DialogMode.WARNING
+                            )
                         }
                     }
                 }

@@ -222,9 +222,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             showAlertDialog(
                                 getString(
                                     R.string.delete_selected_items_confirm,
-                                    this.size
+                                    size
                                 ), { _, _ ->
-                                    this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
+                                    forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
                                     refreshList()
                                 }, null
                             )
@@ -242,9 +242,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             showAlertDialog(
                                 getString(
                                     R.string.duplicate_selected_items_confirm,
-                                    this.size
+                                    size
                                 ), { _, _ ->
-                                    this.reversed().map {
+                                    reversed().map {
                                         EasyDiaryDbHelper.beginTransaction()
                                         it.isSelected = false
                                         EasyDiaryDbHelper.commitTransaction()

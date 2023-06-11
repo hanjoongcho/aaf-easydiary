@@ -165,52 +165,45 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 createBaseCardView(
                     "Dialog", null
                     , Button(this@BaseDevActivity).apply {
-                        text = "알림"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("Title", "message", {_, _ -> }, null)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "확인"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("Title", "message", {_, _ -> }, {_, _ -> })
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
                         text = "알림(DEFAULT)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialogWithIcon("message", null, null)
+                            showAlertDialog("message", null, null)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(INFO)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialogWithIcon("message", null, null, DialogMode.INFO)
+                            showAlertDialog("message", null, null, DialogMode.INFO)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(WARNING)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialogWithIcon("message", null, null, DialogMode.WARNING)
+                            showAlertDialog("message", null, null, DialogMode.WARNING)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(ERROR)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialogWithIcon("message", null, null, DialogMode.ERROR)
+                            showAlertDialog("message", null, null, DialogMode.ERROR)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(SETTING)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialogWithIcon("message", null, null, DialogMode.SETTING)
+                            showAlertDialog("message", null, null, DialogMode.SETTING)
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "확인(INFO)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO)
                         }
                     }
                 )
@@ -447,7 +440,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                     unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
                                 }
                             }
-                            showAlertDialogWithIcon(unUsedPhotos.size.toString(), null, null, DialogMode.WARNING)
+                            showAlertDialog(unUsedPhotos.size.toString(), null,
+                                { _, _ -> }, DialogMode.WARNING
+                            )
                         }
                     }, Button(this@BaseDevActivity).apply {
                         text ="Font Preview Emoji"
