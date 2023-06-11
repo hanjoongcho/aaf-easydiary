@@ -192,6 +192,27 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             showAlertDialogWithIcon("message", null, null, DialogMode.INFO)
                         }
                     }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림(WARNING)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialogWithIcon("message", null, null, DialogMode.WARNING)
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림(ERROR)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialogWithIcon("message", null, null, DialogMode.ERROR)
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림(SETTING)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialogWithIcon("message", null, null, DialogMode.SETTING)
+                        }
+                    }
                 )
             )
             linearDevContainer.addView(
@@ -426,7 +447,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                     unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
                                 }
                             }
-                            showAlertDialog(unUsedPhotos.size.toString(), null, true)
+                            showAlertDialogWithIcon(unUsedPhotos.size.toString(), null, null, DialogMode.WARNING)
                         }
                     }, Button(this@BaseDevActivity).apply {
                         text ="Font Preview Emoji"

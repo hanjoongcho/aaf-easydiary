@@ -564,7 +564,19 @@ fun Context.showAlertDialogWithIcon(
             title = getString(R.string.ok)
             iconResourceId = R.drawable.ic_info
         }
-        else -> {
+        DialogMode.WARNING -> {
+            title = "WARNING"
+            iconResourceId = R.drawable.ic_warning
+        }
+        DialogMode.ERROR -> {
+            title = "ERROR"
+            iconResourceId = R.drawable.ic_error
+        }
+        DialogMode.SETTING -> {
+            title = getString(R.string.ok)
+            iconResourceId = R.drawable.ic_settings_7
+        }
+        DialogMode.DEFAULT -> {
             title = getString(R.string.app_name)
             iconResourceId = R.drawable.ic_easydiary
         }
