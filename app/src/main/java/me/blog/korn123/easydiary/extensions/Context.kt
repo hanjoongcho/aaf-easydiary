@@ -551,10 +551,10 @@ fun Context.makeSnackBar(view: View, message: String) {
 }
 
 fun Context.showAlertDialogWithIcon(
-    dialogMode: DialogMode,
     message: String,
     positiveListener: DialogInterface.OnClickListener?,
     negativeListener: DialogInterface.OnClickListener?,
+    dialogMode: DialogMode = DialogMode.DEFAULT ,
     cancelable: Boolean = true
 ) {
     var title: String? = null
@@ -564,7 +564,10 @@ fun Context.showAlertDialogWithIcon(
             title = getString(R.string.ok)
             iconResourceId = R.drawable.ic_info
         }
-        else -> {}
+        else -> {
+            title = getString(R.string.app_name)
+            iconResourceId = R.drawable.ic_easydiary
+        }
     }
 
     showAlertDialog(
@@ -577,37 +580,53 @@ fun Context.showAlertDialogWithIcon(
     )
 }
 
+@Deprecated(
+    message = "Legacy function",
+    replaceWith = ReplaceWith(
+        "showAlertDialogWithIcon()",
+        "me.blog.korn123.easydiary.extensions.Context"
+    )
+)
+fun Context.showAlertDialog(
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    cancelable: Boolean = true
+) {
+    showAlertDialog(null, message, positiveListener, null, cancelable)
+}
+
+@Deprecated(
+    message = "Legacy function",
+    replaceWith = ReplaceWith(
+        "showAlertDialogWithIcon()",
+        "me.blog.korn123.easydiary.extensions.Context"
+    )
+)
+fun Context.showAlertDialog(
+    message: String,
+    positiveListener: DialogInterface.OnClickListener,
+    negativeListener: DialogInterface.OnClickListener?,
+    cancelable: Boolean = true
+) {
+    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
+}
+
 fun Context.showAlertDialog(
     title: String?,
     message: String,
     positiveListener: DialogInterface.OnClickListener?,
     negativeListener: DialogInterface.OnClickListener?,
     cancelable: Boolean = true,
-    customTitleIcon: Int? = null
+    customTitleIcon: Int? = null,
+    positiveButtonLabel: String = getString(R.string.ok),
+    negativeButtonLabel: String = getString(R.string.cancel)
 ) {
     val builder = AlertDialog.Builder(this)
     builder.setCancelable(cancelable)
-    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    builder.setPositiveButton(positiveButtonLabel, positiveListener)
+    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
     builder.create().apply {
         updateAlertDialog(this, message, null, title, 255, customTitleIcon)
-    }
-}
-
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
-}
-
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, cancelable)
-}
-
-fun Context.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title)
     }
 }
 
@@ -631,6 +650,7 @@ fun Context.updateAlertDialogWithIcon(
             title = getString(R.string.settings)
             iconResourceId = R.drawable.ic_settings_7
         }
+        else -> {}
     }
 
     updateAlertDialog(

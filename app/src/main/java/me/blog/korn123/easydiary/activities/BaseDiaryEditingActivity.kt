@@ -246,11 +246,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         when (item.itemId) {
             android.R.id.home ->
                 showAlertDialogWithIcon(
-                    DialogMode.INFO
-                    , getString(R.string.back_pressed_confirm)
+                    getString(R.string.back_pressed_confirm)
                     , { _, _ -> super.onBackPressed() }
-                    , null
-                    , true
+                    , {_, _ -> }
+                    , DialogMode.INFO
                 )
             R.id.saveContents -> saveContents()
             R.id.datePicker -> {
@@ -277,8 +276,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     override fun onBackPressed() {
         showAlertDialogWithIcon(
-            DialogMode.INFO
-            , getString(R.string.back_pressed_confirm)
+            getString(R.string.back_pressed_confirm)
             , { _, _ ->
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
@@ -286,7 +284,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         super.onBackPressed()
                     }
               }
-            , null
+            , {_, _ -> }
+            , DialogMode.INFO
         )
     }
 

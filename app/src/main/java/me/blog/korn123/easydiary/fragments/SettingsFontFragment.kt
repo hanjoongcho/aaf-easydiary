@@ -69,7 +69,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                             }).start()
                             progressContainer.visibility = View.VISIBLE
                         } else {
-                            showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
+                            showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null, null)
                         }
                     }
                 }

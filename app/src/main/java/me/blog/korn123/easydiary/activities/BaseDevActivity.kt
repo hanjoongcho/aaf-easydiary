@@ -44,6 +44,7 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFing
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -159,6 +160,40 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     private fun setupTestFunction() {
         mBinding.run {
+            linearDevContainer.addView(
+                // Dialog
+                createBaseCardView(
+                    "Dialog", null
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialog("Title", "message", {_, _ -> }, null)
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "확인"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialog("Title", "message", {_, _ -> }, {_, _ -> })
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림(DEFAULT)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialogWithIcon("message", null, null)
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "알림(INFO)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            showAlertDialogWithIcon("message", null, null, DialogMode.INFO)
+                        }
+                    }
+                )
+            )
             linearDevContainer.addView(
                 // Setting Toast
                 createBaseCardView(
