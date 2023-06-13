@@ -168,35 +168,35 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         text = "알림(DEFAULT)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialog("message", null, null)
+                            showAlertDialog("message", null, null, DialogMode.DEFAULT, false)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(INFO)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.INFO)
+                            showAlertDialog("message", null, null, DialogMode.INFO, false)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(WARNING)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.WARNING)
+                            showAlertDialog("message", null, null, DialogMode.WARNING, false)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(ERROR)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.ERROR)
+                            showAlertDialog("message", null, null, DialogMode.ERROR, false)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {
                         text = "알림(SETTING)"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.SETTING)
+                            showAlertDialog("message", null, null, DialogMode.SETTING, false)
                         }
                     }
                     , Button(this@BaseDevActivity).apply {

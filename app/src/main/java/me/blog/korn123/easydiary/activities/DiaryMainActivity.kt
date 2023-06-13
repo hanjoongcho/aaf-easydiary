@@ -36,6 +36,7 @@ import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.D
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.*
@@ -223,10 +224,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 getString(
                                     R.string.delete_selected_items_confirm,
                                     size
-                                ), { _, _ ->
+                                ),
+                                { _, _ ->
                                     forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
                                     refreshList()
-                                }, null
+                                },
+                                { _, _ -> },
+                                DialogMode.WARNING,
+                                true,
+                                getString(R.string.delete),
+                                getString(R.string.delete)
                             )
                         }
                         false -> {
