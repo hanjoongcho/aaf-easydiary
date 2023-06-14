@@ -264,7 +264,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                             0
                                         )
                                     }
-                                }, null
+                                }
+                                , { _, _ -> }
+                                , DialogMode.INFO
+                                , true
                             )
                         }
                         false -> {

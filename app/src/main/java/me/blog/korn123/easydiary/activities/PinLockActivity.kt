@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPinLockBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -104,7 +105,7 @@ class PinLockActivity : BaseSimpleActivity() {
                         ACTIVITY_SETTING -> {
                             holdCurrentOrientation()
                             showAlertDialog(
-                                getString(R.string.pin_setting_complete, "$fullPassword"),
+                                getString(R.string.pin_setting_complete, fullPassword),
                                 { _, _ ->
                                     config.aafPinLockEnable = true
                                     config.aafPinLockSavedPassword = fullPassword
@@ -114,7 +115,9 @@ class PinLockActivity : BaseSimpleActivity() {
                                 { _, _ ->
                                     finish()
                                 },
-                                false)
+                                DialogMode.INFO,
+                                false
+                            )
                         }
                         ACTIVITY_UNLOCK -> {
                             when (config.aafPinLockSavedPassword == fullPassword) {

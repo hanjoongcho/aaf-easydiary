@@ -792,10 +792,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     getString(R.string.delete_photo_confirm_message),
                     { _, _ ->
                         mRemoveIndexes.add(targetIndex)
-                        mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeView(v)
+                        mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeView(
+                            v
+                        )
                         initBottomToolbar()
                     },
-                    { _, _ -> }
+                    { _, _ -> }, DialogMode.INFO
                 )
             }
         }

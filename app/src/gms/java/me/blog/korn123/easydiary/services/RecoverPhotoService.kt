@@ -182,7 +182,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         if (targetItems.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
-            val stringBuilder = createBackupContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
+            val stringBuilder = createRecoveryContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
             notificationBuilder
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))

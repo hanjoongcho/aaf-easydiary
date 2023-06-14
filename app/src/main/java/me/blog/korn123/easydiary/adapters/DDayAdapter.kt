@@ -17,6 +17,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DDay
@@ -117,13 +118,21 @@ class DDayAdapter(
                     true -> imageDeleteDDay.visibility = View.GONE
                     false -> {
                         imageDeleteDDay.setOnClickListener {
-                            showAlertDialog("Are you sure you want to delete the selected D-Day?", { _, _ ->
-                                alertDialog?.dismiss()
-                                EasyDiaryDbHelper.beginTransaction()
-                                storedDDay.deleteFromRealm()
-                                EasyDiaryDbHelper.commitTransaction()
-                                saveDDayCallback.invoke()
-                            }, null)
+                            showAlertDialog(
+                                "Are you sure you want to delete the selected D-Day?",
+                                { _, _ ->
+                                    alertDialog?.dismiss()
+                                    EasyDiaryDbHelper.beginTransaction()
+                                    storedDDay.deleteFromRealm()
+                                    EasyDiaryDbHelper.commitTransaction()
+                                    saveDDayCallback.invoke()
+                                },
+                                { _, _ -> },
+                                DialogMode.WARNING,
+                                true,
+                                getString(R.string.delete),
+                                getString(R.string.delete)
+                            )
                         }
                     }
                 }

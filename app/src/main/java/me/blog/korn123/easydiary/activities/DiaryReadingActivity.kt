@@ -524,7 +524,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
                                 TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
                             }
-                            showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
+                            showAlertDialog(
+                                getString(R.string.delete_confirm),
+                                positiveListener,
+                                { _, _ -> },
+                                DialogMode.WARNING,
+                                true,
+                                getString(R.string.delete),
+                                getString(R.string.delete)
+                            )
                         }
                         R.id.postcard -> {
                             val postCardIntent = Intent(this@DiaryReadingActivity, PostcardActivity::class.java)

@@ -235,12 +235,24 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             realmInfoList.forEach { item ->
                                 if (item.isChecked) checkedList.add(item.title)
                             }
-                            requireActivity().showAlertDialog(getString(R.string.delete_confirm), DialogInterface.OnClickListener { _, _ ->
-                                checkedList.map { filename ->
-                                    File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + filename).delete()
-                                }
-                                this.dismiss()
-                            } , null)
+                            requireActivity().showAlertDialog(
+                                getString(R.string.delete_confirm),
+                                { _, _ ->
+                                    checkedList.map { filename ->
+                                        File(
+                                            EasyDiaryUtils.getApplicationDataDirectory(
+                                                requireActivity()
+                                            ) + BACKUP_DB_DIRECTORY + filename
+                                        ).delete()
+                                    }
+                                    this.dismiss()
+                                },
+                                { _, _ -> },
+                                DialogMode.WARNING,
+                                true,
+                                getString(R.string.delete),
+                                getString(R.string.delete)
+                            )
                         }
                     }
                 }

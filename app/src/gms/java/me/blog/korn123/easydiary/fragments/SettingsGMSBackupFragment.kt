@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
@@ -271,11 +272,18 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 requireActivity().runOnUiThread {
                     progressContainer.visibility = View.GONE
                     requireActivity().run {
-                        showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener { _, _ ->
-                            val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-                            startService(recoverPhotoService)
-                            finish()
-                        }, DialogInterface.OnClickListener { _, _ -> clearHoldOrientation() })
+                        showAlertDialog(
+                            getString(R.string.recover_confirm_attached_photo),
+                            { _, _ ->
+                                val recoverPhotoService =
+                                    Intent(this, RecoverPhotoService::class.java)
+                                startService(recoverPhotoService)
+                                finish()
+                            },
+                            { _, _ -> clearHoldOrientation() },
+                            DialogMode.INFO,
+                            false
+                        )
                     }
                 }
             }
@@ -291,12 +299,25 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                         progressContainer.visibility = View.GONE
                         requireActivity().run {
-                            showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
-                                val backupPhotoService = Intent(this, BackupPhotoService::class.java)
-                                backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                                ContextCompat.startForegroundService(context, backupPhotoService)
-                                finish()
-                            }, DialogInterface.OnClickListener { _, _ -> clearHoldOrientation() })
+                            showAlertDialog(
+                                getString(R.string.backup_confirm_message),
+                                { _, _ ->
+                                    val backupPhotoService =
+                                        Intent(this, BackupPhotoService::class.java)
+                                    backupPhotoService.putExtra(
+                                        DriveServiceHelper.WORKING_FOLDER_ID,
+                                        photoFolderId
+                                    )
+                                    ContextCompat.startForegroundService(
+                                        context,
+                                        backupPhotoService
+                                    )
+                                    finish()
+                                },
+                                { _, _ -> clearHoldOrientation() },
+                                DialogMode.INFO,
+                                false
+                            )
                         }
                     }
                 }
