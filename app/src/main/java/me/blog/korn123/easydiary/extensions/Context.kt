@@ -621,22 +621,6 @@ fun Context.showAlertDialog(
     showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
 }
 
-@Deprecated(
-    message = "Legacy function",
-    replaceWith = ReplaceWith(
-        "showAlertDialogWithIcon()",
-        "me.blog.korn123.easydiary.extensions.Context"
-    )
-)
-fun Context.showAlertDialog(
-    message: String,
-    positiveListener: DialogInterface.OnClickListener,
-    negativeListener: DialogInterface.OnClickListener?,
-    cancelable: Boolean = true
-) {
-    showAlertDialog(message, positiveListener, negativeListener, DialogMode.INFO, cancelable)
-}
-
 fun Context.updateAlertDialogWithIcon(
     dialogMode: DialogMode,
     alertDialog: AlertDialog,
@@ -649,7 +633,7 @@ fun Context.updateAlertDialogWithIcon(
     var iconResourceId: Int? = null
     when (dialogMode) {
         DialogMode.INFO -> {
-            title = "Info"
+            title = getString(R.string.ok)
             iconResourceId = R.drawable.ic_info
         }
 
