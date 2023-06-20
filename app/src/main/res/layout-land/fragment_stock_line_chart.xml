@@ -18,7 +18,6 @@
             tools:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
              />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/chartTitle"
@@ -31,7 +30,6 @@
             app:applyGlobalSize="false"
             app:applyHighLight="false"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"
             tools:text="Weight"
             tools:visibility="visible" />
@@ -47,7 +45,6 @@
             app:srcCompat="@drawable/ic_expand"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             />
 
         <com.google.android.flexbox.FlexboxLayout
@@ -67,7 +64,7 @@
                 app:contentPaddingTop="5dp"
                 app:contentPaddingBottom="5dp"
                 app:contentPadding="@dimen/dashboard_card_padding">
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:text="Chart Options"
                     android:ellipsize="end"
                     android:singleLine="true"

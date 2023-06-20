@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import io.realm.Sort
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DDayAdapter
@@ -28,7 +29,7 @@ class DDayFragment : Fragment() {
     private lateinit var mBinging: FragmentDdayBinding
     private lateinit var mDDayAdapter: DDayAdapter
     private lateinit var mLinearLayoutManager: LinearLayoutManager
-    private lateinit var mSafeFlexboxLayoutManager: SafeFlexboxLayoutManager
+    private lateinit var mSafeFlexboxLayoutManager: FlexboxLayoutManager
     private var mDDayItems: MutableList<DDay> = mutableListOf()
     private var mDDaySortOrder = Sort.DESCENDING
 

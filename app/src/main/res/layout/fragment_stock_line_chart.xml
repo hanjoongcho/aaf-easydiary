@@ -15,7 +15,6 @@
             android:layout_height="20dp"
             android:layout_marginStart="@dimen/dashboard_title_padding"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
@@ -30,7 +29,6 @@
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false"
-            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Weight"
@@ -45,7 +43,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/check_marker"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_expand"
@@ -66,7 +63,7 @@
                 app:contentPaddingTop="5dp"
                 app:contentPaddingBottom="5dp"
                 app:contentPadding="@dimen/dashboard_card_padding">
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:text="Chart Options"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

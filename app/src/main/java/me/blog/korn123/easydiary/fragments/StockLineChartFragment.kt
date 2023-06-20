@@ -119,6 +119,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             initializeCombineChartYAxis(axisRight, false)
             initializeCombineChartLegend(legend, false)
             marker = StockMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).also { it.chartView = this }
+
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     Log.i(AAF_TEST, h.toString())
@@ -705,6 +706,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun setDefaultLineChartColor(lineDataSet: LineDataSet) {
         lineDataSet.run {
             color = requireContext().config.primaryColor
+            highLightColor = requireContext().config.textColor
             setCircleColor(requireContext().config.primaryColor)
             setCircleColorHole(requireContext().config.textColor)
             setDrawCircles(mCheckedDrawCircle)
@@ -715,6 +717,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         lineDataSet.run {
             setDrawCircles(false)
             enableDashedLine(0f, 1f, 0f)
+            highLightColor = requireContext().config.textColor
         }
     }
 
@@ -725,6 +728,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setDrawFilled(true)
             setDrawCircleHole(false)
             setDrawCircles(false)
+            highLightColor = requireContext().config.textColor
         }
     }
 
