@@ -377,7 +377,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                        }
 //                        alertDialog?.cancel()
 //                    }
-                    alertDialog = builder.create().apply { updateAlertDialog(this, null, dialogStockChartOptionBinding.root, "Chart Options") }
+                    builder.create().apply {
+                        updateAlertDialog(
+                            this,
+                            null,
+                            dialogStockChartOptionBinding.root,
+                            "Chart Options"
+                        )
+                    }
 
 //                    listView.setSelection(multiChartModeIndex)
                 }

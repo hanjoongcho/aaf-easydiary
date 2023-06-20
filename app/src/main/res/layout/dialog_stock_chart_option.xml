@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPaddingLeft="@dimen/dashboard_card_padding"
-        app:contentPaddingRight="@dimen/dashboard_card_padding"
-        >
+        app:contentPadding="@dimen/dialog_card_padding">
+
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/flex_toolbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:flexDirection="row"
             app:flexWrap="wrap"
             app:layout_constraintBottom_toTopOf="@+id/lineChart"
-            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart">
 
             <RadioGroup
                 android:id="@+id/radio_group_chart_option"
@@ -90,10 +90,10 @@
                 android:text="Evaluate Price" />
 
             <View
-                android:background="?attr/colorPrimary"
                 android:layout_width="match_parent"
+                android:layout_height="2dp"
                 android:layout_margin="3dp"
-                android:layout_height="2dp" />
+                android:background="?attr/colorPrimary" />
 
             <CheckBox
                 android:id="@+id/check_principal_highlight"
@@ -104,5 +104,4 @@
 
         </com.google.android.flexbox.FlexboxLayout>
     </androidx.cardview.widget.CardView>
-
 </ScrollView>

@@ -654,7 +654,14 @@ fun Context.updateAlertDialogWithIcon(
     )
 }
 
-fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255, customTitleIcon: Int? = null) {
+fun Context.updateAlertDialog(
+    alertDialog: AlertDialog,
+    message: String? = null,
+    customView: View? = null,
+    customTitle: String? = null,
+    backgroundAlpha: Int = 255,
+    customTitleIcon: Int? = null
+) {
     alertDialog.run {
         when (customView == null) {
             true -> {
@@ -672,6 +679,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                     setView(root)
                 }
             }
+
             false -> setView(customView)
         }
 //        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(config.backgroundColor))
@@ -684,27 +692,25 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
 
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        customTitle?.let {
-            PartialDialogTitleBinding.inflate(layoutInflater).apply {
-                textDialogTitle.run {
-                    text = customTitle
+        PartialDialogTitleBinding.inflate(layoutInflater).apply {
+            textDialogTitle.run {
+                text = customTitle ?: getString(R.string.app_name)
 //                    if (!isNightMode()) setTextColor(config.textColor)
-                    if (!isNightMode()) setTextColor(Color.WHITE)
-                    typeface = globalTypeface
+                if (!isNightMode()) setTextColor(Color.WHITE)
+                typeface = globalTypeface
 //                    val padding = dpToPixel(15F)
 //                    setPadding(padding * 2, padding, padding * 2, padding)
-                    setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
-                }
-                customTitleIcon?.let {
-                    imgDialogTitle.run {
-                        visibility = View.VISIBLE
-                        setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
-//                        changeDrawableIconColor(config.textColor, this)
-                        changeDrawableIconColor(Color.WHITE, this)
-                    }
-                }
-                setCustomTitle(this.root)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
             }
+            customTitleIcon?.let {
+                imgDialogTitle.run {
+                    visibility = View.VISIBLE
+                    setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
+//                        changeDrawableIconColor(config.textColor, this)
+                    changeDrawableIconColor(Color.WHITE, this)
+                }
+            }
+            setCustomTitle(this.root)
         }
         show()
         getButton(AlertDialog.BUTTON_POSITIVE).run {

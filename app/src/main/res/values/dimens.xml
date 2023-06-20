@@ -11,12 +11,12 @@
     <dimen name="layout_margin_medium">10dp</dimen>
     <dimen name="layout_margin_large">15dp</dimen>
 
-
     <!-- Padding -->
     <dimen name="card_contents_padding">15dp</dimen>
     <dimen name="dashboard_card_padding">10dp</dimen>
     <dimen name="dashboard_symbol_padding">5dp</dimen>
     <dimen name="dashboard_title_padding">10dp</dimen>
+    <dimen name="dialog_card_padding">10dp</dimen>
     <dimen name="diary_card_text_padding">3sp</dimen>
 
     <!-- Font Size -->
