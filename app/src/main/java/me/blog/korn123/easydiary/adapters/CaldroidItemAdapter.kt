@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -18,6 +19,7 @@ import me.blog.korn123.easydiary.databinding.FragmentCustomCellBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
@@ -60,10 +62,14 @@ class CaldroidItemAdapter(
         }
 
         binding.run {
+            item1.tag = dateTime.format("YYYY-MM-DD")
             CoroutineScope(Dispatchers.IO).launch {
-                delay(100)
+                delay(200)
                 withContext(Dispatchers.Main) {
                     val dateString = dateTime.format("YYYY-MM-DD")
+                    if (!item1.tag.equals(dateString)) {
+                        cancel()
+                    }
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
                     val topPadding = root.paddingTop
                     val leftPadding = root.paddingLeft
