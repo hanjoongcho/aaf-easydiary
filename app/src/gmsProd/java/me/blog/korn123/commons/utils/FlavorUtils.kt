@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -342,14 +343,19 @@ object FlavorUtils {
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
             if (weatherFlag < SYMBOL_USER_CUSTOM_START) {
-                setImageResource(sequenceToSymbolResourceId(weatherFlag))
+//                setImageResource(sequenceToSymbolResourceId(weatherFlag))
+                Glide
+                    .with(this)
+                    .load(sequenceToSymbolResourceId(weatherFlag))
+                    .into(this)
             } else {
                 // FIXME: WIP START
                 if (context.config.enableDebugMode) {
                     val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
                     val filePath = if (getCustomSymbolPaths(SYMBOL_EASTER_EGG).size > targetIndex) getCustomSymbolPaths(SYMBOL_EASTER_EGG)[targetIndex].getFilePath() else ""
 //                    setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath))
-                    Glide.with(this)
+                    Glide
+                        .with(this)
                         .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {

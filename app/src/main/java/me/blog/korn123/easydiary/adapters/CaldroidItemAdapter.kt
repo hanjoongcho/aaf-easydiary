@@ -62,14 +62,14 @@ class CaldroidItemAdapter(
         }
 
         binding.run {
-            item1.tag = dateTime.format("YYYY-MM-DD")
+//            item1.tag = dateTime.format("YYYY-MM-DD")
             CoroutineScope(Dispatchers.IO).launch {
-                delay(200)
+//                delay(200)
                 withContext(Dispatchers.Main) {
                     val dateString = dateTime.format("YYYY-MM-DD")
-                    if (!item1.tag.equals(dateString)) {
-                        cancel()
-                    }
+//                    if (!item1.tag.equals(dateString)) {
+//                        cancel()
+//                    }
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
                     val topPadding = root.paddingTop
                     val leftPadding = root.paddingLeft
