@@ -128,7 +128,6 @@ class DashboardDialogFragment : DialogFragment() {
                         // DDay
                         replace(R.id.dDay, DDayFragment().apply {
                             callback = {
-                                requireActivity().toast("callback")
                                 mBinding.run {
                                     root.setBackgroundColor(getDashboardBackgroundColor())
                                     requireActivity().updateTextColors(root)
