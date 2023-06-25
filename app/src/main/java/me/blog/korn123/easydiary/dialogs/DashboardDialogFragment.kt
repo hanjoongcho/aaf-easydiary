@@ -8,7 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.constants.PageStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -19,6 +26,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
+    private var coroutineJob: Job? = null
 
     override fun onStart() {
         super.onStart()
@@ -95,131 +103,153 @@ class DashboardDialogFragment : DialogFragment() {
             }
 
             childFragmentManager.beginTransaction().run {
-                // PhotoHighlight
-                replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
-                        putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
-                        putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
-                        putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
-                    }
-                    togglePhotoHighlightCallback = { isVisible: Boolean ->
-                        photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+                replace(R.id.calendar, CalendarFragment()).apply {  }
+                commitNow()
+            }
+
+            coroutineJob = CoroutineScope(Dispatchers.IO).launch {
+                delay(500)
+                withContext(Dispatchers.Main) {
+                    childFragmentManager.beginTransaction().run {
+                        // PhotoHighlight
+                        replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
+                            arguments = Bundle().apply {
+                                putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                                putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
+                                putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                                putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
+                            }
+                            togglePhotoHighlightCallback = { isVisible: Boolean ->
+                                photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
 //                        if (!requireActivity().isLandScape()) cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
-                    }
-                })
+                            }
+                        })
 
-                // DDay
-                replace(R.id.dDay, DDayFragment())
+                        // DDay
+                        replace(R.id.dDay, DDayFragment().apply {
+                            callback = {
+                                requireActivity().toast("callback")
+                                mBinding.run {
+                                    root.setBackgroundColor(getDashboardBackgroundColor())
+                                    requireActivity().updateTextColors(root)
+                                    requireActivity().updateAppViews(root)
+                                    FontUtils.setFontsTypeface(requireContext(), null, root, true)
+                                }
+                            }
+                        })
 
-                // TODO
-                replace(R.id.fragment_diary_todo, DiaryFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_TODO)
-                    }
-                })
+                        // TODO
+                        replace(R.id.fragment_diary_todo, DiaryFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_TODO)
+                            }
+                        })
 
-                // DOING
+                        // DOING
 //                replace(R.id.fragment_diary_doing, DiaryFragment().apply {
 //                    arguments = Bundle().apply {
 //                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DOING)
 //                    }
 //                })
 
-                // DONE
-                replace(R.id.fragment_diary_done, DiaryFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DONE)
-                    }
-                })
+                        // DONE
+                        replace(R.id.fragment_diary_done, DiaryFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DONE)
+                            }
+                        })
 
-                // CANCEL
+                        // CANCEL
 //                replace(R.id.fragment_diary_cancel, DiaryFragment().apply {
 //                    arguments = Bundle().apply {
 //                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_CANCEL)
 //                    }
 //                })
 
-                // Diary Previous 100
-                replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
+                        // Diary Previous 100
+                        replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
+                            }
+                        })
+
+                        // DashBoardSummary
+                        replace(R.id.summary, DashBoardSummaryFragment())
+
+                        // Daily Symbol
+                        replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+
+                        // DashBoardRank-Lifetime
+                        replace(R.id.lifetime, DashBoardRankFragment().apply {
+                            val args = Bundle()
+                            args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
+                            arguments = args
+                        })
+
+                        // DashBoardRank-LastMonth
+                        replace(R.id.lastMonth, DashBoardRankFragment().apply {
+                            val args = Bundle()
+                            args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
+                            arguments = args
+                        })
+
+                        // DashBoardRank-LastWeek
+                        replace(R.id.lastWeek, DashBoardRankFragment().apply {
+                            val args = Bundle()
+                            args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
+                            arguments = args
+                        })
+
+                        // Statistics-Creation Time
+                        val chartTitle = getString(R.string.statistics_creation_time)
+                        replace(R.id.statistics1, WritingBarChartFragment().apply {
+                            val args = Bundle()
+                            args.putString(WritingBarChartFragment.CHART_TITLE, chartTitle)
+                            arguments = args
+                        })
+
+                        // Statistics-Symbol All
+                        val symbolAllTitle = getString(R.string.statistics_symbol_all)
+                        replace(R.id.statistics2, SymbolBarChartFragment().apply {
+                            val args = Bundle()
+                            args.putString(WritingBarChartFragment.CHART_TITLE, symbolAllTitle)
+                            arguments = args
+                        })
+
+                        // Statistics-Symbol TopTen
+                        val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
+                        replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
+                            val args = Bundle()
+                            args.putString(WritingBarChartFragment.CHART_TITLE, symbolTopTenTitle)
+                            arguments = args
+                        })
+
+                        if (config.enableDebugOptionVisibleChartWeight) {
+                            mBinding.statistics4.visibility = View.VISIBLE
+                            replace(R.id.statistics4, WeightLineChartFragment().apply {
+                                val args = Bundle()
+                                args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
+                                arguments = args
+                            })
+                        }
+
+                        if (config.enableDebugOptionVisibleChartWeight) {
+                            mBinding.statistics5.visibility = View.VISIBLE
+                            replace(R.id.statistics5, StockLineChartFragment().apply {
+                                val args = Bundle()
+                                args.putString(WritingBarChartFragment.CHART_TITLE, "Stock")
+                                arguments = args
+                            })
+                        }
+
+                        // Commit
+                        commit()
                     }
-                })
-
-                // DashBoardSummary
-                replace(R.id.summary, DashBoardSummaryFragment())
-
-                // Daily Symbol
-                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
-
-                // DashBoardRank-Lifetime
-                replace(R.id.lifetime, DashBoardRankFragment().apply {
-                    val args = Bundle()
-                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
-                    arguments = args
-                })
-
-                // DashBoardRank-LastMonth
-                replace(R.id.lastMonth, DashBoardRankFragment().apply {
-                    val args = Bundle()
-                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
-                    arguments = args
-                })
-
-                // DashBoardRank-LastWeek
-                replace(R.id.lastWeek, DashBoardRankFragment().apply {
-                    val args = Bundle()
-                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
-                    arguments = args
-                })
-
-                // Statistics-Creation Time
-                val chartTitle = getString(R.string.statistics_creation_time)
-                replace(R.id.statistics1, WritingBarChartFragment().apply {
-                    val args = Bundle()
-                    args.putString(WritingBarChartFragment.CHART_TITLE, chartTitle)
-                    arguments = args
-                })
-
-                // Statistics-Symbol All
-                val symbolAllTitle = getString(R.string.statistics_symbol_all)
-                replace(R.id.statistics2, SymbolBarChartFragment().apply {
-                    val args = Bundle()
-                    args.putString(WritingBarChartFragment.CHART_TITLE, symbolAllTitle)
-                    arguments = args
-                })
-
-                // Statistics-Symbol TopTen
-                val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
-                replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
-                    val args = Bundle()
-                    args.putString(WritingBarChartFragment.CHART_TITLE, symbolTopTenTitle)
-                    arguments = args
-                })
-
-                if (config.enableDebugOptionVisibleChartWeight) {
-                    mBinding.statistics4.visibility = View.VISIBLE
-                    replace(R.id.statistics4, WeightLineChartFragment().apply {
-                        val args = Bundle()
-                        args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
-                        arguments = args
-                    })
                 }
-
-                if (config.enableDebugOptionVisibleChartWeight) {
-                    mBinding.statistics5.visibility = View.VISIBLE
-                    replace(R.id.statistics5, StockLineChartFragment().apply {
-                        val args = Bundle()
-                        args.putString(WritingBarChartFragment.CHART_TITLE, "Stock")
-                        arguments = args
-                    })
-                }
-
-                // Commit
-                commit()
             }
-            childFragmentManager.executePendingTransactions()
+
+
+//            childFragmentManager.executePendingTransactions()
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
 //            dashboardDimmer.visibility = View.GONE
 //            dashboardProgress.visibility = View.GONE
@@ -228,6 +258,8 @@ class DashboardDialogFragment : DialogFragment() {
                 val createDiary = Intent(requireActivity(), DiaryWritingActivity::class.java)
                 TransitionHelper.startActivityWithTransition(requireActivity(), createDiary)
             }
+
+
         }
     }
 
@@ -245,6 +277,13 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onPause() {
         super.onPause()
 //        requireActivity().updateStatusBarColor(config.primaryColor)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineJob?.let {
+            if (it.isActive) it.cancel()
+        }
     }
 
     private fun getDashboardBackgroundColor() = config.screenBackgroundColor

@@ -50,6 +50,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+            </me.blog.korn123.easydiary.views.FixedCardView>
+
             <LinearLayout
                 android:id="@+id/fragment_diary_todo"
                 android:layout_width="match_parent"
