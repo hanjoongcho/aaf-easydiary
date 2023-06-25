@@ -77,7 +77,10 @@ class DashboardDialogFragment : DialogFragment() {
             requireActivity().updateDrawableColorInnerCardView(close, Color.WHITE)
             appBar.visibility = View.GONE
             close.visibility = View.VISIBLE
-            close.setOnClickListener { view -> view.postDelayed({ dismiss() }, 300)}
+            close.setOnClickListener {
+                view -> view.postDelayed({ dismiss() }, 300)
+                requireActivity().clearHoldOrientation()
+            }
 
             requireActivity().getDashboardCardWidth(0.9F).also {
                 lifetime.layoutParams.width = it
@@ -102,15 +105,17 @@ class DashboardDialogFragment : DialogFragment() {
                 }
             }
 
-            childFragmentManager.beginTransaction().run {
-                replace(R.id.calendar, CalendarFragment()).apply {  }
-                commitNow()
-            }
+//            childFragmentManager.beginTransaction().run {
+//                replace(R.id.calendar, CalendarFragment()).apply {  }
+//                commitNow()
+//            }
 
-            coroutineJob = CoroutineScope(Dispatchers.IO).launch {
-                delay(500)
-                withContext(Dispatchers.Main) {
+//            coroutineJob = CoroutineScope(Dispatchers.IO).launch {
+//                delay(500)
+//                withContext(Dispatchers.Main) {
                     childFragmentManager.beginTransaction().run {
+                        replace(R.id.calendar, CalendarFragment()).apply {  }
+
                         // PhotoHighlight
                         replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
                             arguments = Bundle().apply {
@@ -243,8 +248,8 @@ class DashboardDialogFragment : DialogFragment() {
 
                         // Commit
                         commit()
-                    }
-                }
+//                    }
+//                }
             }
 
 

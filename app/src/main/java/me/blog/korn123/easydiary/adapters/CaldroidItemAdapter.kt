@@ -63,9 +63,9 @@ class CaldroidItemAdapter(
 
         binding.run {
 //            item1.tag = dateTime.format("YYYY-MM-DD")
-//            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch {
 //                delay(200)
-//                withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     val dateString = dateTime.format("YYYY-MM-DD")
 //                    if (!item1.tag.equals(dateString)) {
 //                        cancel()
@@ -173,8 +173,8 @@ class CaldroidItemAdapter(
 
                     // Set custom color if required
                     setCustomResources(dateTime, itemView, calendarDate)
-//                }
-//            }
+                }
+            }
         }
         return itemView
     }

@@ -301,6 +301,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         supportFragmentManager,
                         "DashboardDialog"
                     )
+                    holdCurrentOrientation()
                 }
             }
             R.id.popupMenu -> openCustomOptionMenu()
