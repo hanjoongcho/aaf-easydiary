@@ -51,19 +51,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/dashboard_daily_symbol"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/dDay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                <com.simplemobiletools.commons.views.MyFloatingActionButton
+                    android:id="@+id/button_open_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/write_diary"
+                    app:fabSize="mini"
+                    app:maxImageSize="15dp"
+                    app:srcCompat="@drawable/ic_planner" />
+
+                <LinearLayout
+                    android:id="@+id/dashboard_daily_symbol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/layout_open_calendar"
+                android:visibility="gone"
                 style="@style/card_dashboard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -74,6 +87,14 @@
                     android:orientation="vertical">
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
+
+            <LinearLayout
+                android:id="@+id/dDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+
 
             <LinearLayout
                 android:id="@+id/fragment_diary_todo"

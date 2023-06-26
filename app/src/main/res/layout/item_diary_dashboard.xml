@@ -6,8 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
+    <me.blog.korn123.easydiary.views.FixedCardView
         style="@style/AppCard"
+        app:fixedAppcompatPadding="true"
+        app:applyCardBackgroundColor="true"
         android:layout_height="match_parent"
         >
 
@@ -109,5 +111,5 @@
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </RelativeLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </me.blog.korn123.easydiary.views.FixedCardView>
 </RelativeLayout>    

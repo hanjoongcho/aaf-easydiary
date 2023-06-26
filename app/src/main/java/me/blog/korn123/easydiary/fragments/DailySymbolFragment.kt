@@ -118,8 +118,8 @@ class DailySymbolFragment : Fragment() {
 
     private fun updateDailyCard() {
         mBinding.run {
-            month.visibility = View.GONE
-            dailyCardRecyclerView.visibility = View.GONE
+//            month.visibility = View.GONE
+//            dailyCardRecyclerView.visibility = View.GONE
             dailyCardProgressBar.visibility = View.VISIBLE
             selectedSymbolFlexBox.removeAllViews()
 
@@ -135,8 +135,8 @@ class DailySymbolFragment : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     mDailySymbolAdapter.notifyDataSetChanged()
-                    month.visibility = View.VISIBLE
-                    dailyCardRecyclerView.visibility = View.VISIBLE
+//                    month.visibility = View.VISIBLE
+//                    dailyCardRecyclerView.visibility = View.VISIBLE
                     dailyCardProgressBar.visibility = View.GONE
 //                    requireActivity().updateAppViews(selectedSymbolFlexBox)
                 }

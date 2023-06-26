@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +32,6 @@ class DDayFragment : Fragment() {
     private lateinit var mSafeFlexboxLayoutManager: FlexboxLayoutManager
     private var mDDayItems: MutableList<DDay> = mutableListOf()
     private var mDDaySortOrder = Sort.DESCENDING
-    var callback: (() -> Unit)? = null
 
 
     /***************************************************************************************************
@@ -95,10 +93,5 @@ class DDayFragment : Fragment() {
             add(DDay("New D-Day!!!"))
         }
         mDDayAdapter.notifyDataSetChanged()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        callback?.invoke()
     }
 }
