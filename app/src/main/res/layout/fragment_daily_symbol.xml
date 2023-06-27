@@ -70,6 +70,33 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_margin="20dp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:padding="10dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <me.blog.korn123.easydiary.views.FixedTextView
+                android:textSize="@dimen/basic_text_medium"
+                app:applyGlobalColor="true"
+                app:applyGlobalSize="false"
+                android:text="Calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <LinearLayout
+            android:id="@+id/calendar"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
     </LinearLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 

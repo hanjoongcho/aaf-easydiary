@@ -51,42 +51,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
+            <LinearLayout
+                android:id="@+id/dashboard_daily_symbol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.simplemobiletools.commons.views.MyFloatingActionButton
-                    android:id="@+id/button_open_calendar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|top"
-                    android:layout_margin="10dp"
-                    android:contentDescription="@string/write_diary"
-                    app:fabSize="mini"
-                    app:maxImageSize="15dp"
-                    app:srcCompat="@drawable/ic_planner" />
-
-                <LinearLayout
-                    android:id="@+id/dashboard_daily_symbol"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-            <me.blog.korn123.easydiary.views.FixedCardView
-                android:id="@+id/layout_open_calendar"
-                android:visibility="gone"
-                style="@style/card_dashboard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                </LinearLayout>
-            </me.blog.korn123.easydiary.views.FixedCardView>
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/dDay"

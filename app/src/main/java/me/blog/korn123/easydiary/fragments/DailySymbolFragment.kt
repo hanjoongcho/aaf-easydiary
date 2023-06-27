@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
@@ -56,10 +57,20 @@ class DailySymbolFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeDailySymbol()
-        mBinding.editSymbolFilter.setOnClickListener {
-            Intent(requireContext(), SymbolFilterPickerActivity::class.java).apply {
-                mRequestUpdateDailySymbol.launch(this)
+        mBinding.run {
+            editSymbolFilter.setOnClickListener {
+                Intent(requireContext(), SymbolFilterPickerActivity::class.java).apply {
+                    mRequestUpdateDailySymbol.launch(this)
+                }
             }
+            switchCalendar.setOnCheckedChangeListener { _, isChecked ->
+                calendar.visibility = if (isChecked) View.VISIBLE else View.GONE
+            }
+        }
+
+        childFragmentManager.beginTransaction().run {
+            replace(R.id.calendar, CalendarFragment()).apply { }
+            commitNow()
         }
     }
 

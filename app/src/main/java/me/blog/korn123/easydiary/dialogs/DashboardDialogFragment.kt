@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.constants.PageStyle
 import kotlinx.coroutines.Job
 import me.blog.korn123.commons.utils.FontUtils
@@ -26,7 +25,6 @@ import me.blog.korn123.easydiary.extensions.statusBarHeight
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.fragments.DDayFragment
 import me.blog.korn123.easydiary.fragments.DailySymbolFragment
 import me.blog.korn123.easydiary.fragments.DashBoardRankFragment
@@ -248,18 +246,6 @@ class DashboardDialogFragment : DialogFragment() {
             insertDiaryButton.setOnClickListener {
                 val createDiary = Intent(requireActivity(), DiaryWritingActivity::class.java)
                 TransitionHelper.startActivityWithTransition(requireActivity(), createDiary)
-            }
-
-            buttonOpenCalendar.setOnClickListener {
-                requireActivity().toast("click!!!")
-                if (mBinding.layoutOpenCalendar.visibility == View.GONE) {
-                    mBinding.layoutOpenCalendar.visibility = View.VISIBLE
-                    childFragmentManager.beginTransaction().run {
-                        replace(R.id.calendar, CalendarFragment()).apply { }
-                        commitNow()
-                    }
-                }
-
             }
         }
     }
