@@ -28,6 +28,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
@@ -161,7 +162,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mPermissionCallback: () -> Unit
     private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, Collections.singleton(DriveScopes.DRIVE_FILE))
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, Arrays.asList(DriveScopes.DRIVE_FILE, CalendarScopes.CALENDAR_READONLY))
         credential.selectedAccount = account
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
