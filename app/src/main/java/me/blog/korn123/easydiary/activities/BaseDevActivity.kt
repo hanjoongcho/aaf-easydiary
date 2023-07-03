@@ -36,6 +36,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.calendar.Calendar
+import com.google.api.services.calendar.CalendarScopes
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.FileList
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.*
@@ -57,6 +68,9 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Arrays
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -459,6 +473,46 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             config.enableDebugOptionVisibleTemporaryDiary =
                                 !config.enableDebugOptionVisibleTemporaryDiary
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="Google Calendar"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, arrayListOf(CalendarScopes.CALENDAR))
+                            credential.selectedAccount = GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
+                            val calendarService = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                                .setApplicationName(getString(R.string.app_name))
+                                .build()
+                            val executor = Executors.newSingleThreadExecutor()
+                            Tasks.call(
+                                executor
+                            ) {
+                                calendarService.events().list("primary").setSingleEvents(true).execute()
+                            }.addOnSuccessListener {
+                                makeToast("${it.items.size}")
+                            }.addOnFailureListener {
+                                makeToast("${it.message}")
+                            }
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="Google Drive"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, arrayListOf(DriveScopes.DRIVE_FILE))
+                            credential.selectedAccount = GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
+                            val executor = Executors.newSingleThreadExecutor()
+                            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                                .setApplicationName(context.getString(R.string.app_name))
+                                .build()
+                            Tasks.call(
+                                executor
+                            ) { googleDriveService.files().list().setCorpora("user").execute() }
+                                .addOnSuccessListener {
+                                    makeToast("${it.size}")
+                                }.addOnFailureListener {
+                                    makeToast("${it.message}")
+                                }
+
                         }
                     }
                 )
