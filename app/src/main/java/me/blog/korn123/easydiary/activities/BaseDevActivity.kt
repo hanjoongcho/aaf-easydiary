@@ -16,6 +16,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
@@ -69,8 +70,10 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Arrays
+import java.util.Collections
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.stream.Collectors
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -483,15 +486,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             val calendarService = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                                 .setApplicationName(getString(R.string.app_name))
                                 .build()
-                            val executor = Executors.newSingleThreadExecutor()
-                            Tasks.call(
-                                executor
-                            ) {
-                                calendarService.calendarList().list().execute()
-                            }.addOnSuccessListener {
-                                makeToast("${it.size}")
-                            }.addOnFailureListener {
-                                makeToast("${it.message}")
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val result = calendarService.calendarList().list().execute()
+
+                                withContext(Dispatchers.Main) {
+                                    val descriptions = arrayListOf<String>()
+                                    result.items.forEach { item -> descriptions.add(item.description) }
+                                    makeToast(descriptions.joinToString(","))
+//                                    makeToast(result.items[0].description)
+                                }
                             }
                         }
                     }, Button(this@BaseDevActivity).apply {
