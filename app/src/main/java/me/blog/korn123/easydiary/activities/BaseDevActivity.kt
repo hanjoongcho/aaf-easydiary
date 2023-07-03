@@ -478,7 +478,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         text ="Google Calendar"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, arrayListOf(CalendarScopes.CALENDAR))
+                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, CalendarScopes.all())
                             credential.selectedAccount = GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
                             val calendarService = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                                 .setApplicationName(getString(R.string.app_name))
@@ -487,9 +487,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             Tasks.call(
                                 executor
                             ) {
-                                calendarService.events().list("primary").setSingleEvents(true).execute()
+                                calendarService.calendarList().list().execute()
                             }.addOnSuccessListener {
-                                makeToast("${it.items.size}")
+                                makeToast("${it.size}")
                             }.addOnFailureListener {
                                 makeToast("${it.message}")
                             }
@@ -498,7 +498,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         text ="Google Drive"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
-                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, arrayListOf(DriveScopes.DRIVE_FILE))
+                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, DriveScopes.all())
                             credential.selectedAccount = GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
                             val executor = Executors.newSingleThreadExecutor()
                             val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
@@ -506,9 +506,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 .build()
                             Tasks.call(
                                 executor
-                            ) { googleDriveService.files().list().setCorpora("user").execute() }
+                            ) { googleDriveService.files().list().execute() }
                                 .addOnSuccessListener {
-                                    makeToast("${it.size}")
+                                    makeToast("${it.files.size}")
                                 }.addOnFailureListener {
                                     makeToast("${it.message}")
                                 }
