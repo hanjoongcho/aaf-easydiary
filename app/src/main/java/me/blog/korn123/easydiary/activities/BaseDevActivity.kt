@@ -488,11 +488,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 .build()
                             CoroutineScope(Dispatchers.IO).launch {
                                 val result = calendarService.calendarList().list().execute()
-
                                 withContext(Dispatchers.Main) {
                                     val descriptions = arrayListOf<String>()
-                                    result.items.forEach { item -> descriptions.add(item.description) }
-                                    makeToast(descriptions.joinToString(","))
+                                    result.items.forEach { item -> descriptions.add(item.summary) }
+                                    showAlertDialog(descriptions.joinToString(","), null, null, DialogMode.INFO, false)
 //                                    makeToast(result.items[0].description)
                                 }
                             }
