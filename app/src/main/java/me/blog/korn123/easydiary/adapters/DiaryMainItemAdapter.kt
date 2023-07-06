@@ -89,6 +89,14 @@ class DiaryMainItemAdapter(
         return selectedItems
     }
 
+    fun toggleCheckBoxALl() {
+        EasyDiaryDbHelper.beginTransaction()
+        diaryItems.forEach { diary ->
+            diary.isSelected = !diary.isSelected
+        }
+        EasyDiaryDbHelper.commitTransaction()
+    }
+
     inner class ViewHolder(
         val activity: Activity,
         private val itemDiaryMainBinding: ItemDiaryMainBinding,
