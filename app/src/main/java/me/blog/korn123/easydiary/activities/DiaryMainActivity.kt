@@ -216,6 +216,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
             }
+            R.id.checkAll -> {
+                mDiaryMainItemAdapter?.toggleCheckBoxALl()
+                mDiaryMainItemAdapter?.notifyDataSetChanged()
+            }
             R.id.delete -> {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
