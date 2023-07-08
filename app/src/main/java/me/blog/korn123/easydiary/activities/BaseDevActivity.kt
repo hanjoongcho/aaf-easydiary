@@ -16,8 +16,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +24,6 @@ import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -39,18 +36,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.calendar.Calendar
-import com.google.api.services.calendar.CalendarScopes
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.*
@@ -58,15 +43,12 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
-import me.blog.korn123.easydiary.databinding.DialogFontsBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
@@ -75,11 +57,6 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Arrays
-import java.util.Collections
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.stream.Collectors
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -482,106 +459,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             config.enableDebugOptionVisibleTemporaryDiary =
                                 !config.enableDebugOptionVisibleTemporaryDiary
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="Google Calendar"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val credential: GoogleAccountCredential =
-                                GoogleAccountCredential.usingOAuth2(
-                                    this@BaseDevActivity,
-                                    arrayListOf(CalendarScopes.CALENDAR)
-                                ).apply {
-                                    selectedAccount =
-                                        GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
-                                }
-                            val calendarService = Calendar.Builder(
-                                AndroidHttp.newCompatibleTransport(),
-                                GsonFactory(),
-                                credential
-                            )
-                                .setApplicationName(getString(R.string.app_name))
-                                .build()
-                            fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val result = if (nextPageToken == null) calendarService.events().list(calendarId).setMaxResults(2000).execute() else calendarService.events().list("hanjoongcho@gmail.com").setPageToken(nextPageToken).setMaxResults(2000).execute()
-                                    withContext(Dispatchers.Main) {
-                                        val descriptions = arrayListOf<String>()
-                                        result.items.forEachIndexed { index, item ->
-                                            Log.i(AAF_TEST, "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}")
-                                            descriptions.add(item.summary)
-                                            val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
-                                            if (EasyDiaryDbHelper.findDiary(item.summary).isEmpty()) {
-                                                EasyDiaryDbHelper.insertDiary(Diary(
-                                                    BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
-                                                    timeMillis,
-                                                    if (item.description != null) item.summary else "",
-                                                    item.description ?: item.summary,
-                                                    10022,
-                                                    item?.start?.dateTime == null
-                                                ))
-                                            }
-                                        }
-                                        if (result.nextPageToken != null) {
-                                            fetchData(calendarId, result.nextPageToken, total.plus(result.items.size))
-                                        } else {
-                                            makeToast("Total: ${total.plus(result.items.size)}")
-                                        }
-                                    }
-                                }
-                            }
-                            fun fetchCalendarList() {
-                                var alertDialog: AlertDialog? = null
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val result = calendarService.calendarList().list().execute()
-                                    withContext(Dispatchers.Main) {
-                                        val builder = AlertDialog.Builder(this@BaseDevActivity)
-                                        builder.setNegativeButton(getString(android.R.string.cancel), null)
-                                        val dialogFontsBinding = DialogFontsBinding.inflate(layoutInflater)
-                                        val calendarInfo = ArrayList<Map<String, String>>()
-                                        result.items.forEach { calendar ->
-                                            calendarInfo.add(mapOf(
-                                                "optionTitle" to calendar.summary,
-                                                "optionValue" to calendar.id
-                                            ))
-                                        }
-                                        val optionItemAdapter = OptionItemAdapter(this@BaseDevActivity, R.layout.item_check_label, calendarInfo, null, null)
-                                        dialogFontsBinding.run {
-                                            listFont.adapter = optionItemAdapter
-                                            listFont.setOnItemClickListener { parent, view, position, id ->
-                                                calendarInfo[position]["optionValue"]?.let {
-                                                    fetchData(it, null)
-                                                    alertDialog?.dismiss()
-                                                }
-                                            }
-                                        }
-                                        alertDialog = builder.create().apply {
-                                            updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogFontsBinding.root, "Sync Google Calendar")
-                                        }
-                                    }
-                                }
-                            }
-                            fetchCalendarList()
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="Google Drive"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this@BaseDevActivity, arrayListOf(DriveScopes.DRIVE))
-                            credential.selectedAccount = GoogleSignIn.getLastSignedInAccount(this@BaseDevActivity)!!.account
-                            val executor = Executors.newSingleThreadExecutor()
-                            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                                .setApplicationName(context.getString(R.string.app_name))
-                                .build()
-                            Tasks.call(
-                                executor
-                            ) { googleDriveService.files().list().execute() }
-                                .addOnSuccessListener {
-                                    makeToast("${it.files.size}")
-                                }.addOnFailureListener {
-                                    makeToast("${it.message}")
-                                }
-
                         }
                     }
                 )
