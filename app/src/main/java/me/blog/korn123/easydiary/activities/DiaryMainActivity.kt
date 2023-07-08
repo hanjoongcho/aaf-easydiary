@@ -230,7 +230,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     size
                                 ),
                                 { _, _ ->
-                                    forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
+                                    EasyDiaryDbHelper.beginTransaction()
+                                    forEach {
+                                        it.deleteFromRealm()
+                                    }
+                                    EasyDiaryDbHelper.commitTransaction()
                                     refreshList()
                                 },
                                 { _, _ -> },

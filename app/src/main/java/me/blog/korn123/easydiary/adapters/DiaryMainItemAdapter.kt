@@ -29,6 +29,7 @@ import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -104,6 +105,7 @@ class DiaryMainItemAdapter(
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
         fun bindTo(diary: Diary) {
             itemDiaryMainBinding.run {
+                viewFutureDiaryBadge.visibility = if (diary.currentTimeMillis > System.currentTimeMillis()) View.VISIBLE else View.GONE
                 activity.run {
                     root.run {
                         setOnClickListener { itemClickCallback.invoke(diary) }
