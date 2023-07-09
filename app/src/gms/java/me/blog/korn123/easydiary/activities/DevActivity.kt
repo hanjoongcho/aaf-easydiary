@@ -206,19 +206,20 @@ class DevActivity : BaseDevActivity() {
     private lateinit var mPermissionCallback: () -> Unit
     private fun requestCalendarPermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, arrayListOf(CalendarScopes.CALENDAR))
-        credential.selectedAccount = account
+        val credential: GoogleAccountCredential =
+            GoogleAccountCredential.usingOAuth2(this, arrayListOf(CalendarScopes.CALENDAR))
+                .apply { selectedAccount = account }
         val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
             .setApplicationName(getString(R.string.app_name))
             .build()
-
-        val executor = Executors.newSingleThreadExecutor()
-        Tasks.call(executor) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 calendarService.calendarList().list().execute()
                 mPermissionCallback.invoke()
             } catch (e: UserRecoverableAuthIOException) {
-                mRequestGoogleDrivePermissions.launch(e.intent)
+                withContext(Dispatchers.Main) {
+                    mRequestGoogleDrivePermissions.launch(e.intent)
+                }
             }
         }
     }
