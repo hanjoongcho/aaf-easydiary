@@ -10,6 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.roomorama.caldroid.CaldroidFragment
+import com.roomorama.caldroid.CaldroidFragmentEx
+import com.roomorama.caldroid.CaldroidListener
 import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -64,12 +67,39 @@ class DailySymbolFragment : Fragment() {
                 }
             }
             switchCalendar.setOnCheckedChangeListener { _, isChecked ->
-                calendar.visibility = if (isChecked) View.VISIBLE else View.GONE
+                layoutCalendarContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
             }
         }
 
+        val startOfWeek = config.calendarStartDay
         childFragmentManager.beginTransaction().run {
-            replace(R.id.calendar, CalendarFragment()).apply { }
+            replace(R.id.calendar, CalendarFragment().apply {
+                arguments =
+                    Bundle().apply { putInt(CaldroidFragment.START_DAY_OF_WEEK, startOfWeek) }
+                caldroidListener = object : CaldroidListener() {
+                    override fun onSelectDate(date: Date, view: View) {}
+                    override fun onChangeMonth(month: Int, year: Int) {
+                        val monthYearFlag =
+                            android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
+                        val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
+                        val calendar = Calendar.getInstance(Locale.getDefault())
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, month - 1)
+                        calendar.set(Calendar.DATE, 1)
+                        val monthTitle = android.text.format.DateUtils.formatDateRange(
+                            requireContext(),
+                            monthYearFormatter,
+                            calendar.timeInMillis,
+                            calendar.timeInMillis,
+                            monthYearFlag
+                        ).toString()
+                        mBinding.textCalendarDate.text = monthTitle.uppercase(Locale.getDefault())
+                    }
+
+                    override fun onLongClickDate(date: Date?, view: View?) {}
+                    override fun onCaldroidViewCreated() {}
+                }
+            })
             commitNow()
         }
     }
