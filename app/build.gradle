@@ -40,7 +40,7 @@ android {
 //        ndk.debugSymbolLevel = 'FULL'
     }
 //    ndkVersion "25.0.8221429"
-    flavorDimensions "buildType"
+    flavorDimensions += "buildType"
     productFlavors {
         gmsProd {
             dimension "buildType"
