@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,16 +14,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,8 +39,6 @@ import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.FullBackupService
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 
 class DevActivity : BaseDevActivity() {
 
@@ -54,7 +47,7 @@ class DevActivity : BaseDevActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
-    private lateinit var mRequestGoogleDrivePermissions: ActivityResultLauncher<Intent>
+    private lateinit var mRequestGoogleCalendarPermissions: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +70,7 @@ class DevActivity : BaseDevActivity() {
             }
         }
 
-        mRequestGoogleDrivePermissions = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        mRequestGoogleCalendarPermissions = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             pauseLock()
             when (it.resultCode == Activity.RESULT_OK && it.data != null) {
                 true -> {
@@ -218,7 +211,7 @@ class DevActivity : BaseDevActivity() {
                 mPermissionCallback.invoke()
             } catch (e: UserRecoverableAuthIOException) {
                 withContext(Dispatchers.Main) {
-                    mRequestGoogleDrivePermissions.launch(e.intent)
+                    mRequestGoogleCalendarPermissions.launch(e.intent)
                 }
             }
         }
