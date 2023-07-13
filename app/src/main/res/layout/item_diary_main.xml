@@ -120,9 +120,8 @@
 
             <View
                 android:background="@drawable/bg_card_plan"
-                android:layout_margin="3dp"
                 android:id="@+id/view_future_diary_badge"
-                android:layout_width="3dp"
+                android:layout_width="4dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true" />
         </FrameLayout>
