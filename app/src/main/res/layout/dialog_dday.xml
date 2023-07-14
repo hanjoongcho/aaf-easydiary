@@ -74,12 +74,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="（1Year 32Days）" />
 
-        <com.simplemobiletools.commons.views.MyTextView
+        <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:applyGlobalSize="false"
             android:text="TextView"
-            android:textSize="@dimen/basic_text_medium"
+            android:textSize="@dimen/basic_text_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_day_remaining_with_year"
             tools:text="8Hours" />
