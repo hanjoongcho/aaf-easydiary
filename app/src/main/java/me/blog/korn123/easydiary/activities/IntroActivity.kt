@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ActivityIntroBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -29,6 +30,7 @@ class IntroActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         mBinding = ActivityIntroBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
@@ -36,21 +38,21 @@ class IntroActivity : AppCompatActivity() {
         rescheduleEnabledAlarms()
         FontUtils.checkFontSetting(this)
 
-        mHandler = object: Handler(this.mainLooper) {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-                when (msg.what) {
-                    START_MAIN_ACTIVITY -> {
-                        TransitionHelper.startActivityWithTransition(
-                            this@IntroActivity, Intent(this@IntroActivity, DiaryMainActivity::class.java).apply {
-                                if (config.enableWelcomeDashboardPopup) putExtra(EXECUTION_MODE_WELCOME_DASHBOARD, true)
-                            }
-                        )
-                        finish()
-                    }
-                    else -> {}
-                }
-            }
-        }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500) }
+//        mHandler = object: Handler(this.mainLooper) {
+//            override fun handleMessage(msg: Message) {
+//                super.handleMessage(msg)
+//                when (msg.what) {
+//                    START_MAIN_ACTIVITY -> {
+//                        TransitionHelper.startActivityWithTransition(
+//                            this@IntroActivity, Intent(this@IntroActivity, DiaryMainActivity::class.java).apply {
+//                                if (config.enableWelcomeDashboardPopup) putExtra(EXECUTION_MODE_WELCOME_DASHBOARD, true)
+//                            }
+//                        )
+//                        finish()
+//                    }
+//                    else -> {}
+//                }
+//            }
+//        }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500) }
     }
 }
