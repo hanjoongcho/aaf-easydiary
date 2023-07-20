@@ -13,6 +13,9 @@ Go to the Releases and download latest apk or click badges below.
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
 <a href='https://f-droid.org/en/packages/me.blog.korn123.easydiary'><img alt='Get it on F-Droid' src='screenshots/fdroid.png' height="98"/></a>     
 
+## Privacy Policy 
+* [Easy Diary Privacy Policy](https://hanjoongcho.github.io/aaf-easydiary/Privacy)
+  
 ## Easy Diary User Manual  
 Since 2023, we have been using notion and YouTube to create Easy Diary user manuals.  
 * [Easy Diary Manual v0.1](https://spiced-skirt-15c.notion.site/User-Manual-v0-1-909b1fc94f5e40ccb8e8e560911c2e52)
