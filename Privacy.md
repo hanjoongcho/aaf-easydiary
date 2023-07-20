@@ -91,7 +91,7 @@ __Use of network data__
 __Use of device data__  
 * When repository access rights are enabled, non-developer software will have the following rights:
   1. Read contents of SD card  
-  2. Modify or delete the contents of the SD card
+  2. Modify or delete the contents of the SD card  
 ---
 
 ## Security Of Data
