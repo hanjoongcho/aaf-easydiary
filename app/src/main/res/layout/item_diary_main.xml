@@ -6,13 +6,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView style="@style/AppCard" app:contentPadding="0dp">
+    <androidx.cardview.widget.CardView
+        style="@style/AppCard"
+        app:contentPadding="0dp">
 
-        <FrameLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout style="@style/LinearLayoutVertical" android:padding="@dimen/card_contents_padding">
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/view_future_diary_badge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/colorPrimary"
+                app:fixedAppcompatPadding="false">
+
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    android:id="@+id/text_d_day_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:padding="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:singleLine="true"
+                    android:text="D+11"
+                    app:applyGlobalSize="false"
+                    app:applyGlobalColor="false"
+                    android:textSize="@dimen/basic_text_medium"
+                    android:textColor="@color/white" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
+
+            <LinearLayout
+                style="@style/LinearLayoutVertical"
+                android:padding="@dimen/card_contents_padding">
 
                 <LinearLayout style="@style/LinearLayoutHorizontal">
 
@@ -117,14 +144,6 @@
                     </me.blog.korn123.easydiary.views.FixedCardView>
                 </RelativeLayout>
             </LinearLayout>
-
-            <View
-                android:background="@drawable/bg_card_plan"
-                android:id="@+id/view_future_diary_badge"
-                android:layout_width="4dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true" />
-        </FrameLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
-
-</RelativeLayout>    
+</RelativeLayout>

@@ -475,7 +475,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             mBinding.linearDevContainer.addView(
                 // Notification
                 createBaseCardView(
-                    "Notification", null, Button(this@BaseDevActivity).apply {
+                    "Notification", null
+                    , Button(this@BaseDevActivity).apply {
                         text = "Basic"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -484,15 +485,57 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 useActionButton = true,
                                 id = mNotificationCount++
                             )
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                                val contentTitle = "[${notification.id}] Basic Notification"
-                                val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                it.setContentTitle(contentTitle)
-                                it.setContentText(contentText)
-                                it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                            }.build())
+                            NotificationManagerCompat.from(this@BaseDevActivity)
+                                .notify(notification.id, createNotification(notification).also {
+                                    val contentTitle = "[${notification.id}] Basic Notification"
+                                    val contentText =
+                                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                    it.setContentTitle(contentTitle)
+                                    it.setContentText(contentText)
+                                    it.setLargeIcon(
+                                        BitmapFactory.decodeResource(
+                                            resources,
+                                            notification.largeIconResourceId
+                                        )
+                                    )
+                                    it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                                }.build())
+
                         }
-                    }, Button(this@BaseDevActivity).apply {
+                    }
+                    , Button(this@BaseDevActivity).apply {
+                        text = "Basic(Bitmap Icon)"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            val notification = NotificationInfo(
+                                R.drawable.ic_diary_writing,
+                                useActionButton = true,
+                                id = mNotificationCount++
+                            )
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val bitmap =
+                                    Glide
+                                        .with(context).asBitmap()
+                                        .load(R.drawable.bg_travel_4514822_1280)
+                                        .transform(
+                                            CenterCrop(),
+                                            RoundedCorners(context.dpToPixel(5F))
+                                        )
+                                        .submit(200, 200).get()
+                                withContext(Dispatchers.Main) {
+                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                                        val contentTitle = "[${notification.id}] Basic Notification"
+                                        val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                        it.setContentTitle(contentTitle)
+                                        it.setContentText(contentText)
+                                        it.setLargeIcon(bitmap)
+                                    }.build())
+                                }
+
+                            }
+                        }
+                    }
+                    , Button(this@BaseDevActivity).apply {
                         text = "CustomContentView"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
@@ -535,7 +578,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 }
                             }
                         }
-                    }, Button(this@BaseDevActivity).apply {
+                    }
+                    , Button(this@BaseDevActivity).apply {
                         text = "BigTextStyle"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {

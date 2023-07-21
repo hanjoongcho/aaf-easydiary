@@ -436,6 +436,9 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                         if (it.fixedAppcompatPadding) {
                             it.useCompatPadding = true
                             it.cardElevation = dpToPixelFloatValue(2F)
+                        } else {
+                            it.useCompatPadding = false
+                            it.cardElevation = 0F
                         }
                     }
                     is CardView -> {
