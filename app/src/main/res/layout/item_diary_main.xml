@@ -10,140 +10,157 @@
         style="@style/AppCard"
         app:contentPadding="0dp">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <me.blog.korn123.easydiary.views.FixedCardView
+            <View
                 android:id="@+id/view_future_diary_badge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="?attr/colorPrimary"
-                app:fixedAppcompatPadding="false">
+                style="@style/view_future_diary_badge"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    android:id="@+id/text_d_day_count"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_future_diary_badge"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <me.blog.korn123.easydiary.views.FixedCardView
+                    android:id="@+id/card_future_diary_badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:padding="3dp"
-                    android:layout_marginLeft="3dp"
-                    android:singleLine="true"
-                    android:text="D+11"
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="false"
-                    android:textSize="@dimen/basic_text_medium"
-                    android:textColor="@color/white" />
-            </me.blog.korn123.easydiary.views.FixedCardView>
+                    app:cardBackgroundColor="?attr/colorPrimary"
+                    app:contentPadding="@dimen/card_tag_padding"
+                    app:fixedAppcompatPadding="true">
 
-            <LinearLayout
-                style="@style/LinearLayoutVertical"
-                android:padding="@dimen/card_contents_padding">
-
-                <LinearLayout style="@style/LinearLayoutHorizontal">
-
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:id="@+id/image_symbol"
-                        android:layout_width="@dimen/diary_symbol_width"
-                        android:layout_height="@dimen/diary_symbol_width"
-                        android:layout_marginEnd="10dp" />
-
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1">
-
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/text_title"
-                            style="@style/text_diary_main_item_inner_contents"
-                            android:gravity="center_vertical" />
-
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/text_date_time"
-                            style="@style/text_diary_main_item_inner_contents"
-                            android:gravity="end" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/text_contents"
-                    style="@style/text_diary_main_item_inner_contents"
-                    android:layout_marginTop="@dimen/card_contents_padding"
-                    android:ellipsize="end"
-                    android:gravity="start"
-                    android:maxLines="3" />
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/photoViews"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/card_contents_padding"
-                    app:flexDirection="row"
-                    app:flexWrap="wrap"
-                    app:justifyContent="flex_end"></com.google.android.flexbox.FlexboxLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/card_contents_padding">
-
-                    <me.blog.korn123.easydiary.views.FixedCardView
-                        android:id="@+id/locationContainer"
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        android:id="@+id/text_d_day_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignWithParentIfMissing="true"
-                        android:layout_toStartOf="@id/contentsLengthContainer"
-                        app:fixedAppcompatPadding="true">
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="D+11"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/basic_text_extra_small"
+                        app:applyGlobalColor="false"
+                        app:applyGlobalSize="false" />
+                </me.blog.korn123.easydiary.views.FixedCardView>
+
+                <LinearLayout
+                    style="@style/LinearLayoutVertical"
+                    android:padding="@dimen/card_contents_padding">
+
+                    <LinearLayout style="@style/LinearLayoutHorizontal">
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/selection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <ImageView
+                            android:id="@+id/image_symbol"
+                            android:layout_width="@dimen/diary_symbol_width"
+                            android:layout_height="@dimen/diary_symbol_width"
+                            android:layout_marginEnd="10dp" />
 
                         <LinearLayout
+                            style="@style/LinearLayoutVertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1">
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/text_title"
+                                style="@style/text_diary_main_item_inner_contents"
+                                android:gravity="center_vertical" />
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/text_date_time"
+                                style="@style/text_diary_main_item_inner_contents"
+                                android:gravity="end" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/text_contents"
+                        style="@style/text_diary_main_item_inner_contents"
+                        android:layout_marginTop="@dimen/card_contents_padding"
+                        android:ellipsize="end"
+                        android:gravity="start"
+                        android:maxLines="3" />
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/photoViews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/card_contents_padding"
+                        app:flexDirection="row"
+                        app:flexWrap="wrap"
+                        app:justifyContent="flex_end"></com.google.android.flexbox.FlexboxLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/card_contents_padding">
+
+                        <me.blog.korn123.easydiary.views.FixedCardView
+                            android:id="@+id/locationContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:padding="5dp">
+                            android:layout_alignWithParentIfMissing="true"
+                            android:layout_toStartOf="@id/contentsLengthContainer"
+                            app:fixedAppcompatPadding="true">
 
-                            <ImageView
-                                android:id="@+id/locationSymbol"
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_marginRight="3dp"
-                                android:src="@drawable/ic_map_marker_2" />
-
-                            <TextView
-                                android:id="@+id/locationLabel"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="There is no location information. Click to update location information."
-                                android:textColor="?attr/colorPrimary" />
-                        </LinearLayout>
-                    </me.blog.korn123.easydiary.views.FixedCardView>
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:padding="5dp">
 
-                    <me.blog.korn123.easydiary.views.FixedCardView
-                        android:id="@+id/contentsLengthContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="5dp"
-                        app:fixedAppcompatPadding="true">
+                                <ImageView
+                                    android:id="@+id/locationSymbol"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginRight="3dp"
+                                    android:src="@drawable/ic_map_marker_2" />
 
-                        <TextView
-                            android:id="@+id/contentsLength"
+                                <TextView
+                                    android:id="@+id/locationLabel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="There is no location information. Click to update location information."
+                                    android:textColor="?attr/colorPrimary" />
+                            </LinearLayout>
+                        </me.blog.korn123.easydiary.views.FixedCardView>
+
+                        <me.blog.korn123.easydiary.views.FixedCardView
+                            android:id="@+id/contentsLengthContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="?attr/colorPrimary"
-                            tools:text="100" />
-                    </me.blog.korn123.easydiary.views.FixedCardView>
-                </RelativeLayout>
-            </LinearLayout>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="5dp"
+                            app:fixedAppcompatPadding="true">
+
+                            <TextView
+                                android:id="@+id/contentsLength"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:textColor="?attr/colorPrimary"
+                                tools:text="100" />
+                        </me.blog.korn123.easydiary.views.FixedCardView>
+                    </RelativeLayout>
+                </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

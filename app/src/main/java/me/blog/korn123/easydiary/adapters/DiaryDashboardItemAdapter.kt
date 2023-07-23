@@ -45,6 +45,15 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
             context.updateCardViewPolicy(this)
             FontUtils.setFontsTypeface(context, null, this)
             binding.run {
+                if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                    viewFutureDiaryBadge.visibility = View.VISIBLE
+                    cardFutureDiaryBadge.visibility = View.VISIBLE
+                    textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                } else {
+                    viewFutureDiaryBadge.visibility = View.GONE
+                    cardFutureDiaryBadge.visibility = View.GONE
+                }
+
                 textContents.maxLines = 1
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                 textDateTime.text = when (diary.isAllDay) {

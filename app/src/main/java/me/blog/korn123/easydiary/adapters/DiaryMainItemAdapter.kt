@@ -107,9 +107,11 @@ class DiaryMainItemAdapter(
             itemDiaryMainBinding.run {
                 if (diary.currentTimeMillis > System.currentTimeMillis()) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
+                    cardFutureDiaryBadge.visibility = View.VISIBLE
                     textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
                 } else {
                     viewFutureDiaryBadge.visibility = View.GONE
+                    cardFutureDiaryBadge.visibility = View.GONE
                 }
 
                 activity.run {
