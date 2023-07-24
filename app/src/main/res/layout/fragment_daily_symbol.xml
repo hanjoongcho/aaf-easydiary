@@ -72,31 +72,47 @@
             android:layout_margin="20dp" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="end"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:padding="10dp">
+
             <me.blog.korn123.easydiary.views.FixedTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calendar"
                 android:textSize="@dimen/basic_text_medium"
                 app:applyGlobalColor="true"
-                app:applyGlobalSize="false"
-                android:text="Calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                app:applyGlobalSize="false" />
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
-            android:id="@+id/calendar"
-            android:visibility="gone"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_calendar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:orientation="vertical"
+            tools:visibility="visible"
+            android:visibility="gone">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                tools:text="2024.07"
+                android:layout_margin="@dimen/layout_margin_medium"
+                android:id="@+id/text_calendar_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </LinearLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 

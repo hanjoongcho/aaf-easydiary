@@ -30,7 +30,7 @@ android {
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 300
-        versionName '1.4.300.202306xx0'
+        versionName '1.4.300.202307110'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -40,7 +40,7 @@ android {
 //        ndk.debugSymbolLevel = 'FULL'
     }
 //    ndkVersion "25.0.8221429"
-    flavorDimensions "buildType"
+    flavorDimensions += "buildType"
     productFlavors {
         gmsProd {
             dimension "buildType"

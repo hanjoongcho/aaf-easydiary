@@ -2,8 +2,10 @@ package me.blog.korn123.easydiary.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import me.blog.korn123.commons.utils.DateUtils
 import java.text.MessageFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.abs
 
 open class DDay : RealmObject {
@@ -49,10 +51,14 @@ open class DDay : RealmObject {
 
                 val years = MessageFormat.format(yearFormat, countYear)
                 val days = MessageFormat.format(dayFormat, end.minus(calendar.timeInMillis).div(oneDayMillis))
-                "（$years $days）"
+                "$years $days"
             }
         }
         return dayRemaining
+    }
+
+    fun getOnlyDayRemaining(onlyDays: Boolean = true, yearFormat: String = "", dayFormat: String = ""): String {
+        return DateUtils.getOnlyDayRemaining(targetTimeStamp, onlyDays, yearFormat, dayFormat)
     }
 
     fun getTimeRemaining(): String {

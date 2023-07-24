@@ -82,9 +82,9 @@ class DDayAdapter(
                 fun updateDDayInfo() {
                     textTargetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                     textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                    textDayRemaining.text = temporaryDDay.getDayRemaining()
-                    textDayRemainingWithYear.text = temporaryDDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
-                    textTimeRemaining.text = temporaryDDay.getTimeRemaining()
+                    textDayRemaining.text = temporaryDDay.getOnlyDayRemaining()
+                    textDayRemainingWithYear.text = temporaryDDay.getOnlyDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
+                    textTimeRemaining.text = "${temporaryDDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))} ${temporaryDDay.getTimeRemaining()}"
                 }
 
                 updateDDayInfo()
@@ -183,14 +183,14 @@ class DDayAdapter(
                 textTitle.text = dDay.title
                 textTargetDate.text = targetDateString
 //                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
-                textDayRemaining.text = if (targetDateString == currentDateString) "D-Day" else dDay.getDayRemaining()
+                textDayRemaining.text = if (targetDateString == currentDateString) "D-Day" else dDay.getOnlyDayRemaining()
                 when {
-                    dDay.getDayRemaining().matches(Regex("^D－0$|^D＋0$")) -> {
+                    dDay.getOnlyDayRemaining() == "D-Day" -> {
                         imgLightRed.alpha = 0.1F
                         imgLightOrange.alpha = 1F
                         imgLightGreen.alpha = 0.1F
                     }
-                    dDay.getDayRemaining().startsWith("D＋") -> {
+                    dDay.getOnlyDayRemaining().startsWith("D＋") -> {
                         imgLightRed.alpha = 1F
                         imgLightOrange.alpha = 0.1F
                         imgLightGreen.alpha = 0.1F

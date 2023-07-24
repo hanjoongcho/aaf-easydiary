@@ -97,6 +97,13 @@ class TimelineItemAdapter(
                     text1.ellipsize = null
                 }
             }
+
+            if (diaryDto.currentTimeMillis > System.currentTimeMillis()) {
+                textDDayCount.visibility = View.VISIBLE
+                textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diaryDto.currentTimeMillis)}）"
+            } else {
+                textDDayCount.visibility = View.GONE
+            }
         }
 
         return itemView

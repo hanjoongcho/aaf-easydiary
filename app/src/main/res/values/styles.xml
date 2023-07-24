@@ -289,6 +289,10 @@
         <item name="layout_constraintHorizontal_bias">0</item>
         <item name="layout_constrainedWidth">true</item>
     </style>
+    <style name="view_future_diary_badge">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
 
     <!--Caldroid theme-->
     <style name="CaldroidDefaultGridView">

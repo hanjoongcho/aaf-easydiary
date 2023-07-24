@@ -105,7 +105,15 @@ class DiaryMainItemAdapter(
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
         fun bindTo(diary: Diary) {
             itemDiaryMainBinding.run {
-                viewFutureDiaryBadge.visibility = if (diary.currentTimeMillis > System.currentTimeMillis()) View.VISIBLE else View.GONE
+                if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                    viewFutureDiaryBadge.visibility = View.VISIBLE
+                    cardFutureDiaryBadge.visibility = View.VISIBLE
+                    textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                } else {
+                    viewFutureDiaryBadge.visibility = View.GONE
+                    cardFutureDiaryBadge.visibility = View.GONE
+                }
+
                 activity.run {
                     root.run {
                         setOnClickListener { itemClickCallback.invoke(diary) }
