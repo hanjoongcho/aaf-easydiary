@@ -74,6 +74,7 @@ class DiaryFragment : Fragment() {
             MODE_TASK_DOING -> "DOING"
             MODE_TASK_DONE -> "Closed Task"
             MODE_TASK_CANCEL -> "CANCEL"
+            MODE_FUTURE -> "Future"
             else -> "Previous 100"
         }
         setupDiary()
@@ -135,8 +136,15 @@ class DiaryFragment : Fragment() {
                 0,
                 83
             )
+            MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                0
+            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
             else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
-                .filter { item -> item.weather < 80 || item.weather > 83 }
+                .filter { item -> item.weather < 80 || item.weather > 83 && item.currentTimeMillis <= System.currentTimeMillis() }
                 .run { if (this.size > 100) this.subList(0, 100) else this }
         }
         mDiaryList.addAll(diaryList)
@@ -183,5 +191,6 @@ class DiaryFragment : Fragment() {
         const val MODE_TASK_DONE = "mode_task_done"
         const val MODE_TASK_CANCEL = "mode_task_cancel"
         const val MODE_PREVIOUS_100 = "mode_previous_100"
+        const val MODE_FUTURE = "mode_future"
     }
 }
