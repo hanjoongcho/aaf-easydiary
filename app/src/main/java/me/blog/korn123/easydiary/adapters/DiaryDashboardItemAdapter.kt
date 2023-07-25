@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.Diary
+import org.apache.commons.lang3.StringUtils
 
 class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diary>() {
 
@@ -45,6 +46,12 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
             context.updateCardViewPolicy(this)
             FontUtils.setFontsTypeface(context, null, this)
             binding.run {
+                textTitle.run {
+                    visibility = if (StringUtils.isEmpty(diary.title)) View.GONE else View.VISIBLE
+                    text = diary.title
+                    EasyDiaryUtils.boldString(activity, this)
+                }
+
                 if (diary.currentTimeMillis > System.currentTimeMillis()) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
                     cardFutureDiaryBadge.visibility = View.VISIBLE
