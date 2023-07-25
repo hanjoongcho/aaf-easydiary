@@ -10,13 +10,13 @@
         style="@style/AppCard"
         app:fixedAppcompatPadding="true"
         app:applyCardBackgroundColor="true"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:contentPadding="0dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <View
                 android:id="@+id/view_future_diary_badge"
@@ -64,8 +64,7 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text_contents"
                         style="@style/text_diary_main_item_inner_contents"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/card_contents_padding"
                         android:ellipsize="end"
                         android:gravity="start"/>
