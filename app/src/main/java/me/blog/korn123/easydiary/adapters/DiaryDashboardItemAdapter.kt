@@ -61,7 +61,7 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                     cardFutureDiaryBadge.visibility = View.GONE
                 }
 
-                textContents.maxLines = 1
+                textContents.maxLines = 3
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
