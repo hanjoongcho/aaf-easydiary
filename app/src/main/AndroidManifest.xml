@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="me.blog.korn123.easydiary.dev">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
@@ -36,7 +35,7 @@
         </activity>
         <activity-alias
             android:name=".activities.IntroActivity.EasyDiary"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -75,7 +74,7 @@
         </activity-alias>
         <activity-alias
             android:name=".activities.IntroActivity.Debug"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_debug"
             android:roundIcon="@mipmap/ic_launcher_debug_round"
