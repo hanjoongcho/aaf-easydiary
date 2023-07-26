@@ -177,7 +177,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mPermissionCallback: () -> Unit
     private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, arrayListOf(DriveScopes.DRIVE, DriveScopes.DRIVE_FILE))
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, arrayListOf(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = account
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
