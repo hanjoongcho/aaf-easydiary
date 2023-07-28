@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,15 +28,24 @@ import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
+import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
+import me.blog.korn123.easydiary.databinding.DialogFontsBinding
+import me.blog.korn123.easydiary.databinding.DialogOptionItemBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -43,11 +53,14 @@ import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.refreshApp
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
@@ -59,6 +72,8 @@ import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_IMPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
+import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import java.util.concurrent.Callable
@@ -77,6 +92,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
     private lateinit var mRequestGoogleDrivePermissions: ActivityResultLauncher<Intent>
+    private lateinit var mRequestGoogleCalendarPermissions: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
 
 
@@ -134,6 +150,20 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     false -> {
                         makeSnackBar("Google account verification failed.")
                         progressContainer.visibility = View. GONE
+                    }
+                }
+            }
+        }
+
+        mRequestGoogleCalendarPermissions = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            requireActivity().run {
+                pauseLock()
+                when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                    true -> {
+                        mPermissionCallback.invoke()
+                    }
+                    false -> {
+                        makeSnackBar("Google account verification failed.")
                     }
                 }
             }
@@ -343,6 +373,128 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
+    private fun requestCalendarPermissions(account: Account, permissionCallback: () -> Unit) {
+        mPermissionCallback = permissionCallback
+        val credential: GoogleAccountCredential =
+            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR))
+                .apply { selectedAccount = account }
+        val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+            .setApplicationName(getString(R.string.app_name))
+            .build()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                calendarService.calendarList().list().execute()
+                mPermissionCallback.invoke()
+            } catch (e: UserRecoverableAuthIOException) {
+                withContext(Dispatchers.Main) {
+                    mRequestGoogleCalendarPermissions.launch(e.intent)
+                }
+            }
+        }
+    }
+
+    private fun syncGoogleCalendar() {
+        requireActivity().holdCurrentOrientation()
+        progressContainer.visibility = View.VISIBLE
+        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
+            requestCalendarPermissions(account) {
+                val credential: GoogleAccountCredential =
+                    GoogleAccountCredential.usingOAuth2(
+                        requireActivity(),
+                        arrayListOf(CalendarScopes.CALENDAR)
+                    ).apply {
+                        selectedAccount = account
+                    }
+                val calendarService = Calendar.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    GsonFactory(),
+                    credential
+                )
+                    .setApplicationName(getString(R.string.app_name))
+                    .build()
+
+                fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
+                    var insertCount = 0
+                    progressContainer.visibility = View.VISIBLE
+                    mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
+                    mBinding.syncGoogleCalendarProgress.visibility = View.VISIBLE
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val result = if (nextPageToken == null) calendarService.events().list(calendarId).setMaxResults(2000).execute() else calendarService.events().list("hanjoongcho@gmail.com").setPageToken(nextPageToken).setMaxResults(2000).execute()
+                        withContext(Dispatchers.Main) { progressContainer.visibility = View.GONE }
+//                        val descriptions = arrayListOf<String>()
+                            result.items.forEachIndexed { index, item ->
+                                Log.i(AAF_TEST, "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}")
+//                                descriptions.add(item.summary)
+                                val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
+                                withContext(Dispatchers.Main) {
+                                    if (EasyDiaryDbHelper.findDiary(item.summary)
+                                            .none { diary -> diary.currentTimeMillis == timeMillis }
+                                        && !(item.description == null && item.summary == null)) {
+                                        EasyDiaryDbHelper.insertDiary(
+                                            Diary(
+                                                BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                                                timeMillis,
+                                                if (item.description != null) item.summary else "",
+                                                item.description ?: item.summary,
+                                                SYMBOL_GOOGLE_CALENDAR,
+                                                item?.start?.dateTime == null
+                                            )
+                                        )
+                                        insertCount++
+                                    }
+                                    mBinding.syncGoogleCalendarProgress.setProgressCompat(index.div(result.items.size.toFloat()).times(100).toInt(), true)
+                                }
+                            }
+                            if (result.nextPageToken != null) {
+                                fetchData(calendarId, result.nextPageToken, total.plus(insertCount))
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    mBinding.syncGoogleCalendarProgress.visibility = View.GONE
+                                }
+                            }
+
+
+                    }
+                }
+                fun fetchCalendarList() {
+                    var alertDialog: AlertDialog? = null
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val result = calendarService.calendarList().list().execute()
+                        withContext(Dispatchers.Main) {
+                            val builder = AlertDialog.Builder(requireActivity())
+                            builder.setNegativeButton(getString(android.R.string.cancel), null)
+                            val dialogOptionItemBinding = DialogOptionItemBinding.inflate(layoutInflater)
+                            val calendarInfo = ArrayList<Map<String, String>>()
+                            result.items.forEach { calendar ->
+                                calendarInfo.add(mapOf(
+                                    "optionTitle" to calendar.summary,
+                                    "optionValue" to calendar.id
+                                ))
+                            }
+                            val optionItemAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, calendarInfo, null, null, false)
+                            dialogOptionItemBinding.run {
+                                listView.adapter = optionItemAdapter
+                                listView.setOnItemClickListener { parent, view, position, id ->
+                                    calendarInfo[position]["optionValue"]?.let {
+                                        fetchData(it, null)
+                                        alertDialog?.dismiss()
+                                    }
+                                }
+                            }
+                            requireActivity().clearHoldOrientation()
+                            progressContainer.visibility = View.GONE
+                            alertDialog = builder.create().apply {
+                                requireActivity().updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogOptionItemBinding.root, "Sync Google Calendar")
+                            }
+                        }
+                    }
+                }
+                fetchCalendarList()
+            }
+        }
+    }
+
 
     /***************************************************************************************************
      *   etc functions
@@ -396,6 +548,9 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 GoogleOAuthHelper.signOutGoogleOAuth(requireActivity())
                 determineAccountInfo()
             }
+            R.id.syncGoogleCalendar -> {
+                syncGoogleCalendar()
+            }
         }
     }
 
@@ -407,6 +562,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
             recoverAttachPhoto.setOnClickListener(mOnClickListener)
             signInGoogleOAuth.setOnClickListener(mOnClickListener)
             signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+            syncGoogleCalendar.setOnClickListener(mOnClickListener)
         }
     }
 
