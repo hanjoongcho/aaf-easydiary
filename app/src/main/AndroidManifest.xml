@@ -74,7 +74,7 @@
         </activity-alias>
         <activity-alias
             android:name=".activities.IntroActivity.Debug"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_debug"
             android:roundIcon="@mipmap/ic_launcher_debug_round"

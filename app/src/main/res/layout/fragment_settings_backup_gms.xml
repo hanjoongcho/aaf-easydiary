@@ -130,6 +130,30 @@
                     android:text="@string/recover_attach_photo_summary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/syncGoogleCalendar"
+            style="@style/AppCard.Settings">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    style="@style/SettingsTitle"
+                    android:text="[BETA] Sync Google Calendar" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:visibility="gone"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/syncGoogleCalendarProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    style="@style/SettingsSummary"
+                    android:text="구글캘린더에 등록된 일정을 이용하여 다이어리를 자동생성 합니다. 이미 동기화된 일정은 추가로 생성되지 않습니다." />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>
 

@@ -128,6 +128,7 @@ class DevActivity : BaseDevActivity() {
                                 .build()
 
                             fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
+                                var insertCount = 0
                                 CoroutineScope(Dispatchers.IO).launch {
                                     val result = if (nextPageToken == null) calendarService.events().list(calendarId).setMaxResults(2000).execute() else calendarService.events().list("hanjoongcho@gmail.com").setPageToken(nextPageToken).setMaxResults(2000).execute()
                                     withContext(Dispatchers.Main) {
@@ -136,7 +137,9 @@ class DevActivity : BaseDevActivity() {
                                             Log.i(AAF_TEST, "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}")
                                             descriptions.add(item.summary)
                                             val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
-                                            if (EasyDiaryDbHelper.findDiary(item.summary).isEmpty()) {
+                                            if (EasyDiaryDbHelper.findDiary(item.summary)
+                                                    .none { diary -> diary.currentTimeMillis == timeMillis }
+                                            ) {
                                                 EasyDiaryDbHelper.insertDiary(
                                                     Diary(
                                                         BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
@@ -147,12 +150,13 @@ class DevActivity : BaseDevActivity() {
                                                         item?.start?.dateTime == null
                                                     )
                                                 )
+                                                insertCount++
                                             }
                                         }
                                         if (result.nextPageToken != null) {
-                                            fetchData(calendarId, result.nextPageToken, total.plus(result.items.size))
+                                            fetchData(calendarId, result.nextPageToken, total.plus(insertCount))
                                         } else {
-                                            makeToast("Total: ${total.plus(result.items.size)}")
+                                            makeToast("Total: ${total.plus(insertCount)}")
                                         }
                                     }
                                 }
