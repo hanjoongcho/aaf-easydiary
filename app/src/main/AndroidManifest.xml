@@ -35,7 +35,7 @@
         </activity>
         <activity-alias
             android:name=".activities.IntroActivity.EasyDiary"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -48,7 +48,7 @@
         </activity-alias>
         <activity-alias
             android:name=".activities.IntroActivity.Dark"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_dark"
             android:roundIcon="@mipmap/ic_launcher_dark_round"
@@ -74,7 +74,7 @@
         </activity-alias>
         <activity-alias
             android:name=".activities.IntroActivity.Debug"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_debug"
             android:roundIcon="@mipmap/ic_launcher_debug_round"

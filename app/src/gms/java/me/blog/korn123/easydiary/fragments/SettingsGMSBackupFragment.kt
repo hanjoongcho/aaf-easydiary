@@ -376,7 +376,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private fun requestCalendarPermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
         val credential: GoogleAccountCredential =
-            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR))
+            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY))
                 .apply { selectedAccount = account }
         val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
             .setApplicationName(getString(R.string.app_name))
@@ -401,7 +401,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 val credential: GoogleAccountCredential =
                     GoogleAccountCredential.usingOAuth2(
                         requireActivity(),
-                        arrayListOf(CalendarScopes.CALENDAR)
+                        arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY)
                     ).apply {
                         selectedAccount = account
                     }
