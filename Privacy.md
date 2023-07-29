@@ -1,7 +1,7 @@
 ## Easy Diary Privacy policy [(한국어)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy_ko.md)
 ![](https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 
-v2022.08.16-01   
+v2023.07.29-01   
 The Awesome Application Factory ("AAF"), which develops and distributes Easy Diary, is not a for-profit corporation or sole proprietorship.
 It aims to develop and distribute applications by mashup of open source libraries so that users can use convenient applications free of charge and without advertisements.
 Therefore, AAF's application does not operate a separate server to store user's data and personal information, and does not handle user's personal information unnecessarily. If the user wants to back up and restore the application in use, the application data is stored in the user's personal Google Drive through Google's OAuth authentication with the user's consent and used when requesting a backup afterwards.
