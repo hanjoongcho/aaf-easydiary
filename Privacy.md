@@ -20,24 +20,31 @@ Normal Permissions are Permissions that are automatically granted when an applic
 #### SET_ALARM
 * Allows an application to broadcast an Intent to set an alarm for the user.   
 * When using the Easy Diary Scheduler function, this permission is required to provide a notification at the time set by the user and proceed with the scheduled task.
+ 
 #### INTERNET
 * Allows applications to open network sockets.
 * This permission is required when the user reads the manual, frequently asked questions, and privacy policy.
+  
 #### FOREGROUND_SERVICE
 * Allows a regular application to use Service.startForeground.
 * This permission is required to provide progress status in the notification window when backing up or restoring all data.
+  
 #### RECEIVE_BOOT_COMPLETED
 * Allows an application to receive the Intent.ACTION_BOOT_COMPLETED that is broadcast after the system finishes booting. If you don't request this permission, you will not receive the broadcast at that time. Though holding this permission does not have any security implications, it can have a negative impact on the user experience by increasing the amount of time it takes the system to start and allowing applications to have themselves running without the user being aware of them. As such, you must explicitly declare your use of this facility to make that visible to the user.
 * This permission is required to re-register the task set in the scheduler when the device is restarted.
+  
 #### VIBRATE
 * Allows access to the vibrator.
 * This permission is required to give a vibration notification to the user when a task scheduled with the scheduler is started or completed.
+  
 #### SCHEDULE_EXACT_ALARM
 * Allows applications to use exact alarm APIs.
 * When using the Easy Diary Scheduler function, this permission is required to provide a notification at the time set by the user and proceed with the scheduled task.
+  
 #### USE_BIOMETRIC
 * Allows an app to use device supported biometric modalities.
 * This permission is required when the user uses the fingerprint lock function.
+  
 #### USE_FINGERPRINT
 * Allows an app to use fingerprint hardware.
 * This permission is required when the user uses the fingerprint lock function.
@@ -49,20 +56,23 @@ Dangerous Permissions은 사용자의 추가 승인을 받은 경우에만 부�
 #### READ_EXTERNAL_STORAGE
 * Allows an application to read from external storage.
 * This permission is necessary to read font files or photos in the user's storage.
+  
 #### WRITE_EXTERNAL_STORAGE
 * Allows an application to write to external storage.
 * This permission is required to save post cards, backup files, etc. in the user's storage.
+  
 #### ACCESS_FINE_LOCATION
 * Allows an app to access precise location. Alternatively, you might want ACCESS_COARSE_LOCATION.
 * If the user activates the option to save the diary writing location, it is a necessary permission to acquire the exact address information of the diary writing location.
+  
 #### ACCESS_COARSE_LOCATION
 * Allows an app to access approximate location. Alternatively, you might want ACCESS_FINE_LOCATION.
-* If the user activates the option to save the diary writing location, it is a necessary permission to acquire the approximate address information of the diary writing location.
+* If the user activates the option to save the diary writing location, it is a necessary permission to acquire the approximate address information of the diary writing location.  
 
 ### ☑️ Information Collection And Use
 In order to provide more advanced functions, Easy Diary may request permission to allow the software to operate normally, and use the acquired permission to access the storage of the device or acquire location information.
 The information obtained in this way may be stored on the user's device storage along with the content created by the user, but is not viewed by the developer or transmitted to a separate server.
-Even if the user connects the user's personal Google Drive through Google's OAuth authentication and stores the diary data in the personal Google Drive, the developer cannot view the information.
+Even if the user connects the user's personal Google Drive through Google's OAuth authentication and stores the diary data in the personal Google Drive, the developer cannot view the information.  
 
 ### ☑️ Types of Data Collected
 
