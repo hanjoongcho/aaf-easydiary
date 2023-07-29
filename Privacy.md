@@ -134,13 +134,11 @@ The developer reserves the right to make modifications to the policy statement a
 | Google Calendar API | /auth/calendar.events.readonly  | 모든 캘린더의 일정 보기 | Automatic diary creation using calendar events |  
 
 * EasyDiary complies with the [Google API Service User Data Policy](https://developers.google.com/terms/api-services-user-data-policy) in using Google API.  
-* Example of user consent for Google API integration  
-  * Google Drive
- ![image](https://github.com/AAFactory/aafactory.github.io/assets/7098851/2ae20a0a-218b-45cf-9562-8b4fe54ba900)
-   
-  * Goolge Calendar
- ![image](https://github.com/AAFactory/aafactory.github.io/assets/7098851/39531151-13fc-4195-8160-0c87d83dedb1)
+* Example of user consent for Google API integration
 
+|Google Drive|Goolge Calendar|
+|---|---|
+|![image](https://github.com/AAFactory/aafactory.github.io/assets/7098851/2ae20a0a-218b-45cf-9562-8b4fe54ba900)|![image](https://github.com/AAFactory/aafactory.github.io/assets/7098851/39531151-13fc-4195-8160-0c87d83dedb1)|  
 
 ---
       
