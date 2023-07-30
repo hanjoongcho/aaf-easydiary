@@ -150,7 +150,7 @@
 
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/SettingsSummary"
-                    android:text="구글캘린더에 등록된 일정을 이용하여 다이어리를 자동생성 합니다. 이미 동기화된 일정은 추가로 생성되지 않습니다." />
+                        android:text="A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally." />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
