@@ -26,8 +26,8 @@ android {
      * @minSdkVersion: 19 (Android 4.4 KitKat)
      */
     defaultConfig {
-        applicationId "me.blog.korn123.easydiary.dev"
-        minSdkVersion 19
+        applicationId "me.blog.korn123.easydiary"
+        minSdkVersion 21
         targetSdkVersion versions.compileSdk
         versionCode 300
         versionName '1.4.300.202307110'
@@ -139,6 +139,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation ('androidx.work:work-runtime-ktx:2.8.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     implementation "androidx.browser:browser:1.5.0"
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
 
     // google components for develop package (not foss)
     gmsDevImplementation 'com.google.android.gms:play-services-auth:20.5.0'
