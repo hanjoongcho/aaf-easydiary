@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -16,6 +17,7 @@ import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -74,6 +76,7 @@ class DiaryFragment : Fragment() {
             MODE_TASK_DOING -> "DOING"
             MODE_TASK_DONE -> "Closed Task"
             MODE_TASK_CANCEL -> "CANCEL"
+            MODE_FUTURE -> "Future"
             else -> "Previous 100"
         }
         setupDiary()
@@ -135,8 +138,15 @@ class DiaryFragment : Fragment() {
                 0,
                 83
             )
+            MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                0
+            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
             else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
-                .filter { item -> item.weather < 80 || item.weather > 83 }
+                .filter { item -> item.weather < 80 || item.weather > 83 && item.currentTimeMillis <= System.currentTimeMillis() }
                 .run { if (this.size > 100) this.subList(0, 100) else this }
         }
         mDiaryList.addAll(diaryList)
@@ -171,6 +181,12 @@ class DiaryFragment : Fragment() {
                     }
                 )
             }
+            registerOnPageChangeCallback(object: OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    mBannerDiary.adapter.notifyDataSetChanged()
+                }
+            })
             create(mDiaryList)
         }
         mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
@@ -183,5 +199,6 @@ class DiaryFragment : Fragment() {
         const val MODE_TASK_DONE = "mode_task_done"
         const val MODE_TASK_CANCEL = "mode_task_cancel"
         const val MODE_PREVIOUS_100 = "mode_previous_100"
+        const val MODE_FUTURE = "mode_future"
     }
 }

@@ -153,6 +153,13 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                })
 
+                // Future Diary
+                replace(R.id.fragment_diary_future, DiaryFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_FUTURE)
+                    }
+                })
+
                 // Diary Previous 100
                 replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
                     arguments = Bundle().apply {

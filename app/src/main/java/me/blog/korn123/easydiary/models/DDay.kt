@@ -2,8 +2,10 @@ package me.blog.korn123.easydiary.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import me.blog.korn123.commons.utils.DateUtils
 import java.text.MessageFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.abs
 
 open class DDay : RealmObject {
@@ -56,51 +58,7 @@ open class DDay : RealmObject {
     }
 
     fun getOnlyDayRemaining(onlyDays: Boolean = true, yearFormat: String = "", dayFormat: String = ""): String {
-        val oneDayMillis: Long = 1000 * 60 * 60 * 24
-        val diffTarget = Calendar.getInstance(Locale.getDefault()).apply {
-            timeInMillis = targetTimeStamp
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
-        val todayTimeStamp = Calendar.getInstance(Locale.getDefault()).apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
-
-        val diffDays = abs(diffTarget.minus(todayTimeStamp).div(oneDayMillis))
-        val dayRemaining = when (onlyDays) {
-            true -> when {
-                diffTarget > todayTimeStamp -> "D－$diffDays"
-                diffTarget < todayTimeStamp -> "D＋$diffDays"
-                else -> "D-Day"
-            }
-            false -> {
-                // Check Leaf Year
-                val start = todayTimeStamp.coerceAtMost(diffTarget)
-                val end = todayTimeStamp.coerceAtLeast(diffTarget)
-                val calendar: Calendar = Calendar.getInstance(Locale.getDefault())
-                calendar.timeInMillis = start
-                var countYear = 0
-                while (true) {
-                    calendar.add(Calendar.YEAR, 1)
-                    if (calendar.timeInMillis > end) {
-                        calendar.add(Calendar.YEAR, -1)
-                        break
-                    } else {
-                        countYear++
-                    }
-                }
-
-                val years = MessageFormat.format(yearFormat, countYear)
-                val days = MessageFormat.format(dayFormat, end.minus(calendar.timeInMillis).div(oneDayMillis))
-                "（$years $days）"
-            }
-        }
-        return dayRemaining
+        return DateUtils.getOnlyDayRemaining(targetTimeStamp, onlyDays, yearFormat, dayFormat)
     }
 
     fun getTimeRemaining(): String {
