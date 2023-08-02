@@ -144,7 +144,7 @@ class DiaryFragment : Fragment() {
                 0,
                 0,
                 0
-            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
+            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }.reversed()
             else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
                 .filter { item -> item.weather < 80 || item.weather > 83 && item.currentTimeMillis <= System.currentTimeMillis() }
                 .run { if (this.size > 100) this.subList(0, 100) else this }
