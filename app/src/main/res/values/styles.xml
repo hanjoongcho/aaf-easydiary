@@ -6,8 +6,8 @@
 
     <!-- App Theme -->
     <style name="AppTheme.FullScreen">
-        <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@null</item>
@@ -25,6 +25,20 @@
         <item name="android:fastScrollThumbDrawable">@drawable/ic_fast_scroll</item>
         <item name="android:fastScrollTrackDrawable">@null</item>
         <item name="android:windowBackground">@null</item>
+    </style>
+    <style name="AppTheme.Starting" parent="Theme.SplashScreen.IconBackground">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">?attr/colorPrimary</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
+             animated drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_easydiary_label</item>
+        <!-- Required for animated icons -->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <!-- Required -->
+        <item name="postSplashScreenTheme">@style/AppTheme.AAF</item>
     </style>
     <style name="AppCard.Timeline">
         <item name="android:layout_width">wrap_content</item>
