@@ -1,18 +1,14 @@
 package me.blog.korn123.easydiary.activities
 
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.View
-import android.view.animation.AnticipateInterpolator
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityIntroBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
@@ -29,6 +25,8 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 class IntroActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityIntroBinding
     private lateinit var mHandler: Handler
+    private lateinit var mSplashScreen: SplashScreen
+
     override fun onResume() {
         super.onResume()
         mBinding.root.run {
@@ -39,8 +37,11 @@ class IntroActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            mSplashScreen = installSplashScreen()
+        }
 
         super.onCreate(savedInstanceState)
         mBinding = ActivityIntroBinding.inflate(layoutInflater)
@@ -49,7 +50,10 @@ class IntroActivity : AppCompatActivity() {
         rescheduleEnabledAlarms()
         FontUtils.checkFontSetting(this)
 
-        splashScreen.setKeepOnScreenCondition { true }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            mSplashScreen.setKeepOnScreenCondition { true }
+        }
+
         mHandler = object: Handler(this.mainLooper) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
@@ -65,6 +69,6 @@ class IntroActivity : AppCompatActivity() {
                     else -> {}
                 }
             }
-        }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500) }
+        }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 1000) }
     }
 }
