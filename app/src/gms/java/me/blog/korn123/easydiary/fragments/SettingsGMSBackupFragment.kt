@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.accounts.Account
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
+import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.drive.Drive
@@ -39,27 +41,32 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.convDateToTimeMillis
+import me.blog.korn123.commons.utils.EasyDiaryUtils.getCalendarInstance
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
-import me.blog.korn123.easydiary.databinding.DialogFontsBinding
-import me.blog.korn123.easydiary.databinding.DialogOptionItemBinding
+import me.blog.korn123.easydiary.databinding.DialogSyncGoogleCalendarBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.refreshApp
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
@@ -76,6 +83,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
+import java.util.Locale
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
@@ -393,6 +401,22 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
+    private fun getCurrentYearLastDatetime(): DateTime {
+        val calendar = java.util.Calendar.getInstance(Locale.getDefault()).apply {
+            set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER)
+            set(java.util.Calendar.DATE, this.getActualMaximum(java.util.Calendar.DAY_OF_MONTH))
+            set(java.util.Calendar.HOUR_OF_DAY, this.getActualMaximum(java.util.Calendar.HOUR_OF_DAY))
+            set(java.util.Calendar.MINUTE, this.getActualMaximum(java.util.Calendar.MINUTE))
+            set(java.util.Calendar.SECOND, this.getActualMaximum(java.util.Calendar.SECOND))
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+        return DateTime(calendar.timeInMillis)
+    }
+
+    private lateinit var mSDatePickerDialog: DatePickerDialog
+    private lateinit var mEDatePickerDialog: DatePickerDialog
+    private lateinit var mTimeMax: DateTime
+    private lateinit var mTimeMin: DateTime
     private fun syncGoogleCalendar() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
@@ -420,7 +444,26 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     mBinding.syncGoogleCalendarProgress.visibility = View.VISIBLE
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        val result = if (nextPageToken == null) calendarService.events().list(calendarId).setMaxResults(2000).execute() else calendarService.events().list("hanjoongcho@gmail.com").setPageToken(nextPageToken).setMaxResults(2000).execute()
+                        val result = if (nextPageToken == null) {
+                            calendarService
+                                .events()
+                                .list(calendarId)
+                                .setMaxResults(2000)
+                                .setTimeMin(mTimeMin)
+                                .setTimeMax(mTimeMax)
+                                .setSingleEvents(true)
+                                .execute()
+                        } else {
+                            calendarService
+                                .events()
+                                .list(calendarId)
+                                .setPageToken(nextPageToken)
+                                .setMaxResults(2000)
+                                .setTimeMin(mTimeMin)
+                                .setTimeMax(mTimeMax)
+                                .setSingleEvents(true)
+                                .execute()
+                        }
                         withContext(Dispatchers.Main) { progressContainer.visibility = View.GONE }
 //                        val descriptions = arrayListOf<String>()
                             result.items.forEachIndexed { index, item ->
@@ -451,10 +494,9 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             } else {
                                 withContext(Dispatchers.Main) {
                                     mBinding.syncGoogleCalendarProgress.visibility = View.GONE
+                                    requireActivity().showAlertDialog("${DateUtils.getDateTimeStringFromTimeMillis(mTimeMin.value)} ~ ${DateUtils.getDateTimeStringFromTimeMillis(mTimeMax.value)} 기간에 등록된 ${total.plus(insertCount)}건의 이벤트가 등록되었습니다.", null, null)
                                 }
                             }
-
-
                     }
                 }
                 fun fetchCalendarList() {
@@ -464,7 +506,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         withContext(Dispatchers.Main) {
                             val builder = AlertDialog.Builder(requireActivity())
                             builder.setNegativeButton(getString(android.R.string.cancel), null)
-                            val dialogOptionItemBinding = DialogOptionItemBinding.inflate(layoutInflater)
+                            val dialogSyncGoogleCalendarBinding = DialogSyncGoogleCalendarBinding.inflate(layoutInflater)
                             val calendarInfo = ArrayList<Map<String, String>>()
                             result.items.forEach { calendar ->
                                 calendarInfo.add(mapOf(
@@ -473,7 +515,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 ))
                             }
                             val optionItemAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, calendarInfo, null, null, false)
-                            dialogOptionItemBinding.run {
+                            dialogSyncGoogleCalendarBinding.run {
                                 listView.adapter = optionItemAdapter
                                 listView.setOnItemClickListener { parent, view, position, id ->
                                     calendarInfo[position]["optionValue"]?.let {
@@ -481,11 +523,57 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                         alertDialog?.dismiss()
                                     }
                                 }
+
+                                val fromCalendar = getCalendarInstance(false, -1)
+                                val toCalendar = getCalendarInstance(true, 1)
+                                mTimeMin = DateTime(fromCalendar.timeInMillis)
+                                mTimeMax = DateTime(toCalendar.timeInMillis)
+
+                                mSDatePickerDialog = DatePickerDialog(
+                                    requireContext()
+                                    , { _, year, month, dayOfMonth ->
+                                        val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+                                        mTimeMin = DateTime(startMillis)
+                                        textSyncFromDate.text = DateUtils.getDateTimeStringFromTimeMillis(startMillis)
+                                    }
+                                    , fromCalendar.get(java.util.Calendar.YEAR)
+                                    , fromCalendar.get(java.util.Calendar.MONTH)
+                                    , fromCalendar.get(java.util.Calendar.DAY_OF_MONTH)
+                                )
+
+                                mEDatePickerDialog = DatePickerDialog(
+                                    requireContext()
+                                    , { _, year, month, dayOfMonth ->
+                                        val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, true)
+                                        mTimeMax = DateTime(endMillis)
+                                        textSyncToDate.text = DateUtils.getDateTimeStringFromTimeMillis(endMillis)
+                                    }
+                                    , toCalendar.get(java.util.Calendar.YEAR)
+                                    , toCalendar.get(java.util.Calendar.MONTH)
+                                    , toCalendar.get(java.util.Calendar.DAY_OF_MONTH)
+                                )
+
+                                textSyncFromDate.run {
+                                    setOnClickListener { mSDatePickerDialog.show() }
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(false, -1))
+                                }
+                                textSyncToDate.run {
+                                    setOnClickListener { mEDatePickerDialog.show() }
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(true))
+                                }
+
+                                requireActivity().run {
+                                    FontUtils.setFontsTypeface(requireContext(), null, cardSyncOptions)
+                                    initTextSize(cardSyncOptions)
+                                    updateTextColors(cardSyncOptions)
+                                    updateAppViews(dialogSyncGoogleCalendarBinding.root)
+                                    updateCardViewPolicy(dialogSyncGoogleCalendarBinding.root)
+                                }
                             }
                             requireActivity().clearHoldOrientation()
                             progressContainer.visibility = View.GONE
                             alertDialog = builder.create().apply {
-                                requireActivity().updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogOptionItemBinding.root, "Sync Google Calendar")
+                                requireActivity().updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogSyncGoogleCalendarBinding.root, "Sync Google Calendar")
                             }
                         }
                     }
