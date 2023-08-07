@@ -165,6 +165,24 @@ object EasyDiaryUtils {
         return calendar.timeInMillis
     }
 
+    fun convDateToTimeMillis(isFullHour: Boolean = false, addYears: Int = 0): Long {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        if (addYears != 0) cal.add(Calendar.YEAR, addYears)
+        return cal.timeInMillis
+    }
+
+    fun getCalendarInstance(isFullHour: Boolean = false, addYears: Int = 0): Calendar {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        if (addYears != 0) cal.add(Calendar.YEAR, addYears)
+        return cal
+    }
+
 
     /***************************************************************************************************
      *   Image Utils
