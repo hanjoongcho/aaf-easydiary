@@ -40,6 +40,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
+    private lateinit var mDailySymbolFragment: DailySymbolFragment
     private var coroutineJob: Job? = null
 
     override fun onStart() {
@@ -71,6 +72,7 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        mDailySymbolFragment = DailySymbolFragment()
 
         mBinding.run {
             requireActivity().updateDrawableColorInnerCardView(close, Color.WHITE)
@@ -171,7 +173,7 @@ class DashboardDialogFragment : DialogFragment() {
                 replace(R.id.summary, DashBoardSummaryFragment())
 
                 // Daily Symbol
-                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+                replace(R.id.dashboard_daily_symbol, mDailySymbolFragment)
 
                 // DashBoardRank-Lifetime
                 replace(R.id.lifetime, DashBoardRankFragment().apply {
@@ -264,6 +266,9 @@ class DashboardDialogFragment : DialogFragment() {
             requireActivity().updateTextColors(root)
             requireActivity().updateAppViews(root)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
+
+            // Diary Update
+            mDailySymbolFragment.updateDailySymbol()
         }
     }
 
