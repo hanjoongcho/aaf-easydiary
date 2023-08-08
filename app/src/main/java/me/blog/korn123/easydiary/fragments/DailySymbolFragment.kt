@@ -186,7 +186,7 @@ class DailySymbolFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     mDailySymbolAdapter.notifyDataSetChanged()
 //                    month.visibility = View.VISIBLE
-//                    dailyCardRecyclerView.visibility = View.VISIBLE
+                    dailyCardRecyclerView.visibility = View.VISIBLE
                     dailyCardProgressBar.visibility = View.GONE
 //                    requireActivity().updateAppViews(selectedSymbolFlexBox)
                 }
