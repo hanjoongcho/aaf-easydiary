@@ -165,6 +165,19 @@ object EasyDiaryUtils {
         return calendar.timeInMillis
     }
 
+    fun getCalendarInstance(isFullHour: Boolean = false, addYears: Int = 0): Calendar {
+        return getCalendarInstance(isFullHour, Calendar.YEAR, addYears)
+    }
+
+    fun getCalendarInstance(isFullHour: Boolean = false, field: Int, amount: Int): Calendar {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        if (amount != 0) cal.add(field, amount)
+        return cal
+    }
+
 
     /***************************************************************************************************
      *   Image Utils
