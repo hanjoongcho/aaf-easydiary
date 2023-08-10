@@ -6,7 +6,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/SplashScreenTheme">
         <service android:name=".services.RecoverPhotoService" />
         <service android:name=".services.BackupPhotoService" />
         <service android:name=".services.FullBackupService" />

@@ -17,11 +17,18 @@
 package me.blog.korn123.easydiary.activities
 
 import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.graphics.Path
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnticipateInterpolator
 import android.widget.FrameLayout
 import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
@@ -35,11 +42,15 @@ import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
+    private lateinit var mSplashScreen: SplashScreen
     protected lateinit var mBinding: ActivityDiaryMainBinding
     protected val viewModel: DiaryMainViewModel by viewModels()
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Need to be called before setContentView or other view operation on the root view.
+        mSplashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main)
         mBinding.lifecycleOwner = this
@@ -48,6 +59,13 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         setSupportActionBar(mBinding.toolBar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
+
+        mSplashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+            updateActionbarColor()
+            showSplashExitAnimator(splashScreenViewProvider.view) {
+                splashScreenViewProvider.remove()
+            }
+        }
     }
 
     protected abstract fun createScrollable(): S
@@ -74,6 +92,73 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
                     }
                 }
             }
+        }
+    }
+
+    private fun showSplashExitAnimator(splashScreenView: View, onExit: () -> Unit = {}) {
+        // Create your custom animation set.
+        val alphaOut = ObjectAnimator.ofFloat(
+            splashScreenView,
+            View.ALPHA,
+            1f,
+            0f
+        )
+
+        // Slide up to center.
+        val slideUp = ObjectAnimator.ofFloat(
+            splashScreenView,
+            View.TRANSLATION_Y,
+            0f,
+            // iconView.translationY,
+            -(splashScreenView.height).toFloat()
+        ).apply {
+            addUpdateListener {
+                Log.d("Splash", "showSplashIconExitAnimator() translationY:${splashScreenView.translationY}")
+            }
+        }
+
+        // Slide down to center.
+        val slideDown = ObjectAnimator.ofFloat(
+            splashScreenView,
+            View.TRANSLATION_Y,
+            0f,
+            // iconView.translationY,
+            (splashScreenView.height).toFloat()
+        ).apply {
+            addUpdateListener {
+                Log.d("Splash", "showSplashIconExitAnimator() translationY:${splashScreenView.translationY}")
+            }
+        }
+
+        val scaleOut = ObjectAnimator.ofFloat(
+            splashScreenView,
+            View.SCALE_X,
+            View.SCALE_Y,
+            Path().apply {
+                moveTo(1.0f, 1.0f)
+                lineTo(0f, 0f)
+            }
+        )
+
+        AnimatorSet().run {
+            duration = 1200
+            interpolator = AnticipateInterpolator()
+            Log.d("Splash", "showSplashExitAnimator() duration:$duration")
+
+            // playTogether(alphaOut, slideUp)
+//             playTogether(scaleOut)
+            playTogether(alphaOut)
+            // playTogether(scaleOut, slideUp, alphaOut)
+            // playTogether(slideUp, alphaOut)
+//            playTogether(slideDown, alphaOut)
+
+            doOnEnd {
+                Log.d("Splash", "showSplashExitAnimator() onEnd")
+                Log.d("Splash", "showSplashExitAnimator() onEnd remove")
+                onExit()
+            }
+
+            start()
         }
     }
 

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Theme -->
-    <style name="AppTheme.Starting" parent="Theme.SplashScreen.IconBackground">
-        <!-- Set the splash screen background, animated icon, and animation duration. -->
-        <item name="windowSplashScreenBackground">#FFFFFF</item>
-
-        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
-             animated drawable. One of these is required. -->
+    <style name="SplashScreenTheme" parent="SplashScreenTheme.Base">
+        <!-- animated icon -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/aaf_easydiary</item>
-        <!-- Required for animated icons -->
-        <item name="windowSplashScreenAnimationDuration">1000</item>
 
-        <!-- Set the theme of the Activity that directly follows your splash screen. -->
-        <!-- Required -->
-        <item name="postSplashScreenTheme">@style/AppTheme.AAF</item>
+        <!-- screen background color -->
+        <item name="windowSplashScreenBackground">#F8F8F8</item>
+
+        <!-- icon background color-->
+<!--        <item name="android:windowSplashScreenIconBackgroundColor">@color/iconBackgroundColor</item>-->
+
+        <!-- brand image-->
+<!--        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_brand_tm_bold_white</item>-->
     </style>
 </resources>

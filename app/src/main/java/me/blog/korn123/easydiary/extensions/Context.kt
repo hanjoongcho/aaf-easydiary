@@ -1024,7 +1024,7 @@ fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
 
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean, colorName: String) {
 //    val className = "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
-    val className = "${appId.removeSuffix(".debug")}.activities.IntroActivity.$colorName"
+    val className = "${appId.removeSuffix(".dev")}.activities.IntroActivity.$colorName"
     val state = if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
     try {
         packageManager.setComponentEnabledSetting(ComponentName(appId, className), state, PackageManager.DONT_KILL_APP)

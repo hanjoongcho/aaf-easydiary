@@ -41,7 +41,19 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="DialogButton" />
-    <style name="AppTheme.Starting" parent="AppTheme.NoActionBar"/>
+
+    <!-- Splash Theme -->
+    <style name="SplashScreenTheme.Base" parent="Theme.SplashScreen">
+        <!-- screen background color -->
+        <item name="windowSplashScreenBackground">#F8F8F8</item>
+
+        <!-- target activity theme-->
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+    </style>
+    <style name="SplashScreenTheme" parent="SplashScreenTheme.Base">
+        <!-- specify static icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_easydiary_label</item>
+    </style>
 
     <!-- Additional App Theme -->
     <style name="AppTheme.Green_450" parent="AppTheme.NoActionBar">
