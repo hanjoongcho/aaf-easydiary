@@ -78,7 +78,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run {
             if (config.isThemeChanged) {
                 config.isThemeChanged = false
-                startMainActivityWithClearTask()
+//                startMainActivityWithClearTask()
+                refreshApp()
             }
         }
     }

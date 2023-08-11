@@ -279,9 +279,10 @@ fun Activity.startActivityWithTransition(intent: Intent) {
 //}
 
 fun Activity.refreshApp() {
-    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
-    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    TransitionHelper.startActivityWithTransition(this, readDiaryIntent)
+    Intent(this, DiaryMainActivity::class.java).apply {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        TransitionHelper.startActivityWithTransition(this@refreshApp, this)
+    }
 }
 
 fun Activity.startMainActivityWithClearTask() {

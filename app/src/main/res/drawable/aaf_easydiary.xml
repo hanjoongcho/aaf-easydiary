@@ -65,7 +65,7 @@
                 android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
-                android:interpolator="@android:anim/fast_out_slow_in"/>
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
     <target android:name="path">
@@ -77,7 +77,7 @@
                 android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
-                android:interpolator="@android:anim/fast_out_slow_in"/>
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
     <target android:name="path_1">

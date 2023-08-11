@@ -23,6 +23,7 @@ import android.graphics.Path
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import android.widget.FrameLayout
 import androidx.activity.viewModels
@@ -60,12 +61,13 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
 
-        mSplashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
-            updateActionbarColor()
-            showSplashExitAnimator(splashScreenViewProvider.view) {
-                splashScreenViewProvider.remove()
-            }
-        }
+        mSplashScreen.setKeepOnScreenCondition { !viewModel.isDataReady() }
+//        mSplashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+//            updateActionbarColor()
+//            showSplashExitAnimator(splashScreenViewProvider.view) {
+//                splashScreenViewProvider.remove()
+//            }
+//        }
     }
 
     protected abstract fun createScrollable(): S
@@ -141,7 +143,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         )
 
         AnimatorSet().run {
-            duration = 1200
+            duration = 1000
             interpolator = AnticipateInterpolator()
             Log.d("Splash", "showSplashExitAnimator() duration:$duration")
 
