@@ -23,6 +23,7 @@ import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import java.text.SimpleDateFormat
@@ -68,8 +69,10 @@ class DailySymbolFragment : Fragment() {
                 }
             }
             switchCalendar.setOnCheckedChangeListener { _, isChecked ->
+                config.enableDashboardCalendar = isChecked
                 layoutCalendarContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
             }
+            switchCalendar.isChecked = config.enableDashboardCalendar
         }
 
         val startOfWeek = config.calendarStartDay

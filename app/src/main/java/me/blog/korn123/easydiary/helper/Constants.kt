@@ -597,6 +597,7 @@ const val SETTING_GALLERY_SPAN_COUNT_PORTRAIT = "setting_gallery_span_count_port
 const val SETTING_ENABLE_STATUSBAR_DARKEN_COLOR = "setting_enable_statusbar_darken_color"
 const val SETTING_ENABLE_WELCOME_DASHBOARD_POPUP = "setting_enable_welcome_dashboard_popup"
 const val SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT = "setting_enable_dday_flexbox_layout"
+const val SETTING_ENABLE_DASHBOARD_CALENDAR = "setting_enable_dashboard_calendar"
 const val SETTING_DATETIME_FORMAT = "setting_datetime_format"
 const val SETTING_ENABLE_MARKDOWN = "setting_enable_markdown"
 const val SETTING_VISIBLE_UNLINKED_PHOTOS = "setting_visible_unlinked_photos"
