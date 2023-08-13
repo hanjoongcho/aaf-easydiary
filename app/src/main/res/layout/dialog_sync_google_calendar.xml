@@ -10,6 +10,7 @@
         android:id="@+id/card_sync_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:applyCardBackgroundColor="true"
         app:layout_constraintBottom_toTopOf="@+id/view_divider"
         app:layout_constraintTop_toTopOf="parent">
 
