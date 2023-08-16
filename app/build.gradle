@@ -26,7 +26,7 @@ android {
      * @minSdkVersion: 19 (Android 4.4 KitKat)
      */
     defaultConfig {
-        applicationId "me.blog.korn123.easydiary"
+        applicationId "me.blog.korn123.easydiary.dev"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 300
