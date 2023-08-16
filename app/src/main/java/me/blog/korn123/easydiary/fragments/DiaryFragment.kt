@@ -104,6 +104,44 @@ class DiaryFragment : Fragment() {
             setRevealWidth(0, requireContext().dpToPixel(30F))
 //            setIndicatorVisibility(View.INVISIBLE)
 //            removeDefaultPageTransformer()
+
+            when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
+                MODE_PREVIOUS_100 -> {
+                    setPageMargin(requireContext().dpToPixel(0F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
+                    removeDefaultPageTransformer()
+                }
+                else -> {
+                    setPageMargin(requireContext().dpToPixel(0F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
+                    removeDefaultPageTransformer()
+                }
+            }
+
+            FigureIndicatorView(requireContext()).apply {
+                setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
+                setBackgroundColor(config.primaryColor)
+                setIndicatorGravity(IndicatorGravity.END)
+                setIndicatorView(this)
+            }
+
+            setOnPageClickListener { _, position ->
+                TransitionHelper.startActivityWithTransition(
+                    requireActivity(),
+                    Intent(requireContext(), DiaryReadingActivity::class.java).apply {
+                        putExtra(DIARY_SEQUENCE, mDiaryList[position].sequence)
+                    }
+                )
+            }
+            registerOnPageChangeCallback(object: OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    mBannerDiary.adapter.notifyDataSetChanged()
+                }
+            })
+            create()
         }
     }
 
@@ -150,46 +188,9 @@ class DiaryFragment : Fragment() {
                 .run { if (this.size > 100) this.subList(0, 100) else this }
         }
         mDiaryList.addAll(diaryList)
-        mBannerDiary.run {
-            when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
-                MODE_PREVIOUS_100 -> {
-                    setPageMargin(requireContext().dpToPixel(0F))
-                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
-                    removeDefaultPageTransformer()
-                }
-                else -> {
-                    setPageMargin(requireContext().dpToPixel(0F))
-                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
-                    removeDefaultPageTransformer()
-                }
-            }
-
-            FigureIndicatorView(requireContext()).apply {
-                setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
-                setBackgroundColor(config.primaryColor)
-                setIndicatorGravity(IndicatorGravity.END)
-                setIndicatorView(this)
-            }
-
-            setOnPageClickListener { _, position ->
-                TransitionHelper.startActivityWithTransition(
-                    requireActivity(),
-                    Intent(requireContext(), DiaryReadingActivity::class.java).apply {
-                        putExtra(DIARY_SEQUENCE, diaryList[position].sequence)
-                    }
-                )
-            }
-            registerOnPageChangeCallback(object: OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    mBannerDiary.adapter.notifyDataSetChanged()
-                }
-            })
-            create(mDiaryList)
-        }
         mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
+        mBannerDiary.data.clear()
+        mBannerDiary.addData(mDiaryList)
     }
 
     companion object {
