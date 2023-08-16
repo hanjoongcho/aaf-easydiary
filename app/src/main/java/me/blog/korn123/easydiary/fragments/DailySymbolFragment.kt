@@ -18,6 +18,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
@@ -26,6 +27,9 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,6 +41,7 @@ class DailySymbolFragment : Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentDailySymbolBinding
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
+    private lateinit var mCalendarFragment: CaldroidFragmentEx
     private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
     private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
@@ -61,6 +66,50 @@ class DailySymbolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val startOfWeek = config.calendarStartDay
+        mCalendarFragment = CalendarFragment().apply {
+            arguments =
+                Bundle().apply { putInt(CaldroidFragment.START_DAY_OF_WEEK, startOfWeek) }
+            caldroidListener = object : CaldroidListener() {
+                override fun onSelectDate(date: Date, view: View) {
+                    val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
+                    val selectedItems = EasyDiaryDbHelper.findDiaryByDateString(formatter.format(date))
+
+                    clearSelectedDates()
+                    setSelectedDate(date)
+                    refreshViewOnlyCurrentPage()
+
+                    if (selectedItems.isNotEmpty()) {
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(requireContext(), DiaryReadingActivity::class.java).apply {
+                                putExtra(DIARY_SEQUENCE, selectedItems[0].sequence)
+                            }
+                        )
+                    }
+                }
+                override fun onChangeMonth(month: Int, year: Int) {
+                    val monthYearFlag =
+                        android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
+                    val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
+                    val calendar = Calendar.getInstance(Locale.getDefault())
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, month - 1)
+                    calendar.set(Calendar.DATE, 1)
+                    val monthTitle = android.text.format.DateUtils.formatDateRange(
+                        requireContext(),
+                        monthYearFormatter,
+                        calendar.timeInMillis,
+                        calendar.timeInMillis,
+                        monthYearFlag
+                    ).toString()
+                    mBinding.textCalendarDate.text = monthTitle.uppercase(Locale.getDefault())
+                }
+
+                override fun onLongClickDate(date: Date?, view: View?) {}
+                override fun onCaldroidViewCreated() {}
+            }
+        }
         initializeDailySymbol()
         mBinding.run {
             editSymbolFilter.setOnClickListener {
@@ -75,35 +124,9 @@ class DailySymbolFragment : Fragment() {
             switchCalendar.isChecked = config.enableDashboardCalendar
         }
 
-        val startOfWeek = config.calendarStartDay
-        childFragmentManager.beginTransaction().run {
-            replace(R.id.calendar, CalendarFragment().apply {
-                arguments =
-                    Bundle().apply { putInt(CaldroidFragment.START_DAY_OF_WEEK, startOfWeek) }
-                caldroidListener = object : CaldroidListener() {
-                    override fun onSelectDate(date: Date, view: View) {}
-                    override fun onChangeMonth(month: Int, year: Int) {
-                        val monthYearFlag =
-                            android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
-                        val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
-                        val calendar = Calendar.getInstance(Locale.getDefault())
-                        calendar.set(Calendar.YEAR, year)
-                        calendar.set(Calendar.MONTH, month - 1)
-                        calendar.set(Calendar.DATE, 1)
-                        val monthTitle = android.text.format.DateUtils.formatDateRange(
-                            requireContext(),
-                            monthYearFormatter,
-                            calendar.timeInMillis,
-                            calendar.timeInMillis,
-                            monthYearFlag
-                        ).toString()
-                        mBinding.textCalendarDate.text = monthTitle.uppercase(Locale.getDefault())
-                    }
 
-                    override fun onLongClickDate(date: Date?, view: View?) {}
-                    override fun onCaldroidViewCreated() {}
-                }
-            })
+        childFragmentManager.beginTransaction().run {
+            replace(R.id.calendar, mCalendarFragment)
             commitNow()
         }
     }
