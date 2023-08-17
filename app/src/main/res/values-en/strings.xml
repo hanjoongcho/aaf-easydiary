@@ -751,7 +751,7 @@
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
     <string name="preferences_category_backup_restore">Backup and Restore</string>
-    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="preferences_category_backup_restore_sub">Google API</string>
     <string name="backup_attach_photo_title">Backup attached photos</string>
     <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
     <string name="recover_attach_photo_title">Recover attached photos</string>
@@ -868,8 +868,8 @@
     <string name="send_email_attach_excel_title">Excel file creation and email sending</string>
     <string name="send_email_attach_excel_description">All content except the attached photo is created as an Excel file and attached to the email.</string>
     <string name="storage_migration_message">Storage location changes will be made in accordance with the Android 10 Scoped Storage policy. This job runs only once.</string>
-    <string name="google_drive_account_sign_out_title">Reset Google Drive linked account</string>
-    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
+    <string name="google_drive_account_sign_out_title">Reset Google linked account</string>
+    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google linked account.</string>
     <string name="calendar_font_scale_title">Set calendar font size</string>
     <string name="calendar_font_scale_description">Scales the font size inside the calendar based on the set global font size.</string>
     <string name="calendar_font_scale_disable">Do not use</string>
@@ -934,8 +934,8 @@
     <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
     <string name="google_drive_account_information_title">Linked Google account information</string>
     <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
-    <string name="google_drive_account_sign_in_title">Link Google Drive account</string>
-    <string name="google_drive_account_sign_in_description">Connect your account to Google Drive for easy diary data backup.</string>
+    <string name="google_drive_account_sign_in_title">Sign in with Google</string>
+    <string name="google_drive_account_sign_in_description">Sign in to your Google account to backup your diary data using Google Drive or create a diary using schedules in Google Calendar.</string>
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>
     <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
     <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
