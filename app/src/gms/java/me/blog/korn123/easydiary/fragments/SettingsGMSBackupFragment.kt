@@ -662,7 +662,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         mBinding.run {
             when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
                 true -> {
-                    profilePhoto.visibility = View.VISIBLE
+//                    profilePhoto.visibility = View.VISIBLE
                     signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
                     GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run {
                         val sb = StringBuilder()
@@ -676,9 +676,10 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     }
                 }
                 false -> {
-                    profilePhoto.visibility = View.GONE
+//                    profilePhoto.visibility = View.GONE
                     signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
                     accountInfo.text = getString(R.string.google_drive_account_sign_in_description)
+                    profilePhoto.setImageResource(R.drawable.logo_google_oauth2)
                 }
             }
         }
