@@ -133,7 +133,7 @@ class DailySymbolFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mCalendarFragment.refreshView()
+        mCalendarFragment.refreshViewOnlyCurrentPage()
     }
 
     override fun onDestroy() {
