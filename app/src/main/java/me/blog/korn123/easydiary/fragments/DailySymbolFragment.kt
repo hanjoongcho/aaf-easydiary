@@ -131,6 +131,11 @@ class DailySymbolFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mCalendarFragment.refreshView()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mInitializeDailySymbolJob?.run { if (isActive) cancel() }
