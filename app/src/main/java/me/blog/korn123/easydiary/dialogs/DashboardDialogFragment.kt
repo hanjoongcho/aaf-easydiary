@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,6 +86,7 @@ class DashboardDialogFragment : DialogFragment() {
                 }, 300)
 
             }
+            layoutProgressContainer.setBackgroundColor(config.primaryColor)
 
             requireActivity().getDashboardCardWidth(0.9F).also {
                 lifetime.layoutParams.width = it
@@ -262,14 +265,30 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
+            layoutProgressContainer.visibility = View.VISIBLE
+            progress.visibility = View.VISIBLE
             root.setBackgroundColor(getDashboardBackgroundColor())
             requireActivity().updateTextColors(root)
             requireActivity().updateAppViews(root)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
-
-            // Diary Update
-            mDailySymbolFragment.updateDailySymbol()
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            mBinding.run {
+                // Diary Update
+                mDailySymbolFragment.updateDailySymbol()
+
+                // FIXME:
+                // This is workaround.
+                // For pages that are invisible but have already been loaded, it will not be updated.
+                mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    layoutProgressContainer.visibility = View.GONE
+                    progress.visibility = View.GONE
+                }, 300)
+            }
+        }, 300)
     }
 
     override fun onDestroy() {

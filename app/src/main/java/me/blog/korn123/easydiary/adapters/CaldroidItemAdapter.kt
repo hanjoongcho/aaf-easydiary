@@ -11,6 +11,7 @@ import com.roomorama.caldroid.CaldroidGridAdapter
 import hirondelle.date4j.DateTime
 import io.realm.Sort
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -22,6 +23,8 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.SETTING_DATETIME_FORMAT
+import java.util.TimeZone
 
 class CaldroidItemAdapter(
         val activity: Activity,

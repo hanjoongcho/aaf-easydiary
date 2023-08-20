@@ -65,6 +65,7 @@
             android:visibility="gone" />
 
         <androidx.core.widget.ContentLoadingProgressBar
+            android:visibility="gone"
             android:id="@+id/dailyCardProgressBar"
             style="?android:progressBarStyleLarge"
             android:layout_width="30dp"
