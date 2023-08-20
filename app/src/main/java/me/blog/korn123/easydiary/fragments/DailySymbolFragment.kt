@@ -41,7 +41,7 @@ class DailySymbolFragment : Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentDailySymbolBinding
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
-    private lateinit var mCalendarFragment: CaldroidFragmentEx
+    public lateinit var mCalendarFragment: CaldroidFragmentEx
     private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
     private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
@@ -133,7 +133,8 @@ class DailySymbolFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mCalendarFragment.refreshViewOnlyCurrentPage()
+
+
     }
 
     override fun onDestroy() {
@@ -198,7 +199,7 @@ class DailySymbolFragment : Fragment() {
         mBinding.run {
 //            month.visibility = View.GONE
 //            dailyCardRecyclerView.visibility = View.GONE
-            dailyCardProgressBar.visibility = View.VISIBLE
+//            dailyCardProgressBar.visibility = View.VISIBLE
             selectedSymbolFlexBox.removeAllViews()
 
             mUpdateDailyCardJob = CoroutineScope(Dispatchers.IO).launch {
@@ -215,7 +216,7 @@ class DailySymbolFragment : Fragment() {
                     mDailySymbolAdapter.notifyDataSetChanged()
 //                    month.visibility = View.VISIBLE
                     dailyCardRecyclerView.visibility = View.VISIBLE
-                    dailyCardProgressBar.visibility = View.GONE
+//                    dailyCardProgressBar.visibility = View.GONE
 //                    requireActivity().updateAppViews(selectedSymbolFlexBox)
                 }
 //                requireActivity().runOnUiThread {
