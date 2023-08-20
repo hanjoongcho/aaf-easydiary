@@ -980,7 +980,11 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         }
 
         refreshMonthTitleTextView()
-        datePagerAdapters[currentVirtualPosition].notifyDataSetChanged()
+
+        datePagerAdapters[currentVirtualPosition].run {
+            updateToday()
+            notifyDataSetChanged()
+        }
     }
 
     /**
