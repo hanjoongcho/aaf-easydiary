@@ -205,7 +205,7 @@ object EasyDiaryDbHelper {
                 .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
                 .equalTo("dateString", dateString)
                 .findAll()
-                .sort("sequence", sort).toList()
+                .sort("currentTimeMillis", sort).toList()
     }
 
     fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUri> {
