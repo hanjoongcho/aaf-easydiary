@@ -30,7 +30,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <me.blog.korn123.easydiary.views.FixedTextView
+                app:applyGlobalSize="false"
+                android:textSize="13dp"
                 android:id="@+id/text_sync_from_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -40,7 +42,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="7"
                 app:layout_constraintStart_toEndOf="@+id/text_sync_from_date_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/text_sync_from_date_label"
+                app:layout_constraintTop_toTopOf="@+id/text_sync_from_date_label" />
 
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/text_sync_to_date_label"
@@ -54,7 +57,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_sync_from_date" />
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <me.blog.korn123.easydiary.views.FixedTextView
+                app:applyGlobalSize="false"
+                android:textSize="13dp"
                 android:id="@+id/text_sync_to_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -64,7 +69,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="7"
                 app:layout_constraintStart_toEndOf="@+id/text_sync_to_date_label"
-                app:layout_constraintTop_toBottomOf="@+id/text_sync_from_date" />
+                app:layout_constraintTop_toTopOf="@+id/text_sync_to_date_label"
+                app:layout_constraintBottom_toBottomOf="@+id/text_sync_to_date_label" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </me.blog.korn123.easydiary.views.FixedCardView>
 

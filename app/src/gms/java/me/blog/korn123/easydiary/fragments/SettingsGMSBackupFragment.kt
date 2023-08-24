@@ -559,7 +559,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 }
                                 textSyncToDate.run {
                                     setOnClickListener { mEDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(true))
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(true, 1))
                                 }
 
                                 requireActivity().run {
