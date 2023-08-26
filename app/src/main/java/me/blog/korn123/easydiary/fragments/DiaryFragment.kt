@@ -154,7 +154,7 @@ class DiaryFragment : Fragment() {
                 0,
                 0,
                 0
-            ).filter { item -> item.weather in 80..81 }
+            ).filter { item -> item.weather in 80..81 }.reversed()
             MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
                 null,
                 config.diarySearchQueryCaseSensitive,
