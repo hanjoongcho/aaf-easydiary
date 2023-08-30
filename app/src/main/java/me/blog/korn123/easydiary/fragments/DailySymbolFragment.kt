@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
-import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
@@ -44,13 +44,11 @@ class DailySymbolFragment : Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentDailySymbolBinding
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
-    public lateinit var mCalendarFragment: CaldroidFragmentEx
+    lateinit var mCalendarFragment: CaldroidFragmentEx
     private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
     private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
     }
-    private var mInitializeDailySymbolJob: Job? = null
-    private var mUpdateDailyCardJob: Job? = null
 
 
     /***************************************************************************************************
@@ -157,8 +155,6 @@ class DailySymbolFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mInitializeDailySymbolJob?.run { if (isActive) cancel() }
-        mUpdateDailyCardJob?.run { if (isActive) cancel() }
     }
 
 
@@ -167,12 +163,6 @@ class DailySymbolFragment : Fragment() {
      *
      ***************************************************************************************************/
     private fun initializeDailySymbol() {
-        val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
-        val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-        val cal = Calendar.getInstance()
-        cal.time = Date()
-        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()).uppercase()
-
         mDailySymbolAdapter = DailySymbolAdapter(
             requireActivity(),
             mDailySymbolList
@@ -189,27 +179,35 @@ class DailySymbolFragment : Fragment() {
             })
         }
 
-        mInitializeDailySymbolJob = CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
-            for (num in 1..365) {
-                mDailySymbolList.add(
-                    DailySymbolAdapter.DailySymbol(
-                        dateFormat.format(cal.time),
-                        cal.get(Calendar.DAY_OF_WEEK),
-                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!,
-                        dayOfMonth.format(cal.time),
-                        cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!.uppercase()
-                    )
+        init365Day()
+        updateDailyCard()
+    }
+
+    private fun init365Day() {
+        val cal = Calendar.getInstance()
+        val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
+        cal.time = Date()
+        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()).uppercase()
+
+        mDailySymbolList.clear()
+        for (num in 1..365) {
+            mDailySymbolList.add(
+                DailySymbolAdapter.DailySymbol(
+                    dateFormat.format(cal.time),
+                    cal.get(Calendar.DAY_OF_WEEK),
+                    cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!,
+                    dayOfMonth.format(cal.time),
+                    cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!.uppercase()
                 )
-                cal.add(Calendar.DATE, -1)
-            }
-            withContext(Dispatchers.Main) {
-                updateDailyCard()
-            }
+            )
+            cal.add(Calendar.DATE, -1)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateDailySymbol() {
+        init365Day()
         mDailySymbolAdapter.notifyDataSetChanged()
     }
 
@@ -220,23 +218,18 @@ class DailySymbolFragment : Fragment() {
 //            dailyCardProgressBar.visibility = View.VISIBLE
             selectedSymbolFlexBox.removeAllViews()
 
-            mUpdateDailyCardJob = CoroutineScope(Dispatchers.IO).launch {
-                config.selectedSymbols.split(",").map { sequence ->
-                    val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
-                    withContext(Dispatchers.Main) {
-                        FlavorUtils.initWeatherView(requireContext(), partialDailySymbolBinding.dailySymbol, sequence.toInt())
-                        requireActivity().updateDashboardInnerCard(partialDailySymbolBinding.root)
-                        selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
-                    }
-                }
+            config.selectedSymbols.split(",").map { sequence ->
+                val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
+                FlavorUtils.initWeatherView(requireContext(), partialDailySymbolBinding.dailySymbol, sequence.toInt())
+                requireActivity().updateDashboardInnerCard(partialDailySymbolBinding.root)
+                selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
+            }
 
-                withContext(Dispatchers.Main) {
-                    mDailySymbolAdapter.notifyDataSetChanged()
+            mDailySymbolAdapter.notifyDataSetChanged()
 //                    month.visibility = View.VISIBLE
-                    dailyCardRecyclerView.visibility = View.VISIBLE
+            dailyCardRecyclerView.visibility = View.VISIBLE
 //                    dailyCardProgressBar.visibility = View.GONE
 //                    requireActivity().updateAppViews(selectedSymbolFlexBox)
-                }
 //                requireActivity().runOnUiThread {
 //                    mDailySymbolAdapter.notifyDataSetChanged()
 //                    month.visibility = View.VISIBLE
@@ -244,7 +237,6 @@ class DailySymbolFragment : Fragment() {
 //                    dailyCardProgressBar.visibility = View.GONE
 //                    requireActivity().updateAppViews(selectedSymbolFlexBox)
 //                }
-            }
         }
     }
 }
