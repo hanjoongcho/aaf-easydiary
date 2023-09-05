@@ -51,6 +51,7 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
@@ -581,5 +582,54 @@ object EasyDiaryUtils {
             null
         }
         return bitmap
+    }
+
+    /***************************************************************************************************
+     *   ETC.
+     *
+     ***************************************************************************************************/
+    fun applyFilter(mode: String?) : List<Diary> {
+        val diaryList: List<Diary> = when (mode) {
+            DiaryFragment.MODE_TASK_TODO -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 80..81 }.reversed()
+            DiaryFragment.MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                81
+            )
+            DiaryFragment.MODE_TASK_DONE -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 82..83 }
+            DiaryFragment.MODE_TASK_CANCEL -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                83
+            )
+            DiaryFragment.MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }.reversed()
+            else -> EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0)
+                .filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis <= System.currentTimeMillis() }
+                .run { if (this.size > 100) this.subList(0, 100) else this }
+        }
+
+        return diaryList
     }
 }
