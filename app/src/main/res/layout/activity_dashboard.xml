@@ -63,12 +63,6 @@
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/fragment_diary_done"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <LinearLayout
                 android:id="@+id/fragment_diary_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +97,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_diary_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/dDay"
