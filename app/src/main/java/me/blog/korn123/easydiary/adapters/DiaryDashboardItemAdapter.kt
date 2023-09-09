@@ -2,9 +2,13 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -63,6 +67,7 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
 
                 textContents.maxLines = when (context.config.enableContentsSummary) {
                     true -> {
+                        textContents.ellipsize = TextUtils.TruncateAt.END
                         context.config.summaryMaxLines
                     }
 
@@ -71,6 +76,10 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                     }
                 }
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
+                if (activity.config.enableMarkdown) {
+                    textContents.tag = diary.sequence
+                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence)
+                }
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringForceFormatting(diary.currentTimeMillis, activity)

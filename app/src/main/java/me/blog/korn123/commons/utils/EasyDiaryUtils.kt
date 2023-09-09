@@ -17,6 +17,8 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import android.text.Html
 import android.text.SpannableString
@@ -403,6 +405,19 @@ object EasyDiaryUtils {
         view.setOnTouchListener { _, _ -> true }
     }
 
+    fun applyMarkDownEllipsize(textContents: TextView, sequence: Int, delayMillis: Long = 0) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (textContents.tag == sequence) {
+                val max = textContents.maxLines
+                val layout = textContents.layout
+                if ((layout?.lineCount ?: 0) > max) {
+                    val end = layout.getLineEnd(max - 1);
+                    textContents.setText(textContents.text.subSequence(0, end - 3), TextView.BufferType.SPANNABLE)
+                    textContents.append("...")
+                }
+            }
+        }, delayMillis)
+    }
 
     /***************************************************************************************************
      *   Dialog Utils
