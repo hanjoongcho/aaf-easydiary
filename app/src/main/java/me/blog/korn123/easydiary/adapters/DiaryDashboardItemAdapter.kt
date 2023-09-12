@@ -107,8 +107,16 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
 
                     FlavorUtils.initWeatherView(this, imageSymbol, diary.weather)
 
+                    when ((diary.photoUris?.size ?: 0) > 0) {
+                        true -> {
+                            photoViews.visibility = View.VISIBLE
+                        }
+
+                        false -> photoViews.visibility = View.GONE
+                    }
+
                     photoViews.removeAllViews()
-                    if (diary.photoUris?.size ?: 0 > 0) {
+                    if ((diary.photoUris?.size ?: 0) > 0) {
                         diary.photoUrisWithEncryptionPolicy()?.map {
                             val imageXY = dpToPixel(32F)
                             val imageView = ImageView(this)

@@ -410,9 +410,9 @@ object EasyDiaryUtils {
                 val max = textContents.maxLines
                 val layout = textContents.layout
                 if ((layout?.lineCount ?: 0) > max) {
-                    val end = layout.getLineEnd(max - 1);
-                    textContents.setText(textContents.text.subSequence(0, end - 3), TextView.BufferType.SPANNABLE)
-                    textContents.append("...")
+                    val end = layout.getLineEnd(max - 1)
+                    textContents.setText(textContents.text.subSequence(0, end - 1), TextView.BufferType.SPANNABLE)
+                    textContents.append("…")
                 }
             }
         }, delayMillis)
