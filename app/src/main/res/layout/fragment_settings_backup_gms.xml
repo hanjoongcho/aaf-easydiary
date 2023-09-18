@@ -189,7 +189,7 @@
 
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/SettingsTitle"
-                    android:text="[BETA] Sync Google Calendar" />
+                    android:text="@string/sync_google_calendar_event_title" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:visibility="gone"
@@ -212,7 +212,7 @@
                         style="@style/SettingsSummary"
                         android:layout_marginTop="0dp"
                         android:layout_marginLeft="10dp"
-                        android:text="A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally." />
+                        android:text="@string/sync_google_calendar_event_summary" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </LinearLayout>

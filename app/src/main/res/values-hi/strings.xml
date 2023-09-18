@@ -726,6 +726,10 @@
         v1.4.301.202308250 / 2023.08.25\n
 		डैशबोर्ड UX सुधार
     </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Added automatic diary creation function using Google Calendar events
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1005,4 +1009,6 @@
     <string name="total_photo_count">कुल फ़ोटो की संख्या</string>
     <string name="delete_unlinked_photo">अनलिंक की गई फ़ोटो हटाएँ</string>
     <string name="delete_unlinked_photo_confirm_message">क्या आप डिवाइस स्टोरेज से लिंक जानकारी के बिना फ़ोटो हटाना चाहते हैं?\nभले ही इसे डिवाइस स्टोरेज से हटा दिया गया हो, फिर भी इसे Google ड्राइव से हटाया नहीं जाता है या डिवाइस पर अलग से फ़ाइलों का बैकअप नहीं लिया जाता है।</string>
+    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
+    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
 </resources>

@@ -726,6 +726,10 @@
         v1.4.301.202308250 / 2023.08.25\n
         ダッシュボードのUX改善
     </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Googleカレンダーのイベントを利用した自動日記作成機能を追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -872,8 +876,8 @@
     <string name="send_email_attach_excel_title">エクセルファイルの作成と電子メールで送信</string>
     <string name="send_email_attach_excel_description">添付写真を除くすべてのコンテンツをExcelファイルに生成し、電子メールに添付します。</string>
     <string name="storage_migration_message">Android10 Scoped Storage政策による格納場所の変更が行われます。この作業は、一度だけ実行されます。</string>
-    <string name="google_drive_account_sign_out_title">Googleのドライブ連動アカウントの初期化</string>
-    <string name="google_drive_account_sign_out_description">Googleのドライブ連動アカウントを利用して、イージーダイアリーで発行されたトークン情報をクリアします。</string>
+    <string name="google_drive_account_sign_out_title">Google連動アカウントの初期化</string>
+    <string name="google_drive_account_sign_out_description">Googleアカウントを利用してイージー日記で発行されたトークン情報をクリアします。</string>
     <string name="calendar_font_scale_title">カレンダーフォントサイズの設定</string>
     <string name="calendar_font_scale_description">設定されたグローバルなフォントサイズを基準にカレンダー内のフォント・サイズのスケールを設定します。</string>
     <string name="calendar_font_scale_disable">使ってはいけません</string>
@@ -938,8 +942,8 @@
     <string name="permission_confirmation_dialog_message">Easy Diaryを使用するには認証が必要です。</string>
     <string name="google_drive_account_information_title">Googleのドライブ連動アカウント情報</string>
     <string name="schedule_backup_gms_description">ダイアリーのバックアップ (Google Drive)\nスケジュールを登録すると、設定された日付と時間に合わせて、添付された写真とデータベースファイルをGoogleドライブにバックアップし、作業結果を通知メッセージで提供します。</string>
-    <string name="google_drive_account_sign_in_title">Googleのドライブアカウント接続</string>
-    <string name="google_drive_account_sign_in_description">イージーダイアリーデータのバックアップのために、Googleドライブアカウントを接続します。</string>
+    <string name="google_drive_account_sign_in_title">Googleアカウントのリンク</string>
+    <string name="google_drive_account_sign_in_description">Google アカウントにサインインして、Google ドライブを使用して日記をバックアップおよび復元したり、Google カレンダーのイベントを使用して日記を自動的に作成したりできます。</string>
     <string name="schedule_gms_error_title">スケジュール作業待機中</string>
     <string name="schedule_gms_error_message">デバイスがDozeモードに入り、ネットワークを使用したバックアップ操作が失敗しました。 通知ウィンドウをタッチすると、バックアップが再開されます。</string>
     <string name="schedule_pending_guide_message">待機中のスケジュールジョブが開始されました。</string>
@@ -1005,4 +1009,6 @@
     <string name="total_photo_count">全体添付写真数</string>
     <string name="delete_unlinked_photo">リンク情報のない添付写真を削除</string>
     <string name="delete_unlinked_photo_confirm_message">リンク情報のない写真をデバイス ストアから削除しますか？\nデバイス ストアから削除されても、Google ドライブまたはデバイスに個別にバックアップされたファイルからは削除されません。</string>
+    <string name="sync_google_calendar_event_title">[BETA] Googleカレンダーの同期</string>
+    <string name="sync_google_calendar_event_summary">Googleカレンダーに登録されたイベントを使用して日記を自動的に作成します。 すでに同期されている日記のイベントは追加されません。</string>
 </resources>

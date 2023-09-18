@@ -726,6 +726,10 @@
         v1.4.301.202308250 / 2023.08.25\n
         대시보드 UX 개선
     </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        구글캘린더 이벤트를 이용한 다이어리 자동생성기능 추가
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -872,8 +876,8 @@
     <string name="send_email_attach_excel_title">엑셀파일 생성 및 이메일 전송</string>
     <string name="send_email_attach_excel_description">첨부 사진을 제외한 모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
     <string name="storage_migration_message">Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다.</string>
-    <string name="google_drive_account_sign_out_title">구글드라이브 연동계정 초기화</string>
-    <string name="google_drive_account_sign_out_description">구글드라이브 연동계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다.</string>
+    <string name="google_drive_account_sign_out_title">구글 연동계정 초기화</string>
+    <string name="google_drive_account_sign_out_description">구글계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다.</string>
     <string name="calendar_font_scale_title">캘린더 폰트 스케일 설정</string>
     <string name="calendar_font_scale_description">설정된 전역 폰트 사이즈를 기준으로 캘린더 내부의 폰트 사이즈의 스케일을 설정합니다.</string>
     <string name="calendar_font_scale_disable">사용하지 않음</string>
@@ -938,8 +942,8 @@
     <string name="permission_confirmation_dialog_message">Easy Diary 사용을 위해서는 권한승인이 필요합니다.</string>
     <string name="google_drive_account_information_title">구글드라이브 연동계정 정보</string>
     <string name="schedule_backup_gms_description">다이어리 백업 (구글드라이브)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부된 사진과 데이터베이스 파일을 구글드라이브에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
-    <string name="google_drive_account_sign_in_title">구글드라이브 계정 연결</string>
-    <string name="google_drive_account_sign_in_description">이지 다이어리 데이터 백업을 위해 구글드라이브 계정을 연결합니다.</string>
+    <string name="google_drive_account_sign_in_title">구글계정 연결</string>
+    <string name="google_drive_account_sign_in_description">구글드라이브를 이용한 다이어리 백업 및 복구 또는 구글캘린더 이벤트를 이용한 다이어리 자동생성을 위해 구글 계정에 로그인합니다.</string>
     <string name="schedule_gms_error_title">스케줄 작업 대기중</string>
     <string name="schedule_gms_error_message">디바이스가 잠자기 모드로 전환되어 네트워크를 이용한 스케줄 작업이 중단되었습니다. 알림창을 터치 하시면 예약된 스케줄 작업이 시작됩니다.</string>
     <string name="schedule_pending_guide_message">대기중인 스케줄 작업이 시작되었습니다.</string>
@@ -1005,4 +1009,6 @@
     <string name="total_photo_count">전체 첨부사진 수</string>
     <string name="delete_unlinked_photo">링크정보 없는 첨부사진 삭제</string>
     <string name="delete_unlinked_photo_confirm_message">링크정보가 없는 사진을 디바이스 저장소에서 삭제하시겠습니까?\n디바이스 저장소에서 삭제되어도 구글드라이브 또는 디바이스에 별도로 백업된 파일에서는 삭제되지 않습니다.</string>
+    <string name="sync_google_calendar_event_title">[BETA] 구글캘린더 동기화</string>
+    <string name="sync_google_calendar_event_summary">구글캘린더에 등록된 이벤트를 이용하여 다이어리를 자동으로 생성합니다. 이미 동기화된 다이어리의 이벤트는 추가로 생성되지 않습니다.</string>
 </resources>
