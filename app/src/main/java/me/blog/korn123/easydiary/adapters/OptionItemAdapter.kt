@@ -23,7 +23,8 @@ class OptionItemAdapter(
         private val layoutResourceId: Int,
         private val list: List<Map<String, String>>,
         private val selectedValueFloat: Float?,
-        private val selectedValueString: String? = null
+        private val selectedValueString: String? = null,
+        private val visibleCheckIcon: Boolean = true
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -44,6 +45,7 @@ class OptionItemAdapter(
                 viewHolder
             }
         }.run {
+            imageView.visibility = if (visibleCheckIcon) View.VISIBLE else View.GONE
             activity.changeDrawableIconColor(context.config.textColor, imageView)
             val optionValue = list[position]["optionValue"] ?: "0"
             if ((selectedValueFloat != null && selectedValueFloat == optionValue.toFloat()) || selectedValueString == optionValue) {

@@ -755,7 +755,7 @@
     <string name="multi_picker_option_title">멀티피커 설정</string>
     <string name="multi_picker_option_summary">다이어리 사진 첨부시 갤러리앱을 이용하지 않고 이지 다이어리에서 제공하는 멀티피커를 사용합니다. 멀티피커 사용이 설정되면 한번에 여러장의 사진을 첨부할 수 있습니다.</string>
     <string name="preferences_category_backup_restore">백업 및 복구</string>
-    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="preferences_category_backup_restore_sub">Google Drive &amp; Calendar</string>
     <string name="backup_attach_photo_title">다이어리 첨부사진 백업하기</string>
     <string name="backup_attach_photo_summary">다이어리에 첨부된 모든 사진을 구글 드라이브에 백업합니다.</string>
     <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기</string>

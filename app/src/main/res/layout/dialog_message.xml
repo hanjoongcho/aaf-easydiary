@@ -4,11 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/AppCard">
-    <com.simplemobiletools.commons.views.MyTextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/simpleMessage"
-        tools:text="Simple dialog message"/>
+        android:layout_height="wrap_content">
+        <com.simplemobiletools.commons.views.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/simpleMessage"
+            tools:text="Simple dialog message"/>
+    </ScrollView>
 </androidx.cardview.widget.CardView>
 
 

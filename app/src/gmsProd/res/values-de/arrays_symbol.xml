@@ -237,6 +237,7 @@
         <item>360|Flickr</item>
         <item>363|Quora</item>
         <item>364|Line</item>
+        <item>373|Google Calendar</item>
     </string-array>
     <string-array name="flag_item_array">
         <item>450|Mauritius</item>

@@ -153,6 +153,7 @@ object EasyDiaryUtils {
         cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
         cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
         cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
+        cal.set(Calendar.MILLISECOND, 0)
         return cal.timeInMillis
     }
 

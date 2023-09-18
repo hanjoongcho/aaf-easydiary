@@ -26,15 +26,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:src="@drawable/logo_google_oauth2"
                     android:id="@+id/profilePhoto"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
+                    android:layout_width="@dimen/settings_google_account_icon"
+                    android:layout_height="@dimen/settings_google_account_icon"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle" />
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/accountInfo"
@@ -46,8 +45,7 @@
                     app:layout_constraintStart_toEndOf="@+id/profilePhoto"
                     app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
                     android:layout_marginStart="10dp"
-                    app:layout_goneMarginLeft="0dp"
-                    tools:text="OK" />
+                    app:layout_goneMarginLeft="0dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -70,16 +68,28 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/backupSetting"
             style="@style/AppCard.Settings">
-
             <LinearLayout style="@style/LinearLayoutVertical">
 
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/SettingsTitle"
                     android:text="@string/backup_diary" />
 
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsSummary"
-                    android:text="@string/backup_diary_summary" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/logo_google_drive"
+                        android:layout_width="@dimen/settings_google_account_icon"
+                        android:layout_height="@dimen/settings_google_account_icon" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        style="@style/SettingsSummary"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/backup_diary_summary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -93,9 +103,23 @@
                     style="@style/SettingsTitle"
                     android:text="@string/restore_diary" />
 
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsSummary"
-                    android:text="@string/restore_diary_summary" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/logo_google_drive"
+                        android:layout_width="@dimen/settings_google_account_icon"
+                        android:layout_height="@dimen/settings_google_account_icon" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        style="@style/SettingsSummary"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/restore_diary_summary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -109,9 +133,22 @@
                     style="@style/SettingsTitle"
                     android:text="@string/backup_attach_photo_title" />
 
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsSummary"
-                    android:text="@string/backup_attach_photo_summary" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/logo_google_drive"
+                        android:layout_width="@dimen/settings_google_account_icon"
+                        android:layout_height="@dimen/settings_google_account_icon" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        style="@style/SettingsSummary"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/backup_attach_photo_summary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -125,9 +162,59 @@
                     style="@style/SettingsTitle"
                     android:text="@string/recover_attach_photo_title" />
 
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/logo_google_drive"
+                        android:layout_width="@dimen/settings_google_account_icon"
+                        android:layout_height="@dimen/settings_google_account_icon" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        style="@style/SettingsSummary"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/recover_attach_photo_summary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/syncGoogleCalendar"
+            style="@style/AppCard.Settings">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsSummary"
-                    android:text="@string/recover_attach_photo_summary" />
+                    style="@style/SettingsTitle"
+                    android:text="[BETA] Sync Google Calendar" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:visibility="gone"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/syncGoogleCalendarProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/logo_google_calendar"
+                        android:layout_width="@dimen/settings_google_account_icon"
+                        android:layout_height="@dimen/settings_google_account_icon" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        style="@style/SettingsSummary"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally." />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

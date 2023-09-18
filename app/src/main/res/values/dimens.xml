@@ -45,6 +45,9 @@
     <dimen name="diary_symbol_width_s">20dp</dimen>
     <dimen name="diary_symbol_height_s">20dp</dimen>
 
+    <!-- Image Size -->
+    <dimen name="settings_google_account_icon">32dp</dimen>
+
     <!-- ETC. -->
     <dimen name="dp_18">18dp</dimen>
     <dimen name="sp_13">13sp</dimen>

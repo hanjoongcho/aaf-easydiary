@@ -252,6 +252,7 @@ object FlavorUtils {
         SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
         SYMBOL_GIT -> R.drawable.ic_git
         SYMBOL_JAVASCRIPT -> R.drawable.ic_javascript
+        SYMBOL_GOOGLE_CALENDAR -> R.drawable.logo_google_calendar
 
         FLAG_MAURITIUS -> R.drawable.ic_001_mauritius
         FLAG_AUSTRIA -> R.drawable.ic_003_austria

@@ -1,13 +1,15 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
     android:orientation="horizontal"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
+        tools:visibility="gone"
         android:id="@+id/checkIcon"
         android:src="@drawable/ic_check_mark"
-        android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -15,7 +17,7 @@
     <com.simplemobiletools.commons.views.MyTextView
         android:gravity="center_vertical"
         android:id="@+id/textView"
-        android:paddingEnd="20dp"
+        tools:text="Option Apple"
         android:paddingTop="@dimen/diary_card_text_padding"
         android:paddingBottom="@dimen/diary_card_text_padding"
         android:layout_weight="1"
