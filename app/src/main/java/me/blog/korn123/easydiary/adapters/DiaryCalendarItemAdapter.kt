@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -56,6 +57,11 @@ class DiaryCalendarItemAdapter(
                         Integer.MAX_VALUE
         //                        ellipsize = null
                     }
+                }
+
+                if (context.config.enableMarkdown) {
+                    textView1.tag = diaryDto.sequence
+                    EasyDiaryUtils.applyMarkDownEllipsize(textView1, diaryDto.sequence, 0)
                 }
             }
 

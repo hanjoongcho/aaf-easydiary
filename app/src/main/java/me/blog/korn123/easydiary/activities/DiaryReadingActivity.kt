@@ -27,6 +27,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
@@ -76,7 +77,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        val diaryList: List<Diary> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
+        val diaryList: List<Diary> = when (intent.getStringExtra(DiaryFragment.MODE_FLAG) == null) {
+            true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
+            false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryFragment.MODE_FLAG))
+        }
+
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))

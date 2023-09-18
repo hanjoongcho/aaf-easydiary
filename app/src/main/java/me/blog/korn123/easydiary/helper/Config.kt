@@ -241,7 +241,7 @@ class Config(val context: Context) {
         set(enableDDayFlexboxLayout) = prefs.edit().putBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, enableDDayFlexboxLayout).apply()
 
     var enableDashboardCalendar: Boolean
-        get() = prefs.getBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, false)
+        get() = prefs.getBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, true)
         set(enableDashboardCalendar) = prefs.edit().putBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, enableDashboardCalendar).apply()
 
     var settingDatetimeFormat: String

@@ -43,7 +43,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
     private lateinit var mDailySymbolFragment: DailySymbolFragment
-    private var coroutineJob: Job? = null
 
     override fun onStart() {
         super.onStart()
@@ -289,13 +288,6 @@ class DashboardDialogFragment : DialogFragment() {
                 }, 300)
             }
         }, 300)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        coroutineJob?.let {
-            if (it.isActive) it.cancel()
-        }
     }
 
     private fun getDashboardBackgroundColor() = config.screenBackgroundColor

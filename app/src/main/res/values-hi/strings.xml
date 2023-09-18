@@ -664,63 +664,71 @@
     </string>
     <string name="release_284">
         v1.4.284.202210260 / 2022.10.26\n
-        Improved Dashboard UX
+		बेहतर डैशबोर्ड UX
     </string>
     <string name="release_285">
         v1.4.285.202211170 / 2022.11.17\n
-        Changed not to check storage access permission in TIRAMISU (Android 13) version
+		तिरामिसु(एंड्रॉइड 13) संस्करण में स्टोरेज एक्सेस अनुमति की जांच नहीं करने के लिए\nबदला गया
     </string>
     <string name="release_286">
         v1.4.286.202212110 / 2022.12.11\n
-        Fixed an error in which the timeline filter was activated abnormally
+		त्रुटि को\nठीक किया जिसमें टाइमलाइन फ़िल्टर असामान्य रूप से सक्रिय किया गया था
     </string>
     <string name="release_287">
         v1.4.287.202301140 / 2023.01.14\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (UX) अनुकूलन
     </string>
     <string name="release_288">
         v1.4.288.202302030 / 2023.02.03\n
-        Fixed an error where Photo Multi-Picker did not work in TIRAMISU (Android 13) version
+		एक त्रुटि\nतय की गई जहां फोटो मल्टी - पिकर तिरामिसु (एंड्रॉइड 13) संस्करण में काम नहीं करता था
     </string>
     <string name="release_289">
         v1.4.289.202302031 / 2023.02.03\n
-        Fixed an error where diary notifications did not work in TIRAMISU (Android 13) version
+		एक त्रुटि\nतय की गई जहां डायरी सूचनाएं तिरामिसु (एंड्रॉइड 13) संस्करण में काम नहीं करती थीं
     </string>
     <string name="release_291">
         v1.4.291.202302260 / 2023.02.26\n
-        Added date and time formatting settings
+		जोड़ा गया दिनांक और समय स्वरूपण सेटिंग
     </string>
     <string name="release_292">
         v1.4.292.202303100 / 2023.03.10\n
-        Added support for Markdown syntax
+		मार्कडाउन सिंटैक्स के लिए समर्थन जोड़ा गया
     </string>
     <string name="release_293">
         v1.4.293.202303240 / 2023.03.24\n
-        Improved markdown mode style
+		बेहतर मार्कडाउन मोड शैली
     </string>
     <string name="release_294">
         v1.4.294.202304080 / 2023.04.08\n
-        Added user manual link
+		जोड़ा गया उपयोगकर्ता मैनुअल लिंक
     </string>
     <string name="release_295">
         v1.4.295.202304180 / 2023.04.18\n
-        Added attached photo gallery
+		संलग्न फ़ोटो गैलरी जोड़ी गई
     </string>
     <string name="release_297">
         v1.4.297.202304260 / 2023.04.26\n
-        Improve to support markdown in widget
+		विजेट में मार्कडाउन का समर्थन करने के लिए सुधार करें
     </string>
     <string name="release_298">
         v1.4.298.202306010 / 2023.06.01\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (UX) अनुकूलन
     </string>
     <string name="release_299">
         v1.4.299.202306100 / 2023.06.10\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (UX) अनुकूलन
     </string>
     <string name="release_300">
         v1.4.300.202307110 / 2023.07.11\n
-        Added Dashboard Calendar Component
+		जोड़ा गया डैशबोर्ड कैलेंडर घटक
+    </string>
+    <string name="release_301">
+        v1.4.301.202308250 / 2023.08.25\n
+		डैशबोर्ड UX सुधार
+    </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Added automatic diary creation function using Google Calendar events
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -784,7 +792,7 @@
     <string name="fingerprint_authentication_info_changed">डिवाइस की फिंगरप्रिंट प्रमाणीकरण जानकारी बदल गई है और पहले से सेट प्रमाणीकरण जानकारी का उपयोग नहीं किया जा सकता है।</string>
     <string name="pin_lock_title">पिन लॉक सेटिंग</string>
     <string name="pin_lock_summary">एप्लिकेशन को लॉक करने के लिए पिन सेट करें।</string>
-    <string name="pin_setting_complete">पDo you want to set the PIN lock number to 「%s」?</string>
+    <string name="pin_setting_complete">क्या आप पिन लॉक नंबर को 「%s」 पर सेट करना चाहते हैं?</string>
     <string name="pin_setting_release">पिन लॉक अक्षम।</string>
     <string name="pin_release_need_fingerprint_disable">पिन लॉक को अक्षम करने के लिए, आपको फिंगरप्रिंट लॉक को बंद करना होगा।</string>
     <string name="pin_setting_guide_message">पिन के रूप में उपयोग करने के लिए कृपया एक नंबर दर्ज करें।</string>
@@ -981,10 +989,10 @@
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">हाल ही में उपयोग किया गया</string>
-    <string name="datetime_setting_title">Datetime Formatting</string>
-    <string name="datetime_setting_summary">Set the date and time display format. (The set display format is applied to most screens except for the timeline and diary creation screens.)</string>
-    <string name="markdown_setting_title">Markdown Syntax</string>
-    <string name="markdown_setting_summary">If you activate the Markdown Syntax option, you can enter various formats using MarkDown syntax when writing a diary.</string>
+    <string name="datetime_setting_title">डेटाटाइम फ़ॉर्मेटिंग</string>
+    <string name="datetime_setting_summary">तारीख और समय प्रदर्शन प्रारूप सेट करें। (समयरेखा और डायरी निर्माण स्क्रीन को छोड़कर अधिकांश स्क्रीन पर सेट डिस्प्ले प्रारूप लागू होता है।)</string>
+    <string name="markdown_setting_title">मार्कडाउन वाक्यविन्यास</string>
+    <string name="markdown_setting_summary">यदि आप मार्कडाउन सिंटैक्स विकल्प को सक्रिय करते हैं, तो आप डायरी लिखते समय मार्कडाउन सिंटैक्स का उपयोग करके विभिन्न प्रारूप दर्ज कर सकते हैं।</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
@@ -993,12 +1001,14 @@
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
-    <string name="attached_photo_gallery">Photo Gallery</string>
-    <string name="visible_unlinked_photo">View photos without diary references</string>
-    <string name="visible_unlinked_photo_description">If you do not save the diary after attaching a photo or delete the saved diary, the attached photo is not deleted and remains in the device storage. If you activate this option, you can view the attached photo.</string>
-    <string name="linked_photo_count">Number of valid photos</string>
-    <string name="unlinked_photo_count">Number of invalid photos</string>
-    <string name="total_photo_count">Number of total photos</string>
-    <string name="delete_unlinked_photo">Delete unlinked photos</string>
-    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
+    <string name="attached_photo_gallery">फ़ोटो गैलर</string>
+    <string name="visible_unlinked_photo">डायरी रेफ़रेंस के बिना फ़ोटो देखें</string>
+    <string name="visible_unlinked_photo_description">अगर आप फ़ोटो अटैच करने के बाद डायरी सेव नहीं करते हैं या सेव की गई डायरी डिलीट नहीं करते हैं, तो अटैच की गई फ़ोटो डिलीट नहीं की जाती है और डिवाइस स्टोरेज में रहती है। अगर आप इस विकल्प को ऐक्टिवेट करते हैं, तो आप अटैच की गई फ़ोटो देख सकते हैं।</string>
+    <string name="linked_photo_count">मान्य फ़ोटो की संख्या</string>
+    <string name="unlinked_photo_count">अमान्य फ़ोटो की संख्या</string>
+    <string name="total_photo_count">कुल फ़ोटो की संख्या</string>
+    <string name="delete_unlinked_photo">अनलिंक की गई फ़ोटो हटाएँ</string>
+    <string name="delete_unlinked_photo_confirm_message">क्या आप डिवाइस स्टोरेज से लिंक जानकारी के बिना फ़ोटो हटाना चाहते हैं?\nभले ही इसे डिवाइस स्टोरेज से हटा दिया गया हो, फिर भी इसे Google ड्राइव से हटाया नहीं जाता है या डिवाइस पर अलग से फ़ाइलों का बैकअप नहीं लिया जाता है।</string>
+    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
+    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
 </resources>

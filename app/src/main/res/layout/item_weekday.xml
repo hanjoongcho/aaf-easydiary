@@ -10,7 +10,7 @@
     <me.blog.korn123.easydiary.views.CalendarItem
         android:id="@+id/text_weekday"
         tools:text="MON"
-        android:textSize="@dimen/calendar_item_text_default"
+        android:textSize="@dimen/calendar_item_text_large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:applyStroke="false"
             android:gravity="center"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_large"
             android:id="@+id/calendarDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:applyStroke="false"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_medium"
             android:id="@+id/itemCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -49,8 +49,9 @@
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
-            android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:textSize="@dimen/calendar_item_text_medium"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"
@@ -69,8 +70,9 @@
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
-            android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:textSize="@dimen/calendar_item_text_medium"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"
@@ -89,8 +91,9 @@
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
-            android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:textSize="@dimen/calendar_item_text_medium"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"

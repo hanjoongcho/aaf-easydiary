@@ -524,8 +524,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                     }
                                 }
 
-                                val fromCalendar = getCalendarInstance(false, -1)
-                                val toCalendar = getCalendarInstance(true, 1)
+                                val fromCalendar = getCalendarInstance(false, java.util.Calendar.MONTH, -1)
+                                val toCalendar = getCalendarInstance(true, java.util.Calendar.MONTH, 1)
                                 mTimeMin = DateTime(fromCalendar.timeInMillis)
                                 mTimeMax = DateTime(toCalendar.timeInMillis)
 
@@ -555,11 +555,11 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
 
                                 textSyncFromDate.run {
                                     setOnClickListener { mSDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(false, -1))
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
                                 }
                                 textSyncToDate.run {
                                     setOnClickListener { mEDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(true))
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
                                 }
 
                                 requireActivity().run {

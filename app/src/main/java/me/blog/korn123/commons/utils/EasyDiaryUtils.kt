@@ -17,6 +17,8 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import android.text.Html
 import android.text.SpannableString
@@ -51,6 +53,7 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
@@ -150,6 +153,7 @@ object EasyDiaryUtils {
         cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
         cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
         cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
+        cal.set(Calendar.MILLISECOND, 0)
         return cal.timeInMillis
     }
 
@@ -401,6 +405,19 @@ object EasyDiaryUtils {
         view.setOnTouchListener { _, _ -> true }
     }
 
+    fun applyMarkDownEllipsize(textContents: TextView, sequence: Int, delayMillis: Long = 0) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (textContents.tag == sequence) {
+                val max = textContents.maxLines
+                val layout = textContents.layout
+                if ((layout?.lineCount ?: 0) > max) {
+                    val end = layout.getLineEnd(max - 1)
+                    textContents.setText(textContents.text.subSequence(0, end - 1), TextView.BufferType.SPANNABLE)
+                    textContents.append("…")
+                }
+            }
+        }, delayMillis)
+    }
 
     /***************************************************************************************************
      *   Dialog Utils
@@ -580,5 +597,54 @@ object EasyDiaryUtils {
             null
         }
         return bitmap
+    }
+
+    /***************************************************************************************************
+     *   ETC.
+     *
+     ***************************************************************************************************/
+    fun applyFilter(mode: String?) : List<Diary> {
+        val diaryList: List<Diary> = when (mode) {
+            DiaryFragment.MODE_TASK_TODO -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 80..81 }.reversed()
+            DiaryFragment.MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                81
+            )
+            DiaryFragment.MODE_TASK_DONE -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 82..83 }
+            DiaryFragment.MODE_TASK_CANCEL -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                83
+            )
+            DiaryFragment.MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                0
+            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }.reversed()
+            else -> EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0)
+                .filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis <= System.currentTimeMillis() }
+                .run { if (this.size > 100) this.subList(0, 100) else this }
+        }
+
+        return diaryList
     }
 }
