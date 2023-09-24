@@ -95,6 +95,8 @@ class CaldroidItemAdapter(
                         (item3.getChildAt(1) as TextView).setTextColor(context.config.textColor)
                     }
 
+
+
                     // Somehow after setBackgroundResource, the padding collapse.
                     // This is to recover the padding
                     root.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
@@ -109,7 +111,7 @@ class CaldroidItemAdapter(
                             null
                         }
                     }
-
+                    if (mDiaryList.isNotEmpty() && mDiaryList.any {diary -> diary.isHoliday}) calendarDate.setTextColor(Color.RED)
 
                     if (!activity.isDestroyed) {
                         when {

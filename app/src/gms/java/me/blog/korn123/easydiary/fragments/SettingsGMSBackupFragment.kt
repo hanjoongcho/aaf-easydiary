@@ -482,7 +482,9 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                                 item.description ?: item.summary,
                                                 SYMBOL_GOOGLE_CALENDAR,
                                                 item?.start?.dateTime == null
-                                            )
+                                            ).apply { isHoliday =
+                                                calendarId == "ko.south_korea#holiday@group.v.calendar.google.com"
+                                            }
                                         )
                                         insertCount++
                                     }

@@ -39,6 +39,7 @@ open class Diary : RealmObject {
     var encryptKeyHash: String? = null
     var isSelected: Boolean = false
     var location: Location? = null
+    var isHoliday: Boolean = false
 
     constructor()
 

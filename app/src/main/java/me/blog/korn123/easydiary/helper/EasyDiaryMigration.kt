@@ -289,5 +289,13 @@ class EasyDiaryMigration : RealmMigration {
                 .addField("title", String::class.java)
             currentVersion++
         }
+
+        // Migration from version 22 to 23
+        if (currentVersion == 22L) {
+            schema.get("Diary")?.let {
+                it.addField("isHoliday", Boolean::class.java)
+            }
+            currentVersion++
+        }
     }
 }
