@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -40,6 +41,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mSDatePickerDialog: DatePickerDialog
+    private lateinit var mEDatePickerDialog: DatePickerDialog
+    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.YEAR, -1) }
+    private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
+    private var mStartMillis = mStartCalendar.timeInMillis
+    private var mEndMillis = 0L
+    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mStartMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        drawChart()
+    }
+
+    private var mEndDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mEndMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        drawChart()
+    }
     private lateinit var mBinding: FragmentStockLineChartBinding
     private lateinit var mCombineChart: CombinedChart
     private lateinit var mKospiChart: LineChart
@@ -161,6 +177,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         setupTitle() // determine title parameter
         setupChartOptions()
         drawChart()
+
+        mSDatePickerDialog = DatePickerDialog(requireContext(), mStartDateListener, mStartCalendar.get(Calendar.YEAR), mStartCalendar.get(Calendar.MONTH), mStartCalendar.get(Calendar.DAY_OF_MONTH))
+        mEDatePickerDialog = DatePickerDialog(requireContext(), mEndDateListener, mEndCalendar.get(Calendar.YEAR), mEndCalendar.get(Calendar.MONTH), mEndCalendar.get(Calendar.DAY_OF_MONTH))
+        mBinding.run {
+            cardFromDate.setOnClickListener { mSDatePickerDialog.show() }
+            cardToDate.setOnClickListener { mSDatePickerDialog.show() }
+        }
     }
 
     override fun onDestroy() {
@@ -482,7 +505,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(
-                null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance
+                null, false, mStartMillis, mEndMillis, DAILY_STOCK, realmInstance = realmInstance
             )
             var index = 0
             var totalSum = 0F

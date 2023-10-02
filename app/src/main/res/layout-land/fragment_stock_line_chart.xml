@@ -65,9 +65,31 @@
                 app:contentPaddingBottom="5dp"
                 app:contentPadding="@dimen/dashboard_card_padding">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Chart Options"
+                    android:text="Options"
                     android:ellipsize="end"
                     android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/card_from_date"
+                style="@style/card_dashboard_inner"
+                app:contentPaddingTop="5dp"
+                app:contentPaddingBottom="5dp"
+                app:contentPadding="@dimen/dashboard_card_padding">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="From"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/card_to_date"
+                style="@style/card_dashboard_inner"
+                app:contentPaddingTop="5dp"
+                app:contentPaddingBottom="5dp"
+                app:contentPadding="@dimen/dashboard_card_padding">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="To"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </me.blog.korn123.easydiary.views.FixedCardView>
