@@ -199,15 +199,15 @@ class CaldroidItemAdapter(
         binding.calendarDate.run {
             if (dateTime == getToday()) {
                 setBackgroundResource(R.drawable.bg_calendar_circle)
-                setTextColor(Color.WHITE)
+//                setTextColor(Color.WHITE)
             } else {
                 setBackgroundResource(0)
-                when (dateTime.weekDay) {
-                    1 -> setTextColor(Color.RED)
-                    7 -> setTextColor(Color.rgb(0, 0, 139))
-                    else -> {
-                        if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
-                    }
+            }
+            when (dateTime.weekDay) {
+                1 -> setTextColor(Color.RED)
+                7 -> setTextColor(Color.rgb(0, 0, 139))
+                else -> {
+                    if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
                 }
             }
         }
