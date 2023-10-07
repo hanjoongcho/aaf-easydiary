@@ -43,7 +43,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mSDatePickerDialog: DatePickerDialog
     private lateinit var mEDatePickerDialog: DatePickerDialog
-    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.YEAR, -1) }
+    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -6) }
     private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
     private var mStartMillis = mStartCalendar.timeInMillis
     private var mEndMillis = 0L
@@ -97,7 +97,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private var mChartMode = R.id.radio_button_option_a
     private var mCheckedSyncMarker = true
-    private var mCheckedDrawCircle = false
+    private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
     private var mCheckedEvaluatePrice = true
     private var mCheckedPrincipalHighlight = true
@@ -754,7 +754,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun setDefaultFillChartColor(lineDataSet: LineDataSet, color: Int) {
         lineDataSet.run {
             fillColor = color
-            enableDashedLine(0f, 1f, 0f)
+            this.color = color
+//            enableDashedLine(3f, 1f, 0f)
             setDrawFilled(true)
             setDrawCircleHole(false)
             setDrawCircles(false)

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -175,6 +177,7 @@ class DailySymbolFragment : Fragment() {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     mBinding.month.text = mDailySymbolList[(mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
+                    mBinding.dailyCardRecyclerView.minimumHeight = 0
                 }
             })
         }
@@ -188,7 +191,7 @@ class DailySymbolFragment : Fragment() {
         val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
         val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         cal.time = Date()
-        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()).uppercase()
+        if (mBinding.month.text.isEmpty()) mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()).uppercase()
 
         mDailySymbolList.clear()
         for (num in 1..365) {
@@ -208,6 +211,7 @@ class DailySymbolFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     fun updateDailySymbol() {
         init365Day()
+        mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
         mDailySymbolAdapter.notifyDataSetChanged()
     }
 
