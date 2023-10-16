@@ -101,9 +101,11 @@ class DailySymbolFragment : Fragment() {
                                 dialog?.dismiss()
                             }
                         }
-                        dialog = builder.create().apply {
-                            requireActivity().updateAlertDialogWithIcon(DialogMode.DEFAULT, this, null, dialogOptionItemBinding.root)
-                        }
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            dialog = builder.create().apply {
+                                requireActivity().updateAlertDialogWithIcon(DialogMode.DEFAULT, this, null, dialogOptionItemBinding.root)
+                            }
+                        }, 100)
                     }
                 }
                 override fun onChangeMonth(month: Int, year: Int) {
