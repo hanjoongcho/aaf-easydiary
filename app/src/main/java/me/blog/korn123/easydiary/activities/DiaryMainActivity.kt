@@ -346,12 +346,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             R.id.microphone -> showSpeechDialog()
             R.id.openDashboard -> {
-                DashboardDialogFragment().apply {
-                    show(
-                        supportFragmentManager,
-                        "DashboardDialog"
-                    )
-                }
+//                DashboardDialogFragment().apply {
+//                    show(
+//                        supportFragmentManager,
+//                        "DashboardDialog"
+//                    )
+//                }
+                TransitionHelper.startActivityWithTransition(
+                    this@DiaryMainActivity,
+                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
+                )
             }
             R.id.popupMenu -> openCustomOptionMenu()
         }

@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

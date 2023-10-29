@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
@@ -21,6 +23,7 @@ import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DashboardActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
@@ -30,8 +33,10 @@ import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -180,6 +185,21 @@ class DailySymbolFragment : Fragment() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     mBinding.month.text = mDailySymbolList[(mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
                     mBinding.dailyCardRecyclerView.minimumHeight = 0
+                    val position = (mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//                    mDailySymbolAdapter.notifyItemChanged(position)
+                    Log.i(AAF_TEST, "pos: $position, newState: $newState, ${mBinding.dailyCardRecyclerView.minimumHeight}/${mBinding.dailyCardRecyclerView.height}")
+                    if (newState == SCROLL_STATE_IDLE) {
+                        requireActivity().run {
+                            if (this is DashboardActivity) {
+                                this.showProgressContainer()
+                            }
+                            mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
+                            Handler(Looper.getMainLooper()).postDelayed({ mDailySymbolAdapter.notifyDataSetChanged() }, 200)
+                            if (this is DashboardActivity) {
+                                this.hideProgressContainer()
+                            }
+                        }
+                    }
                 }
             })
         }
@@ -231,6 +251,7 @@ class DailySymbolFragment : Fragment() {
                 selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
             }
 
+            mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
             mDailySymbolAdapter.notifyDataSetChanged()
 //                    month.visibility = View.VISIBLE
             dailyCardRecyclerView.visibility = View.VISIBLE

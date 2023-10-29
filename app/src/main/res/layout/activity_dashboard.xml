@@ -7,6 +7,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -86,7 +87,7 @@
                     android:layout_gravity="end|top"
                     android:layout_margin="10dp"
                     android:contentDescription="@string/write_diary"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:fabSize="mini"
                     app:maxImageSize="15dp"
                     app:srcCompat="@drawable/ic_edit" />
@@ -221,7 +222,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_cross"
-        android:visibility="gone"
+        android:visibility="visible"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

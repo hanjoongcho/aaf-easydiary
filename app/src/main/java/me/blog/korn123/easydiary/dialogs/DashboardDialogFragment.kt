@@ -112,7 +112,7 @@ class DashboardDialogFragment : DialogFragment() {
 
 
             childFragmentManager.beginTransaction().run {
-                // PhotoHighlight
+                // 01. PhotoHighlight
                 replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
                     arguments = Bundle().apply {
                         putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
@@ -126,10 +126,10 @@ class DashboardDialogFragment : DialogFragment() {
                     }
                 })
 
-                // DDay
+                // 02. DDay
                 replace(R.id.dDay, DDayFragment())
 
-                // TODO
+                // 03. TODO
                 replace(R.id.fragment_diary_todo, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_TODO)
@@ -143,7 +143,7 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                })
 
-                // DONE
+                // 04. DONE
                 replace(R.id.fragment_diary_done, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DONE)
@@ -157,27 +157,27 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                })
 
-                // Future Diary
+                // 05. Future Diary
                 replace(R.id.fragment_diary_future, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_FUTURE)
                     }
                 })
 
-                // Diary Previous 100
+                // 06. Diary Previous 100
                 replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
                     }
                 })
 
-                // DashBoardSummary
+                // 07. DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())
 
-                // Daily Symbol
+                // 08. Daily Symbol
                 replace(R.id.dashboard_daily_symbol, mDailySymbolFragment)
 
-                // DashBoardRank-Lifetime
+                // 09. DashBoardRank-Lifetime
                 replace(R.id.lifetime, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -187,7 +187,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // DashBoardRank-LastMonth
+                // 10. DashBoardRank-LastMonth
                 replace(R.id.lastMonth, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -197,7 +197,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // DashBoardRank-LastWeek
+                // 11. DashBoardRank-LastWeek
                 replace(R.id.lastWeek, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -207,7 +207,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Creation Time
+                // 12. Statistics-Creation Time
                 val chartTitle = getString(R.string.statistics_creation_time)
                 replace(R.id.statistics1, WritingBarChartFragment().apply {
                     val args = Bundle()
@@ -215,7 +215,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Symbol All
+                // 13. Statistics-Symbol All
                 val symbolAllTitle = getString(R.string.statistics_symbol_all)
                 replace(R.id.statistics2, SymbolBarChartFragment().apply {
                     val args = Bundle()
@@ -223,7 +223,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Symbol TopTen
+                // 14. Statistics-Symbol TopTen
                 val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
                 replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
                     val args = Bundle()
@@ -231,6 +231,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
+                // 15. Chart Weight
                 if (config.enableDebugOptionVisibleChartWeight) {
                     mBinding.statistics4.visibility = View.VISIBLE
                     replace(R.id.statistics4, WeightLineChartFragment().apply {
@@ -240,7 +241,8 @@ class DashboardDialogFragment : DialogFragment() {
                     })
                 }
 
-                if (config.enableDebugOptionVisibleChartWeight) {
+                // 16. Chart Stock
+                if (config.enableDebugOptionVisibleChartStock) {
                     mBinding.statistics5.visibility = View.VISIBLE
                     replace(R.id.statistics5, StockLineChartFragment().apply {
                         val args = Bundle()
