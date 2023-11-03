@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
+import io.realm.Sort
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -37,6 +38,7 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -81,7 +83,7 @@ class DailySymbolFragment : Fragment() {
             caldroidListener = object : CaldroidListener() {
                 override fun onSelectDate(date: Date, view: View) {
                     val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-                    val selectedItems = EasyDiaryDbHelper.findDiaryByDateString(formatter.format(date))
+                    val selectedItems = EasyDiaryDbHelper.findDiaryByDateString(formatter.format(date), if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING)
 
                     clearSelectedDates()
                     setSelectedDate(date)
