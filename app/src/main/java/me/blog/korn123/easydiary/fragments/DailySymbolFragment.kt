@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -29,12 +30,12 @@ import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
+import me.blog.korn123.easydiary.databinding.DialogDashboardCalendarItemBinding
 import me.blog.korn123.easydiary.databinding.DialogOptionItemBinding
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -44,6 +45,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class DailySymbolFragment : Fragment() {
 
@@ -94,7 +96,7 @@ class DailySymbolFragment : Fragment() {
                         val builder = AlertDialog.Builder(requireActivity()).apply {
                             setPositiveButton(getString(android.R.string.ok)) { _, _ -> }
                         }
-                        val dialogOptionItemBinding = DialogOptionItemBinding.inflate(layoutInflater)
+                        val dialogOptionItemBinding = DialogDashboardCalendarItemBinding.inflate(layoutInflater)
                         val calendarItemAdapter = DiaryCalendarItemAdapter(requireContext(), R.layout.item_diary_dashboard_calendar, selectedItems)
                         dialogOptionItemBinding.run {
                             listView.adapter = calendarItemAdapter
@@ -105,13 +107,17 @@ class DailySymbolFragment : Fragment() {
                                         putExtra(DIARY_SEQUENCE, selectedItems[position].sequence)
                                     }
                                 )
-                                dialog?.dismiss()
+//                                dialog?.dismiss()
                             }
                         }
                         Handler(Looper.getMainLooper()).postDelayed({
                             dialog = builder.create().apply {
                                 requireActivity().updateAlertDialogWithIcon(DialogMode.DEFAULT, this, null, dialogOptionItemBinding.root)
                             }
+                            val layoutParams = WindowManager.LayoutParams()
+                            layoutParams.copyFrom(dialog?.window?.attributes)
+                            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+                            dialog?.window?.attributes = layoutParams
                         }, 100)
                     }
                 }

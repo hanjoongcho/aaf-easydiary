@@ -47,15 +47,17 @@ class DiaryCalendarItemAdapter(
                     false -> context.applyMarkDownPolicy(this, "${diaryDto.contents}", false, arrayListOf(), true)
                 }
 
-                maxLines = when (context.config.enableContentsSummary) {
-                    true -> {
-                        context.config.summaryMaxLines
-        //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
-                    }
+                if (layoutResourceId != R.layout.item_diary_dashboard_calendar) {
+                    maxLines = when (context.config.enableContentsSummary) {
+                        true -> {
+                            context.config.summaryMaxLines
+                            //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
+                        }
 
-                    false -> {
-                        Integer.MAX_VALUE
-        //                        ellipsize = null
+                        false -> {
+                            Integer.MAX_VALUE
+                            //                        ellipsize = null
+                        }
                     }
                 }
 
