@@ -1,0 +1,54 @@
+📢 <b>All features are free without ads</b>
+All the features of Easy Diary are free, without ads.
+
+📢 <b>Applying improvement opinions using reviews</b>
+Easy Diary checks users' opinions for improvement and applies them to application development.
+
+📢 <b>Support features</b>
+✍ Diary writing & editing
+Contents can be created or edited using the keypad and voice recognition function.
+
+🔍 Diary search
+You can quickly search for saved content. Words matching the searched keywords are highlighted and can be recognized at a glance.
+
+📅 Calendar
+Saved content can be checked by day using the calendar.
+
+🕒 Timeline
+Saved content can be checked in the form of a timeline according to the created time.
+
+🃏 Diary post card
+You can create a diary post card using the saved content (including the attached photo) and share it with your friends.
+Share your anniversary or holiday greetings by making them pretty as a post card.
+
+🔒 Diary lock
+The application can be locked or unlocked using a PIN (personal identification number) or fingerprint recognition function.
+
+🎨 Application theme setting
+You can set the theme of 171 different colors and use the color picker to change the text and text background color to your liking.
+
+🔤 Font setting
+There are three basic fonts provided by Easy Diary, and fonts set in the device can also be used.
+In addition, if you have TTF fonts you have, you can add them to the Easy Diary font directory and use them.
+
+📊 Chart view
+Diary writing status by time can be viewed at a glance in a bar chart.
+
+💾 Backup and recovery
+All content, including attached photos, can be backed up and restored using Google Drive.
+
+📢 <b>Welcome Developer</b>
+Are you a developer?
+If you click on the visit website link, there is a GitHub link where you can download or fork all the sources of Easy Diary.
+If it helped a little, please take a star.
+
+📢 <b>Request Permissions</b>
+Request permissions are classified into basic permissions (Normal Permissions) and permissions acquired after user approval (Dangerous Permissions). The types of permissions used in Easy Diary are as follows.
+📌 Normal Permissions
+1. FOREGROUND_SERVICE
+2. USE_FINGERPRINT
+3. INTERNET
+
+📌 Dangerous Permissions
+1. READ_EXTERNAL_STORAGE
+2. WRITE_EXTERNAL_STORAGE
