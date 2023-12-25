@@ -181,6 +181,10 @@ class DiaryMainItemAdapter(
                 }
                 textTitle.text = diary.title
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
+                if (activity.config.enableMarkdown) {
+                    textContents.tag = diary.sequence
+                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence, 500)
+                }
 
                 // highlight current query
                 if (StringUtils.isNotEmpty(currentQuery)) {

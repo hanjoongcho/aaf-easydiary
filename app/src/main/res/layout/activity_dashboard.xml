@@ -7,6 +7,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -62,13 +63,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-
-            <LinearLayout
-                android:id="@+id/fragment_diary_done"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
             <LinearLayout
                 android:id="@+id/fragment_diary_cancel"
                 android:layout_width="match_parent"
@@ -93,7 +87,7 @@
                     android:layout_gravity="end|top"
                     android:layout_margin="10dp"
                     android:contentDescription="@string/write_diary"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:fabSize="mini"
                     app:maxImageSize="15dp"
                     app:srcCompat="@drawable/ic_edit" />
@@ -104,6 +98,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_diary_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/dDay"
@@ -195,13 +195,34 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:alpha="0.3"
+        android:id="@+id/layout_progress_container"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progress"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:progressBarStyleLarge"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
     <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_cross"
-        android:visibility="gone"
+        android:visibility="visible"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

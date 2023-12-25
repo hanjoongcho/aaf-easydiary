@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -46,16 +47,23 @@ class DiaryCalendarItemAdapter(
                     false -> context.applyMarkDownPolicy(this, "${diaryDto.contents}", false, arrayListOf(), true)
                 }
 
-                maxLines = when (context.config.enableContentsSummary) {
-                    true -> {
-                        context.config.summaryMaxLines
-        //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
-                    }
+                if (layoutResourceId != R.layout.item_diary_dashboard_calendar) {
+                    maxLines = when (context.config.enableContentsSummary) {
+                        true -> {
+                            context.config.summaryMaxLines
+                            //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
+                        }
 
-                    false -> {
-                        Integer.MAX_VALUE
-        //                        ellipsize = null
+                        false -> {
+                            Integer.MAX_VALUE
+                            //                        ellipsize = null
+                        }
                     }
+                }
+
+                if (context.config.enableMarkdown) {
+                    textView1.tag = diaryDto.sequence
+                    EasyDiaryUtils.applyMarkDownEllipsize(textView1, diaryDto.sequence, 0)
                 }
             }
 

@@ -151,7 +151,7 @@
     <!--  自1.4.41版本以来添加的资源点击这里。                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="preferences_category_settings">基本设定</string>
-    <string name="preferences_category_information">申请资料</string>
+    <string name="preferences_category_information">应用信息</string>
     <string name="preferences_information_licenses">开放源码许可证</string>
     <string name="preferences_information_licenses_summary">开放源码软件注意事项</string>
     <string name="preferences_category_aaf">AAF Easy系列</string>
@@ -722,6 +722,18 @@
         v1.4.300.202307110 / 2023.07.11\n
         Added Dashboard Calendar Component
     </string>
+    <string name="release_301">
+        v1.4.301.202308250 / 2023.08.25\n
+        Dashboard UX Improvements
+    </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Added automatic diary creation function using Google Calendar events
+    </string>
+    <string name="release_303">
+        v1.4.303.202310160 / 2023.10.16\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
@@ -784,7 +796,7 @@
     <string name="fingerprint_authentication_info_changed">设备的指纹认证信息已更改，不能使用先前设置的认证信息</string>
     <string name="pin_lock_title">PIN密码锁设定</string>
     <string name="pin_lock_summary">设置PIN来锁定应用</string>
-    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
+    <string name="pin_setting_complete">您是否要将PIN码设置为「%s」？</string>
     <string name="pin_setting_release">密码锁已禁用</string>
     <string name="pin_release_need_fingerprint_disable">要禁用PIN锁，你需要关闭指纹锁</string>
     <string name="pin_setting_guide_message">请输入一个密码</string>
@@ -955,36 +967,36 @@
     <string name="symbol_filter_picker_remove_guide_message">至少要选择一个符号</string>
     <string name="title_dialog_postcard_photo_option">照片剪裁及筛选设定</string>
     <string name="msg_check_force_single_photo">更改为只在明信片的照片区域显示一张照片。\n如果附加的照片超过一张，你可以滑动来查看其他照片。</string>
-    <string name="load_auto_save_diary_title">Load auto-save diary</string>
-    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
-    <string name="enable_review_flow_title">Google Play In-App Review</string>
-    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
-    <string name="postcard_grid_option_title">Grid options</string>
-    <string name="postcard_grid_option_column_number">%d column per row</string>
-    <string name="encrypt_diary">Encrypt Diary</string>
-    <string name="decrypt_diary">Decrypt Diary</string>
-    <string name="postcard_making">Postcard Making</string>
-    <string name="user_custom_setting">User Custom Setting</string>
-    <string name="automation_settings">Automatic setting using themes</string>
+    <string name="load_auto_save_diary_title">加载自动保存的日记</string>
+    <string name="load_auto_save_diary_description">有一篇临时保存的日记。您想加载这篇临时保存的日记吗？</string>
+    <string name="enable_review_flow_title">Google Play 应用内评论</string>
+    <string name="enable_review_flow_summary">如果您使用 Easy Diary 了一段时间，将会启动 Google Play 评论注册对话框。如果您不想使用评论注册功能，或者在评论注册后 Google Play 对话框会弹出，您可以禁用此选项以防止对话框弹出。</string>
+    <string name="postcard_grid_option_title">网格选项</string>
+    <string name="postcard_grid_option_column_number">每行 %d 列</string>
+    <string name="encrypt_diary">加密日记</string>
+    <string name="decrypt_diary">解密日记</string>
+    <string name="postcard_making">制作明信片</string>
+    <string name="user_custom_setting">用户自定义设置</string>
+    <string name="automation_settings">使用主题进行自动设置</string>
     <string name="place_finger_description">请将手指放在指纹传感器上</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
-    <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
-    <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
-    <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>
-    <string name="notification_channel_name_dev">Notification Test</string>
-    <string name="notification_channel_name_alarm">Diary Schedule</string>
-    <string name="notification_channel_name_upload">Google Drive Upload</string>
-    <string name="notification_channel_name_download">Google Drive Download</string>
-    <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
-    <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
-    <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
-    <string name="recently_used_symbol">Recently Used</string>
-    <string name="datetime_setting_title">Datetime Formatting</string>
-    <string name="datetime_setting_summary">Set the date and time display format. (The set display format is applied to most screens except for the timeline and diary creation screens.)</string>
-    <string name="markdown_setting_title">Markdown Syntax</string>
-    <string name="markdown_setting_summary">If you activate the Markdown Syntax option, you can enter various formats using MarkDown syntax when writing a diary.</string>
+    <string name="enable_photo_highlight_title">高亮附件照片</string>
+    <string name="enable_photo_highlight_description">根据今天的日期，将过去附加的照片以年和月为单位显示在高亮区域。如果今天的日期没有年度或月度附件，则不会激活高亮区域。</string>
+    <string name="yearly_highlight_tag">{0,number} {0,choice,1#年前|1&lt;年前}</string>
+    <string name="monthly_highlight_tag">{0,number} {0,choice,1#月前|1&lt;月前}</string>
+    <string name="notification_channel_name_dev">通知测试</string>
+    <string name="notification_channel_name_alarm">日程安排</string>
+    <string name="notification_channel_name_upload">Google Drive 上传</string>
+    <string name="notification_channel_name_download">Google Drive 下载</string>
+    <string name="notification_channel_name_zip_helper">管理ZIP备份</string>
+    <string name="enable_welcome_dashboard_popup_title">欢迎仪表板弹窗</string>
+    <string name="enable_welcome_dashboard_popup_description">启用此选项后，当应用程序在关闭后重新启动时，仪表板将自动以弹窗形式打开。</string>
+    <string name="year_message_format">{0,number} {0,choice,1#年|1&lt;年}</string>
+    <string name="day_message_format">{0,number} {0,choice,1#天|1&lt;天}</string>
+    <string name="recently_used_symbol">最近使用</string>
+    <string name="datetime_setting_title">日期时间格式</string>
+    <string name="datetime_setting_summary">设置日期和时间的显示格式。（设置的显示格式适用于大多数界面，除了时间轴和创建日记的界面。）</string>
+    <string name="markdown_setting_title">Markdown语法</string>
+    <string name="markdown_setting_summary">如果激活了Markdown语法选项，您可以在写日记时使用Markdown语法输入各种格式。</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
@@ -993,12 +1005,14 @@
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
-    <string name="attached_photo_gallery">Photo Gallery</string>
-    <string name="visible_unlinked_photo">View photos without diary references</string>
-    <string name="visible_unlinked_photo_description">If you do not save the diary after attaching a photo or delete the saved diary, the attached photo is not deleted and remains in the device storage. If you activate this option, you can view the attached photo.</string>
-    <string name="linked_photo_count">Number of valid photos</string>
-    <string name="unlinked_photo_count">Number of invalid photos</string>
-    <string name="total_photo_count">Number of total photos</string>
-    <string name="delete_unlinked_photo">Delete unlinked photos</string>
-    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
+    <string name="attached_photo_gallery">照片库</string>
+    <string name="visible_unlinked_photo">查看无日记引用的照片</string>
+    <string name="visible_unlinked_photo_description">如果在附加照片后未保存日记或删除已保存的日记，则附加的照片不会被删除，仍保留在设备存储中。如果激活此选项，您可以查看附加的照片。</string>
+    <string name="linked_photo_count">有效照片数</string>
+    <string name="unlinked_photo_count">无效照片数</string>
+    <string name="total_photo_count">总照片数</string>
+    <string name="delete_unlinked_photo">删除未链接的照片</string>
+    <string name="delete_unlinked_photo_confirm_message">您是否希望从设备存储中删除没有链接信息的照片？即使从设备存储中删除，这些照片也不会从Google Drive或设备上的单独备份文件中删除。</string>
+    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
+    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
 </resources>

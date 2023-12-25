@@ -215,7 +215,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mPermissionCallback: () -> Unit
     private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, arrayListOf(DriveScopes.DRIVE, DriveScopes.DRIVE_FILE))
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, arrayListOf(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = account
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
@@ -384,7 +384,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private fun requestCalendarPermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
         val credential: GoogleAccountCredential =
-            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR))
+            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY))
                 .apply { selectedAccount = account }
         val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
             .setApplicationName(getString(R.string.app_name))
@@ -425,7 +425,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 val credential: GoogleAccountCredential =
                     GoogleAccountCredential.usingOAuth2(
                         requireActivity(),
-                        arrayListOf(CalendarScopes.CALENDAR)
+                        arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY)
                     ).apply {
                         selectedAccount = account
                     }
@@ -482,7 +482,9 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                                 item.description ?: item.summary,
                                                 SYMBOL_GOOGLE_CALENDAR,
                                                 item?.start?.dateTime == null
-                                            )
+                                            ).apply { isHoliday =
+                                                calendarId == "ko.south_korea#holiday@group.v.calendar.google.com"
+                                            }
                                         )
                                         insertCount++
                                     }
@@ -524,8 +526,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                     }
                                 }
 
-                                val fromCalendar = getCalendarInstance(false, -1)
-                                val toCalendar = getCalendarInstance(true, 1)
+                                val fromCalendar = getCalendarInstance(false, java.util.Calendar.MONTH, -1)
+                                val toCalendar = getCalendarInstance(true, java.util.Calendar.MONTH, 1)
                                 mTimeMin = DateTime(fromCalendar.timeInMillis)
                                 mTimeMax = DateTime(toCalendar.timeInMillis)
 
@@ -555,11 +557,11 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
 
                                 textSyncFromDate.run {
                                     setOnClickListener { mSDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(false, -1))
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
                                 }
                                 textSyncToDate.run {
                                     setOnClickListener { mEDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(convDateToTimeMillis(true))
+                                    text = DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
                                 }
 
                                 requireActivity().run {
@@ -662,7 +664,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         mBinding.run {
             when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
                 true -> {
-                    profilePhoto.visibility = View.VISIBLE
+//                    profilePhoto.visibility = View.VISIBLE
                     signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
                     GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run {
                         val sb = StringBuilder()
@@ -676,9 +678,10 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     }
                 }
                 false -> {
-                    profilePhoto.visibility = View.GONE
+//                    profilePhoto.visibility = View.GONE
                     signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
                     accountInfo.text = getString(R.string.google_drive_account_sign_in_description)
+                    profilePhoto.setImageResource(R.drawable.logo_google_oauth2)
                 }
             }
         }

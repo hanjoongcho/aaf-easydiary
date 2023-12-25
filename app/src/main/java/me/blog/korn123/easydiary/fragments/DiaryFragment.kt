@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
+import me.blog.korn123.commons.utils.EasyDiaryUtils.applyFilter
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
@@ -104,53 +105,7 @@ class DiaryFragment : Fragment() {
             setRevealWidth(0, requireContext().dpToPixel(30F))
 //            setIndicatorVisibility(View.INVISIBLE)
 //            removeDefaultPageTransformer()
-        }
-    }
 
-    private fun updateDiary() {
-        mDiaryList.clear()
-        val diaryList: List<Diary> = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
-            MODE_TASK_TODO -> EasyDiaryDbHelper.findDiary(
-                null,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                0
-            ).filter { item -> item.weather in 80..81 }
-            MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
-                null,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                81
-            )
-            MODE_TASK_DONE -> EasyDiaryDbHelper.findDiary(
-                null,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                0
-            ).filter { item -> item.weather in 82..83 }
-            MODE_TASK_CANCEL -> EasyDiaryDbHelper.findDiary(
-                null,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                83
-            )
-            MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
-                null,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                0
-            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
-            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
-                .filter { item -> item.weather < 80 || item.weather > 83 && item.currentTimeMillis <= System.currentTimeMillis() }
-                .run { if (this.size > 100) this.subList(0, 100) else this }
-        }
-        mDiaryList.addAll(diaryList)
-        mBannerDiary.run {
             when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
                 MODE_PREVIOUS_100 -> {
                     setPageMargin(requireContext().dpToPixel(0F))
@@ -177,7 +132,8 @@ class DiaryFragment : Fragment() {
                 TransitionHelper.startActivityWithTransition(
                     requireActivity(),
                     Intent(requireContext(), DiaryReadingActivity::class.java).apply {
-                        putExtra(DIARY_SEQUENCE, diaryList[position].sequence)
+                        putExtra(DIARY_SEQUENCE, mDiaryList[position].sequence)
+                        putExtra(MODE_FLAG, arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100))
                     }
                 )
             }
@@ -187,9 +143,16 @@ class DiaryFragment : Fragment() {
                     mBannerDiary.adapter.notifyDataSetChanged()
                 }
             })
-            create(mDiaryList)
+            create()
         }
+    }
+
+    private fun updateDiary() {
+        mDiaryList.clear()
+        mDiaryList.addAll(applyFilter(arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)))
         mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
+        mBannerDiary.data.clear()
+        mBannerDiary.addData(mDiaryList)
     }
 
     companion object {

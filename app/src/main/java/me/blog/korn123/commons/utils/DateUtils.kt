@@ -3,11 +3,12 @@ package me.blog.korn123.commons.utils
 import android.content.Context
 import com.google.api.client.util.DateTime
 import me.blog.korn123.easydiary.enums.DateTimeFormat
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 
 object DateUtils {

@@ -25,7 +25,8 @@
     <dimen name="basic_text_small">13sp</dimen>
     <dimen name="basic_text_medium">15sp</dimen>
     <dimen name="basic_text_large">17sp</dimen>
-    <dimen name="calendar_item_text_default">9sp</dimen>
+    <dimen name="calendar_item_text_large">10sp</dimen>
+    <dimen name="calendar_item_text_medium">8sp</dimen>
     <dimen name="widget_text_medium">15sp</dimen>
 
     <!-- Component Size -->
@@ -43,6 +44,9 @@
     <dimen name="diary_symbol_height">32dp</dimen>
     <dimen name="diary_symbol_width_s">20dp</dimen>
     <dimen name="diary_symbol_height_s">20dp</dimen>
+
+    <!-- Image Size -->
+    <dimen name="settings_google_account_icon">32dp</dimen>
 
     <!-- ETC. -->
     <dimen name="dp_18">18dp</dimen>

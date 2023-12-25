@@ -84,6 +84,11 @@ class DDayFragment : Fragment() {
         updateDDayList(mDDaySortOrder)
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateDDayList(mDDaySortOrder)
+    }
+
     private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
     private fun updateDDayList(sortOrder: Sort) {

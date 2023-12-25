@@ -664,63 +664,75 @@
     </string>
     <string name="release_284">
         v1.4.284.202210260 / 2022.10.26\n
-        Improved Dashboard UX
+        ᱰᱮᱥᱵᱚᱰ UX ᱥᱩᱫᱷᱟᱹᱨ ᱠᱟᱱᱟ
     </string>
     <string name="release_285">
         v1.4.285.202211170 / 2022.11.17\n
-        Changed not to check storage access permission in TIRAMISU (Android 13) version
+        TIRAMISU (Android 13) ᱵᱟᱨᱥᱚᱱ ᱨᱮ ᱥᱴᱳᱨᱮᱡᱽ ᱟᱫᱮᱨ ᱧᱮᱞ ᱞᱟᱹᱠᱛᱤ ᱵᱟᱝ ᱠᱟᱱᱟ
     </string>
     <string name="release_286">
         v1.4.286.202212110 / 2022.12.11\n
-        Fixed an error in which the timeline filter was activated abnormally
+        ᱦᱤᱰᱟᱹᱜ ᱴᱷᱤᱠ ᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱚᱠᱛᱚ ᱴᱟᱭᱢᱞᱟᱭᱤᱱ ᱪᱷᱟᱹᱱᱤ ᱵᱮᱥ ᱛᱮ ᱵᱟᱭ ᱮᱠᱴᱤᱣᱮᱴᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
     </string>
     <string name="release_287">
         v1.4.287.202301140 / 2023.01.14\n
-        User Experience (UX) Optimization
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_288">
         v1.4.288.202302030 / 2023.02.03\n
-        Fixed an error where Photo Multi-Picker did not work in TIRAMISU (Android 13) version
+        ᱵᱷᱩᱞ ᱥᱩᱜᱷᱟᱹᱨ ᱦᱩᱭᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ Photo Multi-Picker ᱫᱚ TIRAMISU (Android 13) ᱵᱷᱚᱨᱥᱚᱱ ᱨᱮ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
     </string>
     <string name="release_289">
         v1.4.289.202302031 / 2023.02.03\n
-        Fixed an error where diary notifications did not work in TIRAMISU (Android 13) version
+        ᱵᱷᱩᱞ ᱥᱩᱜᱷᱟᱹᱨ ᱦᱩᱭᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱰᱟᱭᱨᱤ ᱤᱛᱞᱟᱹᱠᱚ TIRAMISU (Android 13) ᱵᱷᱚᱨᱥᱚᱱ ᱨᱮ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
     </string>
     <string name="release_291">
         v1.4.291.202302260 / 2023.02.26\n
-        Added date and time formatting settings
+        ᱢᱟᱦᱟᱸ ᱟᱨ ᱚᱠᱛᱚ ᱯᱷᱚᱨᱢᱟᱴ ᱥᱟᱡᱟᱣᱠᱚ ᱥᱮᱞᱮᱫ ᱦᱩᱭ ᱮᱱᱟ
     </string>
     <string name="release_292">
         v1.4.292.202303100 / 2023.03.10\n
-        Added support for Markdown syntax
+        Markdown syntax ᱞᱟᱹᱜᱤᱫ ᱥᱚᱦᱚᱫ ᱥᱮᱞᱮᱫ ᱦᱩᱭᱮᱱᱟ
     </string>
     <string name="release_293">
         v1.4.293.202303240 / 2023.03.24\n
-        Improved markdown mode style
+        markdown mode ᱥᱴᱟᱭᱤᱞ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_294">
         v1.4.294.202304080 / 2023.04.08\n
-        Added user manual link
+        user manual ᱞᱤᱝᱠ ᱥᱮᱞᱮᱫ ᱦᱩᱭᱮᱱᱟ
     </string>
     <string name="release_295">
         v1.4.295.202304180 / 2023.04.18\n
-        Added attached photo gallery
+        ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱜᱮᱞᱨᱤ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
     <string name="release_297">
         v1.4.297.202304260 / 2023.04.26\n
-        Improve to support markdown in widget
+        widget ᱨᱮ markdown ᱨᱮᱭᱟᱜ ᱥᱚᱦᱚᱫ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_298">
         v1.4.298.202306010 / 2023.06.01\n
-        User Experience (UX) Optimization
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ UX ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ ᱥᱩᱫᱷᱟᱹᱨ ᱠᱟᱱᱟ
     </string>
     <string name="release_299">
         v1.4.299.202306100 / 2023.06.10\n
-        User Experience (UX) Optimization
+        ᱰᱮᱥᱵᱚᱰ UX ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ ᱥᱩᱫᱷᱟᱹᱨ ᱠᱟᱱᱟ
     </string>
     <string name="release_300">
         v1.4.300.202307110 / 2023.07.11\n
-        Added Dashboard Calendar Component
+        ᱰᱮᱥᱵᱚᱰ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱱᱚᱢᱩᱱᱟ ᱥᱮᱞᱮᱫ ᱦᱩᱭᱮᱱᱟ
+    </string>
+    <string name="release_301">
+        v1.4.301.202308250 / 2023.08.25\n
+        ᱰᱮᱥᱵᱚᱰ UX ᱥᱩᱫᱷᱟᱹᱨ ᱠᱟᱱᱟ
+    </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Added automatic diary creation function using Google Calendar events
+    </string>
+    <string name="release_303">
+        v1.4.303.202310160 / 2023.10.16\n
+        User Experience (UX) Optimization
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -981,10 +993,10 @@
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">ᱱᱮᱱᱮ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱱ</string>
-    <string name="datetime_setting_title">Datetime Formatting</string>
-    <string name="datetime_setting_summary">Set the date and time display format. (The set display format is applied to most screens except for the timeline and diary creation screens.)</string>
-    <string name="markdown_setting_title">Markdown Syntax</string>
-    <string name="markdown_setting_summary">If you activate the Markdown Syntax option, you can enter various formats using MarkDown syntax when writing a diary.</string>
+    <string name="datetime_setting_title">ᱫᱤᱱᱵᱮᱲᱟ ᱯᱷᱚᱨᱢᱟᱴᱤᱝ</string>
+    <string name="datetime_setting_summary">ᱢᱟᱦᱟᱸ ᱟᱨ ᱚᱠᱛᱚ ᱯᱷᱚᱨᱢᱟᱴ ᱥᱮᱴ ᱢᱮ ᱾ (ᱴᱟᱭᱢᱞᱟᱭᱤᱱ ᱟᱨ ᱰᱟᱭᱨᱤ ᱵᱮᱱᱟᱣ ᱨᱮᱱᱟᱜ ᱥᱠᱨᱤᱱ ᱠᱚ ᱵᱮᱜᱚᱨ ᱰᱮᱵᱽᱞᱚᱯᱢᱮᱸᱴ ᱰᱟᱭᱨᱤ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱟᱹᱲᱛᱤ ᱥᱠᱨᱤᱱ ᱨᱮ ᱞᱟᱜᱟᱜᱼᱟ ᱾)</string>
+    <string name="markdown_setting_title">ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ</string>
+    <string name="markdown_setting_summary">ᱡᱩᱫᱤ ᱟᱢ ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ ᱢᱚᱱᱮᱛᱮᱭᱟᱜ ᱮᱠᱴᱤᱵᱷ ᱠᱮᱫᱟ, ᱟᱢ ᱫᱚ ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮᱜ ᱟᱭᱢᱟ ᱞᱮᱠᱟᱱ ᱯᱷᱚᱨᱢᱮᱴ ᱠᱚ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜ ᱟ ᱡᱚᱠᱷᱚᱱ ᱟᱢ ᱰᱟᱭᱨᱤ ᱮᱢ ᱚᱞ ᱮᱫᱟ ᱾</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
@@ -993,12 +1005,14 @@
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
-    <string name="attached_photo_gallery">Photo Gallery</string>
-    <string name="visible_unlinked_photo">View photos without diary references</string>
-    <string name="visible_unlinked_photo_description">If you do not save the diary after attaching a photo or delete the saved diary, the attached photo is not deleted and remains in the device storage. If you activate this option, you can view the attached photo.</string>
-    <string name="linked_photo_count">Number of valid photos</string>
-    <string name="unlinked_photo_count">Number of invalid photos</string>
-    <string name="total_photo_count">Number of total photos</string>
-    <string name="delete_unlinked_photo">Delete unlinked photos</string>
-    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
+    <string name="attached_photo_gallery">ᱯᱷᱚᱴᱚ ᱜᱚᱞᱨᱤ</string>
+    <string name="visible_unlinked_photo">ᱵᱤᱱᱟ ᱰᱟᱭᱨᱤ ᱥᱟᱹᱠᱷᱤᱭᱟᱹᱛ ᱧᱮᱞ ᱠᱟᱛᱮ ᱪᱤᱛᱟᱹᱨ ᱧᱮᱥ ᱢᱮ</string>
+    <string name="visible_unlinked_photo_description">ᱪᱤᱛᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱛᱟᱭᱚᱢ ᱡᱩᱫᱤ ᱟᱢ ᱫᱚ ᱰᱟᱭᱨᱤ ᱵᱟᱝ ᱥᱟᱧᱪᱟᱣ ᱠᱟᱫᱟᱢ ᱟᱨ ᱞᱟᱴᱷᱟ ᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱫᱚ ᱵᱟᱭ ᱢᱮᱴᱟᱣᱜᱼᱟ ᱚᱱᱟ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱥᱟᱧᱪᱟᱣ ᱠᱟᱛᱮ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱱᱚᱶᱟ ᱢᱚᱱᱮ ᱛᱮᱭᱟᱜ ᱮᱢ ᱞᱮᱠᱷᱟᱱ ᱟᱢ ᱡᱚᱲᱟᱣ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱟ ᱾</string>
+    <string name="linked_photo_count">ᱴᱷᱤᱠ ᱪᱤᱛᱟᱹᱨ ᱨᱮᱭᱟᱜ ᱮᱞ</string>
+    <string name="unlinked_photo_count">ᱵᱟᱝ ᱴᱷᱤᱠ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱨᱮᱭᱟᱜᱞ ᱮᱞ</string>
+    <string name="total_photo_count">ᱢᱩᱴ ᱯᱷᱚᱴᱚ ᱨᱮᱭᱟᱜ ᱮᱞ</string>
+    <string name="delete_unlinked_photo">ᱵᱟᱝ ᱞᱤᱝᱠ ᱠᱟᱱ ᱯᱷᱚᱴᱚᱠᱚ</string>
+    <string name="delete_unlinked_photo_confirm_message">ᱟᱢ ᱫᱚ ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱵᱟᱱ ᱞᱤᱝᱠ ᱛᱮ ᱪᱤᱛᱟᱹᱨ ᱢᱮᱴᱟᱣ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ ?\nᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱦᱚᱸ ᱢᱮᱴᱟᱣ ᱞᱮᱠᱷᱟᱱ, ᱱᱚᱣᱟ ᱫᱚ Google Drive ᱥᱮ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱮᱴᱟᱜ ᱵᱚᱠᱚᱯ ᱨᱮᱫᱽ ᱠᱷᱚᱱ ᱵᱟᱭ ᱢᱮᱴᱟᱣᱜᱼᱟ ᱾</string>
+    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
+    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
 </resources>

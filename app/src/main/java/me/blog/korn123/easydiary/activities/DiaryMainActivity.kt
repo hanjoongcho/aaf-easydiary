@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -11,7 +12,11 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
+import com.squareup.seismic.ShakeDetector
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.makeToast
 import kotlinx.coroutines.CoroutineScope
@@ -39,19 +45,54 @@ import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
+import me.blog.korn123.easydiary.extensions.exportHtmlBook
+import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.migrateData
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
+import me.blog.korn123.easydiary.extensions.openGridSettingDialog
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.startReviewFlow
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.DIARY_MODE
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_WELCOME_DASHBOARD
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
+import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
+import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_NOTIFICATION
+import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
+import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
+import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecyclerView>() {
+class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecyclerView>(), ShakeDetector.Listener {
 
     /***************************************************************************************************
      *   global properties
@@ -119,6 +160,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             setDisplayShowTitleEnabled(false)
         }
 
+        setupMotionSensor()
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         initDiaryGrid()
         initDummyData()
@@ -304,12 +346,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             R.id.microphone -> showSpeechDialog()
             R.id.openDashboard -> {
-                DashboardDialogFragment().apply {
-                    show(
-                        supportFragmentManager,
-                        "DashboardDialog"
-                    )
-                }
+//                DashboardDialogFragment().apply {
+//                    show(
+//                        supportFragmentManager,
+//                        "DashboardDialog"
+//                    )
+//                }
+                TransitionHelper.startActivityWithTransition(
+                    this@DiaryMainActivity,
+                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
+                )
             }
             R.id.popupMenu -> openCustomOptionMenu()
         }
@@ -339,6 +385,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
+    override fun hearShake() {
+        var position = -1
+        run outer@ {
+            mDiaryList.forEachIndexed { index, diary ->
+                if (diary.currentTimeMillis < EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis) {
+                    position = index
+                    return@outer
+                }
+            }
+        }
+
+        makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+        if (position != -1)  mBinding.diaryListView.scrollToPosition(position)
+    }
 
     /***************************************************************************************************
      *   etc functions
@@ -750,5 +810,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             )
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
+    }
+
+    private fun setupMotionSensor() {
+        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val sd = ShakeDetector(this)
+        sd.start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
     }
 }

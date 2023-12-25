@@ -240,6 +240,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, false)
         set(enableDDayFlexboxLayout) = prefs.edit().putBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, enableDDayFlexboxLayout).apply()
 
+    var enableDashboardCalendar: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, true)
+        set(enableDashboardCalendar) = prefs.edit().putBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, enableDashboardCalendar).apply()
+
     var settingDatetimeFormat: String
         get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
         set(settingDatetimeFormat) = prefs.edit().putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat).apply()

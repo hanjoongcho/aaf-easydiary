@@ -70,6 +70,7 @@
                         android:gravity="start"/>
 
                     <com.google.android.flexbox.FlexboxLayout
+                        android:visibility="gone"
                         android:id="@+id/photoViews"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -40,6 +41,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mSDatePickerDialog: DatePickerDialog
+    private lateinit var mEDatePickerDialog: DatePickerDialog
+    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -6) }
+    private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
+    private var mStartMillis = mStartCalendar.timeInMillis
+    private var mEndMillis = 0L
+    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mStartMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        drawChart()
+    }
+
+    private var mEndDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mEndMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        drawChart()
+    }
     private lateinit var mBinding: FragmentStockLineChartBinding
     private lateinit var mCombineChart: CombinedChart
     private lateinit var mKospiChart: LineChart
@@ -81,7 +97,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private var mChartMode = R.id.radio_button_option_a
     private var mCheckedSyncMarker = true
-    private var mCheckedDrawCircle = false
+    private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
     private var mCheckedEvaluatePrice = true
     private var mCheckedPrincipalHighlight = true
@@ -161,6 +177,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         setupTitle() // determine title parameter
         setupChartOptions()
         drawChart()
+
+        mSDatePickerDialog = DatePickerDialog(requireContext(), mStartDateListener, mStartCalendar.get(Calendar.YEAR), mStartCalendar.get(Calendar.MONTH), mStartCalendar.get(Calendar.DAY_OF_MONTH))
+        mEDatePickerDialog = DatePickerDialog(requireContext(), mEndDateListener, mEndCalendar.get(Calendar.YEAR), mEndCalendar.get(Calendar.MONTH), mEndCalendar.get(Calendar.DAY_OF_MONTH))
+        mBinding.run {
+            cardFromDate.setOnClickListener { mSDatePickerDialog.show() }
+            cardToDate.setOnClickListener { mSDatePickerDialog.show() }
+        }
     }
 
     override fun onDestroy() {
@@ -482,7 +505,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(
-                null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance
+                null, false, mStartMillis, mEndMillis, DAILY_STOCK, realmInstance = realmInstance
             )
             var index = 0
             var totalSum = 0F
@@ -715,7 +738,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             color = requireContext().config.primaryColor
             highLightColor = requireContext().config.textColor
             setCircleColor(requireContext().config.primaryColor)
-            setCircleColorHole(requireContext().config.textColor)
+//            setCircleColorHole(requireContext().config.textColor)
             setDrawCircles(mCheckedDrawCircle)
         }
     }
@@ -731,7 +754,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun setDefaultFillChartColor(lineDataSet: LineDataSet, color: Int) {
         lineDataSet.run {
             fillColor = color
-            enableDashedLine(0f, 1f, 0f)
+            this.color = color
+//            enableDashedLine(3f, 1f, 0f)
             setDrawFilled(true)
             setDrawCircleHole(false)
             setDrawCircles(false)

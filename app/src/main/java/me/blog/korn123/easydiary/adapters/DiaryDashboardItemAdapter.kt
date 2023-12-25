@@ -2,9 +2,13 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -61,8 +65,21 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                     cardFutureDiaryBadge.visibility = View.GONE
                 }
 
-                textContents.maxLines = 3
+                textContents.maxLines = when (context.config.enableContentsSummary) {
+                    true -> {
+                        textContents.ellipsize = TextUtils.TruncateAt.END
+                        context.config.summaryMaxLines
+                    }
+
+                    false -> {
+                        Integer.MAX_VALUE
+                    }
+                }
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
+                if (activity.config.enableMarkdown) {
+                    textContents.tag = diary.sequence
+                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence)
+                }
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringForceFormatting(diary.currentTimeMillis, activity)
@@ -90,8 +107,16 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
 
                     FlavorUtils.initWeatherView(this, imageSymbol, diary.weather)
 
+                    when ((diary.photoUris?.size ?: 0) > 0) {
+                        true -> {
+                            photoViews.visibility = View.VISIBLE
+                        }
+
+                        false -> photoViews.visibility = View.GONE
+                    }
+
                     photoViews.removeAllViews()
-                    if (diary.photoUris?.size ?: 0 > 0) {
+                    if ((diary.photoUris?.size ?: 0) > 0) {
                         diary.photoUrisWithEncryptionPolicy()?.map {
                             val imageXY = dpToPixel(32F)
                             val imageView = ImageView(this)

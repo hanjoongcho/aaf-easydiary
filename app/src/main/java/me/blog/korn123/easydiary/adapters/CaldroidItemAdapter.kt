@@ -11,17 +11,21 @@ import com.roomorama.caldroid.CaldroidGridAdapter
 import hirondelle.date4j.DateTime
 import io.realm.Sort
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentCustomCellBinding
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.SETTING_DATETIME_FORMAT
+import java.util.TimeZone
 
 class CaldroidItemAdapter(
         val activity: Activity,
@@ -91,6 +95,8 @@ class CaldroidItemAdapter(
                         (item3.getChildAt(1) as TextView).setTextColor(context.config.textColor)
                     }
 
+
+
                     // Somehow after setBackgroundResource, the padding collapse.
                     // This is to recover the padding
                     root.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
@@ -105,68 +111,78 @@ class CaldroidItemAdapter(
                             null
                         }
                     }
+                    if (mDiaryList.isNotEmpty() && mDiaryList.any {diary -> diary.isHoliday}) calendarDate.setTextColor(Color.RED)
 
-                    when {
-                        mDiaryList.isEmpty() -> {
-                            item1.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
+                    if (!activity.isDestroyed) {
+                        when {
+                            mDiaryList.isEmpty() -> {
+                                item1.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
+                                item2.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
+                                item3.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
                             }
-                            item2.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
+                            mDiaryList.size == 1 -> {
+                                item1.run {
+                                    val item = mDiaryList[0]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+
+                                }
+                                item2.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
+                                item3.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
                             }
-                            item3.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
+                            mDiaryList.size == 2 -> {
+                                item1.run {
+                                    val item = mDiaryList[0]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+                                }
+                                item2.run {
+                                    val item = mDiaryList[1]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+                                }
+                                item3.run {
+                                    (getChildAt(0) as ImageView).setImageResource(0)
+                                    (getChildAt(1) as TextView).text = " "
+                                }
                             }
-                        }
-                        mDiaryList.size == 1 -> {
-                            item1.run {
-                                val item = mDiaryList[0]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
-                            }
-                            item2.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
-                            }
-                            item3.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
-                            }
-                        }
-                        mDiaryList.size == 2 -> {
-                            item1.run {
-                                val item = mDiaryList[0]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
-                            }
-                            item2.run {
-                                val item = mDiaryList[1]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
-                            }
-                            item3.run {
-                                (getChildAt(0) as ImageView).setImageResource(0)
-                                (getChildAt(1) as TextView).text = " "
-                            }
-                        }
-                        else -> {
-                            item1.run {
-                                val item = mDiaryList[0]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
-                            }
-                            item2.run {
-                                val item = mDiaryList[1]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
-                            }
-                            item3.run {
-                                val item = mDiaryList[2]
-                                FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                            else -> {
+                                item1.run {
+                                    val item = mDiaryList[0]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+                                }
+                                item2.run {
+                                    val item = mDiaryList[1]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+                                }
+                                item3.run {
+                                    val item = mDiaryList[2]
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+//                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
+                                    activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
+                                }
                             }
                         }
                     }
@@ -183,15 +199,15 @@ class CaldroidItemAdapter(
         binding.calendarDate.run {
             if (dateTime == getToday()) {
                 setBackgroundResource(R.drawable.bg_calendar_circle)
-                setTextColor(Color.WHITE)
+//                setTextColor(Color.WHITE)
             } else {
                 setBackgroundResource(0)
-                when (dateTime.weekDay) {
-                    1 -> setTextColor(Color.RED)
-                    7 -> setTextColor(Color.rgb(0, 0, 139))
-                    else -> {
-                        if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
-                    }
+            }
+            when (dateTime.weekDay) {
+                1 -> setTextColor(Color.RED)
+                7 -> setTextColor(Color.rgb(0, 0, 139))
+                else -> {
+                    if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
                 }
             }
         }

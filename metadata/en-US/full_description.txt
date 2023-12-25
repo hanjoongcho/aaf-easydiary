@@ -35,6 +35,7 @@ In addition, if you have TTF fonts you have, you can add them to the Easy Diary 
 Diary writing status by time can be viewed at a glance in a bar chart.
 
 💾 Backup and recovery
+All content, including attached photos, can be backed up and restored using Google Drive.
 
 📢 <b>Welcome Developer</b>
 Are you a developer?

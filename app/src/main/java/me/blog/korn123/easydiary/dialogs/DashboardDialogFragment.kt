@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +42,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
-    private var coroutineJob: Job? = null
+    private lateinit var mDailySymbolFragment: DailySymbolFragment
 
     override fun onStart() {
         super.onStart()
@@ -71,6 +73,7 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        mDailySymbolFragment = DailySymbolFragment()
 
         mBinding.run {
             requireActivity().updateDrawableColorInnerCardView(close, Color.WHITE)
@@ -82,6 +85,7 @@ class DashboardDialogFragment : DialogFragment() {
                 }, 300)
 
             }
+            layoutProgressContainer.setBackgroundColor(config.primaryColor)
 
             requireActivity().getDashboardCardWidth(0.9F).also {
                 lifetime.layoutParams.width = it
@@ -108,7 +112,7 @@ class DashboardDialogFragment : DialogFragment() {
 
 
             childFragmentManager.beginTransaction().run {
-                // PhotoHighlight
+                // 01. PhotoHighlight
                 replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
                     arguments = Bundle().apply {
                         putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
@@ -122,10 +126,10 @@ class DashboardDialogFragment : DialogFragment() {
                     }
                 })
 
-                // DDay
+                // 02. DDay
                 replace(R.id.dDay, DDayFragment())
 
-                // TODO
+                // 03. TODO
                 replace(R.id.fragment_diary_todo, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_TODO)
@@ -139,7 +143,7 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                })
 
-                // DONE
+                // 04. DONE
                 replace(R.id.fragment_diary_done, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DONE)
@@ -153,27 +157,27 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                })
 
-                // Future Diary
+                // 05. Future Diary
                 replace(R.id.fragment_diary_future, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_FUTURE)
                     }
                 })
 
-                // Diary Previous 100
+                // 06. Diary Previous 100
                 replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
                     }
                 })
 
-                // DashBoardSummary
+                // 07. DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())
 
-                // Daily Symbol
-                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+                // 08. Daily Symbol
+                replace(R.id.dashboard_daily_symbol, mDailySymbolFragment)
 
-                // DashBoardRank-Lifetime
+                // 09. DashBoardRank-Lifetime
                 replace(R.id.lifetime, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -183,7 +187,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // DashBoardRank-LastMonth
+                // 10. DashBoardRank-LastMonth
                 replace(R.id.lastMonth, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -193,7 +197,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // DashBoardRank-LastWeek
+                // 11. DashBoardRank-LastWeek
                 replace(R.id.lastWeek, DashBoardRankFragment().apply {
                     val args = Bundle()
                     args.putString(
@@ -203,7 +207,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Creation Time
+                // 12. Statistics-Creation Time
                 val chartTitle = getString(R.string.statistics_creation_time)
                 replace(R.id.statistics1, WritingBarChartFragment().apply {
                     val args = Bundle()
@@ -211,7 +215,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Symbol All
+                // 13. Statistics-Symbol All
                 val symbolAllTitle = getString(R.string.statistics_symbol_all)
                 replace(R.id.statistics2, SymbolBarChartFragment().apply {
                     val args = Bundle()
@@ -219,7 +223,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
-                // Statistics-Symbol TopTen
+                // 14. Statistics-Symbol TopTen
                 val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
                 replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
                     val args = Bundle()
@@ -227,6 +231,7 @@ class DashboardDialogFragment : DialogFragment() {
                     arguments = args
                 })
 
+                // 15. Chart Weight
                 if (config.enableDebugOptionVisibleChartWeight) {
                     mBinding.statistics4.visibility = View.VISIBLE
                     replace(R.id.statistics4, WeightLineChartFragment().apply {
@@ -236,7 +241,8 @@ class DashboardDialogFragment : DialogFragment() {
                     })
                 }
 
-                if (config.enableDebugOptionVisibleChartWeight) {
+                // 16. Chart Stock
+                if (config.enableDebugOptionVisibleChartStock) {
                     mBinding.statistics5.visibility = View.VISIBLE
                     replace(R.id.statistics5, StockLineChartFragment().apply {
                         val args = Bundle()
@@ -260,18 +266,30 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
+            layoutProgressContainer.visibility = View.VISIBLE
+            progress.visibility = View.VISIBLE
             root.setBackgroundColor(getDashboardBackgroundColor())
             requireActivity().updateTextColors(root)
             requireActivity().updateAppViews(root)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        coroutineJob?.let {
-            if (it.isActive) it.cancel()
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            mBinding.run {
+                // Diary Update
+                mDailySymbolFragment.updateDailySymbol()
+
+                // FIXME:
+                // This is workaround.
+                // For pages that are invisible but have already been loaded, it will not be updated.
+                mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    layoutProgressContainer.visibility = View.GONE
+                    progress.visibility = View.GONE
+                }, 300)
+            }
+        }, 300)
     }
 
     private fun getDashboardBackgroundColor() = config.screenBackgroundColor

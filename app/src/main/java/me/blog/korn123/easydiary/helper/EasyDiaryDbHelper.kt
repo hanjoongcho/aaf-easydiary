@@ -17,7 +17,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(22)
+                .schemaVersion(23)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -205,7 +205,7 @@ object EasyDiaryDbHelper {
                 .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
                 .equalTo("dateString", dateString)
                 .findAll()
-                .sort("sequence", sort).toList()
+                .sort("currentTimeMillis", sort).toList()
     }
 
     fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUri> {

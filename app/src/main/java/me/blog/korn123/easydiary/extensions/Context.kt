@@ -420,6 +420,10 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                             }
                         }
                     }
+                    is ProgressBar -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  it.indeterminateTintList = ColorStateList.valueOf(config.primaryColor)
+                    }
+
                 }
             }
 }

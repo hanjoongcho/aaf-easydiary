@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/card_dashboard"
+    app:contentPadding="0dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="@dimen/card_radius">
@@ -61,9 +62,10 @@
             android:id="@+id/dailyCardRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <androidx.core.widget.ContentLoadingProgressBar
+            android:visibility="gone"
             android:id="@+id/dailyCardProgressBar"
             style="?android:progressBarStyleLarge"
             android:layout_width="30dp"

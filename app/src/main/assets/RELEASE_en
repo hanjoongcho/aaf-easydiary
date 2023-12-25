@@ -4,6 +4,15 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.303.202310160 (date: 2023.10.16)
+  * User Experience (UX) Optimization
+
+# Changes in 1.4.302.202309180 (date: 2023.09.18)
+  * Added automatic diary creation function using Google Calendar events
+
+# Changes in 1.4.301.202308250 (date: 2023.08.25)
+  * Dashboard UX Improvements
+
 # Changes in 1.4.300.202307110 (date: 2023.07.11)
   * Added Dashboard Calendar Component
 

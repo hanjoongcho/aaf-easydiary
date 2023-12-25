@@ -722,6 +722,18 @@
         v1.4.300.202307110 / 2023.07.11\n
         Added Dashboard Calendar Component
     </string>
+    <string name="release_301">
+        v1.4.301.202308250 / 2023.08.25\n
+        Dashboard UX Improvements
+    </string>
+    <string name="release_302">
+        v1.4.302.202309180 / 2023.09.18\n
+        Added automatic diary creation function using Google Calendar events
+    </string>
+    <string name="release_303">
+        v1.4.303.202310160 / 2023.10.16\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -751,7 +763,7 @@
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
     <string name="preferences_category_backup_restore">Backup and Restore</string>
-    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="preferences_category_backup_restore_sub">Google API</string>
     <string name="backup_attach_photo_title">Backup attached photos</string>
     <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
     <string name="recover_attach_photo_title">Recover attached photos</string>
@@ -868,8 +880,8 @@
     <string name="send_email_attach_excel_title">Excel file creation and email sending</string>
     <string name="send_email_attach_excel_description">All content except the attached photo is created as an Excel file and attached to the email.</string>
     <string name="storage_migration_message">Storage location changes will be made in accordance with the Android 10 Scoped Storage policy. This job runs only once.</string>
-    <string name="google_drive_account_sign_out_title">Reset Google Drive linked account</string>
-    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
+    <string name="google_drive_account_sign_out_title">Reset Google linked account</string>
+    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google linked account.</string>
     <string name="calendar_font_scale_title">Set calendar font size</string>
     <string name="calendar_font_scale_description">Scales the font size inside the calendar based on the set global font size.</string>
     <string name="calendar_font_scale_disable">Do not use</string>
@@ -934,8 +946,8 @@
     <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
     <string name="google_drive_account_information_title">Linked Google account information</string>
     <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
-    <string name="google_drive_account_sign_in_title">Link Google Drive account</string>
-    <string name="google_drive_account_sign_in_description">Connect your account to Google Drive for easy diary data backup.</string>
+    <string name="google_drive_account_sign_in_title">Sign in with Google</string>
+    <string name="google_drive_account_sign_in_description">Sign in to your Google account to back up and restore your diary using Google Drive or automatically create a diary using Google Calendar events.</string>
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>
     <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
     <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
@@ -1001,4 +1013,6 @@
     <string name="total_photo_count">Number of total photos</string>
     <string name="delete_unlinked_photo">Delete unlinked photos</string>
     <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
+    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
+    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
 </resources>
