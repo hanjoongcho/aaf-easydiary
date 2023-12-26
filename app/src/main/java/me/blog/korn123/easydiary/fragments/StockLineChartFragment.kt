@@ -43,7 +43,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mSDatePickerDialog: DatePickerDialog
     private lateinit var mEDatePickerDialog: DatePickerDialog
-    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -6) }
+    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }
     private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
     private var mStartMillis = mStartCalendar.timeInMillis
     private var mEndMillis = 0L
@@ -485,7 +485,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val krTradingProfitEntries = arrayListOf<Entry>()
         val krTradingProfitPositiveEntries = arrayListOf<Entry>()
         val krTradingProfitNegativeEntries = arrayListOf<Entry>()
-        val krColors = arrayListOf<Int>()
+//        val krColors = arrayListOf<Int>()
 
         val usPrincipalEntries = arrayListOf<BarEntry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
@@ -525,7 +525,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
                             krEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), krEvaluatedPrice, StockDataType.KR_EVALUATE_PRICE))
                             krTradingProfitEntries.add(Entry(index.toFloat(), diff))
-                            if (diff >= 0) krColors.add(mColorPlus) else krColors.add(mColorMinus)
+//                            if (diff >= 0) krColors.add(mColorPlus) else krColors.add(mColorMinus)
 
                             usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
                             usEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), usEvaluatedPrice, StockDataType.US_EVALUATE_PRICE))
@@ -568,7 +568,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     originEntry.forEachIndexed { index, entry ->
                         if (index > 0 && index < originEntry.size) {
                             val offset = entry.y.minus(start).div(splitCnt)
-                            for(i in 0..splitCnt.minus(1)) {
+                            for(i in 0..splitCnt.minus(if (originEntry.size.minus(1) == index) 0 else 1)) {
                                 val y = offset.times(i).plus(start)
                                 negative.add(Entry(splitIndex, if (y > 0) 0f else y))
                                 positive.add(Entry(splitIndex, if (y < 0) 0f else y))
