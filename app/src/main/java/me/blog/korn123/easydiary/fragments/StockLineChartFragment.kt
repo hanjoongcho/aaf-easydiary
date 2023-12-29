@@ -99,7 +99,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
-    private var mCheckedEvaluatePrice = true
+    private var mCheckedEvaluatePrice = false
     private var mCheckedPrincipalHighlight = true
 
 
@@ -182,7 +182,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mEDatePickerDialog = DatePickerDialog(requireContext(), mEndDateListener, mEndCalendar.get(Calendar.YEAR), mEndCalendar.get(Calendar.MONTH), mEndCalendar.get(Calendar.DAY_OF_MONTH))
         mBinding.run {
             cardFromDate.setOnClickListener { mSDatePickerDialog.show() }
-            cardToDate.setOnClickListener { mSDatePickerDialog.show() }
+            cardToDate.setOnClickListener { mEDatePickerDialog.show() }
         }
     }
 
@@ -199,6 +199,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun initDataSet() {
         mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
             setDefaultLineChartColor(this)
+            isVisible = mCheckedEvaluatePrice
+            isHighlightEnabled = mCheckedEvaluatePrice
         }
         mUsEvaluatedPriceDataSet = LineDataSet(null, "US Evaluated Price").apply {
             setDefaultLineChartColor(this)

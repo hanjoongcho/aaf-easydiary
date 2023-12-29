@@ -140,7 +140,9 @@ class DiaryFragment : Fragment() {
             registerOnPageChangeCallback(object: OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    mBannerDiary.adapter.notifyDataSetChanged()
+                    Handler(Looper.getMainLooper()).post {
+                        mBannerDiary.adapter.notifyDataSetChanged()
+                    }
                 }
             })
             create()
