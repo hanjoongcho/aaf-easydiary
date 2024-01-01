@@ -169,12 +169,14 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     Alarm.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
                     Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
                     Alarm.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
+                    Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> radioCalendarScheduleSync.isChecked = true
                 }
                 radioGroupWorkMode.setOnCheckedChangeListener { _, i ->
                     when (i) {
                         R.id.radio_diary_writing -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
                         R.id.radio_diary_backup_local -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
                         R.id.radio_diary_backup_gms -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_GMS
+                        R.id.radio_calendar_schedule_sync -> temporaryAlarm.workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                     }
                 }
 

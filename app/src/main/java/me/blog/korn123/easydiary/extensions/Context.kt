@@ -184,7 +184,7 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
                 putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
             }
         }
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS, Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
             Intent(this, DiaryMainActivity::class.java)
         }
         else -> null
@@ -272,6 +272,10 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
             description = getString(R.string.schedule_backup_gms_complete)
+        }
+        Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo_google_calendar)
+            description = "Calendar schedule has been created as a diary."
         }
     }
     val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")

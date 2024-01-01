@@ -73,7 +73,10 @@ import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.calendarEventToDiary
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarCredential
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarService
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
@@ -422,21 +425,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestCalendarPermissions(account) {
-                val credential: GoogleAccountCredential =
-                    GoogleAccountCredential.usingOAuth2(
-                        requireActivity(),
-                        arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY)
-                    ).apply {
-                        selectedAccount = account
-                    }
-                val calendarService = Calendar.Builder(
-                    AndroidHttp.newCompatibleTransport(),
-                    GsonFactory(),
-                    credential
-                )
-                    .setApplicationName(getString(R.string.app_name))
-                    .build()
-
+                val credential = getCalendarCredential(requireContext())
+                val calendarService = getCalendarService(requireContext(), credential)
                 fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
                     var insertCount = 0
                     progressContainer.visibility = View.VISIBLE
@@ -469,25 +459,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             result.items.forEachIndexed { index, item ->
                                 Log.i(AAF_TEST, "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}")
 //                                descriptions.add(item.summary)
-                                val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
                                 withContext(Dispatchers.Main) {
-                                    if (EasyDiaryDbHelper.findDiary(item.summary)
-                                            .none { diary -> diary.currentTimeMillis == timeMillis }
-                                        && !(item.description == null && item.summary == null)) {
-                                        EasyDiaryDbHelper.insertDiary(
-                                            Diary(
-                                                BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
-                                                timeMillis,
-                                                if (item.description != null) item.summary else "",
-                                                item.description ?: item.summary,
-                                                SYMBOL_GOOGLE_CALENDAR,
-                                                item?.start?.dateTime == null
-                                            ).apply { isHoliday =
-                                                calendarId == "ko.south_korea#holiday@group.v.calendar.google.com"
-                                            }
-                                        )
-                                        insertCount++
-                                    }
+                                    insertCount += calendarEventToDiary(item, calendarId)
                                     mBinding.syncGoogleCalendarProgress.setProgressCompat(index.div(result.items.size.toFloat()).times(100).toInt(), true)
                                 }
                             }

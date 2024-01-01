@@ -28,5 +28,6 @@ open class Alarm : RealmObject {
         const val WORK_MODE_DIARY_WRITING = 0
         const val WORK_MODE_DIARY_BACKUP_GMS = 1
         const val WORK_MODE_DIARY_BACKUP_LOCAL = 2
+        const val WORK_MODE_CALENDAR_SCHEDULE_SYNC = 3
     }
 }

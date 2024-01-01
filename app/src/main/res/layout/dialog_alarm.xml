@@ -123,6 +123,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_calendar_schedule_sync"
+                    android:gravity="top"
+                    android:text="[BETA] Create a diary of Google Calendar events from -30 days to +30 days."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
             </RadioGroup>
             <View
                 android:background="?attr/colorPrimary"
