@@ -85,7 +85,7 @@ class DiaryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Handler(Looper.getMainLooper()).post { updateDiary() }
+        Handler(Looper.getMainLooper()).postDelayed({ updateDiary() }, 300)
     }
 
 
@@ -140,9 +140,9 @@ class DiaryFragment : Fragment() {
             registerOnPageChangeCallback(object: OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    Handler(Looper.getMainLooper()).post {
+                    Handler(Looper.getMainLooper()).postDelayed({
                         mBannerDiary.adapter.notifyDataSetChanged()
-                    }
+                    }, 300)
                 }
             })
             create()
