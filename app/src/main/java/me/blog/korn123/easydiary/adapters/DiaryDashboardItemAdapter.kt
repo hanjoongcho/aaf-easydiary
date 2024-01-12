@@ -75,10 +75,13 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                         Integer.MAX_VALUE
                     }
                 }
-                activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
-                if (activity.config.enableMarkdown) {
-                    textContents.tag = diary.sequence
-                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence)
+                if (textContents.getTag(R.id.diary_dashboard_item) != diary.contents!!) {
+                    textContents.setTag(R.id.diary_dashboard_item, diary.contents!!)
+                    activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
+                    if (activity.config.enableMarkdown) {
+                        textContents.tag = diary.sequence
+                        EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence)
+                    }
                 }
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
