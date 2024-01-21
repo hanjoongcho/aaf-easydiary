@@ -16,6 +16,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
@@ -43,17 +44,23 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.api.models.Contents
+import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -459,6 +466,80 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             config.enableDebugOptionVisibleTemporaryDiary =
                                 !config.enableDebugOptionVisibleTemporaryDiary
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+                        }
+                    }
+                )
+            )
+            linearDevContainer.addView(
+                // Sync GitHub MarkDown Page.
+                createBaseCardView(
+                    "GitHub MarkDown Page", null,
+                    Button(this@BaseDevActivity).apply {
+                        text = "SD-Stock"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val baseUrl = "https://api.github.com"
+                                var token: String? = null
+                                var tokenInfo: List<Diary>?
+                                var size = 0
+                                EasyDiaryDbHelper.getTemporaryInstance().run {
+                                    tokenInfo = EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
+                                    tokenInfo?.let {
+                                        size = it.size
+                                        if (size > 0) token = it[0].contents
+                                    }
+                                    close()
+                                }
+
+                                if (size != 1) {
+                                    runOnUiThread { makeToast("No Data") }
+                                } else {
+                                    val retrofitApi: Retrofit = Retrofit.Builder()
+                                        .baseUrl(baseUrl)
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build()
+                                    val downloadApi: Retrofit = Retrofit.Builder()
+                                        .baseUrl(baseUrl)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .build()
+                                    val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
+                                    val downloadApiService = downloadApi.create(GitHubRepos::class.java)
+                                    fun fetchContents(path: String) {
+                                        val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
+                                        val response = call.execute()
+                                        val contentsItems: List<Contents>? = response.body()
+                                        contentsItems?.forEach { content ->
+                                            if (content.download_url == null) {
+                                                fetchContents(content.path)
+                                            } else if (content.name.startsWith("👀")){
+                                                EasyDiaryDbHelper.getTemporaryInstance().run {
+                                                    val items = EasyDiaryDbHelper.findDiary(content.name.split(".")[0], false, 0, 0, 0, this)
+                                                    if (items.size == 1) {
+                                                        runOnUiThread {
+                                                            mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
+                                                        }
+                                                        val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                                        val diary = items[0]
+                                                        this.beginTransaction()
+                                                        diary.contents = re.body()
+                                                        this.commitTransaction()
+                                                    }
+
+                                                    this.close()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    fetchContents("stock/KOSPI200")
+                                    withContext(Dispatchers.Main) {
+                                        mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
+                                    }
+                                }
+
+
+                            }
                         }
                     }
                 )

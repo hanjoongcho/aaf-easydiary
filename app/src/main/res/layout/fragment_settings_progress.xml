@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressBar"
+        android:id="@+id/message"
         android:padding="10dp"
         android:textSize="15dp"
         android:text="@string/task_progress_message"

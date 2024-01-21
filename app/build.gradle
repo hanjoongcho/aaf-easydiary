@@ -201,6 +201,9 @@ dependencies {
     implementation 'io.noties.markwon:ext-strikethrough:4.6.2'
     implementation 'io.noties:prism4j:2.0.0'
     implementation 'com.squareup:seismic:1.0.3'
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
