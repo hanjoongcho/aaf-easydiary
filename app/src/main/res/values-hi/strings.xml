@@ -728,15 +728,15 @@
     </string>
     <string name="release_302">
         v1.4.302.202309180 / 2023.09.18\n
-        Added automatic diary creation function using Google Calendar events
+        Google कैलेंडर ईवेंट का उपयोग करके स्वचालित डायरी निर्माण फ़ंक्शन जोड़ा गया
     </string>
     <string name="release_303">
         v1.4.303.202310160 / 2023.10.16\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (UX) अनुकूलन
     </string>
     <string name="release_304">
         v1.4.304.202312270 / 2023.12.27\n
-        Dashboard UX Improvements
+		डैशबोर्ड यूएक्स सुधार
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -1017,6 +1017,6 @@
     <string name="total_photo_count">कुल फ़ोटो की संख्या</string>
     <string name="delete_unlinked_photo">अनलिंक की गई फ़ोटो हटाएँ</string>
     <string name="delete_unlinked_photo_confirm_message">क्या आप डिवाइस स्टोरेज से लिंक जानकारी के बिना फ़ोटो हटाना चाहते हैं?\nभले ही इसे डिवाइस स्टोरेज से हटा दिया गया हो, फिर भी इसे Google ड्राइव से हटाया नहीं जाता है या डिवाइस पर अलग से फ़ाइलों का बैकअप नहीं लिया जाता है।</string>
-    <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
-    <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
+    <string name="sync_google_calendar_event_title">[बीटा] Google कैलेंडर सिंक करें</string>
+    <string name="sync_google_calendar_event_summary">Google कैलेंडर में पंजीकृत शेड्यूल का उपयोग करके एक डायरी स्वचालित रूप से बनाई जाती है। पहले से सिंक्रनाइज़ किए गए शेड्यूल अतिरिक्त रूप से नहीं बनाए जाएंगे।</string>
 </resources>
