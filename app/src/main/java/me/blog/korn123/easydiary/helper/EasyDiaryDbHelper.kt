@@ -69,8 +69,8 @@ object EasyDiaryDbHelper {
      *   Delete: Delete
      *
      ***************************************************************************************************/
-    fun insertDiary(diary: Diary) {
-        getInstance().executeTransaction { realm ->
+    fun insertDiary(diary: Diary, realmInstance: Realm = getInstance()) {
+        realmInstance.executeTransaction { realm ->
             var sequence = 1
             if (realm.where(Diary::class.java).count() > 0L) {
                 val number = realm.where(Diary::class.java).max("sequence")

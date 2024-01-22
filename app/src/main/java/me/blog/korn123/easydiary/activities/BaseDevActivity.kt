@@ -506,16 +506,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                         .build()
                                     val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
                                     val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                                    fun fetchContents(path: String) {
+                                    fun fetchContents(path: String, prefix: String? = null) {
                                         val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                                         val response = call.execute()
                                         val contentsItems: List<Contents>? = response.body()
                                         contentsItems?.forEach { content ->
                                             if (content.download_url == null) {
-                                                fetchContents(content.path)
-                                            } else if (content.name.startsWith("👀")){
+                                                fetchContents(content.path, prefix)
+                                            } else if (prefix.isNullOrEmpty() || content.name.startsWith(prefix)){
                                                 EasyDiaryDbHelper.getTemporaryInstance().run {
-                                                    val items = EasyDiaryDbHelper.findDiary(content.name.split(".")[0], false, 0, 0, 0, this)
+                                                    val title = if (prefix == null) content.name else content.name.split(".")[0]
+                                                    val items = EasyDiaryDbHelper.findDiary(title, false, 0, 0, 0, this)
                                                     if (items.size == 1) {
                                                         runOnUiThread {
                                                             mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
@@ -525,14 +526,29 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                         this.beginTransaction()
                                                         diary.contents = re.body()
                                                         this.commitTransaction()
+                                                    } else if (items.isEmpty()) {
+                                                        runOnUiThread {
+                                                            mBinding.partialSettingsProgress.message.text = "Download ${content.name}…"
+                                                        }
+                                                        val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                                        EasyDiaryDbHelper.insertDiary(Diary(
+                                                            BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                                                            System.currentTimeMillis()
+                                                            , content.name
+                                                            , re.body()!!
+                                                            , 0
+                                                            ,true
+                                                        ), this)
                                                     }
-
                                                     this.close()
                                                 }
                                             }
                                         }
                                     }
-                                    fetchContents("stock/KOSPI200")
+                                    fetchContents("stock/KOSPI200", "👀")
+                                    fetchContents("java")
+                                    fetchContents("vuejs")
+                                    fetchContents("life")
                                     withContext(Dispatchers.Main) {
                                         mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                                     }
