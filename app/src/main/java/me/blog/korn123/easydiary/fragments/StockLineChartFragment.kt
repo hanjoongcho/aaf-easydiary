@@ -100,7 +100,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
     private var mCheckedEvaluatePrice = false
-    private var mCheckedPrincipalHighlight = true
+    private var mCheckedPrincipalHighlight = false
 
 
     /***************************************************************************************************

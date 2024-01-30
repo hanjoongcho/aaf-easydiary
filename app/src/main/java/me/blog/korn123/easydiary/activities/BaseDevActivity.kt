@@ -506,16 +506,20 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                         .build()
                                     val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
                                     val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                                    fun fetchContents(path: String, prefix: String? = null) {
+                                    fun fetchContents(path: String, prefix: String? = null, usingPathTitle: Boolean = false) {
                                         val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                                         val response = call.execute()
                                         val contentsItems: List<Contents>? = response.body()
                                         contentsItems?.forEach { content ->
                                             if (content.download_url == null) {
-                                                fetchContents(content.path, prefix)
+                                                fetchContents(content.path, prefix, usingPathTitle)
                                             } else if (prefix.isNullOrEmpty() || content.name.startsWith(prefix)){
                                                 EasyDiaryDbHelper.getTemporaryInstance().run {
-                                                    val title = if (prefix == null) content.name else content.name.split(".")[0]
+                                                    val title = when (usingPathTitle) {
+                                                        true -> content.path
+                                                        false -> if (prefix == null) content.name else content.name.split(".")[0]
+                                                    }
+
                                                     val items = EasyDiaryDbHelper.findDiary(title, false, 0, 0, 0, this)
                                                     if (items.size == 1) {
                                                         runOnUiThread {
@@ -534,7 +538,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                         EasyDiaryDbHelper.insertDiary(Diary(
                                                             BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
                                                             System.currentTimeMillis()
-                                                            , content.name
+                                                            , title
                                                             , re.body()!!
                                                             , 0
                                                             ,true
@@ -546,9 +550,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                         }
                                     }
                                     fetchContents("stock/KOSPI200", "👀")
-                                    fetchContents("java")
-                                    fetchContents("vuejs")
-                                    fetchContents("life")
+                                    fetchContents("stock/knowledge", null, true)
+                                    fetchContents("life", null, true)
+                                    fetchContents("java", null, true)
+                                    fetchContents("vuejs", null, true)
+                                    fetchContents("design", null, true)
+                                    fetchContents("convention", null, true)
                                     withContext(Dispatchers.Main) {
                                         mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                                     }
