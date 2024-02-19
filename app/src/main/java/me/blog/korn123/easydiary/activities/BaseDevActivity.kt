@@ -475,7 +475,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 createBaseCardView(
                     "GitHub MarkDown Page", null,
                     Button(this@BaseDevActivity).apply {
-                        text = "SD-Stock"
+                        text = "\uD83D\uDD04SYNC"
                         layoutParams = mFlexboxLayoutParams
                         setOnClickListener {
                             mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
@@ -506,18 +506,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                         .build()
                                     val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
                                     val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                                    fun fetchContents(path: String, prefix: String? = null, usingPathTitle: Boolean = false) {
+                                    fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = SYMBOL_USER_CUSTOM_SYNC) {
                                         val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                                         val response = call.execute()
                                         val contentsItems: List<Contents>? = response.body()
                                         contentsItems?.forEach { content ->
                                             if (content.download_url == null) {
-                                                fetchContents(content.path, prefix, usingPathTitle)
-                                            } else if (prefix.isNullOrEmpty() || content.name.startsWith(prefix)){
+                                                fetchContents(content.path, usingPathTitle, symbolSequence)
+                                            } else {
                                                 EasyDiaryDbHelper.getTemporaryInstance().run {
                                                     val title = when (usingPathTitle) {
                                                         true -> content.path
-                                                        false -> if (prefix == null) content.name else content.name.split(".")[0]
+                                                        false -> if (usingPathTitle) content.name else content.name.split(".")[0]
                                                     }
 
                                                     val items = EasyDiaryDbHelper.findDiary(title, false, 0, 0, 0, this)
@@ -529,6 +529,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                         val diary = items[0]
                                                         this.beginTransaction()
                                                         diary.contents = re.body()
+                                                        diary.weather = symbolSequence
                                                         this.commitTransaction()
                                                     } else if (items.isEmpty()) {
                                                         runOnUiThread {
@@ -540,7 +541,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                             System.currentTimeMillis()
                                                             , title
                                                             , re.body()!!
-                                                            , 0
+                                                            , symbolSequence
                                                             ,true
                                                         ), this)
                                                     }
@@ -549,13 +550,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             }
                                         }
                                     }
-                                    fetchContents("stock/KOSPI200", "👀")
-                                    fetchContents("stock/knowledge", null, true)
-                                    fetchContents("life", null, true)
-                                    fetchContents("java", null, true)
-                                    fetchContents("vuejs", null, true)
-                                    fetchContents("design", null, true)
-                                    fetchContents("convention", null, true)
+                                    fetchContents("stock/KOSPI200", false, 10014)
+                                    fetchContents("stock/knowledge", true)
+                                    fetchContents("life", true)
+                                    fetchContents("java", true)
+                                    fetchContents("vuejs", true)
+                                    fetchContents("design", true)
+                                    fetchContents("convention", true)
                                     withContext(Dispatchers.Main) {
                                         mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                                     }
@@ -979,6 +980,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         const val NOTIFICATION_ID = "notification_id"
         const val NOTIFICATION_INFO = "notification_info"
         const val TAG_LOCATION_MANAGER = "tag_location_manager"
+        const val SYMBOL_USER_CUSTOM_SYNC = 10025
     }
 }
 
