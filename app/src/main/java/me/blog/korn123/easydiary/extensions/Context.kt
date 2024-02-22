@@ -22,12 +22,21 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.preference.PreferenceManager
+import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.AlignmentSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.LineHeightSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.SubscriptSpan
+import android.text.style.SuperscriptSpan
+import android.text.style.UnderlineSpan
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +44,7 @@ import android.view.Window
 import android.widget.*
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -55,7 +65,11 @@ import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.SpanFactory
+import io.noties.markwon.core.CoreProps
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.core.spans.LinkSpan
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
@@ -86,6 +100,7 @@ import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import org.commonmark.node.Code
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -1077,6 +1092,7 @@ fun Context.getPermissionString(id: Int) = when (id) {
 }
 
 fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf(), isRecyclerItem: Boolean = false) {
+
     when (config.enableMarkdown) {
         true -> {
             val transformLineBreak = contents.replace("\n", "  \n")
@@ -1091,7 +1107,42 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
                         .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
-                        .codeTextSize(config.settingFontSize.times(0.7).toInt())
+//                        .codeTextSize(config.settingFontSize.times(0.7).toInt())
+//                        .codeBackgroundColor(config.primaryColor)
+//                        .codeTextColor(Color.WHITE)
+
+                }
+
+                @RequiresApi(Build.VERSION_CODES.Q)
+                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                    builder.setFactory(
+                        Code::class.java,
+                        SpanFactory { _, _ ->
+                            arrayOf<Any>(
+                                BackgroundColorSpan(config.primaryColor),
+                                ForegroundColorSpan(Color.WHITE),
+                                RelativeSizeSpan(0.7f),
+//                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
+//                                UnderlineSpan(),
+//                                SuperscriptSpan(),
+                                LineHeightSpan.Standard(config.settingFontSize.toInt())
+//                                object : LineHeightSpan {
+//                                    override fun chooseHeight(
+//                                        text: CharSequence?,
+//                                        start: Int,
+//                                        end: Int,
+//                                        spanstartv: Int,
+//                                        lineHeight: Int,
+//                                        fm: Paint.FontMetricsInt?
+//                                    ) {
+//                                        fm?.run {
+//                                            fm.bottom += 100
+//                                        }
+//                                    }
+//
+//                                }
+                            )
+                        })
                 }
             }
             val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->

@@ -376,7 +376,10 @@ object EasyDiaryUtils {
             input?.let { targetString ->
                 //Get the text from text view and create a spannable string
                 val spannableString = SpannableString(tv.text)
-                removeSpans(spannableString)
+
+                // TODO: removeSpans 코드를 왜 넣었는지 확인 필요함
+                // MarkwonTheme configureSpansFactory 설정 시 span 설정이 클리어 되는 이슈가 있어서 임시로 주석처리 함
+//                removeSpans(spannableString)
 
                 //Search for all occurrences of the keyword in the string
                 var indexOfKeyword = spannableString.toString().indexOf(targetString)

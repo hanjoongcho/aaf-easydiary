@@ -550,7 +550,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             }
                                         }
                                     }
-                                    fetchContents("stock/KOSPI200", false, 10014)
+                                    fetchContents("stock/KOSPI", false, 10014)
+                                    fetchContents("stock/KOSDAQ", false, 10014)
                                     fetchContents("stock/knowledge", true)
                                     fetchContents("life", true)
                                     fetchContents("java", true)
