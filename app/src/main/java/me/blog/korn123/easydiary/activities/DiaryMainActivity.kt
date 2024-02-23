@@ -156,8 +156,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
         supportActionBar?.run {
+            setDisplayShowTitleEnabled(config.enableDebugMode)
 //            title = getString(R.string.read_diary_title)
-            setDisplayShowTitleEnabled(false)
+            subtitle = "👀"
         }
 
         setupMotionSensor()
@@ -732,6 +733,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     diaryListView.visibility = View.VISIBLE
                     textNoDiary.visibility = View.GONE
                 }
+            }
+        }
+
+        if (config.enableDebugMode) {
+            supportActionBar?.run {
+                title = ""
+                subtitle = "${mDiaryList.size}"
             }
         }
     }

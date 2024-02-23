@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.305.202402230 (date: 2024.02.23)
+  * Added scheduler option to create diaries with Google Calendar events
+
 # Changes in 1.4.304.202312270 (date: 2023.12.27)
   * Dashboard UX Improvements
 
