@@ -219,6 +219,9 @@ fun Context.cancelAlarmClock(alarm: Alarm) {
 }
 
 fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) return
+
     val calendar = Calendar.getInstance()
     calendar.firstDayOfWeek = Calendar.MONDAY
     for (i in 0..7) {

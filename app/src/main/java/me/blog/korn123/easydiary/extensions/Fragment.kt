@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -28,19 +29,6 @@ fun Fragment.updateFragmentUI(rootView: ViewGroup) {
             updateCardViewPolicy(it)
             FontUtils.setFontsTypeface(this, null, it, true)
         }
-    }
-}
-
-fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            || ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-        AlertDialog.Builder(context!!)
-                .setMessage(getString(R.string.permission_confirmation_dialog_message))
-                .setTitle(getString(R.string.permission_confirmation_dialog_title))
-                .setPositiveButton(getString(R.string.ok)) { _, _ -> requestPermissions(permissions, requestCode) }
-                .show()
-    } else {
-        requestPermissions(permissions, requestCode)
     }
 }
 
