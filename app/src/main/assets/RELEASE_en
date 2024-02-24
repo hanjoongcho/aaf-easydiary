@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.306.202402250 (date: 2024.02.25)
+  * Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+
 # Changes in 1.4.305.202402230 (date: 2024.02.23)
   * Added scheduler option to create diaries with Google Calendar events
 

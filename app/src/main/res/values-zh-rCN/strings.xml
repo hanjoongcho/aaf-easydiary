@@ -742,6 +742,10 @@
         v1.4.305.202402230 / 2024.02.23\n
         Added scheduler option to create diaries with Google Calendar events
     </string>
+    <string name="release_306">
+        v1.4.306.202402250 / 2024.02.25\n
+        Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
