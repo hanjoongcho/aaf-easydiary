@@ -398,7 +398,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
-        if (position != -1)  mBinding.diaryListView.scrollToPosition(position)
+        if (position != -1) {
+            mBinding.diaryListView.scrollToPosition(if (mDiaryList.size > position.plus(1)) position.plus(1) else position)
+        }
     }
 
     /***************************************************************************************************
