@@ -29,8 +29,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 306
-        versionName '1.4.306.202402250'
+        versionCode 307
+        versionName '1.4.307.202403xx0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -82,7 +82,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true // Use Android app bundle
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def releaseFileName = "easy_diary-$versionName-${new Date().format('yyyyMMddHHmmss')}.apk"
@@ -104,11 +104,11 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     namespace 'me.blog.korn123.easydiary'
     lint {

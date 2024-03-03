@@ -53,3 +53,7 @@
 
 -dontwarn com.ibm.icu.**
 -dontwarn org.jasypt.web.**
+
+-dontwarn com.caverock.androidsvg.SVG
+-dontwarn com.caverock.androidsvg.SVGParseException
+-dontwarn pl.droidsonroids.gif.GifDrawable
