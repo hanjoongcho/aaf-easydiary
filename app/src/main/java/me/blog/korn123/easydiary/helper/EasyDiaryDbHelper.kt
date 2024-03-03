@@ -16,11 +16,12 @@ import org.apache.commons.lang3.StringUtils
 object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
-                .name("diary.realm")
-                .schemaVersion(23)
-                .migration(EasyDiaryMigration())
-                .modules(Realm.getDefaultModule()!!)
-                .build()
+            .name("diary.realm")
+            .schemaVersion(23)
+            .migration(EasyDiaryMigration())
+            .modules(Realm.getDefaultModule()!!)
+            .allowWritesOnUiThread(true)
+            .build()
     }
 
     private var mRealmInstance: Realm? = null
