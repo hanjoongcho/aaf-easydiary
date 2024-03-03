@@ -388,18 +388,23 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     override fun hearShake() {
         var position = -1
-        run outer@ {
-            mDiaryList.forEachIndexed { index, diary ->
-                if (diary.currentTimeMillis < EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis) {
-                    position = index
-                    return@outer
+        val tomorrowTimeMillis = EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+        val filteredDiary = mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+        val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+        target?.let {
+            run outer@ {
+                mDiaryList.forEachIndexed { index, diary ->
+                    if (diary.sequence == it.sequence) {
+                        position = index
+                        return@outer
+                    }
                 }
             }
-        }
 
-        makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
-        if (position != -1) {
-            mBinding.diaryListView.scrollToPosition(if (mDiaryList.size > position.plus(1)) position.plus(1) else position)
+            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+            if (position != -1) {
+                mBinding.diaryListView.scrollToPosition(position)
+            }
         }
     }
 
