@@ -69,6 +69,7 @@ import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.SpanFactory
 import io.noties.markwon.core.CoreProps
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.core.spans.CodeBlockSpan
 import io.noties.markwon.core.spans.LinkSpan
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
@@ -100,6 +101,7 @@ import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import org.commonmark.node.Block
 import org.commonmark.node.Code
 import java.io.File
 import java.io.FileOutputStream
@@ -1108,9 +1110,12 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
             val markdownContents = if (isTimeline) "$timelineTitle  \n$mergedContents" else mergedContents
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
+                    val appTextSize = config.settingFontSize
                     builder
                         .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
-//                        .codeTextSize(config.settingFontSize.times(0.7).toInt())
+                        .headingTextSizeMultipliers(floatArrayOf(1.6F, 1.4F, 1.17F, 1.0F, .83F, .67F))
+                        .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
+//                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
 //                        .codeBackgroundColor(config.primaryColor)
 //                        .codeTextColor(Color.WHITE)
 
@@ -1118,17 +1123,18 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
 
                 @RequiresApi(Build.VERSION_CODES.Q)
                 override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                    builder.setFactory(
+                    builder
+                        .appendFactory(
                         Code::class.java,
                         SpanFactory { _, _ ->
                             arrayOf<Any>(
                                 BackgroundColorSpan(config.primaryColor),
                                 ForegroundColorSpan(Color.WHITE),
                                 RelativeSizeSpan(0.7f),
+                                LineHeightSpan.Standard(config.settingFontSize.toInt()),
 //                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
 //                                UnderlineSpan(),
 //                                SuperscriptSpan(),
-                                LineHeightSpan.Standard(config.settingFontSize.toInt())
 //                                object : LineHeightSpan {
 //                                    override fun chooseHeight(
 //                                        text: CharSequence?,
@@ -1146,7 +1152,14 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
 //                                }
                             )
                         })
+//                        .appendFactory(Code::class.java
+//                        ) { _, _ ->
+//                            arrayOf<Any>(
+//                                RelativeSizeSpan(0.7f),
+//                            )
+//                        }
                 }
+
             }
             val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
                 val dip: Dip = Dip.create(this)

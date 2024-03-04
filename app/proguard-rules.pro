@@ -36,7 +36,6 @@
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
--dontwarn retrofit2.Platform$Java8
 -dontwarn java.lang.management.**
 -dontwarn junit.**
 
@@ -57,3 +56,6 @@
 -dontwarn com.caverock.androidsvg.SVG
 -dontwarn com.caverock.androidsvg.SVGParseException
 -dontwarn pl.droidsonroids.gif.GifDrawable
+
+-keep class retrofit2.** { *; }
+-dontwarn retrofit2.**

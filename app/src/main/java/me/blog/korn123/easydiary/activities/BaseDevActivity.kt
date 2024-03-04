@@ -550,14 +550,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             }
                                         }
                                     }
+                                    fetchContents("dev", true)
+                                    fetchContents("etc", true)
+                                    fetchContents("life", true)
                                     fetchContents("stock/KOSPI", false, 10014)
                                     fetchContents("stock/KOSDAQ", false, 10014)
                                     fetchContents("stock/knowledge", true)
-                                    fetchContents("life", true)
-                                    fetchContents("java", true)
-                                    fetchContents("vuejs", true)
-                                    fetchContents("design", true)
-                                    fetchContents("convention", true)
                                     withContext(Dispatchers.Main) {
                                         mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                                     }
