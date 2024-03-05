@@ -28,6 +28,7 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -51,6 +52,8 @@ import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
@@ -112,6 +115,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     private val mRequestImagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         pauseLock()
         if (it.resultCode == Activity.RESULT_OK && it.data != null) attachPhotos(arrayListOf(it.data!!.data.toString()), true)
+    }
+    private val mPickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
+        pauseLock()
+        if (uris.isNotEmpty()) {
+            attachPhotos(ArrayList(uris.map { uri -> uri.toString() }), true)
+        } else {
+            showAlertDialog("No selected photos.")
+        }
     }
     private val mRequestCaptureCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         pauseLock()
@@ -358,13 +369,18 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         .start(mRequestPickPhotoData)
             }
             false -> {
-                val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                //                pickIntent.setType("image/*");
-                try {
-                    mRequestImagePicker.launch(pickImageIntent)
-                } catch (e: ActivityNotFoundException) {
-                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    //                pickIntent.setType("image/*");
+                    try {
+                        mRequestImagePicker.launch(pickImageIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+                    }
+                } else {
+                    mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
+
             }
         }
     }

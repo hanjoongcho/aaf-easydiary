@@ -16,13 +16,13 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
@@ -100,6 +100,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
         , FlexboxLayout.LayoutParams.WRAP_CONTENT
     )
     protected lateinit var mBinding: ActivityBaseDevBinding
+
+
+    private val mPickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
+        if (uris.isNotEmpty()) {
+            showAlertDialog(uris.joinToString(",") { uri -> uri.toString() }, null, null, DialogMode.INFO, false)
+        } else {
+            makeToast("There are no photos selected.")
+        }
+    }
 
 
     /***************************************************************************************************
@@ -466,6 +475,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             config.enableDebugOptionVisibleTemporaryDiary =
                                 !config.enableDebugOptionVisibleTemporaryDiary
                             makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+                        }
+                    }, Button(this@BaseDevActivity).apply {
+                        text ="PickMultipleVisualMedia"
+                        layoutParams = mFlexboxLayoutParams
+                        setOnClickListener {
+                            mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         }
                     }
                 )

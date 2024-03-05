@@ -652,6 +652,13 @@ fun Context.showAlertDialog(
     showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
 }
 
+
+fun Context.showAlertDialog(
+    message: String
+) {
+    showAlertDialog(message, null, null, DialogMode.INFO, true)
+}
+
 fun Context.updateAlertDialogWithIcon(
     dialogMode: DialogMode,
     alertDialog: AlertDialog,
