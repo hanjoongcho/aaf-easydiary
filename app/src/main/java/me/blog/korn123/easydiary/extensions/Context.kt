@@ -1118,55 +1118,57 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
             val markdownContents = if (isTimeline) "$timelineTitle  \n$mergedContents" else mergedContents
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
-                    val appTextSize = config.settingFontSize
                     builder
                         .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
                         .headingTextSizeMultipliers(floatArrayOf(1.6F, 1.4F, 1.17F, 1.0F, .83F, .67F))
+                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
+                        .codeBackgroundColor(config.backgroundColor)
+
                         .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
-//                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
-//                        .codeBackgroundColor(config.primaryColor)
+                        .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
+                        .codeBlockTextColor(config.textColor)
 //                        .codeTextColor(Color.WHITE)
 
                 }
 
-                @RequiresApi(Build.VERSION_CODES.Q)
-                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                    builder
-                        .appendFactory(
-                        Code::class.java,
-                        SpanFactory { _, _ ->
-                            arrayOf<Any>(
-                                BackgroundColorSpan(config.primaryColor),
-                                ForegroundColorSpan(Color.WHITE),
-                                RelativeSizeSpan(0.7f),
-                                LineHeightSpan.Standard(config.settingFontSize.toInt()),
-//                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
-//                                UnderlineSpan(),
-//                                SuperscriptSpan(),
-//                                object : LineHeightSpan {
-//                                    override fun chooseHeight(
-//                                        text: CharSequence?,
-//                                        start: Int,
-//                                        end: Int,
-//                                        spanstartv: Int,
-//                                        lineHeight: Int,
-//                                        fm: Paint.FontMetricsInt?
-//                                    ) {
-//                                        fm?.run {
-//                                            fm.bottom += 100
-//                                        }
-//                                    }
-//
-//                                }
-                            )
-                        })
-//                        .appendFactory(Code::class.java
-//                        ) { _, _ ->
+//                @RequiresApi(Build.VERSION_CODES.Q)
+//                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+//                    builder
+//                        .appendFactory(
+//                        Code::class.java,
+//                        SpanFactory { _, _ ->
 //                            arrayOf<Any>(
+//                                BackgroundColorSpan(Color.WHITE),
+//                                ForegroundColorSpan(config.primaryColor),
 //                                RelativeSizeSpan(0.7f),
+//                                LineHeightSpan.Standard(config.settingFontSize.toInt()),
+////                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
+////                                UnderlineSpan(),
+////                                SuperscriptSpan(),
+////                                object : LineHeightSpan {
+////                                    override fun chooseHeight(
+////                                        text: CharSequence?,
+////                                        start: Int,
+////                                        end: Int,
+////                                        spanstartv: Int,
+////                                        lineHeight: Int,
+////                                        fm: Paint.FontMetricsInt?
+////                                    ) {
+////                                        fm?.run {
+////                                            fm.bottom += 100
+////                                        }
+////                                    }
+////
+////                                }
 //                            )
-//                        }
-                }
+//                        })
+////                        .appendFactory(Code::class.java
+////                        ) { _, _ ->
+////                            arrayOf<Any>(
+////                                RelativeSizeSpan(0.7f),
+////                            )
+////                        }
+//                }
 
             }
             val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
@@ -1181,8 +1183,8 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                             50
                         )
                     )
-//                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
-//                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+                    .tableEvenRowBackgroundColor(config.backgroundColor)
+                    .tableOddRowBackgroundColor(config.backgroundColor)
             }
             val strikeoutPlugin = StrikethroughPlugin.create()
             when (isRecyclerItem) {
