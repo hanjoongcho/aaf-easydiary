@@ -117,6 +117,10 @@ object EasyDiaryDbHelper {
         return realm.where(Diary::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
+    fun findMarkdownSyncTargetDiary(query: String?, realmInstance: Realm = getInstance()): List<Diary> {
+        return realmInstance.where(Diary::class.java).contains("title", query).findAll()
+    }
+
     /**
      * Makes an unmanaged in-memory copy of already persisted RealmObjects
      *

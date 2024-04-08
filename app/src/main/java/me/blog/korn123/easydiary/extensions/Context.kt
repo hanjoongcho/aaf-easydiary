@@ -1120,7 +1120,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
                         .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
-                        .headingTextSizeMultipliers(floatArrayOf(1.6F, 1.4F, 1.17F, 1.0F, .83F, .67F))
+                        .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
                         .codeTextSize(config.settingFontSize.times(0.8).toInt())
                         .codeBackgroundColor(config.backgroundColor)
 

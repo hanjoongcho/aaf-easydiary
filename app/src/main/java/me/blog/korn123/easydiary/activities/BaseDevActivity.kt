@@ -535,7 +535,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                         false -> if (usingPathTitle) content.name else content.name.split(".")[0]
                                                     }
 
-                                                    val items = EasyDiaryDbHelper.findDiary(title, false, 0, 0, 0, this)
+                                                    val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
                                                     if (items.size == 1) {
                                                         runOnUiThread {
                                                             mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
