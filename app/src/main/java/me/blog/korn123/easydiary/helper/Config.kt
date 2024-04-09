@@ -308,6 +308,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, false)
         set(visibleUnlinkedPhotos) = prefs.edit().putBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, visibleUnlinkedPhotos).apply()
 
+    var disableFutureDiary: Boolean
+        get() = prefs.getBoolean(SETTING_DISABLE_FUTURE_DIARY, false)
+        set(disableFutureDiary) = prefs.edit().putBoolean(SETTING_DISABLE_FUTURE_DIARY, disableFutureDiary).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

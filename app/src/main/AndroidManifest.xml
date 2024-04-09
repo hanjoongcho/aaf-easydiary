@@ -91,6 +91,7 @@
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DevActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity android:name=".activities.QuickSettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.CustomizationActivity" android:label="@string/customize_colors" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.StatisticsActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:launchMode="singleTask" />

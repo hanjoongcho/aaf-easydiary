@@ -528,6 +528,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     this@DiaryMainActivity,
                     Intent(this@DiaryMainActivity, SettingsActivity::class.java)
                 )
+                R.id.quickSettings -> TransitionHelper.startActivityWithTransition(
+                    this,
+                    Intent(this, QuickSettingsActivity::class.java)
+                )
                 R.id.devConsole -> TransitionHelper.startActivityWithTransition(
                     this,
                     Intent(this, DevActivity::class.java)
@@ -550,6 +554,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             attachedPhotoGallery.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
+            quickSettings.setOnClickListener(customItemClickListener)
             devConsole.setOnClickListener(customItemClickListener)
             gridLayout.setOnClickListener(customItemClickListener)
         }
@@ -577,8 +582,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //            updateDrawableColorInnerCardView(imgDashboard)
             updateDrawableColorInnerCardView(imgAttachedPhotoGallery)
             updateDrawableColorInnerCardView(imgStatistics)
-            updateDrawableColorInnerCardView(imgSettings)
             updateDrawableColorInnerCardView(imgGridLayout)
+            updateDrawableColorInnerCardView(imgSettings)
+            updateDrawableColorInnerCardView(imgQuickSettings)
         }
     }
 

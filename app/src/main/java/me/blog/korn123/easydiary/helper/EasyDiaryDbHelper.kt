@@ -149,6 +149,10 @@ object EasyDiaryDbHelper {
             else -> results
         }
 
+        if (EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
+            results = results.where().lessThanOrEqualTo("currentTimeMillis", System.currentTimeMillis()).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+        }
+
         // apply feeling symbol
 //        if (symbolSequence in 1..9998 || symbolSequence > 9999) {
         if (symbolSequence != 0 && symbolSequence != SYMBOL_SELECT_ALL) {
