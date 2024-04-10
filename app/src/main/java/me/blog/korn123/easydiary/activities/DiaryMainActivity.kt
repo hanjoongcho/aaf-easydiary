@@ -731,7 +731,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mDiaryList.addAll(
             EasyDiaryDbHelper.findDiary(
                 query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value
-                    ?: 0
+                    ?: 0, true
             )
         )
         mDiaryMainItemAdapter?.currentQuery = query

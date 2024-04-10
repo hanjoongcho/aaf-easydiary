@@ -297,13 +297,16 @@ class TimelineActivity : EasyDiaryActivity() {
 
         mDiaryList.run {
             clear()
-            addAll(EasyDiaryDbHelper.findDiary(
+            addAll(
+                EasyDiaryDbHelper.findDiary(
                     mBinding.partialTimelineFilter.query.text.toString(),
                     config.diarySearchQueryCaseSensitive,
                     startMillis,
                     endMillis,
-                    mSymbolSequence
-            ))
+                    mSymbolSequence,
+                    true
+                )
+            )
             reverse()
         }
 

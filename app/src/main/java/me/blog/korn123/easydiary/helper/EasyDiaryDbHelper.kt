@@ -121,12 +121,31 @@ object EasyDiaryDbHelper {
         return realmInstance.where(Diary::class.java).contains("title", query).findAll()
     }
 
+    fun findDiary(
+        query: String?,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+        realmInstance: Realm = getInstance()
+    ): List<Diary> {
+        return findDiary(
+            query,
+            isSensitive,
+            startTimeMillis,
+            endTimeMillis,
+            symbolSequence,
+            false,
+            realmInstance
+        );
+    }
+
     /**
      * Makes an unmanaged in-memory copy of already persisted RealmObjects
      *
      * @return an in-memory detached copy of managed RealmObjects.
      */
-    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): List<Diary> {
+    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, isDiaryMain: Boolean = false, realmInstance: Realm = getInstance()): List<Diary> {
         var results: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
             true -> {
                 realmInstance.where(Diary::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
@@ -149,7 +168,7 @@ object EasyDiaryDbHelper {
             else -> results
         }
 
-        if (EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
+        if (isDiaryMain && EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
             results = results.where().lessThanOrEqualTo("currentTimeMillis", System.currentTimeMillis()).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
         }
 
