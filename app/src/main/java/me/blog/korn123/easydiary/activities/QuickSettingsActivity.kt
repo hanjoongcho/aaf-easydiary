@@ -21,6 +21,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class QuickSettingsActivity : EasyDiaryActivity() {
 
@@ -38,6 +39,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             setTitle("Quick Settings")
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         mBinding.run {
@@ -80,10 +82,10 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     }
 
     private fun initPreference() {
-            mBinding.run {
-                enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-                disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
-            }
+        mBinding.run {
+            enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
+            disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
+        }
     }
 
     @Composable

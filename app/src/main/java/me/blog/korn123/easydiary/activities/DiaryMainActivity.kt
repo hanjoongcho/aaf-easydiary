@@ -200,6 +200,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     override fun onResume() {
         super.onResume()
+        mShakeDetector.start(mSensorManager)
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
         initTextSize(mBinding.progressDialog)
@@ -213,6 +215,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mShakeDetector.stop()
     }
 
     override fun onRequestPermissionsResult(
@@ -383,6 +390,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
@@ -833,9 +841,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
+
+    private lateinit var mSensorManager: SensorManager
+    private lateinit var mShakeDetector: ShakeDetector
     private fun setupMotionSensor() {
-        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val sd = ShakeDetector(this)
-        sd.start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        mShakeDetector = ShakeDetector(this)
     }
 }
