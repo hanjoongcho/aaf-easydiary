@@ -5,6 +5,9 @@ import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.executeScheduledTask
+import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
+import me.blog.korn123.easydiary.models.Alarm
 
 class QuickSettingsActivity : EasyDiaryActivity() {
 
@@ -45,6 +48,14 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     disableFutureDiarySwitcher.toggle()
                     config.disableFutureDiary = disableFutureDiarySwitcher.isChecked
                 }
+                R.id.syncGoogleCalendar -> {
+                    val alarm = Alarm().apply {
+                        sequence = Int.MAX_VALUE
+                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                        label = "Quick Settings"
+                    }
+                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                }
             }
         }
         updateCardAlpha()
@@ -54,6 +65,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         mBinding.run {
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
             disableFutureDiary.setOnClickListener(mOnClickListener)
+            syncGoogleCalendar.setOnClickListener(mOnClickListener)
         }
     }
 

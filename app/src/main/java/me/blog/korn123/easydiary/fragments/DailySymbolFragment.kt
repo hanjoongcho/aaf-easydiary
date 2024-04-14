@@ -107,7 +107,7 @@ class DailySymbolFragment : Fragment() {
                                         putExtra(DIARY_SEQUENCE, selectedItems[position].sequence)
                                     }
                                 )
-//                                dialog?.dismiss()
+                                dialog?.dismiss()
                             }
                         }
                         Handler(Looper.getMainLooper()).postDelayed({
