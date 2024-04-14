@@ -30,15 +30,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
-        <LinearLayout
+        <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/component_margin_small">
+            android:padding="@dimen/component_margin_small"
+            app:alignContent="flex_start"
+            app:alignItems="flex_start"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/enable_photo_highlight"
-                style="@style/AppCard.Settings">
+                style="@style/AppCard.Settings"
+                android:layout_width="wrap_content"
+                app:layout_flexGrow="1">
 
                 <LinearLayout style="@style/LinearLayoutVertical">
 
@@ -60,15 +67,17 @@
                             android:clickable="false" />
                     </LinearLayout>
 
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:text="@string/enable_photo_highlight_description" />
+                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
+                    <!--                        style="@style/SettingsSummary"-->
+                    <!--                        android:text="@string/enable_photo_highlight_description" />-->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/disable_future_diary"
-                style="@style/AppCard.Settings">
+                style="@style/AppCard.Settings"
+                android:layout_width="wrap_content"
+                app:layout_flexGrow="1">
 
                 <LinearLayout style="@style/LinearLayoutVertical">
 
@@ -90,11 +99,12 @@
                             android:clickable="false" />
                     </LinearLayout>
 
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:text="If you activate this option, diaries written with events scheduled after today will be disabled from the list." />
+                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
+                    <!--                        style="@style/SettingsSummary"-->
+                    <!--                        android:text="If you activate this option, diaries written with events scheduled after today will be disabled from the list." />-->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-        </LinearLayout>
+
+        </com.google.android.flexbox.FlexboxLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

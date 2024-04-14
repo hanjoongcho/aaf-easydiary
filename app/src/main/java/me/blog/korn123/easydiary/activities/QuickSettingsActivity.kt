@@ -47,6 +47,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 }
             }
         }
+        updateCardAlpha()
     }
 
     private fun bindEvent() {
@@ -57,9 +58,17 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     }
 
     private fun initPreference() {
-            mBinding.run {
-                enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-                disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
-            }
+        mBinding.run {
+            enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
+            disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
+            updateCardAlpha()
+        }
+    }
+
+    private fun updateCardAlpha() {
+        mBinding.run {
+            enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
+            disableFutureDiary.alpha = if (disableFutureDiarySwitcher.isChecked) 1.0f else 0.5f
+        }
     }
 }

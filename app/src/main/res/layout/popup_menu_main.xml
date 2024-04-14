@@ -87,6 +87,7 @@
                     android:text="@string/settings" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:visibility="gone"
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/quickSettings">
                 <androidx.appcompat.widget.AppCompatImageView

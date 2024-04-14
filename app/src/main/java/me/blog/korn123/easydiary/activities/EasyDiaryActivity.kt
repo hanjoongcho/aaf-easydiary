@@ -1,31 +1,46 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.Intent
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
+import com.squareup.seismic.ShakeDetector
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import java.util.Calendar
 
 /**
  * Created by hanjoong on 2017-05-03.
  */
 
-open class EasyDiaryActivity : BaseSimpleActivity() {
+open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
     var mCustomLineSpacing = true
     private val mRootView: ViewGroup? by lazy {
         findViewById(R.id.main_holder)
     }
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         useDynamicTheme = !isNightMode()
         super.onCreate(savedInstanceState)
+
+        setupMotionSensor()
     }
 
     override fun onResume() {
         useDynamicTheme = !isNightMode()
+
         super.onResume()
+        mShakeDetector.start(mSensorManager)
         if (config.updatePreference) {
             config.updatePreference = false
             startMainActivityWithClearTask()
@@ -38,9 +53,20 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 updateCardViewPolicy(it)
             }
             updateBackgroundColor(config.screenBackgroundColor)
-            FontUtils.setFontsTypeface(applicationContext, null, findViewById(android.R.id.content), mCustomLineSpacing)
+            FontUtils.setFontsTypeface(
+                applicationContext,
+                null,
+                findViewById(android.R.id.content),
+                mCustomLineSpacing
+            )
         }
         applyPolicyForRecentApps()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mShakeDetector.stop()
+        pauseLock()
     }
 
     override fun onBackPressed() {
@@ -49,13 +75,20 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
-    override fun onPause() {
-        super.onPause()
-        pauseLock()
-    }
-
     override fun getMainViewGroup(): ViewGroup? = mRootView
 
+    override fun hearShake() {
+        TransitionHelper.startActivityWithTransition(
+            this,
+            Intent(this, QuickSettingsActivity::class.java)
+        )
+    }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
             add(Release(305, R.string.release_306))
@@ -195,5 +228,12 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             add(Release(103, R.string.release_103))
             checkWhatsNew(this, BuildConfig.VERSION_CODE, applyFilter)
         }
+    }
+
+    private lateinit var mSensorManager: SensorManager
+    private lateinit var mShakeDetector: ShakeDetector
+    private fun setupMotionSensor() {
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        mShakeDetector = ShakeDetector(this)
     }
 }
