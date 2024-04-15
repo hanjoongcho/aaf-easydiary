@@ -19,7 +19,12 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -113,6 +118,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
     @Composable
     fun PlantDetailDescription(context: Context) {
+        val pixelValue = config.settingFontSize
+        val density = LocalDensity.current
+        val sp = with (density) {
+            val temp = pixelValue.toDp() / density.fontScale
+            temp.toSp()
+        }
+
         Card(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
@@ -122,12 +134,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 modifier = Modifier.padding(15.dp)
             ) {
                 Text(
-                    text = "Hello Compose",
+                    text = "Sync Google Calendar",
+                    fontWeight = FontWeight.Bold,
                     style = TextStyle(
                         color = Color(context.config.textColor)
-
                     ),
-                    fontFamily = FontFamily(FontUtils.getCommonTypeface(context)!!)
+                    fontFamily = FontFamily(FontUtils.getCommonTypeface(context)!!),
+                    fontSize = TextUnit(sp.value, TextUnitType.Sp)
                 )
             }
         }
