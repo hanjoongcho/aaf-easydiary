@@ -235,5 +235,6 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
     private fun setupMotionSensor() {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mShakeDetector = ShakeDetector(this)
+        mShakeDetector.setSensitivity(ShakeDetector.SENSITIVITY_LIGHT)
     }
 }
