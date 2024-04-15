@@ -1,8 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Context
-import android.os.Bundle
-import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,10 +16,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import android.os.Bundle
+import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.extensions.executeScheduledTask
+import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
+import me.blog.korn123.easydiary.models.Alarm
 
 class QuickSettingsActivity : EasyDiaryActivity() {
 
@@ -38,6 +42,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             setTitle("Quick Settings")
+            setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
@@ -70,14 +75,24 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     disableFutureDiarySwitcher.toggle()
                     config.disableFutureDiary = disableFutureDiarySwitcher.isChecked
                 }
+                R.id.syncGoogleCalendar -> {
+                    val alarm = Alarm().apply {
+                        sequence = Int.MAX_VALUE
+                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                        label = "Quick Settings"
+                    }
+                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                }
             }
         }
+        updateCardAlpha()
     }
 
     private fun bindEvent() {
         mBinding.run {
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
             disableFutureDiary.setOnClickListener(mOnClickListener)
+            syncGoogleCalendar.setOnClickListener(mOnClickListener)
         }
     }
 
@@ -85,6 +100,14 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         mBinding.run {
             enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
             disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
+            updateCardAlpha()
+        }
+    }
+
+    private fun updateCardAlpha() {
+        mBinding.run {
+            enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
+            disableFutureDiary.alpha = if (disableFutureDiarySwitcher.isChecked) 1.0f else 0.5f
         }
     }
 

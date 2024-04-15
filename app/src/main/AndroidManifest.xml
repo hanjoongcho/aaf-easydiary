@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        tools:node="remove" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -24,15 +25,15 @@
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.IntroActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.FullScreen">
-        </activity>
+            android:theme="@style/AppTheme.FullScreen"></activity>
+
         <activity-alias
             android:name=".activities.IntroActivity.EasyDiary"
             android:enabled="true"
@@ -43,6 +44,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -56,6 +58,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -69,6 +72,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -82,31 +86,88 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <activity android:name=".activities.DiaryWritingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
-        <activity android:name=".activities.DiaryReadingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
-        <activity android:name=".activities.DiaryEditingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.DevActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.QuickSettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.CustomizationActivity" android:label="@string/customize_colors" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.StatisticsActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:launchMode="singleTask" />
-        <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:hardwareAccelerated="false" />
-        <activity android:name=".activities.PostcardActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.PostcardViewerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.DashboardActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.PostcardViewPagerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:hardwareAccelerated="false" android:launchMode="singleTask" />
-        <activity android:name=".activities.FingerprintLockActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.PinLockActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.MarkDownViewerActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.SymbolFilterPickerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.GalleryActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.GalleryViewPagerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+
+        <activity
+            android:name=".activities.DiaryWritingActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.DiaryReadingActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.DiaryEditingActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.DiaryMainActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.DevActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.QuickSettingsActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.CustomizationActivity"
+            android:label="@string/customize_colors"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.StatisticsActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.CalendarActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.PhotoViewPagerActivity"
+            android:hardwareAccelerated="false"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.PostcardActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.PostcardViewerActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.TimelineActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.PostcardViewPagerActivity"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.FingerprintLockActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.PinLockActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.MarkDownViewerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SymbolFilterPickerActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.GalleryActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity
+            android:name=".activities.GalleryViewPagerActivity"
+            android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -114,33 +175,35 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
         <service android:name=".services.NotificationService" />
         <service
             android:name=".services.DiaryMainWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".receivers.AlarmReceiver" />
-        <receiver android:name=".receivers.BootCompletedReceiver"
+        <receiver
+            android:name=".receivers.BootCompletedReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".widgets.DiaryMainWidget"
-            android:label="@string/app_name"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/simple_app_widget_info"/>
+                android:resource="@xml/simple_app_widget_info" />
         </receiver>
     </application>
 </manifest>

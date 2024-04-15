@@ -92,7 +92,7 @@ import java.util.Locale
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecyclerView>(), ShakeDetector.Listener {
+class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecyclerView>() {
 
     /***************************************************************************************************
      *   global properties
@@ -160,8 +160,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //            title = getString(R.string.read_diary_title)
             subtitle = "👀"
         }
-
-        setupMotionSensor()
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         initDiaryGrid()
         initDummyData()
@@ -394,27 +392,28 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
-    override fun hearShake() {
-        var position = -1
-        val tomorrowTimeMillis = EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
-        val filteredDiary = mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
-        val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
-        target?.let {
-            run outer@ {
-                mDiaryList.forEachIndexed { index, diary ->
-                    if (diary.sequence == it.sequence) {
-                        position = index
-                        return@outer
-                    }
-                }
-            }
+//    override fun hearShake() {
+//        var position = -1
+//        val tomorrowTimeMillis = EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+//        val filteredDiary = mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+//        val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+//        target?.let {
+//            run outer@ {
+//                mDiaryList.forEachIndexed { index, diary ->
+//                    if (diary.sequence == it.sequence) {
+//                        position = index
+//                        return@outer
+//                    }
+//                }
+//            }
+//
+//            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+//            if (position != -1) {
+//                mBinding.diaryListView.scrollToPosition(position)
+//            }
+//        }
+//    }
 
-            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
-            if (position != -1) {
-                mBinding.diaryListView.scrollToPosition(position)
-            }
-        }
-    }
 
     /***************************************************************************************************
      *   etc functions
@@ -840,7 +839,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
     }
-
 
     private lateinit var mSensorManager: SensorManager
     private lateinit var mShakeDetector: ShakeDetector
