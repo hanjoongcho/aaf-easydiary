@@ -6,6 +6,8 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
@@ -17,7 +19,6 @@ import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.util.*
-
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -86,7 +87,7 @@ object FontUtils {
         }
         return sTypeface
     }
-    
+
     fun setTypefaceDefault(view: TextView) {
         view.typeface = Typeface.DEFAULT
     }
@@ -147,4 +148,19 @@ object FontUtils {
             }
         }
     }
+
+    fun isDeviceSettingFont(context: Context): Boolean {
+        return context.config.settingFontName == CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
+    }
+
+    fun getCommonFontFile(context: Context): File {
+        return File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName)
+    }
+
+    fun getComposeFontFamily(context: Context): FontFamily? {
+        return if (isDeviceSettingFont(context)) null else FontFamily(
+            Font(getCommonFontFile(context))
+        )
+    }
 }
+

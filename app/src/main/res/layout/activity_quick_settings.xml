@@ -120,7 +120,6 @@
 
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/SettingsTitle"
-                            android:textStyle="normal"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:text="Sync Google Calendar" />

@@ -22,7 +22,10 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import me.blog.korn123.easydiary.R
@@ -121,7 +124,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         val pixelValue = config.settingFontSize
         val density = LocalDensity.current
         val sp = with (density) {
-            val temp = pixelValue.toDp() / density.fontScale
+            val temp = pixelValue.toDp()
             temp.toSp()
         }
 
@@ -135,12 +138,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             ) {
                 Text(
                     text = "Sync Google Calendar",
-                    fontWeight = FontWeight.Bold,
                     style = TextStyle(
-                        color = Color(context.config.textColor)
-                    ),
-                    fontFamily = FontFamily(FontUtils.getCommonTypeface(context)!!),
-                    fontSize = TextUnit(sp.value, TextUnitType.Sp)
+                        fontFamily = FontUtils.getComposeFontFamily(context),
+                        fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(sp.value, TextUnitType.Sp),
+                    )
                 )
             }
         }
