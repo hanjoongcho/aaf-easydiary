@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,26 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
-import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.TransitionHelper
-import android.os.Bundle
-import android.util.TypedValue
-import android.view.View
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.Typeface
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.executeScheduledTask
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 
@@ -120,8 +113,8 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     }
 
     @Composable
-    fun PlantDetailDescription(context: Context) {
-        val pixelValue = config.settingFontSize
+    fun PlantDetailDescription(context: Context, isPreview: Boolean = false) {
+        val pixelValue = context.config.settingFontSize
         val density = LocalDensity.current
         val sp = with (density) {
             val temp = pixelValue.toDp()
@@ -139,7 +132,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 Text(
                     text = "Sync Google Calendar",
                     style = TextStyle(
-                        fontFamily = FontUtils.getComposeFontFamily(context),
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
                         fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                         color = Color(context.config.textColor),
@@ -150,11 +143,11 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
     }
 
-//    @Preview
-//    @Composable
-//    private fun PlantDetailDescriptionPreview() {
-//        MaterialTheme {
-//            PlantDetailDescription(LocalContext.current)
-//        }
-//    }
+    @Preview
+    @Composable
+    private fun PlantDetailDescriptionPreview() {
+        MaterialTheme {
+            PlantDetailDescription(LocalContext.current, true)
+        }
+    }
 }

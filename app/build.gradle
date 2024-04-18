@@ -145,6 +145,8 @@ dependencies {
     implementation "androidx.browser:browser:1.8.0"
     implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'androidx.compose.material3:material3:1.2.1'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.6.6'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.6.6'
 
     // google components for develop package (not foss)
     gmsDevImplementation 'com.google.android.gms:play-services-auth:21.0.0'
