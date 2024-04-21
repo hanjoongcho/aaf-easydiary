@@ -3,7 +3,10 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -76,14 +79,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     disableFutureDiarySwitcher.toggle()
                     config.disableFutureDiary = disableFutureDiarySwitcher.isChecked
                 }
-                R.id.syncGoogleCalendar -> {
-                    val alarm = Alarm().apply {
-                        sequence = Int.MAX_VALUE
-                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                        label = "Quick Settings"
-                    }
-                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                }
             }
         }
         updateCardAlpha()
@@ -93,7 +88,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         mBinding.run {
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
             disableFutureDiary.setOnClickListener(mOnClickListener)
-            syncGoogleCalendar.setOnClickListener(mOnClickListener)
         }
     }
 
@@ -121,24 +115,61 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             temp.toSp()
         }
 
-        Card(
-            shape = RoundedCornerShape(4.dp),
-            colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-            modifier = Modifier.padding(3.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(15.dp)
+        Row {
+            Card(
+                shape = RoundedCornerShape(4.dp),
+                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+                modifier = Modifier
+                    .padding(3.dp),
+                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
             ) {
-                Text(
-                    text = "Sync Google Calendar",
-                    style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                        fontWeight = FontWeight.Bold,
+                Column(
+                    modifier = Modifier.padding(15.dp)
+                ) {
+                    Text(
+                        text = "Sync",
+                        style = TextStyle(
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                            fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
-                        color = Color(context.config.textColor),
-                        fontSize = TextUnit(sp.value, TextUnitType.Sp),
+                            color = Color(context.config.textColor),
+                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
+                        ),
                     )
-                )
+                }
+            }
+            Card(
+                shape = RoundedCornerShape(4.dp),
+                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+                modifier = Modifier
+                    .padding(3.dp)
+//                    .fillMaxWidth()
+                    
+                    .clickable {
+                        val alarm = Alarm().apply {
+                            sequence = Int.MAX_VALUE
+                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            label = "Quick Settings"
+                        }
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                    }
+                ,
+                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(15.dp)
+                ) {
+                    Text(
+                        text = "Sync Google Calendar",
+                        style = TextStyle(
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                            fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                            color = Color(context.config.textColor),
+                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
             }
         }
     }
