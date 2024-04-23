@@ -6,14 +6,21 @@ import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
@@ -34,7 +42,6 @@ import me.blog.korn123.easydiary.models.Alarm
 class QuickSettingsActivity : EasyDiaryActivity() {
 
     private lateinit var mBinding: ActivityQuickSettingsBinding
-
     /***************************************************************************************************
      *   override functions
      *
@@ -54,7 +61,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         mBinding.run {
             composeView.setContent {
                 MaterialTheme {
-                    PlantDetailDescription(context = this@QuickSettingsActivity)
+                    QuickSettings(context = this@QuickSettingsActivity)
                 }
             }
         }
@@ -107,13 +114,14 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     }
 
     @Composable
-    fun PlantDetailDescription(context: Context, isPreview: Boolean = false) {
+    fun QuickSettings(context: Context, isPreview: Boolean = false) {
         val pixelValue = context.config.settingFontSize
         val density = LocalDensity.current
         val sp = with (density) {
             val temp = pixelValue.toDp()
             temp.toSp()
         }
+        var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
 
         Row {
             Card(
@@ -123,8 +131,9 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     .padding(3.dp),
                 elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(15.dp)
+                Row(
+                    modifier = Modifier.padding(15.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "Sync",
@@ -136,6 +145,16 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                             fontSize = TextUnit(sp.value, TextUnitType.Sp),
                         ),
                     )
+                    Switch(colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.Red, // Change the color of the thumb when checked
+                        checkedTrackColor = Color.Green, // Change the color of the track when checked
+                        uncheckedThumbColor = Color.Blue, // Change the color of the thumb when unchecked
+                        uncheckedTrackColor = Color.Gray // Change the color of the track when unchecked
+                    ), modifier = Modifier.padding(start = 20.dp), checked = enablePhotoHighlight, onCheckedChange = { isChecked ->
+                        context.config.enablePhotoHighlight = isChecked
+                        enablePhotoHighlight = isChecked
+                        initPreference()
+                    })
                 }
             }
             Card(
@@ -144,7 +163,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 modifier = Modifier
                     .padding(3.dp)
 //                    .fillMaxWidth()
-                    
+
                     .clickable {
                         val alarm = Alarm().apply {
                             sequence = Int.MAX_VALUE
@@ -176,9 +195,9 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
     @Preview
     @Composable
-    private fun PlantDetailDescriptionPreview() {
+    private fun QuickSettingsPreview() {
         MaterialTheme {
-            PlantDetailDescription(LocalContext.current, true)
+            QuickSettings(LocalContext.current, true)
         }
     }
 }

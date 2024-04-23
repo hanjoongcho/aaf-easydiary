@@ -66,10 +66,6 @@
                             android:layout_height="wrap_content"
                             android:clickable="false" />
                     </LinearLayout>
-
-                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
-                    <!--                        style="@style/SettingsSummary"-->
-                    <!--                        android:text="@string/enable_photo_highlight_description" />-->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -98,10 +94,6 @@
                             android:layout_height="wrap_content"
                             android:clickable="false" />
                     </LinearLayout>
-
-                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
-                    <!--                        style="@style/SettingsSummary"-->
-                    <!--                        android:text="If you activate this option, diaries written with events scheduled after today will be disabled from the list." />-->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
