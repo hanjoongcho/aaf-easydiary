@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -22,7 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -31,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.MutableLiveData
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -113,6 +121,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     fun QuickSettings(context: Context, isPreview: Boolean = false) {
         val pixelValue = context.config.settingFontSize
@@ -123,12 +132,11 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
         var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
 
-        Row {
+        FlowRow {
             Card(
                 shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                modifier = Modifier
-                    .padding(3.dp),
+                modifier = Modifier.padding(3.dp),
                 elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
             ) {
                 Row(
@@ -145,16 +153,31 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                             fontSize = TextUnit(sp.value, TextUnitType.Sp),
                         ),
                     )
-                    Switch(colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.Red, // Change the color of the thumb when checked
-                        checkedTrackColor = Color.Green, // Change the color of the track when checked
-                        uncheckedThumbColor = Color.Blue, // Change the color of the thumb when unchecked
-                        uncheckedTrackColor = Color.Gray // Change the color of the track when unchecked
-                    ), modifier = Modifier.padding(start = 20.dp), checked = enablePhotoHighlight, onCheckedChange = { isChecked ->
-                        context.config.enablePhotoHighlight = isChecked
-                        enablePhotoHighlight = isChecked
-                        initPreference()
-                    })
+                    Switch(
+//                        modifier = Modifier.scale(0.8F),
+                        modifier = Modifier.padding(start = 10.dp),
+                        checked = enablePhotoHighlight,
+                        colors = SwitchDefaults.colors(
+//                            checkedThumbColor = Color(context.config.primaryColor),
+//                            checkedTrackColor = Color(ColorUtils.setAlphaComponent(context.config.primaryColor, 150)),
+                        ),
+                        onCheckedChange = { isChecked ->
+                            context.config.enablePhotoHighlight = isChecked
+                            enablePhotoHighlight = isChecked
+                            initPreference()
+                        },
+                        thumbContent = if (enablePhotoHighlight) {
+                            {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(SwitchDefaults.IconSize),
+                                )
+                            }
+                        } else {
+                            null
+                        }
+                    )
                 }
             }
             Card(
@@ -163,7 +186,38 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 modifier = Modifier
                     .padding(3.dp)
 //                    .fillMaxWidth()
-
+                    .clickable {
+                        val alarm = Alarm().apply {
+                            sequence = Int.MAX_VALUE
+                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            label = "Quick Settings"
+                        }
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                    }
+                ,
+                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(15.dp)
+                ) {
+                    Text(
+                        text = "Sync Google Calendar",
+                        style = TextStyle(
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                            fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                            color = Color(context.config.textColor),
+                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
+            }
+            Card(
+                shape = RoundedCornerShape(4.dp),
+                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+                modifier = Modifier
+                    .padding(3.dp)
+//                    .fillMaxWidth()
                     .clickable {
                         val alarm = Alarm().apply {
                             sequence = Int.MAX_VALUE
