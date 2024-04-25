@@ -27,9 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -38,8 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.ColorUtils
-import androidx.lifecycle.MutableLiveData
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
@@ -63,7 +59,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             setTitle("Quick Settings")
             setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         mBinding.run {
@@ -90,10 +85,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enablePhotoHighlightSwitcher.toggle()
                     config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
                 }
-                R.id.disable_future_diary -> {
-                    disableFutureDiarySwitcher.toggle()
-                    config.disableFutureDiary = disableFutureDiarySwitcher.isChecked
-                }
             }
         }
         updateCardAlpha()
@@ -102,14 +93,12 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     private fun bindEvent() {
         mBinding.run {
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
-            disableFutureDiary.setOnClickListener(mOnClickListener)
         }
     }
 
     private fun initPreference() {
         mBinding.run {
             enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-            disableFutureDiarySwitcher.isChecked = config.disableFutureDiary
             updateCardAlpha()
         }
     }
@@ -117,7 +106,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     private fun updateCardAlpha() {
         mBinding.run {
             enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
-            disableFutureDiary.alpha = if (disableFutureDiarySwitcher.isChecked) 1.0f else 0.5f
         }
     }
 
@@ -126,123 +114,138 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     fun QuickSettings(context: Context, isPreview: Boolean = false) {
         val pixelValue = context.config.settingFontSize
         val density = LocalDensity.current
-        val sp = with (density) {
+        val currentTextUnit = with (density) {
             val temp = pixelValue.toDp()
             temp.toSp()
         }
         var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+        var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
 
         FlowRow {
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                modifier = Modifier.padding(3.dp),
-                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
+            SwitchCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                "첨부사진 하이라이트",
+                enablePhotoHighlight
             ) {
-                Row(
-                    modifier = Modifier.padding(15.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Sync",
-                        style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                            fontWeight = FontWeight.Bold,
+                context.config.enablePhotoHighlight = !enablePhotoHighlight
+                enablePhotoHighlight = !enablePhotoHighlight
+                initPreference()
+            }
+            SwitchCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                "미래일정 숨김",
+                disableFutureDiary
+            ) {
+                context.config.disableFutureDiary = !disableFutureDiary
+                disableFutureDiary = !disableFutureDiary
+            }
+            SimpleCard(context, currentTextUnit, isPreview, "Sync Google Calendar") {
+                val alarm = Alarm().apply {
+                    sequence = Int.MAX_VALUE
+                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                    label = "Quick Settings"
+                }
+                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+            }
+            SimpleCard(context, currentTextUnit, isPreview, "Setting-A") {}
+        }
+    }
+
+    @Composable
+    private fun SimpleCard(
+        context: Context,
+        fontSize: TextUnit,
+        isPreview: Boolean = false,
+        title: String,
+        callback: () -> Unit
+    ) {
+        Card(
+            shape = RoundedCornerShape(4.dp),
+            colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+            modifier = Modifier
+                .padding(3.dp)
+//                    .fillMaxWidth()
+                .clickable {
+                    callback.invoke()
+                },
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(15.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
-                            color = Color(context.config.textColor),
-                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
-                        ),
-                    )
-                    Switch(
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(fontSize.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun SwitchCard(
+        context: Context,
+        textUnit: TextUnit,
+        isPreview: Boolean = false,
+        title: String,
+        isOn: Boolean,
+        callback: () -> Unit
+    ) {
+        Card(
+            shape = RoundedCornerShape(4.dp),
+            colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+            modifier = Modifier.padding(3.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            onClick = {
+                callback.invoke()
+            }
+        ) {
+            Row(
+                modifier = Modifier.padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+                Switch(
 //                        modifier = Modifier.scale(0.8F),
-                        modifier = Modifier.padding(start = 10.dp),
-                        checked = enablePhotoHighlight,
-                        colors = SwitchDefaults.colors(
+                    modifier = Modifier.padding(start = 10.dp),
+                    checked = isOn,
+                    colors = SwitchDefaults.colors(
 //                            checkedThumbColor = Color(context.config.primaryColor),
 //                            checkedTrackColor = Color(ColorUtils.setAlphaComponent(context.config.primaryColor, 150)),
-                        ),
-                        onCheckedChange = { isChecked ->
-                            context.config.enablePhotoHighlight = isChecked
-                            enablePhotoHighlight = isChecked
-                            initPreference()
-                        },
-                        thumbContent = if (enablePhotoHighlight) {
-                            {
-                                Icon(
-                                    imageVector = Icons.Filled.Check,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                                )
-                            }
-                        } else {
-                            null
+                    ),
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
                         }
-                    )
-                }
-            }
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                modifier = Modifier
-                    .padding(3.dp)
-//                    .fillMaxWidth()
-                    .clickable {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
-                        }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                    } else {
+                        null
                     }
-                ,
-                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(15.dp)
-                ) {
-                    Text(
-                        text = "Sync Google Calendar",
-                        style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                            fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                            color = Color(context.config.textColor),
-                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
-                        ),
-                    )
-                }
-            }
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                modifier = Modifier
-                    .padding(3.dp)
-//                    .fillMaxWidth()
-                    .clickable {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
-                        }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                    }
-                ,
-                elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(15.dp)
-                ) {
-                    Text(
-                        text = "Sync Google Calendar",
-                        style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                            fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                            color = Color(context.config.textColor),
-                            fontSize = TextUnit(sp.value, TextUnitType.Sp),
-                        ),
-                    )
-                }
+                )
             }
         }
     }
