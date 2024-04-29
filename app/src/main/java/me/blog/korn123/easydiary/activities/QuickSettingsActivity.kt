@@ -3,16 +3,28 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Space
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -27,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -36,10 +49,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.google.android.material.color.MaterialColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 
@@ -121,12 +137,15 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
 
-        FlowRow {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
             SwitchCard(
                 context,
                 currentTextUnit,
                 isPreview,
                 "첨부사진 하이라이트",
+                Modifier,
                 enablePhotoHighlight
             ) {
                 context.config.enablePhotoHighlight = !enablePhotoHighlight
@@ -138,12 +157,19 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 currentTextUnit,
                 isPreview,
                 "미래일정 숨김",
+                Modifier,
                 disableFutureDiary
             ) {
                 context.config.disableFutureDiary = !disableFutureDiary
                 disableFutureDiary = !disableFutureDiary
             }
-            SimpleCard(context, currentTextUnit, isPreview, "Sync Google Calendar") {
+            SimpleCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                "Sync Google Calendar",
+                Modifier
+            ) {
                 val alarm = Alarm().apply {
                     sequence = Int.MAX_VALUE
                     workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
@@ -151,7 +177,22 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 }
                 AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
             }
-            SimpleCard(context, currentTextUnit, isPreview, "Setting-A") {}
+            SimpleCard(context, currentTextUnit, isPreview, "Apple", Modifier) { context.makeToast("OK") }
+            SimpleCard(context, currentTextUnit, isPreview, "Banana", Modifier) { context.makeToast("OK") }
+            SimpleCard(context, currentTextUnit, isPreview, "Cocoa", Modifier) { context.makeToast("OK") }
+            val itemModifier = Modifier
+//                .padding(14.dp)
+//                .height(60.dp)
+//                .width(150.dp)
+//                .weight(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.DarkGray)
+            repeat(5) {
+                Text(modifier = itemModifier, text="Vue")
+            }
+            Button(contentPadding = PaddingValues(10.dp), onClick = {}) {
+                Text(modifier = itemModifier, text="Vue")
+            }
         }
     }
 
@@ -161,17 +202,18 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         fontSize: TextUnit,
         isPreview: Boolean = false,
         title: String,
+        modifier: Modifier,
         callback: () -> Unit
     ) {
         Card(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-            modifier = Modifier
+            modifier = modifier
                 .padding(3.dp)
-//                    .fillMaxWidth()
                 .clickable {
                     callback.invoke()
                 },
+
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(
@@ -197,20 +239,21 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         textUnit: TextUnit,
         isPreview: Boolean = false,
         title: String,
+        modifier: Modifier,
         isOn: Boolean,
         callback: () -> Unit
     ) {
         Card(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-            modifier = Modifier.padding(3.dp),
+            modifier = modifier.padding(3.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             onClick = {
                 callback.invoke()
             }
         ) {
             Row(
-                modifier = Modifier.padding(15.dp),
+                modifier = Modifier.padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
