@@ -32,6 +32,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +52,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.google.android.material.color.MaterialColors
+import me.blog.korn123.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
@@ -79,7 +82,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
         mBinding.run {
             composeView.setContent {
-                MaterialTheme {
+                AppTheme(context = LocalContext.current) {
                     QuickSettings(context = this@QuickSettingsActivity)
                 }
             }
@@ -293,10 +296,48 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    val Purple80 = Color(0xFFD0BCFF)
+    val PurpleGrey80 = Color(0xFFCCC2DC)
+    val Pink80 = Color(0xFFEFB8C8)
+
+    val Purple40 = Color(0xFF6650a4)
+    val PurpleGrey40 = Color(0xFF625b71)
+    val Pink40 = Color(0xFF7D5260)
+
+    @Composable
+    fun AppTheme(
+        darkTheme: Boolean = false,
+        context: Context,
+        content: @Composable () -> Unit
+    ) {
+        // Material 3 color schemes
+        val DarkColorScheme = darkColorScheme(
+            primary = Purple80,
+            secondary = PurpleGrey80,
+            tertiary = Pink80
+        )
+
+        val LightColorScheme = lightColorScheme(
+            primary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
+            secondary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
+            tertiary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
+        )
+
+        val replyColorScheme = when {
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
+        }
+        MaterialTheme(
+            colorScheme = replyColorScheme,
+            content = content
+        )
+    }
+
+
     @Preview
     @Composable
     private fun QuickSettingsPreview() {
-        MaterialTheme {
+        AppTheme(context = LocalContext.current) {
             QuickSettings(LocalContext.current, true)
         }
     }

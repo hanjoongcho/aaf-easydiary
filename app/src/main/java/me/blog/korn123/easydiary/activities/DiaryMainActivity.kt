@@ -570,8 +570,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
-        mPopupMenuBinding.devConsole.visibility =
-            if (config.enableDebugMode) View.VISIBLE else View.GONE
+
+        val isVisible = if (config.enableDebugMode) View.VISIBLE else View.GONE
+        mPopupMenuBinding.devConsole.visibility = isVisible
+        mPopupMenuBinding.quickSettings.visibility = isVisible
+
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(
             mPopupMenuBinding.root,
             findViewById(R.id.popupMenu)
