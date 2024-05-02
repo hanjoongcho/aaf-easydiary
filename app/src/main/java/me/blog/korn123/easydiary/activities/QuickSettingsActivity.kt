@@ -3,64 +3,37 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Space
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.google.android.material.color.MaterialColors
-import me.blog.korn123.commons.utils.ColorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class QuickSettingsActivity : EasyDiaryActivity() {
 
@@ -184,153 +157,21 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             SimpleCard(context, currentTextUnit, isPreview, "Banana", Modifier) { context.makeToast("OK") }
             SimpleCard(context, currentTextUnit, isPreview, "Cocoa", Modifier) { context.makeToast("OK") }
             val itemModifier = Modifier
-//                .padding(14.dp)
+                .padding(14.dp)
 //                .height(60.dp)
 //                .width(150.dp)
 //                .weight(1f)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color.DarkGray)
+//                .background(Color.DarkGray)
             repeat(5) {
-                Text(modifier = itemModifier, text="Vue")
+                Surface(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
+                    Text(modifier = itemModifier, text="Vue")
+                }
             }
             Button(contentPadding = PaddingValues(10.dp), onClick = {}) {
-                Text(modifier = itemModifier, text="Vue")
+                Text(modifier = Modifier, text="Vue")
             }
         }
-    }
-
-    @Composable
-    private fun SimpleCard(
-        context: Context,
-        fontSize: TextUnit,
-        isPreview: Boolean = false,
-        title: String,
-        modifier: Modifier,
-        callback: () -> Unit
-    ) {
-        Card(
-            shape = RoundedCornerShape(4.dp),
-            colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-            modifier = modifier
-                .padding(3.dp)
-                .clickable {
-                    callback.invoke()
-                },
-
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(15.dp)
-            ) {
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                        fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                        color = Color(context.config.textColor),
-                        fontSize = TextUnit(fontSize.value, TextUnitType.Sp),
-                    ),
-                )
-            }
-        }
-    }
-
-    @Composable
-    private fun SwitchCard(
-        context: Context,
-        textUnit: TextUnit,
-        isPreview: Boolean = false,
-        title: String,
-        modifier: Modifier,
-        isOn: Boolean,
-        callback: () -> Unit
-    ) {
-        Card(
-            shape = RoundedCornerShape(4.dp),
-            colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-            modifier = modifier.padding(3.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            onClick = {
-                callback.invoke()
-            }
-        ) {
-            Row(
-                modifier = Modifier.padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                        fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                        color = Color(context.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
-                Switch(
-//                        modifier = Modifier.scale(0.8F),
-                    modifier = Modifier.padding(start = 10.dp),
-                    checked = isOn,
-                    colors = SwitchDefaults.colors(
-//                            checkedThumbColor = Color(context.config.primaryColor),
-//                            checkedTrackColor = Color(ColorUtils.setAlphaComponent(context.config.primaryColor, 150)),
-                    ),
-                    onCheckedChange = {
-                        callback.invoke()
-                    },
-                    thumbContent = if (isOn) {
-                        {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                            )
-                        }
-                    } else {
-                        null
-                    }
-                )
-            }
-        }
-    }
-
-    val Purple80 = Color(0xFFD0BCFF)
-    val PurpleGrey80 = Color(0xFFCCC2DC)
-    val Pink80 = Color(0xFFEFB8C8)
-
-    val Purple40 = Color(0xFF6650a4)
-    val PurpleGrey40 = Color(0xFF625b71)
-    val Pink40 = Color(0xFF7D5260)
-
-    @Composable
-    fun AppTheme(
-        darkTheme: Boolean = false,
-        context: Context,
-        content: @Composable () -> Unit
-    ) {
-        // Material 3 color schemes
-        val DarkColorScheme = darkColorScheme(
-            primary = Purple80,
-            secondary = PurpleGrey80,
-            tertiary = Pink80
-        )
-
-        val LightColorScheme = lightColorScheme(
-            primary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
-            secondary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
-            tertiary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
-        )
-
-        val replyColorScheme = when {
-            darkTheme -> DarkColorScheme
-            else -> LightColorScheme
-        }
-        MaterialTheme(
-            colorScheme = replyColorScheme,
-            content = content
-        )
     }
 
 
