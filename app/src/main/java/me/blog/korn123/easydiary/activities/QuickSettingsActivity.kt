@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +24,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -164,12 +170,48 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 .clip(RoundedCornerShape(8.dp))
 //                .background(Color.DarkGray)
             repeat(5) {
-                Surface(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
-                    Text(modifier = itemModifier, text="Vue")
+                Surface(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .padding(3.dp),
+                    color = Color(context.config.backgroundColor)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(15.dp),
+                        text = "Surface Text",
+                        style = TextStyle(
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
+                                context
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            color = Color(context.config.textColor),
+                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+                        )
+                    )
                 }
             }
-            Button(contentPadding = PaddingValues(10.dp), onClick = {}) {
-                Text(modifier = Modifier, text="Vue")
+            Button(
+                modifier = Modifier
+                    .padding(3.dp)
+                    .background(color = Color(context.config.backgroundColor)),
+                contentPadding = PaddingValues(10.dp),
+                colors = ButtonColors(
+                    Color(context.config.backgroundColor),
+                    Color(context.config.textColor),
+                    Color(context.config.backgroundColor),
+                    Color(context.config.textColor)
+                ),
+                onClick = {}) {
+                Text(
+                    modifier = Modifier, text = "Button Text", style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
+                            context
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+                    )
+                )
             }
         }
     }
