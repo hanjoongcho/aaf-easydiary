@@ -146,6 +146,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'androidx.compose.material3:material3:1.2.1'
     implementation 'androidx.compose.ui:ui-tooling-preview:1.6.6'
+    implementation 'androidx.compose.foundation:foundation-layout:1.7.0-alpha08'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.6.6'
 
     // google components for develop package (not foss)

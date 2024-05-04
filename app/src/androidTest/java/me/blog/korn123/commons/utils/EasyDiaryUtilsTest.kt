@@ -19,7 +19,7 @@ import org.junit.Test
  * Created by Administrator on 2017-11-02.
  */
 
-class EasyDiaryUtilsTest {ssss
+class EasyDiaryUtilsTest {
     @Test
     fun test_01() {
         val textView = TextView(InstrumentationRegistry.getInstrumentation().targetContext)

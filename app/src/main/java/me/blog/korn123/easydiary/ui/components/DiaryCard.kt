@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -40,7 +42,7 @@ fun SimpleCard(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
         modifier = modifier
-            .padding(3.dp)
+//            .padding(3.dp)
             .clickable {
                 callback.invoke()
             },
@@ -77,17 +79,18 @@ fun SwitchCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-        modifier = modifier.padding(3.dp),
+        modifier = modifier.padding(2.dp, 3.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = {
             callback.invoke()
         }
     ) {
         Row(
-            modifier = Modifier.padding(10.dp),
+            modifier = modifier.padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = title,
                 style = TextStyle(
                     fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
@@ -99,7 +102,8 @@ fun SwitchCard(
             )
             Switch(
 //                        modifier = Modifier.scale(0.8F),
-                modifier = Modifier.padding(start = 10.dp),
+                modifier = Modifier
+                    .padding(start = 10.dp),
                 checked = isOn,
                 colors = SwitchDefaults.colors(
 //                            checkedThumbColor = Color(context.config.primaryColor),

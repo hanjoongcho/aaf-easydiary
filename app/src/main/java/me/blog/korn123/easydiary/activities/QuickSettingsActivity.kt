@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -119,15 +122,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
 
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
+        Column {
             SwitchCard(
                 context,
                 currentTextUnit,
                 isPreview,
-                "첨부사진 하이라이트",
-                Modifier,
+                "🍳 첨부사진 하이라이트",
+                Modifier.fillMaxWidth(),
                 enablePhotoHighlight
             ) {
                 context.config.enablePhotoHighlight = !enablePhotoHighlight
@@ -138,80 +139,100 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 context,
                 currentTextUnit,
                 isPreview,
-                "미래일정 숨김",
-                Modifier,
+                "🍕 미래일정 숨김",
+                Modifier.fillMaxWidth(),
                 disableFutureDiary
             ) {
                 context.config.disableFutureDiary = !disableFutureDiary
                 disableFutureDiary = !disableFutureDiary
             }
-            SimpleCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                "Sync Google Calendar",
-                Modifier
-            ) {
-                val alarm = Alarm().apply {
-                    sequence = Int.MAX_VALUE
-                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                    label = "Quick Settings"
-                }
-                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-            }
-            SimpleCard(context, currentTextUnit, isPreview, "Apple", Modifier) { context.makeToast("OK") }
-            SimpleCard(context, currentTextUnit, isPreview, "Banana", Modifier) { context.makeToast("OK") }
-            SimpleCard(context, currentTextUnit, isPreview, "Cocoa", Modifier) { context.makeToast("OK") }
-            val itemModifier = Modifier
-                .padding(14.dp)
-//                .height(60.dp)
-//                .width(150.dp)
-//                .weight(1f)
-                .clip(RoundedCornerShape(8.dp))
-//                .background(Color.DarkGray)
-            repeat(5) {
-                Surface(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .padding(3.dp),
-                    color = Color(context.config.backgroundColor)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(15.dp),
-                        text = "Surface Text",
-                        style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
-                                context
-                            ),
-                            fontWeight = FontWeight.Bold,
-                            color = Color(context.config.textColor),
-                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-                        )
-                    )
-                }
-            }
-            Button(
+
+            FlowRow(
                 modifier = Modifier
-                    .padding(3.dp)
-                    .background(color = Color(context.config.backgroundColor)),
-                contentPadding = PaddingValues(10.dp),
-                colors = ButtonColors(
-                    Color(context.config.backgroundColor),
-                    Color(context.config.textColor),
-                    Color(context.config.backgroundColor),
-                    Color(context.config.textColor)
-                ),
-                onClick = {}) {
-                Text(
-                    modifier = Modifier, text = "Button Text", style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
-                            context
-                        ),
-                        fontWeight = FontWeight.Bold,
-                        color = Color(context.config.textColor),
-                        fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-                    )
-                )
+                    .padding(2.dp, 0.dp)
+                    .fillMaxWidth(1f)
+                    .fillMaxHeight(1f),
+
+                horizontalArrangement = Arrangement.spacedBy(3.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+//            maxItemsInEachRow = 3
+            ) {
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Sync Google Calendar",
+//                    Modifier.weight(1f)
+                    Modifier
+                ) {
+                    val alarm = Alarm().apply {
+                        sequence = Int.MAX_VALUE
+                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                        label = "Quick Settings"
+                    }
+                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                }
+                repeat(15) {
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Water Melon", Modifier.weight(1f)) { context.makeToast("[${it}] Water Melon") }
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Banana", Modifier.weight(1f)) { context.makeToast("[${it}] Banana") }
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Cocoa", Modifier.weight(1f)) { context.makeToast("[${it}] Cocoa") }
+                }
+//            val itemModifier = Modifier
+////                .padding(14.dp)
+////                .height(60.dp)
+////                .width(150.dp)
+//                .weight(1f)
+//                .clip(RoundedCornerShape(8.dp))
+////                .background(Color.DarkGray)
+//            repeat(5) {
+//                Surface(
+//                    modifier = itemModifier,
+//                    color = Color(context.config.backgroundColor)
+//                ) {
+//                    Text(
+//                        modifier = Modifier.padding(15.dp),
+//                        text = "Surface Text",
+//                        style = TextStyle(
+//                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
+//                                context
+//                            ),
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color(context.config.textColor),
+//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+//                        )
+//                    )
+//                }
+//            }
+//            Surface(
+//                modifier = Modifier
+//                    .clip(RoundedCornerShape(8.dp))
+//                    .padding(3.dp),
+//                color = Color(context.config.backgroundColor)
+//            ) {
+//                Button(
+//                    modifier = Modifier
+//                        .padding(3.dp)
+//                        .background(color = Color(context.config.backgroundColor)),
+//                    contentPadding = PaddingValues(10.dp),
+//                    colors = ButtonColors(
+//                        Color(context.config.backgroundColor),
+//                        Color(context.config.textColor),
+//                        Color(context.config.backgroundColor),
+//                        Color(context.config.textColor)
+//                    ),
+//                    onClick = {}) {
+//                    Text(
+//                        modifier = Modifier, text = "Button Text", style = TextStyle(
+//                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
+//                                context
+//                            ),
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color(context.config.textColor),
+//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+//                        )
+//                    )
+//                }
+//            }
             }
         }
     }
