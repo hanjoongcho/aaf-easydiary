@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -149,32 +150,34 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 disableFutureDiary = !disableFutureDiary
             }
 
-            SimpleCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                stringResource(id = R.string.sync_google_calendar_event_title),
-                stringResource(id = R.string.sync_google_calendar_event_summary),
-                Modifier.fillMaxWidth(),
-//                    Modifier
-            ) {
-                val alarm = Alarm().apply {
-                    sequence = Int.MAX_VALUE
-                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                    label = "Quick Settings"
-                }
-                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-            }
+
 
             FlowRow(
                 modifier = Modifier
 //                    .padding(3.dp, 3.dp)
                     .fillMaxWidth(1f)
                     .fillMaxHeight(1f),
-
+//                horizontalArrangement = Arrangement.spacedBy(3.dp),
+//                verticalArrangement = Arrangement.spacedBy(3.dp),
 //                overflow = FlowRowOverflow.Clip,
             maxItemsInEachRow = 2
             ) {
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(id = R.string.sync_google_calendar_event_title),
+                    stringResource(id = R.string.sync_google_calendar_event_summary),
+//                Modifier.wrapContentHeight()
+                    Modifier
+                ) {
+                    val alarm = Alarm().apply {
+                        sequence = Int.MAX_VALUE
+                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                        label = "Quick Settings"
+                    }
+                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                }
 
                 repeat(1) {
                     SimpleCard(context, currentTextUnit, isPreview, "[${it}] Water Melon weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Water Melon") }

@@ -5,9 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,10 +17,12 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,12 +58,12 @@ fun SimpleCard(
         ,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Row(
-            modifier = modifier.padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = modifier.padding(15.dp),
+//            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f),
+//                modifier = Modifier.weight(1f),
                 text = title,
                 style = TextStyle(
                     fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
@@ -71,7 +75,9 @@ fun SimpleCard(
 //                softWrap = false
             )
             Text(
-                modifier = Modifier.weight(2f).padding(5.dp, 0.dp, 0.dp, 0.dp),
+                modifier = Modifier
+//                    .weight(2f)
+                    .padding(0.dp, 5.dp, 0.dp, 0.dp),
                 text = description,
                 style = TextStyle(
                     fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
@@ -103,7 +109,7 @@ fun SwitchCard(
         }
     ) {
         Row(
-            modifier = modifier.padding(10.dp),
+            modifier = modifier.padding(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -117,30 +123,29 @@ fun SwitchCard(
                     fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
             )
-            Switch(
+                Switch(
 //                        modifier = Modifier.scale(0.8F),
-                modifier = Modifier
-                    .padding(start = 10.dp),
-                checked = isOn,
-                colors = SwitchDefaults.colors(
+                modifier = Modifier.absolutePadding(0.dp),
+                    checked = isOn,
+                    colors = SwitchDefaults.colors(
 //                            checkedThumbColor = Color(context.config.primaryColor),
 //                            checkedTrackColor = Color(ColorUtils.setAlphaComponent(context.config.primaryColor, 150)),
-                ),
-                onCheckedChange = {
-                    callback.invoke()
-                },
-                thumbContent = if (isOn) {
-                    {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = null,
-                            modifier = Modifier.size(SwitchDefaults.IconSize),
-                        )
+                    ),
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
-            )
+                )
         }
     }
 }
