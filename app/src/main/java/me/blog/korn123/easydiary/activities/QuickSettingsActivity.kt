@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -127,7 +129,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 context,
                 currentTextUnit,
                 isPreview,
-                "🍳 첨부사진 하이라이트",
+                stringResource(R.string.enable_photo_highlight_title),
                 Modifier.fillMaxWidth(),
                 enablePhotoHighlight
             ) {
@@ -139,7 +141,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 context,
                 currentTextUnit,
                 isPreview,
-                "🍕 미래일정 숨김",
+                "미래일정 숨김",
                 Modifier.fillMaxWidth(),
                 disableFutureDiary
             ) {
@@ -147,35 +149,37 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 disableFutureDiary = !disableFutureDiary
             }
 
+            SimpleCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                stringResource(id = R.string.sync_google_calendar_event_title),
+                stringResource(id = R.string.sync_google_calendar_event_summary),
+                Modifier.fillMaxWidth(),
+//                    Modifier
+            ) {
+                val alarm = Alarm().apply {
+                    sequence = Int.MAX_VALUE
+                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                    label = "Quick Settings"
+                }
+                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+            }
+
             FlowRow(
                 modifier = Modifier
-                    .padding(2.dp, 0.dp)
+//                    .padding(3.dp, 3.dp)
                     .fillMaxWidth(1f)
                     .fillMaxHeight(1f),
 
-                horizontalArrangement = Arrangement.spacedBy(3.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-//            maxItemsInEachRow = 3
+//                overflow = FlowRowOverflow.Clip,
+            maxItemsInEachRow = 2
             ) {
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "Sync Google Calendar",
-//                    Modifier.weight(1f)
-                    Modifier
-                ) {
-                    val alarm = Alarm().apply {
-                        sequence = Int.MAX_VALUE
-                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                        label = "Quick Settings"
-                    }
-                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                }
-                repeat(15) {
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Water Melon", Modifier.weight(1f)) { context.makeToast("[${it}] Water Melon") }
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Banana", Modifier.weight(1f)) { context.makeToast("[${it}] Banana") }
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Cocoa", Modifier.weight(1f)) { context.makeToast("[${it}] Cocoa") }
+
+                repeat(1) {
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Water Melon weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Water Melon") }
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Banana weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Banana") }
+                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] TURKEYTURKEYTURKEY weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Cocoa") }
                 }
 //            val itemModifier = Modifier
 ////                .padding(14.dp)
