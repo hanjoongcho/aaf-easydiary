@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,10 +11,13 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -138,6 +142,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 enablePhotoHighlight = !enablePhotoHighlight
                 initPreference()
             }
+
             SwitchCard(
                 context,
                 currentTextUnit,
@@ -150,39 +155,49 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 disableFutureDiary = !disableFutureDiary
             }
 
-
+            SimpleCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                stringResource(id = R.string.sync_google_calendar_event_title),
+                stringResource(id = R.string.sync_google_calendar_event_summary),
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth()
+//                        .weight(1f)
+            ) {
+                val alarm = Alarm().apply {
+                    sequence = Int.MAX_VALUE
+                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                    label = "Quick Settings"
+                }
+                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+            }
 
             FlowRow(
-                modifier = Modifier
+                modifier = Modifier,
 //                    .padding(3.dp, 3.dp)
-                    .fillMaxWidth(1f)
-                    .fillMaxHeight(1f),
+//                    .fillMaxWidth(1f)
+//                    .fillMaxHeight(1f),
 //                horizontalArrangement = Arrangement.spacedBy(3.dp),
 //                verticalArrangement = Arrangement.spacedBy(3.dp),
 //                overflow = FlowRowOverflow.Clip,
             maxItemsInEachRow = 2
             ) {
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    stringResource(id = R.string.sync_google_calendar_event_title),
-                    stringResource(id = R.string.sync_google_calendar_event_summary),
-//                Modifier.wrapContentHeight()
-                    Modifier
-                ) {
-                    val alarm = Alarm().apply {
-                        sequence = Int.MAX_VALUE
-                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                        label = "Quick Settings"
-                    }
-                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                }
 
-                repeat(1) {
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Water Melon weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Water Melon") }
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] Banana weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Banana") }
-                    SimpleCard(context, currentTextUnit, isPreview, "[${it}] TURKEYTURKEYTURKEY weight-1", "Description...", Modifier.weight(1f)) { context.makeToast("[${it}] Cocoa") }
+                val itemModifier = Modifier
+                    .padding(4.dp)
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(context.config.backgroundColor))
+
+                val spaceModifier = Modifier
+                repeat(7) { item ->
+                    if ((item + 1) % 3 == 0) {
+                        Spacer(modifier = itemModifier.fillMaxWidth())
+                    } else {
+                        Spacer(modifier = itemModifier.weight(0.5f))
+                    }
                 }
 //            val itemModifier = Modifier
 ////                .padding(14.dp)
