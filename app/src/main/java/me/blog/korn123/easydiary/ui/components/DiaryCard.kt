@@ -31,7 +31,7 @@ import me.blog.korn123.easydiary.extensions.config
 @Composable
 fun SimpleCard(
     context: Context,
-    fontSize: TextUnit,
+    textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
     description: String,
@@ -59,7 +59,7 @@ fun SimpleCard(
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                     color = Color(context.config.textColor),
-                    fontSize = TextUnit(fontSize.value, TextUnitType.Sp),
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
 //                softWrap = false
             )
@@ -70,7 +70,7 @@ fun SimpleCard(
                 style = TextStyle(
                     fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
                     color = Color(context.config.textColor),
-                    fontSize = TextUnit(fontSize.value, TextUnitType.Sp),
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
             )
         }
@@ -83,6 +83,7 @@ fun SwitchCard(
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
+    description: String,
     modifier: Modifier,
     isOn: Boolean,
     callback: () -> Unit
@@ -96,24 +97,27 @@ fun SwitchCard(
             callback.invoke()
         }
     ) {
-        Row(
-            modifier = modifier.padding(15.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = modifier.padding(15.dp)
         ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = title,
-                style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                    fontWeight = FontWeight.Bold,
+            Row(
+//                modifier = modifier.padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
-                    color = Color(context.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
                 Switch(
 //                        modifier = Modifier.scale(0.8F),
-                modifier = Modifier.absolutePadding(0.dp),
+                    modifier = Modifier.absolutePadding(0.dp),
                     checked = isOn,
                     colors = SwitchDefaults.colors(
 //                            checkedThumbColor = Color(context.config.primaryColor),
@@ -134,6 +138,20 @@ fun SwitchCard(
                         null
                     }
                 )
+            }
+            Row(
+//                modifier = modifier.padding(15.dp),
+            ) {
+                Text(
+//                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
         }
     }
 }

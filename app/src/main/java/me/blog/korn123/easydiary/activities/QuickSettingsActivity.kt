@@ -119,6 +119,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 currentTextUnit,
                 isPreview,
                 stringResource(R.string.enable_photo_highlight_title),
+                stringResource(R.string.enable_photo_highlight_description),
                 Modifier.fillMaxWidth(),
                 enablePhotoHighlight
             ) {
@@ -132,6 +133,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 currentTextUnit,
                 isPreview,
                 "미래일정 숨김",
+                "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
                 Modifier.fillMaxWidth(),
                 disableFutureDiary
             ) {
@@ -209,7 +211,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             }
         }
     }
-
 
     @Preview(heightDp = 2000)
     @Composable
