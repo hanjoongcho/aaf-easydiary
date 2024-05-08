@@ -3,26 +3,17 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Space
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowOverflow
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,17 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -128,7 +113,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
         var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
-
         Column {
             SwitchCard(
                 context,
@@ -155,23 +139,27 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 disableFutureDiary = !disableFutureDiary
             }
 
-            SimpleCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                stringResource(id = R.string.sync_google_calendar_event_title),
-                stringResource(id = R.string.sync_google_calendar_event_summary),
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth()
-//                        .weight(1f)
-            ) {
-                val alarm = Alarm().apply {
-                    sequence = Int.MAX_VALUE
-                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                    label = "Quick Settings"
+            Row {
+                repeat(2) {
+                    SimpleCard(
+                        context,
+                        currentTextUnit,
+                        isPreview,
+                        stringResource(id = R.string.sync_google_calendar_event_title),
+                        stringResource(id = R.string.sync_google_calendar_event_summary),
+                        Modifier
+                            .fillMaxWidth()
+//                            .wrapContentWidth()
+                            .weight(1f)
+                    ) {
+                        val alarm = Alarm().apply {
+                            sequence = Int.MAX_VALUE
+                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            label = "Quick Settings"
+                        }
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                    }
                 }
-                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
             }
 
             FlowRow(
@@ -192,75 +180,38 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     .background(Color(context.config.backgroundColor))
 
                 val spaceModifier = Modifier
-                repeat(7) { item ->
+                repeat(11) { item ->
                     if ((item + 1) % 3 == 0) {
                         Spacer(modifier = itemModifier.fillMaxWidth())
                     } else {
                         Spacer(modifier = itemModifier.weight(0.5f))
                     }
                 }
-//            val itemModifier = Modifier
-////                .padding(14.dp)
-////                .height(60.dp)
-////                .width(150.dp)
-//                .weight(1f)
-//                .clip(RoundedCornerShape(8.dp))
-////                .background(Color.DarkGray)
-//            repeat(5) {
-//                Surface(
-//                    modifier = itemModifier,
-//                    color = Color(context.config.backgroundColor)
-//                ) {
-//                    Text(
-//                        modifier = Modifier.padding(15.dp),
-//                        text = "Surface Text",
-//                        style = TextStyle(
-//                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
-//                                context
-//                            ),
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(context.config.textColor),
-//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-//                        )
-//                    )
-//                }
-//            }
-//            Surface(
-//                modifier = Modifier
-//                    .clip(RoundedCornerShape(8.dp))
-//                    .padding(3.dp),
-//                color = Color(context.config.backgroundColor)
-//            ) {
-//                Button(
-//                    modifier = Modifier
-//                        .padding(3.dp)
-//                        .background(color = Color(context.config.backgroundColor)),
-//                    contentPadding = PaddingValues(10.dp),
-//                    colors = ButtonColors(
-//                        Color(context.config.backgroundColor),
-//                        Color(context.config.textColor),
-//                        Color(context.config.backgroundColor),
-//                        Color(context.config.textColor)
-//                    ),
-//                    onClick = {}) {
-//                    Text(
-//                        modifier = Modifier, text = "Button Text", style = TextStyle(
-//                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(
-//                                context
-//                            ),
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(context.config.textColor),
-//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-//                        )
-//                    )
-//                }
-//            }
+            }
+
+            SimpleCard(
+                context,
+                currentTextUnit,
+                isPreview,
+                stringResource(id = R.string.sync_google_calendar_event_title),
+                stringResource(id = R.string.sync_google_calendar_event_summary),
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth()
+//                        .weight(1f)
+            ) {
+                val alarm = Alarm().apply {
+                    sequence = Int.MAX_VALUE
+                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                    label = "Quick Settings"
+                }
+                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
             }
         }
     }
 
 
-    @Preview
+    @Preview(heightDp = 2000)
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme(context = LocalContext.current) {
