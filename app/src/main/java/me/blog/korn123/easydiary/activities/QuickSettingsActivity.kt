@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,6 +29,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -39,6 +43,7 @@ import me.blog.korn123.easydiary.ui.theme.AppTheme
 class QuickSettingsActivity : EasyDiaryActivity() {
 
     private lateinit var mBinding: ActivityQuickSettingsBinding
+    private val mViewModel: QuickSettingsViewModel by viewModels()
     /***************************************************************************************************
      *   override functions
      *
@@ -53,6 +58,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
         }
+        mViewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
 
         mBinding.run {
             composeView.setContent {
@@ -77,6 +83,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 R.id.enable_photo_highlight -> {
                     enablePhotoHighlightSwitcher.toggle()
                     config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
+                    mViewModel.toggle()
                 }
             }
         }
@@ -111,8 +118,9 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             val temp = pixelValue.toDp()
             temp.toSp()
         }
-        var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+        val isOn: Boolean by mViewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
+        
         Column {
             SwitchCard(
                 context,
@@ -121,10 +129,10 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 stringResource(R.string.enable_photo_highlight_title),
                 stringResource(R.string.enable_photo_highlight_description),
                 Modifier.fillMaxWidth(),
-                enablePhotoHighlight
+                isOn
             ) {
-                context.config.enablePhotoHighlight = !enablePhotoHighlight
-                enablePhotoHighlight = !enablePhotoHighlight
+                mViewModel.toggle()
+                context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
                 initPreference()
             }
 
@@ -217,6 +225,15 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     private fun QuickSettingsPreview() {
         AppTheme(context = LocalContext.current) {
             QuickSettings(LocalContext.current, true)
+        }
+    }
+
+    class QuickSettingsViewModel : ViewModel() {
+        var enablePhotoHighlight: MutableLiveData<Boolean> = MutableLiveData()
+            private set
+
+        fun toggle() {
+            enablePhotoHighlight.value = enablePhotoHighlight.value != true
         }
     }
 }
