@@ -58,6 +58,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
         }
+
         mViewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
 
         mBinding.run {
@@ -120,7 +121,9 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         }
         val isOn: Boolean by mViewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
-        
+        var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
+        var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
+
         Column {
             SwitchCard(
                 context,
@@ -136,42 +139,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 initPreference()
             }
 
-            SwitchCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                "미래일정 숨김",
-                "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
-                Modifier.fillMaxWidth(),
-                disableFutureDiary
-            ) {
-                context.config.disableFutureDiary = !disableFutureDiary
-                disableFutureDiary = !disableFutureDiary
-            }
-
-            Row {
-                repeat(2) {
-                    SimpleCard(
-                        context,
-                        currentTextUnit,
-                        isPreview,
-                        stringResource(id = R.string.sync_google_calendar_event_title),
-                        stringResource(id = R.string.sync_google_calendar_event_summary),
-                        Modifier
-                            .fillMaxWidth()
-//                            .wrapContentWidth()
-                            .weight(1f)
-                    ) {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
-                        }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                    }
-                }
-            }
-
             FlowRow(
                 modifier = Modifier,
 //                    .padding(3.dp, 3.dp)
@@ -182,6 +149,68 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 //                overflow = FlowRowOverflow.Clip,
             maxItemsInEachRow = 2
             ) {
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "미래일정 숨김",
+                    "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    disableFutureDiary
+                ) {
+                    context.config.disableFutureDiary = !disableFutureDiary
+                    disableFutureDiary = !disableFutureDiary
+                }
+
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(R.string.markdown_setting_title),
+                    stringResource(R.string.markdown_setting_summary),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    enableMarkdown
+                ) {
+                    context.config.enableMarkdown = !enableMarkdown
+                    enableMarkdown = !enableMarkdown
+                }
+
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(R.string.enable_welcome_dashboard_popup_title),
+                    stringResource(R.string.enable_welcome_dashboard_popup_description),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    enableWelcomeDashboardPopup
+                ) {
+                    context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
+                    enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
+                }
+
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(id = R.string.sync_google_calendar_event_title),
+                    stringResource(id = R.string.sync_google_calendar_event_summary),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    val alarm = Alarm().apply {
+                        sequence = Int.MAX_VALUE
+                        workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                        label = "Quick Settings"
+                    }
+                    AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                }
 
                 val itemModifier = Modifier
                     .padding(4.dp)
@@ -190,32 +219,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     .background(Color(context.config.backgroundColor))
 
                 val spaceModifier = Modifier
-                repeat(11) { item ->
+                repeat(3) { item ->
                     if ((item + 1) % 3 == 0) {
                         Spacer(modifier = itemModifier.fillMaxWidth())
                     } else {
                         Spacer(modifier = itemModifier.weight(0.5f))
                     }
                 }
-            }
-
-            SimpleCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                stringResource(id = R.string.sync_google_calendar_event_title),
-                stringResource(id = R.string.sync_google_calendar_event_summary),
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth()
-//                        .weight(1f)
-            ) {
-                val alarm = Alarm().apply {
-                    sequence = Int.MAX_VALUE
-                    workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                    label = "Quick Settings"
-                }
-                AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
             }
         }
     }

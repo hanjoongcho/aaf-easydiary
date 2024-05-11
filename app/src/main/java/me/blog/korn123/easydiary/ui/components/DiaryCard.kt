@@ -43,7 +43,6 @@ fun SimpleCard(
         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
         modifier = modifier
             .padding(3.dp, 3.dp)
-//            .wrapContentHeight()
             .clickable {
                 callback.invoke()
             },
@@ -61,7 +60,6 @@ fun SimpleCard(
                     color = Color(context.config.textColor),
                     fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
-//                softWrap = false
             )
             Text(
                 modifier = Modifier
@@ -98,10 +96,9 @@ fun SwitchCard(
         }
     ) {
         Column(
-            modifier = modifier.padding(15.dp)
+            modifier = Modifier.padding(15.dp)
         ) {
             Row(
-//                modifier = modifier.padding(15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -110,19 +107,13 @@ fun SwitchCard(
                     style = TextStyle(
                         fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
                         fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
                         color = Color(context.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                 )
                 Switch(
-//                        modifier = Modifier.scale(0.8F),
                     modifier = Modifier.absolutePadding(0.dp),
                     checked = isOn,
-                    colors = SwitchDefaults.colors(
-//                            checkedThumbColor = Color(context.config.primaryColor),
-//                            checkedTrackColor = Color(ColorUtils.setAlphaComponent(context.config.primaryColor, 150)),
-                    ),
                     onCheckedChange = {
                         callback.invoke()
                     },
@@ -140,10 +131,8 @@ fun SwitchCard(
                 )
             }
             Row(
-//                modifier = modifier.padding(15.dp),
             ) {
                 Text(
-//                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                     text = description,
                     style = TextStyle(
                         fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
