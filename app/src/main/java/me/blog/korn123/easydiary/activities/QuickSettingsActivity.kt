@@ -2,18 +2,15 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityQuickSettingsBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -42,8 +40,10 @@ import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class QuickSettingsActivity : EasyDiaryActivity() {
 
+
     private lateinit var mBinding: ActivityQuickSettingsBinding
-    private val mViewModel: QuickSettingsViewModel by viewModels()
+
+
     /***************************************************************************************************
      *   override functions
      *
@@ -59,17 +59,29 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        mViewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
+
+        val viewModel: QuickSettingsViewModel by viewModels()
+        viewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
 
         mBinding.run {
             composeView.setContent {
                 AppTheme(context = LocalContext.current) {
-                    QuickSettings(context = this@QuickSettingsActivity)
+                    QuickSettings(context = this@QuickSettingsActivity, false, viewModel)
                 }
+            }
+
+            enablePhotoHighlight.setOnClickListener { view ->
+                when (view.id) {
+                    R.id.enable_photo_highlight -> {
+                        enablePhotoHighlightSwitcher.toggle()
+                        config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
+                        viewModel.toggle()
+                    }
+                }
+                updateCardAlpha()
             }
         }
 
-        bindEvent()
         initPreference()
     }
 
@@ -78,25 +90,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        mBinding.run {
-            when (view.id) {
-                R.id.enable_photo_highlight -> {
-                    enablePhotoHighlightSwitcher.toggle()
-                    config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
-                    mViewModel.toggle()
-                }
-            }
-        }
-        updateCardAlpha()
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            enablePhotoHighlight.setOnClickListener(mOnClickListener)
-        }
-    }
-
     private fun initPreference() {
         mBinding.run {
             enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
@@ -112,33 +105,19 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    fun QuickSettings(context: Context, isPreview: Boolean = false) {
+    fun QuickSettings(context: Context, isPreview: Boolean = false, viewModel: QuickSettingsViewModel) {
         val pixelValue = context.config.settingFontSize
         val density = LocalDensity.current
         val currentTextUnit = with (density) {
             val temp = pixelValue.toDp()
             temp.toSp()
         }
-        val isOn: Boolean by mViewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
+        val isOn: Boolean by viewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
 
         Column {
-            SwitchCard(
-                context,
-                currentTextUnit,
-                isPreview,
-                stringResource(R.string.enable_photo_highlight_title),
-                stringResource(R.string.enable_photo_highlight_description),
-                Modifier.fillMaxWidth(),
-                isOn
-            ) {
-                mViewModel.toggle()
-                context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
-                initPreference()
-            }
-
             FlowRow(
                 modifier = Modifier,
 //                    .padding(3.dp, 3.dp)
@@ -149,15 +128,31 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 //                overflow = FlowRowOverflow.Clip,
             maxItemsInEachRow = 2
             ) {
+                val settingCardModifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(R.string.enable_photo_highlight_title),
+                    stringResource(R.string.enable_photo_highlight_description),
+                    settingCardModifier,
+                    isOn
+                ) {
+                    viewModel.toggle()
+                    context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
+                    initPreference()
+                }
+
                 SwitchCard(
                     context,
                     currentTextUnit,
                     isPreview,
                     "미래일정 숨김",
                     "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                    settingCardModifier,
                     disableFutureDiary
                 ) {
                     context.config.disableFutureDiary = !disableFutureDiary
@@ -170,9 +165,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     isPreview,
                     stringResource(R.string.markdown_setting_title),
                     stringResource(R.string.markdown_setting_summary),
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                    settingCardModifier,
                     enableMarkdown
                 ) {
                     context.config.enableMarkdown = !enableMarkdown
@@ -185,9 +178,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     isPreview,
                     stringResource(R.string.enable_welcome_dashboard_popup_title),
                     stringResource(R.string.enable_welcome_dashboard_popup_description),
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                    settingCardModifier,
                     enableWelcomeDashboardPopup
                 ) {
                     context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
@@ -200,9 +191,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     isPreview,
                     stringResource(id = R.string.sync_google_calendar_event_title),
                     stringResource(id = R.string.sync_google_calendar_event_summary),
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                    settingCardModifier,
                 ) {
                     val alarm = Alarm().apply {
                         sequence = Int.MAX_VALUE
@@ -212,7 +201,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                 }
 
-                val itemModifier = Modifier
+                val itemModifier = settingCardModifier
                     .padding(4.dp)
                     .height(80.dp)
                     .clip(RoundedCornerShape(8.dp))
@@ -234,7 +223,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme(context = LocalContext.current) {
-            QuickSettings(LocalContext.current, true)
+            QuickSettings(LocalContext.current, true, viewModel())
         }
     }
 
