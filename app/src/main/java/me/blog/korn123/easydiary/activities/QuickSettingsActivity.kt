@@ -39,8 +39,6 @@ import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class QuickSettingsActivity : EasyDiaryActivity() {
-
-
     private lateinit var mBinding: ActivityQuickSettingsBinding
 
 
@@ -54,7 +52,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            setTitle("Quick Settings")
+            title = "Quick Settings"
             setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
         }
