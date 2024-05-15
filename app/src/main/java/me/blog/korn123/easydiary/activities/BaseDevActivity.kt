@@ -27,6 +27,28 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -39,7 +61,16 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -49,12 +80,38 @@ import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.fullAddress
+import me.blog.korn123.easydiary.extensions.getFromLocation
+import me.blog.korn123.easydiary.extensions.getLastKnownLocation
+import me.blog.korn123.easydiary.extensions.hasGPSPermissions
+import me.blog.korn123.easydiary.extensions.isLocationEnabled
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.pendingIntentFlag
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.startReviewFlow
+import me.blog.korn123.easydiary.extensions.toggleLauncher
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
+import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
@@ -127,8 +184,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        mBinding.run {
+            composeView.setContent {
+                AppTheme(context = LocalContext.current) {
+                    DevTools(context = this@BaseDevActivity, false)
+                }
+            }
+        }
+
         setupActionLog()
-        setupNotification()
         setupLocation()
         setupCoroutine()
         setupTestFunction()
@@ -585,140 +649,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun setupNotification() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            mBinding.linearDevContainer.addView(
-                // Notification
-                createBaseCardView(
-                    "Notification", null
-                    , Button(this@BaseDevActivity).apply {
-                        text = "Basic"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val notification = NotificationInfo(
-                                R.drawable.ic_diary_writing,
-                                useActionButton = true,
-                                id = mNotificationCount++
-                            )
-                            NotificationManagerCompat.from(this@BaseDevActivity)
-                                .notify(notification.id, createNotification(notification).also {
-                                    val contentTitle = "[${notification.id}] Basic Notification"
-                                    val contentText =
-                                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                    it.setContentTitle(contentTitle)
-                                    it.setContentText(contentText)
-                                    it.setLargeIcon(
-                                        BitmapFactory.decodeResource(
-                                            resources,
-                                            notification.largeIconResourceId
-                                        )
-                                    )
-                                    it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                                }.build())
-
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "Basic(Bitmap Icon)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val notification = NotificationInfo(
-                                R.drawable.ic_diary_writing,
-                                useActionButton = true,
-                                id = mNotificationCount++
-                            )
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val bitmap =
-                                    Glide
-                                        .with(context).asBitmap()
-                                        .load(R.drawable.bg_travel_4514822_1280)
-                                        .transform(
-                                            CenterCrop(),
-                                            RoundedCorners(context.dpToPixel(5F))
-                                        )
-                                        .submit(200, 200).get()
-                                withContext(Dispatchers.Main) {
-                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                                        val contentTitle = "[${notification.id}] Basic Notification"
-                                        val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                        it.setContentTitle(contentTitle)
-                                        it.setContentText(contentText)
-                                        it.setLargeIcon(bitmap)
-                                    }.build())
-                                }
-
-                            }
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "CustomContentView"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val notification = NotificationInfo(
-                                R.drawable.ic_diary_backup_local,
-                                useActionButton = true,
-                                mNotificationCount++)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val bitmap =
-                                        Glide
-                                            .with(context).asBitmap()
-                                            .load(R.drawable.bg_travel_4514822_1280)
-                                            .transform(
-                                                CenterCrop(),
-                                                RoundedCorners(context.dpToPixel(5F))
-                                            )
-                                            .submit(200, 200).get()
-                                withContext(Dispatchers.Main) {
-                                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
-                                        setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                                        setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
-                                            setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
-                                            setImageViewBitmap(R.id.img_notification_content, bitmap)
-                                        })
-                                        setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
-                                            setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
-                                        })
-//                                        setColor(config.primaryColor)
-//                                        setColorized(true)
-//                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                                        addAction(
-                                            R.drawable.ic_easydiary,
-                                            "Toast",
-                                            PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
-                                                action = BaseNotificationService.ACTION_DEV_TOAST
-                                                putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
-                                            }, pendingIntentFlag())
-                                        )
-                                    }.build())
-                                }
-                            }
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "BigTextStyle"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val notification = NotificationInfo(
-                                R.drawable.ic_done,
-                                useActionButton = true,
-                                mNotificationCount)
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                                val contentTitle = "[${notification.id}] BigTextStyle Title"
-                                val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
-                                it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
-                                it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                            }.build())
-                        }
-                    }
-                )
-            )
-        }
-    }
-
     private fun setupActionLog() {
         mBinding.clearLog.setOnClickListener {
             EasyDiaryDbHelper.deleteActionLogAll()
@@ -988,6 +918,170 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         return notificationBuilder
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    fun DevTools(context: Context, isPreview: Boolean = false) {
+        val pixelValue = context.config.settingFontSize
+        val density = LocalDensity.current
+        val currentTextUnit = with (density) {
+            val temp = pixelValue.toDp()
+            temp.toSp()
+        }
+
+        Column {
+            FlowRow(
+                modifier = Modifier,
+                maxItemsInEachRow = 2
+            ) {
+                val settingCardModifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-01",
+                    "Basic",
+                    settingCardModifier,
+                ) {
+                    val notification = NotificationInfo(
+                        R.drawable.ic_diary_writing,
+                        useActionButton = true,
+                        id = mNotificationCount++
+                    )
+                    NotificationManagerCompat.from(this@BaseDevActivity)
+                        .notify(notification.id, createNotification(notification).also {
+                            val contentTitle = "[${notification.id}] Basic Notification"
+                            val contentText =
+                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                            it.setContentTitle(contentTitle)
+                            it.setContentText(contentText)
+                            it.setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    resources,
+                                    notification.largeIconResourceId
+                                )
+                            )
+                            it.setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    resources,
+                                    notification.largeIconResourceId
+                                )
+                            )
+                        }.build())
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-02",
+                    "Basic(Bitmap Icon)",
+                    settingCardModifier,
+                ) {
+                    val notification = NotificationInfo(
+                        R.drawable.ic_diary_writing,
+                        useActionButton = true,
+                        id = mNotificationCount++
+                    )
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val bitmap =
+                            Glide
+                                .with(context).asBitmap()
+                                .load(R.drawable.bg_travel_4514822_1280)
+                                .transform(
+                                    CenterCrop(),
+                                    RoundedCorners(context.dpToPixel(5F))
+                                )
+                                .submit(200, 200).get()
+                        withContext(Dispatchers.Main) {
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                                val contentTitle = "[${notification.id}] Basic Notification"
+                                val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                it.setContentTitle(contentTitle)
+                                it.setContentText(contentText)
+                                it.setLargeIcon(bitmap)
+                            }.build())
+                        }
+                    }
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-03",
+                    "CustomContentView",
+                    settingCardModifier,
+                ) {
+                    val notification = NotificationInfo(
+                        R.drawable.ic_diary_backup_local,
+                        useActionButton = true,
+                        mNotificationCount++)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val bitmap =
+                            Glide
+                                .with(context).asBitmap()
+                                .load(R.drawable.bg_travel_4514822_1280)
+                                .transform(
+                                    CenterCrop(),
+                                    RoundedCorners(context.dpToPixel(5F))
+                                )
+                                .submit(200, 200).get()
+                        withContext(Dispatchers.Main) {
+                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
+                                setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                                setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
+                                    setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
+                                    setImageViewBitmap(R.id.img_notification_content, bitmap)
+                                })
+                                setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
+                                    setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
+                                })
+//                                        setColor(config.primaryColor)
+//                                        setColorized(true)
+//                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                                addAction(
+                                    R.drawable.ic_easydiary,
+                                    "Toast",
+                                    PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
+                                        action = BaseNotificationService.ACTION_DEV_TOAST
+                                        putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
+                                    }, pendingIntentFlag())
+                                )
+                            }.build())
+                        }
+                    }
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-04",
+                    "BigTextStyle",
+                    settingCardModifier,
+                ) {
+                    val notification = NotificationInfo(
+                        R.drawable.ic_done,
+                        useActionButton = true,
+                        mNotificationCount)
+                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                        val contentTitle = "[${notification.id}] BigTextStyle Title"
+                        val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                        it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
+                        it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                    }.build())
+                }
+            }
+        }
+    }
+
+    @Preview(heightDp = 2000)
+    @Composable
+    private fun DevToolsPreview() {
+        AppTheme(context = LocalContext.current) {
+            DevTools(LocalContext.current, true)
+        }
     }
 
     companion object {

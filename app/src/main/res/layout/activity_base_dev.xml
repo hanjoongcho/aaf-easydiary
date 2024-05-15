@@ -64,6 +64,7 @@
                         </androidx.core.widget.NestedScrollView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
                     android:onClick="@{() -> view_model.plus()}"
                     style="@style/AppCard.Settings">
@@ -82,6 +83,12 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/scroll_coroutine"
                     android:fillViewport="true"
