@@ -41,11 +41,12 @@ fun SimpleCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-        modifier = modifier
-            .padding(3.dp, 3.dp)
-            .clickable {
-                callback.invoke()
-            },
+        modifier = (if (context.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)).clickable {
+            callback.invoke()
+        },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(
@@ -89,7 +90,7 @@ fun SwitchCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-        modifier = modifier.padding(3.dp, 3.dp),
+        modifier = if (context.config.enableCardViewPolicy) modifier.padding(3.dp, 3.dp) else modifier.padding(1.dp, 1.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = {
             callback.invoke()

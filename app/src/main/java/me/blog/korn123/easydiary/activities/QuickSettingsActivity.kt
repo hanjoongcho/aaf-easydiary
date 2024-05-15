@@ -116,6 +116,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
+        var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
 
         Column {
             FlowRow(
@@ -136,33 +137,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     context,
                     currentTextUnit,
                     isPreview,
-                    stringResource(R.string.enable_photo_highlight_title),
-                    stringResource(R.string.enable_photo_highlight_description),
-                    settingCardModifier,
-                    isOn
-                ) {
-                    viewModel.toggle()
-                    context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
-                    initPreference()
-                }
-
-                SwitchCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "미래일정 숨김",
-                    "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
-                    settingCardModifier,
-                    disableFutureDiary
-                ) {
-                    context.config.disableFutureDiary = !disableFutureDiary
-                    disableFutureDiary = !disableFutureDiary
-                }
-
-                SwitchCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
                     stringResource(R.string.markdown_setting_title),
                     stringResource(R.string.markdown_setting_summary),
                     settingCardModifier,
@@ -171,7 +145,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     context.config.enableMarkdown = !enableMarkdown
                     enableMarkdown = !enableMarkdown
                 }
-
                 SwitchCard(
                     context,
                     currentTextUnit,
@@ -183,6 +156,43 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 ) {
                     context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                     enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
+                }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(R.string.enable_photo_highlight_title),
+                    stringResource(R.string.enable_photo_highlight_description),
+                    settingCardModifier,
+                    isOn
+                ) {
+                    viewModel.toggle()
+                    context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
+                    initPreference()
+                }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    stringResource(R.string.enable_card_view_policy_title),
+                    stringResource(R.string.enable_card_view_policy_summary),
+                    settingCardModifier,
+                    enableCardViewPolicy
+                ) {
+                    context.config.enableCardViewPolicy = !enableCardViewPolicy
+                    enableCardViewPolicy = !enableCardViewPolicy
+                }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "미래일정 숨김",
+                    "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
+                    settingCardModifier,
+                    disableFutureDiary
+                ) {
+                    context.config.disableFutureDiary = !disableFutureDiary
+                    disableFutureDiary = !disableFutureDiary
                 }
 
                 SimpleCard(
