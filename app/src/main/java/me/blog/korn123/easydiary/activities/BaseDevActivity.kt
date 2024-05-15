@@ -951,26 +951,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         useActionButton = true,
                         id = mNotificationCount++
                     )
-                    NotificationManagerCompat.from(this@BaseDevActivity)
-                        .notify(notification.id, createNotification(notification).also {
-                            val contentTitle = "[${notification.id}] Basic Notification"
-                            val contentText =
-                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                            it.setContentTitle(contentTitle)
-                            it.setContentText(contentText)
-                            it.setLargeIcon(
-                                BitmapFactory.decodeResource(
-                                    resources,
-                                    notification.largeIconResourceId
+                    if (ActivityCompat.checkSelfPermission(
+                            this@BaseDevActivity,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        NotificationManagerCompat.from(this@BaseDevActivity)
+                            .notify(notification.id, createNotification(notification).also {
+                                val contentTitle = "[${notification.id}] Basic Notification"
+                                val contentText =
+                                    "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                it.setContentTitle(contentTitle)
+                                it.setContentText(contentText)
+                                it.setLargeIcon(
+                                    BitmapFactory.decodeResource(
+                                        resources,
+                                        notification.largeIconResourceId
+                                    )
                                 )
-                            )
-                            it.setLargeIcon(
-                                BitmapFactory.decodeResource(
-                                    resources,
-                                    notification.largeIconResourceId
+                                it.setLargeIcon(
+                                    BitmapFactory.decodeResource(
+                                        resources,
+                                        notification.largeIconResourceId
+                                    )
                                 )
-                            )
-                        }.build())
+                            }.build())
+                    }
                 }
                 SimpleCard(
                     context,
@@ -996,13 +1002,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 )
                                 .submit(200, 200).get()
                         withContext(Dispatchers.Main) {
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                                val contentTitle = "[${notification.id}] Basic Notification"
-                                val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                it.setContentTitle(contentTitle)
-                                it.setContentText(contentText)
-                                it.setLargeIcon(bitmap)
-                            }.build())
+                            if (ActivityCompat.checkSelfPermission(
+                                    this@BaseDevActivity,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                                    val contentTitle = "[${notification.id}] Basic Notification"
+                                    val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                    it.setContentTitle(contentTitle)
+                                    it.setContentText(contentText)
+                                    it.setLargeIcon(bitmap)
+                                }.build())
+                            }
                         }
                     }
                 }
@@ -1029,27 +1041,33 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 )
                                 .submit(200, 200).get()
                         withContext(Dispatchers.Main) {
-                            NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
-                                setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                                setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
-                                    setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
-                                    setImageViewBitmap(R.id.img_notification_content, bitmap)
-                                })
-                                setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
-                                    setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
-                                })
+                            if (ActivityCompat.checkSelfPermission(
+                                    this@BaseDevActivity,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
+                                    setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                                    setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
+                                        setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
+                                        setImageViewBitmap(R.id.img_notification_content, bitmap)
+                                    })
+                                    setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
+                                        setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
+                                    })
 //                                        setColor(config.primaryColor)
 //                                        setColorized(true)
 //                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                                addAction(
-                                    R.drawable.ic_easydiary,
-                                    "Toast",
-                                    PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
-                                        action = BaseNotificationService.ACTION_DEV_TOAST
-                                        putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
-                                    }, pendingIntentFlag())
-                                )
-                            }.build())
+                                    addAction(
+                                        R.drawable.ic_easydiary,
+                                        "Toast",
+                                        PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
+                                            action = BaseNotificationService.ACTION_DEV_TOAST
+                                            putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
+                                        }, pendingIntentFlag())
+                                    )
+                                }.build())
+                            }
                         }
                     }
                 }
@@ -1065,12 +1083,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         R.drawable.ic_done,
                         useActionButton = true,
                         mNotificationCount)
-                    NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                        val contentTitle = "[${notification.id}] BigTextStyle Title"
-                        val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
-                        it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
-                        it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                    }.build())
+                    if (ActivityCompat.checkSelfPermission(
+                            this@BaseDevActivity,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
+                            val contentTitle = "[${notification.id}] BigTextStyle Title"
+                            val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                            it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
+                            it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                        }.build())
+                    }
                 }
             }
         }
