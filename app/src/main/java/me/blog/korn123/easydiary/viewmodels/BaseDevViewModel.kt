@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 
 class BaseDevViewModel : ViewModel()  {
     val symbol: MutableLiveData<Int> = MutableLiveData(1)
+    val locationInfo: MutableLiveData<String> = MutableLiveData("N/A")
 
     fun plus() {
         // Launch a coroutine that reads from a remote data source and updates cache

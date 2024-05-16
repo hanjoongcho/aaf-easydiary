@@ -27,32 +27,26 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -110,7 +104,6 @@ import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
@@ -193,7 +186,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         setupActionLog()
-        setupLocation()
         setupCoroutine()
         setupTestFunction()
     }
@@ -208,9 +200,394 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
 
     /***************************************************************************************************
-     *   test functions
+     *   Define Compose
      *
      ***************************************************************************************************/
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    fun DevTools(context: Context, isPreview: Boolean = false) {
+        val pixelValue = context.config.settingFontSize
+        val density = LocalDensity.current
+        val currentTextUnit = with (density) {
+            val temp = pixelValue.toDp()
+            temp.toSp()
+        }
+
+        val locationInfo by mViewModel.locationInfo.observeAsState("")
+
+        Column {
+            FlowRow(
+                modifier = Modifier,
+                maxItemsInEachRow = 2
+            ) {
+                val settingCardModifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "GitHub MarkDown Page",
+                    "🛸 SYNC",
+                    settingCardModifier,
+                ) { syncMarkDown() }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-01",
+                    "Basic",
+                    settingCardModifier,
+                ) {
+                    createNotificationBasic()
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-02",
+                    "Basic(Bitmap Icon)",
+                    settingCardModifier,
+                ) {
+                    createNotificationBasicWithBitmapIcon(context)
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-03",
+                    "CustomContentView",
+                    settingCardModifier,
+                ) {
+                    createNotificationCustomView(context)
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification-04",
+                    "BigTextStyle",
+                    settingCardModifier,
+                ) {
+                    createNotificationBigTextStyle()
+                }
+
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "",
+                    locationInfo,
+                    settingCardModifier,
+                ) {}
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Location Manager",
+                    "Last-Location",
+                    settingCardModifier,
+                ) { updateLocation() }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Location Manager",
+                    "Update-GPS",
+                    settingCardModifier,
+                ) {
+                    when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        true -> {
+                            // hasGPSPermissions 대체가능하나 lint error 때문에 직접 체크
+                            if (ActivityCompat.checkSelfPermission(this@BaseDevActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(this@BaseDevActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                mLocationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    0,
+                                    0F,
+                                    mGPSLocationListener
+                                )
+                            }
+                        }
+                        false -> makeSnackBar("GPS Provider is not available.")
+                    }
+                }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Location Manager",
+                    "Update-Network",
+                    settingCardModifier,
+                ) {
+                    when (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && hasGPSPermissions()) {
+                        true -> {
+                            mLocationManager.requestLocationUpdates(
+                                LocationManager.NETWORK_PROVIDER,
+                                0,
+                                0F,
+                                mNetworkLocationListener
+                            )
+                        }
+                        false -> makeSnackBar("Network Provider is not available.")
+                    }
+                }
+
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "알림(DEFAULT)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "알림(INFO)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "알림(WARNING)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "알림(ERROR)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "알림(SETTING)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dialog",
+                    "확인(INFO)",
+                    settingCardModifier,
+                ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
+
+                // 👉 template
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "",
+                    "",
+                    settingCardModifier,
+                ) {}
+            }
+        }
+    }
+
+
+
+
+    @Preview(heightDp = 2000)
+    @Composable
+    private fun DevToolsPreview() {
+        AppTheme(context = LocalContext.current) {
+            DevTools(LocalContext.current, true)
+        }
+    }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private fun createNotificationBigTextStyle() {
+        val notification = NotificationInfo(
+            R.drawable.ic_done,
+            useActionButton = true,
+            mNotificationCount
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this@BaseDevActivity,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(this@BaseDevActivity)
+                .notify(notification.id, createNotification(notification).also {
+                    val contentTitle = "[${notification.id}] BigTextStyle Title"
+                    val contentText =
+                        "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                    it.setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .setSummaryText("[BigTextStyle] $contentTitle")
+                            .bigText("[BigTextStyle] $contentText")
+                    )
+                    it.setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            notification.largeIconResourceId
+                        )
+                    )
+                }.build())
+        }
+    }
+    
+    private fun createNotificationCustomView(context: Context) {
+        val notification = NotificationInfo(
+            R.drawable.ic_diary_backup_local,
+            useActionButton = true,
+            mNotificationCount++
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            val bitmap =
+                Glide
+                    .with(context).asBitmap()
+                    .load(R.drawable.bg_travel_4514822_1280)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(context.dpToPixel(5F))
+                    )
+                    .submit(200, 200).get()
+            withContext(Dispatchers.Main) {
+                if (ActivityCompat.checkSelfPermission(
+                        this@BaseDevActivity,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    NotificationManagerCompat.from(this@BaseDevActivity)
+                        .notify(notification.id, createNotification(notification, bitmap).apply {
+                            setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                            setCustomContentView(
+                                RemoteViews(
+                                    applicationContext.packageName,
+                                    R.layout.partial_notification_contents
+                                ).apply {
+                                    setTextViewText(
+                                        R.id.text_notification_content,
+                                        "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects."
+                                    )
+                                    setImageViewBitmap(R.id.img_notification_content, bitmap)
+                                })
+                            setCustomBigContentView(
+                                RemoteViews(
+                                    applicationContext.packageName,
+                                    R.layout.partial_notification
+                                ).apply {
+                                    setImageViewResource(
+                                        R.id.img_notification_content,
+                                        R.drawable.bg_travel_4514822_1280
+                                    )
+                                })
+                            //                                        setColor(config.primaryColor)
+                            //                                        setColorized(true)
+                            //                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                            addAction(
+                                R.drawable.ic_easydiary,
+                                "Toast",
+                                PendingIntent.getService(
+                                    this@BaseDevActivity,
+                                    notification.id /*Private request code for the sender*/,
+                                    Intent(
+                                        this@BaseDevActivity,
+                                        NotificationService::class.java
+                                    ).apply {
+                                        action = BaseNotificationService.ACTION_DEV_TOAST
+                                        putExtra(
+                                            NOTIFICATION_ID,
+                                            notification.id /*An identifier for this notification unique within your application.*/
+                                        )
+                                    },
+                                    pendingIntentFlag()
+                                )
+                            )
+                        }.build())
+                }
+            }
+        }
+    }
+    
+    private fun createNotificationBasicWithBitmapIcon(context: Context) {
+        val notification = NotificationInfo(
+            R.drawable.ic_diary_writing,
+            useActionButton = true,
+            id = mNotificationCount++
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            val bitmap =
+                Glide
+                    .with(context).asBitmap()
+                    .load(R.drawable.bg_travel_4514822_1280)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(context.dpToPixel(5F))
+                    )
+                    .submit(200, 200).get()
+            withContext(Dispatchers.Main) {
+                if (ActivityCompat.checkSelfPermission(
+                        this@BaseDevActivity,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    NotificationManagerCompat.from(this@BaseDevActivity)
+                        .notify(notification.id, createNotification(notification).also {
+                            val contentTitle = "[${notification.id}] Basic Notification"
+                            val contentText =
+                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                            it.setContentTitle(contentTitle)
+                            it.setContentText(contentText)
+                            it.setLargeIcon(bitmap)
+                        }.build())
+                }
+            }
+        }
+    }
+    
+    private fun createNotificationBasic() {
+        val notification = NotificationInfo(
+            R.drawable.ic_diary_writing,
+            useActionButton = true,
+            id = mNotificationCount++
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this@BaseDevActivity,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(this@BaseDevActivity)
+                .notify(notification.id, createNotification(notification).also {
+                    val contentTitle = "[${notification.id}] Basic Notification"
+                    val contentText =
+                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                    it.setContentTitle(contentTitle)
+                    it.setContentText(contentText)
+                    it.setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            notification.largeIconResourceId
+                        )
+                    )
+                    it.setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            notification.largeIconResourceId
+                        )
+                    )
+                }.build())
+        }
+    }
+    
     protected fun createBaseCardView(cardTitle: String, descriptionTag: String? = null, vararg buttons: Button): CardView {
         val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
         val descriptionContextTheme = ContextThemeWrapper(this, R.style.SettingsSummary)
@@ -237,57 +614,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-
     private fun setupTestFunction() {
         mBinding.run {
-            linearDevContainer.addView(
-                // Dialog
-                createBaseCardView(
-                    "Dialog", null
-                    , Button(this@BaseDevActivity).apply {
-                        text = "알림(DEFAULT)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.DEFAULT, false)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "알림(INFO)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.INFO, false)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "알림(WARNING)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.WARNING, false)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "알림(ERROR)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.ERROR, false)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "알림(SETTING)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, null, DialogMode.SETTING, false)
-                        }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "확인(INFO)"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO)
-                        }
-                    }
-                )
-            )
             linearDevContainer.addView(
                 // Setting Toast
                 createBaseCardView(
@@ -549,103 +877,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                 )
             )
-            linearDevContainer.addView(
-                // Sync GitHub MarkDown Page.
-                createBaseCardView(
-                    "GitHub MarkDown Page", null,
-                    Button(this@BaseDevActivity).apply {
-                        text = "\uD83D\uDD04SYNC"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val baseUrl = "https://api.github.com"
-                                var token: String? = null
-                                var tokenInfo: List<Diary>?
-                                var size = 0
-                                EasyDiaryDbHelper.getTemporaryInstance().run {
-                                    tokenInfo = EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
-                                    tokenInfo?.let {
-                                        size = it.size
-                                        if (size > 0) token = it[0].contents
-                                    }
-                                    close()
-                                }
-
-                                if (size != 1) {
-                                    runOnUiThread { makeToast("No Data") }
-                                } else {
-                                    val retrofitApi: Retrofit = Retrofit.Builder()
-                                        .baseUrl(baseUrl)
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build()
-                                    val downloadApi: Retrofit = Retrofit.Builder()
-                                        .baseUrl(baseUrl)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .build()
-                                    val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
-                                    val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                                    fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = SYMBOL_USER_CUSTOM_SYNC) {
-                                        val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
-                                        val response = call.execute()
-                                        val contentsItems: List<Contents>? = response.body()
-                                        contentsItems?.forEach { content ->
-                                            if (content.download_url == null) {
-                                                fetchContents(content.path, usingPathTitle, symbolSequence)
-                                            } else {
-                                                EasyDiaryDbHelper.getTemporaryInstance().run {
-                                                    val title = when (usingPathTitle) {
-                                                        true -> content.path
-                                                        false -> if (usingPathTitle) content.name else content.name.split(".")[0]
-                                                    }
-
-                                                    val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
-                                                    if (items.size == 1) {
-                                                        runOnUiThread {
-                                                            mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
-                                                        }
-                                                        val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
-                                                        val diary = items[0]
-                                                        this.beginTransaction()
-                                                        diary.contents = re.body()
-                                                        diary.weather = symbolSequence
-                                                        this.commitTransaction()
-                                                    } else if (items.isEmpty()) {
-                                                        runOnUiThread {
-                                                            mBinding.partialSettingsProgress.message.text = "Download ${content.name}…"
-                                                        }
-                                                        val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
-                                                        EasyDiaryDbHelper.insertDiary(Diary(
-                                                            BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
-                                                            System.currentTimeMillis()
-                                                            , title
-                                                            , re.body()!!
-                                                            , symbolSequence
-                                                            ,true
-                                                        ), this)
-                                                    }
-                                                    this.close()
-                                                }
-                                            }
-                                        }
-                                    }
-                                    fetchContents("dev", true)
-                                    fetchContents("etc", true)
-                                    fetchContents("life", true)
-                                    fetchContents("stock/KOSPI", false, 10014)
-                                    fetchContents("stock/KOSDAQ", false, 10014)
-                                    fetchContents("stock/knowledge", true)
-                                    withContext(Dispatchers.Main) {
-                                        mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
-                                    }
-                                }
-
-
-                            }
-                        }
-                    }
-                )
-            )
         }
     }
 
@@ -664,59 +895,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
         }
         mBinding.actionLog.text = sb.toString()
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun setupLocation() {
-        mBinding.linearDevContainer.addView(
-            // Location Manager
-            createBaseCardView(
-                "Location Manager", TAG_LOCATION_MANAGER,
-                Button(this@BaseDevActivity).apply {
-                    text = "Last-Location"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener { updateLocation() }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "Update-GPS"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            true -> {
-                                mLocationManager.requestLocationUpdates(
-                                    LocationManager.GPS_PROVIDER,
-                                    0,
-                                    0F,
-                                    mGPSLocationListener
-                                )
-                            }
-
-                            false -> makeSnackBar("GPS Provider is not available.")
-                        }
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "Update-Network"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        val locationManager =
-                            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                        when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                            true -> {
-                                mLocationManager.requestLocationUpdates(
-                                    LocationManager.NETWORK_PROVIDER,
-                                    0,
-                                    0F,
-                                    mNetworkLocationListener
-                                )
-                            }
-
-                            false -> makeSnackBar("Network Provider is not available.")
-                        }
-                    }
-                },
-            )
-        )
     }
 
     private var mCoroutineJob1: Job? = null
@@ -833,11 +1011,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         )
     }
 
-
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     private fun updateLocation() {
         fun setLocationInfo() {
             getLastKnownLocation()?.let {
@@ -847,7 +1020,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         info += fullAddress(address[0])
                     }
                 }
-                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
+//                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
+//                makeSnackBar(info)
+                mViewModel.locationInfo.value = info
             }
         }
         when (hasGPSPermissions()) {
@@ -920,193 +1095,93 @@ open class BaseDevActivity : EasyDiaryActivity() {
         return notificationBuilder
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    fun DevTools(context: Context, isPreview: Boolean = false) {
-        val pixelValue = context.config.settingFontSize
-        val density = LocalDensity.current
-        val currentTextUnit = with (density) {
-            val temp = pixelValue.toDp()
-            temp.toSp()
-        }
+    private fun syncMarkDown() {
+        mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
+        CoroutineScope(Dispatchers.IO).launch {
+            val baseUrl = "https://api.github.com"
+            var token: String? = null
+            var tokenInfo: List<Diary>?
+            var size = 0
+            EasyDiaryDbHelper.getTemporaryInstance().run {
+                tokenInfo = EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
+                tokenInfo?.let {
+                    size = it.size
+                    if (size > 0) token = it[0].contents
+                }
+                close()
+            }
 
-        Column {
-            FlowRow(
-                modifier = Modifier,
-                maxItemsInEachRow = 2
-            ) {
-                val settingCardModifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-01",
-                    "Basic",
-                    settingCardModifier,
-                ) {
-                    val notification = NotificationInfo(
-                        R.drawable.ic_diary_writing,
-                        useActionButton = true,
-                        id = mNotificationCount++
-                    )
-                    if (ActivityCompat.checkSelfPermission(
-                            this@BaseDevActivity,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        NotificationManagerCompat.from(this@BaseDevActivity)
-                            .notify(notification.id, createNotification(notification).also {
-                                val contentTitle = "[${notification.id}] Basic Notification"
-                                val contentText =
-                                    "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                it.setContentTitle(contentTitle)
-                                it.setContentText(contentText)
-                                it.setLargeIcon(
-                                    BitmapFactory.decodeResource(
-                                        resources,
-                                        notification.largeIconResourceId
-                                    )
-                                )
-                                it.setLargeIcon(
-                                    BitmapFactory.decodeResource(
-                                        resources,
-                                        notification.largeIconResourceId
-                                    )
-                                )
-                            }.build())
-                    }
-                }
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-02",
-                    "Basic(Bitmap Icon)",
-                    settingCardModifier,
-                ) {
-                    val notification = NotificationInfo(
-                        R.drawable.ic_diary_writing,
-                        useActionButton = true,
-                        id = mNotificationCount++
-                    )
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val bitmap =
-                            Glide
-                                .with(context).asBitmap()
-                                .load(R.drawable.bg_travel_4514822_1280)
-                                .transform(
-                                    CenterCrop(),
-                                    RoundedCorners(context.dpToPixel(5F))
-                                )
-                                .submit(200, 200).get()
-                        withContext(Dispatchers.Main) {
-                            if (ActivityCompat.checkSelfPermission(
-                                    this@BaseDevActivity,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                ) == PackageManager.PERMISSION_GRANTED
-                            ) {
-                                NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                                    val contentTitle = "[${notification.id}] Basic Notification"
-                                    val contentText = "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                                    it.setContentTitle(contentTitle)
-                                    it.setContentText(contentText)
-                                    it.setLargeIcon(bitmap)
-                                }.build())
+            if (size != 1) {
+                runOnUiThread { makeToast("No Data") }
+            } else {
+                val retrofitApi: Retrofit = Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                val downloadApi: Retrofit = Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build()
+                val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
+                val downloadApiService = downloadApi.create(GitHubRepos::class.java)
+                fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = SYMBOL_USER_CUSTOM_SYNC) {
+                    val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
+                    val response = call.execute()
+                    val contentsItems: List<Contents>? = response.body()
+                    contentsItems?.forEach { content ->
+                        if (content.download_url == null) {
+                            fetchContents(content.path, usingPathTitle, symbolSequence)
+                        } else {
+                            EasyDiaryDbHelper.getTemporaryInstance().run {
+                                val title = when (usingPathTitle) {
+                                    true -> content.path
+                                    false -> if (usingPathTitle) content.name else content.name.split(".")[0]
+                                }
+
+                                val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
+                                if (items.size == 1) {
+                                    runOnUiThread {
+                                        mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
+                                    }
+                                    val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                    val diary = items[0]
+                                    this.beginTransaction()
+                                    diary.contents = re.body()
+                                    diary.weather = symbolSequence
+                                    this.commitTransaction()
+                                } else if (items.isEmpty()) {
+                                    runOnUiThread {
+                                        mBinding.partialSettingsProgress.message.text = "Download ${content.name}…"
+                                    }
+                                    val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                    EasyDiaryDbHelper.insertDiary(Diary(
+                                        BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                                        System.currentTimeMillis()
+                                        , title
+                                        , re.body()!!
+                                        , symbolSequence
+                                        ,true
+                                    ), this)
+                                }
+                                this.close()
                             }
                         }
                     }
                 }
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-03",
-                    "CustomContentView",
-                    settingCardModifier,
-                ) {
-                    val notification = NotificationInfo(
-                        R.drawable.ic_diary_backup_local,
-                        useActionButton = true,
-                        mNotificationCount++)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val bitmap =
-                            Glide
-                                .with(context).asBitmap()
-                                .load(R.drawable.bg_travel_4514822_1280)
-                                .transform(
-                                    CenterCrop(),
-                                    RoundedCorners(context.dpToPixel(5F))
-                                )
-                                .submit(200, 200).get()
-                        withContext(Dispatchers.Main) {
-                            if (ActivityCompat.checkSelfPermission(
-                                    this@BaseDevActivity,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                ) == PackageManager.PERMISSION_GRANTED
-                            ) {
-                                NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification, bitmap).apply {
-                                    setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                                    setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification_contents).apply {
-                                        setTextViewText(R.id.text_notification_content, "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.")
-                                        setImageViewBitmap(R.id.img_notification_content, bitmap)
-                                    })
-                                    setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification).apply {
-                                        setImageViewResource(R.id.img_notification_content, R.drawable.bg_travel_4514822_1280)
-                                    })
-//                                        setColor(config.primaryColor)
-//                                        setColorized(true)
-//                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                                    addAction(
-                                        R.drawable.ic_easydiary,
-                                        "Toast",
-                                        PendingIntent.getService(this@BaseDevActivity, notification.id /*Private request code for the sender*/, Intent(this@BaseDevActivity, NotificationService::class.java).apply {
-                                            action = BaseNotificationService.ACTION_DEV_TOAST
-                                            putExtra(NOTIFICATION_ID, notification.id /*An identifier for this notification unique within your application.*/)
-                                        }, pendingIntentFlag())
-                                    )
-                                }.build())
-                            }
-                        }
-                    }
-                }
-                SimpleCard(
-                    context,
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-04",
-                    "BigTextStyle",
-                    settingCardModifier,
-                ) {
-                    val notification = NotificationInfo(
-                        R.drawable.ic_done,
-                        useActionButton = true,
-                        mNotificationCount)
-                    if (ActivityCompat.checkSelfPermission(
-                            this@BaseDevActivity,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        NotificationManagerCompat.from(this@BaseDevActivity).notify(notification.id, createNotification(notification).also {
-                            val contentTitle = "[${notification.id}] BigTextStyle Title"
-                            val contentText = "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
-                            it.setStyle(NotificationCompat.BigTextStyle().setSummaryText("[BigTextStyle] $contentTitle").bigText("[BigTextStyle] $contentText"))
-                            it.setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                        }.build())
-                    }
+                fetchContents("dev", true)
+                fetchContents("etc", true)
+                fetchContents("life", true)
+                fetchContents("stock/KOSPI", false, 10014)
+                fetchContents("stock/KOSDAQ", false, 10014)
+                fetchContents("stock/knowledge", true)
+                withContext(Dispatchers.Main) {
+                    mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                 }
             }
         }
     }
 
-    @Preview(heightDp = 2000)
-    @Composable
-    private fun DevToolsPreview() {
-        AppTheme(context = LocalContext.current) {
-            DevTools(LocalContext.current, true)
-        }
-    }
+
 
     companion object {
         const val NOTIFICATION_ID = "notification_id"
