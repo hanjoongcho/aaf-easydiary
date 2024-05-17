@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,12 +30,46 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 
 @Composable
+fun CategoryTitleCard(
+    context: Context,
+    textUnit: TextUnit,
+    isPreview: Boolean = false,
+    title: String,
+) {
+    val modifier = Modifier.fillMaxWidth()
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
+        modifier = (if (context.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp, 5.dp)
+        ) {
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                    fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                    color = Color.White,
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                ),
+            )
+        }
+    }
+}
+
+@Composable
 fun SimpleCard(
     context: Context,
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
-    description: String,
+    description: String?,
     modifier: Modifier,
     callback: () -> Unit
 ) {
@@ -62,16 +97,18 @@ fun SimpleCard(
                     fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
             )
-            Text(
-                modifier = Modifier
-                    .padding(0.dp, 5.dp, 0.dp, 0.dp),
-                text = description,
-                style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                    color = Color(context.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
+            description?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        color = Color(context.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
         }
     }
 }
@@ -82,7 +119,7 @@ fun SwitchCard(
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
-    description: String,
+    description: String?,
     modifier: Modifier,
     isOn: Boolean,
     callback: () -> Unit
@@ -113,7 +150,7 @@ fun SwitchCard(
                     ),
                 )
                 Switch(
-                    modifier = Modifier.absolutePadding(0.dp),
+                    modifier = Modifier.absolutePadding(left = 5.dp),
                     checked = isOn,
                     onCheckedChange = {
                         callback.invoke()
@@ -131,16 +168,18 @@ fun SwitchCard(
                     }
                 )
             }
-            Row(
-            ) {
-                Text(
-                    text = description,
-                    style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                        color = Color(context.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
+            description?.let {
+                Row(
+                ) {
+                    Text(
+                        text = description,
+                        style = TextStyle(
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                            color = Color(context.config.textColor),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
             }
         }
     }

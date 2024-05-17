@@ -30,6 +30,7 @@ import androidx.cardview.widget.CardView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -54,6 +56,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import com.simplemobiletools.commons.models.Release
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,9 +75,12 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
+import me.blog.korn123.easydiary.dialogs.ActionLogDialog
+import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
@@ -103,7 +109,9 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
@@ -185,7 +193,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        setupActionLog()
         setupCoroutine()
         setupTestFunction()
     }
@@ -213,17 +220,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
             temp.toSp()
         }
 
-        val locationInfo by mViewModel.locationInfo.observeAsState("")
-
         Column {
-            FlowRow(
-                modifier = Modifier,
-                maxItemsInEachRow = 2
-            ) {
-                val settingCardModifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+            val settingCardModifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
 
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Etc.")
+            Row {
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Action Log",
+                    "Open Action Log",
+                    settingCardModifier,
+                ) {
+                    val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
+                    ActionLogDialog(this@BaseDevActivity, actionLogs) { EasyDiaryDbHelper.deleteActionLogAll() }
+                }
                 SimpleCard(
                     context,
                     currentTextUnit,
@@ -232,6 +246,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     "🛸 SYNC",
                     settingCardModifier,
                 ) { syncMarkDown() }
+            }
+
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
+            FlowRow(
+                modifier = Modifier,
+                maxItemsInEachRow = 2
+            ) {
                 SimpleCard(
                     context,
                     currentTextUnit,
@@ -272,15 +293,37 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 ) {
                     createNotificationBigTextStyle()
                 }
+            }
 
-                SimpleCard(
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
+            FlowRow(
+                modifier = Modifier,
+                maxItemsInEachRow = 2
+            ) {
+                var enableDebugOptionToastLocation by remember { mutableStateOf(context.config.enableDebugOptionToastLocation) }
+                SwitchCard(
                     context,
                     currentTextUnit,
                     isPreview,
-                    "",
-                    locationInfo,
+                    "Toast Message",
+                    "Location Toast",
                     settingCardModifier,
-                ) {}
+                    enableDebugOptionToastLocation
+                ) {
+                    enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
+                    context.config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
+                }
+                if (!isPreview) {
+                    val locationInfo by mViewModel.locationInfo.observeAsState("")
+                    SimpleCard(
+                        context,
+                        currentTextUnit,
+                        isPreview,
+                        "",
+                        locationInfo,
+                        settingCardModifier,
+                    ) {}
+                }
                 SimpleCard(
                     context,
                     currentTextUnit,
@@ -297,22 +340,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     "Update-GPS",
                     settingCardModifier,
                 ) {
-                    when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        true -> {
-                            // hasGPSPermissions 대체가능하나 lint error 때문에 직접 체크
-                            if (ActivityCompat.checkSelfPermission(this@BaseDevActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                                && ActivityCompat.checkSelfPermission(this@BaseDevActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                            ) {
-                                mLocationManager.requestLocationUpdates(
-                                    LocationManager.GPS_PROVIDER,
-                                    0,
-                                    0F,
-                                    mGPSLocationListener
-                                )
-                            }
-                        }
-                        false -> makeSnackBar("GPS Provider is not available.")
-                    }
+                    updateGPSProvider()
                 }
                 SimpleCard(
                     context,
@@ -322,19 +350,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     "Update-Network",
                     settingCardModifier,
                 ) {
-                    when (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && hasGPSPermissions()) {
-                        true -> {
-                            mLocationManager.requestLocationUpdates(
-                                LocationManager.NETWORK_PROVIDER,
-                                0,
-                                0F,
-                                mNetworkLocationListener
-                            )
-                        }
-                        false -> makeSnackBar("Network Provider is not available.")
-                    }
+                    updateNetWorkProvider()
                 }
+            }
 
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Alert Dialog")
+            FlowRow(
+                modifier = Modifier,
+                maxItemsInEachRow = 2
+            ) {
                 SimpleCard(
                     context,
                     currentTextUnit,
@@ -383,22 +407,131 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     "확인(INFO)",
                     settingCardModifier,
                 ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
+            }
 
-                // 👉 template
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Debug Toast")
+            FlowRow(
+                maxItemsInEachRow = 2
+            ) {
+                var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(context.config.enableDebugOptionToastAttachedPhoto) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Attached Photo Toast",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionToastAttachedPhoto
+                ) {
+                    enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
+                    context.config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
+                }
+                var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(context.config.enableDebugOptionToastNotificationInfo) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Notification Info",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionToastNotificationInfo
+                ) {
+                    enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo.not()
+                    context.config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
+                }
+                var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(context.config.enableDebugOptionToastReviewFlowInfo) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "ReviewFlow Info",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionToastReviewFlowInfo
+                ) {
+                    enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
+                    context.config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
+                }
+                var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(context.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Photo-Highlight Update Time",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionToastPhotoHighlightUpdateTime
+                ) {
+                    enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
+                    context.config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
+                }
+                var enableDebugOptionVisibleChartStock by remember { mutableStateOf(context.config.enableDebugOptionVisibleChartStock) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Stock",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionVisibleChartStock
+                ) {
+                    enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
+                    context.config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
+                }
+                var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(context.config.enableDebugOptionVisibleChartWeight) }
+                SwitchCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Weight",
+                    null,
+                    settingCardModifier,
+                    enableDebugOptionVisibleChartWeight
+                ) {
+                    enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
+                    context.config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
+                }
+            }
+
+            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Custom Launcher")
+            FlowRow(
+                maxItemsInEachRow = 2
+            ) {
                 SimpleCard(
                     context,
                     currentTextUnit,
                     isPreview,
-                    "",
-                    "",
+                    "EasyDiary Launcher",
+                    null,
                     settingCardModifier,
-                ) {}
+                ) { toggleLauncher(Launcher.EASY_DIARY) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Dark Launcher",
+                    null,
+                    settingCardModifier,
+                ) { toggleLauncher(Launcher.DARK) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Green Launcher",
+                    null,
+                    settingCardModifier,
+                ) { toggleLauncher(Launcher.GREEN) }
+                SimpleCard(
+                    context,
+                    currentTextUnit,
+                    isPreview,
+                    "Debug Launcher",
+                    null,
+                    settingCardModifier,
+                ) { toggleLauncher(Launcher.DEBUG) }
             }
         }
     }
-
-
-
 
     @Preview(heightDp = 2000)
     @Composable
@@ -413,6 +546,48 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun updateGPSProvider() {
+        when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            true -> {
+                // hasGPSPermissions 대체가능하나 lint error 때문에 직접 체크
+                if (ActivityCompat.checkSelfPermission(
+                        this@BaseDevActivity,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(
+                        this@BaseDevActivity,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    mLocationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        0,
+                        0F,
+                        mGPSLocationListener
+                    )
+                }
+            }
+
+            false -> makeSnackBar("GPS Provider is not available.")
+        }
+    }
+
+    private fun updateNetWorkProvider() {
+        when (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            true -> {
+                if (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+                    mLocationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        0,
+                        0F,
+                        mNetworkLocationListener
+                    )
+                }
+            }
+            false -> makeSnackBar("Network Provider is not available.")
+        }
+    }
+
     private fun createNotificationBigTextStyle() {
         val notification = NotificationInfo(
             R.drawable.ic_done,
@@ -617,78 +792,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private fun setupTestFunction() {
         mBinding.run {
             linearDevContainer.addView(
-                // Setting Toast
-                createBaseCardView(
-                    "Toast Message", null, Button(this@BaseDevActivity).apply {
-                        text = "Location Toast"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionToastLocation =
-                                !config.enableDebugOptionToastLocation
-                            makeSnackBar("Status: ${config.enableDebugOptionToastLocation}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Attached Photo Toast"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionToastAttachedPhoto =
-                                !config.enableDebugOptionToastAttachedPhoto
-                            makeSnackBar("Status: ${config.enableDebugOptionToastAttachedPhoto}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Notification Info"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionToastNotificationInfo =
-                                !config.enableDebugOptionToastNotificationInfo
-                            makeSnackBar("Status: ${config.enableDebugOptionToastNotificationInfo}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "ReviewFlow Info"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionToastReviewFlowInfo =
-                                !config.enableDebugOptionToastReviewFlowInfo
-                            makeSnackBar("Status: ${config.enableDebugOptionToastReviewFlowInfo}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Photo-Highlight Update Time"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionToastPhotoHighlightUpdateTime =
-                                !config.enableDebugOptionToastPhotoHighlightUpdateTime
-                            makeSnackBar("Status: ${config.enableDebugOptionToastPhotoHighlightUpdateTime}")
-                        }
-                    }
-                )
-            )
-            linearDevContainer.addView(
-                // Setting Custom Launcher
-                createBaseCardView(
-                    "Custom Launcher"
-                    , null, Button(this@BaseDevActivity).apply {
-                        text = "EasyDiary Launcher"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.EASY_DIARY) }
-                    },
-                    Button(this@BaseDevActivity).apply {
-                        text = "Dark Launcher"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.DARK) }
-                    },
-                    Button(this@BaseDevActivity).apply {
-                        text = "Green Launcher"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.GREEN) }
-                    },
-                    Button(this@BaseDevActivity).apply {
-                        text = "Debug Launcher"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { toggleLauncher(Launcher.DEBUG) }
-                    }
-                )
-            )
-            linearDevContainer.addView(
                 // Biometric authentication
                 createBaseCardView(
                     "Finger Print"
@@ -878,23 +981,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             )
         }
-    }
-
-    private fun setupActionLog() {
-        mBinding.clearLog.setOnClickListener {
-            EasyDiaryDbHelper.deleteActionLogAll()
-            updateActionLog()
-        }
-        updateActionLog()
-    }
-
-    private fun updateActionLog() {
-        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
-        val sb = StringBuilder()
-        actionLogs.map {
-            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
-        }
-        mBinding.actionLog.text = sb.toString()
     }
 
     private var mCoroutineJob1: Job? = null
