@@ -63,7 +63,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
         mBinding.run {
             composeView.setContent {
-                AppTheme(context = LocalContext.current) {
+                AppTheme {
                     QuickSettings(context = this@QuickSettingsActivity, false, viewModel)
                 }
             }
@@ -85,22 +85,9 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 
 
     /***************************************************************************************************
-     *   etc functions
+     *   Define Compose
      *
      ***************************************************************************************************/
-    private fun initPreference() {
-        mBinding.run {
-            enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-            updateCardAlpha()
-        }
-    }
-
-    private fun updateCardAlpha() {
-        mBinding.run {
-            enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
-        }
-    }
-
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     fun QuickSettings(context: Context, isPreview: Boolean = false, viewModel: QuickSettingsViewModel) {
@@ -125,14 +112,13 @@ class QuickSettingsActivity : EasyDiaryActivity() {
 //                horizontalArrangement = Arrangement.spacedBy(3.dp),
 //                verticalArrangement = Arrangement.spacedBy(3.dp),
 //                overflow = FlowRowOverflow.Clip,
-            maxItemsInEachRow = 2
+                maxItemsInEachRow = 2
             ) {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
 
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     stringResource(R.string.markdown_setting_title),
@@ -144,7 +130,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableMarkdown = !enableMarkdown
                 }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     stringResource(R.string.enable_welcome_dashboard_popup_title),
@@ -156,7 +141,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                 }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     stringResource(R.string.enable_photo_highlight_title),
@@ -169,7 +153,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     initPreference()
                 }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     stringResource(R.string.enable_card_view_policy_title),
@@ -181,7 +164,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableCardViewPolicy = !enableCardViewPolicy
                 }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "미래일정 숨김",
@@ -194,7 +176,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 }
 
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     stringResource(id = R.string.sync_google_calendar_event_title),
@@ -230,10 +211,30 @@ class QuickSettingsActivity : EasyDiaryActivity() {
     @Preview(heightDp = 2000)
     @Composable
     private fun QuickSettingsPreview() {
-        AppTheme(context = LocalContext.current) {
+        AppTheme {
             QuickSettings(LocalContext.current, true, viewModel())
         }
     }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private fun initPreference() {
+        mBinding.run {
+            enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
+            updateCardAlpha()
+        }
+    }
+
+    private fun updateCardAlpha() {
+        mBinding.run {
+            enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
+        }
+    }
+
+
 
     class QuickSettingsViewModel : ViewModel() {
         var enablePhotoHighlight: MutableLiveData<Boolean> = MutableLiveData()

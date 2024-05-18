@@ -1,11 +1,11 @@
 package me.blog.korn123.easydiary.ui.theme
 
-import android.content.Context
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import me.blog.korn123.commons.utils.ColorUtils
 import me.blog.korn123.easydiary.extensions.config
 
@@ -22,7 +22,6 @@ val Pink40 = Color(0xFF7D5260)
 @Composable
 fun AppTheme(
     darkTheme: Boolean = false,
-    context: Context,
     content: @Composable () -> Unit
 ) {
     // Material 3 color schemes
@@ -33,9 +32,9 @@ fun AppTheme(
     )
 
     val LightColorScheme = lightColorScheme(
-        primary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
-        secondary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
-        tertiary = Color(ColorUtils.adjustAlpha(context.config.primaryColor, 1f)),
+        primary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
+        secondary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
+        tertiary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
     )
 
     val replyColorScheme = when {

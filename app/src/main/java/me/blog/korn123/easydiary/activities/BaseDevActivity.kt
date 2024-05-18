@@ -158,8 +158,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         , FlexboxLayout.LayoutParams.WRAP_CONTENT
     )
     protected lateinit var mBinding: ActivityBaseDevBinding
-
-
     private val mPickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
         if (uris.isNotEmpty()) {
             showAlertDialog(uris.joinToString(",") { uri -> uri.toString() }, null, null, DialogMode.INFO, false)
@@ -187,8 +185,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
         mBinding.run {
             composeView.setContent {
-                AppTheme(context = LocalContext.current) {
-                    DevTools(context = this@BaseDevActivity, false)
+                AppTheme {
+                    DevTools(false)
                 }
             }
         }
@@ -212,8 +210,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    fun DevTools(context: Context, isPreview: Boolean = false) {
-        val pixelValue = context.config.settingFontSize
+    fun DevTools(isPreview: Boolean = false) {
+        val currentContext = LocalContext.current
+        val pixelValue = currentContext.config.settingFontSize
         val density = LocalDensity.current
         val currentTextUnit = with (density) {
             val temp = pixelValue.toDp()
@@ -225,10 +224,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 .fillMaxWidth()
                 .weight(1f)
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Etc.")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Etc.")
             Row {
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Action Log",
@@ -239,7 +237,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     ActionLogDialog(this@BaseDevActivity, actionLogs) { EasyDiaryDbHelper.deleteActionLogAll() }
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "GitHub MarkDown Page",
@@ -248,13 +245,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 ) { syncMarkDown() }
             }
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
             FlowRow(
                 modifier = Modifier,
                 maxItemsInEachRow = 2
             ) {
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Notification-01",
@@ -264,27 +260,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     createNotificationBasic()
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Notification-02",
                     "Basic(Bitmap Icon)",
                     settingCardModifier,
                 ) {
-                    createNotificationBasicWithBitmapIcon(context)
+                    createNotificationBasicWithBitmapIcon(this@BaseDevActivity)
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Notification-03",
                     "CustomContentView",
                     settingCardModifier,
                 ) {
-                    createNotificationCustomView(context)
+                    createNotificationCustomView(this@BaseDevActivity)
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Notification-04",
@@ -295,14 +288,23 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
+            if (!isPreview) {
+                val locationInfo by mViewModel.locationInfo.observeAsState("")
+                SimpleCard(
+                    currentTextUnit,
+                    false,
+                    "Location Info",
+                    locationInfo,
+                    Modifier.fillMaxWidth(),
+                ) {}
+            }
             FlowRow(
                 modifier = Modifier,
                 maxItemsInEachRow = 2
             ) {
-                var enableDebugOptionToastLocation by remember { mutableStateOf(context.config.enableDebugOptionToastLocation) }
+                var enableDebugOptionToastLocation by remember { mutableStateOf(currentContext.config.enableDebugOptionToastLocation) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Toast Message",
@@ -311,21 +313,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionToastLocation
                 ) {
                     enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
-                    context.config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
-                }
-                if (!isPreview) {
-                    val locationInfo by mViewModel.locationInfo.observeAsState("")
-                    SimpleCard(
-                        context,
-                        currentTextUnit,
-                        isPreview,
-                        "",
-                        locationInfo,
-                        settingCardModifier,
-                    ) {}
+                    config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Location Manager",
@@ -333,7 +323,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { updateLocation() }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Location Manager",
@@ -343,7 +332,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     updateGPSProvider()
                 }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Location Manager",
@@ -354,13 +342,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Alert Dialog")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Alert Dialog")
             FlowRow(
                 modifier = Modifier,
                 maxItemsInEachRow = 2
             ) {
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -368,7 +355,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -376,7 +362,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -384,7 +369,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -392,7 +376,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -400,7 +383,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dialog",
@@ -409,13 +391,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
             }
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Debug Toast")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Debug Toast")
             FlowRow(
                 maxItemsInEachRow = 2
             ) {
-                var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(context.config.enableDebugOptionToastAttachedPhoto) }
+                var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(currentContext.config.enableDebugOptionToastAttachedPhoto) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Attached Photo Toast",
@@ -424,11 +405,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionToastAttachedPhoto
                 ) {
                     enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
-                    context.config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
+                    config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
                 }
-                var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(context.config.enableDebugOptionToastNotificationInfo) }
+                var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastNotificationInfo) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Notification Info",
@@ -437,11 +417,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionToastNotificationInfo
                 ) {
                     enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo.not()
-                    context.config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
+                    config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
                 }
-                var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(context.config.enableDebugOptionToastReviewFlowInfo) }
+                var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastReviewFlowInfo) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "ReviewFlow Info",
@@ -450,11 +429,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionToastReviewFlowInfo
                 ) {
                     enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
-                    context.config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
+                    config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
                 }
-                var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(context.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
+                var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(currentContext.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Photo-Highlight Update Time",
@@ -463,11 +441,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionToastPhotoHighlightUpdateTime
                 ) {
                     enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
-                    context.config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
+                    config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
                 }
-                var enableDebugOptionVisibleChartStock by remember { mutableStateOf(context.config.enableDebugOptionVisibleChartStock) }
+                var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Stock",
@@ -476,11 +453,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionVisibleChartStock
                 ) {
                     enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
-                    context.config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
+                    config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
                 }
-                var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(context.config.enableDebugOptionVisibleChartWeight) }
+                var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
                 SwitchCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Weight",
@@ -489,16 +465,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     enableDebugOptionVisibleChartWeight
                 ) {
                     enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
-                    context.config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
+                    config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
                 }
             }
 
-            CategoryTitleCard(context = context, textUnit = currentTextUnit, isPreview = isPreview, title = "Custom Launcher")
+            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Custom Launcher")
             FlowRow(
                 maxItemsInEachRow = 2
             ) {
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "EasyDiary Launcher",
@@ -506,7 +481,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { toggleLauncher(Launcher.EASY_DIARY) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Dark Launcher",
@@ -514,7 +488,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { toggleLauncher(Launcher.DARK) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Green Launcher",
@@ -522,7 +495,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     settingCardModifier,
                 ) { toggleLauncher(Launcher.GREEN) }
                 SimpleCard(
-                    context,
                     currentTextUnit,
                     isPreview,
                     "Debug Launcher",
@@ -536,8 +508,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Preview(heightDp = 2000)
     @Composable
     private fun DevToolsPreview() {
-        AppTheme(context = LocalContext.current) {
-            DevTools(LocalContext.current, true)
+        AppTheme {
+            DevTools(true)
         }
     }
 

@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -31,7 +31,6 @@ import me.blog.korn123.easydiary.extensions.config
 
 @Composable
 fun CategoryTitleCard(
-    context: Context,
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
@@ -39,8 +38,8 @@ fun CategoryTitleCard(
     val modifier = Modifier.fillMaxWidth()
     Card(
         shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
-        modifier = (if (context.config.enableCardViewPolicy) modifier.padding(
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
             3.dp,
             3.dp
         ) else modifier.padding(1.dp, 1.dp)),
@@ -52,7 +51,7 @@ fun CategoryTitleCard(
             Text(
                 text = title,
                 style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                     color = Color.White,
@@ -65,7 +64,6 @@ fun CategoryTitleCard(
 
 @Composable
 fun SimpleCard(
-    context: Context,
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
@@ -75,8 +73,8 @@ fun SimpleCard(
 ) {
     Card(
         shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-        modifier = (if (context.config.enableCardViewPolicy) modifier.padding(
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
             3.dp,
             3.dp
         ) else modifier.padding(1.dp, 1.dp)).clickable {
@@ -90,10 +88,10 @@ fun SimpleCard(
             Text(
                 text = title,
                 style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
-                    color = Color(context.config.textColor),
+                    color = Color(LocalContext.current.config.textColor),
                     fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                 ),
             )
@@ -103,8 +101,8 @@ fun SimpleCard(
                         .padding(0.dp, 5.dp, 0.dp, 0.dp),
                     text = description,
                     style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                        color = Color(context.config.textColor),
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                 )
@@ -115,7 +113,6 @@ fun SimpleCard(
 
 @Composable
 fun SwitchCard(
-    context: Context,
     textUnit: TextUnit,
     isPreview: Boolean = false,
     title: String,
@@ -126,8 +123,8 @@ fun SwitchCard(
 ) {
     Card(
         shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-        modifier = if (context.config.enableCardViewPolicy) modifier.padding(3.dp, 3.dp) else modifier.padding(1.dp, 1.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(3.dp, 3.dp) else modifier.padding(1.dp, 1.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = {
             callback.invoke()
@@ -143,9 +140,9 @@ fun SwitchCard(
                     modifier = Modifier.weight(1f),
                     text = title,
                     style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
                         fontWeight = FontWeight.Bold,
-                        color = Color(context.config.textColor),
+                        color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                 )
@@ -174,8 +171,8 @@ fun SwitchCard(
                     Text(
                         text = description,
                         style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(context),
-                            color = Color(context.config.textColor),
+                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            color = Color(LocalContext.current.config.textColor),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),
                     )
