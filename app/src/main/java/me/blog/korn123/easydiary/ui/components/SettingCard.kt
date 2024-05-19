@@ -69,7 +69,7 @@ fun SimpleCard(
     title: String,
     description: String?,
     modifier: Modifier,
-    callback: () -> Unit
+    callback: () -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(4.dp),
