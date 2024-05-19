@@ -536,8 +536,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     coroutine1Console,
                     Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
-                        .verticalScroll(state)
+//                        .height(100.dp)
+//                        .verticalScroll(state)
                 )
                 FlowRow(
                     maxItemsInEachRow = maxItemsInEachRow
