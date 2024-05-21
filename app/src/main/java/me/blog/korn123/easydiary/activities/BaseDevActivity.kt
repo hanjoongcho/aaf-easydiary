@@ -62,6 +62,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -124,6 +125,7 @@ import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
+import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -144,6 +146,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private var mNotificationCount = 9000
+    private var mCoroutineJob1: Job? = null
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -197,15 +200,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        val viewModel: BaseDevViewModel by viewModels()
         mBinding.run {
             composeView.setContent {
                 AppTheme {
-                    DevTools(false)
+                    DevTools(false, viewModel)
                 }
             }
         }
 
-        setupCoroutine()
         setupTestFunction()
     }
 
@@ -224,7 +227,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    fun DevTools(isPreview: Boolean = false) {
+    fun DevTools(isPreview: Boolean = false, viewModel: BaseDevViewModel) {
         val currentContext = LocalContext.current
         val pixelValue = currentContext.config.settingFontSize
         val density = LocalDensity.current
@@ -239,26 +242,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val settingCardModifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Etc.")
-            Row {
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Action Log",
-                    "Open Action Log",
-                    settingCardModifier,
-                ) {
-                    val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
-                    ActionLogDialog(this@BaseDevActivity, actionLogs) { EasyDiaryDbHelper.deleteActionLogAll() }
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "GitHub MarkDown Page",
-                    "🛸 SYNC",
-                    settingCardModifier,
-                ) { syncMarkDown() }
-            }
+
 
             CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
             FlowRow(
@@ -304,16 +288,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
 
             CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
-            if (!isPreview) {
-                val locationInfo by mViewModel.locationInfo.observeAsState("")
-                SimpleCard(
-                    currentTextUnit,
-                    false,
-                    "Location Info",
-                    locationInfo,
-                    Modifier.fillMaxWidth(),
-                ) {}
-            }
+            val locationInfo by viewModel.locationInfo.observeAsState("")
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Location Info",
+                locationInfo,
+                Modifier.fillMaxWidth(),
+            ) {}
             FlowRow(
                 modifier = Modifier,
                 maxItemsInEachRow = maxItemsInEachRow
@@ -336,7 +318,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     "Location Manager",
                     "Last-Location",
                     settingCardModifier,
-                ) { updateLocation() }
+                ) { updateLocation(viewModel) }
                 SimpleCard(
                     currentTextUnit,
                     isPreview,
@@ -519,57 +501,138 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
 
             CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Coroutine")
-            if (!isPreview) {
-                val coroutine1Console by mViewModel.coroutine1Console.observeAsState("N/A")
-                val state = rememberScrollState()
-                val coroutineScope = rememberCoroutineScope()
-                fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
-                    mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
-                    coroutineScope.launch {
-                        state.animateScrollBy(Float.MAX_VALUE)
+            val coroutine1Console by viewModel.coroutine1Console.observeAsState("")
+            val state = rememberScrollState()
+            val coroutineScope = rememberCoroutineScope()
+            fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
+                mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
+                coroutineScope.launch {
+                    state.animateScrollBy(Float.MAX_VALUE)
+                }
+            }
+            ScrollableCard(
+                currentTextUnit,
+                isPreview,
+                "Coroutine Info",
+                coroutine1Console,
+                Modifier
+                    .fillMaxWidth()
+//                        .height(100.dp)
+//                        .verticalScroll(state)
+                ,
+                state
+            )
+            FlowRow(
+                maxItemsInEachRow = maxItemsInEachRow
+            ) {
+                SimpleCard(
+                    currentTextUnit,
+                    isPreview,
+                    "[T1] Start",
+                    null,
+                    settingCardModifier,
+                ) {
+                    if (mCoroutineJob1?.isActive == true) {
+                        updateConsole("Job has already started.")
+                    } else {
+                        mCoroutineJob1 =
+                            GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                                for (i in 1..50) {
+                                    if (isActive) {
+                                        val currentThreadName = Thread.currentThread().name
+                                        withContext(Dispatchers.Main) {
+                                            updateConsole(
+                                                i.toString(),
+                                                currentThreadName
+                                            )
+                                        }
+                                        delay(500)
+                                    }
+                                }
+                            }
                     }
                 }
                 SimpleCard(
                     currentTextUnit,
-                    false,
-                    "Coroutine Info",
-                    coroutine1Console,
-                    Modifier
-                        .fillMaxWidth()
-//                        .height(100.dp)
-//                        .verticalScroll(state)
-                )
-                FlowRow(
-                    maxItemsInEachRow = maxItemsInEachRow
+                    isPreview,
+                    "[T1] Stop",
+                    null,
+                    settingCardModifier,
                 ) {
-                    SimpleCard(
-                        currentTextUnit,
-                        isPreview,
-                        "[T1] Start",
-                        null,
-                        settingCardModifier,
-                    ) {
-                        if (mCoroutineJob1?.isActive == true) {
-                            updateConsole("Job has already started.")
-                        } else {
-                            mCoroutineJob1 =
-                                GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                                    for (i in 1..50) {
-                                        if (isActive) {
-                                            val currentThreadName = Thread.currentThread().name
-                                            withContext(Dispatchers.Main) {
-                                                updateConsole(
-                                                    i.toString(),
-                                                    currentThreadName
-                                                )
-                                            }
-                                            delay(500)
-                                        }
-                                    }
-                                }
+                    if (mCoroutineJob1?.isActive == true) {
+                        runBlocking { mCoroutineJob1?.cancelAndJoin() }
+                    } else {
+                        updateConsole("The job has been canceled")
+                    }
+                }
+                SimpleCard(
+                    currentTextUnit,
+                    isPreview,
+                    "[T1] Job Status",
+                    null,
+                    settingCardModifier,
+                ) {
+                    mCoroutineJob1?.let {
+                        when (it.isActive) {
+                            true -> updateConsole("On")
+                            false -> updateConsole("Off")
+                        }
+                    } ?: run {
+                        updateConsole("Coroutine is not initialized.")
+                    }
+                }
+                SimpleCard(
+                    currentTextUnit,
+                    isPreview,
+                    "[T2] Multiple",
+                    null,
+                    settingCardModifier,
+                ) {
+                    for (k in 1..3) {
+                        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                            for (i in 1..10) {
+                                val currentThreadName = Thread.currentThread().name
+                                runOnUiThread { updateConsole(i.toString(), currentThreadName) }
+                                delay(100)
+                            }
                         }
                     }
                 }
+                SimpleCard(
+                    currentTextUnit,
+                    isPreview,
+                    "[T3] runBlocking",
+                    null,
+                    settingCardModifier,
+                ) {
+                    updateConsole("1")
+                    runBlocking {
+                        launch {
+                            updateConsole("3")
+                            delay(2000)
+                            updateConsole("4")
+                        }
+                        updateConsole("2")
+                    }
+                }
+                SimpleCard(
+                    currentTextUnit,
+                    isPreview,
+                    "[T4] CoroutineScope",
+                    null,
+                    settingCardModifier,
+                ) {
+                    updateConsole("1")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val name = Thread.currentThread().name
+                        withContext(Dispatchers.Main) { updateConsole("3", name) }
+                        delay(2000)
+                        withContext(Dispatchers.Main) { updateConsole("4", name) }
+                    }
+                    updateConsole("2")
+                }
+
+                CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Finger Print")
             }
         }
     }
@@ -578,7 +641,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     private fun DevToolsPreview() {
         AppTheme {
-            DevTools(true)
+            DevTools(true, viewModel())
+        }
+    }
+
+    @Preview(heightDp = 2000)
+    @Composable
+    private fun DevToolsPreview_01() {
+        AppTheme {
+            DevTools(true, viewModel())
         }
     }
 
@@ -1024,103 +1095,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private var mCoroutineJob1: Job? = null
-    private fun setupCoroutine() {
-        fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
-            mBinding.textCoroutine1Console.append("$tag: $message\n")
-            mBinding.scrollCoroutine.post { mBinding.scrollCoroutine.fullScroll(View.FOCUS_DOWN) }
-        }
 
-        mBinding.linearDevContainer.addView(
-            // Coroutine
-            createBaseCardView(
-                "Coroutine", null,
-                Button(this@BaseDevActivity).apply {
-                    text = "[T1] Start"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
 
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "[T1] Stop"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        if (mCoroutineJob1?.isActive == true) {
-                            runBlocking { mCoroutineJob1?.cancelAndJoin() }
-                        } else {
-                            updateConsole("The job has been canceled")
-                        }
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "[T1] Job Status"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        mCoroutineJob1?.let {
-                            when (it.isActive) {
-                                true -> updateConsole("On")
-                                false -> updateConsole("Off")
-                            }
-                        } ?: run {
-                            updateConsole("Coroutine is not initialized.")
-                        }
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "[T2] Multiple"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        for (k in 1..3) {
-                            GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                                for (i in 1..10) {
-                                    val currentThreadName = Thread.currentThread().name
-                                    runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                                    delay(100)
-                                }
-                            }
-                        }
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "[T3] runBlocking"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        updateConsole("1")
-                        runBlocking {
-                            launch {
-                                updateConsole("3")
-                                delay(2000)
-                                updateConsole("4")
-                            }
-                            updateConsole("2")
-                        }
-                    }
-                },
-                Button(this@BaseDevActivity).apply {
-                    text = "[T4] CoroutineScope"
-                    layoutParams = mFlexboxLayoutParams
-                    setOnClickListener {
-                        updateConsole("1")
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val name = Thread.currentThread().name
-                            withContext(Dispatchers.Main) { updateConsole("3", name) }
-                            delay(2000)
-                            withContext(Dispatchers.Main) { updateConsole("4", name) }
-                        }
-                        updateConsole("2")
-                    }
-                },
-            ).also {
-                mBinding.scrollCoroutine.run {
-                    (parent as ViewGroup).removeView(this)
-                    (it.getChildAt(0) as ViewGroup).addView(this)
-                }
-            }
-        )
-    }
 
-    private fun updateLocation() {
+    private fun updateLocation(viewModel: BaseDevViewModel) {
         fun setLocationInfo() {
             getLastKnownLocation()?.let {
                 var info = "Longitude: ${it.longitude}\nLatitude: ${it.latitude}\n"
@@ -1131,7 +1109,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
 //                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
 //                makeSnackBar(info)
-                mViewModel.locationInfo.value = info
+                viewModel.locationInfo.value = info
             }
         }
         when (hasGPSPermissions()) {

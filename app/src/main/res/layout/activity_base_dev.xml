@@ -63,16 +63,6 @@
                     android:id="@+id/compose_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/scroll_coroutine"
-                    android:fillViewport="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/text_coroutine1_console"
-                        style="@style/SettingsSummary" />
-                </androidx.core.widget.NestedScrollView>
             </LinearLayout>
         </ScrollView>
         <include

@@ -1,13 +1,18 @@
 package me.blog.korn123.easydiary.ui.components
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
@@ -17,6 +22,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,8 +32,61 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
+
+
+@Composable
+fun ScrollableCard(
+    textUnit: TextUnit,
+    isPreview: Boolean = false,
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    scrollState: ScrollState
+) {
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .height(200.dp)
+                .verticalScroll(scrollState)
+        ) {
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                    color = Color(LocalContext.current.config.textColor),
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                ),
+            )
+            description?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun CategoryTitleCard(
@@ -82,6 +141,7 @@ fun SimpleCard(
         },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
