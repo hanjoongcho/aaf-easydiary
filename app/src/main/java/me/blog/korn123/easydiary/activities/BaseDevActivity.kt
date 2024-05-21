@@ -55,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -204,7 +205,29 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mBinding.run {
             composeView.setContent {
                 AppTheme {
-                    DevTools(false, viewModel)
+                    val currentContext = LocalContext.current
+                    val pixelValue = currentContext.config.settingFontSize
+                    val density = LocalDensity.current
+                    val currentTextUnit = with (density) {
+                        val temp = pixelValue.toDp()
+                        temp.toSp()
+                    }
+                    val configuration = LocalConfiguration.current
+                    val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+
+                    Column {
+                        val settingCardModifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                        FingerPrint(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                        Etc(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        Notification(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        LocationManager(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
+                        AlertDialog(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        DebugToast(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        CustomLauncher(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        Coroutine(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
+                    }
                 }
             }
         }
@@ -227,413 +250,534 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    fun DevTools(isPreview: Boolean = false, viewModel: BaseDevViewModel) {
-        val currentContext = LocalContext.current
-        val pixelValue = currentContext.config.settingFontSize
-        val density = LocalDensity.current
-        val currentTextUnit = with (density) {
-            val temp = pixelValue.toDp()
-            temp.toSp()
-        }
-        val configuration = LocalConfiguration.current
-        val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-
-        Column {
-            val settingCardModifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
-            FlowRow(
-                modifier = Modifier,
-                maxItemsInEachRow = maxItemsInEachRow
+    private fun Etc(currentContext: Context, currentTextUnit: TextUnit, isPreview: Boolean, settingCardModifier: Modifier, maxItemsInEachRow: Int) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Etc.")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            var enableDebugOptionVisibleDiarySequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleDiarySequence) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Display Diary Sequence",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleDiarySequence
             ) {
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-01",
-                    "Basic",
-                    settingCardModifier,
-                ) {
-                    createNotificationBasic()
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-02",
-                    "Basic(Bitmap Icon)",
-                    settingCardModifier,
-                ) {
-                    createNotificationBasicWithBitmapIcon(this@BaseDevActivity)
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-03",
-                    "CustomContentView",
-                    settingCardModifier,
-                ) {
-                    createNotificationCustomView(this@BaseDevActivity)
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Notification-04",
-                    "BigTextStyle",
-                    settingCardModifier,
-                ) {
-                    createNotificationBigTextStyle()
-                }
+                enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence.not()
+                config.enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence
             }
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
-            val locationInfo by viewModel.locationInfo.observeAsState("")
+            var enableDebugOptionVisibleAlarmSequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleAlarmSequence) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Display Alarm Sequence",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleAlarmSequence
+            ) {
+                enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence.not()
+                config.enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence
+            }
             SimpleCard(
                 currentTextUnit,
                 isPreview,
-                "Location Info",
-                locationInfo,
-                Modifier.fillMaxWidth(),
-            ) {}
-            FlowRow(
-                modifier = Modifier,
-                maxItemsInEachRow = maxItemsInEachRow
+                "Action Log",
+                "Open Action Log",
+                settingCardModifier,
             ) {
-                var enableDebugOptionToastLocation by remember { mutableStateOf(currentContext.config.enableDebugOptionToastLocation) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Toast Message",
-                    "Location Toast",
-                    settingCardModifier,
-                    enableDebugOptionToastLocation
-                ) {
-                    enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
-                    config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Location Manager",
-                    "Last-Location",
-                    settingCardModifier,
-                ) { updateLocation(viewModel) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Location Manager",
-                    "Update-GPS",
-                    settingCardModifier,
-                ) {
-                    updateGPSProvider()
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Location Manager",
-                    "Update-Network",
-                    settingCardModifier,
-                ) {
-                    updateNetWorkProvider()
-                }
+                val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
+                ActionLogDialog(this@BaseDevActivity, actionLogs) { EasyDiaryDbHelper.deleteActionLogAll() }
             }
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Alert Dialog")
-            FlowRow(
-                modifier = Modifier,
-                maxItemsInEachRow = maxItemsInEachRow
-            ) {
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "알림(DEFAULT)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "알림(INFO)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "알림(WARNING)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "알림(ERROR)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "알림(SETTING)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dialog",
-                    "확인(INFO)",
-                    settingCardModifier,
-                ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
-            }
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Debug Toast")
-            FlowRow(
-                maxItemsInEachRow = maxItemsInEachRow
-            ) {
-                var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(currentContext.config.enableDebugOptionToastAttachedPhoto) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Attached Photo Toast",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionToastAttachedPhoto
-                ) {
-                    enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
-                    config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
-                }
-                var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastNotificationInfo) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Notification Info",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionToastNotificationInfo
-                ) {
-                    enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo.not()
-                    config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
-                }
-                var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastReviewFlowInfo) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "ReviewFlow Info",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionToastReviewFlowInfo
-                ) {
-                    enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
-                    config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
-                }
-                var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(currentContext.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Photo-Highlight Update Time",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionToastPhotoHighlightUpdateTime
-                ) {
-                    enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
-                    config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
-                }
-                var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Stock",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionVisibleChartStock
-                ) {
-                    enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
-                    config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
-                }
-                var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
-                SwitchCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Weight",
-                    null,
-                    settingCardModifier,
-                    enableDebugOptionVisibleChartWeight
-                ) {
-                    enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
-                    config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
-                }
-            }
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Custom Launcher")
-            FlowRow(
-                maxItemsInEachRow = maxItemsInEachRow
-            ) {
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "EasyDiary Launcher",
-                    null,
-                    settingCardModifier,
-                ) { toggleLauncher(Launcher.EASY_DIARY) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Dark Launcher",
-                    null,
-                    settingCardModifier,
-                ) { toggleLauncher(Launcher.DARK) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Green Launcher",
-                    null,
-                    settingCardModifier,
-                ) { toggleLauncher(Launcher.GREEN) }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "Debug Launcher",
-                    null,
-                    settingCardModifier,
-                ) { toggleLauncher(Launcher.DEBUG) }
-            }
-
-            CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Coroutine")
-            val coroutine1Console by viewModel.coroutine1Console.observeAsState("")
-            val state = rememberScrollState()
-            val coroutineScope = rememberCoroutineScope()
-            fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
-                mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
-                coroutineScope.launch {
-                    state.animateScrollBy(Float.MAX_VALUE)
-                }
-            }
-            ScrollableCard(
+            SimpleCard(
                 currentTextUnit,
                 isPreview,
-                "Coroutine Info",
-                coroutine1Console,
-                Modifier
-                    .fillMaxWidth()
+                "GitHub MarkDown Page",
+                "🛸 SYNC",
+                settingCardModifier,
+            ) { syncMarkDown() }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun Notification(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Notification")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Notification-01",
+                "Basic",
+                settingCardModifier,
+            ) {
+                createNotificationBasic()
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Notification-02",
+                "Basic(Bitmap Icon)",
+                settingCardModifier,
+            ) {
+                createNotificationBasicWithBitmapIcon(this@BaseDevActivity)
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Notification-03",
+                "CustomContentView",
+                settingCardModifier,
+            ) {
+                createNotificationCustomView(this@BaseDevActivity)
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Notification-04",
+                "BigTextStyle",
+                settingCardModifier,
+            ) {
+                createNotificationBigTextStyle()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun LocationManager(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Location Manager")
+        val locationInfo by viewModel.locationInfo.observeAsState("")
+        SimpleCard(
+            currentTextUnit,
+            isPreview,
+            "Location Info",
+            locationInfo,
+            Modifier.fillMaxWidth(),
+        ) {}
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            var enableDebugOptionToastLocation by remember { mutableStateOf(currentContext.config.enableDebugOptionToastLocation) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Toast Message",
+                "Location Toast",
+                settingCardModifier,
+                enableDebugOptionToastLocation
+            ) {
+                enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
+                config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Location Manager",
+                "Last-Location",
+                settingCardModifier,
+            ) { updateLocation(viewModel) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Location Manager",
+                "Update-GPS",
+                settingCardModifier,
+            ) {
+                updateGPSProvider()
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Location Manager",
+                "Update-Network",
+                settingCardModifier,
+            ) {
+                updateNetWorkProvider()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun AlertDialog(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Alert Dialog")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "알림(DEFAULT)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "알림(INFO)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "알림(WARNING)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "알림(ERROR)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "알림(SETTING)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dialog",
+                "확인(INFO)",
+                settingCardModifier,
+            ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun DebugToast(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Debug Toast")
+        FlowRow(
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(currentContext.config.enableDebugOptionToastAttachedPhoto) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Attached Photo Toast",
+                null,
+                settingCardModifier,
+                enableDebugOptionToastAttachedPhoto
+            ) {
+                enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
+                config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
+            }
+            var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastNotificationInfo) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Notification Info",
+                null,
+                settingCardModifier,
+                enableDebugOptionToastNotificationInfo
+            ) {
+                enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo.not()
+                config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
+            }
+            var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastReviewFlowInfo) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "ReviewFlow Info",
+                null,
+                settingCardModifier,
+                enableDebugOptionToastReviewFlowInfo
+            ) {
+                enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
+                config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
+            }
+            var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(currentContext.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Photo-Highlight Update Time",
+                null,
+                settingCardModifier,
+                enableDebugOptionToastPhotoHighlightUpdateTime
+            ) {
+                enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
+                config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
+            }
+            var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Stock",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleChartStock
+            ) {
+                enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
+                config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
+            }
+            var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Weight",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleChartWeight
+            ) {
+                enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
+                config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
+            }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun CustomLauncher(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Custom Launcher")
+        FlowRow(
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "EasyDiary Launcher",
+                null,
+                settingCardModifier,
+            ) { toggleLauncher(Launcher.EASY_DIARY) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Dark Launcher",
+                null,
+                settingCardModifier,
+            ) { toggleLauncher(Launcher.DARK) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Green Launcher",
+                null,
+                settingCardModifier,
+            ) { toggleLauncher(Launcher.GREEN) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Debug Launcher",
+                null,
+                settingCardModifier,
+            ) { toggleLauncher(Launcher.DEBUG) }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun Coroutine(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Coroutine")
+        val coroutine1Console by viewModel.coroutine1Console.observeAsState("")
+        val state = rememberScrollState()
+        val coroutineScope = rememberCoroutineScope()
+        fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
+            mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
+            coroutineScope.launch {
+                state.animateScrollBy(Float.MAX_VALUE)
+            }
+        }
+        ScrollableCard(
+            currentTextUnit,
+            isPreview,
+            "Coroutine Info",
+            coroutine1Console,
+            Modifier
+                .fillMaxWidth()
 //                        .height(100.dp)
 //                        .verticalScroll(state)
-                ,
-                state
-            )
-            FlowRow(
-                maxItemsInEachRow = maxItemsInEachRow
+            ,
+            state
+        )
+        FlowRow(
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T1] Start",
+                null,
+                settingCardModifier,
             ) {
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T1] Start",
-                    null,
-                    settingCardModifier,
-                ) {
-                    if (mCoroutineJob1?.isActive == true) {
-                        updateConsole("Job has already started.")
-                    } else {
-                        mCoroutineJob1 =
-                            GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                                for (i in 1..50) {
-                                    if (isActive) {
-                                        val currentThreadName = Thread.currentThread().name
-                                        withContext(Dispatchers.Main) {
-                                            updateConsole(
-                                                i.toString(),
-                                                currentThreadName
-                                            )
-                                        }
-                                        delay(500)
+                if (mCoroutineJob1?.isActive == true) {
+                    updateConsole("Job has already started.")
+                } else {
+                    mCoroutineJob1 =
+                        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                            for (i in 1..50) {
+                                if (isActive) {
+                                    val currentThreadName = Thread.currentThread().name
+                                    withContext(Dispatchers.Main) {
+                                        updateConsole(
+                                            i.toString(),
+                                            currentThreadName
+                                        )
                                     }
+                                    delay(500)
                                 }
                             }
-                    }
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T1] Stop",
-                    null,
-                    settingCardModifier,
-                ) {
-                    if (mCoroutineJob1?.isActive == true) {
-                        runBlocking { mCoroutineJob1?.cancelAndJoin() }
-                    } else {
-                        updateConsole("The job has been canceled")
-                    }
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T1] Job Status",
-                    null,
-                    settingCardModifier,
-                ) {
-                    mCoroutineJob1?.let {
-                        when (it.isActive) {
-                            true -> updateConsole("On")
-                            false -> updateConsole("Off")
                         }
-                    } ?: run {
-                        updateConsole("Coroutine is not initialized.")
-                    }
                 }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T2] Multiple",
-                    null,
-                    settingCardModifier,
-                ) {
-                    for (k in 1..3) {
-                        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                            for (i in 1..10) {
-                                val currentThreadName = Thread.currentThread().name
-                                runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                                delay(100)
-                            }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T1] Stop",
+                null,
+                settingCardModifier,
+            ) {
+                if (mCoroutineJob1?.isActive == true) {
+                    runBlocking { mCoroutineJob1?.cancelAndJoin() }
+                } else {
+                    updateConsole("The job has been canceled")
+                }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T1] Job Status",
+                null,
+                settingCardModifier,
+            ) {
+                mCoroutineJob1?.let {
+                    when (it.isActive) {
+                        true -> updateConsole("On")
+                        false -> updateConsole("Off")
+                    }
+                } ?: run {
+                    updateConsole("Coroutine is not initialized.")
+                }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T2] Multiple",
+                null,
+                settingCardModifier,
+            ) {
+                for (k in 1..3) {
+                    GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                        for (i in 1..10) {
+                            val currentThreadName = Thread.currentThread().name
+                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
+                            delay(100)
                         }
                     }
                 }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T3] runBlocking",
-                    null,
-                    settingCardModifier,
-                ) {
-                    updateConsole("1")
-                    runBlocking {
-                        launch {
-                            updateConsole("3")
-                            delay(2000)
-                            updateConsole("4")
-                        }
-                        updateConsole("2")
-                    }
-                }
-                SimpleCard(
-                    currentTextUnit,
-                    isPreview,
-                    "[T4] CoroutineScope",
-                    null,
-                    settingCardModifier,
-                ) {
-                    updateConsole("1")
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val name = Thread.currentThread().name
-                        withContext(Dispatchers.Main) { updateConsole("3", name) }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T3] runBlocking",
+                null,
+                settingCardModifier,
+            ) {
+                updateConsole("1")
+                runBlocking {
+                    launch {
+                        updateConsole("3")
                         delay(2000)
-                        withContext(Dispatchers.Main) { updateConsole("4", name) }
+                        updateConsole("4")
                     }
                     updateConsole("2")
                 }
-
-                CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Finger Print")
             }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "[T4] CoroutineScope",
+                null,
+                settingCardModifier,
+            ) {
+                updateConsole("1")
+                CoroutineScope(Dispatchers.IO).launch {
+                    val name = Thread.currentThread().name
+                    withContext(Dispatchers.Main) { updateConsole("3", name) }
+                    delay(2000)
+                    withContext(Dispatchers.Main) { updateConsole("4", name) }
+                }
+                updateConsole("2")
+            }
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun FingerPrint(
+        currentContext: Context,
+        currentTextUnit: TextUnit,
+        isPreview: Boolean,
+        settingCardModifier: Modifier,
+        maxItemsInEachRow: Int
+    ) {
+        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Finger Print")
+        FlowRow(
+            maxItemsInEachRow = maxItemsInEachRow
+        ) {
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Fingerprint",
+                null,
+                settingCardModifier,
+            ) { startListeningFingerprint(this@BaseDevActivity) }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Biometric",
+                null,
+                settingCardModifier,
+            ) { startListeningBiometric(this@BaseDevActivity) }
         }
     }
 
@@ -641,17 +785,31 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     private fun DevToolsPreview() {
         AppTheme {
-            DevTools(true, viewModel())
+            val currentContext = LocalContext.current
+            val pixelValue = currentContext.config.settingFontSize
+            val density = LocalDensity.current
+            val currentTextUnit = with (density) {
+                val temp = pixelValue.toDp()
+                temp.toSp()
+            }
+            val configuration = LocalConfiguration.current
+            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+            Column {
+                val settingCardModifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                FingerPrint(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                Etc(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                Notification(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                LocationManager(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow, viewModel())
+                AlertDialog(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                DebugToast(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                CustomLauncher(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                Coroutine(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow, viewModel())
+            }
         }
     }
 
-    @Preview(heightDp = 2000)
-    @Composable
-    private fun DevToolsPreview_01() {
-        AppTheme {
-            DevTools(true, viewModel())
-        }
-    }
 
 
     /***************************************************************************************************
@@ -904,44 +1062,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private fun setupTestFunction() {
         mBinding.run {
             linearDevContainer.addView(
-                // Biometric authentication
-                createBaseCardView(
-                    "Finger Print"
-                    , null, Button(this@BaseDevActivity).apply {
-                        text = "Fingerprint"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { startListeningFingerprint(this@BaseDevActivity) }
-                    }
-                    , Button(this@BaseDevActivity).apply {
-                        text = "Biometric"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { startListeningBiometric(this@BaseDevActivity) }
-                    }
-                )
-            )
-            linearDevContainer.addView(
-                // Setting Custom Chart
-                createBaseCardView(
-                    "Custom Chart", null, Button(this@BaseDevActivity).apply {
-                        text = "Stock"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleChartStock =
-                                !config.enableDebugOptionVisibleChartStock
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartStock}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Weight"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleChartWeight =
-                                !config.enableDebugOptionVisibleChartWeight
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleChartWeight}")
-                        }
-                    }
-                )
-            )
-            linearDevContainer.addView(
                 // ETC.
                 createBaseCardView(
                     "ETC.", null,
@@ -1030,22 +1150,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 this@BaseDevActivity,
                                 Uri.parse("https://github.com/AAFactory/aafactory-commons")
                             )
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Display Diary Sequence"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleDiarySequence =
-                                !config.enableDebugOptionVisibleDiarySequence
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleDiarySequence}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Display Alarm Sequence"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleAlarmSequence =
-                                !config.enableDebugOptionVisibleAlarmSequence
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleAlarmSequence}")
                         }
                     }, Button(this@BaseDevActivity).apply {
                         text ="Clear-Unused-Photo"
