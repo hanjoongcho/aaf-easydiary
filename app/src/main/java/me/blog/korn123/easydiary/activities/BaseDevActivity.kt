@@ -19,7 +19,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
@@ -29,19 +28,11 @@ import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -53,16 +44,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -71,14 +58,12 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import com.simplemobiletools.commons.models.Release
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -92,7 +77,6 @@ import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
-import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
@@ -219,7 +203,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         val settingCardModifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                        FingerPrint(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                        FingerPrint(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                         Etc(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                         Notification(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                         LocationManager(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
@@ -231,8 +215,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
         }
-
-        setupTestFunction()
     }
 
     override fun onDestroy() {
@@ -297,6 +279,161 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "🛸 SYNC",
                 settingCardModifier,
             ) { syncMarkDown() }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "ReviewFlow",
+                null,
+                settingCardModifier,
+            ) { startReviewFlow() }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Reset Showcase",
+                null,
+                settingCardModifier,
+            ) {
+                getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
+                    edit().putBoolean(
+                        "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
+                        false
+                    ).apply()
+                    edit().putBoolean(
+                        "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
+                        false
+                    ).apply()
+                    edit().putBoolean(
+                        "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
+                        false
+                    ).apply()
+                    edit().putBoolean(
+                        "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
+                        false
+                    ).apply()
+                }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Reset Font Size",
+                null,
+                settingCardModifier,
+            ) {
+                config.settingFontSize =
+                    spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+                makeToast(
+                    "DP:${
+                        dpToPixelFloatValue(
+                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                        )
+                    } , SP:${
+                        spToPixelFloatValue(
+                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                        )
+                    }"
+                )
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Check Force Release URL",
+                null,
+                settingCardModifier,
+            ) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val url =
+                        URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
+                    val httpConn = url.openConnection() as HttpURLConnection
+                    val responseCode = httpConn.responseCode
+
+                    withContext(Dispatchers.Main) {
+                        makeToast("Response Code: $responseCode")
+                    }
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // opens input stream from the HTTP connection
+                        val inputStream = httpConn.inputStream
+                        val lines = IOUtils.readLines(inputStream, "UTF-8")
+                        withContext(Dispatchers.Main) {
+                            makeToast(lines[0])
+//                            if (lines[0].contains("true")) {
+//                                config.aafPinLockEnable = false
+//                                config.fingerprintLockEnable = false
+//                                finish()
+//                            }
+                        }
+                        inputStream.close()
+                    }
+                    httpConn.disconnect()
+                }
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "InApp Browser",
+                null,
+                settingCardModifier,
+            ) {
+                val customTabsIntent =
+                    CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
+                customTabsIntent.launchUrl(
+                    this@BaseDevActivity,
+                    Uri.parse("https://github.com/AAFactory/aafactory-commons")
+                )
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Clear-Unused-Photo",
+                null,
+                settingCardModifier,
+            ) {
+                val localPhotoBaseNames = arrayListOf<String>()
+                val unUsedPhotos = arrayListOf<String>()
+                val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this@BaseDevActivity) + DIARY_PHOTO_DIRECTORY)
+                targetFiles.listFiles()?.map {
+                    localPhotoBaseNames.add(it.name)
+                }
+
+                EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
+                    if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
+                        unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
+                    }
+                }
+                showAlertDialog(unUsedPhotos.size.toString(), null,
+                    { _, _ -> }, DialogMode.WARNING
+                )
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Font Preview Emoji",
+                null,
+                settingCardModifier,
+            ) {
+                config.enableDebugOptionVisibleFontPreviewEmoji =
+                    !config.enableDebugOptionVisibleFontPreviewEmoji
+                makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "Display Temporary Diary",
+                null,
+                settingCardModifier,
+            ) {
+                config.enableDebugOptionVisibleTemporaryDiary =
+                    !config.enableDebugOptionVisibleTemporaryDiary
+                makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+            }
+            SimpleCard(
+                currentTextUnit,
+                isPreview,
+                "PickMultipleVisualMedia",
+                null,
+                settingCardModifier,
+            ) {
+                mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         }
     }
 
@@ -753,7 +890,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun FingerPrint(
+    protected fun FingerPrint(
         currentContext: Context,
         currentTextUnit: TextUnit,
         isPreview: Boolean,
@@ -1058,149 +1195,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             )
         }
     }
-
-    private fun setupTestFunction() {
-        mBinding.run {
-            linearDevContainer.addView(
-                // ETC.
-                createBaseCardView(
-                    "ETC.", null,
-                    Button(this@BaseDevActivity).apply {
-                        text = "ReviewFlow"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener { startReviewFlow() }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Reset Showcase"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
-                                edit().putBoolean(
-                                    "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
-                                    false
-                                ).apply()
-                                edit().putBoolean(
-                                    "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
-                                    false
-                                ).apply()
-                                edit().putBoolean(
-                                    "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
-                                    false
-                                ).apply()
-                                edit().putBoolean(
-                                    "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
-                                    false
-                                ).apply()
-                            }
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Reset Font Size"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.settingFontSize =
-                                spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
-                            makeToast(
-                                "DP:${
-                                    dpToPixelFloatValue(
-                                        UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
-                                    )
-                                } , SP:${
-                                    spToPixelFloatValue(
-                                        UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
-                                    )
-                                }"
-                            )
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "Check Force Release URL"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val url =
-                                    URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
-                                val httpConn = url.openConnection() as HttpURLConnection
-                                val responseCode = httpConn.responseCode
-
-                                withContext(Dispatchers.Main) {
-                                    makeToast("Response Code: $responseCode")
-                                }
-                                if (responseCode == HttpURLConnection.HTTP_OK) {
-                                    // opens input stream from the HTTP connection
-                                    val inputStream = httpConn.inputStream
-                                    val lines = IOUtils.readLines(inputStream, "UTF-8")
-                                    withContext(Dispatchers.Main) {
-                                        makeToast(lines[0])
-//                            if (lines[0].contains("true")) {
-//                                config.aafPinLockEnable = false
-//                                config.fingerprintLockEnable = false
-//                                finish()
-//                            }
-                                    }
-                                    inputStream.close()
-                                }
-                                httpConn.disconnect()
-                            }
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text = "InApp Browser"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val customTabsIntent =
-                                CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                            customTabsIntent.launchUrl(
-                                this@BaseDevActivity,
-                                Uri.parse("https://github.com/AAFactory/aafactory-commons")
-                            )
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="Clear-Unused-Photo"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            val localPhotoBaseNames = arrayListOf<String>()
-                            val unUsedPhotos = arrayListOf<String>()
-                            val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this@BaseDevActivity) + DIARY_PHOTO_DIRECTORY)
-                            targetFiles.listFiles()?.map {
-                                localPhotoBaseNames.add(it.name)
-                            }
-
-                            EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
-                                if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
-                                    unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
-                                }
-                            }
-                            showAlertDialog(unUsedPhotos.size.toString(), null,
-                                { _, _ -> }, DialogMode.WARNING
-                            )
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="Font Preview Emoji"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleFontPreviewEmoji =
-                                !config.enableDebugOptionVisibleFontPreviewEmoji
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="Display Temporary Diary"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            config.enableDebugOptionVisibleTemporaryDiary =
-                                !config.enableDebugOptionVisibleTemporaryDiary
-                            makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
-                        }
-                    }, Button(this@BaseDevActivity).apply {
-                        text ="PickMultipleVisualMedia"
-                        layoutParams = mFlexboxLayoutParams
-                        setOnClickListener {
-                            mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        }
-                    }
-                )
-            )
-        }
-    }
-
-
-
 
     private fun updateLocation(viewModel: BaseDevViewModel) {
         fun setLocationInfo() {
