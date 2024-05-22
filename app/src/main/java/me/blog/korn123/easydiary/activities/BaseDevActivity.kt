@@ -203,14 +203,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         val settingCardModifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                        FingerPrint(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
-                        Etc(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
-                        Notification(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
-                        LocationManager(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
-                        AlertDialog(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
-                        DebugToast(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                         CustomLauncher(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        Notification(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        AlertDialog(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        Etc(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                        LocationManager(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
+                        DebugToast(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                         Coroutine(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow, viewModel)
+                        FingerPrint(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
                     }
                 }
             }
@@ -261,6 +261,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence.not()
                 config.enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence
+            }
+            var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Stock",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleChartStock
+            ) {
+                enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
+                config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
+            }
+            var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
+            SwitchCard(
+                currentTextUnit,
+                isPreview,
+                "Weight",
+                null,
+                settingCardModifier,
+                enableDebugOptionVisibleChartWeight
+            ) {
+                enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
+                config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
             }
             SimpleCard(
                 currentTextUnit,
@@ -673,30 +697,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
                 config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
             }
-            var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
-            SwitchCard(
-                currentTextUnit,
-                isPreview,
-                "Stock",
-                null,
-                settingCardModifier,
-                enableDebugOptionVisibleChartStock
-            ) {
-                enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
-                config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
-            }
-            var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
-            SwitchCard(
-                currentTextUnit,
-                isPreview,
-                "Weight",
-                null,
-                settingCardModifier,
-                enableDebugOptionVisibleChartWeight
-            ) {
-                enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
-                config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
-            }
         }
     }
 
@@ -935,14 +935,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                FingerPrint(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
-                Etc(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
-                Notification(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
-                LocationManager(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow, viewModel())
-                AlertDialog(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
-                DebugToast(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
                 CustomLauncher(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                Notification(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                AlertDialog(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                Etc(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
+                LocationManager(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow, viewModel())
+                DebugToast(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
                 Coroutine(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow, viewModel())
+                FingerPrint(currentContext, currentTextUnit, true, settingCardModifier, maxItemsInEachRow)
             }
         }
     }

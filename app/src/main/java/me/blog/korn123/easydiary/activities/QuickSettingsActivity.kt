@@ -189,21 +189,21 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     }
                     AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                 }
-
-                val itemModifier = settingCardModifier
-                    .padding(4.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color(context.config.backgroundColor))
-
-                val spaceModifier = Modifier
-                repeat(3) { item ->
-                    if ((item + 1) % 3 == 0) {
-                        Spacer(modifier = itemModifier.fillMaxWidth())
-                    } else {
-                        Spacer(modifier = itemModifier.weight(0.5f))
-                    }
-                }
+//
+//                val itemModifier = settingCardModifier
+//                    .padding(4.dp)
+//                    .height(80.dp)
+//                    .clip(RoundedCornerShape(8.dp))
+//                    .background(Color(context.config.backgroundColor))
+//
+//                val spaceModifier = Modifier
+//                repeat(3) { item ->
+//                    if ((item + 1) % 3 == 0) {
+//                        Spacer(modifier = itemModifier.fillMaxWidth())
+//                    } else {
+//                        Spacer(modifier = itemModifier.weight(0.5f))
+//                    }
+//                }
             }
         }
     }
@@ -233,8 +233,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
             enablePhotoHighlight.alpha = if (enablePhotoHighlightSwitcher.isChecked) 1.0f else 0.5f
         }
     }
-
-
 
     class QuickSettingsViewModel : ViewModel() {
         var enablePhotoHighlight: MutableLiveData<Boolean> = MutableLiveData()
