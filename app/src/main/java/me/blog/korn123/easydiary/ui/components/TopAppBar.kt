@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
@@ -24,9 +25,16 @@ import me.blog.korn123.easydiary.extensions.config
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EasyDiaryActionBar(textUnit: TextUnit, close: () -> Unit) {
+fun EasyDiaryActionBar(close: () -> Unit) {
     val isDarkMode = isSystemInDarkTheme()
     val context = LocalContext.current as ComponentActivity
+
+    val pixelValue = context.config.settingFontSize
+    val density = LocalDensity.current
+    val currentTextUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
 
     DisposableEffect(isDarkMode) {
         context.enableEdgeToEdge(
@@ -53,7 +61,7 @@ fun EasyDiaryActionBar(textUnit: TextUnit, close: () -> Unit) {
                 style = TextStyle(
                     fontFamily = FontUtils.getComposeFontFamily(LocalContext.current),
                     color = Color.White,
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
                 ),
             )
         },

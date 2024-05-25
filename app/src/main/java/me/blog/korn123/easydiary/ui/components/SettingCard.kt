@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
@@ -22,18 +21,16 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 
@@ -41,7 +38,6 @@ import me.blog.korn123.easydiary.extensions.config
 @Composable
 fun ScrollableCard(
     textUnit: TextUnit,
-    isPreview: Boolean = false,
     title: String,
     description: String?,
     modifier: Modifier,
@@ -65,7 +61,7 @@ fun ScrollableCard(
             Text(
                 text = title,
                 style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                     color = Color(LocalContext.current.config.textColor),
@@ -78,7 +74,7 @@ fun ScrollableCard(
                         .padding(0.dp, 5.dp, 0.dp, 0.dp),
                     text = description,
                     style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                         color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
@@ -91,7 +87,6 @@ fun ScrollableCard(
 @Composable
 fun CategoryTitleCard(
     textUnit: TextUnit,
-    isPreview: Boolean = false,
     title: String,
 ) {
     val modifier = Modifier.fillMaxWidth()
@@ -110,7 +105,7 @@ fun CategoryTitleCard(
             Text(
                 text = title,
                 style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                     color = Color.White,
@@ -124,7 +119,6 @@ fun CategoryTitleCard(
 @Composable
 fun SimpleCard(
     textUnit: TextUnit,
-    isPreview: Boolean = false,
     title: String,
     description: String?,
     modifier: Modifier,
@@ -148,7 +142,7 @@ fun SimpleCard(
             Text(
                 text = title,
                 style = TextStyle(
-                    fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                     fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
                     color = Color(LocalContext.current.config.textColor),
@@ -161,7 +155,7 @@ fun SimpleCard(
                         .padding(0.dp, 5.dp, 0.dp, 0.dp),
                     text = description,
                     style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                         color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
@@ -174,7 +168,6 @@ fun SimpleCard(
 @Composable
 fun SwitchCard(
     textUnit: TextUnit,
-    isPreview: Boolean = false,
     title: String,
     description: String?,
     modifier: Modifier,
@@ -200,7 +193,7 @@ fun SwitchCard(
                     modifier = Modifier.weight(1f),
                     text = title,
                     style = TextStyle(
-                        fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                         fontWeight = FontWeight.Bold,
                         color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
@@ -231,7 +224,7 @@ fun SwitchCard(
                     Text(
                         text = description,
                         style = TextStyle(
-                            fontFamily = if (isPreview) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                             color = Color(LocalContext.current.config.textColor),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),

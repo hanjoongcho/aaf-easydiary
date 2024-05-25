@@ -105,14 +105,13 @@ class DevActivity : BaseDevActivity() {
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
-        CategoryTitleCard(textUnit = currentTextUnit, isPreview = isPreview, title = "Google Mobile Service")
+        CategoryTitleCard(textUnit = currentTextUnit, title = "Google Mobile Service")
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow
         ) {
             SimpleCard(
                 currentTextUnit,
-                isPreview,
                 "Check Google Sign Account",
                 null,
                 settingCardModifier,
@@ -127,7 +126,6 @@ class DevActivity : BaseDevActivity() {
             }
             SimpleCard(
                 currentTextUnit,
-                isPreview,
                 "Full Backup",
                 null,
                 settingCardModifier,
