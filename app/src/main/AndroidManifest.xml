@@ -119,6 +119,11 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".compose.QuickSettingsActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".activities.CustomizationActivity"
             android:label="@string/customize_colors"
             android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
