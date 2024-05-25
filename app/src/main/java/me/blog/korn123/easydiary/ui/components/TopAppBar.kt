@@ -36,14 +36,11 @@ fun EasyDiaryActionBar(textUnit: TextUnit, close: () -> Unit) {
             } else {
                 SystemBarStyle.auto(context.config.primaryColor, context.config.primaryColor)
             },
-//            navigationBarStyle = if(!isDarkMode){
-//                SystemBarStyle.light(
-//                    navigationBarLight,
-//                    navigationBarDark
-//                )
-//            } else {
-//                SystemBarStyle.dark(navigationBarDark)
-//            }
+            navigationBarStyle = if(!isDarkMode){
+                SystemBarStyle.auto(context.config.primaryColor, context.config.primaryColor)
+            } else {
+                SystemBarStyle.auto(context.config.primaryColor, context.config.primaryColor)
+            }
         )
 
         onDispose { }

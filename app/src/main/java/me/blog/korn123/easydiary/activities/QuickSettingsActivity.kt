@@ -84,16 +84,17 @@ class QuickSettingsActivity : ComponentActivity() {
                         EasyDiaryActionBar(currentTextUnit) {
                             onBackPressed()
                         }
-                    }
-                ) { innerPadding ->
+                    },
+                    content = { innerPadding ->
 //                    it.calculateTopPadding()
-                    QuickSettings(
-                        context = this@QuickSettingsActivity,
-                        false,
-                        viewModel,
-                        Modifier.padding(innerPadding)
-                    )
-                }
+                        QuickSettings(
+                            context = this@QuickSettingsActivity,
+                            false,
+                            viewModel,
+                            Modifier.padding(innerPadding)
+                        )
+                    },
+                )
 
             }
         }
