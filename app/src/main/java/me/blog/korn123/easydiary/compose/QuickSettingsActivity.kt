@@ -3,7 +3,9 @@ package me.blog.korn123.easydiary.compose
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -35,6 +37,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
@@ -52,30 +55,49 @@ class QuickSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // https://velog.io/@hyemdooly/enableEdgeToEdge-%EB%82%B4%EB%B6%80-%EC%BD%94%EB%93%9C-%EC%95%8C%EA%B3%A0-%EC%93%B0%EA%B8%B0
+        enableEdgeToEdge(
+//            statusBarStyle = SystemBarStyle.auto(config.primaryColor, config.primaryColor)
+        )
+
         setContent {
             val viewModel: QuickSettingsViewModel by viewModels()
             viewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
 
-            AppTheme {
-                Scaffold(
-                    topBar = {
-                        EasyDiaryActionBar {
-                            onBackPressed()
-                        }
-                    },
-                    content = { innerPadding ->
-//                    it.calculateTopPadding()
-                        QuickSettings(
-                            context = this@QuickSettingsActivity,
-                            false,
-                            viewModel,
-                            Modifier.padding(innerPadding)
-                        )
-                    },
-                )
+//            AppTheme {
+//                Scaffold(
+//                    topBar = {
+//                        EasyDiaryActionBar {
+//                            onBackPressed()
+//                        }
+//                    },
+//                    content = { innerPadding ->
+//                        QuickSettings(
+//                            context = this@QuickSettingsActivity,
+//                            false,
+//                            viewModel,
+//                            Modifier.padding(innerPadding)
+//                        )
+//                    },
+//                )
+//
+//            }
 
+            AppTheme {
+                QuickSettings(
+                    context = this@QuickSettingsActivity,
+                    false,
+                    viewModel,
+                    Modifier.padding()
+                )
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        pauseLock()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
 
@@ -207,23 +229,12 @@ class QuickSettingsActivity : ComponentActivity() {
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme {
-            Scaffold(
-//                topBar = {
-//                    EasyDiaryActionBar {
-//                        onBackPressed()
-//                    }
-//                },
-                content = { innerPadding ->
-//                    it.calculateTopPadding()
-                    QuickSettings(
-                        context = LocalContext.current,
-                        LocalInspectionMode.current,
-                        viewModel(),
-                        Modifier.padding(innerPadding)
-                    )
-                },
+            QuickSettings(
+                context = LocalContext.current,
+                LocalInspectionMode.current,
+                viewModel(),
+                Modifier.padding()
             )
-
         }
     }
 
