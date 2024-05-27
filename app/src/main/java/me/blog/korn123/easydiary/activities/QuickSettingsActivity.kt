@@ -188,6 +188,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                         this@QuickSettingsActivity,
                         Intent(this@QuickSettingsActivity, QuickSettingsActivity::class.java)
                     )
+                    finish()
                 }
 //
 //                val itemModifier = settingCardModifier
