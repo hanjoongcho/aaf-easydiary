@@ -3,23 +3,25 @@ package me.blog.korn123.easydiary.compose
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +30,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,14 +51,15 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.QuickSettingsActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getStatusBarColor
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+
 
 class QuickSettingsActivity : ComponentActivity() {
 
@@ -70,6 +75,8 @@ class QuickSettingsActivity : ComponentActivity() {
 //        enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.auto(config.primaryColor, config.primaryColor)
 //        )
+
+        window.statusBarColor = getStatusBarColor(config.primaryColor)
 
         setContent {
             val viewModel: QuickSettingsViewModel by viewModels()
@@ -88,6 +95,25 @@ class QuickSettingsActivity : ComponentActivity() {
                             Modifier.padding(innerPadding)
                         )
                     },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = { onBackPressed() },
+                            containerColor = Color(config.primaryColor),
+                            contentColor = Color.White,
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                            modifier = Modifier.size(40.dp)
+
+
+                        ) {
+//                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cross),
+                                contentDescription = "액션 아이콘"
+                            )
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.Center,
                 )
 
             }
@@ -122,7 +148,11 @@ class QuickSettingsActivity : ComponentActivity() {
         var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
 
         val scrollState = rememberScrollState()
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.background(Color(context.config.screenBackgroundColor))
+
+        ) {
             Card(
                 shape = RoundedCornerShape(0.dp),
                 colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
@@ -134,7 +164,7 @@ class QuickSettingsActivity : ComponentActivity() {
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Shake the device to open the quick settings screen.",
+                        text = "\uD83D\uDCF1\uD83D\uDC4B This screen is the quick settings screen that activates when you shake the device.",
                         style = TextStyle(
                             fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                             fontWeight = FontWeight.Bold,
@@ -147,9 +177,11 @@ class QuickSettingsActivity : ComponentActivity() {
 
             Column(
                 modifier = modifier
-                    .fillMaxSize()
+//                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .weight(1f)
                     .verticalScroll(scrollState)
-                    .background(Color(context.config.screenBackgroundColor))
+
                     .padding(0.dp, 0.dp, 0.dp, 0.dp)
             ) {
                 FlowRow(
@@ -160,7 +192,7 @@ class QuickSettingsActivity : ComponentActivity() {
 //                horizontalArrangement = Arrangement.spacedBy(3.dp),
 //                verticalArrangement = Arrangement.spacedBy(3.dp),
 //                overflow = FlowRowOverflow.Clip,
-                    maxItemsInEachRow = 2
+                    maxItemsInEachRow = 1
                 ) {
                     val settingCardModifier = Modifier
                         .fillMaxWidth()
@@ -242,10 +274,18 @@ class QuickSettingsActivity : ComponentActivity() {
                         )
                         finish()
                     }
+
+
+                    SimpleCard(
+                        currentTextUnit,
+                        "Bottom Padding Item",
+                        null,
+                        settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                    ) {}
                 }
             }
-        }
 
+        }
     }
 
     @Preview
@@ -264,6 +304,25 @@ class QuickSettingsActivity : ComponentActivity() {
                         Modifier.padding(innerPadding)
                     )
                 },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { onBackPressed() },
+                        containerColor = Color(LocalContext.current.config.primaryColor),
+                        contentColor = Color.White,
+                        shape = CircleShape,
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                        modifier = Modifier.size(40.dp)
+
+
+                    ) {
+//                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = "액션 아이콘"
+                        )
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
             )
 
         }
