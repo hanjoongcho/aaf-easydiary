@@ -114,7 +114,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     .weight(1f)
 
                 SwitchCard(
-                    currentTextUnit,
                     stringResource(R.string.markdown_setting_title),
                     stringResource(R.string.markdown_setting_summary),
                     settingCardModifier,
@@ -124,7 +123,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableMarkdown = !enableMarkdown
                 }
                 SwitchCard(
-                    currentTextUnit,
                     stringResource(R.string.enable_welcome_dashboard_popup_title),
                     stringResource(R.string.enable_welcome_dashboard_popup_description),
                     settingCardModifier,
@@ -134,7 +132,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                 }
                 SwitchCard(
-                    currentTextUnit,
                     stringResource(R.string.enable_photo_highlight_title),
                     stringResource(R.string.enable_photo_highlight_description),
                     settingCardModifier,
@@ -145,7 +142,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     initPreference()
                 }
                 SwitchCard(
-                    currentTextUnit,
                     stringResource(R.string.enable_card_view_policy_title),
                     stringResource(R.string.enable_card_view_policy_summary),
                     settingCardModifier,
@@ -155,7 +151,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     enableCardViewPolicy = !enableCardViewPolicy
                 }
                 SwitchCard(
-                    currentTextUnit,
                     "미래일정 숨김",
                     "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
                     settingCardModifier,
@@ -166,7 +161,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 }
 
                 SimpleCard(
-                    currentTextUnit,
                     stringResource(id = R.string.sync_google_calendar_event_title),
                     stringResource(id = R.string.sync_google_calendar_event_summary),
                     settingCardModifier,
@@ -179,7 +173,6 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                     AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                 }
                 SimpleCard(
-                    currentTextUnit,
                     "Quick Settings With Compose",
                     null,
                     settingCardModifier,

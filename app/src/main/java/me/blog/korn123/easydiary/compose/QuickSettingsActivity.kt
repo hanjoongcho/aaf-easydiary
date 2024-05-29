@@ -199,7 +199,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         .weight(1f)
 
                     SwitchCard(
-                        currentTextUnit,
                         stringResource(R.string.markdown_setting_title),
                         stringResource(R.string.markdown_setting_summary),
                         settingCardModifier,
@@ -209,7 +208,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         enableMarkdown = !enableMarkdown
                     }
                     SwitchCard(
-                        currentTextUnit,
                         stringResource(R.string.enable_welcome_dashboard_popup_title),
                         stringResource(R.string.enable_welcome_dashboard_popup_description),
                         settingCardModifier,
@@ -219,7 +217,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                     }
                     SwitchCard(
-                        currentTextUnit,
                         stringResource(R.string.enable_photo_highlight_title),
                         stringResource(R.string.enable_photo_highlight_description),
                         settingCardModifier,
@@ -229,7 +226,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
                     }
                     SwitchCard(
-                        currentTextUnit,
                         stringResource(R.string.enable_card_view_policy_title),
                         stringResource(R.string.enable_card_view_policy_summary),
                         settingCardModifier,
@@ -239,7 +235,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         enableCardViewPolicy = !enableCardViewPolicy
                     }
                     SwitchCard(
-                        currentTextUnit,
                         "미래일정 숨김",
                         "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
                         settingCardModifier,
@@ -250,7 +245,6 @@ class QuickSettingsActivity : ComponentActivity() {
                     }
 
                     SimpleCard(
-                        currentTextUnit,
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
                         settingCardModifier,
@@ -263,7 +257,6 @@ class QuickSettingsActivity : ComponentActivity() {
                         AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
                     SimpleCard(
-                        currentTextUnit,
                         "Quick Settings With Leagacy View",
                         null,
                         settingCardModifier,
@@ -277,7 +270,6 @@ class QuickSettingsActivity : ComponentActivity() {
 
 
                     SimpleCard(
-                        currentTextUnit,
                         "Bottom Padding Item",
                         null,
                         settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
