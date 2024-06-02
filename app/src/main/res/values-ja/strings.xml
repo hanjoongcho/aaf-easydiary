@@ -1027,6 +1027,6 @@
     <string name="delete_unlinked_photo_confirm_message">リンク情報のない写真をデバイス ストアから削除しますか？\nデバイス ストアから削除されても、Google ドライブまたはデバイスに個別にバックアップされたファイルからは削除されません。</string>
     <string name="sync_google_calendar_event_title">[BETA] Googleカレンダーの同期</string>
     <string name="sync_google_calendar_event_summary">Googleカレンダーに登録されたイベントを使用して日記を自動的に作成します。 すでに同期されている日記のイベントは追加されません。</string>
-    <string name="quick_setting_title">クイック設定</string>
+    <string name="quick_setting_title">[BETA] クイック設定</string>
     <string name="quick_setting_summary">このオプションを有効にすると、デバイスを振ってクイック設定画面を開くことができます。</string>
 </resources>

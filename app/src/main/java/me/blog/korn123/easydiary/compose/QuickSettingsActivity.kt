@@ -247,7 +247,7 @@ class QuickSettingsActivity : ComponentActivity() {
                     SimpleCard(
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
-                        settingCardModifier,
+                        settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
                     ) {
                         val alarm = Alarm().apply {
                             sequence = Int.MAX_VALUE
@@ -256,24 +256,17 @@ class QuickSettingsActivity : ComponentActivity() {
                         }
                         AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
-                    SimpleCard(
-                        "Quick Settings With Leagacy View",
-                        null,
-                        settingCardModifier,
-                    ) {
-                        TransitionHelper.startActivityWithTransition(
-                            this@QuickSettingsActivity,
-                            Intent(this@QuickSettingsActivity, QuickSettingsActivity::class.java)
-                        )
-                        finish()
-                    }
-
-
-                    SimpleCard(
-                        "Bottom Padding Item",
-                        null,
-                        settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
-                    ) {}
+//                    SimpleCard(
+//                        "Quick Settings With Leagacy View",
+//                        null,
+//                        settingCardModifier,
+//                    ) {
+//                        TransitionHelper.startActivityWithTransition(
+//                            this@QuickSettingsActivity,
+//                            Intent(this@QuickSettingsActivity, QuickSettingsActivity::class.java)
+//                        )
+//                        finish()
+//                    }
                 }
             }
 

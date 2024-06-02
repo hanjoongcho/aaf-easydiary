@@ -1027,6 +1027,6 @@
     <string name="delete_unlinked_photo_confirm_message">您是否希望从设备存储中删除没有链接信息的照片？即使从设备存储中删除，这些照片也不会从Google Drive或设备上的单独备份文件中删除。</string>
     <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
     <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
-    <string name="quick_setting_title">Quick Settings</string>
+    <string name="quick_setting_title">[BETA] Quick Settings</string>
     <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
 </resources>

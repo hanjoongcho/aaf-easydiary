@@ -1027,6 +1027,6 @@
     <string name="delete_unlinked_photo_confirm_message">ᱟᱢ ᱫᱚ ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱵᱟᱱ ᱞᱤᱝᱠ ᱛᱮ ᱪᱤᱛᱟᱹᱨ ᱢᱮᱴᱟᱣ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ ?\nᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱦᱚᱸ ᱢᱮᱴᱟᱣ ᱞᱮᱠᱷᱟᱱ, ᱱᱚᱣᱟ ᱫᱚ Google Drive ᱥᱮ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱮᱴᱟᱜ ᱵᱚᱠᱚᱯ ᱨᱮᱫᱽ ᱠᱷᱚᱱ ᱵᱟᱭ ᱢᱮᱴᱟᱣᱜᱼᱟ ᱾</string>
     <string name="sync_google_calendar_event_title">[BETA] Google Calendar ᱟᱹᱭᱩᱨᱢᱤᱫ ᱢᱮ</string>
     <string name="sync_google_calendar_event_summary">ᱢᱤᱫᱴᱟᱹᱝ ᱰᱟᱭᱨᱤ ᱫᱚ Google Calendar ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱟᱡ ᱛᱮ ᱛᱮᱭᱟᱨᱚᱜᱼᱟ ᱾ ᱡᱟᱦᱟᱸ ᱥᱮᱰᱭᱩᱞ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱛᱮᱭᱟᱨ ᱠᱟᱱᱟ ᱚᱱᱟ ᱫᱚ ᱵᱟᱭ ᱛᱮᱭᱟᱨᱚᱜᱼᱟ ᱾</string>
-    <string name="quick_setting_title">Quick Settings</string>
+    <string name="quick_setting_title">[BETA] Quick Settings</string>
     <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
 </resources>
