@@ -312,6 +312,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_DISABLE_FUTURE_DIARY, false)
         set(disableFutureDiary) = prefs.edit().putBoolean(SETTING_DISABLE_FUTURE_DIARY, disableFutureDiary).apply()
 
+    var enableShakeDetector: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
+        set(enableShakeDetector) = prefs.edit().putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

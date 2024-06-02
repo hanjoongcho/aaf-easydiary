@@ -39,9 +39,10 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     override fun onResume() {
         useDynamicTheme = !isNightMode()
-
         super.onResume()
-        mShakeDetector?.start(mSensorManager)
+
+        if (config.enableShakeDetector) mShakeDetector?.start(mSensorManager)
+
         if (config.updatePreference) {
             config.updatePreference = false
             startMainActivityWithClearTask()
@@ -66,6 +67,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     override fun onPause() {
         super.onPause()
+
         mShakeDetector?.stop()
         pauseLock()
     }
@@ -235,6 +237,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
     private var mShakeDetector: ShakeDetector? = null
     private fun setupMotionSensor() {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mShakeDetector = ShakeDetector(this).apply { setSensitivity(ShakeDetector.SENSITIVITY_LIGHT) }
+        mShakeDetector =
+            ShakeDetector(this).apply { setSensitivity(ShakeDetector.SENSITIVITY_LIGHT) }
     }
 }

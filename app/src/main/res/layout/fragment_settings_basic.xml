@@ -52,6 +52,32 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_quick_setting"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/quick_setting_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_quick_setting"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/quick_setting_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/enable_welcome_dashboard_popup"
             style="@style/AppCard.Settings">
             <LinearLayout

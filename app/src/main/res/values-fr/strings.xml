@@ -1027,4 +1027,6 @@
     <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
     <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
     <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
+    <string name="quick_setting_title">Quick Settings</string>
+    <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
 </resources>
