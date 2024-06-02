@@ -30,103 +30,41 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:orientation="vertical"
             android:padding="@dimen/component_margin_small"
-            app:alignContent="flex_start"
-            app:alignItems="flex_start"
-            app:flexDirection="row"
-            app:flexWrap="wrap"
-            app:justifyContent="flex_start">
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <androidx.cardview.widget.CardView
                 android:id="@+id/enable_photo_highlight"
-                style="@style/AppCard.Settings"
-                android:layout_width="wrap_content"
-                app:layout_flexGrow="1">
-
-                <LinearLayout style="@style/LinearLayoutVertical">
-
+                style="@style/AppCard.Settings">
+                <LinearLayout
+                    style="@style/LinearLayoutVertical">
                     <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
+                        android:layout_height="wrap_content">
                         <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsTitle"
+                            android:text="@string/enable_photo_highlight_title"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:text="@string/enable_photo_highlight_title" />
-
+                            style="@style/SettingsTitle" />
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/enable_photo_highlight_switcher"
+                            android:clickable="false"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="false" />
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
-
-                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
-                    <!--                        style="@style/SettingsSummary"-->
-                    <!--                        android:text="@string/enable_photo_highlight_description" />-->
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/enable_photo_highlight_description"
+                        style="@style/SettingsSummary" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/disable_future_diary"
-                style="@style/AppCard.Settings"
-                android:layout_width="wrap_content"
-                app:layout_flexGrow="1">
-
-                <LinearLayout style="@style/LinearLayoutVertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsTitle"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:text="Disable Future Diary" />
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/disable_future_diary_switcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="false" />
-                    </LinearLayout>
-
-                    <!--                    <com.simplemobiletools.commons.views.MyTextView-->
-                    <!--                        style="@style/SettingsSummary"-->
-                    <!--                        android:text="If you activate this option, diaries written with events scheduled after today will be disabled from the list." />-->
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/syncGoogleCalendar"
-                style="@style/AppCard.Settings"
-                android:layout_width="wrap_content"
-                app:layout_flexGrow="1">
-
-                <LinearLayout style="@style/LinearLayoutVertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsTitle"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:text="Sync Google Calendar" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-        </com.google.android.flexbox.FlexboxLayout>
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

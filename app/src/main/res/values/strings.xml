@@ -746,6 +746,12 @@
         v1.4.306.202402250 / 2024.02.25\n
         Added Android 14 SCHEDULE_EXACT_ALARM permission handling
     </string>
+    <string name="release_307">
+        v1.4.307.202406020 / 2024.06.02\n
+        Discontinuation of support for devices prior to API 5.0 (Android Lollipop)\n
+        Apply Jetpack Compose to some screens to improve functionality\n
+        Add option to use quick settings
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1027,4 +1033,6 @@
     <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
     <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
     <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
+    <string name="quick_setting_title">[BETA] Quick Settings</string>
+    <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
 </resources>

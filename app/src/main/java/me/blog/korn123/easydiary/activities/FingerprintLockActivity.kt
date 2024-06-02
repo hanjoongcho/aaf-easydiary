@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.content.Intent
@@ -72,6 +73,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onResume() {
         super.onResume()
 
@@ -168,6 +170,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      *   
      ***************************************************************************************************/
     @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("RestrictedApi")
     fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         // 11. fingerprint 센서 상태 및 권한 확인
         if (!isFingerprintAuthAvailable()) {
@@ -180,7 +183,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         // 12. fingerprint authentication callback 등록
         mFingerprintManager
                 .authenticate(cryptoObject, 0 /* flags */, mCancellationSignal, object : FingerprintManagerCompat.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
+                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
                         config.fingerprintAuthenticationFailCount = 0
 
@@ -204,13 +207,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         }
                     }
 
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                         super.onAuthenticationError(errorCode, errString)
                         config.fingerprintAuthenticationFailCount = ++config.fingerprintAuthenticationFailCount
                         updateErrorMessage(errString.toString())
                     }
 
-                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) {
+                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence) {
                         super.onAuthenticationHelp(helpCode, helpString)
                         updateErrorMessage(helpString.toString())
                     }
@@ -222,6 +225,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 }, null)
     }
 
+    @SuppressLint("RestrictedApi")
     @RequiresApi(Build.VERSION_CODES.M)
     fun isFingerprintAuthAvailable(): Boolean {
         // The line below prevents the false positive inspection from Android Studio
@@ -384,6 +388,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      * Indicate whether this device can authenticate the user with biometrics
      * @return true if there are any available biometric sensors and biometrics are enrolled on the device, if not, return false
      */
+    @SuppressLint("RestrictedApi")
     private fun canAuthenticateWithBiometrics(): Boolean {
         // Check whether the fingerprint can be used for authentication (Android M to P)
         if (Build.VERSION.SDK_INT < 29) {

@@ -4,6 +4,11 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.307.202406020 (date: 2024.06.02)
+  * Discontinuation of support for devices prior to Android Version 5.0 (Android Lollipop)
+  * Apply Jetpack Compose to some screens to improve functionality
+  * Add option to use quick settings
+
 # Changes in 1.4.306.202402250 (date: 2024.02.25)
   * Android 14 SCHEDULE_EXACT_ALARM permission acquisition
 

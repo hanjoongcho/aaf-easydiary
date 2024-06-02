@@ -41,30 +41,6 @@
                 android:paddingBottom="35dp"
                 >
                 <androidx.cardview.widget.CardView
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Action Log"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/clearLog"
-                            android:gravity="end"
-                            android:text="Clear log"
-                            style="@style/SettingsTitle" />
-                        <androidx.core.widget.NestedScrollView
-                            android:fillViewport="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:id="@+id/actionLog"
-                                android:layout_height="wrap_content"
-                                style="@style/SettingsSummary" />
-                        </androidx.core.widget.NestedScrollView>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
                     android:onClick="@{() -> view_model.plus()}"
                     style="@style/AppCard.Settings">
                     <LinearLayout
@@ -82,15 +58,16 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/scroll_coroutine"
-                    android:fillViewport="true"
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose_view"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/text_coroutine1_console"
-                        style="@style/SettingsSummary" />
-                </androidx.core.widget.NestedScrollView>
+                    android:layout_height="wrap_content" />
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose_view_gms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </ScrollView>
         <include

@@ -1,6 +1,7 @@
 package me.blog.korn123.commons.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
@@ -56,22 +57,23 @@ class BiometricUtils {
             }
         }
 
+        @SuppressLint("RestrictedApi")
         @Suppress("DEPRECATION")
         fun startListeningFingerprint(activity: AppCompatActivity) {
             val cancellationSignal = CancellationSignal()
             FingerprintManagerCompat.from(activity)
                 .authenticate(null, 0 /* flags */, cancellationSignal, object : FingerprintManagerCompat.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
+                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
                         activity.makeToast("onAuthenticationSucceeded")
                     }
 
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                         super.onAuthenticationError(errorCode, errString)
                         activity.makeToast("onAuthenticationError")
                     }
 
-                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) {
+                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence) {
                         super.onAuthenticationHelp(helpCode, helpString)
                         activity.makeToast("onAuthenticationHelp")
                     }
@@ -90,6 +92,7 @@ class BiometricUtils {
          * to perform this check.
          *
          * */
+        @SuppressLint("RestrictedApi")
         @RequiresApi(Build.VERSION_CODES.M)
         @Suppress("DEPRECATION")
         fun isHardwareSupported(context: Context): Boolean {
@@ -111,6 +114,7 @@ class BiometricUtils {
          * in order to enable fingerprint authentication
          *
          * */
+        @SuppressLint("RestrictedApi")
         @RequiresApi(Build.VERSION_CODES.M)
         @Suppress("DEPRECATION")
         fun isFingerprintAvailable(context: Context): Boolean {

@@ -10,6 +10,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.util.Calendar
@@ -33,14 +34,15 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         useDynamicTheme = !isNightMode()
         super.onCreate(savedInstanceState)
 
-        setupMotionSensor()
+        if (config.enableDebugMode) setupMotionSensor()
     }
 
     override fun onResume() {
         useDynamicTheme = !isNightMode()
-
         super.onResume()
-        mShakeDetector.start(mSensorManager)
+
+        if (config.enableShakeDetector) mShakeDetector?.start(mSensorManager)
+
         if (config.updatePreference) {
             config.updatePreference = false
             startMainActivityWithClearTask()
@@ -65,7 +67,8 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     override fun onPause() {
         super.onPause()
-        mShakeDetector.stop()
+
+        mShakeDetector?.stop()
         pauseLock()
     }
 
@@ -91,7 +94,8 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
      ***************************************************************************************************/
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
-            add(Release(305, R.string.release_306))
+            add(Release(307, R.string.release_307))
+            add(Release(306, R.string.release_306))
             add(Release(305, R.string.release_305))
             add(Release(304, R.string.release_304))
             add(Release(303, R.string.release_303))
@@ -230,11 +234,11 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         }
     }
 
-    private lateinit var mSensorManager: SensorManager
-    private lateinit var mShakeDetector: ShakeDetector
+    private var mSensorManager: SensorManager? = null
+    private var mShakeDetector: ShakeDetector? = null
     private fun setupMotionSensor() {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mShakeDetector = ShakeDetector(this)
-        mShakeDetector.setSensitivity(ShakeDetector.SENSITIVITY_LIGHT)
+        mShakeDetector =
+            ShakeDetector(this).apply { setSensitivity(ShakeDetector.SENSITIVITY_LIGHT) }
     }
 }

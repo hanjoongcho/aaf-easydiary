@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
+import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
@@ -92,35 +94,47 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@activity, Intent(this@activity, CustomizationActivity::class.java))
+                    R.id.primaryColor -> TransitionHelper.startActivityWithTransition(
+                        this@activity,
+                        Intent(this@activity, CustomizationActivity::class.java)
+                    )
+
                     R.id.thumbnailSetting -> {
                         openThumbnailSettingDialog()
                     }
+
                     cardDatetimeSetting.id -> {
                         openDatetimeFormattingSettingDialog()
                     }
+
                     R.id.contentsSummary -> {
                         contentsSummarySwitcher.toggle()
                         config.enableContentsSummary = contentsSummarySwitcher.isChecked
-                        maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+                        maxLines.visibility =
+                            if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
                     }
+
                     R.id.enableCardViewPolicy -> {
                         enableCardViewPolicySwitcher.toggle()
                         config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
                         updateCardViewPolicy(this.root)
                     }
+
                     R.id.multiPickerOption -> {
                         multiPickerOptionSwitcher.toggle()
                         config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
                     }
+
                     R.id.sensitiveOption -> {
                         sensitiveOptionSwitcher.toggle()
                         config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
                     }
+
                     R.id.countCharacters -> {
                         countCharactersSwitcher.toggle()
                         config.enableCountCharacters = countCharactersSwitcher.isChecked
                     }
+
                     R.id.locationInfo -> {
                         locationInfoSwitcher.toggle()
                         when (locationInfoSwitcher.isChecked) {
@@ -128,51 +142,69 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 run {
                                     when (hasGPSPermissions()) {
                                         true -> {
-                                            config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                            config.enableLocationInfo =
+                                                locationInfoSwitcher.isChecked
                                         }
+
                                         false -> {
                                             locationInfoSwitcher.isChecked = false
                                             if (this@activity is EasyDiaryActivity) {
                                                 acquireGPSPermissions(mRequestLocationSourceLauncher) {
                                                     locationInfoSwitcher.isChecked = true
-                                                    config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                                    config.enableLocationInfo =
+                                                        locationInfoSwitcher.isChecked
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+
                             false -> {
                                 config.enableLocationInfo = locationInfoSwitcher.isChecked
                             }
                         }
                     }
+
                     R.id.holdPositionEnterEditScreen -> {
                         holdPositionSwitcher.toggle()
                         config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
                     }
+
                     R.id.maxLines -> {
                         openMaxLinesSettingDialog()
                     }
+
                     R.id.taskSymbolTopOrder -> {
                         taskSymbolTopOrderSwitcher.toggle()
                         config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
                     }
+
                     R.id.enableReviewFlow -> {
                         enableReviewFlowSwitcher.toggle()
                         config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
                     }
+
                     R.id.enable_photo_highlight -> {
                         enablePhotoHighlightSwitcher.toggle()
                         config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
                     }
+
                     R.id.enable_welcome_dashboard_popup -> {
                         enableWelcomeDashboardPopupSwitcher.toggle()
-                        config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopupSwitcher.isChecked
+                        config.enableWelcomeDashboardPopup =
+                            enableWelcomeDashboardPopupSwitcher.isChecked
                     }
+
                     R.id.card_markdown_setting -> {
                         switchMarkdownSetting.toggle()
                         config.enableMarkdown = switchMarkdownSetting.isChecked
+                    }
+
+                    R.id.card_quick_setting -> {
+                        switchQuickSetting.toggle()
+                        config.enableShakeDetector = switchQuickSetting.isChecked
+                        showAlertDialog("Close the current screen to apply the settings.", { _, _ -> finish() }, null)
                     }
                 }
             }
@@ -197,6 +229,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
             enableWelcomeDashboardPopup.setOnClickListener(mOnClickListener)
             cardMarkdownSetting.setOnClickListener(mOnClickListener)
+            cardQuickSetting.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
                 requireActivity().config.calendarStartDay = when (i) {
                     R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -250,6 +283,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     System.currentTimeMillis(), requireContext()
                 )
                 switchMarkdownSetting.isChecked = config.enableMarkdown
+                switchQuickSetting.isChecked = config.enableShakeDetector
             }
         }
     }
