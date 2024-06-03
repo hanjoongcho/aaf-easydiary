@@ -752,6 +752,10 @@
         Apply Jetpack Compose to some screens to improve functionality\n
         Add option to use quick settings
     </string>
+    <string name="release_308">
+        v1.4.308.202406030 / 2024.06.03\n
+        Applying the detailed consent guide policy for OAuth
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
