@@ -384,10 +384,42 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun requestCalendarPermissions(account: Account, permissionCallback: () -> Unit) {
+    /**
+     * OAuth clients must support granular consent, starting June 17, 2024.
+     *
+     * @param account
+     * @param permissionCallback
+     */
+    private fun requestCalendarPermissionEventReadOnly(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
         val credential: GoogleAccountCredential =
-            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR_EVENTS_READONLY))
+            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR_EVENTS_READONLY))
+                .apply { selectedAccount = account }
+        val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+            .setApplicationName(getString(R.string.app_name))
+            .build()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                calendarService.calendarList().list().execute()
+                mPermissionCallback.invoke()
+            } catch (e: UserRecoverableAuthIOException) {
+                withContext(Dispatchers.Main) {
+                    mRequestGoogleCalendarPermissions.launch(e.intent)
+                }
+            }
+        }
+    }
+
+    /**
+     * OAuth clients must support granular consent, starting June 17, 2024.
+     *
+     * @param account
+     * @param permissionCallback
+     */
+    private fun requestCalendarPermissionCalendarReadOnly(account: Account, permissionCallback: () -> Unit) {
+        mPermissionCallback = permissionCallback
+        val credential: GoogleAccountCredential =
+            GoogleAccountCredential.usingOAuth2(requireActivity(), arrayListOf(CalendarScopes.CALENDAR_READONLY))
                 .apply { selectedAccount = account }
         val calendarService: Calendar = Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
             .setApplicationName(getString(R.string.app_name))
@@ -424,37 +456,38 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-            requestCalendarPermissions(account) {
-                val credential = getCalendarCredential(requireContext())
-                val calendarService = getCalendarService(requireContext(), credential)
-                fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
-                    var insertCount = 0
-                    progressContainer.visibility = View.VISIBLE
-                    mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
-                    mBinding.syncGoogleCalendarProgress.visibility = View.VISIBLE
+            requestCalendarPermissionEventReadOnly(account) {
+                requestCalendarPermissionCalendarReadOnly(account) {
+                    val credential = getCalendarCredential(requireContext())
+                    val calendarService = getCalendarService(requireContext(), credential)
+                    fun fetchData(calendarId: String, nextPageToken: String?, total: Int = 0) {
+                        var insertCount = 0
+                        progressContainer.visibility = View.VISIBLE
+                        mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
+                        mBinding.syncGoogleCalendarProgress.visibility = View.VISIBLE
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val result = if (nextPageToken == null) {
-                            calendarService
-                                .events()
-                                .list(calendarId)
-                                .setMaxResults(2000)
-                                .setTimeMin(mTimeMin)
-                                .setTimeMax(mTimeMax)
-                                .setSingleEvents(true)
-                                .execute()
-                        } else {
-                            calendarService
-                                .events()
-                                .list(calendarId)
-                                .setPageToken(nextPageToken)
-                                .setMaxResults(2000)
-                                .setTimeMin(mTimeMin)
-                                .setTimeMax(mTimeMax)
-                                .setSingleEvents(true)
-                                .execute()
-                        }
-                        withContext(Dispatchers.Main) { progressContainer.visibility = View.GONE }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val result = if (nextPageToken == null) {
+                                calendarService
+                                    .events()
+                                    .list(calendarId)
+                                    .setMaxResults(2000)
+                                    .setTimeMin(mTimeMin)
+                                    .setTimeMax(mTimeMax)
+                                    .setSingleEvents(true)
+                                    .execute()
+                            } else {
+                                calendarService
+                                    .events()
+                                    .list(calendarId)
+                                    .setPageToken(nextPageToken)
+                                    .setMaxResults(2000)
+                                    .setTimeMin(mTimeMin)
+                                    .setTimeMax(mTimeMax)
+                                    .setSingleEvents(true)
+                                    .execute()
+                            }
+                            withContext(Dispatchers.Main) { progressContainer.visibility = View.GONE }
 //                        val descriptions = arrayListOf<String>()
                             result.items.forEachIndexed { index, item ->
                                 Log.i(AAF_TEST, "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}")
@@ -472,88 +505,89 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                     requireActivity().showAlertDialog("${DateUtils.getDateTimeStringFromTimeMillis(mTimeMin.value)} ~ ${DateUtils.getDateTimeStringFromTimeMillis(mTimeMax.value)} 기간에 등록된 ${total.plus(insertCount)}건의 이벤트가 등록되었습니다.", null, null)
                                 }
                             }
+                        }
                     }
-                }
-                fun fetchCalendarList() {
-                    var alertDialog: AlertDialog? = null
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val result = calendarService.calendarList().list().execute()
-                        withContext(Dispatchers.Main) {
-                            val builder = AlertDialog.Builder(requireActivity())
-                            builder.setNegativeButton(getString(android.R.string.cancel), null)
-                            val dialogSyncGoogleCalendarBinding = DialogSyncGoogleCalendarBinding.inflate(layoutInflater)
-                            val calendarInfo = ArrayList<Map<String, String>>()
-                            result.items.forEach { calendar ->
-                                calendarInfo.add(mapOf(
-                                    "optionTitle" to calendar.summary,
-                                    "optionValue" to calendar.id
-                                ))
-                            }
-                            val optionItemAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, calendarInfo, null, null, false)
-                            dialogSyncGoogleCalendarBinding.run {
-                                listView.adapter = optionItemAdapter
-                                listView.setOnItemClickListener { parent, view, position, id ->
-                                    calendarInfo[position]["optionValue"]?.let {
-                                        fetchData(it, null)
-                                        alertDialog?.dismiss()
+                    fun fetchCalendarList() {
+                        var alertDialog: AlertDialog? = null
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val result = calendarService.calendarList().list().execute()
+                            withContext(Dispatchers.Main) {
+                                val builder = AlertDialog.Builder(requireActivity())
+                                builder.setNegativeButton(getString(android.R.string.cancel), null)
+                                val dialogSyncGoogleCalendarBinding = DialogSyncGoogleCalendarBinding.inflate(layoutInflater)
+                                val calendarInfo = ArrayList<Map<String, String>>()
+                                result.items.forEach { calendar ->
+                                    calendarInfo.add(mapOf(
+                                        "optionTitle" to calendar.summary,
+                                        "optionValue" to calendar.id
+                                    ))
+                                }
+                                val optionItemAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, calendarInfo, null, null, false)
+                                dialogSyncGoogleCalendarBinding.run {
+                                    listView.adapter = optionItemAdapter
+                                    listView.setOnItemClickListener { parent, view, position, id ->
+                                        calendarInfo[position]["optionValue"]?.let {
+                                            fetchData(it, null)
+                                            alertDialog?.dismiss()
+                                        }
+                                    }
+
+                                    val fromCalendar = getCalendarInstance(false, java.util.Calendar.MONTH, -1)
+                                    val toCalendar = getCalendarInstance(true, java.util.Calendar.MONTH, 1)
+                                    mTimeMin = DateTime(fromCalendar.timeInMillis)
+                                    mTimeMax = DateTime(toCalendar.timeInMillis)
+
+                                    mSDatePickerDialog = DatePickerDialog(
+                                        requireContext()
+                                        , { _, year, month, dayOfMonth ->
+                                            val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+                                            mTimeMin = DateTime(startMillis)
+                                            textSyncFromDate.text = DateUtils.getDateTimeStringFromTimeMillis(startMillis)
+                                        }
+                                        , fromCalendar.get(java.util.Calendar.YEAR)
+                                        , fromCalendar.get(java.util.Calendar.MONTH)
+                                        , fromCalendar.get(java.util.Calendar.DAY_OF_MONTH)
+                                    )
+
+                                    mEDatePickerDialog = DatePickerDialog(
+                                        requireContext()
+                                        , { _, year, month, dayOfMonth ->
+                                            val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, true)
+                                            mTimeMax = DateTime(endMillis)
+                                            textSyncToDate.text = DateUtils.getDateTimeStringFromTimeMillis(endMillis)
+                                        }
+                                        , toCalendar.get(java.util.Calendar.YEAR)
+                                        , toCalendar.get(java.util.Calendar.MONTH)
+                                        , toCalendar.get(java.util.Calendar.DAY_OF_MONTH)
+                                    )
+
+                                    textSyncFromDate.run {
+                                        setOnClickListener { mSDatePickerDialog.show() }
+                                        text = DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
+                                    }
+                                    textSyncToDate.run {
+                                        setOnClickListener { mEDatePickerDialog.show() }
+                                        text = DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
+                                    }
+
+                                    requireActivity().run {
+                                        FontUtils.setFontsTypeface(requireContext(), null, cardSyncOptions)
+                                        initTextSize(cardSyncOptions)
+                                        updateTextColors(cardSyncOptions)
+                                        updateAppViews(dialogSyncGoogleCalendarBinding.root)
+                                        updateCardViewPolicy(dialogSyncGoogleCalendarBinding.root)
                                     }
                                 }
-
-                                val fromCalendar = getCalendarInstance(false, java.util.Calendar.MONTH, -1)
-                                val toCalendar = getCalendarInstance(true, java.util.Calendar.MONTH, 1)
-                                mTimeMin = DateTime(fromCalendar.timeInMillis)
-                                mTimeMax = DateTime(toCalendar.timeInMillis)
-
-                                mSDatePickerDialog = DatePickerDialog(
-                                    requireContext()
-                                    , { _, year, month, dayOfMonth ->
-                                        val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-                                        mTimeMin = DateTime(startMillis)
-                                        textSyncFromDate.text = DateUtils.getDateTimeStringFromTimeMillis(startMillis)
-                                    }
-                                    , fromCalendar.get(java.util.Calendar.YEAR)
-                                    , fromCalendar.get(java.util.Calendar.MONTH)
-                                    , fromCalendar.get(java.util.Calendar.DAY_OF_MONTH)
-                                )
-
-                                mEDatePickerDialog = DatePickerDialog(
-                                    requireContext()
-                                    , { _, year, month, dayOfMonth ->
-                                        val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, true)
-                                        mTimeMax = DateTime(endMillis)
-                                        textSyncToDate.text = DateUtils.getDateTimeStringFromTimeMillis(endMillis)
-                                    }
-                                    , toCalendar.get(java.util.Calendar.YEAR)
-                                    , toCalendar.get(java.util.Calendar.MONTH)
-                                    , toCalendar.get(java.util.Calendar.DAY_OF_MONTH)
-                                )
-
-                                textSyncFromDate.run {
-                                    setOnClickListener { mSDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
+                                requireActivity().clearHoldOrientation()
+                                progressContainer.visibility = View.GONE
+                                alertDialog = builder.create().apply {
+                                    requireActivity().updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogSyncGoogleCalendarBinding.root, "Sync Google Calendar")
                                 }
-                                textSyncToDate.run {
-                                    setOnClickListener { mEDatePickerDialog.show() }
-                                    text = DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
-                                }
-
-                                requireActivity().run {
-                                    FontUtils.setFontsTypeface(requireContext(), null, cardSyncOptions)
-                                    initTextSize(cardSyncOptions)
-                                    updateTextColors(cardSyncOptions)
-                                    updateAppViews(dialogSyncGoogleCalendarBinding.root)
-                                    updateCardViewPolicy(dialogSyncGoogleCalendarBinding.root)
-                                }
-                            }
-                            requireActivity().clearHoldOrientation()
-                            progressContainer.visibility = View.GONE
-                            alertDialog = builder.create().apply {
-                                requireActivity().updateAlertDialogWithIcon(DialogMode.INFO, this, null, dialogSyncGoogleCalendarBinding.root, "Sync Google Calendar")
                             }
                         }
                     }
+                    fetchCalendarList()
                 }
-                fetchCalendarList()
             }
         }
     }
