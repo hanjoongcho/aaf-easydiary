@@ -273,7 +273,7 @@ class QuickSettingsActivity : ComponentActivity() {
         }
     }
 
-    @Preview
+    @Preview(heightDp = 1200)
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme {

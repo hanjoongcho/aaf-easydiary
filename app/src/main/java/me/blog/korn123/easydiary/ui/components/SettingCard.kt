@@ -2,10 +2,13 @@ package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -164,16 +167,20 @@ fun SimpleCard(
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
-            Text(
-                text = title,
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
+            Row(
+                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontWeight = FontWeight.Bold,
 //                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
             description?.let {
                 Text(
                     modifier = Modifier
@@ -279,7 +286,12 @@ fun SwitchCard(
                     ),
                 )
                 Switch(
-                    modifier = Modifier.absolutePadding(left = 5.dp),
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+
                     checked = isOn,
                     onCheckedChange = {
                         callback.invoke()
@@ -299,6 +311,7 @@ fun SwitchCard(
             }
             description?.let {
                 Row(
+                    modifier = Modifier.padding(top = 5.dp)
                 ) {
                     Text(
                         text = description,
