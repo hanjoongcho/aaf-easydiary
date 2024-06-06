@@ -194,9 +194,18 @@ class QuickSettingsActivity : ComponentActivity() {
 //                overflow = FlowRowOverflow.Clip,
                     maxItemsInEachRow = 1
                 ) {
-                    val settingCardModifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+
+                    val settingCardModifier =
+                        if (enableCardViewPolicy) Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(
+                                3.dp,
+                                3.dp
+                            ) else Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(1.dp, 1.dp)
 
                     SwitchCard(
                         stringResource(R.string.markdown_setting_title),

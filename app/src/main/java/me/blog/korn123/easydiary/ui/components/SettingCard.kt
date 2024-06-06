@@ -155,10 +155,7 @@ fun SimpleCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)).clickable {
+        modifier = modifier.clickable {
             callback.invoke()
         },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -259,11 +256,10 @@ fun SwitchCard(
         val temp = pixelValue.toDp()
         temp.toSp()
     }
-
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(3.dp, 3.dp) else modifier.padding(1.dp, 1.dp),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = {
             callback.invoke()
