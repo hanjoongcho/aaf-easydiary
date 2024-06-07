@@ -194,7 +194,7 @@ class QuickSettingsActivity : ComponentActivity() {
 //                overflow = FlowRowOverflow.Clip,
                     maxItemsInEachRow = 1
                 ) {
-
+                    // Pass modifier using mutableState to recompose when enableCardViewPolicy is changed.
                     val settingCardModifier =
                         if (enableCardViewPolicy) Modifier
                             .fillMaxWidth()

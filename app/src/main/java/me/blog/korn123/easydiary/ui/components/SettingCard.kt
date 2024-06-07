@@ -45,62 +45,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
-
-@Composable
-fun ScrollableCard(
-    title: String,
-    description: String?,
-    modifier: Modifier,
-    scrollState: ScrollState
-) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
-
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(15.dp)
-                .height(200.dp)
-                .verticalScroll(scrollState)
-        ) {
-            Text(
-                text = title,
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
-            description?.let {
-                Text(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    text = description,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
-            }
-        }
-    }
-}
-
 @Composable
 fun CategoryTitleCard(
     title: String,
@@ -155,9 +99,10 @@ fun SimpleCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = modifier.clickable {
-            callback.invoke()
-        },
+        modifier = modifier
+            .clickable {
+                callback.invoke()
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         val scrollState = rememberScrollState()
@@ -190,54 +135,6 @@ fun SimpleCard(
                     ),
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun SymbolCard(
-    modifier: Modifier,
-    viewModel: BaseDevViewModel,
-    callback: () -> Unit
-) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
-    val symbol by viewModel.symbol.observeAsState(1)
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)).clickable {
-            callback.invoke()
-        },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        val scrollState = rememberScrollState()
-        Row(
-            modifier = Modifier.padding(15.dp)
-        ) {
-            Text(
-                text = symbol.toString(),
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
-            Image(
-                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
-                contentDescription = null,
-                modifier = Modifier.size(64.dp),
-                contentScale = ContentScale.Crop
-            )
         }
     }
 }
@@ -319,6 +216,109 @@ fun SwitchCard(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ScrollableCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    scrollState: ScrollState
+) {
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .height(200.dp)
+                .verticalScroll(scrollState)
+        ) {
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                    color = Color(LocalContext.current.config.textColor),
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                ),
+            )
+            description?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SymbolCard(
+    modifier: Modifier,
+    viewModel: BaseDevViewModel,
+    callback: () -> Unit
+) {
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+    val symbol by viewModel.symbol.observeAsState(1)
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)).clickable {
+            callback.invoke()
+        },
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        val scrollState = rememberScrollState()
+        Row(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Text(
+                text = symbol.toString(),
+                style = TextStyle(
+                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                    fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                    color = Color(LocalContext.current.config.textColor),
+                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                ),
+            )
+            Image(
+                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }

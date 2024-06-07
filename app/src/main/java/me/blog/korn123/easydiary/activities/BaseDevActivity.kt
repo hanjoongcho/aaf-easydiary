@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -194,11 +196,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 AppTheme {
                     val configuration = LocalConfiguration.current
                     val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-
                     Column {
-                        val settingCardModifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                        val settingCardModifier =
+                            if (config.enableCardViewPolicy) Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(3.dp, 3.dp)
+                            else Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(1.dp, 1.dp)
                         CustomLauncher(settingCardModifier, maxItemsInEachRow)
                         Notification(settingCardModifier, maxItemsInEachRow)
                         AlertDialog(settingCardModifier, maxItemsInEachRow)
