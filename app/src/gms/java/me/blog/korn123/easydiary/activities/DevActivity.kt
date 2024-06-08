@@ -17,8 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,6 +31,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.services.FullBackupService
+import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -75,28 +74,14 @@ class DevActivity : BaseDevActivity() {
 
         mBinding.composeView.setContent {
             AppTheme {
-                val currentContext = LocalContext.current
-                val pixelValue = currentContext.config.settingFontSize
-                val density = LocalDensity.current
-                val currentTextUnit = with (density) {
-                    val temp = pixelValue.toDp()
-                    temp.toSp()
-                }
                 val configuration = LocalConfiguration.current
                 val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
                 val scrollState = rememberScrollState()
 
-                Column(modifier = Modifier.verticalScroll(scrollState))
-                {
-                    val settingCardModifier =
-                        if (config.enableCardViewPolicy) Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(3.dp, 3.dp)
-                        else Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(1.dp, 1.dp)
+                CardContainer {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                     Notification(settingCardModifier, maxItemsInEachRow)
                     AlertDialog(settingCardModifier, maxItemsInEachRow)
@@ -165,7 +150,6 @@ class DevActivity : BaseDevActivity() {
             }
         }
     }
-
 
 
     /***************************************************************************************************

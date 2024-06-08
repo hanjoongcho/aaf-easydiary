@@ -110,6 +110,7 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -607,7 +608,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
     ) {
         CategoryTitleCard(title = "Custom Launcher")
         FlowRow(
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
+            modifier = Modifier.padding(6.dp, 3.dp)
         ) {
             SimpleCard(
                 "EasyDiary Launcher",
@@ -788,7 +790,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-            Column {
+            CardContainer {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)

@@ -2,10 +2,9 @@ package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.defaultMinSize
@@ -44,6 +43,29 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+
+const val verticalPadding = 4.5F
+const val horizontalPadding = 3F
+
+@Composable
+fun CardContainer(
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = if (enableCardViewPolicy) Modifier
+            .padding(6.dp, 6.dp)
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+        else Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+
+    ) {
+        content()
+    }
+}
 
 @Composable
 fun CategoryTitleCard(
@@ -87,6 +109,7 @@ fun SimpleCard(
     title: String,
     description: String?,
     modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit = {}
 ) {
     val pixelValue = LocalContext.current.config.settingFontSize
@@ -99,7 +122,8 @@ fun SimpleCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = modifier
+        modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
             },
@@ -156,7 +180,11 @@ fun SwitchCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = modifier,
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = {
             callback.invoke()
@@ -322,3 +350,4 @@ fun SymbolCard(
         }
     }
 }
+

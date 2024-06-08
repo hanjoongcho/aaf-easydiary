@@ -56,6 +56,7 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -175,15 +176,7 @@ class QuickSettingsActivity : ComponentActivity() {
                 }
             }
 
-            Column(
-                modifier = modifier
-//                    .fillMaxSize()
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(scrollState)
-
-                    .padding(0.dp, 0.dp, 0.dp, 0.dp)
-            ) {
+            CardContainer(enableCardViewPolicy) {
                 FlowRow(
                     modifier = Modifier,
 //                    .padding(3.dp, 3.dp)
@@ -195,23 +188,14 @@ class QuickSettingsActivity : ComponentActivity() {
                     maxItemsInEachRow = 1
                 ) {
                     // Pass modifier using mutableState to recompose when enableCardViewPolicy is changed.
-                    val settingCardModifier =
-                        if (enableCardViewPolicy) Modifier
+                    val settingCardModifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(
-                                3.dp,
-                                3.dp
-                            ) else Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(1.dp, 1.dp)
-
                     SwitchCard(
                         stringResource(R.string.markdown_setting_title),
                         stringResource(R.string.markdown_setting_summary),
                         settingCardModifier,
-                        enableMarkdown
+                        enableCardViewPolicy,
                     ) {
                         context.config.enableMarkdown = !enableMarkdown
                         enableMarkdown = !enableMarkdown
@@ -257,6 +241,7 @@ class QuickSettingsActivity : ComponentActivity() {
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
                         settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                        enableCardViewPolicy
                     ) {
                         val alarm = Alarm().apply {
                             sequence = Int.MAX_VALUE
