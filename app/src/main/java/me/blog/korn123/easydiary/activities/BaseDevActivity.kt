@@ -31,11 +31,10 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -46,9 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -135,6 +132,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    protected lateinit var mBinding: ActivityBaseDevBinding
     private var mNotificationCount = 9000
     private var mCoroutineJob1: Job? = null
     private val mViewModel: BaseDevViewModel by viewModels()
@@ -164,7 +162,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         FlexboxLayout.LayoutParams.WRAP_CONTENT
         , FlexboxLayout.LayoutParams.WRAP_CONTENT
     )
-    protected lateinit var mBinding: ActivityBaseDevBinding
+
     private val mPickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
         if (uris.isNotEmpty()) {
             showAlertDialog(uris.joinToString(",") { uri -> uri.toString() }, null, null, DialogMode.INFO, false)
@@ -180,43 +178,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base_dev)
-        mBinding.lifecycleOwner = this
-        mBinding.viewModel = mViewModel
-
+        mBinding = ActivityBaseDevBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
-        }
-
-        val viewModel: BaseDevViewModel by viewModels()
-        mBinding.run {
-            composeView.setContent {
-                AppTheme {
-                    val configuration = LocalConfiguration.current
-                    val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-                    Column {
-                        val settingCardModifier =
-                            if (config.enableCardViewPolicy) Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(3.dp, 3.dp)
-                            else Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(1.dp, 1.dp)
-                        CustomLauncher(settingCardModifier, maxItemsInEachRow)
-                        Notification(settingCardModifier, maxItemsInEachRow)
-                        AlertDialog(settingCardModifier, maxItemsInEachRow)
-                        Etc(settingCardModifier, maxItemsInEachRow, viewModel)
-                        LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                        DebugToast(settingCardModifier, maxItemsInEachRow)
-                        Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
-                        FingerPrint(settingCardModifier, maxItemsInEachRow)
-                    }
-                }
-            }
         }
     }
 
@@ -235,7 +202,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun Etc(settingCardModifier: Modifier, maxItemsInEachRow: Int, viewModel: BaseDevViewModel) {
+    protected fun Etc(settingCardModifier: Modifier, maxItemsInEachRow: Int, viewModel: BaseDevViewModel) {
         val currentContext = LocalContext.current
         CategoryTitleCard(title = "Etc.")
         FlowRow(
@@ -443,7 +410,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun Notification(
+    protected fun Notification(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
@@ -485,7 +452,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun LocationManager(
+    protected fun LocationManager(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel
@@ -536,7 +503,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun AlertDialog(
+    protected fun AlertDialog(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
@@ -580,7 +547,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun DebugToast(
+    protected fun DebugToast(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
@@ -634,7 +601,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun CustomLauncher(
+    protected fun CustomLauncher(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
@@ -667,7 +634,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun Coroutine(
+    protected fun Coroutine(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel
@@ -817,7 +784,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun CustomLauncherPreview() {
+    protected fun CustomLauncherPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -832,7 +799,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun NotificationPreview() {
+    protected fun NotificationPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -847,7 +814,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun AlertDialogPreview() {
+    protected fun AlertDialogPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -862,7 +829,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 1500)
     @Composable
-    private fun EtcPreview() {
+    protected fun EtcPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -877,7 +844,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun LocationManagerPreview() {
+    protected fun LocationManagerPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -892,7 +859,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun DebugToastPreview() {
+    protected fun DebugToastPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -907,7 +874,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 600)
     @Composable
-    private fun CoroutinePreview() {
+    protected fun CoroutinePreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
@@ -922,7 +889,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @Preview(heightDp = 300)
     @Composable
-    private fun FingerPrintPreview() {
+    protected fun FingerPrintPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3

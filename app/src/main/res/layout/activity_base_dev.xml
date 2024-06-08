@@ -1,84 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="view_model"
-            type="me.blog.korn123.easydiary.viewmodels.BaseDevViewModel" />
-    </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.google.android.material.appbar.AppBarLayout
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.AppBarLayout>
-        <ScrollView
-            app:layout_constraintTop_toBottomOf="@+id/app_bar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/main_holder"
-            android:fillViewport="true"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-            <LinearLayout
-                style="@style/LinearLayoutVertical"
-                android:id="@+id/linear_dev_container"
-                android:paddingTop="@dimen/component_margin_small"
-                android:paddingLeft="@dimen/component_margin_small"
-                android:paddingRight="@dimen/component_margin_small"
-                android:paddingBottom="35dp"
-                >
-                <androidx.cardview.widget.CardView
-                    android:onClick="@{() -> view_model.plus()}"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Live Data"
-                            style="@style/SettingsTitle" />
-                        <ImageView
-                            app:symbolSequence="@{view_model.symbol}"
-                            android:layout_width="@dimen/diary_symbol_width"
-                            android:layout_height="@dimen/diary_symbol_height" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="@{Long.toString(view_model.symbol)}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/compose_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/compose_view_gms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </ScrollView>
-        <include
-            android:id="@+id/partial_settings_progress"
-            layout="@layout/fragment_settings_progress"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    <LinearLayout
+        android:id="@+id/main_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        style="@style/LinearLayoutVertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar">
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/partial_settings_progress"
+        layout="@layout/fragment_settings_progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 

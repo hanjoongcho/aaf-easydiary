@@ -1,23 +1,24 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -35,6 +36,7 @@ import me.blog.korn123.easydiary.services.FullBackupService
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {
 
@@ -43,7 +45,6 @@ class DevActivity : BaseDevActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
-    private lateinit var mPermissionCallback: () -> Unit
 
 
     /***************************************************************************************************
@@ -70,8 +71,9 @@ class DevActivity : BaseDevActivity() {
                 }
             }
         }
+        val viewModel: BaseDevViewModel by viewModels()
 
-        mBinding.composeViewGms.setContent {
+        mBinding.composeView.setContent {
             AppTheme {
                 val currentContext = LocalContext.current
                 val pixelValue = currentContext.config.settingFontSize
@@ -82,8 +84,10 @@ class DevActivity : BaseDevActivity() {
                 }
                 val configuration = LocalConfiguration.current
                 val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+                val scrollState = rememberScrollState()
 
-                Column {
+                Column(modifier = Modifier.verticalScroll(scrollState))
+                {
                     val settingCardModifier =
                         if (config.enableCardViewPolicy) Modifier
                             .fillMaxWidth()
@@ -93,7 +97,15 @@ class DevActivity : BaseDevActivity() {
                             .fillMaxWidth()
                             .weight(1f)
                             .padding(1.dp, 1.dp)
-                    GoogleMobileService(currentContext, currentTextUnit, false, settingCardModifier, maxItemsInEachRow)
+                    CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                    Notification(settingCardModifier, maxItemsInEachRow)
+                    AlertDialog(settingCardModifier, maxItemsInEachRow)
+                    Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                    LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
+                    DebugToast(settingCardModifier, maxItemsInEachRow)
+                    Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
+                    FingerPrint(settingCardModifier, maxItemsInEachRow)
+                    GoogleMobileService(settingCardModifier, maxItemsInEachRow)
                 }
             }
         }
@@ -107,9 +119,6 @@ class DevActivity : BaseDevActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun GoogleMobileService(
-        currentContext: Context,
-        currentTextUnit: TextUnit,
-        isPreview: Boolean,
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int
     ) {
