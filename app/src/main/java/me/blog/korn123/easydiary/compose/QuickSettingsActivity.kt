@@ -195,7 +195,7 @@ class QuickSettingsActivity : ComponentActivity() {
                         stringResource(R.string.markdown_setting_title),
                         stringResource(R.string.markdown_setting_summary),
                         settingCardModifier,
-                        enableCardViewPolicy,
+                        enableMarkdown,
                     ) {
                         context.config.enableMarkdown = !enableMarkdown
                         enableMarkdown = !enableMarkdown

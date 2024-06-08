@@ -44,7 +44,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
-const val verticalPadding = 4.5F
+const val verticalPadding = 4F
 const val horizontalPadding = 3F
 
 @Composable
@@ -55,7 +55,7 @@ fun CardContainer(
     val scrollState = rememberScrollState()
     Column(
         modifier = if (enableCardViewPolicy) Modifier
-            .padding(6.dp, 6.dp)
+            .padding(6.dp, 0.dp)
             .fillMaxWidth()
             .verticalScroll(scrollState)
         else Modifier
@@ -127,7 +127,7 @@ fun SimpleCard(
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
     ) {
         val scrollState = rememberScrollState()
         Column(
@@ -185,7 +185,7 @@ fun SwitchCard(
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = {
             callback.invoke()
         }
