@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.309.202406100 (date: 2024.06.10)
+  * Fixed Android 14 Foreground Service permission issue
+
 # Changes in 1.4.308.202406030 (date: 2024.06.03)
   * Applying the detailed consent guide policy for OAuth
 
