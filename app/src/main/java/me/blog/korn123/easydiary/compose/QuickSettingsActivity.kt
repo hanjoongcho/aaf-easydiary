@@ -50,9 +50,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.QuickSettingsActivity
+import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getStatusBarColor
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -127,6 +129,17 @@ class QuickSettingsActivity : ComponentActivity() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
+    override fun onResume() {
+        super.onResume()
+        resumeLock()
+        applyPolicyForRecentApps()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseLock()
+    }
+
 
     /***************************************************************************************************
      *   Define Compose
@@ -148,7 +161,6 @@ class QuickSettingsActivity : ComponentActivity() {
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
 
-        val scrollState = rememberScrollState()
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.background(Color(context.config.screenBackgroundColor))
