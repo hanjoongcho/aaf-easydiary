@@ -39,8 +39,7 @@ android {
         signingConfig signingConfigs.config
 //        ndk.debugSymbolLevel = 'FULL'
     }
-//    ndkVersion "25.0.8221429"
-//    ndkVersion "26.3.11579264"
+//    ndkVersion "25.2.9519653"
     flavorDimensions += "buildType"
     productFlavors {
         gmsProd {
@@ -131,38 +130,38 @@ dependencies {
 
     // androidx
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.biometric:biometric:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1'
     implementation 'androidx.activity:activity-ktx:1.9.0'
-    implementation 'androidx.fragment:fragment-ktx:1.7.0'
+    implementation 'androidx.fragment:fragment-ktx:1.7.1'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation ('androidx.work:work-runtime-ktx:2.9.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     implementation "androidx.browser:browser:1.8.0"
     implementation 'androidx.activity:activity-compose:1.9.0'
 
     // compose
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.1'
     implementation 'androidx.compose.runtime:runtime-livedata:1.6.7'
     implementation 'androidx.compose.material3:material3:1.2.1'
     implementation 'androidx.compose.ui:ui-tooling-preview:1.6.7'
-    implementation 'androidx.compose.foundation:foundation-layout:1.7.0-alpha08'
+    implementation 'androidx.compose.foundation:foundation-layout:1.7.0-beta02'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.6.7'
 
     // google components for develop package (not foss)
-    gmsDevImplementation 'com.google.android.gms:play-services-auth:21.1.1'
+    gmsDevImplementation 'com.google.android.gms:play-services-auth:21.2.0'
     gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
     gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsDevImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components for production package (not foss)
-    gmsProdImplementation 'com.google.android.gms:play-services-auth:21.1.1'
+    gmsProdImplementation 'com.google.android.gms:play-services-auth:21.2.0'
     gmsProdImplementation 'com.google.android.play:core:1.10.3'
     gmsProdImplementation 'com.google.android.play:core-ktx:1.8.1'
     gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
@@ -174,7 +173,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.google.guava:guava:30.1.1-android'
 
     // apache commons
     // From version 2.7, it calls the java.nio.file API internally.
@@ -214,8 +213,8 @@ dependencies {
     implementation 'io.noties.markwon:ext-strikethrough:4.6.2'
     implementation 'io.noties:prism4j:2.0.0'
     implementation 'com.squareup:seismic:1.0.3'
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:2.11.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.11.0"
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
