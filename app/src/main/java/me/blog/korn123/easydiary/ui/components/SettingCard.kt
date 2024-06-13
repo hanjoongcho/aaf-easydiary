@@ -122,8 +122,8 @@ fun SimpleCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
-            .padding(1.dp, 1.dp)
+        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp))
             .clickable {
                 callback.invoke()
             },
