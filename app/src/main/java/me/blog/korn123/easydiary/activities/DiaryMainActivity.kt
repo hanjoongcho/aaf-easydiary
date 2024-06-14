@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
@@ -154,6 +155,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mBinding.root.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                return if (viewModel.isReady.value == true) {
+                    mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
+                    true
+
+                } else {
+                    false
+                }
+            }
+        })
+
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
         supportActionBar?.run {
@@ -190,6 +205,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             )
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.isReady.value = true
+        } , 1000)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

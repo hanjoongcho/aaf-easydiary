@@ -144,6 +144,7 @@ dependencies {
     implementation ('androidx.work:work-runtime-ktx:2.9.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     implementation "androidx.browser:browser:1.8.0"
     implementation 'androidx.activity:activity-compose:1.9.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
 
     // compose
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.1'

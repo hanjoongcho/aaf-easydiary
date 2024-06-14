@@ -16,4 +16,19 @@
         <item name="android:fastScrollTrackDrawable">@null</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@android:color/transparent</item>
     </style>
+
+    <!-- App Theme -->
+    <style name="SplashScreenTheme" parent="SplashScreenTheme.Base">
+        <!-- animated icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/aaf_easydiary</item>
+
+        <!-- screen background color -->
+        <item name="windowSplashScreenBackground">#F8F8F8</item>
+
+        <!-- icon background color-->
+        <!--        <item name="android:windowSplashScreenIconBackgroundColor">@color/iconBackgroundColor</item>-->
+
+        <!-- brand image-->
+        <!--        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_brand_tm_bold_white</item>-->
+    </style>
 </resources>
