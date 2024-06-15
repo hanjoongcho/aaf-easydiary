@@ -1,10 +1,10 @@
 package me.blog.korn123.easydiary.activities
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,16 +18,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.view.animation.AnticipateInterpolator
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
-import com.squareup.seismic.ShakeDetector
 import com.zhpan.bannerview.constants.PageStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,7 +88,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
-import java.util.Calendar
 import java.util.Locale
 
 
@@ -153,6 +154,27 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         return mBinding.diaryListView
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setOnExitAnimationListener() {
+        splashScreen.setOnExitAnimationListener {splashScreenView ->
+            // Create your custom animation.
+            val fadeOut = ObjectAnimator.ofFloat(
+                splashScreenView,
+                "alpha",
+                1f,
+                0f
+            )
+//            fadeOut.interpolator = AnticipateInterpolator()
+            fadeOut.duration = 300L
+
+            // Call SplashScreenView.remove at the end of your custom animation.
+            fadeOut.doOnEnd { splashScreenView.remove() }
+
+            // Run your animation.
+            fadeOut.start()
+        }
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -168,6 +190,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
         })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setOnExitAnimationListener()
 
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()

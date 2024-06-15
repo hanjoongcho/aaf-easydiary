@@ -23,7 +23,7 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/aaf_easydiary</item>
 
         <!-- screen background color -->
-        <item name="windowSplashScreenBackground">#F8F8F8</item>
+<!--        <item name="windowSplashScreenBackground">#F8F8F8</item>-->
 
         <!-- icon background color-->
         <!--        <item name="android:windowSplashScreenIconBackgroundColor">@color/iconBackgroundColor</item>-->
