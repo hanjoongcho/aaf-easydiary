@@ -18,7 +18,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
-import android.view.animation.AnticipateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.BounceInterpolator
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -158,14 +159,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun setOnExitAnimationListener() {
         splashScreen.setOnExitAnimationListener {splashScreenView ->
             // Create your custom animation.
-            val fadeOut = ObjectAnimator.ofFloat(
-                splashScreenView,
-                "alpha",
-                1f,
-                0f
-            )
-//            fadeOut.interpolator = AnticipateInterpolator()
-            fadeOut.duration = 300L
+            val fadeOut = ObjectAnimator.ofFloat(splashScreenView, "alpha", 1f, 0f)
+            fadeOut.interpolator = AccelerateInterpolator()
+            fadeOut.duration = 500L
 
             // Call SplashScreenView.remove at the end of your custom animation.
             fadeOut.doOnEnd { splashScreenView.remove() }
