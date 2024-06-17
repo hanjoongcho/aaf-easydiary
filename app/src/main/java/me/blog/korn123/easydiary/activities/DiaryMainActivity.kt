@@ -228,7 +228,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.isReady.value = true
-        } , 1000)
+        } , 700)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

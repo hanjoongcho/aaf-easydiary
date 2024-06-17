@@ -61,7 +61,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:duration="98"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -72,8 +72,8 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="98"
-                android:duration="105"
+                android:startOffset="50"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -81,35 +81,35 @@
         </aapt:attr>
     </target>
     <target android:name="path_s">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillColor"
+                android:startOffset="100"
+                android:duration="50"
+                android:valueFrom="#00F8F8F8"
+                android:valueTo="#07abb3"
+                android:valueType="colorType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_y">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillColor"
+                android:startOffset="150"
+                android:duration="50"
+                android:valueFrom="#00F8F8F8"
+                android:valueTo="#07abb3"
+                android:valueType="colorType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_d">
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="200"
-                android:duration="99"
-                android:valueFrom="#00F8F8F8"
-                android:valueTo="#07abb3"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_y">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="299"
-                android:duration="99"
-                android:valueFrom="#00F8F8F8"
-                android:valueTo="#07abb3"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_d">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="398"
-                android:duration="106"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -120,8 +120,8 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="504"
-                android:duration="97"
+                android:startOffset="250"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -132,8 +132,8 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="601"
-                android:duration="101"
+                android:startOffset="300"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -144,8 +144,8 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="702"
-                android:duration="101"
+                android:startOffset="350"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
@@ -156,19 +156,21 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="803"
-                android:duration="99"
+                android:startOffset="400"
+                android:duration="50"
                 android:valueFrom="#00F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
+
+
     <target android:name="path_e">
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -180,7 +182,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -192,7 +194,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -204,7 +206,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -216,7 +218,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -228,7 +230,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -240,7 +242,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -252,7 +254,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
@@ -264,7 +266,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillColor"
-                android:startOffset="1000"
+                android:startOffset="700"
                 android:duration="1"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
