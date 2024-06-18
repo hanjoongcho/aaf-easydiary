@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.content.Intent
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
 import com.squareup.seismic.ShakeDetector
@@ -21,9 +22,6 @@ import java.util.Calendar
 
 open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
     var mCustomLineSpacing = true
-    private val mRootView: ViewGroup? by lazy {
-        findViewById(R.id.main_holder)
-    }
 
 
     /***************************************************************************************************
@@ -48,7 +46,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
             startMainActivityWithClearTask()
         } else {
             resumeLock()
-            mRootView?.let {
+            getMainViewGroup()?.let {
                 initTextSize(it)
                 updateTextColors(it)
                 updateAppViews(it)
@@ -78,7 +76,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
-    override fun getMainViewGroup(): ViewGroup? = mRootView
+    override fun getMainViewGroup(): ViewGroup? = if (findViewById<View>(R.id.main_holder) != null) findViewById(R.id.main_holder) else findViewById(R.id.compose_view)
 
     override fun hearShake() {
         TransitionHelper.startActivityWithTransition(
