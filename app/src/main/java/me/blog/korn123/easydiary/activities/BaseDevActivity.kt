@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -50,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -110,7 +108,6 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
-import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -181,7 +178,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBaseDevBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        setSupportActionBar(mBinding.partialAppbarLayout.toolbar)
         supportActionBar?.run {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
@@ -609,7 +606,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         CategoryTitleCard(title = "Custom Launcher")
         FlowRow(
             maxItemsInEachRow = maxItemsInEachRow,
-            modifier = Modifier.padding(6.dp, 3.dp)
+            modifier = Modifier
         ) {
             SimpleCard(
                 "EasyDiary Launcher",
@@ -790,7 +787,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-            CardContainer {
+            Column {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
