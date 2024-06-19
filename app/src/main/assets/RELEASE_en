@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.310.202406190 (date: 2024.06.19)
+  * Applied Android 12 Splash API
+
 # Changes in 1.4.309.202406100 (date: 2024.06.10)
   * Fixed Android 14 Foreground Service permission issue
 
