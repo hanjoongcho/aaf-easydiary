@@ -760,8 +760,8 @@
         v1.4.309.202406100 / 2024.06.10\n
         Fixed Android 14 Foreground Service permission issue
     </string>
-    <string name="release_310">
-        v1.4.310.202406190 / 2024.06.19\n
+    <string name="release_312">
+        v1.4.312.202406200 / 2024.06.20\n
         Applied Android 12 Splash API
     </string>
 

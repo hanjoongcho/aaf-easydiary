@@ -71,6 +71,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
@@ -123,6 +124,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Locale
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -181,6 +183,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         setSupportActionBar(mBinding.partialAppbarLayout.toolbar)
         supportActionBar?.run {
             title = "Easy-Diary Dev Mode"
+            subtitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
             setDisplayHomeAsUpEnabled(true)
         }
     }
