@@ -5,6 +5,8 @@ import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -92,6 +94,12 @@ object DateUtils {
             }
         }
         return dayRemaining
+    }
+
+    fun dateStringToTimeStamp(dateString: String): Long {
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date: Date = formatter.parse(dateString)
+        return date.time
     }
 
 

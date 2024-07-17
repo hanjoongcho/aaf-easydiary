@@ -68,6 +68,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -1279,6 +1280,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 }
 
                                 val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
+                                fun getUpdateDate(body: String): String {
+                                    val regex = Regex("""UPDATE:\s(\d{4}-\d{2}-\d{2})""")
+                                    val matchResult = regex.find(body)
+                                    if (matchResult != null) {
+                                        val dateString = matchResult.groupValues[1]
+                                        return dateString
+                                    } else {
+                                        return "";
+                                    }
+                                }
                                 if (items.size == 1) {
                                     runOnUiThread {
                                         mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
@@ -1288,6 +1299,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                     this.beginTransaction()
                                     diary.contents = re.body()
                                     diary.weather = symbolSequence
+                                    val updateDateString = getUpdateDate(diary.contents!!)
+                                    if (updateDateString.isNotEmpty()) {
+                                        diary.currentTimeMillis = DateUtils.dateStringToTimeStamp(updateDateString)
+                                    }
                                     this.commitTransaction()
                                 } else if (items.isEmpty()) {
                                     runOnUiThread {
