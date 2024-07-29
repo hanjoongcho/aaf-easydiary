@@ -1177,7 +1177,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                 builder
                     .tableBorderWidth(dip.toPx(1))
                     .tableBorderColor(Color.BLACK)
-                    .tableCellPadding(dip.toPx(2))
+                    .tableCellPadding(dip.toPx(6))
                     .tableHeaderRowBackgroundColor(
                         io.noties.markwon.utils.ColorUtils.applyAlpha(
                             config.primaryColor,
