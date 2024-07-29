@@ -1121,6 +1121,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     builder
                         .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
                         .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
+                        .headingBreakHeight(0)
                         .codeTextSize(config.settingFontSize.times(0.8).toInt())
                         .codeBackgroundColor(config.backgroundColor)
 
@@ -1176,7 +1177,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                 builder
                     .tableBorderWidth(dip.toPx(1))
                     .tableBorderColor(Color.BLACK)
-                    .tableCellPadding(dip.toPx(4))
+                    .tableCellPadding(dip.toPx(2))
                     .tableHeaderRowBackgroundColor(
                         io.noties.markwon.utils.ColorUtils.applyAlpha(
                             config.primaryColor,
