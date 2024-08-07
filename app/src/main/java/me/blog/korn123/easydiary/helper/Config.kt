@@ -66,6 +66,14 @@ class Config(val context: Context) {
 
 
     /// ------------------------------------------------------------------
+    /// Dev properties
+    /// ------------------------------------------------------------------
+    var devStockChartOptionFromMillis: Long
+        get() = prefs.getLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS,  Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }.timeInMillis)
+        set(stockChartOptionFromMillis) = prefs.edit().putLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, stockChartOptionFromMillis).apply()
+
+
+    /// ------------------------------------------------------------------
     /// Easy Diary properties
     /// ------------------------------------------------------------------
     var settingFontName: String

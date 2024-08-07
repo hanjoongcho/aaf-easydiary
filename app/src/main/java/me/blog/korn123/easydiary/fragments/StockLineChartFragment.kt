@@ -43,12 +43,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mSDatePickerDialog: DatePickerDialog
     private lateinit var mEDatePickerDialog: DatePickerDialog
-    private val mStartCalendar = Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }
     private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mStartMillis = mStartCalendar.timeInMillis
     private var mEndMillis = 0L
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-        mStartMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        requireContext().config.devStockChartOptionFromMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
         drawChart()
     }
 
@@ -178,7 +176,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         setupChartOptions()
         drawChart()
 
-        mSDatePickerDialog = DatePickerDialog(requireContext(), mStartDateListener, mStartCalendar.get(Calendar.YEAR), mStartCalendar.get(Calendar.MONTH), mStartCalendar.get(Calendar.DAY_OF_MONTH))
+        val startCalendar = Calendar.getInstance(Locale.getDefault()).apply { timeInMillis = requireContext().config.devStockChartOptionFromMillis }
+
+        mSDatePickerDialog = DatePickerDialog(requireContext(), mStartDateListener, startCalendar.get(Calendar.YEAR), startCalendar.get(Calendar.MONTH), startCalendar.get(Calendar.DAY_OF_MONTH))
         mEDatePickerDialog = DatePickerDialog(requireContext(), mEndDateListener, mEndCalendar.get(Calendar.YEAR), mEndCalendar.get(Calendar.MONTH), mEndCalendar.get(Calendar.DAY_OF_MONTH))
         mBinding.run {
             cardFromDate.setOnClickListener { mSDatePickerDialog.show() }
@@ -507,7 +507,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(
-                null, false, mStartMillis, mEndMillis, DAILY_STOCK, realmInstance = realmInstance
+                null, false, requireContext().config.devStockChartOptionFromMillis, mEndMillis, DAILY_STOCK, realmInstance = realmInstance
             )
             var index = 0
             var totalSum = 0F

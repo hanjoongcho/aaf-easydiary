@@ -649,3 +649,10 @@ const val PERMISSION_ACCESS_FINE_LOCATION = 11
 
 const val AAF_PIN_LOCK_PAUSE_MILLIS = "aaf_pin_lock_pause_millis"
 const val AAF_THEME_CHANGE = "aaf_theme_change"
+
+
+/***************************************************************************************************
+ *   Dev
+ *
+ ***************************************************************************************************/
+const val DEV_STOCK_CHART_OPTIONS_FROM_MILLIS = "devStockChartOptionsFromMillis"
