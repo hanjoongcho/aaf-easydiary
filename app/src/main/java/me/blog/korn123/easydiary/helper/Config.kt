@@ -72,6 +72,10 @@ class Config(val context: Context) {
         get() = prefs.getLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS,  Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }.timeInMillis)
         set(stockChartOptionFromMillis) = prefs.edit().putLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, stockChartOptionFromMillis).apply()
 
+    var devStockEnableEvaluatePrice: Boolean
+        get() = prefs.getBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, true)
+        set(devStockEnableEvaluatePrice) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, devStockEnableEvaluatePrice).apply()
+
 
     /// ------------------------------------------------------------------
     /// Easy Diary properties

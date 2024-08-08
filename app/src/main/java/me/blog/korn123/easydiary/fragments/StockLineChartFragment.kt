@@ -97,7 +97,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
-    private var mCheckedEvaluatePrice = false
     private var mCheckedPrincipalHighlight = false
 
 
@@ -199,8 +198,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun initDataSet() {
         mKrEvaluatedPriceDataSet = LineDataSet(null, "KR/JP Evaluated Price").apply {
             setDefaultLineChartColor(this)
-            isVisible = mCheckedEvaluatePrice
-            isHighlightEnabled = mCheckedEvaluatePrice
+            isVisible = requireContext().config.devStockEnableEvaluatePrice
+            isHighlightEnabled = requireContext().config.devStockEnableEvaluatePrice
         }
         mUsEvaluatedPriceDataSet = LineDataSet(null, "US Evaluated Price").apply {
             setDefaultLineChartColor(this)
@@ -310,7 +309,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkSyncMarker.isChecked = mCheckedSyncMarker
                         checkDrawCircle.isChecked = mCheckedDrawCircle
                         checkMarker.isChecked = mCheckedDrawMarker
-                        checkEvaluatePrice.isChecked = mCheckedEvaluatePrice
+                        checkEvaluatePrice.isChecked = requireContext().config.devStockEnableEvaluatePrice
                         checkPrincipalHighlight.isChecked = mCheckedPrincipalHighlight
 
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
@@ -351,7 +350,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                         checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
-                            mCheckedEvaluatePrice = isChecked
+                            requireContext().config.devStockEnableEvaluatePrice = isChecked
                             when (mChartMode) {
                                 R.id.radio_button_option_a, R.id.radio_button_option_a_1 -> {
                                     mKrEvaluatedPriceDataSet.run {
