@@ -118,7 +118,7 @@ object EasyDiaryDbHelper {
     }
 
     fun findMarkdownSyncTargetDiary(query: String?, realmInstance: Realm = getInstance()): List<Diary> {
-        return realmInstance.where(Diary::class.java).contains("title", query).findAll()
+        return realmInstance.where(Diary::class.java).equalTo("title", query).findAll()
     }
 
     fun findDiary(

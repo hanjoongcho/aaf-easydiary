@@ -1292,7 +1292,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 }
                                 if (items.size == 1) {
                                     runOnUiThread {
-                                        mBinding.partialSettingsProgress.message.text = "Sync ${content.name}…"
+                                        mBinding.partialSettingsProgress.message.text = "Sync ${title}…"
                                     }
                                     val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                     val diary = items[0]
@@ -1306,7 +1306,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                     this.commitTransaction()
                                 } else if (items.isEmpty()) {
                                     runOnUiThread {
-                                        mBinding.partialSettingsProgress.message.text = "Download ${content.name}…"
+                                        mBinding.partialSettingsProgress.message.text = "Download ${title}…"
                                     }
                                     val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                     EasyDiaryDbHelper.insertDiary(Diary(
@@ -1326,8 +1326,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 fetchContents("dev", true)
                 fetchContents("etc", true)
                 fetchContents("life", true)
-                fetchContents("stock/KOSPI", false, 10014)
-                fetchContents("stock/KOSDAQ", false, 10014)
+                fetchContents("stock/KOSPI", true, 10031)
+                fetchContents("stock/KOSDAQ", true, 10032)
+                fetchContents("stock/fics", true, 10030)
                 fetchContents("stock/knowledge", true)
                 withContext(Dispatchers.Main) {
                     mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
