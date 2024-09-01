@@ -1328,7 +1328,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 fetchContents("life", true)
                 fetchContents("stock/KOSPI", true, 10031)
                 fetchContents("stock/KOSDAQ", true, 10032)
-                fetchContents("stock/fics", true, 10030)
+                fetchContents("stock/FICS", true, 10030)
                 fetchContents("stock/knowledge", true)
                 withContext(Dispatchers.Main) {
                     mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
