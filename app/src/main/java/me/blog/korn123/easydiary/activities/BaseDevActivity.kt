@@ -1302,6 +1302,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                     val updateDateString = getUpdateDate(diary.contents!!)
                                     if (updateDateString.isNotEmpty()) {
                                         diary.currentTimeMillis = DateUtils.dateStringToTimeStamp(updateDateString)
+                                        diary.updateDateString()
                                     }
                                     this.commitTransaction()
                                 } else if (items.isEmpty()) {
