@@ -1123,7 +1123,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                         .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
                         .headingBreakHeight(0)
                         .codeTextSize(config.settingFontSize.times(0.8).toInt())
-                        .codeBackgroundColor(config.backgroundColor)
+//                        .codeBackgroundColor(config.backgroundColor)
 
                         .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
                         .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
