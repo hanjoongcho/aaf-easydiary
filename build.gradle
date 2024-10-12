@@ -2,7 +2,10 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
     }
     
     dependencies {
@@ -17,8 +20,11 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
