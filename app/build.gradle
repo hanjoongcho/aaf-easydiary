@@ -119,9 +119,6 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
-    aaptOptions {
-        noCompress 'aar'
-    }
 }
 
 configurations.all {
@@ -195,8 +192,8 @@ dependencies {
 //    implementation project(":aafactory-commons")
 
     // etc.
-    implementation (name: 'viewpagerdotsindicator', group: 'com.tbuonomo.andrui', version: 4.0, ext: 'aar')
-    implementation (name: 'bubbleseekbar', group: 'com.xw.repo', version: 3.17, ext: 'aar')
+    implementation 'com.github.woxingxiao:BubbleSeekBar:3.20'
+    implementation 'com.tbuonomo:dotsindicator:5.0'
     implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'id.zelory:compressor:2.1.1'
