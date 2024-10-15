@@ -174,7 +174,7 @@ dependencies {
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components common
-    implementation (name: 'flexbox', group: 'com.google.android', version: '1.0.0', ext: 'aar')
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:33.0.0-android'
@@ -188,16 +188,18 @@ dependencies {
     implementation 'org.apache.poi:poi:3.13'
 
     // AAFactory
-//    implementation 'io.github.aafactory:commons:1.2.0'
+    implementation ('io.github.aafactory:commons:1.2.0') {
+        exclude group: 'com.werb.eventbuskotlin', module: 'eventbuskotlin'
+        exclude group: 'com.werb.moretype', module: 'moretype'
+    }
 //    implementation project(":aafactory-commons")
 
     // etc.
-    implementation (name: 'bubbleseekbar', group: 'com.xw.repo', version: 3.17, ext: 'aar')
     implementation (name: 'viewpagerdotsindicator', group: 'com.tbuonomo.andrui', version: 4.0, ext: 'aar')
-    implementation (name: 'glide-transformations', group: 'jp.wasabeef', version: '4.0.0', ext: 'aar')
-    implementation (name: 'gpuimage', group: 'jp.co.cyberagent.android', version: '2.0.3', ext: 'aar')
-    implementation (name: 'compressor', group: 'id.zelory', version: '2.1.0', ext: 'aar')
-    implementation (name: 'commons', group: 'io.github.aafactory', version: '1.2.0', ext: 'aar')
+    implementation (name: 'bubbleseekbar', group: 'com.xw.repo', version: 3.17, ext: 'aar')
+    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+    implementation 'id.zelory:compressor:2.1.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
