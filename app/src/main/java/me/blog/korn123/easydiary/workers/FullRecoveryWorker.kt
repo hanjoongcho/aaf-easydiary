@@ -38,7 +38,7 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
                     enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
                     summaryMaxLines =(map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
                     enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
-                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
+//                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
                     diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean
                     calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
                     calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()

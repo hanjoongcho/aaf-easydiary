@@ -349,39 +349,16 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     private fun callImagePicker() {
-        when (config.multiPickerEnable) {
-            true -> {
-                var colorPrimaryDark: TypedValue = TypedValue()
-                var colorPrimary: TypedValue = TypedValue()
-                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
-                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-                PickPhotoViewEx.Builder(this)
-                        .setShowCamera(false)
-                        .setHasPhotoSize(0)
-                        .setPickPhotoSize(15)
-                        .setAllPhotoSize(15)
-                        .setSpanCount(4)
-                        .setLightStatusBar(false)
-                        .setStatusBarColor(colorPrimaryDark.resourceId)
-                        .setToolbarColor(colorPrimary.resourceId)
-                        .setToolbarTextColor(R.color.white)
-                        .setSelectIconColor(colorPrimary.resourceId)
-                        .start(mRequestPickPhotoData)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            //                pickIntent.setType("image/*");
+            try {
+                mRequestImagePicker.launch(pickImageIntent)
+            } catch (e: ActivityNotFoundException) {
+                showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
             }
-            false -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    //                pickIntent.setType("image/*");
-                    try {
-                        mRequestImagePicker.launch(pickImageIntent)
-                    } catch (e: ActivityNotFoundException) {
-                        showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-                    }
-                } else {
-                    mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                }
-
-            }
+        } else {
+            mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 

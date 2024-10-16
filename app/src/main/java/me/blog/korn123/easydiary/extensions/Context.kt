@@ -822,7 +822,7 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[SETTING_CONTENTS_SUMMARY] = config.enableContentsSummary
     preferenceMap[SETTING_SUMMARY_MAX_LINES] = config.summaryMaxLines
     preferenceMap[ENABLE_CARD_VIEW_POLICY] = config.enableCardViewPolicy
-    preferenceMap[SETTING_MULTIPLE_PICKER] = config.multiPickerEnable
+//    preferenceMap[SETTING_MULTIPLE_PICKER] = config.multiPickerEnable
     preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
     preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
     preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting

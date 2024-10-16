@@ -120,10 +120,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         updateCardViewPolicy(this.root)
                     }
 
-                    R.id.multiPickerOption -> {
-                        multiPickerOptionSwitcher.toggle()
-                        config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-                    }
+//                    R.id.multiPickerOption -> {
+//                        multiPickerOptionSwitcher.toggle()
+//                        config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+//                    }
 
                     R.id.sensitiveOption -> {
                         sensitiveOptionSwitcher.toggle()
@@ -218,7 +218,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             cardDatetimeSetting.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
-            multiPickerOption.setOnClickListener(mOnClickListener)
+//            multiPickerOption.setOnClickListener(mOnClickListener)
             sensitiveOption.setOnClickListener(mOnClickListener)
             maxLines.setOnClickListener(mOnClickListener)
             countCharacters.setOnClickListener(mOnClickListener)
@@ -255,7 +255,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run {
             mBinding.run {
                 sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
-                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
+//                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
                 enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
                 contentsSummarySwitcher.isChecked = config.enableContentsSummary
                 countCharactersSwitcher.isChecked = config.enableCountCharacters
