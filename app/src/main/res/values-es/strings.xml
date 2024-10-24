@@ -768,6 +768,10 @@
         v1.4.313.202410010 / 2024.10.01\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_317">
+        v1.4.317.202410240 / 2024.10.24\n
+        Changed multi-picker support policy
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
