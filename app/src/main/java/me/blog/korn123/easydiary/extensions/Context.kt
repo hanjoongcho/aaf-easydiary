@@ -50,8 +50,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
@@ -85,8 +87,11 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.enums.Calculation
@@ -97,7 +102,10 @@ import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
+import me.blog.korn123.easydiary.services.BaseNotificationService
+import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
@@ -316,6 +324,116 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
 //    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
 }
+
+
+/***************************************************************************************************
+ *   Task Notification
+ *
+ ***************************************************************************************************/
+
+fun Context.openOverDueNotification() {
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+
+    val diaryList = EasyDiaryDbHelper.findDiary(
+        null,
+        false,
+        0,
+        0,
+        0
+    ).filter { item -> item.weather in 80..81 }.reversed()
+
+    val notificationStartId = 9000
+
+    fun createNotification(notificationInfo: NotificationInfo, bitmap: Bitmap? = null): NotificationCompat.Builder {
+        if (isOreoPlus()) {
+            // Create the NotificationChannel
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", getString(R.string.notification_channel_name_dev), importance)
+            channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
+            setDefaults(Notification.DEFAULT_ALL)
+            setWhen(System.currentTimeMillis())
+            setSmallIcon(R.drawable.ic_easydiary)
+            setOnlyAlertOnce(true)
+            setOngoing(false)
+            setAutoCancel(true)
+        }
+
+        if (notificationInfo.useActionButton) {
+            notificationBuilder.addAction(
+                R.drawable.ic_easydiary,
+                getString(R.string.dismiss),
+                PendingIntent.getService(
+                    this,
+                    notificationInfo.id /*Private request code for the sender*/,
+                    Intent(this, NotificationService::class.java).apply {
+                        action = BaseNotificationService.ACTION_DEV_DISMISS
+                        putExtra(
+                            BaseDevActivity.NOTIFICATION_ID,
+                            notificationInfo.id /*An identifier for this notification unique within your application.*/
+                        )
+                    },
+                    pendingIntentFlag()
+                )
+            )
+        }
+
+        return notificationBuilder
+    }
+
+    fun sendNotification(diary: Diary) {
+        val notification = NotificationInfo(
+            if (diary.weather == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
+            useActionButton = true,
+            notificationStartId + diary.sequence
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(this)
+                .notify(notification.id, createNotification(notification).also {
+                    val contentTitle = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
+                    var contentText = "[${if (diary.weather == DAILY_TODO) "👀" else "\uD83D\uDE31"} ${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}] "
+                    contentText += diary.contents
+                    it.setContentTitle(contentTitle)
+                    it.setContentText(contentText)
+                    it.setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            notification.largeIconResourceId
+                        )
+                    )
+                    it.setContentIntent(
+                        PendingIntent.getActivity(
+                            this,
+                            notification.id /*Private request code for the sender*/,
+                            Intent(this, DiaryReadingActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                putExtra(DIARY_SEQUENCE, diary.sequence)
+
+                            },
+                            pendingIntentFlag()
+                        )
+                    )
+                }.build())
+        }
+    }
+
+    diaryList.forEach { diary ->
+        sendNotification(diary)
+    }
+}
+
 
 
 /***************************************************************************************************

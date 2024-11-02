@@ -90,12 +90,14 @@ import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.helper.DAILY_DOING
+import me.blog.korn123.easydiary.helper.DAILY_TODO
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -474,7 +476,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Over-Due",
                 settingCardModifier,
             ) {
-                createNotificationOverDue()
+             openOverDueNotification()
             }
         }
     }
@@ -1011,61 +1013,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun createNotificationOverDue() {
 
-        val diaryList = EasyDiaryDbHelper.findDiary(
-            null,
-            false,
-            0,
-            0,
-            0
-        ).filter { item -> item.weather in 80..81 }.reversed()
-
-        var notificationStartId = 9000
-
-        fun sendNotification(diary: Diary) {
-            val notification = NotificationInfo(
-                if (diary.weather == DAILY_DOING) R.drawable.ic_doing else R.drawable.ic_done,
-                useActionButton = true,
-                ++notificationStartId
-            )
-            if (ActivityCompat.checkSelfPermission(
-                    this@BaseDevActivity,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                NotificationManagerCompat.from(this@BaseDevActivity)
-                    .notify(notification.id, createNotification(notification).also {
-                        val contentTitle = "\uD83D\uDCC6 \uD83D\uDCC5 \uD83D\uDCCC ${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}"
-                        val contentText = if(diary.title.isNullOrEmpty()) diary.contents else diary.title
-                        it.setContentTitle(contentTitle)
-                        it.setContentText(contentText)
-                        it.setLargeIcon(
-                            BitmapFactory.decodeResource(
-                                resources,
-                                notification.largeIconResourceId
-                            )
-                        )
-                        it.setContentIntent(
-                            PendingIntent.getActivity(
-                                this@BaseDevActivity,
-                                notification.id /*Private request code for the sender*/,
-                                Intent(this@BaseDevActivity, DiaryReadingActivity::class.java).apply {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    putExtra(DIARY_SEQUENCE, diary.sequence)
-
-                                },
-                                pendingIntentFlag()
-                            )
-                        )
-                    }.build())
-            }
-        }
-
-        diaryList.forEach { diary ->
-            sendNotification(diary)
-        }
-    }
 
     private fun createNotificationCustomView(context: Context) {
         val notification = NotificationInfo(

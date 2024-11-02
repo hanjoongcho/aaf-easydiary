@@ -64,6 +64,7 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.migrateData
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
+import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startReviewFlow
@@ -229,6 +230,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.isReady.value = true
         } , 700)
+
+        if (config.enableDebugMode) openOverDueNotification()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
