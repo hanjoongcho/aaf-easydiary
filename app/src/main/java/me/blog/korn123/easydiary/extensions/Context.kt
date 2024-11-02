@@ -341,7 +341,7 @@ fun Context.openOverDueNotification() {
         0,
         0,
         0
-    ).filter { item -> item.weather in 80..81 }.reversed()
+    ).filter { item -> item.weather in 80..81 }
 
     val notificationStartId = 9000
 
@@ -403,7 +403,7 @@ fun Context.openOverDueNotification() {
             NotificationManagerCompat.from(this)
                 .notify(notification.id, createNotification(notification).also {
                     val contentTitle = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
-                    var contentText = "[${if (diary.weather == DAILY_TODO) "👀" else "\uD83D\uDE31"} ${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}] "
+                    var contentText = "「${if (diary.weather == DAILY_TODO) "👀" else "\uD83D\uDE31"} ${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}」 "
                     contentText += diary.contents
                     it.setContentTitle(contentTitle)
                     it.setContentText(contentText)
