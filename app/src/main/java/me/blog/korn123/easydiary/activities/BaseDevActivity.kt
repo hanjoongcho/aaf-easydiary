@@ -273,14 +273,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) { syncMarkDown(SYNC_MARKDOWN_DEV) }
             SimpleCard(
                 "GitHub MarkDown Page",
+                "SYNC life",
+                settingCardModifier,
+            ) { syncMarkDown(SYNC_MARKDOWN_LIFE) }
+            SimpleCard(
+                "GitHub MarkDown Page",
                 "SYNC etc",
                 settingCardModifier,
             ) { syncMarkDown(SYNC_MARKDOWN_ETC) }
             SimpleCard(
                 "GitHub MarkDown Page",
-                "SYNC stock/fics",
+                "SYNC stock/FICS",
                 settingCardModifier,
             ) { syncMarkDown(SYNC_MARKDOWN_STOCK_FICS) }
+            SimpleCard(
+                "GitHub MarkDown Page",
+                "SYNC stock/ETF",
+                settingCardModifier,
+            ) { syncMarkDown(SYNC_MARKDOWN_STOCK_ETF) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/knowledge",
@@ -1363,6 +1373,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 //                fetchContents("stock/KOSPI", true, 10031)
 //                fetchContents("stock/KOSDAQ", true, 10032)
                 if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
+                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
                 if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
                 withContext(Dispatchers.Main) {
                     mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
@@ -1383,6 +1394,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         const val SYNC_MARKDOWN_ETC = "sync_markdown_etc"
         const val SYNC_MARKDOWN_LIFE = "sync_markdown_life"
         const val SYNC_MARKDOWN_STOCK_FICS = "sync_markdown_stock_fics"
+        const val SYNC_MARKDOWN_STOCK_ETF = "sync_markdown_stock_etf"
         const val SYNC_MARKDOWN_STOCK_KNOWLEDGE = "sync_markdown_stock_knowledge"
     }
 }
