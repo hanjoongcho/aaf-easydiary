@@ -76,6 +76,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, true)
         set(devStockEnableEvaluatePrice) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, devStockEnableEvaluatePrice).apply()
 
+    var devStockEnablePrincipalHighlight: Boolean
+        get() = prefs.getBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, false)
+        set(devStockEnablePrincipalHighlight) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, devStockEnablePrincipalHighlight).apply()
+
 
     /// ------------------------------------------------------------------
     /// Easy Diary properties

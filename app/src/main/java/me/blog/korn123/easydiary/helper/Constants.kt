@@ -657,3 +657,4 @@ const val AAF_THEME_CHANGE = "aaf_theme_change"
  ***************************************************************************************************/
 const val DEV_STOCK_CHART_OPTIONS_FROM_MILLIS = "devStockChartOptionsFromMillis"
 const val DEV_STOCK_ENABLE_EVALUATE_PRICE = "devStockEnableEvaluatePrice"
+const val DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT = "devStockEnablePrincipalHighlight"

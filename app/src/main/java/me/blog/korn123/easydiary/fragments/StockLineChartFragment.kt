@@ -97,7 +97,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mCheckedSyncMarker = true
     private var mCheckedDrawCircle = true
     private var mCheckedDrawMarker = true
-    private var mCheckedPrincipalHighlight = false
 
 
     /***************************************************************************************************
@@ -209,7 +208,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mKrPrincipalDataSet = BarDataSet(listOf(), "KR/JP Principal").apply {
             setColor(requireContext().config.textColor, 100)
-            isHighlightEnabled = mCheckedPrincipalHighlight
+            isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
         }
         mKrTradingProfitDataSet = LineDataSet(null, "KR/JP Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -224,7 +223,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mUsPrincipalDataSet = BarDataSet(listOf(), "US Principal").apply {
             setColor(requireContext().config.textColor, 100)
-            isHighlightEnabled = mCheckedPrincipalHighlight
+            isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
         }
         mUsTradingProfitDataSet = LineDataSet(null, "US Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -239,7 +238,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
         mTotalPrincipalDataSet = BarDataSet(listOf(), "Total Principal").apply {
             setColor(requireContext().config.textColor, 100)
-            isHighlightEnabled = mCheckedPrincipalHighlight
+            isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
         }
         mTotalTradingProfitDataSet = LineDataSet(null, "Total Trading Profit").apply {
             setGhostLineChartColor(this)
@@ -310,7 +309,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         checkDrawCircle.isChecked = mCheckedDrawCircle
                         checkMarker.isChecked = mCheckedDrawMarker
                         checkEvaluatePrice.isChecked = requireContext().config.devStockEnableEvaluatePrice
-                        checkPrincipalHighlight.isChecked = mCheckedPrincipalHighlight
+                        checkPrincipalHighlight.isChecked = requireContext().config.devStockEnablePrincipalHighlight
 
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                             mChartMode = checkedId
@@ -374,7 +373,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             mCombineChart.invalidate()
                         }
                         checkPrincipalHighlight.setOnCheckedChangeListener { _, isChecked ->
-                            mCheckedPrincipalHighlight = isChecked
+                            requireContext().config.devStockEnablePrincipalHighlight = isChecked
                             mKrPrincipalDataSet.isHighlightEnabled = isChecked
                             mUsPrincipalDataSet.isHighlightEnabled = isChecked
                             mTotalPrincipalDataSet.isHighlightEnabled = isChecked
