@@ -2,7 +2,11 @@ package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
@@ -10,7 +14,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.location.Address
 import android.location.Geocoder
@@ -22,29 +33,26 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.preference.PreferenceManager
-import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.AlignmentSpan
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.LineHeightSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.text.style.SubscriptSpan
-import android.text.style.SuperscriptSpan
-import android.text.style.UnderlineSpan
+import android.text.util.Linkify
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -63,21 +71,37 @@ import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.toast
-import com.simplemobiletools.commons.helpers.*
-import com.simplemobiletools.commons.views.*
+import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.DAY_MINUTES
+import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
+import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CONTACTS
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
+import com.simplemobiletools.commons.helpers.PERMISSION_RECORD_AUDIO
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
+import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
+import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.TEXT_COLOR
+import com.simplemobiletools.commons.helpers.isOreoPlus
+import com.simplemobiletools.commons.views.MyAppCompatSpinner
+import com.simplemobiletools.commons.views.MyButton
+import com.simplemobiletools.commons.views.MyEditText
+import com.simplemobiletools.commons.views.MyFloatingActionButton
+import com.simplemobiletools.commons.views.MySeekBar
+import com.simplemobiletools.commons.views.MySwitchCompat
+import com.simplemobiletools.commons.views.MyTextView
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
-import io.noties.markwon.MarkwonSpansFactory
-import io.noties.markwon.SpanFactory
-import io.noties.markwon.core.CoreProps
 import io.noties.markwon.core.MarkwonTheme
-import io.noties.markwon.core.spans.CodeBlockSpan
-import io.noties.markwon.core.spans.LinkSpan
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.ImagesPlugin
+import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
 import io.realm.Realm
@@ -99,7 +123,43 @@ import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
+import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
+import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
+import me.blog.korn123.easydiary.helper.CAPTURE_CAMERA_FILE_NAME
+import me.blog.korn123.easydiary.helper.Config
+import me.blog.korn123.easydiary.helper.DAILY_TODO
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
+import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
+import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
+import me.blog.korn123.easydiary.helper.ENABLE_CARD_VIEW_POLICY
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.HOLD_POSITION_ENTER_EDIT_SCREEN
+import me.blog.korn123.easydiary.helper.LINE_SPACING_SCALE_FACTOR
+import me.blog.korn123.easydiary.helper.MIME_TYPE_BINARY
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
+import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
+import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
+import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_FONT_SCALE
+import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_SORTING
+import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_START_DAY
+import me.blog.korn123.easydiary.helper.SETTING_CONTENTS_SUMMARY
+import me.blog.korn123.easydiary.helper.SETTING_COUNT_CHARACTERS
+import me.blog.korn123.easydiary.helper.SETTING_FONT_NAME
+import me.blog.korn123.easydiary.helper.SETTING_FONT_SIZE
+import me.blog.korn123.easydiary.helper.SETTING_SELECTED_SYMBOLS
+import me.blog.korn123.easydiary.helper.SETTING_SUMMARY_MAX_LINES
+import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
+import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.Diary
@@ -110,11 +170,10 @@ import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import org.commonmark.node.Block
-import org.commonmark.node.Code
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.pow
 
 
@@ -1307,6 +1366,7 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .tableOddRowBackgroundColor(config.backgroundColor)
             }
             val strikeoutPlugin = StrikethroughPlugin.create()
+
             when (isRecyclerItem) {
                 true -> Markwon.builder(this)
                     .usePlugin(MovementMethodPlugin.none())
@@ -1325,6 +1385,8 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .usePlugin(HtmlPlugin.create())
                     .usePlugin(tablePlugin)
                     .usePlugin(strikeoutPlugin)
+                    .usePlugin(MovementMethodPlugin.link())
+                    .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                     .build()
                     .apply {
                         setMarkdown(contentsView, markdownContents)
