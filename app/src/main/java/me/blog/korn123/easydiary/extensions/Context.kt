@@ -57,6 +57,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AlarmManagerCompat
@@ -94,7 +95,9 @@ import com.simplemobiletools.commons.views.MySeekBar
 import com.simplemobiletools.commons.views.MySwitchCompat
 import com.simplemobiletools.commons.views.MyTextView
 import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.LinkResolver
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.core.MarkwonTheme
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
@@ -1387,6 +1390,23 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                     .usePlugin(strikeoutPlugin)
                     .usePlugin(MovementMethodPlugin.link())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                    .usePlugin(object : AbstractMarkwonPlugin() {
+                        override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                            super.configureConfiguration(builder)
+                            builder.linkResolver { view, link ->
+                                val customTabsIntent = CustomTabsIntent
+                                    .Builder()
+                                    .setToolbarColor(config.primaryColor)
+                                    .setUrlBarHidingEnabled(true)
+                                    .setShowTitle(false)
+                                    .build()
+                                customTabsIntent.launchUrl(
+                                    this@applyMarkDownPolicy,
+                                    Uri.parse(link)
+                                )
+                            }
+                        }
+                    })
                     .build()
                     .apply {
                         setMarkdown(contentsView, markdownContents)
