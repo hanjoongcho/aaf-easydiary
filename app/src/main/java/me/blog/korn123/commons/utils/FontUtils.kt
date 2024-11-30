@@ -37,7 +37,7 @@ object FontUtils {
                         }
 
                         if (it is FixedTextView && it.applyHighLight) EasyDiaryUtils.highlightString(it)
-                        if (it is FixedTextView && it.applyBoldStyle) it.setTypeface(it.typeface, Typeface.BOLD)
+                        if (it is FixedTextView && it.applyBoldStyle) it.setTypeface(typeface, Typeface.BOLD)
                     }
                 }
                 else -> {}
