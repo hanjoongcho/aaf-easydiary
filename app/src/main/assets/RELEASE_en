@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.318.202412220 (date: 2024.12.22)
+  * Fixed an error where custom fonts were not applied on some screens
+
 # Changes in 1.4.317.202410240 (date: 2024.10.24)
   * Changed multi-picker support policy
 
