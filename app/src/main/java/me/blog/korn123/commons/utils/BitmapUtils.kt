@@ -153,7 +153,7 @@ object BitmapUtils {
         val targetFlameHeight: Int = (bmp.height * scaleFactor).toInt() + (borderSize * 2)
         val targetPhotoWidth: Int = (bmp.width * scaleFactor).toInt()
         val targetPhotoHeight: Int = (bmp.height * scaleFactor).toInt()
-        val bmpWithBorder = Bitmap.createBitmap(targetFlameWidth, targetFlameHeight, bmp.config)
+        val bmpWithBorder = Bitmap.createBitmap(targetFlameWidth, targetFlameHeight, bmp.config!!)
         val samplingPhoto = Bitmap.createScaledBitmap(bmp, targetPhotoWidth, targetPhotoHeight, false)
         val canvas = Canvas(bmpWithBorder)
         canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimary))
