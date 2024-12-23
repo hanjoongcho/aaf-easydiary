@@ -353,7 +353,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
 
         val headerRow = sheet.createRow(0)
-        headerRow.height = 256 * 3
+        headerRow.height = (256 * 3).toShort()
         headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
         headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
         headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))

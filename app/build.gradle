@@ -1,7 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'realm-android'
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" // this version matches your Kotlin version
+}
 
 ext.versions = [
     compileSdk: 35
@@ -29,8 +32,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 21
         targetSdkVersion versions.compileSdk
-        versionCode 318
-        versionName '1.4.318.202412220'
+        versionCode 319
+        versionName '1.4.319.202501xx0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -111,9 +114,9 @@ android {
         targetCompatibility JavaVersion.VERSION_17
         sourceCompatibility JavaVersion.VERSION_17
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
-    }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = "1.5.2"
+//    }
     namespace 'me.blog.korn123.easydiary'
     lint {
         abortOnError false
@@ -141,7 +144,7 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.9.3'
     implementation 'androidx.fragment:fragment-ktx:1.8.5'
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation ('androidx.work:work-runtime-ktx:2.9.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    implementation ('androidx.work:work-runtime-ktx:2.10.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     implementation "androidx.browser:browser:1.8.0"
     implementation 'androidx.activity:activity-compose:1.9.3'
     implementation 'androidx.core:core-splashscreen:1.0.1'
@@ -200,7 +203,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.13' // Version Change Prohibited: This is the last version available for download from JitPack.
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
