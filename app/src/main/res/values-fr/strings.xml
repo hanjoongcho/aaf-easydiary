@@ -776,6 +776,10 @@
         v1.4.318.202412220 / 2024.12.22\n
         Fixed an error where custom fonts were not applied on some screens
     </string>
+    <string name="release_319">
+        v1.4.319.202501050 / 2025.01.05\n
+        Fixed app bar area overlapping issue in Android 15
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

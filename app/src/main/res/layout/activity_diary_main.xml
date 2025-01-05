@@ -17,6 +17,7 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -126,6 +127,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:contentDescription="@string/write_diary"
+            android:fitsSystemWindows="true"
             app:srcCompat="@drawable/ic_edit" />
 
         <LinearLayout
