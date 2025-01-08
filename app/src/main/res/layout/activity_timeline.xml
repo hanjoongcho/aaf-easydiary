@@ -57,13 +57,19 @@
     <include
         android:id="@+id/partial_timeline_filter" layout="@layout/partial_timeline_filter"/>
 
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/insertDiaryButton"
-        android:contentDescription="@string/write_diary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_edit" />
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:gravity="bottom|end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/insertDiaryButton"
+            android:contentDescription="@string/write_diary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_edit" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

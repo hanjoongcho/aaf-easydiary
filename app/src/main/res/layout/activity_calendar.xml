@@ -67,12 +67,19 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
-        android:id="@+id/writeDiary"
-        android:contentDescription="@string/write_diary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_edit" />
+
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:gravity="bottom|end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
+            android:id="@+id/writeDiary"
+            android:contentDescription="@string/write_diary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_edit" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
