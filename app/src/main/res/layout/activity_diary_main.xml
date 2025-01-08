@@ -14,10 +14,10 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:fitsSystemWindows="true"
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -120,15 +120,19 @@
                 tools:visibility="visible" />
         </LinearLayout>
 
-        <com.simplemobiletools.commons.views.MyFloatingActionButton
-            android:id="@+id/insertDiaryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:contentDescription="@string/write_diary"
+        <LinearLayout
             android:fitsSystemWindows="true"
-            app:srcCompat="@drawable/ic_edit" />
+            android:gravity="bottom|end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.simplemobiletools.commons.views.MyFloatingActionButton
+                android:id="@+id/insertDiaryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:contentDescription="@string/write_diary"
+                app:srcCompat="@drawable/ic_edit" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/modalContainer"
