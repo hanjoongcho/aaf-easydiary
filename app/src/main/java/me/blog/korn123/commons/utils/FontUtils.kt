@@ -19,6 +19,7 @@ import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.util.*
+
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -153,14 +154,33 @@ object FontUtils {
         return context.config.settingFontName == CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
     }
 
-    fun getCommonFontFile(context: Context): File {
-        return File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName)
+    fun getCommonFontFile(context: Context): FontFamily? {
+//        return File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName)
+
+        val fontName = context.config.settingFontName
+        val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
+        val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
+        return when {
+            isValidTypeface(assetsFonts, fontName) -> {
+                if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
+                    null
+                } else {
+//                    Typeface.createFromAsset(context.assets, "fonts/" + fontName)
+                    val typeface = Typeface.createFromAsset(context.assets, "fonts/" + fontName)
+                    FontFamily(typeface)
+                }
+            }
+            isValidTypeface(userFonts, fontName) -> {
+                FontFamily(
+                    Font(File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName))
+                )
+            }
+            else -> null
+        }
     }
 
     fun getComposeFontFamily(context: Context): FontFamily? {
-        return if (isDeviceSettingFont(context)) null else FontFamily(
-            Font(getCommonFontFile(context))
-        )
+        return if (isDeviceSettingFont(context)) null else getCommonFontFile(context)
     }
 }
 

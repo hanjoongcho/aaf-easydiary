@@ -83,7 +83,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
      *
      ***************************************************************************************************/
     private fun setupShowcase() {
-        val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
+        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
 
         val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)

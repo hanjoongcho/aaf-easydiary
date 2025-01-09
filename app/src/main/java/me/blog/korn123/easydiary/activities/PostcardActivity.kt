@@ -82,7 +82,7 @@ class PostcardActivity : EasyDiaryActivity() {
             }
             EasyDiaryUtils.boldString(applicationContext, diaryTitle)
 
-            initShowcase()
+            setupShowcase()
             savedInstanceState?.let {
                 setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
                 setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
@@ -242,8 +242,8 @@ class PostcardActivity : EasyDiaryActivity() {
         }
     }
     
-    private fun initShowcase() {
-        val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
+    private fun setupShowcase() {
+        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
 
         val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)

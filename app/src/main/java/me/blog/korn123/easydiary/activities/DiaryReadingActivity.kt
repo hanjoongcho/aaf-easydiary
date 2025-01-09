@@ -90,7 +90,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         setupViewPager()
         if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { mBinding.diaryViewPager.setCurrentItem(startPageIndex, false) }
-        initShowcase()
+        setupShowcase()
     }
 
     override fun onResume() {
@@ -410,8 +410,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         })
     }
 
-    private fun initShowcase() {
-        val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
+    private fun setupShowcase() {
+        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
 
         val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)

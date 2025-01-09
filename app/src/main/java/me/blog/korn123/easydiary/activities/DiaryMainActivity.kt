@@ -204,7 +204,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         bindEvent()
         confirmPrePermissions()
 
-        initShowcase()
+        setupShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData(mBinding)
         setupPopupMenu()
@@ -639,8 +639,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
-    private fun initShowcase() {
-        val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
+    private fun setupShowcase() {
+        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
 
         val centerParams = RelativeLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
