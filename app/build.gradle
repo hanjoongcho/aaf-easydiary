@@ -32,8 +32,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 21
         targetSdkVersion versions.compileSdk
-        versionCode 321
-        versionName '1.4.321.202501100'
+        versionCode 322
+        versionName '1.4.322.202501110'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
