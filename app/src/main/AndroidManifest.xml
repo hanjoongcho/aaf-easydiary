@@ -100,14 +100,14 @@
         <activity
             android:name=".activities.DiaryWritingActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SplashScreenTheme" />
         <activity
             android:name=".activities.DiaryReadingActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.DiaryEditingActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SplashScreenTheme" />
         <activity
             android:name=".activities.DevActivity"
             android:theme="@style/AppTheme.NoActionBar" />
