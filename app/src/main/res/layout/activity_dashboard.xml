@@ -150,6 +150,7 @@
 
 
             <HorizontalScrollView
+                android:fitsSystemWindows="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="62dp"
@@ -217,16 +218,20 @@
         android:layout_width="30dp"
         android:layout_height="30dp" />
 
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_cross"
-        android:visibility="visible"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:gravity="bottom|center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_cross"
+            android:visibility="visible"
+            app:fabSize="mini" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:fitsSystemWindows="true"
@@ -32,26 +31,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
-
-        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-            android:id="@+id/dots_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            app:dotsColor="@android:color/white"
-            app:dotsCornerRadius="8dp"
-            app:dotsSize="12dp"
-            app:dotsSpacing="4dp"
-            app:progressMode="false"
-            app:selectedDotColor="?attr/colorPrimary" />
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dots_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                app:dotsColor="@android:color/white"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="12dp"
+                app:dotsSpacing="4dp"
+                app:progressMode="false"
+                app:selectedDotColor="?attr/colorPrimary" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <include
@@ -70,6 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.simplemobiletools.commons.views.MyFloatingActionButton
+            tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/button_add_schedule"
             android:layout_width="wrap_content"
