@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="view_model"
             type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel" />
@@ -127,9 +126,9 @@
 
         <LinearLayout
             android:fitsSystemWindows="true"
-            android:gravity="bottom|end"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_gravity="bottom|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <com.simplemobiletools.commons.views.MyFloatingActionButton
                 android:id="@+id/insertDiaryButton"
                 android:layout_width="wrap_content"
