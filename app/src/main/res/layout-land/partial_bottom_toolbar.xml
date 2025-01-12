@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <LinearLayout
+            android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -20,10 +21,16 @@
             android:layout_height="wrap_content">
             <ImageView
                 style="@style/image_custom_toolbar_icon"
-                android:id="@+id/togglePhoto"
+                android:id="@+id/attachGallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_collapse" />
+                android:src="@drawable/ic_image_2_w" />
+            <ImageView
+                style="@style/image_custom_toolbar_icon"
+                android:id="@+id/captureCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_camera_4" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

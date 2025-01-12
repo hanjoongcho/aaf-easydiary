@@ -32,6 +32,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.simplemobiletools.commons.extensions.toast
 import com.werb.pickphotoview.PickPhotoViewEx
 import com.werb.pickphotoview.util.PickConfig
 import me.blog.korn123.commons.utils.DateUtils
@@ -172,7 +173,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         hideSoftInputFromWindow()
 
         when (view.id) {
-            R.id.photoView -> {
+            R.id.photoView, R.id.attachGallery -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     if (checkPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES))) {
                         callImagePicker()
@@ -429,13 +430,13 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 View.VISIBLE -> {
                     photoContainerScrollView.visibility = View.GONE
 //                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_expand))
+//                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_expand))
 //                    supportActionBar?.hide()
                 }
                 View.GONE -> {
                     photoContainerScrollView.visibility = View.VISIBLE
 //                    mBinding.partialEditContents.titleCard.visibility = View.GONE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_collapse))
+//                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_collapse))
 //                    supportActionBar?.show()
                 }
                 else -> {}
@@ -584,6 +585,22 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         mBinding.partialEditContents.partialEditPhotoContainer.run {
                             photoContainer.addView(imageView, photoContainer.childCount - 1)
                         }
+
+                        this@BaseDiaryEditingActivity.run {
+                            val point = getDefaultDisplay()
+                            val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                            val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
+                            val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                                this,
+                                photoUriDto,
+                                targetX
+                            ).apply {
+                                setOnClickListener(PhotoClickListener(currentIndex))
+                            }
+                            mBinding.partialEditContents.photoContainerFlexBox?.run {
+                                addView(imageView2)
+                            }
+                        }
                         initBottomToolbar()
                     }
                 } catch (e: Exception) {
@@ -638,6 +655,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected fun restoreContents(savedInstanceState: Bundle?) {
         savedInstanceState?.run {
+            mBinding.partialEditContents.photoContainerFlexBox?.removeAllViews()
             mBinding.partialEditContents.partialEditPhotoContainer.run {
                 mPhotoUris.clear()
                 val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
@@ -661,6 +679,22 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     }
                     imageView.setOnClickListener(PhotoClickListener(index))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
+
+                    this@BaseDiaryEditingActivity.run {
+                        val point = getDefaultDisplay()
+                        val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                        val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
+                        val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                            this,
+                            photoUriDto,
+                            targetX
+                        ).apply {
+                            setOnClickListener(PhotoClickListener(index))
+                        }
+                        mBinding.partialEditContents.photoContainerFlexBox?.run {
+                            addView(imageView2)
+                        }
+                    }
                 }
 
                 selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
@@ -725,6 +759,22 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 imageView.setOnClickListener(PhotoClickListener(index))
                 mBinding.partialEditContents.partialEditPhotoContainer.run {
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
+                }
+
+                this@BaseDiaryEditingActivity.run {
+                    val point = getDefaultDisplay()
+                    val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                    val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
+                    val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                        this,
+                        photoUriDto,
+                        targetX
+                    ).apply {
+                        setOnClickListener(PhotoClickListener(index))
+                    }
+                    mBinding.partialEditContents.photoContainerFlexBox.run {
+                        addView(imageView2)
+                    }
                 }
             }
         }

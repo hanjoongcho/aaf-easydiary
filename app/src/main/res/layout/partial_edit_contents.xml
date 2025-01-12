@@ -108,13 +108,23 @@
                         android:layout_weight="1"
                         android:fillViewport="true">
 
-                        <com.simplemobiletools.commons.views.MyEditText
-                            android:id="@+id/diaryContents"
-                            style="@style/edit_diary_edit_inner_contents"
-                            android:background="@android:color/transparent"
-                            android:gravity="top"
-                            android:hint="@string/contents_text_hint"
-                            android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.google.android.flexbox.FlexboxLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:alignContent="stretch"
+                                app:alignItems="stretch"
+                                app:flexWrap="wrap"
+                                android:id="@+id/photoContainerFlexBox" />
+                            <com.simplemobiletools.commons.views.MyEditText
+                                android:id="@+id/diaryContents"
+                                style="@style/edit_diary_edit_inner_contents"
+                                android:background="@android:color/transparent"
+                                android:gravity="top"
+                                android:hint="@string/contents_text_hint"
+                                android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
+                        </LinearLayout>
                     </ScrollView>
 
                     <RelativeLayout

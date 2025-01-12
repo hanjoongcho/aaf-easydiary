@@ -683,10 +683,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 mBinding.run {
                     if (photoCount > 0) {
 //                        photoContainerScrollView.visibility = View.VISIBLE
-                        if (photoContainer.childCount > 0) {
-//                            photoContainer.removeAllViews()
-                            photoContainerFlexBox.removeAllViews()
-                        }
+                        if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                        if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
+
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
                             diaryDto.photoUrisWithEncryptionPolicy()?.forEachIndexed { index, item ->
