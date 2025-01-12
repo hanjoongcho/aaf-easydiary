@@ -23,6 +23,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -681,18 +682,31 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val photoCount = diaryDto.photoUris?.size ?: 0
                 mBinding.run {
                     if (photoCount > 0) {
-                        photoContainerScrollView.visibility = View.VISIBLE
-                        if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+//                        photoContainerScrollView.visibility = View.VISIBLE
+                        if (photoContainer.childCount > 0) {
+//                            photoContainer.removeAllViews()
+                            photoContainerFlexBox.removeAllViews()
+                        }
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
                             diaryDto.photoUrisWithEncryptionPolicy()?.forEachIndexed { index, item ->
-                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
-                                val imageView = when (requireActivity().isLandScape()) {
-                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
-                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
+//                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
+//                                val imageView = when (requireActivity().isLandScape()) {
+//                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
+//                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
+//                                }
+//                                photoContainer.addView(imageView)
+//                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
+
+                                requireActivity().run {
+                                    val point = getDefaultDisplay()
+                                    val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                                    val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
+                                    val imageView2 = createAttachedPhotoViewForFlexBox(appContext, item, targetX).apply {
+                                        setOnClickListener(PhotoClickListener(getSequence(), index))
+                                    }
+                                    photoContainerFlexBox.addView(imageView2)
                                 }
-                                photoContainer.addView(imageView)
-                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                             }
                         }
                     } else {

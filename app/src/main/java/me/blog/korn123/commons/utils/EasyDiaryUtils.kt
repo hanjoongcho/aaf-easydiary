@@ -53,6 +53,8 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -210,6 +212,25 @@ object EasyDiaryUtils {
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
         layoutParams.setMargins(context.dpToPixel(marginLeft), context.dpToPixel(marginTop), context.dpToPixel(marginRight), context.dpToPixel(marginBottom))
+        imageView.layoutParams = layoutParams
+        imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+        imageView.scaleType = ImageView.ScaleType.CENTER
+        val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
+        imageView.setPadding(padding, padding, padding, padding)
+        Glide.with(context)
+            .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
+            .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
+            .into(imageView)
+        return imageView
+    }
+
+    fun createAttachedPhotoViewForFlexBox(context: Context, photoUri: PhotoUri, targetX:Int = 0): ImageView {
+        val thumbnailSize = targetX
+        val margin = 2f
+        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+        val imageView = ImageView(context)
+        val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
+        layoutParams.setMargins(context.dpToPixel(margin), context.dpToPixel(margin), context.dpToPixel(margin), context.dpToPixel(margin))
         imageView.layoutParams = layoutParams
         imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
         imageView.scaleType = ImageView.ScaleType.CENTER

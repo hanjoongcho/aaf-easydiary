@@ -71,6 +71,13 @@
                                     tools:text="2021년10월23일 토요일 05:14" />
                             </LinearLayout>
                         </LinearLayout>
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:alignContent="stretch"
+                            app:alignItems="stretch"
+                            app:flexWrap="wrap"
+                            android:id="@+id/photoContainerFlexBox" />
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/diaryContents"
                             style="@style/text_diary_read_fragment_inner_contents"
@@ -148,17 +155,15 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     tools:visibility="visible">
-
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-
                         <LinearLayout
                             android:id="@+id/photoContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal"></LinearLayout>
+                            android:orientation="horizontal" />
                     </HorizontalScrollView>
                 </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
