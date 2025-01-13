@@ -27,6 +27,7 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -103,7 +104,7 @@ object EasyDiaryUtils {
      ***************************************************************************************************/
     fun summaryDiaryLabel(diary: Diary): String {
 //        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
-        return if (diary.title.isNullOrEmpty()) diary.contents!! else diary.title!!
+        return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
     }
 
     fun searchWordIndexes(contents: String, searchWord: String): List<Int> {
