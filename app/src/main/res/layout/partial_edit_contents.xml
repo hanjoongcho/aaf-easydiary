@@ -120,6 +120,7 @@
                             <com.simplemobiletools.commons.views.MyEditText
                                 android:id="@+id/diaryContents"
                                 style="@style/edit_diary_edit_inner_contents"
+                                android:layout_height="match_parent"
                                 android:background="@android:color/transparent"
                                 android:gravity="top"
                                 android:hint="@string/contents_text_hint"
