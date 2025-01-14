@@ -21,7 +21,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -31,9 +30,6 @@ import android.widget.ScrollView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import com.simplemobiletools.commons.extensions.toast
-import com.werb.pickphotoview.PickPhotoViewEx
 import com.werb.pickphotoview.util.PickConfig
 import me.blog.korn123.commons.utils.DateUtils
 import io.realm.RealmList
@@ -586,21 +582,16 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                             photoContainer.addView(imageView, photoContainer.childCount - 1)
                         }
 
-                        this@BaseDiaryEditingActivity.run {
-                            val point = getDefaultDisplay()
-                            val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                            val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
-                            val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                        mBinding.partialEditContents.photoContainerFlexBox.addView(
+                            EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
                                 this,
                                 photoUriDto,
-                                targetX
+                                selectPaths.size
                             ).apply {
                                 setOnClickListener(PhotoClickListener(currentIndex))
                             }
-                            mBinding.partialEditContents.photoContainerFlexBox?.run {
-                                addView(imageView2)
-                            }
-                        }
+                        )
+
                         initBottomToolbar()
                     }
                 } catch (e: Exception) {
@@ -680,21 +671,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     imageView.setOnClickListener(PhotoClickListener(index))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
 
-                    this@BaseDiaryEditingActivity.run {
-                        val point = getDefaultDisplay()
-                        val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                        val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
-                        val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
-                            this,
+                    mBinding.partialEditContents.photoContainerFlexBox.addView(
+                        EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                            this@BaseDiaryEditingActivity,
                             photoUriDto,
-                            targetX
+                            mPhotoUris.size
                         ).apply {
                             setOnClickListener(PhotoClickListener(index))
                         }
-                        mBinding.partialEditContents.photoContainerFlexBox?.run {
-                            addView(imageView2)
-                        }
-                    }
+                    )
                 }
 
                 selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
@@ -761,21 +746,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
                 }
 
-                this@BaseDiaryEditingActivity.run {
-                    val point = getDefaultDisplay()
-                    val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                    val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
-                    val imageView2 = EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
+                mBinding.partialEditContents.photoContainerFlexBox.addView(
+                    EasyDiaryUtils.createAttachedPhotoViewForFlexBox(
                         this,
                         photoUriDto,
-                        targetX
+                        mPhotoUris.size
                     ).apply {
                         setOnClickListener(PhotoClickListener(index))
                     }
-                    mBinding.partialEditContents.photoContainerFlexBox.run {
-                        addView(imageView2)
-                    }
-                }
+                )
             }
         }
 

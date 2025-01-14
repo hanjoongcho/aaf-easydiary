@@ -3,6 +3,7 @@ package me.blog.korn123.commons.utils
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -27,7 +28,6 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -46,8 +46,6 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
-import io.noties.markwon.Markwon
-import io.noties.markwon.movement.MovementMethodPlugin
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.enums.Calculation
@@ -225,20 +223,26 @@ object EasyDiaryUtils {
         return imageView
     }
 
-    fun createAttachedPhotoViewForFlexBox(context: Context, photoUri: PhotoUri, targetX:Int = 0): ImageView {
-        val thumbnailSize = targetX
-        val margin = 2f
+    fun createAttachedPhotoViewForFlexBox(activity: Activity, photoUri: PhotoUri, attachedCount:Int): ImageView {
+        val spanCount = when {
+            !activity.isLandScape() && attachedCount == 1 -> 1
+            !activity.isLandScape() && attachedCount == 2 -> 2
+            !activity.isLandScape() && attachedCount > 2 -> 3
+            activity.isLandScape()  -> 5
+            else -> 1
+        }
+        val thumbnailSize = (activity.getDefaultDisplay().x - activity.dpToPixel(ATTACH_PHOTO_CARD_PADDING_DP) - activity.dpToPixel(spanCount * ATTACH_PHOTO_MARGIN_DP * 2f)).div(spanCount)
         val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-        val imageView = ImageView(context)
+        val imageView = ImageView(activity)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
-        layoutParams.setMargins(context.dpToPixel(margin), context.dpToPixel(margin), context.dpToPixel(margin), context.dpToPixel(margin))
+        layoutParams.setMargins(activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP))
         imageView.layoutParams = layoutParams
-        imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
         imageView.scaleType = ImageView.ScaleType.CENTER
-        val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
+        val padding = (activity.dpToPixel(2.5F, Calculation.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
-        Glide.with(context)
-            .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
+        Glide.with(activity)
+            .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
         return imageView

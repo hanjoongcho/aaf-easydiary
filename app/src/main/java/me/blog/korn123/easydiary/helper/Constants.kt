@@ -639,6 +639,8 @@ const val DOZE_SCHEDULE = "doze_schedule"
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
+const val ATTACH_PHOTO_MARGIN_DP = 2F
+const val ATTACH_PHOTO_CARD_PADDING_DP = 30F
 
 /***************************************************************************************************
  *   AAFactory Legacy

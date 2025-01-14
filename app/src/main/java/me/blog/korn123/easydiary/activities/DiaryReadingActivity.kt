@@ -22,7 +22,6 @@ import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import me.blog.korn123.commons.utils.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
@@ -697,15 +696,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                                photoContainer.addView(imageView)
 //                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
 
-                                requireActivity().run {
-                                    val point = getDefaultDisplay()
-                                    val spanCount = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                                    val targetX = (point.x - dpToPixel(30F) - dpToPixel(spanCount * 2f * 2f)) / spanCount
-                                    val imageView2 = createAttachedPhotoViewForFlexBox(appContext, item, targetX).apply {
+                                photoContainerFlexBox.addView(
+                                    createAttachedPhotoViewForFlexBox(
+                                        requireActivity(),
+                                        item,
+                                        photoCount
+                                    ).apply {
                                         setOnClickListener(PhotoClickListener(getSequence(), index))
                                     }
-                                    photoContainerFlexBox.addView(imageView2)
-                                }
+                                )
                             }
                         }
                     } else {
