@@ -22,25 +22,17 @@
     <LinearLayout
         android:theme="@style/AppTheme.AppBarOverlay"
         android:gravity="end"
-        android:padding="1dp"
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
             style="@style/image_custom_toolbar_icon"
-            android:id="@+id/attachGallery"
+            android:id="@+id/togglePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_image_2_w" />
-        <ImageView
-            style="@style/image_custom_toolbar_icon"
-            android:id="@+id/captureCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_camera_4" />
+            android:src="@drawable/ic_collapse" />
     </LinearLayout>
 </me.blog.korn123.easydiary.views.LabelLayout>
    

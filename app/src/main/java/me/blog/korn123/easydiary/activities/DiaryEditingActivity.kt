@@ -129,14 +129,12 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
         mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
         mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
-        mBinding.partialEditContents.partialBottomToolbar.attachGallery.setOnClickListener(mClickListener)
-        mBinding.partialEditContents.partialBottomToolbar.captureCamera.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
-//        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
-//            toggleSimpleLayout()
-//        }
+        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
+            toggleSimpleLayout()
+        }
 
         mBinding.partialEditContents.run {
             allDayContainer.setOnClickListener {
