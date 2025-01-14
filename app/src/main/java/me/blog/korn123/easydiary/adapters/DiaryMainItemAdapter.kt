@@ -226,7 +226,7 @@ class DiaryMainItemAdapter(
                         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
                         layoutParams.setMargins(
                             0,
-                            activity.dpToPixel(1F),
+                            activity.dpToPixel(3F),
                             activity.dpToPixel(3F),
                             0
                         )
