@@ -643,7 +643,7 @@ const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
 const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP = 30F
 const val ATTACH_PHOTO_MARGIN_DP = 2F
-const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 3F
+const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 2F
 const val ATTACH_PHOTO_CARD_COMPAT_PADDING_DP = 3F
 
 /***************************************************************************************************
