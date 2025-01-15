@@ -72,6 +72,7 @@
                             </LinearLayout>
                         </LinearLayout>
                         <com.google.android.flexbox.FlexboxLayout
+                            android:layout_marginTop="@dimen/card_contents_padding"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:alignContent="stretch"
@@ -83,7 +84,6 @@
                             style="@style/text_diary_read_fragment_inner_contents"
                             android:layout_marginTop="@dimen/card_contents_padding"
                             android:gravity="start" />
-
                     </LinearLayout>
                 </ScrollView>
 

@@ -31,9 +31,11 @@ import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -223,7 +225,7 @@ object EasyDiaryUtils {
         return imageView
     }
 
-    fun createAttachedPhotoViewForFlexBox(activity: Activity, photoUri: PhotoUri, attachedCount:Int): ImageView {
+    fun createAttachedPhotoViewForFlexBox(activity: Activity, photoUri: PhotoUri, attachedCount:Int): CardView {
         val spanCount = when {
             !activity.isLandScape() && attachedCount == 1 -> 1
             !activity.isLandScape() && attachedCount == 2 -> 2
@@ -231,21 +233,41 @@ object EasyDiaryUtils {
             activity.isLandScape()  -> 5
             else -> 1
         }
-        val thumbnailSize = (activity.getDefaultDisplay().x - activity.dpToPixel(ATTACH_PHOTO_CARD_PADDING_DP) - activity.dpToPixel(spanCount * ATTACH_PHOTO_MARGIN_DP * 2f)).div(spanCount)
-        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+        val thumbnailSize =
+            (activity.getDefaultDisplay().x
+                    - activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP)
+                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_MARGIN_DP * 2f))
+                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_CARD_CONTENT_PADDING_DP * 2f /* Card ContentPadding*/))
+                    - activity.dpToPixel((spanCount.minus(1)) * ATTACH_PHOTO_CARD_COMPAT_PADDING_DP /* Card Compat Padding*/)
+
+            ).div(spanCount)
+        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
         val imageView = ImageView(activity)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
         layoutParams.setMargins(activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP))
         imageView.layoutParams = layoutParams
-        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+//        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA_HIGH, cornerRadius)
         imageView.scaleType = ImageView.ScaleType.CENTER
-        val padding = (activity.dpToPixel(2.5F, Calculation.FLOOR))
+        val padding = (activity.dpToPixel(1F, Calculation.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
         Glide.with(activity)
             .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
-        return imageView
+
+        return me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
+            setLayoutParams(ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ))
+//            cardElevation = 8F
+//            setPadding(activity.dpToPixel(10f),activity.dpToPixel(10f),activity.dpToPixel(10f),activity.dpToPixel(10f))
+            fixedAppcompatPadding = true
+//            setContentPadding(activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP))
+//            setContentPadding(activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP),activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP),activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP),activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP))
+            addView(imageView)
+        }
+//        return imageView
     }
 
     fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {

@@ -681,7 +681,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val photoCount = diaryDto.photoUris?.size ?: 0
                 mBinding.run {
                     if (photoCount > 0) {
-//                        photoContainerScrollView.visibility = View.VISIBLE
+                        photoContainerFlexBox.visibility = View.VISIBLE
                         if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                         if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
 
@@ -708,7 +708,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             }
                         }
                     } else {
-                        photoContainerScrollView.visibility = View.GONE
+                        photoContainerFlexBox.visibility = View.GONE
                     }
                 }
 

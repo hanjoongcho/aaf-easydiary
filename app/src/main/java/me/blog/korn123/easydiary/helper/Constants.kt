@@ -557,6 +557,8 @@ const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 //const val OPEN_URL_INFO = "open_url_info"
 const val THUMBNAIL_BACKGROUND_ALPHA = 170
+const val THUMBNAIL_BACKGROUND_ALPHA_HIGH = 220
+const val THUMBNAIL_BACKGROUND_ALPHA_LOW = 70
 
 const val SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP    = 20
 const val UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 15
@@ -639,8 +641,10 @@ const val DOZE_SCHEDULE = "doze_schedule"
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
+const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP = 30F
 const val ATTACH_PHOTO_MARGIN_DP = 2F
-const val ATTACH_PHOTO_CARD_PADDING_DP = 30F
+const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 3F
+const val ATTACH_PHOTO_CARD_COMPAT_PADDING_DP = 3F
 
 /***************************************************************************************************
  *   AAFactory Legacy
