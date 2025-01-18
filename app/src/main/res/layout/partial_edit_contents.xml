@@ -9,6 +9,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
+        <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
         <me.blog.korn123.easydiary.views.FixedCardView
             app:fixedAppcompatPadding="false"
             app:applyCardBackgroundColor="true"
@@ -180,7 +182,5 @@
                     android:layout_height="32dp"/>
             </FrameLayout>
         </me.blog.korn123.easydiary.views.FixedCardView>
-        <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
-        <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
     </LinearLayout>
 </LinearLayout>
