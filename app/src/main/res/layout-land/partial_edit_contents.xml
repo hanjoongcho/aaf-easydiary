@@ -10,10 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
+            <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
+            <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
             <me.blog.korn123.easydiary.views.FixedCardView
                 app:fixedAppcompatPadding="false"
                 app:applyCardBackgroundColor="true"
@@ -188,7 +190,5 @@
                 </FrameLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
-        <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
-        <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
     </LinearLayout>
 </LinearLayout>
