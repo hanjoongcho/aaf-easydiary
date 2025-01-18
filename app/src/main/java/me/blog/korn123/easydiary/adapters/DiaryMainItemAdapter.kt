@@ -33,6 +33,7 @@ import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
@@ -224,22 +225,22 @@ class DiaryMainItemAdapter(
                         val imageXY = activity.dpToPixel(32F)
                         val imageView = ImageView(activity)
                         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
-                        layoutParams.setMargins(
-                            0,
-                            activity.dpToPixel(3F),
-                            activity.dpToPixel(3F),
-                            0
-                        )
+//                        layoutParams.setMargins(
+//                            0,
+//                            activity.dpToPixel(3F),
+//                            activity.dpToPixel(3F),
+//                            0
+//                        )
                         imageView.layoutParams = layoutParams
-                        imageView.background = createBackgroundGradientDrawable(
-                            activity.config.primaryColor,
-                            THUMBNAIL_BACKGROUND_ALPHA,
-                            imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-                        )
+//                        imageView.background = createBackgroundGradientDrawable(
+//                            activity.config.primaryColor,
+//                            THUMBNAIL_BACKGROUND_ALPHA,
+//                            imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+//                        )
                         imageView.scaleType = ImageView.ScaleType.CENTER
-                        activity.dpToPixel(1.5F, Calculation.FLOOR).apply {
-                            imageView.setPadding(this, this, this, this)
-                        }
+//                        activity.dpToPixel(1.5F, Calculation.FLOOR).apply {
+//                            imageView.setPadding(this, this, this, this)
+//                        }
                         val listener = object : RequestListener<Drawable> {
                             override fun onLoadFailed(
                                 e: GlideException?,
@@ -271,7 +272,24 @@ class DiaryMainItemAdapter(
                             )
                             .into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
-                        photoViews.addView(imageView)
+
+                        val margin = activity.dpToPixel(3F)
+                        val contentPadding = activity.dpToPixel(1F)
+                        val cardView = me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
+                            activity.updateDashboardInnerCard(this)
+                            setLayoutParams(ViewGroup.MarginLayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                            ).apply {
+//                                setMargins(margin, margin, margin, margin)
+                            })
+
+                            radius = imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+                            fixedAppcompatPadding = true
+                            setContentPadding(contentPadding, contentPadding, contentPadding, contentPadding)
+                            addView(imageView)
+                        }
+                        photoViews.addView(cardView)
                     }
                 }
 

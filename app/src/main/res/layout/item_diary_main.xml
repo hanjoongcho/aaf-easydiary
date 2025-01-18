@@ -100,7 +100,7 @@
                         android:layout_marginTop="@dimen/card_contents_padding"
                         app:flexDirection="row"
                         app:flexWrap="wrap"
-                        app:justifyContent="flex_end"></com.google.android.flexbox.FlexboxLayout>
+                        app:justifyContent="flex_end" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
