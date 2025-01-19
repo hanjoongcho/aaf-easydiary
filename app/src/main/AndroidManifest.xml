@@ -101,7 +101,6 @@
             android:name=".activities.DiaryWritingActivity"
             android:excludeFromRecents="true"
             android:theme="@style/SplashScreenTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"
             />
         <activity
             android:name=".activities.DiaryReadingActivity"
@@ -110,7 +109,6 @@
         <activity
             android:name=".activities.DiaryEditingActivity"
             android:theme="@style/SplashScreenTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"
             />
         <activity
             android:name=".activities.DevActivity"
