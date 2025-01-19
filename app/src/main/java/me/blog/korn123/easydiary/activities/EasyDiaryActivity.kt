@@ -92,6 +92,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
      ***************************************************************************************************/
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
+            add(Release(324, R.string.release_324))
             add(Release(319, R.string.release_319))
             add(Release(318, R.string.release_318))
             add(Release(317, R.string.release_317))
