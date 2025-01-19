@@ -780,6 +780,10 @@
         v1.4.319.202501050 / 2025.01.05\n
         Fixed app bar area overlapping issue in Android 15
     </string>
+    <string name="release_324">
+        v1.4.324.202501190 / 2025.01.19\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->

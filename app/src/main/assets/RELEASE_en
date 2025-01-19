@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.324.202501190 (date: 2025.01.19)
+  * User Experience (UX) Optimization
+
 # Changes in 1.4.319.202501050 (date: 2025.01.05)
   * Fixed app bar area overlapping issue in Android 15
 
