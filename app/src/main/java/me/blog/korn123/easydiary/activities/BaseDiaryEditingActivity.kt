@@ -224,6 +224,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 if (isProviderEnabled(LocationManager.NETWORK_PROVIDER)) requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
             }
         }
+
+        if (isLandScape()) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
