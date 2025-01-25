@@ -22,7 +22,7 @@ import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import me.blog.korn123.commons.utils.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -651,9 +651,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
-                if (StringUtils.isEmpty(diaryDto.title)) {
-                    diaryTitle.visibility = View.GONE
-                }
+                diaryTitle.visibility = if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
                 diaryTitle.text = diaryDto.title
 
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
@@ -681,22 +679,34 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val photoCount = diaryDto.photoUris?.size ?: 0
                 mBinding.run {
                     if (photoCount > 0) {
-                        photoContainerScrollView.visibility = View.VISIBLE
+                        photoContainerFlexBox.visibility = View.VISIBLE
                         if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                        if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
+
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
                             diaryDto.photoUrisWithEncryptionPolicy()?.forEachIndexed { index, item ->
-                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
-                                val imageView = when (requireActivity().isLandScape()) {
-                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
-                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
-                                }
-                                photoContainer.addView(imageView)
-                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
+//                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
+//                                val imageView = when (requireActivity().isLandScape()) {
+//                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
+//                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
+//                                }
+//                                photoContainer.addView(imageView)
+//                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
+
+                                photoContainerFlexBox.addView(
+                                    createAttachedPhotoViewForFlexBox(
+                                        requireActivity(),
+                                        item,
+                                        photoCount
+                                    ).apply {
+                                        setOnClickListener(PhotoClickListener(getSequence(), index))
+                                    }
+                                )
                             }
                         }
                     } else {
-                        photoContainerScrollView.visibility = View.GONE
+                        photoContainerFlexBox.visibility = View.GONE
                     }
                 }
 

@@ -3,6 +3,7 @@ package me.blog.korn123.commons.utils
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -31,9 +32,11 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -46,14 +49,17 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
-import io.noties.markwon.Markwon
-import io.noties.markwon.movement.MovementMethodPlugin
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
+import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -221,6 +227,55 @@ object EasyDiaryUtils {
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
         return imageView
+    }
+
+    fun createAttachedPhotoViewForFlexBox(activity: Activity, photoUri: PhotoUri, attachedCount:Int): CardView {
+        val spanCount = when {
+            !activity.isLandScape() && attachedCount == 1 -> 1
+            !activity.isLandScape() && attachedCount == 2 -> 2
+            !activity.isLandScape() && attachedCount > 2 -> 3
+            activity.isLandScape()  -> 5
+            else -> 1
+        }
+        val thumbnailSize =
+            (activity.getDefaultDisplay().x
+                    - activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP, Calculation.FLOOR)
+                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_MARGIN_DP * 2f))
+                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_CARD_CONTENT_PADDING_DP * 2f /* Card ContentPadding*/), Calculation.FLOOR)
+                    //- activity.?dpToPixel((spanCount.minus(1)) * ATTACH_PHOTO_CARD_COMPAT_PADDING_DP /* Card Compat Padding*/, Calculation.FLOOR)
+
+            ).div(spanCount)
+        val cornerRadius = thumbnailSize.times(PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL)
+        val imageView = ImageView(activity)
+        val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
+//        layoutParams.setMargins(activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP))
+        imageView.layoutParams = layoutParams
+//        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA_HIGH, cornerRadius)
+        imageView.scaleType = ImageView.ScaleType.CENTER
+//        val padding = (activity.dpToPixel(1F, Calculation.FLOOR))
+//        imageView.setPadding(padding, padding, padding, padding)
+        Glide.with(activity)
+            .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
+            .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
+            .into(imageView)
+
+        val margin = activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)
+        val contentPadding = activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP)
+        return me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
+            activity.updateDashboardInnerCard(this)
+            setLayoutParams(ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(margin, margin, margin, margin)
+            })
+
+            radius = cornerRadius
+            fixedAppcompatPadding = false
+            setContentPadding(contentPadding, contentPadding, contentPadding, contentPadding)
+            addView(imageView)
+        }
+//        return imageView
     }
 
     fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
