@@ -651,9 +651,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
-                if (StringUtils.isEmpty(diaryDto.title)) {
-                    diaryTitle.visibility = View.GONE
-                }
+                diaryTitle.visibility = if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
                 diaryTitle.text = diaryDto.title
 
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
