@@ -784,6 +784,10 @@
         v1.4.324.202501190 / 2025.01.19\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_325">
+        v1.4.325.202501250 / 2025.01.25\n
+        Change the layout of attached photos in viewing mode
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
