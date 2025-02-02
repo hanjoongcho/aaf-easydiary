@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.326.202502030 (date: 2025.02.03)
+  * Fixed an issue where the main search bar was hidden in Android version 15
+
 # Changes in 1.4.325.202501250 (date: 2025.01.25)
   * Change the layout of attached photos in viewing mode
 
