@@ -29,6 +29,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
+            android:fitsSystemWindows="true"
             android:id="@+id/main_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
