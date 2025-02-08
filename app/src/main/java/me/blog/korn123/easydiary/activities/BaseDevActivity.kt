@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -96,10 +97,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
-import me.blog.korn123.easydiary.helper.DAILY_DOING
-import me.blog.korn123.easydiary.helper.DAILY_TODO
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
-import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -432,6 +430,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 settingCardModifier,
             ) {
                 mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            SimpleCard(
+                "Check Next Alarm",
+                null,
+                settingCardModifier,
+            ) {
+                val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+                alarmManager.run {
+                    val alarmInfo = nextAlarmClock
+                    alarmInfo?.let { makeToast("Next: ${DateUtils.getDateTimeStringFromTimeMillis(alarmInfo.triggerTime)}") } ?: makeToast("Next schedule does not exist.")
+                }
             }
             SymbolCard(
                 settingCardModifier,

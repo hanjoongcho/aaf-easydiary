@@ -66,6 +66,7 @@ import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.rescheduleEnabledAlarms
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -90,6 +91,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
+import java.util.Calendar
 import java.util.Locale
 
 
@@ -192,6 +194,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
+        rescheduleEnabledAlarms()
+//        FontUtils.checkFontSetting(this)
+
         supportActionBar?.run {
             setDisplayShowTitleEnabled(config.enableDebugMode)
 //            title = getString(R.string.read_diary_title)
@@ -232,6 +237,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         } , 700)
 
         if (config.enableDebugMode) openOverDueNotification()
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -734,6 +741,32 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
+        }
+
+        mBinding.insertDiaryButton.setOnLongClickListener {
+            var position = -1
+            val tomorrowTimeMillis =
+                EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+            val filteredDiary =
+                mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+            val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+            target?.let {
+                run outer@{
+                    mDiaryList.forEachIndexed { index, diary ->
+                        if (diary.sequence == it.sequence) {
+                            position = index
+                            return@outer
+                        }
+                    }
+                }
+
+                makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+                if (position != -1) {
+                    mBinding.diaryListView.scrollToPosition(position)
+                }
+            }
+
+            true
         }
 
         mBinding.feelingSymbolButton.setOnClickListener {
