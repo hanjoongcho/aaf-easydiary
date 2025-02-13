@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.327.202502140 (date: 2025.02.14)
+  * User Experience (UX) Optimization
+
 # Changes in 1.4.326.202502030 (date: 2025.02.03)
   * Fixed an issue where the main search bar was hidden in Android version 15
 
