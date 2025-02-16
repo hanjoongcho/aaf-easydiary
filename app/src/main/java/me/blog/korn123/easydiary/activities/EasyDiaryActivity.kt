@@ -35,6 +35,11 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         if (config.enableDebugMode) setupMotionSensor()
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        hideSystemBarsInLandscape()
+    }
+
     override fun onResume() {
         useDynamicTheme = !isNightMode()
         super.onResume()

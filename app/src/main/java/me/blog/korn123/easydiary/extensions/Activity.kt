@@ -25,6 +25,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -190,6 +192,24 @@ fun Activity.printDisplayMetrics() {
 
 fun Activity.getRootViewHeight(): Int {
     return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
+}
+
+fun Activity.hideSystemBarsInLandscape() {
+    if (isLandScape()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.systemBars())
+            window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    } else {
+        hideNavigationBars()
+    }
+}
+
+fun Activity.hideNavigationBars() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        window.insetsController?.hide(WindowInsets.Type.navigationBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
 }
 
 
