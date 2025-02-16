@@ -1,7 +1,10 @@
 package me.blog.korn123.easydiary.compose
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -9,9 +12,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -53,12 +60,14 @@ import me.blog.korn123.easydiary.activities.QuickSettingsActivity
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getStatusBarColor
+import me.blog.korn123.easydiary.extensions.hideSystemBarsInLandscape
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.CardContainer
+import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -87,11 +96,11 @@ class QuickSettingsActivity : ComponentActivity() {
 
             AppTheme {
                 Scaffold(
-//                    topBar = {
-//                        EasyDiaryActionBar(subTitle = "Shake the device to open the quick settings screen.") {
-//                            onBackPressed()
-//                        }
-//                    },
+                    topBar = {
+                        EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open.") {
+                            onBackPressed()
+                        }
+                    },
                     content = { innerPadding ->
                         QuickSettings(
                             viewModel,
@@ -118,7 +127,6 @@ class QuickSettingsActivity : ComponentActivity() {
                     },
                     floatingActionButtonPosition = FabPosition.Center,
                 )
-
             }
         }
     }
@@ -138,6 +146,11 @@ class QuickSettingsActivity : ComponentActivity() {
     override fun onPause() {
         super.onPause()
         pauseLock()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        hideSystemBarsInLandscape()
     }
 
 
@@ -163,34 +176,34 @@ class QuickSettingsActivity : ComponentActivity() {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.background(Color(context.config.screenBackgroundColor))
-
+            modifier = Modifier
+                .background(Color(context.config.screenBackgroundColor))
         ) {
-            Card(
-                shape = RoundedCornerShape(0.dp),
-                colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "\uD83D\uDCF1\uD83D\uDC4B This screen is the quick settings screen that activates when you shake the device.",
-                        style = TextStyle(
-                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-                        ),
-                    )
-                }
-            }
+//            Card(
+//                shape = RoundedCornerShape(0.dp),
+//                colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
+//                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+//            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .padding(15.dp)
+//                        .fillMaxWidth()
+//                ) {
+//                    Text(
+//                        text = "\uD83D\uDCF1\uD83D\uDC4B This screen is the quick settings screen that activates when you shake the device.",
+//                        style = TextStyle(
+//                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color.White,
+//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+//                        ),
+//                    )
+//                }
+//            }
 
             CardContainer(enableCardViewPolicy) {
                 FlowRow(
-                    modifier = Modifier,
+                    modifier = modifier,
 //                    .padding(3.dp, 3.dp)
 //                    .fillMaxWidth(1f)
 //                    .fillMaxHeight(1f),
@@ -284,11 +297,11 @@ class QuickSettingsActivity : ComponentActivity() {
     private fun QuickSettingsPreview() {
         AppTheme {
             Scaffold(
-//                topBar = {
-//                    EasyDiaryActionBar(subTitle = "Shake the device to open the quick settings screen.") {
-//                        onBackPressed()
-//                    }
-//                },
+                topBar = {
+                    EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {
+                        onBackPressed()
+                    }
+                },
                 content = { innerPadding ->
                     QuickSettings(
                         viewModel(),
