@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.google.android.material.appbar.AppBarLayout
-        android:fitsSystemWindows="true"
-        app:elevation="0dp"
         android:id="@+id/appBarLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -23,16 +24,18 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
         <!--<include android:id="@+id/partial_edit_toolbar_sub" layout="@layout/partial_edit_toolbar_sub" />-->
     </com.google.android.material.appbar.AppBarLayout>
+
     <include
-        layout="@layout/partial_edit_contents"
         android:id="@+id/partial_edit_contents"
-        android:layout_marginTop="?attr/actionBarSize"
+        layout="@layout/partial_edit_contents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent" />
+
     <ProgressBar
         android:id="@+id/photoProgress"
         android:layout_width="32dp"
