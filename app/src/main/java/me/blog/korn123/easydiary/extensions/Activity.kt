@@ -14,11 +14,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Point
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.provider.Settings.SettingNotFoundException
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -30,6 +32,7 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -206,10 +209,43 @@ fun Activity.hideSystemBarsInLandscape() {
 }
 
 fun Activity.hideNavigationBars() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         window.insetsController?.hide(WindowInsets.Type.navigationBars())
         window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
+}
+
+/**
+ * 0 → 3버튼 네비게이션 (기본 소프트키)
+ * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
+ * 2 → 제스처 네비게이션
+ * FIXME: 동작이 정확 하지 않아요!!! 😂
+ * @return
+ */
+fun Activity.getNavigationMode(): Int {
+    try {
+        return Settings.Global.getInt(contentResolver, "navigation_mode")
+    } catch (e: SettingNotFoundException) {
+        e.printStackTrace()
+        return -1 // 설정 값이 없을 경우
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+fun Activity.isNavigationBarVisible(): Boolean {
+
+    // 전체 화면 크기 가져오기
+    val metrics = windowManager.currentWindowMetrics
+    val fullHeight = metrics.bounds.height()
+
+    // 현재 화면에서 사용 가능한 높이 가져오기
+    val visibleBounds: Rect = Rect()
+    window.decorView.getWindowVisibleDisplayFrame(visibleBounds)
+    val visibleHeight: Int = visibleBounds.height()
+
+    // 네비게이션 바 높이가 존재하면 보이는 상태
+    return (fullHeight - visibleHeight) > 0
 }
 
 
