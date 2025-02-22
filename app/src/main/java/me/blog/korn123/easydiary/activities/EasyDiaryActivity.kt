@@ -78,7 +78,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
     override fun onBackPressed() {
         super.onBackPressed()
         pauseLock()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        TransitionHelper.finishActivityWithTransition(this)
     }
 
     override fun getMainViewGroup(): ViewGroup? = if (findViewById<View>(R.id.main_holder) != null) findViewById(R.id.main_holder) else findViewById(R.id.compose_view)
