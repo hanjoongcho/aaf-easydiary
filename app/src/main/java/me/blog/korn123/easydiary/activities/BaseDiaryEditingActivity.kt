@@ -32,7 +32,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.werb.pickphotoview.PickPhotoViewEx
 import com.werb.pickphotoview.util.PickConfig
 import me.blog.korn123.commons.utils.DateUtils
 import io.realm.RealmList

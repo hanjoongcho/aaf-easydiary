@@ -1,37 +1,22 @@
 package me.blog.korn123.easydiary.compose
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsetsController
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -42,27 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.QuickSettingsActivity
-import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.getStatusBarColor
-import me.blog.korn123.easydiary.extensions.hideSystemBarsInLandscape
-import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -72,8 +45,7 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
-
-class QuickSettingsActivity : ComponentActivity() {
+class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 
 
     /***************************************************************************************************
@@ -88,8 +60,6 @@ class QuickSettingsActivity : ComponentActivity() {
 //            statusBarStyle = SystemBarStyle.auto(config.primaryColor, config.primaryColor)
 //        )
 
-        window.statusBarColor = getStatusBarColor(config.primaryColor)
-
         setContent {
             val viewModel: QuickSettingsViewModel by viewModels()
             viewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
@@ -98,7 +68,7 @@ class QuickSettingsActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open.") {
-                            onBackPressed()
+                            TransitionHelper.finishActivityWithTransition(this@QuickSettingsActivity)
                         }
                     },
                     content = { innerPadding ->
@@ -121,7 +91,7 @@ class QuickSettingsActivity : ComponentActivity() {
 //                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_cross),
-                                contentDescription = "액션 아이콘"
+                                contentDescription = "Finish Activity"
                             )
                         }
                     },
@@ -129,28 +99,6 @@ class QuickSettingsActivity : ComponentActivity() {
                 )
             }
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        pauseLock()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        resumeLock()
-        applyPolicyForRecentApps()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        pauseLock()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        hideSystemBarsInLandscape()
     }
 
 
@@ -214,8 +162,8 @@ class QuickSettingsActivity : ComponentActivity() {
                 ) {
                     // Pass modifier using mutableState to recompose when enableCardViewPolicy is changed.
                     val settingCardModifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                        .fillMaxWidth()
+                        .weight(1f)
                     SwitchCard(
                         stringResource(R.string.markdown_setting_title),
                         stringResource(R.string.markdown_setting_summary),
@@ -298,9 +246,7 @@ class QuickSettingsActivity : ComponentActivity() {
         AppTheme {
             Scaffold(
                 topBar = {
-                    EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {
-                        onBackPressed()
-                    }
+                    EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {}
                 },
                 content = { innerPadding ->
                     QuickSettings(
@@ -346,3 +292,5 @@ class QuickSettingsActivity : ComponentActivity() {
         }
     }
 }
+
+
