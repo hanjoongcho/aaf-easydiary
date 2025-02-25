@@ -24,7 +24,7 @@ open class EasyDiaryComposeBaseActivity : ComponentActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                TransitionHelper.finishActivityWithTransition(this@EasyDiaryComposeBaseActivity)
+                finishActivityWithTransition()
             }
         })
     }
@@ -43,5 +43,9 @@ open class EasyDiaryComposeBaseActivity : ComponentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         hideSystemBarsInLandscape()
+    }
+
+    fun finishActivityWithTransition() {
+        TransitionHelper.finishActivityWithTransition(this@EasyDiaryComposeBaseActivity)
     }
 }

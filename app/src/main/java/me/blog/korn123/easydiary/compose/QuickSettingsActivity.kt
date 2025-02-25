@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +41,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -68,7 +74,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 Scaffold(
                     topBar = {
                         EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open.") {
-                            TransitionHelper.finishActivityWithTransition(this@QuickSettingsActivity)
+                            finishActivityWithTransition()
                         }
                     },
                     content = { innerPadding ->
@@ -79,7 +85,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     },
                     floatingActionButton = {
                         FloatingActionButton(
-                            onClick = { onBackPressed() },
+                            onClick = { finishActivityWithTransition() },
                             containerColor = Color(config.primaryColor),
                             contentColor = Color.White,
                             shape = CircleShape,
@@ -110,55 +116,31 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun QuickSettings(viewModel: QuickSettingsViewModel, modifier: Modifier = Modifier) {
         val context = LocalContext.current
-        val pixelValue = context.config.settingFontSize
-        val density = LocalDensity.current
-        val currentTextUnit = with (density) {
-            val temp = pixelValue.toDp()
-            temp.toSp()
-        }
         val isOn: Boolean by viewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
+        val maxItemsInEachRow = when {
+            LocalInspectionMode.current -> 2
+            isLandScape() -> 2
+            else -> 1
+        }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(Color(context.config.screenBackgroundColor))
         ) {
-//            Card(
-//                shape = RoundedCornerShape(0.dp),
-//                colors = CardDefaults.cardColors(Color(context.config.primaryColor)),
-//                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(15.dp)
-//                        .fillMaxWidth()
-//                ) {
-//                    Text(
-//                        text = "\uD83D\uDCF1\uD83D\uDC4B This screen is the quick settings screen that activates when you shake the device.",
-//                        style = TextStyle(
-//                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color.White,
-//                            fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
-//                        ),
-//                    )
-//                }
-//            }
-
             CardContainer(enableCardViewPolicy) {
                 FlowRow(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxHeight(1f).fillMaxWidth(),
 //                    .padding(3.dp, 3.dp)
 //                    .fillMaxWidth(1f)
-//                    .fillMaxHeight(1f),
 //                horizontalArrangement = Arrangement.spacedBy(3.dp),
 //                verticalArrangement = Arrangement.spacedBy(3.dp),
 //                overflow = FlowRowOverflow.Clip,
-                    maxItemsInEachRow = 1
+                    maxItemsInEachRow = maxItemsInEachRow
                 ) {
                     // Pass modifier using mutableState to recompose when enableCardViewPolicy is changed.
                     val settingCardModifier = Modifier
@@ -209,7 +191,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         context.config.disableFutureDiary = !disableFutureDiary
                         disableFutureDiary = !disableFutureDiary
                     }
-
                     SimpleCard(
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
@@ -223,24 +204,14 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         }
                         AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
-//                    SimpleCard(
-//                        "Quick Settings With Leagacy View",
-//                        null,
-//                        settingCardModifier,
-//                    ) {
-//                        TransitionHelper.startActivityWithTransition(
-//                            this@QuickSettingsActivity,
-//                            Intent(this@QuickSettingsActivity, QuickSettingsActivity::class.java)
-//                        )
-//                        finish()
-//                    }
                 }
             }
 
         }
     }
 
-    @Preview(heightDp = 1200)
+    @Preview(heightDp = 1100)
+//    @Preview(name = "Landscape Pixel 4 XL", device = "spec:width=1280dp,height=720dp")
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme {
