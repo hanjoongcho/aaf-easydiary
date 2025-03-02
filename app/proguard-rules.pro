@@ -59,3 +59,8 @@
 
 -keep class retrofit2.** { *; }
 -dontwarn retrofit2.**
+
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}

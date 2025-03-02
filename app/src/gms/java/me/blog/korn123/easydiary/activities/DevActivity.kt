@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.content.ContextCompat
+import androidx.credentials.CredentialManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -117,7 +118,7 @@ class DevActivity : BaseDevActivity() {
                         showAlertDialog(account!!.name, null, null, DialogMode.DEFAULT, false)
                     }
                 } else {
-                    showAlertDialog("Sign account is invalid.", null)
+                    showAlertDialog("Sign account is invalid.")
                 }
             }
             SimpleCard(
@@ -142,6 +143,13 @@ class DevActivity : BaseDevActivity() {
                         }
                     }
                 }
+            }
+            SimpleCard(
+                "Login",
+                "Google Credential Manager Login",
+                modifier,
+            ) {
+                val credentialManager = CredentialManager.create(this@DevActivity)
             }
         }
     }
