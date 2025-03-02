@@ -5,7 +5,10 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -50,8 +54,9 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, close: () -> Uni
                        style = TextStyle(
                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                            color = Color.White,
-                           fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+                           fontSize = TextUnit(currentTextUnit.value.times(1.0F), TextUnitType.Sp),
                        ),
+                       modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
                    )
                }
                Text(
@@ -59,8 +64,11 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, close: () -> Uni
                    style = TextStyle(
                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
                        color = Color.White,
-                       fontSize = TextUnit(currentTextUnit.value, TextUnitType.Sp),
+                       fontSize = TextUnit(currentTextUnit.value.times(0.9F), TextUnitType.Sp),
                    ),
+//                   modifier = Modifier
+//                       .fillMaxWidth()
+//                       .wrapContentWidth(Alignment.End)
                )
            }
         },

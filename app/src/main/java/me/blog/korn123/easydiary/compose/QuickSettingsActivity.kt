@@ -73,7 +73,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             AppTheme {
                 Scaffold(
                     topBar = {
-                        EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open.") {
+                        EasyDiaryActionBar(title = "QuickSettings", subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {
                             finishActivityWithTransition()
                         }
                     },
@@ -217,7 +217,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         AppTheme {
             Scaffold(
                 topBar = {
-                    EasyDiaryActionBar(subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {}
+                    EasyDiaryActionBar(title = "QuickSettings", subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {}
                 },
                 content = { innerPadding ->
                     QuickSettings(
