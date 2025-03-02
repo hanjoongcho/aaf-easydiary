@@ -17,7 +17,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDevActivity.Companion.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText

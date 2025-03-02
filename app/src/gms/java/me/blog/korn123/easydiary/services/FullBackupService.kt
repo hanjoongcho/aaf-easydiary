@@ -1,7 +1,11 @@
 package me.blog.korn123.easydiary.services
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -19,18 +23,26 @@ import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import java.io.File
-import java.util.*
+import java.util.Collections
 
 class FullBackupService : Service() {
     private lateinit var mPhotoPath: String
@@ -254,7 +266,7 @@ class FullBackupService : Service() {
                     .setContentIntent(
                             PendingIntent.getActivity(this, alarm.id, Intent(this, DiaryMainActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                putExtra(BaseDevActivity.NOTIFICATION_INFO, this@FullBackupService::class.java.name)
+                                putExtra(NOTIFICATION_INFO, this@FullBackupService::class.java.name)
                             }, pendingIntentFlag())
                     )
                     .addAction(

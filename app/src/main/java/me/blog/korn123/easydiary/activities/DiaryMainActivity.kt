@@ -40,7 +40,6 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDevActivity.Companion.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
@@ -80,6 +79,8 @@ import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
 import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
+import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_NOTIFICATION
@@ -224,7 +225,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             makeToast(
                 "Notification id is ${
                     intent.getIntExtra(
-                        BaseDevActivity.NOTIFICATION_ID,
+                        NOTIFICATION_ID,
                         -1
                     )
                 }"

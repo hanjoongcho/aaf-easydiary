@@ -7,24 +7,19 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -104,7 +99,7 @@ class DevActivity : BaseDevActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun GoogleMobileService(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int
     ) {
         CategoryTitleCard(title = "Google Mobile Service")
@@ -115,7 +110,7 @@ class DevActivity : BaseDevActivity() {
             SimpleCard(
                 "Check Google Sign Account",
                 null,
-                settingCardModifier,
+                modifier,
             ) {
                 if (GoogleOAuthHelper.isValidGoogleSignAccount(this@DevActivity)) {
                     GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.run {
@@ -128,7 +123,7 @@ class DevActivity : BaseDevActivity() {
             SimpleCard(
                 "Full Backup",
                 null,
-                settingCardModifier,
+                modifier,
             ) {
                 GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
                     DriveServiceHelper(this@DevActivity, account).run {

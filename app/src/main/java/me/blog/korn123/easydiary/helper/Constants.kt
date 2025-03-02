@@ -408,6 +408,8 @@ const val NOTIFICATION_GMS_RECOVERY_COMPLETE_ID = 1003
 const val NOTIFICATION_COMPRESS_ID = 1004
 const val NOTIFICATION_DECOMPRESS_ID = 1005
 const val NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID = 1006
+const val NOTIFICATION_ID = "notification_id"
+const val NOTIFICATION_INFO = "notification_info"
 
 
 /***************************************************************************************************
@@ -663,3 +665,12 @@ const val AAF_THEME_CHANGE = "aaf_theme_change"
 const val DEV_STOCK_CHART_OPTIONS_FROM_MILLIS = "devStockChartOptionsFromMillis"
 const val DEV_STOCK_ENABLE_EVALUATE_PRICE = "devStockEnableEvaluatePrice"
 const val DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT = "devStockEnablePrincipalHighlight"
+const val DEV_TAG_LOCATION_MANAGER = "dev_tag_location_manager"
+const val DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC = 10025
+const val DEV_SYNC_MARKDOWN_ALL = "dev_sync_markdown_all"
+const val DEV_SYNC_MARKDOWN_DEV = "dev_sync_markdown_dev"
+const val DEV_SYNC_MARKDOWN_ETC = "dev_sync_markdown_etc"
+const val DEV_SYNC_MARKDOWN_LIFE = "dev_sync_markdown_life"
+const val DEV_SYNC_MARKDOWN_STOCK_FICS = "dev_sync_markdown_stock_fics"
+const val DEV_SYNC_MARKDOWN_STOCK_ETF = "dev_sync_markdown_stock_etf"
+const val DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE = "dev_sync_markdown_stock_knowledge"

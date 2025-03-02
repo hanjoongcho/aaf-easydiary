@@ -1,6 +1,10 @@
 package me.blog.korn123.easydiary.services
 
-import android.app.*
+import android.app.IntentService
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -18,15 +22,19 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_RECOVERY_COMPLETE_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import java.io.File
-import java.util.*
+import java.util.Collections
 
 class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(name) {
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -223,7 +231,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setContentIntent(
                         PendingIntent.getActivity(this, NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            putExtra(BaseDevActivity.NOTIFICATION_INFO, this@RecoverPhotoService::class.java.name)
+                            putExtra(NOTIFICATION_INFO, this@RecoverPhotoService::class.java.name)
                         }, pendingIntentFlag())
                 )
                 .addAction(

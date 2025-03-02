@@ -97,10 +97,20 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ALL
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_DEV
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ETC
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_LIFE
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_ETF
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
+import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
@@ -268,32 +278,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "GitHub MarkDown Page",
                 "SYNC dev",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_DEV) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_DEV) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC life",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_LIFE) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_LIFE) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC etc",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_ETC) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_ETC) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/FICS",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_STOCK_FICS) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_FICS) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/ETF",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_STOCK_ETF) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_ETF) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/knowledge",
                 settingCardModifier,
-            ) { syncMarkDown(SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
+            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
             SimpleCard(
                 "ReviewFlow",
                 null,
@@ -1288,7 +1298,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         return notificationBuilder
     }
 
-    private fun syncMarkDown(syncMode: String = SYNC_MARKDOWN_ALL) {
+    private fun syncMarkDown(syncMode: String = DEV_SYNC_MARKDOWN_ALL) {
         mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
             val baseUrl = "https://api.github.com"
@@ -1317,7 +1327,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     .build()
                 val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
                 val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = SYMBOL_USER_CUSTOM_SYNC) {
+                fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC) {
                     val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                     val response = call.execute()
                     val contentsItems: List<Contents>? = response.body()
@@ -1376,35 +1386,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         }
                     }
                 }
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_DEV) fetchContents("dev", true)
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_ETC) fetchContents("etc", true)
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_LIFE) fetchContents("life", true)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_DEV) fetchContents("dev", true)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_ETC) fetchContents("etc", true)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_LIFE) fetchContents("life", true)
 //                fetchContents("stock/KOSPI", true, 10031)
 //                fetchContents("stock/KOSDAQ", true, 10032)
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
-                if (syncMode == SYNC_MARKDOWN_ALL || syncMode == SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
+                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
                 withContext(Dispatchers.Main) {
                     mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
                 }
             }
         }
-    }
-
-
-
-    companion object {
-        const val NOTIFICATION_ID = "notification_id"
-        const val NOTIFICATION_INFO = "notification_info"
-        const val TAG_LOCATION_MANAGER = "tag_location_manager"
-        const val SYMBOL_USER_CUSTOM_SYNC = 10025
-        const val SYNC_MARKDOWN_ALL = "sync_markdown_all"
-        const val SYNC_MARKDOWN_DEV = "sync_markdown_dev"
-        const val SYNC_MARKDOWN_ETC = "sync_markdown_etc"
-        const val SYNC_MARKDOWN_LIFE = "sync_markdown_life"
-        const val SYNC_MARKDOWN_STOCK_FICS = "sync_markdown_stock_fics"
-        const val SYNC_MARKDOWN_STOCK_ETF = "sync_markdown_stock_etf"
-        const val SYNC_MARKDOWN_STOCK_KNOWLEDGE = "sync_markdown_stock_knowledge"
     }
 }
 

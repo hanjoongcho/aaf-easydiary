@@ -95,7 +95,6 @@ import com.simplemobiletools.commons.views.MySeekBar
 import com.simplemobiletools.commons.views.MySwitchCompat
 import com.simplemobiletools.commons.views.MyTextView
 import io.noties.markwon.AbstractMarkwonPlugin
-import io.noties.markwon.LinkResolver
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.core.MarkwonTheme
@@ -114,7 +113,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -149,6 +147,7 @@ import me.blog.korn123.easydiary.helper.LINE_SPACING_SCALE_FACTOR
 import me.blog.korn123.easydiary.helper.MIME_TYPE_BINARY
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
 import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
@@ -439,7 +438,7 @@ fun Context.openOverDueNotification() {
                     Intent(this, NotificationService::class.java).apply {
                         action = BaseNotificationService.ACTION_DEV_DISMISS
                         putExtra(
-                            BaseDevActivity.NOTIFICATION_ID,
+                            NOTIFICATION_ID,
                             notificationInfo.id /*An identifier for this notification unique within your application.*/
                         )
                     },
