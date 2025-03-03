@@ -122,7 +122,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
         val maxItemsInEachRow = when {
-            LocalInspectionMode.current -> 2
+            LocalInspectionMode.current -> 1
             isLandScape() -> 2
             else -> 1
         }

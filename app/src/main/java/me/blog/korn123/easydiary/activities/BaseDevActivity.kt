@@ -123,6 +123,7 @@ import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -670,9 +671,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
             modifier = Modifier
         ) {
-            SimpleCard(
+            SimpleCardWithImage(
                 "EasyDiary Launcher",
                 null,
+                R.drawable.ic_004_sandwich,
                 settingCardModifier,
             ) { toggleLauncher(Launcher.EASY_DIARY) }
             SimpleCard(
