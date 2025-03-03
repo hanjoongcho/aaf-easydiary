@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
@@ -112,6 +113,25 @@ fun SimpleCard(
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit = {}
 ) {
+    SimpleCardWithImage(
+        title,
+        description,
+        null,
+        modifier,
+        enableCardViewPolicy,
+        callback
+    )
+}
+
+@Composable
+fun SimpleCardWithImage(
+    title: String,
+    description: String?,
+    imageResourceId: Int?,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    callback: () -> Unit = {}
+) {
     val pixelValue = LocalContext.current.config.settingFontSize
     val density = LocalDensity.current
     val textUnit = with (density) {
@@ -136,6 +156,14 @@ fun SimpleCard(
             Row(
                 modifier = Modifier.defaultMinSize(minHeight = 32.dp),
                 verticalAlignment = Alignment.CenterVertically) {
+                imageResourceId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = "Google Calendar",
+                        contentScale = ContentScale.Fit,
+                        modifier =  Modifier.size(42.dp).padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
+                    )
+                }
                 Text(
                     text = title,
                     style = TextStyle(

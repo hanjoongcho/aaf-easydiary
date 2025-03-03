@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -142,6 +143,31 @@ class DevActivity : BaseDevActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @Composable
+    @Preview(heightDp = 1100)
+    private fun DevActivityPreview() {
+        AppTheme {
+            val configuration = LocalConfiguration.current
+            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+            val scrollState = rememberScrollState()
+
+            CardContainer {
+                val settingCardModifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                Notification(settingCardModifier, maxItemsInEachRow)
+                AlertDialog(settingCardModifier, maxItemsInEachRow)
+//                Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+//                LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
+                DebugToast(settingCardModifier, maxItemsInEachRow)
+//                Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
+                FingerPrint(settingCardModifier, maxItemsInEachRow)
+                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
             }
         }
     }
