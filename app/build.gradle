@@ -164,9 +164,9 @@ dependencies {
     gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsDevImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmsProdImplementation 'androidx.credentials:credentials:1.3.0'
-    gmsProdImplementation 'androidx.credentials:credentials-play-services-auth:1.3.0'
-    gmsProdImplementation 'com.google.android.libraries.identity.googleid:googleid:1.3.0'
+    gmsProdImplementation 'androidx.credentials:credentials:1.1.1'
+    gmsProdImplementation 'androidx.credentials:credentials-play-services-auth:1.1.1'
+    gmsProdImplementation 'com.google.android.libraries.identity.googleid:googleid:1.1.1'
 
     // google components for production package (not foss)
     gmsProdImplementation 'com.google.android.gms:play-services-auth:21.3.0'
@@ -176,9 +176,9 @@ dependencies {
     gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsProdImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmsProdImplementation 'androidx.credentials:credentials:1.3.0'
-    gmsProdImplementation 'androidx.credentials:credentials-play-services-auth:1.3.0'
-    gmsProdImplementation 'com.google.android.libraries.identity.googleid:googleid:1.3.0'
+    gmsProdImplementation 'androidx.credentials:credentials:1.1.1'
+    gmsProdImplementation 'androidx.credentials:credentials-play-services-auth:1.1.1'
+    gmsProdImplementation 'com.google.android.libraries.identity.googleid:googleid:1.1.1'
 
     // google components common
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
