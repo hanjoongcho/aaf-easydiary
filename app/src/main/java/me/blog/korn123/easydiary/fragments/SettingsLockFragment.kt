@@ -2,19 +2,37 @@ package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.ui.components.CardContainer
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class SettingsLockFragment : androidx.fragment.app.Fragment() {
 
@@ -42,6 +60,31 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
         bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                Column {
+                    SimpleCard(
+                        "Notification-01",
+                        "Basic",
+                        Modifier
+                            .fillMaxWidth()
+                    ) {
+                    }
+                    var aafPinLockEnable by remember { mutableStateOf(requireContext().config.aafPinLockEnable) }
+                    SwitchCard(
+                        getString(R.string.pin_lock_title),
+                        getString(R.string.pin_lock_summary),
+                        Modifier
+                            .fillMaxWidth(),
+                        aafPinLockEnable
+                    ) {
+                        aafPinLockEnable = aafPinLockEnable.not()
+                        config.aafPinLockEnable = aafPinLockEnable
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {

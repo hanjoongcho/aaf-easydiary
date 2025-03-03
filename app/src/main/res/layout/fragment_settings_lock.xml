@@ -8,6 +8,12 @@
         android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/appLockSetting"
             style="@style/AppCard.Settings">
