@@ -117,7 +117,7 @@ class DevActivity : BaseDevActivity() {
                         showAlertDialog(account!!.name, null, null, DialogMode.DEFAULT, false)
                     }
                 } else {
-                    showAlertDialog("Sign account is invalid.", null)
+                    showAlertDialog("Sign account is invalid.")
                 }
             }
             SimpleCard(
