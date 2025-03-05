@@ -21,8 +21,6 @@ import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.extensions.updateFragmentUI
-import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
@@ -97,7 +95,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                     true -> {
                                         fingerprintLockEnable = false
                                         config.fingerprintLockEnable = fingerprintLockEnable
-                                        showAlertDialog(getString(R.string.fingerprint_setting_release), )
+                                        showAlertDialog(getString(R.string.fingerprint_setting_release))
                                         applyPolicyForRecentApps()
                                     }
                                     false -> {
