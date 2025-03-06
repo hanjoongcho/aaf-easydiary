@@ -6,12 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -154,15 +156,17 @@ fun SimpleCardWithImage(
             modifier = Modifier.padding(15.dp)
         ) {
             Row(
-                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
-                verticalAlignment = Alignment.CenterVertically) {
+//                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top) {
                 imageResourceId?.let {
                     Image(
                         painter = painterResource(id = it),
                         contentDescription = "Google Calendar",
                         contentScale = ContentScale.Fit,
-                        modifier =  Modifier.size(42.dp).padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
+                        modifier =  Modifier.size(32.dp)
                     )
+                    Spacer(modifier = Modifier.width(10.dp))
                 }
                 Text(
                     text = title,
@@ -182,7 +186,7 @@ fun SimpleCardWithImage(
                     text = description,
                     style = TextStyle(
                         fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                 )

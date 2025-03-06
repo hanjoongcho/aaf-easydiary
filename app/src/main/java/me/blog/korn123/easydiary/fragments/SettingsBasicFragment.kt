@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,18 +12,37 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.Modifier
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
-import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.hasGPSPermissions
+import me.blog.korn123.easydiary.extensions.isLocationEnabled
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_DESC
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
@@ -71,6 +89,24 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                Column {
+                    SimpleCard(
+                        title = getString(R.string.setting_primary_color_title),
+                        description = getString(R.string.setting_primary_color_summary),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity()
+                            , Intent(requireActivity(), CustomizationActivity::class.java)
+                        )
+                    }
+
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -86,6 +122,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     }
 
 
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     /***************************************************************************************************
      *   etc functions
      *

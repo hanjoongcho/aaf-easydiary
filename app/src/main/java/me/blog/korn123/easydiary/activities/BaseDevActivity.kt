@@ -849,13 +849,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun CustomLauncherPreview() {
         AppTheme {
-            val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
             Column {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                CustomLauncher(settingCardModifier, 1)
             }
         }
     }
@@ -864,13 +862,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun NotificationPreview() {
         AppTheme {
-            val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
             Column {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                Notification(settingCardModifier, maxItemsInEachRow)
+                Notification(settingCardModifier, 1)
             }
         }
     }
