@@ -14,17 +14,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
+import me.blog.korn123.easydiary.activities.FingerprintLockActivity
+import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
@@ -42,6 +49,7 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import java.text.SimpleDateFormat
 
@@ -103,7 +111,18 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             , Intent(requireActivity(), CustomizationActivity::class.java)
                         )
                     }
-
+                    var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
+                    SwitchCard(
+                        title = getString(R.string.markdown_setting_title)
+                        , description = getString(R.string.markdown_setting_summary)
+                        , modifier = Modifier.fillMaxWidth()
+                        , isOn = enableMarkdown
+                    ) {
+                        requireActivity().run {
+                            enableMarkdown = enableMarkdown.not()
+                            config.enableMarkdown = enableMarkdown
+                        }
+                    }
                 }
             }
         }

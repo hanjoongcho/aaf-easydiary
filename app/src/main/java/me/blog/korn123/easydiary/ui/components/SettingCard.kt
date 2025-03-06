@@ -244,7 +244,6 @@ fun SwitchCard(
                         .height(32.dp)
 //                        .background(Color.Yellow)
                     ,
-
                     checked = isOn,
                     onCheckedChange = {
                         callback.invoke()
@@ -270,7 +269,7 @@ fun SwitchCard(
                         text = description,
                         style = TextStyle(
                             fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                            color = Color(LocalContext.current.config.textColor),
+                            color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),
                     )
@@ -326,7 +325,7 @@ fun ScrollableCard(
                     text = description,
                     style = TextStyle(
                         fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                 )
