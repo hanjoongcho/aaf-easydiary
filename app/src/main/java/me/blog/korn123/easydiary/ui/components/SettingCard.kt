@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -22,12 +23,17 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +51,9 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 const val verticalPadding = 4F
@@ -378,6 +387,96 @@ fun SymbolCard(
                 modifier = Modifier.size(64.dp),
                 contentScale = ContentScale.Crop
             )
+        }
+    }
+}
+
+@Composable
+fun RadioGroupCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    options: List<Map<String, Any>>,
+    selectedKey: Int,
+    callback: (key: Int) -> Unit
+) {
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+            description?.let {
+                Row(
+                    modifier = Modifier.padding(top = 5.dp)
+                ) {
+                    Text(
+                        text = description,
+                        style = TextStyle(
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                options.forEach { option ->
+                    RadioButton(
+                        selected = (selectedKey == option["key"]),
+                        onClick = {
+                            callback.invoke(option["key"] as Int)
+                        },
+                        modifier = Modifier.size(20.dp),
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(LocalContext.current.config.primaryColor),
+                            unselectedColor = Color(LocalContext.current.config.textColor),
+                            disabledSelectedColor = Color.LightGray,   // 비활성화된 선택 색상
+                            disabledUnselectedColor = Color.DarkGray   // 비활성화된 미선택 색상
+                        )
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = option["title"] as String,
+                        style = TextStyle(
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                }
+            }
         }
     }
 }

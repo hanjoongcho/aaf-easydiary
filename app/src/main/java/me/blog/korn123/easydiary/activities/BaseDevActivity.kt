@@ -121,6 +121,7 @@ import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
+import me.blog.korn123.easydiary.ui.components.RadioGroupCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
@@ -692,6 +693,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 null,
                 settingCardModifier,
             ) { toggleLauncher(Launcher.DEBUG) }
+            val settingCardModifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
         }
     }
 

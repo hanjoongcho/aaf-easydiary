@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,22 @@ import android.widget.AdapterView
 import android.widget.ListView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -27,6 +35,7 @@ import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
+import me.blog.korn123.easydiary.compose.QuickSettingsActivity.QuickSettingsViewModel
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -48,9 +57,11 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.ui.components.RadioGroupCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
@@ -91,6 +102,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
@@ -100,22 +112,31 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
         mBinding.composeView.setContent {
             AppTheme {
-                Column {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
                     SimpleCard(
                         title = getString(R.string.setting_primary_color_title),
                         description = getString(R.string.setting_primary_color_summary),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = settingCardModifier
                     ) {
                         TransitionHelper.startActivityWithTransition(
                             requireActivity()
                             , Intent(requireActivity(), CustomizationActivity::class.java)
                         )
                     }
+
                     var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
                     SwitchCard(
                         title = getString(R.string.markdown_setting_title)
                         , description = getString(R.string.markdown_setting_summary)
-                        , modifier = Modifier.fillMaxWidth()
+                        , modifier = settingCardModifier
                         , isOn = enableMarkdown
                     ) {
                         requireActivity().run {
@@ -123,6 +144,52 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             config.enableMarkdown = enableMarkdown
                         }
                     }
+
+                    var calendarStartDay by remember { mutableStateOf(requireContext().config.calendarStartDay) }
+                    RadioGroupCard(
+                        title = getString(R.string.calendar_start_day_title),
+                        description = getString(R.string.calendar_start_day_summary),
+                        modifier = settingCardModifier,
+                        options = listOf(
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_saturday),
+                                "key" to CALENDAR_START_DAY_SATURDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_sunday),
+                                "key" to CALENDAR_START_DAY_SUNDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_monday),
+                                "key" to CALENDAR_START_DAY_MONDAY
+                            )
+                        ),
+                        selectedKey = calendarStartDay
+                    ) { key ->
+                        calendarStartDay = key
+                        config.calendarStartDay = calendarStartDay
+                    }
+
+                    var enableShakeDetector by remember { mutableStateOf(requireContext().config.enableShakeDetector) }
+//                    val viewModel: SwitchViewModel by viewModels()
+//                    val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
+                    SwitchCard(
+                        title = getString(R.string.quick_setting_title)
+                        , description = getString(R.string.quick_setting_summary)
+                        , modifier = settingCardModifier
+                        , isOn = enableShakeDetector
+                    ) {
+                        requireActivity().run {
+                            enableShakeDetector = enableShakeDetector.not()
+                            config.enableShakeDetector = enableShakeDetector
+                        }
+                    }
+
+                    SimpleCard(
+                        title = "🍟🍔🍕🌭🍿",
+                        description = null,
+                        modifier = settingCardModifier
+                    )
                 }
             }
         }
@@ -263,7 +330,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     R.id.card_quick_setting -> {
                         switchQuickSetting.toggle()
                         config.enableShakeDetector = switchQuickSetting.isChecked
-                        showAlertDialog("Close the current screen to apply the settings.", { _, _ -> finish() }, null)
+//                        showAlertDialog("Close the current screen to apply the settings.", { _, _ -> finish() }, null)
                     }
                 }
             }
