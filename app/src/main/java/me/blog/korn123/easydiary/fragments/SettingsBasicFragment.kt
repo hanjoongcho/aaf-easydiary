@@ -134,7 +134,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
                     SwitchCard(
-                        title = getString(R.string.markdown_setting_title)
+                        title = "${getString(R.string.markdown_setting_title)} $enableMarkdown"
                         , description = getString(R.string.markdown_setting_summary)
                         , modifier = settingCardModifier
                         , isOn = enableMarkdown
@@ -170,17 +170,19 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.calendarStartDay = calendarStartDay
                     }
 
-                    var enableShakeDetector by remember { mutableStateOf(requireContext().config.enableShakeDetector) }
-//                    val viewModel: SwitchViewModel by viewModels()
-//                    val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
+//                    var enableShakeDetector by remember { mutableStateOf(requireContext().config.enableShakeDetector) }
+                    val viewModel: SwitchViewModel by viewModels()
+                    val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
                     SwitchCard(
-                        title = getString(R.string.quick_setting_title)
+                        title = "${getString(R.string.quick_setting_title)} $enableShakeDetector"
                         , description = getString(R.string.quick_setting_summary)
                         , modifier = settingCardModifier
                         , isOn = enableShakeDetector
                     ) {
                         requireActivity().run {
-                            enableShakeDetector = enableShakeDetector.not()
+//                            enableShakeDetector = enableShakeDetector.not()
+//                            config.enableShakeDetector = enableShakeDetector
+                            viewModel.toggle()
                             config.enableShakeDetector = enableShakeDetector
                         }
                     }

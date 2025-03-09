@@ -7,6 +7,6 @@ class SwitchViewModel : ViewModel() {
     var isOn: MutableLiveData<Boolean> = MutableLiveData()
 
     fun toggle() {
-        isOn.value = isOn.value?.not()
+        isOn.value = isOn.value != true
     }
 }
