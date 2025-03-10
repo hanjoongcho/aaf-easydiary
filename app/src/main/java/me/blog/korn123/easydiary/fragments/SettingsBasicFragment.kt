@@ -184,8 +184,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         , isOn = enableShakeDetector
                     ) {
                         requireActivity().run {
-                            viewModel.toggle()
-                            config.enableShakeDetector = enableShakeDetector
+                            config.enableShakeDetector = enableShakeDetector.not()
+                            viewModel.isOn.value = config.enableShakeDetector
                         }
                     }
 
