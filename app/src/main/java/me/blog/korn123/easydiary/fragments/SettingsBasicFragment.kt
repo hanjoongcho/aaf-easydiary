@@ -39,6 +39,7 @@ import me.blog.korn123.easydiary.compose.QuickSettingsActivity.QuickSettingsView
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
@@ -48,6 +49,7 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -59,7 +61,10 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.ui.components.RadioGroupCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
+import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
@@ -170,7 +175,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.calendarStartDay = calendarStartDay
                     }
 
-//                    var enableShakeDetector by remember { mutableStateOf(requireContext().config.enableShakeDetector) }
                     val viewModel: SwitchViewModel by viewModels()
                     val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
                     SwitchCard(
@@ -180,11 +184,46 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         , isOn = enableShakeDetector
                     ) {
                         requireActivity().run {
-//                            enableShakeDetector = enableShakeDetector.not()
-//                            config.enableShakeDetector = enableShakeDetector
                             viewModel.toggle()
                             config.enableShakeDetector = enableShakeDetector
                         }
+                    }
+
+                    var enableWelcomeDashboardPopup by remember { mutableStateOf(requireContext().config.enableWelcomeDashboardPopup) }
+                    SwitchCard(
+                        title = getString(R.string.enable_welcome_dashboard_popup_title)
+                        , description = getString(R.string.enable_welcome_dashboard_popup_description)
+                        , modifier = settingCardModifier
+                        , isOn = enableWelcomeDashboardPopup
+                    ) {
+                        requireActivity().run {
+                            enableWelcomeDashboardPopup = enableWelcomeDashboardPopup.not()
+                            config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopup
+                        }
+                    }
+
+                    var enablePhotoHighlight by remember { mutableStateOf(requireContext().config.enablePhotoHighlight) }
+                    SwitchCard(
+                        title = getString(R.string.enable_photo_highlight_title)
+                        , description = getString(R.string.enable_photo_highlight_description)
+                        , modifier = settingCardModifier
+                        , isOn = enablePhotoHighlight
+                    ) {
+                        requireActivity().run {
+                            enablePhotoHighlight = enablePhotoHighlight.not()
+                            config.enablePhotoHighlight = enablePhotoHighlight
+                        }
+                    }
+
+                    var enableTaskSymbolTopOrder by remember { mutableStateOf(requireContext().config.enableTaskSymbolTopOrder) }
+                    SwitchCardTodo(
+                        title = getString(R.string.task_symbol_top_order_title),
+                        description = getString(R.string.task_symbol_top_order_description),
+                        modifier = settingCardModifier,
+                        isOn = enableTaskSymbolTopOrder,
+                    ) {
+                        enableTaskSymbolTopOrder = enableTaskSymbolTopOrder.not()
+                        config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
                     }
 
                     SimpleCard(
@@ -222,11 +261,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    R.id.primaryColor -> TransitionHelper.startActivityWithTransition(
-                        this@activity,
-                        Intent(this@activity, CustomizationActivity::class.java)
-                    )
-
                     R.id.thumbnailSetting -> {
                         openThumbnailSettingDialog()
                     }
@@ -303,36 +337,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         openMaxLinesSettingDialog()
                     }
 
-                    R.id.taskSymbolTopOrder -> {
-                        taskSymbolTopOrderSwitcher.toggle()
-                        config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
-                    }
-
                     R.id.enableReviewFlow -> {
                         enableReviewFlowSwitcher.toggle()
                         config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
-                    }
-
-                    R.id.enable_photo_highlight -> {
-                        enablePhotoHighlightSwitcher.toggle()
-                        config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
-                    }
-
-                    R.id.enable_welcome_dashboard_popup -> {
-                        enableWelcomeDashboardPopupSwitcher.toggle()
-                        config.enableWelcomeDashboardPopup =
-                            enableWelcomeDashboardPopupSwitcher.isChecked
-                    }
-
-                    R.id.card_markdown_setting -> {
-                        switchMarkdownSetting.toggle()
-                        config.enableMarkdown = switchMarkdownSetting.isChecked
-                    }
-
-                    R.id.card_quick_setting -> {
-                        switchQuickSetting.toggle()
-                        config.enableShakeDetector = switchQuickSetting.isChecked
-//                        showAlertDialog("Close the current screen to apply the settings.", { _, _ -> finish() }, null)
                     }
                 }
             }
@@ -341,7 +348,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     private fun bindEvent() {
         mBinding.run {
-            primaryColor.setOnClickListener(mOnClickListener)
             thumbnailSetting.setOnClickListener(mOnClickListener)
             cardDatetimeSetting.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
@@ -352,12 +358,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             countCharacters.setOnClickListener(mOnClickListener)
             locationInfo.setOnClickListener(mOnClickListener)
             holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
-            taskSymbolTopOrder.setOnClickListener(mOnClickListener)
             enableReviewFlow.setOnClickListener(mOnClickListener)
-            enablePhotoHighlight.setOnClickListener(mOnClickListener)
-            enableWelcomeDashboardPopup.setOnClickListener(mOnClickListener)
-            cardMarkdownSetting.setOnClickListener(mOnClickListener)
-            cardQuickSetting.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
                 requireActivity().config.calendarStartDay = when (i) {
                     R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -388,10 +389,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 contentsSummarySwitcher.isChecked = config.enableContentsSummary
                 countCharactersSwitcher.isChecked = config.enableCountCharacters
                 locationInfoSwitcher.isChecked = config.enableLocationInfo
-                taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
-                enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-                enableWelcomeDashboardPopupSwitcher.isChecked = config.enableWelcomeDashboardPopup
 
                 when (config.calendarStartDay) {
                     CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
@@ -410,8 +408,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
                     System.currentTimeMillis(), requireContext()
                 )
-                switchMarkdownSetting.isChecked = config.enableMarkdown
-                switchQuickSetting.isChecked = config.enableShakeDetector
             }
         }
     }

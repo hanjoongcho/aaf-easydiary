@@ -168,15 +168,6 @@ fun SimpleCardWithImage(
 //                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
                 modifier = Modifier,
                 verticalAlignment = Alignment.Top) {
-                imageResourceId?.let {
-                    Image(
-                        painter = painterResource(id = it),
-                        contentDescription = "Google Calendar",
-                        contentScale = ContentScale.Fit,
-                        modifier =  Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                }
                 Text(
                     text = title,
                     style = TextStyle(
@@ -188,17 +179,29 @@ fun SimpleCardWithImage(
                     ),
                 )
             }
-            description?.let {
-                Text(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    text = description,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                imageResourceId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = "Google Calendar",
+                        contentScale = ContentScale.Fit,
+                        modifier =  Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+                description?.run {
+                    Text(
+                        text = description,
+                        style = TextStyle(
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -235,8 +238,7 @@ fun SwitchCard(
             modifier = Modifier.padding(15.dp)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                verticalAlignment = Alignment.CenterVertically            ) {
                 Text(
                     modifier = Modifier.weight(1f),
                     text = title,
@@ -481,3 +483,191 @@ fun RadioGroupCard(
     }
 }
 
+
+@Composable
+fun SwitchCardWithImage(
+    title: String,
+    imageResourceId: Int,
+    description: String,
+    modifier: Modifier,
+    isOn: Boolean,
+    callback: () -> Unit
+) {
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        onClick = {
+            callback.invoke()
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+                Switch(
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+                    checked = isOn,
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = imageResourceId),
+                    contentDescription = "Google Calendar",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SwitchCardTodo(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    isOn: Boolean,
+    callback: () -> Unit
+) {
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        onClick = {
+            callback.invoke()
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_todo),
+                    contentDescription = "Todo",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(26.dp)
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_doing),
+                    contentDescription = "Doing",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(26.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Switch(
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+                    checked = isOn,
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
+            ) {
+                Text(
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                            LocalContext.current
+                        ),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+}

@@ -152,7 +152,7 @@ class DevActivity : BaseDevActivity() {
     private fun DevActivityPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 3
             val scrollState = rememberScrollState()
 
             CardContainer {

@@ -126,6 +126,7 @@ import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
 import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
@@ -672,11 +673,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
             modifier = Modifier
         ) {
-            SimpleCardWithImage(
-                "EasyDiary Launcher",
-                null,
-                R.drawable.ic_004_sandwich,
-                settingCardModifier,
+            SwitchCardTodo(
+                title = getString(R.string.task_symbol_top_order_title),
+                description = getString(R.string.task_symbol_top_order_description),
+                modifier = settingCardModifier,
+                isOn = true,
             ) { toggleLauncher(Launcher.EASY_DIARY) }
             SimpleCard(
                 "Dark Launcher",
