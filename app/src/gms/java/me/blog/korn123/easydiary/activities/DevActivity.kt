@@ -109,9 +109,9 @@ class DevActivity : BaseDevActivity() {
             maxItemsInEachRow = maxItemsInEachRow
         ) {
             SimpleCard(
-                "Check Google Sign Account",
-                null,
-                modifier,
+                title = "Check Google Sign Account",
+                description = null,
+                modifier = modifier,
             ) {
                 if (GoogleOAuthHelper.isValidGoogleSignAccount(this@DevActivity)) {
                     GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.run {
@@ -122,9 +122,9 @@ class DevActivity : BaseDevActivity() {
                 }
             }
             SimpleCard(
-                "Full Backup",
-                null,
-                modifier,
+                title = "Full Backup",
+                description = null,
+                modifier = modifier,
             ) {
                 GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
                     DriveServiceHelper(this@DevActivity, account).run {

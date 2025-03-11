@@ -11,10 +11,8 @@ import android.widget.AdapterView
 import android.widget.ListView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,24 +30,17 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
-import me.blog.korn123.easydiary.activities.FingerprintLockActivity
-import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
-import me.blog.korn123.easydiary.compose.QuickSettingsActivity.QuickSettingsViewModel
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
-import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
-import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -61,11 +52,10 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.ui.components.RadioGroupCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
-import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.DescriptionViewModel
 import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
 
@@ -78,9 +68,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
-    private val enableLocationInfoViewModel: SwitchViewModel by viewModels()
+    private val mEnableLocationInfoViewModel: SwitchViewModel by viewModels()
+    private val mDescriptionViewModel: DescriptionViewModel by viewModels()
 
-    
+
     /***************************************************************************************************
      *   override functions
      *
@@ -94,7 +85,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 when (isLocationEnabled()) {
                     true -> {
                         config.enableLocationInfo = true
-                        enableLocationInfoViewModel.isOn.value = config.enableLocationInfo
+                        mEnableLocationInfoViewModel.isOn.value = config.enableLocationInfo
                         makeSnackBar("GPS provider setting is activated!!!")
                     }
                     false -> makeSnackBar("The request operation did not complete normally.")
@@ -228,7 +219,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     }
 
 
-                    val enableLocationInfo: Boolean by enableLocationInfoViewModel.isOn.observeAsState(requireActivity().config.enableLocationInfo)
+                    val enableLocationInfo: Boolean by mEnableLocationInfoViewModel.isOn.observeAsState(requireActivity().config.enableLocationInfo)
                     SwitchCard(
                         title = "${getString(R.string.location_info_title)}-${config.enableLocationInfo}"
                         , description = getString(R.string.location_info_description)
@@ -237,8 +228,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
 //                            config.enableLocationInfo = enableLocationInfo.not()
-                            enableLocationInfoViewModel.isOn.value = enableLocationInfo.not()
-                            when (enableLocationInfoViewModel.isOn.value == true) {
+                            mEnableLocationInfoViewModel.isOn.value = enableLocationInfo.not()
+                            when (mEnableLocationInfoViewModel.isOn.value == true) {
                                 true -> {
                                     when (hasGPSPermissions()) {
                                         true -> {
@@ -246,12 +237,12 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                         }
                                         false -> {
                                             config.enableLocationInfo = false
-                                            enableLocationInfoViewModel.isOn.value = false
+                                            mEnableLocationInfoViewModel.isOn.value = false
                                             requireActivity().run {
                                                 if (this is EasyDiaryActivity) {
                                                     acquireGPSPermissions(mRequestLocationSourceLauncher) {
                                                         config.enableLocationInfo = true
-                                                        enableLocationInfoViewModel.isOn.value = true
+                                                        mEnableLocationInfoViewModel.isOn.value = true
                                                     }
                                                 }
                                             }
@@ -263,6 +254,26 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 }
                             }
                         }
+                    }
+
+                    val settingThumbnailSize: String by mDescriptionViewModel.settingThumbnailSize.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.thumbnail_setting_title),
+                        description = getString(R.string.thumbnail_setting_summary),
+                        subDescription = settingThumbnailSize,
+                        modifier = settingCardModifier
+                    ) {
+                        openThumbnailSettingDialog()
+                    }
+
+                    val settingDatetimeFormat: String by mDescriptionViewModel.settingDatetimeFormat.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.datetime_setting_title),
+                        description = getString(R.string.datetime_setting_summary),
+                        subDescription = settingDatetimeFormat,
+                        modifier = settingCardModifier
+                    ) {
+                        openDatetimeFormattingSettingDialog()
                     }
 
                     SimpleCard(
@@ -300,10 +311,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    R.id.thumbnailSetting -> {
-                        openThumbnailSettingDialog()
-                    }
-
                     cardDatetimeSetting.id -> {
                         openDatetimeFormattingSettingDialog()
                     }
@@ -356,7 +363,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     private fun bindEvent() {
         mBinding.run {
-            thumbnailSetting.setOnClickListener(mOnClickListener)
             cardDatetimeSetting.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
@@ -407,7 +413,12 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     CALENDAR_SORTING_DESC -> descending.isChecked = true
                 }
                 holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
-                thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
+
+                mDescriptionViewModel.settingThumbnailSize.value = "${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp"
+                mDescriptionViewModel.settingDatetimeFormat.value = DateUtils.getDateTimeStringForceFormatting(
+                    System.currentTimeMillis(), requireContext()
+                )
+
                 maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
                 maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
 
@@ -417,7 +428,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false
-                    enableLocationInfoViewModel.isOn.value = false
+                    mEnableLocationInfoViewModel.isOn.value = false
                 }
             }
         }

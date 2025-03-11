@@ -120,17 +120,19 @@ fun CategoryTitleCard(
 fun SimpleCard(
     title: String,
     description: String?,
+    subDescription: String? = null,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit = {}
 ) {
     SimpleCardWithImage(
-        title,
-        description,
-        null,
-        modifier,
-        enableCardViewPolicy,
-        callback
+        title = title,
+        description = description,
+        subDescription = subDescription,
+        imageResourceId = null,
+        modifier = modifier,
+        enableCardViewPolicy = enableCardViewPolicy,
+        callback = callback
     )
 }
 
@@ -138,6 +140,7 @@ fun SimpleCard(
 fun SimpleCardWithImage(
     title: String,
     description: String?,
+    subDescription: String? = null,
     imageResourceId: Int?,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
@@ -197,6 +200,24 @@ fun SimpleCardWithImage(
                         text = description,
                         style = TextStyle(
                             fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                            color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
+                    )
+                }
+            }
+
+            subDescription?.run {
+                Row(
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = subDescription,
+                        style = TextStyle(
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                                LocalContext.current
+                            ),
                             color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),

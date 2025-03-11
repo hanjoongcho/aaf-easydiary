@@ -194,8 +194,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     SimpleCard(
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
-                        settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
-                        enableCardViewPolicy
+                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         val alarm = Alarm().apply {
                             sequence = Int.MAX_VALUE
