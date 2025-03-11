@@ -78,6 +78,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
+    private val enableLocationInfoViewModel: SwitchViewModel by viewModels()
 
     
     /***************************************************************************************************
@@ -92,8 +93,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 pauseLock()
                 when (isLocationEnabled()) {
                     true -> {
-                        mBinding.locationInfoSwitcher.isChecked = true
-                        config.enableLocationInfo = mBinding.locationInfoSwitcher.isChecked
+                        config.enableLocationInfo = true
+                        enableLocationInfoViewModel.isOn.value = config.enableLocationInfo
                         makeSnackBar("GPS provider setting is activated!!!")
                     }
                     false -> makeSnackBar("The request operation did not complete normally.")
@@ -226,6 +227,44 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
                     }
 
+
+                    val enableLocationInfo: Boolean by enableLocationInfoViewModel.isOn.observeAsState(requireActivity().config.enableLocationInfo)
+                    SwitchCard(
+                        title = "${getString(R.string.location_info_title)}-${config.enableLocationInfo}"
+                        , description = getString(R.string.location_info_description)
+                        , modifier = settingCardModifier
+                        , isOn = enableLocationInfo
+                    ) {
+                        requireActivity().run {
+//                            config.enableLocationInfo = enableLocationInfo.not()
+                            enableLocationInfoViewModel.isOn.value = enableLocationInfo.not()
+                            when (enableLocationInfoViewModel.isOn.value == true) {
+                                true -> {
+                                    when (hasGPSPermissions()) {
+                                        true -> {
+                                            config.enableLocationInfo = true
+                                        }
+                                        false -> {
+                                            config.enableLocationInfo = false
+                                            enableLocationInfoViewModel.isOn.value = false
+                                            requireActivity().run {
+                                                if (this is EasyDiaryActivity) {
+                                                    acquireGPSPermissions(mRequestLocationSourceLauncher) {
+                                                        config.enableLocationInfo = true
+                                                        enableLocationInfoViewModel.isOn.value = true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                false -> {
+                                    config.enableLocationInfo = false
+                                }
+                            }
+                        }
+                    }
+
                     SimpleCard(
                         title = "🍟🍔🍕🌭🍿",
                         description = null,
@@ -297,37 +336,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.enableCountCharacters = countCharactersSwitcher.isChecked
                     }
 
-                    R.id.locationInfo -> {
-                        locationInfoSwitcher.toggle()
-                        when (locationInfoSwitcher.isChecked) {
-                            true -> {
-                                run {
-                                    when (hasGPSPermissions()) {
-                                        true -> {
-                                            config.enableLocationInfo =
-                                                locationInfoSwitcher.isChecked
-                                        }
-
-                                        false -> {
-                                            locationInfoSwitcher.isChecked = false
-                                            if (this@activity is EasyDiaryActivity) {
-                                                acquireGPSPermissions(mRequestLocationSourceLauncher) {
-                                                    locationInfoSwitcher.isChecked = true
-                                                    config.enableLocationInfo =
-                                                        locationInfoSwitcher.isChecked
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            false -> {
-                                config.enableLocationInfo = locationInfoSwitcher.isChecked
-                            }
-                        }
-                    }
-
                     R.id.holdPositionEnterEditScreen -> {
                         holdPositionSwitcher.toggle()
                         config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
@@ -356,7 +364,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             sensitiveOption.setOnClickListener(mOnClickListener)
             maxLines.setOnClickListener(mOnClickListener)
             countCharacters.setOnClickListener(mOnClickListener)
-            locationInfo.setOnClickListener(mOnClickListener)
             holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
             enableReviewFlow.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
@@ -388,7 +395,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
                 contentsSummarySwitcher.isChecked = config.enableContentsSummary
                 countCharactersSwitcher.isChecked = config.enableCountCharacters
-                locationInfoSwitcher.isChecked = config.enableLocationInfo
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
 
                 when (config.calendarStartDay) {
@@ -408,6 +414,11 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
                     System.currentTimeMillis(), requireContext()
                 )
+
+                if (!hasGPSPermissions()) {
+                    config.enableLocationInfo = false
+                    enableLocationInfoViewModel.isOn.value = false
+                }
             }
         }
     }
