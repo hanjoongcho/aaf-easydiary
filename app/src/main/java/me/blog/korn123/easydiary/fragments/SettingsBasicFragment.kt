@@ -276,6 +276,20 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         openDatetimeFormattingSettingDialog()
                     }
 
+                    var enableContentsSummary by remember { mutableStateOf(requireContext().config.enableContentsSummary) }
+                    SwitchCard(
+                        title = getString(R.string.contents_summary_title)
+                        , description = getString(R.string.contents_summary_description)
+                        , modifier = settingCardModifier
+                        , isOn = enableContentsSummary
+                    ) {
+                        requireActivity().run {
+                            enableContentsSummary = enableContentsSummary.not()
+                            config.enableContentsSummary = enableContentsSummary
+                            initPreference()
+                        }
+                    }
+
                     SimpleCard(
                         title = "🍟🍔🍕🌭🍿",
                         description = null,
@@ -311,13 +325,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    R.id.contentsSummary -> {
-                        contentsSummarySwitcher.toggle()
-                        config.enableContentsSummary = contentsSummarySwitcher.isChecked
-                        maxLines.visibility =
-                            if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-                    }
-
                     R.id.enableCardViewPolicy -> {
                         enableCardViewPolicySwitcher.toggle()
                         config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
@@ -359,7 +366,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     private fun bindEvent() {
         mBinding.run {
-            contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
 //            multiPickerOption.setOnClickListener(mOnClickListener)
             sensitiveOption.setOnClickListener(mOnClickListener)
@@ -394,7 +400,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
 //                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
                 enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
-                contentsSummarySwitcher.isChecked = config.enableContentsSummary
                 countCharactersSwitcher.isChecked = config.enableCountCharacters
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
 
@@ -414,7 +419,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     System.currentTimeMillis(), requireContext()
                 )
 
-                maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+                maxLines.visibility = if (config.enableContentsSummary) View.VISIBLE else View.GONE
                 maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
 
                 if (!hasGPSPermissions()) {
