@@ -311,10 +311,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    cardDatetimeSetting.id -> {
-                        openDatetimeFormattingSettingDialog()
-                    }
-
                     R.id.contentsSummary -> {
                         contentsSummarySwitcher.toggle()
                         config.enableContentsSummary = contentsSummarySwitcher.isChecked
@@ -363,7 +359,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     private fun bindEvent() {
         mBinding.run {
-            cardDatetimeSetting.setOnClickListener(mOnClickListener)
             contentsSummary.setOnClickListener(mOnClickListener)
             enableCardViewPolicy.setOnClickListener(mOnClickListener)
 //            multiPickerOption.setOnClickListener(mOnClickListener)
@@ -421,10 +416,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                 maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
                 maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
-
-                textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
-                    System.currentTimeMillis(), requireContext()
-                )
 
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false
