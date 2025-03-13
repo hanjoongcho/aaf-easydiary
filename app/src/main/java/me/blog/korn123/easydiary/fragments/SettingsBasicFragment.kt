@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -56,6 +58,7 @@ import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DescriptionViewModel
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
 
@@ -70,6 +73,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
     private val mEnableLocationInfoViewModel: SwitchViewModel by viewModels()
     private val mDescriptionViewModel: DescriptionViewModel by viewModels()
+    private val mSettingsViewModel: SettingsViewModel by viewModels()
 
 
     /***************************************************************************************************
@@ -103,6 +107,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
+        mSettingsViewModel.enableCardViewPolicy.value = requireActivity().config.enableCardViewPolicy
+
+
         bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
@@ -118,10 +125,13 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         .fillMaxWidth()
                         .weight(1f)
 
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+
                     SimpleCard(
                         title = getString(R.string.setting_primary_color_title),
                         description = getString(R.string.setting_primary_color_summary),
-                        modifier = settingCardModifier
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         TransitionHelper.startActivityWithTransition(
                             requireActivity()
@@ -131,10 +141,11 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
                     SwitchCard(
-                        title = "${getString(R.string.markdown_setting_title)} $enableMarkdown"
-                        , description = getString(R.string.markdown_setting_summary)
-                        , modifier = settingCardModifier
-                        , isOn = enableMarkdown
+                        title = "${getString(R.string.markdown_setting_title)} $enableMarkdown",
+                        description = getString(R.string.markdown_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableMarkdown,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
                             enableMarkdown = enableMarkdown.not()
@@ -142,38 +153,14 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    var calendarStartDay by remember { mutableStateOf(requireContext().config.calendarStartDay) }
-                    RadioGroupCard(
-                        title = getString(R.string.calendar_start_day_title),
-                        description = getString(R.string.calendar_start_day_summary),
-                        modifier = settingCardModifier,
-                        options = listOf(
-                            mapOf(
-                                "title" to LocalContext.current.getString(R.string.calendar_start_day_saturday),
-                                "key" to CALENDAR_START_DAY_SATURDAY
-                            ),
-                            mapOf(
-                                "title" to LocalContext.current.getString(R.string.calendar_start_day_sunday),
-                                "key" to CALENDAR_START_DAY_SUNDAY
-                            ),
-                            mapOf(
-                                "title" to LocalContext.current.getString(R.string.calendar_start_day_monday),
-                                "key" to CALENDAR_START_DAY_MONDAY
-                            )
-                        ),
-                        selectedKey = calendarStartDay
-                    ) { key ->
-                        calendarStartDay = key
-                        config.calendarStartDay = calendarStartDay
-                    }
-
                     val viewModel: SwitchViewModel by viewModels()
                     val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
                     SwitchCard(
-                        title = "${getString(R.string.quick_setting_title)} $enableShakeDetector"
-                        , description = getString(R.string.quick_setting_summary)
-                        , modifier = settingCardModifier
-                        , isOn = enableShakeDetector
+                        title = "${getString(R.string.quick_setting_title)} $enableShakeDetector",
+                        description = getString(R.string.quick_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableShakeDetector,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
                             config.enableShakeDetector = enableShakeDetector.not()
@@ -183,10 +170,11 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     var enableWelcomeDashboardPopup by remember { mutableStateOf(requireContext().config.enableWelcomeDashboardPopup) }
                     SwitchCard(
-                        title = getString(R.string.enable_welcome_dashboard_popup_title)
-                        , description = getString(R.string.enable_welcome_dashboard_popup_description)
-                        , modifier = settingCardModifier
-                        , isOn = enableWelcomeDashboardPopup
+                        title = getString(R.string.enable_welcome_dashboard_popup_title),
+                        description = getString(R.string.enable_welcome_dashboard_popup_description),
+                        modifier = settingCardModifier,
+                        isOn = enableWelcomeDashboardPopup,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
                             enableWelcomeDashboardPopup = enableWelcomeDashboardPopup.not()
@@ -196,10 +184,11 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     var enablePhotoHighlight by remember { mutableStateOf(requireContext().config.enablePhotoHighlight) }
                     SwitchCard(
-                        title = getString(R.string.enable_photo_highlight_title)
-                        , description = getString(R.string.enable_photo_highlight_description)
-                        , modifier = settingCardModifier
-                        , isOn = enablePhotoHighlight
+                        title = getString(R.string.enable_photo_highlight_title),
+                        description = getString(R.string.enable_photo_highlight_description),
+                        modifier = settingCardModifier,
+                        isOn = enablePhotoHighlight,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
                             enablePhotoHighlight = enablePhotoHighlight.not()
@@ -213,6 +202,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.task_symbol_top_order_description),
                         modifier = settingCardModifier,
                         isOn = enableTaskSymbolTopOrder,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         enableTaskSymbolTopOrder = enableTaskSymbolTopOrder.not()
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
@@ -225,6 +215,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         , description = getString(R.string.location_info_description)
                         , modifier = settingCardModifier
                         , isOn = enableLocationInfo
+                        , enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
 //                            config.enableLocationInfo = enableLocationInfo.not()
@@ -261,7 +252,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         title = getString(R.string.thumbnail_setting_title),
                         description = getString(R.string.thumbnail_setting_summary),
                         subDescription = settingThumbnailSize,
-                        modifier = settingCardModifier
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         openThumbnailSettingDialog()
                     }
@@ -271,23 +263,111 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         title = getString(R.string.datetime_setting_title),
                         description = getString(R.string.datetime_setting_summary),
                         subDescription = settingDatetimeFormat,
-                        modifier = settingCardModifier
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         openDatetimeFormattingSettingDialog()
                     }
 
                     var enableContentsSummary by remember { mutableStateOf(requireContext().config.enableContentsSummary) }
                     SwitchCard(
-                        title = getString(R.string.contents_summary_title)
-                        , description = getString(R.string.contents_summary_description)
-                        , modifier = settingCardModifier
-                        , isOn = enableContentsSummary
+                        title = getString(R.string.contents_summary_title),
+                        description = getString(R.string.contents_summary_description),
+                        modifier = settingCardModifier,
+                        isOn = enableContentsSummary,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
                             enableContentsSummary = enableContentsSummary.not()
                             config.enableContentsSummary = enableContentsSummary
                             initPreference()
                         }
+                    }
+
+                    if (enableContentsSummary) {
+                        val summaryMaxLines: String by mDescriptionViewModel.summaryMaxLines.observeAsState("")
+                        SimpleCard(
+                            title = getString(R.string.max_lines_title),
+                            description = getString(R.string.max_lines_summary),
+                            subDescription = summaryMaxLines,
+                            modifier = settingCardModifier,
+                            enableCardViewPolicy = enableCardViewPolicy
+                        ) {
+                            openMaxLinesSettingDialog()
+                        }
+                    }
+
+                    SwitchCard(
+                        title = getString(R.string.enable_card_view_policy_title),
+                        description = getString(R.string.enable_card_view_policy_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableCardViewPolicy,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            config.enableCardViewPolicy = enableCardViewPolicy.not()
+                            mSettingsViewModel.enableCardViewPolicy.value = config.enableCardViewPolicy
+                        }
+                    }
+
+                    var diarySearchQueryCaseSensitive by remember { mutableStateOf(requireContext().config.diarySearchQueryCaseSensitive) }
+                    SwitchCard(
+                        title = getString(R.string.diary_search_keyword_case_sensitive_title),
+                        description = getString(R.string.diary_search_keyword_case_sensitive_summary),
+                        modifier = settingCardModifier,
+                        isOn = diarySearchQueryCaseSensitive,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            diarySearchQueryCaseSensitive = diarySearchQueryCaseSensitive.not()
+                            config.enableContentsSummary = diarySearchQueryCaseSensitive
+                        }
+                    }
+
+                    var calendarStartDay by remember { mutableIntStateOf(requireContext().config.calendarStartDay) }
+                    RadioGroupCard(
+                        title = getString(R.string.calendar_start_day_title),
+                        description = getString(R.string.calendar_start_day_summary),
+                        modifier = settingCardModifier,
+                        options = listOf(
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_saturday),
+                                "key" to CALENDAR_START_DAY_SATURDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_sunday),
+                                "key" to CALENDAR_START_DAY_SUNDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_monday),
+                                "key" to CALENDAR_START_DAY_MONDAY
+                            )
+                        ),
+                        selectedKey = calendarStartDay
+                    ) { key ->
+                        calendarStartDay = key
+                        config.calendarStartDay = calendarStartDay
+                    }
+
+                    var calendarSorting by remember { mutableIntStateOf(requireContext().config.calendarSorting) }
+                    RadioGroupCard(
+                        title = getString(R.string.calendar_sort_title),
+                        description = getString(R.string.calendar_sort_summary),
+                        modifier = settingCardModifier,
+                        options = listOf(
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_sort_ascending),
+                                "key" to CALENDAR_SORTING_ASC
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_sort_descending),
+                                "key" to CALENDAR_SORTING_DESC
+                            ),
+                        ),
+                        selectedKey = calendarSorting
+                    ) { key ->
+                        config.calendarSorting = key
+                        calendarSorting = key
                     }
 
                     SimpleCard(
@@ -317,30 +397,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
         requireActivity().run activity@ {
             mBinding.run {
                 when (view.id) {
-                    R.id.enableCardViewPolicy -> {
-                        enableCardViewPolicySwitcher.toggle()
-                        config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                        updateCardViewPolicy(this.root)
-                    }
-
-//                    R.id.multiPickerOption -> {
-//                        multiPickerOptionSwitcher.toggle()
-//                        config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-//                    }
-
-                    R.id.sensitiveOption -> {
-                        sensitiveOptionSwitcher.toggle()
-                        config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-                    }
-
                     R.id.countCharacters -> {
                         countCharactersSwitcher.toggle()
                         config.enableCountCharacters = countCharactersSwitcher.isChecked
@@ -349,10 +409,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     R.id.holdPositionEnterEditScreen -> {
                         holdPositionSwitcher.toggle()
                         config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
-                    }
-
-                    R.id.maxLines -> {
-                        openMaxLinesSettingDialog()
                     }
 
                     R.id.enableReviewFlow -> {
@@ -366,30 +422,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     private fun bindEvent() {
         mBinding.run {
-            enableCardViewPolicy.setOnClickListener(mOnClickListener)
-//            multiPickerOption.setOnClickListener(mOnClickListener)
-            sensitiveOption.setOnClickListener(mOnClickListener)
-            maxLines.setOnClickListener(mOnClickListener)
             countCharacters.setOnClickListener(mOnClickListener)
             holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
             enableReviewFlow.setOnClickListener(mOnClickListener)
-            calendarStartDay.setOnCheckedChangeListener { _, i ->
-                requireActivity().config.calendarStartDay = when (i) {
-                    R.id.startMonday -> CALENDAR_START_DAY_MONDAY
-//                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
-//                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
-//                R.id.startThursday -> CALENDAR_START_DAY_THURSDAY
-//                R.id.startFriday -> CALENDAR_START_DAY_FRIDAY
-                    R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
-                    else -> CALENDAR_START_DAY_SUNDAY
-                }
-            }
-            calendarSorting.setOnCheckedChangeListener { _, i ->
-                requireActivity().config.calendarSorting = when (i) {
-                    R.id.ascending -> CALENDAR_SORTING_ASC
-                    else -> CALENDAR_SORTING_DESC
-                }
-            }
         }
     }
 
@@ -397,30 +432,15 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     private fun initPreference() {
         requireActivity().run {
             mBinding.run {
-                sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
-//                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
-                enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
                 countCharactersSwitcher.isChecked = config.enableCountCharacters
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
-
-                when (config.calendarStartDay) {
-                    CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
-                    CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
-                    else -> startSunday.isChecked = true
-                }
-                when (config.calendarSorting) {
-                    CALENDAR_SORTING_ASC -> ascending.isChecked = true
-                    CALENDAR_SORTING_DESC -> descending.isChecked = true
-                }
                 holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
 
                 mDescriptionViewModel.settingThumbnailSize.value = "${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp"
                 mDescriptionViewModel.settingDatetimeFormat.value = DateUtils.getDateTimeStringForceFormatting(
                     System.currentTimeMillis(), requireContext()
                 )
-
-                maxLines.visibility = if (config.enableContentsSummary) View.VISIBLE else View.GONE
-                maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
+                mDescriptionViewModel.summaryMaxLines.value = getString(R.string.max_lines_value, config.summaryMaxLines)
 
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false

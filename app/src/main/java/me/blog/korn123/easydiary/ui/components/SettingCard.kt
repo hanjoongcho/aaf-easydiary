@@ -234,6 +234,7 @@ fun SwitchCard(
     description: String?,
     modifier: Modifier,
     isOn: Boolean,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit
 ) {
     val pixelValue = LocalContext.current.config.settingFontSize
@@ -245,7 +246,7 @@ fun SwitchCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+        modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
@@ -601,6 +602,7 @@ fun SwitchCardTodo(
     description: String,
     modifier: Modifier,
     isOn: Boolean,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit
 ) {
     val pixelValue = LocalContext.current.config.settingFontSize
@@ -612,7 +614,7 @@ fun SwitchCardTodo(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+        modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
