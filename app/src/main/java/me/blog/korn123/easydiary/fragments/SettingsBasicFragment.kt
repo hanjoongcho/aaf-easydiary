@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -44,7 +43,6 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_DESC
@@ -106,11 +104,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
+        if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.enableReviewFlowVisible.value = false
         mSettingsViewModel.enableCardViewPolicy.value = requireActivity().config.enableCardViewPolicy
 
-
-        bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
 
@@ -370,11 +366,49 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         calendarSorting = key
                     }
 
-                    SimpleCard(
-                        title = "🍟🍔🍕🌭🍿",
-                        description = null,
-                        modifier = settingCardModifier
-                    )
+                    var enableCountCharacters by remember { mutableStateOf(requireContext().config.enableCountCharacters) }
+                    SwitchCard(
+                        title = getString(R.string.count_characters_title),
+                        description = getString(R.string.count_characters_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableCountCharacters,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enableCountCharacters = enableCountCharacters.not()
+                            config.enableCountCharacters = enableCountCharacters
+                        }
+                    }
+
+                    var holdPositionEnterEditScreen by remember { mutableStateOf(requireContext().config.holdPositionEnterEditScreen) }
+                    SwitchCard(
+                        title = getString(R.string.hold_position_title),
+                        description = getString(R.string.hold_position_summary),
+                        modifier = settingCardModifier,
+                        isOn = holdPositionEnterEditScreen,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            holdPositionEnterEditScreen = holdPositionEnterEditScreen.not()
+                            config.holdPositionEnterEditScreen = holdPositionEnterEditScreen
+                        }
+                    }
+
+                    if (mSettingsViewModel.enableReviewFlowVisible.value != false) {
+                        var enableReviewFlow by remember { mutableStateOf(requireContext().config.enableReviewFlow) }
+                        SwitchCard(
+                            title = getString(R.string.enable_review_flow_title),
+                            description = getString(R.string.enable_review_flow_summary),
+                            modifier = settingCardModifier,
+                            isOn = enableReviewFlow,
+                            enableCardViewPolicy = enableCardViewPolicy
+                        ) {
+                            requireActivity().run {
+                                enableReviewFlow = enableReviewFlow.not()
+                                config.enableReviewFlow = enableReviewFlow
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -397,45 +431,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        requireActivity().run activity@ {
-            mBinding.run {
-                when (view.id) {
-                    R.id.countCharacters -> {
-                        countCharactersSwitcher.toggle()
-                        config.enableCountCharacters = countCharactersSwitcher.isChecked
-                    }
-
-                    R.id.holdPositionEnterEditScreen -> {
-                        holdPositionSwitcher.toggle()
-                        config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
-                    }
-
-                    R.id.enableReviewFlow -> {
-                        enableReviewFlowSwitcher.toggle()
-                        config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
-                    }
-                }
-            }
-        }
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            countCharacters.setOnClickListener(mOnClickListener)
-            holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
-            enableReviewFlow.setOnClickListener(mOnClickListener)
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun initPreference() {
         requireActivity().run {
             mBinding.run {
-                countCharactersSwitcher.isChecked = config.enableCountCharacters
-                enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
-                holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
-
                 mDescriptionViewModel.settingThumbnailSize.value = "${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp"
                 mDescriptionViewModel.settingDatetimeFormat.value = DateUtils.getDateTimeStringForceFormatting(
                     System.currentTimeMillis(), requireContext()

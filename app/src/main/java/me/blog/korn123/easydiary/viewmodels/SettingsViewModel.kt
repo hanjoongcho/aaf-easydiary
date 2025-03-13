@@ -5,4 +5,5 @@ import androidx.lifecycle.ViewModel
 
 class SettingsViewModel : ViewModel() {
     var enableCardViewPolicy: MutableLiveData<Boolean> = MutableLiveData()
+    var enableReviewFlowVisible: MutableLiveData<Boolean> = MutableLiveData(true)
 }

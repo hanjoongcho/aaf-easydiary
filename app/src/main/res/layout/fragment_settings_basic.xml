@@ -1,97 +1,20 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/component_margin_small">
+
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/countCharacters"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:text="@string/count_characters_title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        style="@style/SettingsTitle" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/countCharactersSwitcher"
-                        android:clickable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/count_characters_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/holdPositionEnterEditScreen"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:text="@string/hold_position_title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        style="@style/SettingsTitle" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/holdPositionSwitcher"
-                        android:clickable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/hold_position_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/enableReviewFlow"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:text="@string/enable_review_flow_title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        style="@style/SettingsTitle" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/enableReviewFlowSwitcher"
-                        android:clickable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/enable_review_flow_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>
 
