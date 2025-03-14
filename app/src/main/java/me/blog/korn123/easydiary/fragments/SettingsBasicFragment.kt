@@ -55,7 +55,6 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DescriptionViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
@@ -69,8 +68,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
-    private val mEnableLocationInfoViewModel: SwitchViewModel by viewModels()
-    private val mDescriptionViewModel: DescriptionViewModel by viewModels()
     private val mSettingsViewModel: SettingsViewModel by viewModels()
 
 
@@ -87,7 +84,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 when (isLocationEnabled()) {
                     true -> {
                         config.enableLocationInfo = true
-                        mEnableLocationInfoViewModel.isOn.value = config.enableLocationInfo
+                        mSettingsViewModel.setEnableLocationInfo(true)
                         makeSnackBar("GPS provider setting is activated!!!")
                     }
                     false -> makeSnackBar("The request operation did not complete normally.")
@@ -104,8 +101,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.enableReviewFlowVisible.value = false
-        mSettingsViewModel.enableCardViewPolicy.value = requireActivity().config.enableCardViewPolicy
+        if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.setEnableReviewFlowVisible(false)
+        mSettingsViewModel.setEnableCardViewPolicy(requireActivity().config.enableCardViewPolicy)
 
         updateFragmentUI(mBinding.root)
         initPreference()
@@ -137,7 +134,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
                     SwitchCard(
-                        title = "${getString(R.string.markdown_setting_title)} $enableMarkdown",
+                        title = getString(R.string.markdown_setting_title),
                         description = getString(R.string.markdown_setting_summary),
                         modifier = settingCardModifier,
                         isOn = enableMarkdown,
@@ -152,7 +149,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     val viewModel: SwitchViewModel by viewModels()
                     val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
                     SwitchCard(
-                        title = "${getString(R.string.quick_setting_title)} $enableShakeDetector",
+                        title = getString(R.string.quick_setting_title),
                         description = getString(R.string.quick_setting_summary),
                         modifier = settingCardModifier,
                         isOn = enableShakeDetector,
@@ -205,18 +202,17 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     }
 
 
-                    val enableLocationInfo: Boolean by mEnableLocationInfoViewModel.isOn.observeAsState(requireActivity().config.enableLocationInfo)
+                    val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.observeAsState(requireActivity().config.enableLocationInfo)
                     SwitchCard(
-                        title = "${getString(R.string.location_info_title)}-${config.enableLocationInfo}"
+                        title = getString(R.string.location_info_title)
                         , description = getString(R.string.location_info_description)
                         , modifier = settingCardModifier
                         , isOn = enableLocationInfo
                         , enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         requireActivity().run {
-//                            config.enableLocationInfo = enableLocationInfo.not()
-                            mEnableLocationInfoViewModel.isOn.value = enableLocationInfo.not()
-                            when (mEnableLocationInfoViewModel.isOn.value == true) {
+                            mSettingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
+                            when (mSettingsViewModel.enableLocationInfoIsOn()) {
                                 true -> {
                                     when (hasGPSPermissions()) {
                                         true -> {
@@ -224,12 +220,12 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                         }
                                         false -> {
                                             config.enableLocationInfo = false
-                                            mEnableLocationInfoViewModel.isOn.value = false
+                                            mSettingsViewModel.setEnableLocationInfo(false)
                                             requireActivity().run {
                                                 if (this is EasyDiaryActivity) {
                                                     acquireGPSPermissions(mRequestLocationSourceLauncher) {
                                                         config.enableLocationInfo = true
-                                                        mEnableLocationInfoViewModel.isOn.value = true
+                                                        mSettingsViewModel.setEnableLocationInfo(true)
                                                     }
                                                 }
                                             }
@@ -243,7 +239,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val settingThumbnailSize: String by mDescriptionViewModel.settingThumbnailSize.observeAsState("")
+                    val settingThumbnailSize: String by mSettingsViewModel.thumbnailSizeSubDescription.observeAsState("")
                     SimpleCard(
                         title = getString(R.string.thumbnail_setting_title),
                         description = getString(R.string.thumbnail_setting_summary),
@@ -254,7 +250,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         openThumbnailSettingDialog()
                     }
 
-                    val settingDatetimeFormat: String by mDescriptionViewModel.settingDatetimeFormat.observeAsState("")
+                    val settingDatetimeFormat: String by mSettingsViewModel.datetimeFormatSubDescription.observeAsState("")
                     SimpleCard(
                         title = getString(R.string.datetime_setting_title),
                         description = getString(R.string.datetime_setting_summary),
@@ -281,7 +277,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     }
 
                     if (enableContentsSummary) {
-                        val summaryMaxLines: String by mDescriptionViewModel.summaryMaxLines.observeAsState("")
+                        val summaryMaxLines: String by mSettingsViewModel.summaryMaxLinesSubDescription.observeAsState("")
                         SimpleCard(
                             title = getString(R.string.max_lines_title),
                             description = getString(R.string.max_lines_summary),
@@ -302,7 +298,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
                             config.enableCardViewPolicy = enableCardViewPolicy.not()
-                            mSettingsViewModel.enableCardViewPolicy.value = config.enableCardViewPolicy
+                            mSettingsViewModel.setEnableCardViewPolicy(config.enableCardViewPolicy)
                         }
                     }
 
@@ -394,7 +390,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    if (mSettingsViewModel.enableReviewFlowVisible.value != false) {
+                    if (mSettingsViewModel.enableReviewFlowVisibleIsOn()) {
                         var enableReviewFlow by remember { mutableStateOf(requireContext().config.enableReviewFlow) }
                         SwitchCard(
                             title = getString(R.string.enable_review_flow_title),
@@ -435,15 +431,17 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     private fun initPreference() {
         requireActivity().run {
             mBinding.run {
-                mDescriptionViewModel.settingThumbnailSize.value = "${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp"
-                mDescriptionViewModel.settingDatetimeFormat.value = DateUtils.getDateTimeStringForceFormatting(
-                    System.currentTimeMillis(), requireContext()
+                mSettingsViewModel.setThumbnailSizeSubDescription("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
+                mSettingsViewModel.setDatetimeFormatSubDescription(
+                    DateUtils.getDateTimeStringForceFormatting(
+                        System.currentTimeMillis(), requireContext()
+                    )
                 )
-                mDescriptionViewModel.summaryMaxLines.value = getString(R.string.max_lines_value, config.summaryMaxLines)
+                mSettingsViewModel.setSummaryMaxLinesSubDescription(getString(R.string.max_lines_value, config.summaryMaxLines))
 
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false
-                    mEnableLocationInfoViewModel.isOn.value = false
+                    mSettingsViewModel.setEnableLocationInfo(false)
                 }
             }
         }
