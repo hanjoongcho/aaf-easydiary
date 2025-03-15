@@ -696,9 +696,10 @@ fun SwitchCardTodo(
 fun LineSpacing(
     title: String,
     description: String,
+    lineSpacingScaleFactor: Float,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
-    callback: () -> Unit = {}
+    callback: (progressFloat: Float) -> Unit = {}
 ) {
 
 
@@ -746,7 +747,7 @@ fun LineSpacing(
                             fontLineSpacing.configBuilder
                                 .min(0.2F)
                                 .max(1.8F)
-                                .progress(ctx.config.lineSpacingScaleFactor)
+                                .progress(lineSpacingScaleFactor)
                                 .floatType()
                                 .secondTrackColor(ctx.config.textColor)
                                 .trackColor(ctx.config.textColor)
@@ -760,7 +761,7 @@ fun LineSpacing(
                                 override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
                                     ctx.config.lineSpacingScaleFactor = progressFloat
 //                                    setFontsStyle()
-                                    callback()
+                                    callback(progressFloat)
                                 }
                                 override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
                                 override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
@@ -769,6 +770,14 @@ fun LineSpacing(
                         }
 
                         binding.root
+                    },
+                    update = {
+                            view ->
+                        val binding = PartialBubbleSeekBarBinding.bind(view)
+                        binding.fontLineSpacing.run {
+                            setProgress(lineSpacingScaleFactor)
+                            invalidate()
+                        }
                     }
                 )
             }

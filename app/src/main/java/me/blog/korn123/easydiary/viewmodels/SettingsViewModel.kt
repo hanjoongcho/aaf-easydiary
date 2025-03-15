@@ -5,6 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class SettingsViewModel : ViewModel() {
+
+    /***************************************************************************************************
+     *   Switch
+     *
+     ***************************************************************************************************/
     private val _enableReviewFlowVisible: MutableLiveData<Boolean> = MutableLiveData(true)
     val enableReviewFlowVisible: LiveData<Boolean> get() = _enableReviewFlowVisible
     fun enableReviewFlowVisibleIsOn() = _enableReviewFlowVisible.value == true
@@ -25,6 +30,11 @@ class SettingsViewModel : ViewModel() {
     fun enableShakeDetectorIsOn() = _enableShakeDetector.value == true
     fun setEnableShakeDetector(isOn: Boolean) { _enableShakeDetector.value = isOn }
 
+
+    /***************************************************************************************************
+     *   SubDescription
+     *
+     ***************************************************************************************************/
     private val _settingThumbnailSizeSubDescription: MutableLiveData<String> = MutableLiveData()
     val thumbnailSizeSubDescription: LiveData<String> get() = _settingThumbnailSizeSubDescription
     fun setThumbnailSizeSubDescription(description: String) { _settingThumbnailSizeSubDescription.value = description }
@@ -40,4 +50,13 @@ class SettingsViewModel : ViewModel() {
     private val _fontSetting: MutableLiveData<String> = MutableLiveData()
     val fontSettingDescription: LiveData<String> get() = _fontSetting
     fun setFontSettingDescription(description: String) { _fontSetting.value = description }
+
+
+    /***************************************************************************************************
+     *   Setting Value
+     *
+     ***************************************************************************************************/
+    private val _lineSpacingScaleFactor: MutableLiveData<Float> = MutableLiveData()
+    val lineSpacingScaleFactor: LiveData<Float> get() = _lineSpacingScaleFactor
+    fun setLineSpacingScaleFactor(value: Float) { _lineSpacingScaleFactor.value = value }
 }

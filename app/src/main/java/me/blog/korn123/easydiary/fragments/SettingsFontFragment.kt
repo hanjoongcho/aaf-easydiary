@@ -19,8 +19,13 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import com.xw.repo.BubbleSeekBar
@@ -40,6 +45,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
@@ -134,7 +140,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         }
         bindEvent()
         updateFragmentUI(mBinding.root)
-        initPreference()
+//        initPreference()
 
         mBinding.composeView.setContent {
             AppTheme {
@@ -165,13 +171,18 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
+                        LocalContext.current.config.lineSpacingScaleFactor
+                    )
                     LineSpacing(
-                        title = getString(R.string.font_line_spacing),
+                        title = "${getString(R.string.font_line_spacing)} $lineSpacingScaleFactor",
                         description = getString(R.string.font_line_spacing_summary),
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy
-                    ) {
+                    ) { progressFloat ->
                         setFontsStyle()
+                        mSettingsViewModel.setLineSpacingScaleFactor(progressFloat)
                     }
 
                     SimpleCard(
@@ -180,10 +191,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy
                     ) {
-                        TransitionHelper.startActivityWithTransition(
-                            requireActivity()
-                            , Intent(requireActivity(), CustomizationActivity::class.java)
-                        )
+                        mSettingsViewModel.setLineSpacingScaleFactor(mSettingsViewModel.lineSpacingScaleFactor.value!!.plus(0.1f))
                     }
                 }
             }
@@ -293,6 +301,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     private fun initPreference() {
         mBinding.run {
             mSettingsViewModel.setFontSettingDescription(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
+            mSettingsViewModel.setLineSpacingScaleFactor(requireActivity().config.lineSpacingScaleFactor)
 
             fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName)
             calendarFontScaleDescription.text = when (requireActivity().config.settingCalendarFontScale) {
