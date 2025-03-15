@@ -56,7 +56,6 @@ import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
-import me.blog.korn123.easydiary.viewmodels.SwitchViewModel
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
@@ -146,8 +145,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val viewModel: SwitchViewModel by viewModels()
-                    val enableShakeDetector: Boolean by viewModel.isOn.observeAsState(requireActivity().config.enableShakeDetector)
+                    val enableShakeDetector: Boolean by mSettingsViewModel.enableShakeDetector.observeAsState(requireActivity().config.enableShakeDetector)
                     SwitchCard(
                         title = getString(R.string.quick_setting_title),
                         description = getString(R.string.quick_setting_summary),
@@ -157,7 +155,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
                             config.enableShakeDetector = enableShakeDetector.not()
-                            viewModel.isOn.value = config.enableShakeDetector
+                            mSettingsViewModel.setEnableShakeDetector(config.enableShakeDetector)
                         }
                     }
 
@@ -226,6 +224,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                                     acquireGPSPermissions(mRequestLocationSourceLauncher) {
                                                         config.enableLocationInfo = true
                                                         mSettingsViewModel.setEnableLocationInfo(true)
+                                                        makeSnackBar("GPS provider setting is activated!!!")
                                                     }
                                                 }
                                             }

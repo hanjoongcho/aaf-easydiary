@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,21 +14,44 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.viewModels
 import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
+import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsFontBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.ui.components.LineSpacing
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -41,9 +65,9 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsFontBinding
     private lateinit var progressContainer: ConstraintLayout
-    private lateinit var  mRequestFontPick: ActivityResultLauncher<Intent>
-    private lateinit var  mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
-
+    private lateinit var mRequestFontPick: ActivityResultLauncher<Intent>
+    private lateinit var mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
+    private val mSettingsViewModel: SettingsViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -100,6 +124,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
@@ -110,6 +135,59 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+
+                    val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.font_setting),
+                        description = fontSettingDescription,
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                                openFontSettingDialog()
+                            } else {
+                                confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    LineSpacing(
+                        title = getString(R.string.font_line_spacing),
+                        description = getString(R.string.font_line_spacing_summary),
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        setFontsStyle()
+                    }
+
+                    SimpleCard(
+                        title = "🍿🌭🍕🍔🍟",
+                        description = "Testing...",
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity()
+                            , Intent(requireActivity(), CustomizationActivity::class.java)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -214,6 +292,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
     private fun initPreference() {
         mBinding.run {
+            mSettingsViewModel.setFontSettingDescription(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
+
             fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName)
             calendarFontScaleDescription.text = when (requireActivity().config.settingCalendarFontScale) {
                 DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)

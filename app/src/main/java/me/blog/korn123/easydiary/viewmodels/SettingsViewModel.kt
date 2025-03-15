@@ -20,6 +20,11 @@ class SettingsViewModel : ViewModel() {
     fun enableLocationInfoIsOn() = _enableLocationInfo.value == true
     fun setEnableLocationInfo(isOn: Boolean) { _enableLocationInfo.value = isOn }
 
+    private val _enableShakeDetector: MutableLiveData<Boolean> = MutableLiveData()
+    val enableShakeDetector: LiveData<Boolean> get() = _enableShakeDetector
+    fun enableShakeDetectorIsOn() = _enableShakeDetector.value == true
+    fun setEnableShakeDetector(isOn: Boolean) { _enableShakeDetector.value = isOn }
+
     private val _settingThumbnailSizeSubDescription: MutableLiveData<String> = MutableLiveData()
     val thumbnailSizeSubDescription: LiveData<String> get() = _settingThumbnailSizeSubDescription
     fun setThumbnailSizeSubDescription(description: String) { _settingThumbnailSizeSubDescription.value = description }
@@ -31,4 +36,8 @@ class SettingsViewModel : ViewModel() {
     private val _summaryMaxLines: MutableLiveData<String> = MutableLiveData()
     val summaryMaxLinesSubDescription: LiveData<String> get() = _summaryMaxLines
     fun setSummaryMaxLinesSubDescription(description: String) { _summaryMaxLines.value = description }
+
+    private val _fontSetting: MutableLiveData<String> = MutableLiveData()
+    val fontSettingDescription: LiveData<String> get() = _fontSetting
+    fun setFontSettingDescription(description: String) { _fontSetting.value = description }
 }

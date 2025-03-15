@@ -1,15 +1,15 @@
 package me.blog.korn123.easydiary.ui.components
 
+import android.util.Log
+import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,9 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,13 +44,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
-import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
-import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 const val verticalPadding = 4F
@@ -680,6 +677,107 @@ fun SwitchCardTodo(
             Row(
                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
             ) {
+                Text(
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                            LocalContext.current
+                        ),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LineSpacing(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    callback: () -> Unit = {}
+) {
+
+
+    val pixelValue = LocalContext.current.config.settingFontSize
+    val density = LocalDensity.current
+    val textUnit = with (density) {
+        val temp = pixelValue.toDp()
+        temp.toSp()
+    }
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+//                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                        fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AndroidView(
+                    modifier = modifier,
+                    factory = { ctx ->
+                        val binding = PartialBubbleSeekBarBinding.inflate(LayoutInflater.from(ctx)).apply {
+                            fontLineSpacing.configBuilder
+                                .min(0.2F)
+                                .max(1.8F)
+                                .progress(ctx.config.lineSpacingScaleFactor)
+                                .floatType()
+                                .secondTrackColor(ctx.config.textColor)
+                                .trackColor(ctx.config.textColor)
+                                .sectionCount(16)
+                                .sectionTextInterval(2)
+                                .showSectionText()
+                                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                                .autoAdjustSectionMark()
+                                .build()
+                            val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
+                                override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                                    ctx.config.lineSpacingScaleFactor = progressFloat
+//                                    setFontsStyle()
+                                    callback()
+                                }
+                                override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
+                                override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
+                            }
+                            fontLineSpacing.onProgressChangedListener = bubbleSeekBarListener
+                        }
+
+                        binding.root
+                    }
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
                 Text(
                     text = description,
                     style = TextStyle(
