@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -152,7 +151,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
 
-                    val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState("")
+                    val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
                     SimpleCard(
                         title = getString(R.string.font_setting),
                         description = fontSettingDescription,
@@ -205,7 +204,15 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         }
                     )
 
-                    val calendarFontScaleDescription: String by mSettingsViewModel.calendarFontScaleDescription.observeAsState("")
+                    val calendarFontScaleDescription: String by mSettingsViewModel.calendarFontScaleDescription.observeAsState(
+                        when (requireActivity().config.settingCalendarFontScale) {
+                            DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
+                            else -> getString(
+                                R.string.calendar_font_scale_factor,
+                                requireActivity().config.settingCalendarFontScale
+                            )
+                        }
+                    )
                     SimpleCard(
                         title = getString(R.string.calendar_font_scale_title),
                         description = getString(R.string.calendar_font_scale_description),
