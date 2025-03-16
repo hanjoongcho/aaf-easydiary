@@ -2,18 +2,22 @@ package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
@@ -45,19 +49,27 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.composeView.setContent {
             AppTheme {
-                Column {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
                     var aafPinLockEnable by remember { mutableStateOf(requireContext().config.aafPinLockEnable) }
                     SwitchCard(
-                        getString(R.string.pin_lock_title),
-                        getString(R.string.pin_lock_summary),
-                        Modifier
-                            .fillMaxWidth(),
-                        aafPinLockEnable
+                        title = getString(R.string.pin_lock_title),
+                        description = getString(R.string.pin_lock_summary),
+                        modifier = settingCardModifier,
+                        isOn = aafPinLockEnable
                     ) {
                         mActivity.run {
                             when (config.aafPinLockEnable) {
@@ -71,23 +83,27 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                         applyPolicyForRecentApps()
                                     }
                                 }
+
                                 false -> {
                                     aafPinLockEnable = true
                                     config.aafPinLockEnable = aafPinLockEnable
                                     startActivity(Intent(this, PinLockActivity::class.java).apply {
-                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
+                                        putExtra(
+                                            FingerprintLockActivity.LAUNCHING_MODE,
+                                            PinLockActivity.ACTIVITY_SETTING
+                                        )
                                     })
                                 }
                             }
                         }
                     }
+
                     var fingerprintLockEnable by remember { mutableStateOf(requireContext().config.fingerprintLockEnable) }
                     SwitchCard(
-                        getString(R.string.fingerprint_lock_title),
-                        getString(R.string.fingerprint_lock_summary),
-                        Modifier
-                            .fillMaxWidth(),
-                        fingerprintLockEnable
+                        title = getString(R.string.fingerprint_lock_title),
+                        description = getString(R.string.fingerprint_lock_summary),
+                        modifier = settingCardModifier,
+                        isOn = fingerprintLockEnable
                     ) {
                         mActivity.run {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -98,15 +114,24 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                         showAlertDialog(getString(R.string.fingerprint_setting_release))
                                         applyPolicyForRecentApps()
                                     }
+
                                     false -> {
                                         when (config.aafPinLockEnable) {
                                             true -> {
                                                 fingerprintLockEnable = true
                                                 config.fingerprintLockEnable = fingerprintLockEnable
-                                                startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-                                                    putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
-                                                })
+                                                startActivity(
+                                                    Intent(
+                                                        this,
+                                                        FingerprintLockActivity::class.java
+                                                    ).apply {
+                                                        putExtra(
+                                                            FingerprintLockActivity.LAUNCHING_MODE,
+                                                            FingerprintLockActivity.ACTIVITY_SETTING
+                                                        )
+                                                    })
                                             }
+
                                             false -> {
                                                 mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting))
                                             }

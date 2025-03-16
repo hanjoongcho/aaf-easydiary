@@ -58,6 +58,11 @@ import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 const val verticalPadding = 4F
 const val horizontalPadding = 3F
 
+/***************************************************************************************************
+ *   Base Composable
+ *
+ ***************************************************************************************************/
+
 @Composable
 fun CardContainer(
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
@@ -112,40 +117,40 @@ fun SimpleText(
 @Composable
 fun CategoryTitleCard(
     title: String,
+    marginTop: Int = 6
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
     val modifier = Modifier.fillMaxWidth()
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)),
+            start = 3.dp, top = marginTop.plus(3).dp,
+            end = 3.dp,
+            bottom = 3.dp
+        ) else modifier.padding(
+            start = 1.dp,
+            top = marginTop.plus(1).dp,
+            end = 1.dp,
+            bottom = 1.dp
+        )),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp, 5.dp)
         ) {
-            Text(
+            SimpleText(
                 text = title,
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color.White,
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
+                fontWeight = FontWeight.Bold,
             )
         }
     }
 }
 
+
+/***************************************************************************************************
+ *   Simple Setting Card
+ *
+ ***************************************************************************************************/
 @Composable
 fun SimpleCard(
     title: String,
@@ -157,6 +162,7 @@ fun SimpleCard(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
+
     SimpleCardWithImage(
         title = title,
         description = description,
@@ -182,6 +188,7 @@ fun SimpleCardWithImage(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
+
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -245,6 +252,12 @@ fun SimpleCardWithImage(
     }
 }
 
+
+/***************************************************************************************************
+ *   Switch Setting Card
+ *
+ ***************************************************************************************************/
+
 @Composable
 fun SwitchCard(
     title: String,
@@ -256,6 +269,7 @@ fun SwitchCard(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit
 ) {
+
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -325,177 +339,6 @@ fun SwitchCard(
 }
 
 @Composable
-fun ScrollableCard(
-    title: String,
-    description: String?,
-    modifier: Modifier,
-    scrollState: ScrollState,
-    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
-    fontSize: Float = LocalContext.current.config.settingFontSize,
-    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-) {
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(15.dp)
-                .height(200.dp)
-                .verticalScroll(scrollState)
-        ) {
-            SimpleText(
-                text = title,
-                fontWeight = FontWeight.Bold,
-                fontSize = fontSize,
-                lineSpacingScaleFactor = lineSpacingScaleFactor,
-            )
-            description?.let {
-                SimpleText(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    text = description,
-                    alpha = 0.7f,
-                    fontSize = fontSize,
-                    lineSpacingScaleFactor = lineSpacingScaleFactor,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SymbolCard(
-    modifier: Modifier,
-    viewModel: BaseDevViewModel,
-    callback: () -> Unit
-) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
-    val symbol by viewModel.symbol.observeAsState(1)
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)).clickable {
-            callback.invoke()
-        },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        val scrollState = rememberScrollState()
-        Row(
-            modifier = Modifier.padding(15.dp)
-        ) {
-            Text(
-                text = symbol.toString(),
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
-            )
-            Image(
-                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
-                contentDescription = null,
-                modifier = Modifier.size(64.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
-
-@Composable
-fun RadioGroupCard(
-    title: String,
-    description: String?,
-    modifier: Modifier,
-    options: List<Map<String, Any>>,
-    selectedKey: Int,
-    callback: (key: Int) -> Unit
-) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            horizontalPadding.dp,
-            verticalPadding.dp
-        ) else modifier
-            .padding(1.dp, 1.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(15.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SimpleText(
-                    modifier = Modifier.weight(1f),
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-            description?.let {
-                Row(
-                    modifier = Modifier.padding(top = 5.dp)
-                ) {
-                    SimpleText(
-                        text = description,
-                        alpha = 0.7f,
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.padding(top = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                options.forEach { option ->
-                    RadioButton(
-                        selected = (selectedKey == option["key"]),
-                        onClick = {
-                            callback.invoke(option["key"] as Int)
-                        },
-                        modifier = Modifier.size(20.dp),
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = Color(LocalContext.current.config.primaryColor),
-                            unselectedColor = Color(LocalContext.current.config.textColor),
-                            disabledSelectedColor = Color.LightGray,   // 비활성화된 선택 색상
-                            disabledUnselectedColor = Color.DarkGray   // 비활성화된 미선택 색상
-                        )
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    SimpleText(
-                        text = option["title"] as String,
-                        alpha = 0.7f,
-                    )
-                    Spacer(modifier = Modifier.width(15.dp))
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
 fun SwitchCardWithImage(
     title: String,
     imageResourceId: Int,
@@ -504,6 +347,7 @@ fun SwitchCardWithImage(
     isOn: Boolean,
     callback: () -> Unit
 ) {
+
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -579,12 +423,7 @@ fun SwitchCardTodo(
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     callback: () -> Unit
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
+
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -658,6 +497,136 @@ fun SwitchCardTodo(
     }
 }
 
+
+/***************************************************************************************************
+ *   Radio Setting Card
+ *
+ ***************************************************************************************************/
+
+@Composable
+fun RadioGroupCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    options: List<Map<String, Any>>,
+    selectedKey: Int,
+    callback: (key: Int) -> Unit
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            description?.let {
+                Row(
+                    modifier = Modifier.padding(top = 5.dp)
+                ) {
+                    SimpleText(
+                        text = description,
+                        alpha = 0.7f,
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                options.forEach { option ->
+                    RadioButton(
+                        selected = (selectedKey == option["key"]),
+                        onClick = {
+                            callback.invoke(option["key"] as Int)
+                        },
+                        modifier = Modifier.size(20.dp),
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(LocalContext.current.config.primaryColor),
+                            unselectedColor = Color(LocalContext.current.config.textColor),
+                            disabledSelectedColor = Color.LightGray,   // 비활성화된 선택 색상
+                            disabledUnselectedColor = Color.DarkGray   // 비활성화된 미선택 색상
+                        )
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    SimpleText(
+                        text = option["title"] as String,
+                        alpha = 0.7f,
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                }
+            }
+        }
+    }
+}
+
+
+/***************************************************************************************************
+ *   Custom Setting Card
+ *
+ ***************************************************************************************************/
+
+@Composable
+fun ScrollableCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    scrollState: ScrollState,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .height(200.dp)
+                .verticalScroll(scrollState)
+        ) {
+            SimpleText(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = fontSize,
+                lineSpacingScaleFactor = lineSpacingScaleFactor,
+            )
+            description?.let {
+                SimpleText(
+                    modifier = Modifier
+                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    text = description,
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+        }
+    }
+}
+
 @Composable
 fun LineSpacing(
     title: String,
@@ -668,11 +637,6 @@ fun LineSpacing(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (progressFloat: Float) -> Unit = {}
 ) {
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = fontSize.toDp()
-        temp.toSp()
-    }
 
     Card(
         shape = RoundedCornerShape(4.dp),
@@ -768,11 +732,6 @@ fun FontSize(
     callbackMinus: () -> Unit = {},
     callbackPlus: () -> Unit = {}
 ) {
-    val density = LocalDensity.current
-    val textUnit = with(density) {
-        val temp = fontSize.toDp()
-        temp.toSp()
-    }
 
     Card(
         shape = RoundedCornerShape(4.dp),
@@ -838,6 +797,40 @@ fun FontSize(
                     colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun SymbolCard(
+    modifier: Modifier,
+    viewModel: BaseDevViewModel,
+    callback: () -> Unit
+) {
+    val symbol by viewModel.symbol.observeAsState(1)
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            3.dp,
+            3.dp
+        ) else modifier.padding(1.dp, 1.dp)).clickable {
+            callback.invoke()
+        },
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            SimpleText(
+                text = symbol.toString(),
+            )
+            Image(
+                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
