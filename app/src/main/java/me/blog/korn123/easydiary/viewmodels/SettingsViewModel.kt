@@ -51,6 +51,10 @@ class SettingsViewModel : ViewModel() {
     val fontSettingDescription: LiveData<String> get() = _fontSetting
     fun setFontSettingDescription(description: String) { _fontSetting.value = description }
 
+    private val _settingCalendarFontScale: MutableLiveData<String> = MutableLiveData()
+    val calendarFontScaleDescription: LiveData<String> get() = _settingCalendarFontScale
+    fun setCalendarFontScaleDescription(description: String) { _settingCalendarFontScale.value = description }
+
 
     /***************************************************************************************************
      *   Setting Value
@@ -59,4 +63,10 @@ class SettingsViewModel : ViewModel() {
     private val _lineSpacingScaleFactor: MutableLiveData<Float> = MutableLiveData()
     val lineSpacingScaleFactor: LiveData<Float> get() = _lineSpacingScaleFactor
     fun setLineSpacingScaleFactor(value: Float) { _lineSpacingScaleFactor.value = value }
+
+    private val _fontSize: MutableLiveData<Float> = MutableLiveData()
+    val fontSize: LiveData<Float> get() = _fontSize
+    fun setFontSize(value: Float) { _fontSize.value = value }
+
+
 }

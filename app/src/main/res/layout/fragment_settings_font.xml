@@ -1,156 +1,19 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/component_margin_small">
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/fontSetting"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/font_setting"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/fontSettingSummary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/font_line_spacing"
-                    style="@style/SettingsTitle" />
-                <com.xw.repo.BubbleSeekBar
-                    android:id="@+id/fontLineSpacing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"/>
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/fontLineSpacingSummary"
-                    android:text="@string/font_line_spacing_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/font_size_title"
-                    style="@style/SettingsTitle" />
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:paddingEnd="6dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/font_size_summary"
-                        style="@style/SettingsSummary" />
-
-                    <ImageView
-                        android:id="@+id/decreaseFont"
-                        android:src="@drawable/ic_minus_6"
-                        android:layout_marginEnd="6dp"
-                        android:padding="3dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:id="@+id/increaseFont"
-                        android:src="@drawable/ic_plus_6"
-                        android:padding="3dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/calendarFontScale"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/calendar_font_scale_title"
-                    style="@style/SettingsTitle" />
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:paddingEnd="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/calendar_font_scale_description"
-                        style="@style/SettingsSummary" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/calendarFontScaleDescription"
-                        style="@style/SettingsSummary" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/addTtfFontSetting"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/add_ttf_fonts_title"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/add_ttf_fonts_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/boldStyleOption"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:text="@string/bold_style_option_title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        style="@style/SettingsTitle" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/boldStyleOptionSwitcher"
-                        android:clickable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/bold_style_option_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>
 

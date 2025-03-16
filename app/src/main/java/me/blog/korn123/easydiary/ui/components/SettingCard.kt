@@ -34,6 +34,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -44,6 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.viewinterop.AndroidView
 import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -120,6 +123,8 @@ fun SimpleCard(
     subDescription: String? = null,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
     SimpleCardWithImage(
@@ -129,6 +134,8 @@ fun SimpleCard(
         imageResourceId = null,
         modifier = modifier,
         enableCardViewPolicy = enableCardViewPolicy,
+        fontSize = fontSize,
+        lineSpacingScaleFactor = lineSpacingScaleFactor,
         callback = callback
     )
 }
@@ -141,12 +148,13 @@ fun SimpleCardWithImage(
     imageResourceId: Int?,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
     val density = LocalDensity.current
     val textUnit = with (density) {
-        val temp = pixelValue.toDp()
+        val temp = fontSize.toDp()
         temp.toSp()
     }
 
@@ -200,6 +208,7 @@ fun SimpleCardWithImage(
                             color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),
+                        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
                     )
                 }
             }
@@ -218,6 +227,7 @@ fun SimpleCardWithImage(
                             color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),
+                        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
                     )
                 }
             }
@@ -232,12 +242,13 @@ fun SwitchCard(
     modifier: Modifier,
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
     val density = LocalDensity.current
     val textUnit = with (density) {
-        val temp = pixelValue.toDp()
+        val temp = fontSize.toDp()
         temp.toSp()
     }
     Card(
@@ -267,6 +278,7 @@ fun SwitchCard(
                         color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
+                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
                 )
                 Switch(
                     modifier = Modifier
@@ -302,6 +314,7 @@ fun SwitchCard(
                             color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                         ),
+                        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
                     )
                 }
             }
@@ -696,17 +709,15 @@ fun SwitchCardTodo(
 fun LineSpacing(
     title: String,
     description: String,
-    lineSpacingScaleFactor: Float,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (progressFloat: Float) -> Unit = {}
 ) {
-
-
-    val pixelValue = LocalContext.current.config.settingFontSize
     val density = LocalDensity.current
     val textUnit = with (density) {
-        val temp = pixelValue.toDp()
+        val temp = fontSize.toDp()
         temp.toSp()
     }
 
@@ -733,6 +744,7 @@ fun LineSpacing(
                         color = Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
+                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
                 )
             }
 
@@ -796,6 +808,104 @@ fun LineSpacing(
                         color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
+                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FontSize(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callbackMinus: () -> Unit = {},
+    callbackPlus: () -> Unit = {}
+) {
+    val density = LocalDensity.current
+    val textUnit = with(density) {
+        val temp = fontSize.toDp()
+        temp.toSp()
+    }
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+//                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                            LocalContext.current
+                        ),
+                        fontWeight = FontWeight.Bold,
+//                        fontStyle = FontStyle.Italic,
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = description,
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                            LocalContext.current
+                        ),
+                        color = Color(LocalContext.current.config.textColor).copy(alpha = 0.7f),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_minus_6),
+                    contentDescription = "Google Calendar",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(3.dp)
+                        .clickable {
+//                            LocalContext.current.config.settingFontSize.minus(6)
+                            callbackMinus.invoke()
+                        },
+                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_plus_6),
+                    contentDescription = "Google Calendar",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(3.dp)
+                        .clickable {
+                            callbackPlus.invoke()
+                        },
+                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
                 )
             }
         }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,12 +26,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
-import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
-import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
@@ -45,17 +41,17 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.ui.components.FontSize
 import me.blog.korn123.easydiary.ui.components.LineSpacing
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import org.apache.commons.io.FileUtils
@@ -138,7 +134,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             changeDrawableIconColor(config.textColor, R.drawable.ic_minus_6)
             changeDrawableIconColor(config.textColor, R.drawable.ic_plus_6)
         }
-        bindEvent()
         updateFragmentUI(mBinding.root)
 //        initPreference()
 
@@ -154,11 +149,14 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         .weight(1f)
 
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
 
                     val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState("")
                     SimpleCard(
                         title = getString(R.string.font_setting),
                         description = fontSettingDescription,
+                        fontSize = fontSize,
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy
                     ) {
@@ -171,28 +169,90 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
-                        LocalContext.current.config.lineSpacingScaleFactor
-                    )
                     LineSpacing(
                         title = "${getString(R.string.font_line_spacing)} $lineSpacingScaleFactor",
                         description = getString(R.string.font_line_spacing_summary),
-                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) { progressFloat ->
                         setFontsStyle()
                         mSettingsViewModel.setLineSpacingScaleFactor(progressFloat)
                     }
 
-                    SimpleCard(
-                        title = "🍿🌭🍕🍔🍟",
-                        description = "Testing...",
+                    FontSize(
+                        title = getString(R.string.font_size_title),
+                        description = getString(R.string.font_size_summary),
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        callbackMinus = {
+                            requireActivity().run {
+                                config.settingFontSize = config.settingFontSize.minus(5)
+                                mSettingsViewModel.setFontSize(config.settingFontSize)
+//                                initTextSize(mBinding.root)
+                            }
+
+                        },
+                        callbackPlus = {
+                            requireActivity().run {
+                                config.settingFontSize = config.settingFontSize.plus(5)
+                                mSettingsViewModel.setFontSize(config.settingFontSize)
+//                                initTextSize(mBinding.root)
+                            }
+                        }
+                    )
+
+                    val calendarFontScaleDescription: String by mSettingsViewModel.calendarFontScaleDescription.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.calendar_font_scale_title),
+                        description = getString(R.string.calendar_font_scale_description),
+                        subDescription = calendarFontScaleDescription,
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) {
-                        mSettingsViewModel.setLineSpacingScaleFactor(mSettingsViewModel.lineSpacingScaleFactor.value!!.plus(0.1f))
+                        openCalendarFontScaleDialog()
                     }
+
+                    SimpleCard(
+                        title = getString(R.string.add_ttf_fonts_title),
+                        description = getString(R.string.add_ttf_fonts_summary),
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                    ) {
+                        performFileSearch()
+                    }
+
+                    var boldStyleEnable by remember { mutableStateOf(requireContext().config.boldStyleEnable) }
+                    SwitchCard(
+                        title = getString(R.string.bold_style_option_title),
+                        description = getString(R.string.bold_style_option_summary),
+                        modifier = settingCardModifier,
+                        isOn = boldStyleEnable,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                    ) {
+                        requireActivity().run {
+                            boldStyleEnable = boldStyleEnable.not()
+                            config.boldStyleEnable = boldStyleEnable
+                        }
+                    }
+
+//                    SimpleCard(
+//                        title = "🍿🌭🍕🍔🍟",
+//                        description = "Testing...",
+//                        modifier = settingCardModifier,
+//                        enableCardViewPolicy = enableCardViewPolicy
+//                    ) {
+//                        mSettingsViewModel.setLineSpacingScaleFactor(mSettingsViewModel.lineSpacingScaleFactor.value!!.plus(0.1f))
+//                    }
                 }
             }
         }
@@ -212,11 +272,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     private val mOnClickListener = View.OnClickListener { view ->
         requireActivity().run {
             when (view.id) {
-                R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    openFontSettingDialog()
-                } else {
-                    confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                }
                 R.id.decreaseFont -> {
                     config.settingFontSize = config.settingFontSize - 5
                     initTextSize(mBinding.root)
@@ -225,53 +280,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     config.settingFontSize = config.settingFontSize + 5
                     initTextSize(mBinding.root)
                 }
-                R.id.calendarFontScale -> {
-                    openCalendarFontScaleDialog()
-                }
-                R.id.addTtfFontSetting -> {
-//                openGuideView(getString(R.string.add_ttf_fonts_title))
-                    performFileSearch()
-                }
-                R.id.boldStyleOption -> {
-                    mBinding.boldStyleOptionSwitcher.toggle()
-                    config.boldStyleEnable = mBinding.boldStyleOptionSwitcher.isChecked
-                }
             }
-        }
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            fontSetting.setOnClickListener(mOnClickListener)
-            fontLineSpacing.configBuilder
-                    .min(0.2F)
-                    .max(1.8F)
-                    .progress(requireActivity().config.lineSpacingScaleFactor)
-                    .floatType()
-                    .secondTrackColor(config.textColor)
-                    .trackColor(config.textColor)
-                    .sectionCount(16)
-                    .sectionTextInterval(2)
-                    .showSectionText()
-                    .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
-                    .autoAdjustSectionMark()
-                    .build()
-            val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
-                override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
-                    Log.i("progress", "$progress $progressFloat")
-                    requireActivity().config.lineSpacingScaleFactor = progressFloat
-                    setFontsStyle()
-                    Log.i("progress", "${requireActivity().config.lineSpacingScaleFactor}")
-                }
-                override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
-                override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
-            }
-            fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-            decreaseFont.setOnClickListener(mOnClickListener)
-            increaseFont.setOnClickListener(mOnClickListener)
-            calendarFontScale.setOnClickListener(mOnClickListener)
-            addTtfFontSetting.setOnClickListener(mOnClickListener)
-            boldStyleOption.setOnClickListener(mOnClickListener)
         }
     }
 
@@ -302,13 +311,15 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         mBinding.run {
             mSettingsViewModel.setFontSettingDescription(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
             mSettingsViewModel.setLineSpacingScaleFactor(requireActivity().config.lineSpacingScaleFactor)
-
-            fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName)
-            calendarFontScaleDescription.text = when (requireActivity().config.settingCalendarFontScale) {
-                DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
-                else -> getString(R.string.calendar_font_scale_factor, requireActivity().config.settingCalendarFontScale)
-            }
-            boldStyleOptionSwitcher.isChecked = requireActivity().config.boldStyleEnable
+            mSettingsViewModel.setCalendarFontScaleDescription(
+                when (requireActivity().config.settingCalendarFontScale) {
+                    DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
+                    else -> getString(
+                        R.string.calendar_font_scale_factor,
+                        requireActivity().config.settingCalendarFontScale
+                    )
+                }
+            )
         }
     }
 
