@@ -109,9 +109,9 @@ class DevActivity : BaseDevActivity() {
             maxItemsInEachRow = maxItemsInEachRow
         ) {
             SimpleCard(
-                "Check Google Sign Account",
-                null,
-                modifier,
+                title = "Check Google Sign Account",
+                description = null,
+                modifier = modifier,
             ) {
                 if (GoogleOAuthHelper.isValidGoogleSignAccount(this@DevActivity)) {
                     GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.run {
@@ -122,9 +122,9 @@ class DevActivity : BaseDevActivity() {
                 }
             }
             SimpleCard(
-                "Full Backup",
-                null,
-                modifier,
+                title = "Full Backup",
+                description = null,
+                modifier = modifier,
             ) {
                 GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
                     DriveServiceHelper(this@DevActivity, account).run {
@@ -152,7 +152,7 @@ class DevActivity : BaseDevActivity() {
     private fun DevActivityPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 3
             val scrollState = rememberScrollState()
 
             CardContainer {
