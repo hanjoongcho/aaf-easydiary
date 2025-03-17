@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
@@ -116,11 +117,9 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun QuickSettings(viewModel: QuickSettingsViewModel, modifier: Modifier = Modifier) {
         val context = LocalContext.current
-        val isOn: Boolean by viewModel.enablePhotoHighlight.observeAsState(context.config.enablePhotoHighlight)
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
-        var enableCardViewPolicy by remember { mutableStateOf(context.config.enableCardViewPolicy) }
         val maxItemsInEachRow = when {
             LocalInspectionMode.current -> 1
             isLandScape() -> 2
@@ -131,8 +130,13 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(Color(context.config.screenBackgroundColor))
+                .fillMaxHeight()
         ) {
-            CardContainer(enableCardViewPolicy) {
+            val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(context.config.enableCardViewPolicy)
+
+            CardContainer(
+                enableCardViewPolicy = enableCardViewPolicy
+            ) {
                 FlowRow(
                     modifier = modifier.fillMaxHeight(1f).fillMaxWidth(),
 //                    .padding(3.dp, 3.dp)
@@ -146,11 +150,13 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     val settingCardModifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
+
                     SwitchCard(
-                        stringResource(R.string.markdown_setting_title),
-                        stringResource(R.string.markdown_setting_summary),
-                        settingCardModifier,
-                        enableMarkdown,
+                        title = stringResource(R.string.markdown_setting_title),
+                        description = stringResource(R.string.markdown_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableMarkdown,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         context.config.enableMarkdown = !enableMarkdown
                         enableMarkdown = !enableMarkdown
@@ -159,51 +165,63 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         stringResource(R.string.enable_welcome_dashboard_popup_title),
                         stringResource(R.string.enable_welcome_dashboard_popup_description),
                         settingCardModifier,
-                        enableWelcomeDashboardPopup
+                        enableWelcomeDashboardPopup,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                         enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                     }
+
+                    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
                     SwitchCard(
                         stringResource(R.string.enable_photo_highlight_title),
                         stringResource(R.string.enable_photo_highlight_description),
                         settingCardModifier,
-                        isOn
+                        isOn = enablePhotoHighlight,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
-                        viewModel.toggle()
-                        context.config.enablePhotoHighlight = !context.config.enablePhotoHighlight
+                        enablePhotoHighlight = enablePhotoHighlight.not()
+                        context.config.enablePhotoHighlight = enablePhotoHighlight
                     }
+
                     SwitchCard(
                         stringResource(R.string.enable_card_view_policy_title),
                         stringResource(R.string.enable_card_view_policy_summary),
                         settingCardModifier,
-                        enableCardViewPolicy
+                        isOn = enableCardViewPolicy,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
-                        context.config.enableCardViewPolicy = !enableCardViewPolicy
-                        enableCardViewPolicy = !enableCardViewPolicy
+                        context.config.enableCardViewPolicy = enableCardViewPolicy.not()
+                        mSettingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
                     }
+
                     SwitchCard(
                         "미래일정 숨김",
                         "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
                         settingCardModifier,
-                        disableFutureDiary
+                        disableFutureDiary,
+                        enableCardViewPolicy = enableCardViewPolicy
                     ) {
                         context.config.disableFutureDiary = !disableFutureDiary
                         disableFutureDiary = !disableFutureDiary
                     }
-                    SimpleCard(
-                        stringResource(id = R.string.sync_google_calendar_event_title),
-                        stringResource(id = R.string.sync_google_calendar_event_summary),
-                        settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
-                        enableCardViewPolicy
-                    ) {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
+
+                    if (BuildConfig.FLAVOR != "foss") {
+                        SimpleCard(
+                            stringResource(id = R.string.sync_google_calendar_event_title),
+                            stringResource(id = R.string.sync_google_calendar_event_summary),
+                            modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                            enableCardViewPolicy = enableCardViewPolicy,
+                        ) {
+                            val alarm = Alarm().apply {
+                                sequence = Int.MAX_VALUE
+                                workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                                label = "Quick Settings"
+                            }
+                            AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                         }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
+
                 }
             }
 

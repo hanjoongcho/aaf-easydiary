@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
@@ -705,16 +706,41 @@ fun Activity.updateStatusBarColor(color: Int) {
     window.statusBarColor = getStatusBarColor(color)
 }
 
-fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
-    handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
-        if (hasCoarseLocation) {
-            handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
-                if (hasFineLocation) {
-                    if (isLocationEnabled()) {
-                        callback()
-                    } else {
+fun EasyDiaryActivity.acquireGPSPermissions(
+    activityResultLauncher: ActivityResultLauncher<Intent>,
+    callback: () -> Unit
+) {
+
+    when (arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ).any { permission ->
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            permission
+        )
+    }) {
+        true -> {
+            // If authorization is denied
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+            startActivity(intent)
+        }
+
+        false -> {
+            // If authorization request is possible
+            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+                if (hasCoarseLocation) {
+                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+                        if (hasFineLocation) {
+                            if (isLocationEnabled()) {
+                                callback()
+                            } else {
 //                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-                        activityResultLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                                activityResultLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            }
+                        }
                     }
                 }
             }

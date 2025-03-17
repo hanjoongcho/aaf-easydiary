@@ -163,7 +163,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 SimpleCard(
                     stringResource(id = R.string.sync_google_calendar_event_title),
                     stringResource(id = R.string.sync_google_calendar_event_summary),
-                    settingCardModifier,
+                    modifier = settingCardModifier,
                 ) {
                     val alarm = Alarm().apply {
                         sequence = Int.MAX_VALUE
@@ -175,7 +175,7 @@ class QuickSettingsActivity : EasyDiaryActivity() {
                 SimpleCard(
                     "Quick Settings With Compose",
                     null,
-                    settingCardModifier,
+                    modifier = settingCardModifier,
                 ) {
                     TransitionHelper.startActivityWithTransition(
                         this@QuickSettingsActivity,

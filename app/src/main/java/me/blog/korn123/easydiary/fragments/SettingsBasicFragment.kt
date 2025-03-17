@@ -1,8 +1,8 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,18 +13,49 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
-import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.hasGPSPermissions
+import me.blog.korn123.easydiary.extensions.isLocationEnabled
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_DESC
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.ui.components.RadioGroupCard
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
@@ -36,8 +67,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
+    private val mSettingsViewModel: SettingsViewModel by viewModels()
 
-    
+
     /***************************************************************************************************
      *   override functions
      *
@@ -50,8 +82,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 pauseLock()
                 when (isLocationEnabled()) {
                     true -> {
-                        mBinding.locationInfoSwitcher.isChecked = true
-                        config.enableLocationInfo = mBinding.locationInfoSwitcher.isChecked
+                        config.enableLocationInfo = true
+                        mSettingsViewModel.setEnableLocationInfo(true)
                         makeSnackBar("GPS provider setting is activated!!!")
                     }
                     false -> makeSnackBar("The request operation did not complete normally.")
@@ -65,12 +97,316 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
-        bindEvent()
+        if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.setEnableReviewFlowVisible(false)
+        mSettingsViewModel.setEnableCardViewPolicy(requireActivity().config.enableCardViewPolicy)
+
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+
+                    SimpleCard(
+                        title = getString(R.string.setting_primary_color_title),
+                        description = getString(R.string.setting_primary_color_summary),
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity()
+                            , Intent(requireActivity(), CustomizationActivity::class.java)
+                        )
+                    }
+
+                    var enableMarkdown by remember { mutableStateOf(requireContext().config.enableMarkdown) }
+                    SwitchCard(
+                        title = getString(R.string.markdown_setting_title),
+                        description = getString(R.string.markdown_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableMarkdown,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enableMarkdown = enableMarkdown.not()
+                            config.enableMarkdown = enableMarkdown
+                        }
+                    }
+
+                    val enableShakeDetector: Boolean by mSettingsViewModel.enableShakeDetector.observeAsState(requireActivity().config.enableShakeDetector)
+                    SwitchCard(
+                        title = getString(R.string.quick_setting_title),
+                        description = getString(R.string.quick_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableShakeDetector,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            config.enableShakeDetector = enableShakeDetector.not()
+                            mSettingsViewModel.setEnableShakeDetector(config.enableShakeDetector)
+                        }
+                    }
+
+                    var enableWelcomeDashboardPopup by remember { mutableStateOf(requireContext().config.enableWelcomeDashboardPopup) }
+                    SwitchCard(
+                        title = getString(R.string.enable_welcome_dashboard_popup_title),
+                        description = getString(R.string.enable_welcome_dashboard_popup_description),
+                        modifier = settingCardModifier,
+                        isOn = enableWelcomeDashboardPopup,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enableWelcomeDashboardPopup = enableWelcomeDashboardPopup.not()
+                            config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopup
+                        }
+                    }
+
+                    var enablePhotoHighlight by remember { mutableStateOf(requireContext().config.enablePhotoHighlight) }
+                    SwitchCard(
+                        title = getString(R.string.enable_photo_highlight_title),
+                        description = getString(R.string.enable_photo_highlight_description),
+                        modifier = settingCardModifier,
+                        isOn = enablePhotoHighlight,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enablePhotoHighlight = enablePhotoHighlight.not()
+                            config.enablePhotoHighlight = enablePhotoHighlight
+                        }
+                    }
+
+                    var enableTaskSymbolTopOrder by remember { mutableStateOf(requireContext().config.enableTaskSymbolTopOrder) }
+                    SwitchCardTodo(
+                        title = getString(R.string.task_symbol_top_order_title),
+                        description = getString(R.string.task_symbol_top_order_description),
+                        modifier = settingCardModifier,
+                        isOn = enableTaskSymbolTopOrder,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        enableTaskSymbolTopOrder = enableTaskSymbolTopOrder.not()
+                        config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
+                    }
+
+
+                    val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.observeAsState(requireActivity().config.enableLocationInfo)
+                    SwitchCard(
+                        title = getString(R.string.location_info_title)
+                        , description = getString(R.string.location_info_description)
+                        , modifier = settingCardModifier
+                        , isOn = enableLocationInfo
+                        , enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            mSettingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
+                            when (mSettingsViewModel.enableLocationInfoIsOn()) {
+                                true -> {
+                                    when (hasGPSPermissions()) {
+                                        true -> {
+                                            config.enableLocationInfo = true
+                                        }
+                                        false -> {
+                                            config.enableLocationInfo = false
+                                            mSettingsViewModel.setEnableLocationInfo(false)
+                                            requireActivity().run {
+                                                if (this is EasyDiaryActivity) {
+                                                    acquireGPSPermissions(mRequestLocationSourceLauncher) {
+                                                        config.enableLocationInfo = true
+                                                        mSettingsViewModel.setEnableLocationInfo(true)
+                                                        makeSnackBar("GPS provider setting is activated!!!")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                false -> {
+                                    config.enableLocationInfo = false
+                                }
+                            }
+                        }
+                    }
+
+                    val settingThumbnailSize: String by mSettingsViewModel.thumbnailSizeSubDescription.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.thumbnail_setting_title),
+                        description = getString(R.string.thumbnail_setting_summary),
+                        subDescription = settingThumbnailSize,
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        openThumbnailSettingDialog()
+                    }
+
+                    val settingDatetimeFormat: String by mSettingsViewModel.datetimeFormatSubDescription.observeAsState("")
+                    SimpleCard(
+                        title = getString(R.string.datetime_setting_title),
+                        description = getString(R.string.datetime_setting_summary),
+                        subDescription = settingDatetimeFormat,
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        openDatetimeFormattingSettingDialog()
+                    }
+
+                    var enableContentsSummary by remember { mutableStateOf(requireContext().config.enableContentsSummary) }
+                    SwitchCard(
+                        title = getString(R.string.contents_summary_title),
+                        description = getString(R.string.contents_summary_description),
+                        modifier = settingCardModifier,
+                        isOn = enableContentsSummary,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enableContentsSummary = enableContentsSummary.not()
+                            config.enableContentsSummary = enableContentsSummary
+                            initPreference()
+                        }
+                    }
+
+                    if (enableContentsSummary) {
+                        val summaryMaxLines: String by mSettingsViewModel.summaryMaxLinesSubDescription.observeAsState("")
+                        SimpleCard(
+                            title = getString(R.string.max_lines_title),
+                            description = getString(R.string.max_lines_summary),
+                            subDescription = summaryMaxLines,
+                            modifier = settingCardModifier,
+                            enableCardViewPolicy = enableCardViewPolicy
+                        ) {
+                            openMaxLinesSettingDialog()
+                        }
+                    }
+
+                    SwitchCard(
+                        title = getString(R.string.enable_card_view_policy_title),
+                        description = getString(R.string.enable_card_view_policy_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableCardViewPolicy,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            config.enableCardViewPolicy = enableCardViewPolicy.not()
+                            mSettingsViewModel.setEnableCardViewPolicy(config.enableCardViewPolicy)
+                        }
+                    }
+
+                    var diarySearchQueryCaseSensitive by remember { mutableStateOf(requireContext().config.diarySearchQueryCaseSensitive) }
+                    SwitchCard(
+                        title = getString(R.string.diary_search_keyword_case_sensitive_title),
+                        description = getString(R.string.diary_search_keyword_case_sensitive_summary),
+                        modifier = settingCardModifier,
+                        isOn = diarySearchQueryCaseSensitive,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            diarySearchQueryCaseSensitive = diarySearchQueryCaseSensitive.not()
+                            config.enableContentsSummary = diarySearchQueryCaseSensitive
+                        }
+                    }
+
+                    var calendarStartDay by remember { mutableIntStateOf(requireContext().config.calendarStartDay) }
+                    RadioGroupCard(
+                        title = getString(R.string.calendar_start_day_title),
+                        description = getString(R.string.calendar_start_day_summary),
+                        modifier = settingCardModifier,
+                        options = listOf(
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_saturday),
+                                "key" to CALENDAR_START_DAY_SATURDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_sunday),
+                                "key" to CALENDAR_START_DAY_SUNDAY
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_start_day_monday),
+                                "key" to CALENDAR_START_DAY_MONDAY
+                            )
+                        ),
+                        selectedKey = calendarStartDay
+                    ) { key ->
+                        calendarStartDay = key
+                        config.calendarStartDay = calendarStartDay
+                    }
+
+                    var calendarSorting by remember { mutableIntStateOf(requireContext().config.calendarSorting) }
+                    RadioGroupCard(
+                        title = getString(R.string.calendar_sort_title),
+                        description = getString(R.string.calendar_sort_summary),
+                        modifier = settingCardModifier,
+                        options = listOf(
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_sort_ascending),
+                                "key" to CALENDAR_SORTING_ASC
+                            ),
+                            mapOf(
+                                "title" to LocalContext.current.getString(R.string.calendar_sort_descending),
+                                "key" to CALENDAR_SORTING_DESC
+                            ),
+                        ),
+                        selectedKey = calendarSorting
+                    ) { key ->
+                        config.calendarSorting = key
+                        calendarSorting = key
+                    }
+
+                    var enableCountCharacters by remember { mutableStateOf(requireContext().config.enableCountCharacters) }
+                    SwitchCard(
+                        title = getString(R.string.count_characters_title),
+                        description = getString(R.string.count_characters_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableCountCharacters,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            enableCountCharacters = enableCountCharacters.not()
+                            config.enableCountCharacters = enableCountCharacters
+                        }
+                    }
+
+                    var holdPositionEnterEditScreen by remember { mutableStateOf(requireContext().config.holdPositionEnterEditScreen) }
+                    SwitchCard(
+                        title = getString(R.string.hold_position_title),
+                        description = getString(R.string.hold_position_summary),
+                        modifier = settingCardModifier,
+                        isOn = holdPositionEnterEditScreen,
+                        enableCardViewPolicy = enableCardViewPolicy
+                    ) {
+                        requireActivity().run {
+                            holdPositionEnterEditScreen = holdPositionEnterEditScreen.not()
+                            config.holdPositionEnterEditScreen = holdPositionEnterEditScreen
+                        }
+                    }
+
+                    if (mSettingsViewModel.enableReviewFlowVisibleIsOn()) {
+                        var enableReviewFlow by remember { mutableStateOf(requireContext().config.enableReviewFlow) }
+                        SwitchCard(
+                            title = getString(R.string.enable_review_flow_title),
+                            description = getString(R.string.enable_review_flow_summary),
+                            modifier = settingCardModifier,
+                            isOn = enableReviewFlow,
+                            enableCardViewPolicy = enableCardViewPolicy
+                        ) {
+                            requireActivity().run {
+                                enableReviewFlow = enableReviewFlow.not()
+                                config.enableReviewFlow = enableReviewFlow
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -90,200 +426,22 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        requireActivity().run activity@ {
-            mBinding.run {
-                when (view.id) {
-                    R.id.primaryColor -> TransitionHelper.startActivityWithTransition(
-                        this@activity,
-                        Intent(this@activity, CustomizationActivity::class.java)
-                    )
-
-                    R.id.thumbnailSetting -> {
-                        openThumbnailSettingDialog()
-                    }
-
-                    cardDatetimeSetting.id -> {
-                        openDatetimeFormattingSettingDialog()
-                    }
-
-                    R.id.contentsSummary -> {
-                        contentsSummarySwitcher.toggle()
-                        config.enableContentsSummary = contentsSummarySwitcher.isChecked
-                        maxLines.visibility =
-                            if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-                    }
-
-                    R.id.enableCardViewPolicy -> {
-                        enableCardViewPolicySwitcher.toggle()
-                        config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                        updateCardViewPolicy(this.root)
-                    }
-
-//                    R.id.multiPickerOption -> {
-//                        multiPickerOptionSwitcher.toggle()
-//                        config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-//                    }
-
-                    R.id.sensitiveOption -> {
-                        sensitiveOptionSwitcher.toggle()
-                        config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-                    }
-
-                    R.id.countCharacters -> {
-                        countCharactersSwitcher.toggle()
-                        config.enableCountCharacters = countCharactersSwitcher.isChecked
-                    }
-
-                    R.id.locationInfo -> {
-                        locationInfoSwitcher.toggle()
-                        when (locationInfoSwitcher.isChecked) {
-                            true -> {
-                                run {
-                                    when (hasGPSPermissions()) {
-                                        true -> {
-                                            config.enableLocationInfo =
-                                                locationInfoSwitcher.isChecked
-                                        }
-
-                                        false -> {
-                                            locationInfoSwitcher.isChecked = false
-                                            if (this@activity is EasyDiaryActivity) {
-                                                acquireGPSPermissions(mRequestLocationSourceLauncher) {
-                                                    locationInfoSwitcher.isChecked = true
-                                                    config.enableLocationInfo =
-                                                        locationInfoSwitcher.isChecked
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            false -> {
-                                config.enableLocationInfo = locationInfoSwitcher.isChecked
-                            }
-                        }
-                    }
-
-                    R.id.holdPositionEnterEditScreen -> {
-                        holdPositionSwitcher.toggle()
-                        config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
-                    }
-
-                    R.id.maxLines -> {
-                        openMaxLinesSettingDialog()
-                    }
-
-                    R.id.taskSymbolTopOrder -> {
-                        taskSymbolTopOrderSwitcher.toggle()
-                        config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
-                    }
-
-                    R.id.enableReviewFlow -> {
-                        enableReviewFlowSwitcher.toggle()
-                        config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
-                    }
-
-                    R.id.enable_photo_highlight -> {
-                        enablePhotoHighlightSwitcher.toggle()
-                        config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
-                    }
-
-                    R.id.enable_welcome_dashboard_popup -> {
-                        enableWelcomeDashboardPopupSwitcher.toggle()
-                        config.enableWelcomeDashboardPopup =
-                            enableWelcomeDashboardPopupSwitcher.isChecked
-                    }
-
-                    R.id.card_markdown_setting -> {
-                        switchMarkdownSetting.toggle()
-                        config.enableMarkdown = switchMarkdownSetting.isChecked
-                    }
-
-                    R.id.card_quick_setting -> {
-                        switchQuickSetting.toggle()
-                        config.enableShakeDetector = switchQuickSetting.isChecked
-                        showAlertDialog("Close the current screen to apply the settings.", { _, _ -> finish() }, null)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            primaryColor.setOnClickListener(mOnClickListener)
-            thumbnailSetting.setOnClickListener(mOnClickListener)
-            cardDatetimeSetting.setOnClickListener(mOnClickListener)
-            contentsSummary.setOnClickListener(mOnClickListener)
-            enableCardViewPolicy.setOnClickListener(mOnClickListener)
-//            multiPickerOption.setOnClickListener(mOnClickListener)
-            sensitiveOption.setOnClickListener(mOnClickListener)
-            maxLines.setOnClickListener(mOnClickListener)
-            countCharacters.setOnClickListener(mOnClickListener)
-            locationInfo.setOnClickListener(mOnClickListener)
-            holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
-            taskSymbolTopOrder.setOnClickListener(mOnClickListener)
-            enableReviewFlow.setOnClickListener(mOnClickListener)
-            enablePhotoHighlight.setOnClickListener(mOnClickListener)
-            enableWelcomeDashboardPopup.setOnClickListener(mOnClickListener)
-            cardMarkdownSetting.setOnClickListener(mOnClickListener)
-            cardQuickSetting.setOnClickListener(mOnClickListener)
-            calendarStartDay.setOnCheckedChangeListener { _, i ->
-                requireActivity().config.calendarStartDay = when (i) {
-                    R.id.startMonday -> CALENDAR_START_DAY_MONDAY
-//                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
-//                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
-//                R.id.startThursday -> CALENDAR_START_DAY_THURSDAY
-//                R.id.startFriday -> CALENDAR_START_DAY_FRIDAY
-                    R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
-                    else -> CALENDAR_START_DAY_SUNDAY
-                }
-            }
-            calendarSorting.setOnCheckedChangeListener { _, i ->
-                requireActivity().config.calendarSorting = when (i) {
-                    R.id.ascending -> CALENDAR_SORTING_ASC
-                    else -> CALENDAR_SORTING_DESC
-                }
-            }
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun initPreference() {
         requireActivity().run {
             mBinding.run {
-                sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
-//                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
-                enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
-                contentsSummarySwitcher.isChecked = config.enableContentsSummary
-                countCharactersSwitcher.isChecked = config.enableCountCharacters
-                locationInfoSwitcher.isChecked = config.enableLocationInfo
-                taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
-                enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
-                enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
-                enableWelcomeDashboardPopupSwitcher.isChecked = config.enableWelcomeDashboardPopup
-
-                when (config.calendarStartDay) {
-                    CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
-                    CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
-                    else -> startSunday.isChecked = true
-                }
-                when (config.calendarSorting) {
-                    CALENDAR_SORTING_ASC -> ascending.isChecked = true
-                    CALENDAR_SORTING_DESC -> descending.isChecked = true
-                }
-                holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
-                thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
-                maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-                maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
-
-                textDatetimeSettingDescription.text = DateUtils.getDateTimeStringForceFormatting(
-                    System.currentTimeMillis(), requireContext()
+                mSettingsViewModel.setThumbnailSizeSubDescription("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
+                mSettingsViewModel.setDatetimeFormatSubDescription(
+                    DateUtils.getDateTimeStringForceFormatting(
+                        System.currentTimeMillis(), requireContext()
+                    )
                 )
-                switchMarkdownSetting.isChecked = config.enableMarkdown
-                switchQuickSetting.isChecked = config.enableShakeDetector
+                mSettingsViewModel.setSummaryMaxLinesSubDescription(getString(R.string.max_lines_value, config.summaryMaxLines))
+
+                if (!hasGPSPermissions()) {
+                    config.enableLocationInfo = false
+                    mSettingsViewModel.setEnableLocationInfo(false)
+                }
             }
         }
     }
