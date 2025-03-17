@@ -800,6 +800,10 @@
         v1.4.328.202502160 / 2025.02.16\n
         System Bar Area and Toolbar UI/UX Improvements
     </string>
+    <string name="release_329">
+        v1.4.329.202503170 / 2025.03.17\n
+        Applied Jetpack Compose components to some settings screens
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
