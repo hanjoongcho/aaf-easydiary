@@ -71,7 +71,7 @@ fun CardContainer(
     val scrollState = rememberScrollState()
     Column(
         modifier = if (enableCardViewPolicy) Modifier
-            .padding(6.dp, 0.dp)
+//            .padding(6.dp, 0.dp)
             .fillMaxWidth()
             .verticalScroll(scrollState)
         else Modifier
