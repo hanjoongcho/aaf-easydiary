@@ -227,7 +227,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 description = getString(R.string.task_symbol_top_order_description),
                 modifier = settingCardModifier,
                 isOn = true,
-                imageResourceId = R.drawable.ic_004_sandwich
+                imageResourceId = R.drawable.ic_select_symbol
             ) {}
             var enableDebugOptionVisibleDiarySequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleDiarySequence) }
             SwitchCard(

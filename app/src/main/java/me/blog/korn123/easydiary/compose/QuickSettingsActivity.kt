@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
@@ -129,6 +130,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(Color(context.config.screenBackgroundColor))
+                .fillMaxHeight()
         ) {
             val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(context.config.enableCardViewPolicy)
 
@@ -203,19 +205,23 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         context.config.disableFutureDiary = !disableFutureDiary
                         disableFutureDiary = !disableFutureDiary
                     }
-                    SimpleCard(
-                        stringResource(id = R.string.sync_google_calendar_event_title),
-                        stringResource(id = R.string.sync_google_calendar_event_summary),
-                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
-                        enableCardViewPolicy = enableCardViewPolicy,
-                    ) {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
+
+                    if (BuildConfig.FLAVOR != "foss") {
+                        SimpleCard(
+                            stringResource(id = R.string.sync_google_calendar_event_title),
+                            stringResource(id = R.string.sync_google_calendar_event_summary),
+                            modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                            enableCardViewPolicy = enableCardViewPolicy,
+                        ) {
+                            val alarm = Alarm().apply {
+                                sequence = Int.MAX_VALUE
+                                workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                                label = "Quick Settings"
+                            }
+                            AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                         }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
+
                 }
             }
 
