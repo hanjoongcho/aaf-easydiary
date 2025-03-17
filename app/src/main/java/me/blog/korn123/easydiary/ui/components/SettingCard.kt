@@ -1,17 +1,19 @@
 package me.blog.korn123.easydiary.ui.components
 
+import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +22,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -29,6 +33,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -39,14 +44,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
+import androidx.compose.ui.viewinterop.AndroidView
+import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 const val verticalPadding = 4F
 const val horizontalPadding = 3F
+
+/***************************************************************************************************
+ *   Base Composable
+ *
+ ***************************************************************************************************/
 
 @Composable
 fun CardContainer(
@@ -56,7 +71,7 @@ fun CardContainer(
     val scrollState = rememberScrollState()
     Column(
         modifier = if (enableCardViewPolicy) Modifier
-            .padding(6.dp, 0.dp)
+//            .padding(6.dp, 0.dp)
             .fillMaxWidth()
             .verticalScroll(scrollState)
         else Modifier
@@ -69,57 +84,95 @@ fun CardContainer(
 }
 
 @Composable
-fun CategoryTitleCard(
-    title: String,
+fun SimpleText(
+    modifier: Modifier = Modifier,
+    text: String,
+    alpha: Float = 1.0f,
+    fontWeight: FontWeight = FontWeight.Normal,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
     val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
+    val textUnit = with(density) {
+        val temp = fontSize.toDp()
         temp.toSp()
     }
+
+    Text(
+        modifier = modifier,
+        text = text,
+        style = TextStyle(
+            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                LocalContext.current
+            ),
+            fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+            color = Color(LocalContext.current.config.textColor).copy(alpha),
+            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+        ),
+        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+    )
+}
+
+@Composable
+fun CategoryTitleCard(
+    title: String,
+    marginTop: Int = 6
+) {
     val modifier = Modifier.fillMaxWidth()
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
-            3.dp,
-            3.dp
-        ) else modifier.padding(1.dp, 1.dp)),
+            start = 3.dp, top = marginTop.plus(3).dp,
+            end = 3.dp,
+            bottom = 3.dp
+        ) else modifier.padding(
+            start = 1.dp,
+            top = marginTop.plus(1).dp,
+            end = 1.dp,
+            bottom = 1.dp
+        )),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp, 5.dp)
         ) {
-            Text(
+            SimpleText(
                 text = title,
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color.White,
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
+                fontWeight = FontWeight.Bold,
             )
         }
     }
 }
 
+
+/***************************************************************************************************
+ *   Simple Setting Card
+ *
+ ***************************************************************************************************/
 @Composable
 fun SimpleCard(
     title: String,
     description: String?,
+    subDescription: String? = null,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
+
     SimpleCardWithImage(
-        title,
-        description,
-        null,
-        modifier,
-        enableCardViewPolicy,
-        callback
+        title = title,
+        description = description,
+        subDescription = subDescription,
+        imageResourceId = null,
+        modifier = modifier,
+        enableCardViewPolicy = enableCardViewPolicy,
+        fontSize = fontSize,
+        lineSpacingScaleFactor = lineSpacingScaleFactor,
+        callback = callback
     )
 }
 
@@ -127,17 +180,14 @@ fun SimpleCard(
 fun SimpleCardWithImage(
     title: String,
     description: String?,
+    subDescription: String? = null,
     imageResourceId: Int?,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
 
     Card(
         shape = RoundedCornerShape(4.dp),
@@ -149,47 +199,64 @@ fun SimpleCardWithImage(
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
     ) {
-        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
             Row(
-                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top) {
+                SimpleText(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 imageResourceId?.let {
                     Image(
                         painter = painterResource(id = it),
                         contentDescription = "Google Calendar",
                         contentScale = ContentScale.Fit,
-                        modifier =  Modifier.size(42.dp).padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
+                        modifier =  Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+                description?.run {
+                    SimpleText(
+                        text = description,
+                        alpha = 0.7f,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                     )
                 }
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                        color = Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
             }
-            description?.let {
-                Text(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    text = description,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
-                )
+
+            subDescription?.run {
+                Row(
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SimpleText(
+                        text = subDescription,
+                        alpha = 0.7f,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                    )
+                }
             }
         }
     }
 }
+
+
+/***************************************************************************************************
+ *   Switch Setting Card
+ *
+ ***************************************************************************************************/
 
 @Composable
 fun SwitchCard(
@@ -197,18 +264,19 @@ fun SwitchCard(
     description: String?,
     modifier: Modifier,
     isOn: Boolean,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
+
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+        modifier = if (enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
@@ -224,15 +292,12 @@ fun SwitchCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                SimpleText(
                     modifier = Modifier.weight(1f),
                     text = title,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        fontWeight = FontWeight.Bold,
-                        color = Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
                 Switch(
                     modifier = Modifier
@@ -240,7 +305,6 @@ fun SwitchCard(
                         .height(32.dp)
 //                        .background(Color.Yellow)
                     ,
-
                     checked = isOn,
                     onCheckedChange = {
                         callback.invoke()
@@ -262,13 +326,11 @@ fun SwitchCard(
                 Row(
                     modifier = Modifier.padding(top = 5.dp)
                 ) {
-                    Text(
+                    SimpleText(
                         text = description,
-                        style = TextStyle(
-                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                            color = Color(LocalContext.current.config.textColor),
-                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                        ),
+                        alpha = 0.7f,
+                        fontSize = fontSize,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
                     )
                 }
             }
@@ -277,23 +339,263 @@ fun SwitchCard(
 }
 
 @Composable
-fun ScrollableCard(
+fun SwitchCardWithImage(
     title: String,
-    description: String?,
+    imageResourceId: Int,
+    description: String,
     modifier: Modifier,
-    scrollState: ScrollState
+    isOn: Boolean,
+    callback: () -> Unit
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
 
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        onClick = {
+            callback.invoke()
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                )
+                Switch(
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+                    checked = isOn,
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = imageResourceId),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                SimpleText(
+                    text = description,
+                    alpha = 0.7f,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SwitchCardTodo(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    isOn: Boolean,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    callback: () -> Unit
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        onClick = {
+            callback.invoke()
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_todo),
+                    contentDescription = "Todo",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(26.dp)
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_doing),
+                    contentDescription = "Doing",
+                    contentScale = ContentScale.Fit,
+                    modifier =  Modifier.size(26.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Switch(
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+                    checked = isOn,
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
+            ) {
+                SimpleText(
+                    text = description,
+                    alpha = 0.7f,
+                )
+            }
+        }
+    }
+}
+
+
+/***************************************************************************************************
+ *   Radio Setting Card
+ *
+ ***************************************************************************************************/
+
+@Composable
+fun RadioGroupCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    options: List<Map<String, Any>>,
+    selectedKey: Int,
+    callback: (key: Int) -> Unit
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            description?.let {
+                Row(
+                    modifier = Modifier.padding(top = 5.dp)
+                ) {
+                    SimpleText(
+                        text = description,
+                        alpha = 0.7f,
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                options.forEach { option ->
+                    RadioButton(
+                        selected = (selectedKey == option["key"]),
+                        onClick = {
+                            callback.invoke(option["key"] as Int)
+                        },
+                        modifier = Modifier.size(20.dp),
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(LocalContext.current.config.primaryColor),
+                            unselectedColor = Color(LocalContext.current.config.textColor),
+                            disabledSelectedColor = Color.LightGray,   // 비활성화된 선택 색상
+                            disabledUnselectedColor = Color.DarkGray   // 비활성화된 미선택 색상
+                        )
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    SimpleText(
+                        text = option["title"] as String,
+                        alpha = 0.7f,
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                }
+            }
+        }
+    }
+}
+
+
+/***************************************************************************************************
+ *   Custom Setting Card
+ *
+ ***************************************************************************************************/
+
+@Composable
+fun ScrollableCard(
+    title: String,
+    description: String?,
+    modifier: Modifier,
+    scrollState: ScrollState,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(
             3.dp,
             3.dp
         ) else modifier.padding(1.dp, 1.dp)),
@@ -305,26 +607,194 @@ fun ScrollableCard(
                 .height(200.dp)
                 .verticalScroll(scrollState)
         ) {
-            Text(
+            SimpleText(
                 text = title,
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
+                fontWeight = FontWeight.Bold,
+                fontSize = fontSize,
+                lineSpacingScaleFactor = lineSpacingScaleFactor,
             )
             description?.let {
-                Text(
+                SimpleText(
                     modifier = Modifier
                         .padding(0.dp, 5.dp, 0.dp, 0.dp),
                     text = description,
-                    style = TextStyle(
-                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                        color = Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LineSpacing(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callback: (progressFloat: Float) -> Unit = {}
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+//                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top) {
+                SimpleText(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AndroidView(
+                    modifier = modifier,
+                    factory = { ctx ->
+                        val binding = PartialBubbleSeekBarBinding.inflate(LayoutInflater.from(ctx)).apply {
+                            fontLineSpacing.configBuilder
+                                .min(0.2F)
+                                .max(1.8F)
+                                .progress(lineSpacingScaleFactor)
+                                .floatType()
+                                .secondTrackColor(ctx.config.textColor)
+                                .trackColor(ctx.config.textColor)
+                                .sectionCount(16)
+                                .sectionTextInterval(2)
+                                .showSectionText()
+                                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                                .autoAdjustSectionMark()
+                                .build()
+                            val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
+                                override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                                    ctx.config.lineSpacingScaleFactor = progressFloat
+//                                    setFontsStyle()
+                                    callback(progressFloat)
+                                }
+                                override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
+                                override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
+                            }
+                            fontLineSpacing.onProgressChangedListener = bubbleSeekBarListener
+                        }
+
+                        binding.root
+                    },
+                    update = {
+                            view ->
+                        val binding = PartialBubbleSeekBarBinding.bind(view)
+                        binding.fontLineSpacing.run {
+                            setProgress(lineSpacingScaleFactor)
+                            invalidate()
+                        }
+                    }
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    text = description,
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FontSize(
+    title: String,
+    description: String,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callbackMinus: () -> Unit = {},
+    callbackPlus: () -> Unit = {}
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+//                modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                modifier = Modifier,
+                verticalAlignment = Alignment.Top
+            ) {
+                SimpleText(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+
+            Row(
+                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    modifier = Modifier.weight(1f),
+                    text = description,
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_minus_6),
+                    contentDescription = "Google Calendar",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(3.dp)
+                        .clickable {
+//                            LocalContext.current.config.settingFontSize.minus(6)
+                            callbackMinus.invoke()
+                        },
+                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_plus_6),
+                    contentDescription = "Google Calendar",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(3.dp)
+                        .clickable {
+                            callbackPlus.invoke()
+                        },
+                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
                 )
             }
         }
@@ -337,12 +807,6 @@ fun SymbolCard(
     viewModel: BaseDevViewModel,
     callback: () -> Unit
 ) {
-    val pixelValue = LocalContext.current.config.settingFontSize
-    val density = LocalDensity.current
-    val textUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
     val symbol by viewModel.symbol.observeAsState(1)
     Card(
         shape = RoundedCornerShape(4.dp),
@@ -355,19 +819,11 @@ fun SymbolCard(
         },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        val scrollState = rememberScrollState()
         Row(
             modifier = Modifier.padding(15.dp)
         ) {
-            Text(
+            SimpleText(
                 text = symbol.toString(),
-                style = TextStyle(
-                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                    fontWeight = FontWeight.Bold,
-//                        fontStyle = FontStyle.Italic,
-                    color = Color(LocalContext.current.config.textColor),
-                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                ),
             )
             Image(
                 painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
@@ -378,4 +834,3 @@ fun SymbolCard(
         }
     }
 }
-
