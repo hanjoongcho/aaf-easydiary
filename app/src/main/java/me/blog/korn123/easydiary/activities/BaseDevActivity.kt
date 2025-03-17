@@ -123,8 +123,8 @@ import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
+import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
@@ -222,6 +222,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow
         ) {
+            SwitchCardWithImage(
+                title = getString(R.string.task_symbol_top_order_title),
+                description = getString(R.string.task_symbol_top_order_description),
+                modifier = settingCardModifier,
+                isOn = true,
+                imageResourceId = R.drawable.ic_select_symbol
+            ) {}
             var enableDebugOptionVisibleDiarySequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleDiarySequence) }
             SwitchCard(
                 "Display Diary Sequence",
@@ -265,7 +272,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Action Log",
                 "Open Action Log",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
                 ActionLogDialog(this@BaseDevActivity, actionLogs) { EasyDiaryDbHelper.deleteActionLogAll() }
@@ -273,47 +280,47 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC ALL",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown() }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC dev",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_DEV) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC life",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_LIFE) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC etc",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_ETC) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/FICS",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_FICS) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/ETF",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_ETF) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/knowledge",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
             SimpleCard(
                 "ReviewFlow",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { startReviewFlow() }
             SimpleCard(
                 "Reset Showcase",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
                     edit().putBoolean(
@@ -337,7 +344,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Reset Font Size",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 config.settingFontSize =
                     spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
@@ -356,7 +363,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Check Force Release URL",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val url =
@@ -387,7 +394,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "InApp Browser",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 val customTabsIntent =
                     CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
@@ -399,7 +406,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Clear-Unused-Photo",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 val localPhotoBaseNames = arrayListOf<String>()
                 val unUsedPhotos = arrayListOf<String>()
@@ -420,7 +427,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Font Preview Emoji",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 config.enableDebugOptionVisibleFontPreviewEmoji =
                     !config.enableDebugOptionVisibleFontPreviewEmoji
@@ -429,7 +436,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Display Temporary Diary",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 config.enableDebugOptionVisibleTemporaryDiary =
                     !config.enableDebugOptionVisibleTemporaryDiary
@@ -438,14 +445,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "PickMultipleVisualMedia",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
             SimpleCard(
                 "Check Next Alarm",
                 null,
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
                 alarmManager.run {
@@ -454,7 +461,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SymbolCard(
-                settingCardModifier,
+                modifier = settingCardModifier,
                 viewModel,
             ) {
                 viewModel.plus()
@@ -465,7 +472,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun Notification(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int
     ) {
         CategoryTitleCard(title = "Notification")
@@ -476,37 +483,37 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Notification-01",
                 "Basic",
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 createNotificationBasic()
             }
             SimpleCard(
                 "Notification-02",
                 "Basic(Bitmap Icon)",
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 createNotificationBasicWithBitmapIcon(this@BaseDevActivity)
             }
             SimpleCard(
                 "Notification-03",
                 "CustomContentView",
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 createNotificationCustomView(this@BaseDevActivity)
             }
             SimpleCard(
                 "Notification-04",
                 "BigTextStyle",
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 createNotificationBigTextStyle()
             }
             SimpleCard(
                 "Notification-05",
                 "Over-Due",
-                settingCardModifier,
+                modifier = modifier,
             ) {
-             openOverDueNotification()
+                openOverDueNotification()
             }
         }
     }
@@ -524,7 +531,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         SimpleCard(
             "Location Info",
             locationInfo,
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {}
         FlowRow(
             modifier = Modifier,
@@ -543,19 +550,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Location Manager",
                 "Last-Location",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { updateLocation(viewModel) }
             SimpleCard(
                 "Location Manager",
                 "Update-GPS",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 updateGPSProvider()
             }
             SimpleCard(
                 "Location Manager",
                 "Update-Network",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) {
                 updateNetWorkProvider()
             }
@@ -576,32 +583,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Dialog",
                 "알림(DEFAULT)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
             SimpleCard(
                 "Dialog",
                 "알림(INFO)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
             SimpleCard(
                 "Dialog",
                 "알림(WARNING)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
             SimpleCard(
                 "Dialog",
                 "알림(ERROR)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
             SimpleCard(
                 "Dialog",
                 "알림(SETTING)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
             SimpleCard(
                 "Dialog",
                 "확인(INFO)",
-                settingCardModifier,
+                modifier = settingCardModifier,
             ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
         }
     }
@@ -663,34 +670,33 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun CustomLauncher(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int
     ) {
-        CategoryTitleCard(title = "Custom Launcher")
+        CategoryTitleCard(title = "Custom Launcher", marginTop = 0)
         FlowRow(
             maxItemsInEachRow = maxItemsInEachRow,
             modifier = Modifier
         ) {
-            SimpleCardWithImage(
+            SimpleCard(
                 "EasyDiary Launcher",
                 null,
-                R.drawable.ic_004_sandwich,
-                settingCardModifier,
+                modifier = modifier,
             ) { toggleLauncher(Launcher.EASY_DIARY) }
             SimpleCard(
                 "Dark Launcher",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) { toggleLauncher(Launcher.DARK) }
             SimpleCard(
                 "Green Launcher",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) { toggleLauncher(Launcher.GREEN) }
             SimpleCard(
                 "Debug Launcher",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) { toggleLauncher(Launcher.DEBUG) }
         }
     }
@@ -698,7 +704,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun Coroutine(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel
     ) {
@@ -728,7 +734,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T1] Start",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 if (mCoroutineJob1?.isActive == true) {
                     updateConsole("Job has already started.")
@@ -753,7 +759,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T1] Stop",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 if (mCoroutineJob1?.isActive == true) {
                     runBlocking { mCoroutineJob1?.cancelAndJoin() }
@@ -764,7 +770,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T1] Job Status",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 mCoroutineJob1?.let {
                     when (it.isActive) {
@@ -778,7 +784,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T2] Multiple",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 for (k in 1..3) {
                     GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
@@ -793,7 +799,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T3] runBlocking",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 updateConsole("1")
                 runBlocking {
@@ -808,7 +814,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "[T4] CoroutineScope",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) {
                 updateConsole("1")
                 CoroutineScope(Dispatchers.IO).launch {
@@ -825,7 +831,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun FingerPrint(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int
     ) {
         CategoryTitleCard(title = "Finger Print")
@@ -835,12 +841,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Fingerprint",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) { startListeningFingerprint(this@BaseDevActivity) }
             SimpleCard(
                 "Biometric",
                 null,
-                settingCardModifier,
+                modifier = modifier,
             ) { startListeningBiometric(this@BaseDevActivity) }
         }
     }
@@ -849,13 +855,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun CustomLauncherPreview() {
         AppTheme {
-            val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
             Column {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                CustomLauncher(settingCardModifier, 1)
             }
         }
     }
@@ -864,13 +868,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun NotificationPreview() {
         AppTheme {
-            val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
             Column {
                 val settingCardModifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                Notification(settingCardModifier, maxItemsInEachRow)
+                Notification(settingCardModifier, 1)
             }
         }
     }
@@ -1119,7 +1121,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
     }
-    
+
     private fun createNotificationBasicWithBitmapIcon(context: Context) {
         val notification = NotificationInfo(
             R.drawable.ic_diary_writing,
@@ -1155,7 +1157,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
     }
-    
+
     private fun createNotificationBasic() {
         val notification = NotificationInfo(
             R.drawable.ic_diary_writing,
@@ -1189,7 +1191,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }.build())
         }
     }
-    
+
     protected fun createBaseCardView(cardTitle: String, descriptionTag: String? = null, vararg buttons: Button): CardView {
         val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
         val descriptionContextTheme = ContextThemeWrapper(this, R.style.SettingsSummary)
