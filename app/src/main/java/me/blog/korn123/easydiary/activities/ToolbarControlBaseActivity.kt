@@ -22,6 +22,7 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.viewModels
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
@@ -129,7 +130,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
             val translationY = animation.animatedValue as Float
             ViewHelper.setTranslationY(mBinding.appBar, translationY)
             ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
-            val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
+            val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
             lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
             (mBinding.mainHolder as View).requestLayout()
         }
