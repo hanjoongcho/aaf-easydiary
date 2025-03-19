@@ -201,31 +201,21 @@ fun Activity.getRootViewHeight(): Int {
 fun Activity.hideSystemBarsInLandscape() {
     if (isLandScape()) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.navigationBars())
-            window.insetsController?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            window.insetsController?.hide(WindowInsets.Type.systemBars())
+            window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+    } else {
+        hideNavigationBars()
     }
 }
 
-//fun Activity.hideSystemBarsInLandscape() {
-//    if (isLandScape()) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            window.insetsController?.hide(WindowInsets.Type.systemBars())
-//            window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-//        }
-//    } else {
-//        hideNavigationBars()
-//    }
-//}
-//
-//fun Activity.hideNavigationBars() {
-////    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-//        window.insetsController?.hide(WindowInsets.Type.navigationBars())
-//        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-//    }
-//}
+fun Activity.hideNavigationBars() {
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        window.insetsController?.hide(WindowInsets.Type.navigationBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+}
 
 /**
  * 0 → 3버튼 네비게이션 (기본 소프트키)
