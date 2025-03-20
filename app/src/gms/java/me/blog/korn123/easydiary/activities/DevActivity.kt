@@ -81,7 +81,7 @@ class DevActivity : BaseDevActivity() {
                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                     Notification(settingCardModifier, maxItemsInEachRow)
                     AlertDialog(settingCardModifier, maxItemsInEachRow)
-                    Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                    Etc(settingCardModifier, maxItemsInEachRow.minus(1), viewModel)
                     LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
                     DebugToast(settingCardModifier, maxItemsInEachRow)
                     Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)

@@ -1,5 +1,8 @@
 package me.blog.korn123.easydiary.ui.components
 
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -39,8 +42,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import android.graphics.Typeface
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -53,6 +59,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 const val verticalPadding = 4F
@@ -833,4 +840,123 @@ fun SymbolCard(
             )
         }
     }
+}
+
+@Composable
+fun AlarmCard(
+    alarmTime: String,
+    alarmDays: String,
+    alarmDescription: String,
+    modifier: Modifier,
+    isOn: Boolean,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callback: () -> Unit
+) {
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = if (enableCardViewPolicy) modifier.padding(
+            horizontalPadding.dp,
+            verticalPadding.dp
+        ) else modifier
+            .padding(1.dp, 1.dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        onClick = {
+            callback.invoke()
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = modifier,
+                    text = LocalContext.current.getFormattedTime(6.times(7).times(60), false, true).toAnnotatedString(),
+                    style = TextStyle(
+                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                            LocalContext.current
+                        ),
+//                        fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+//                        color = Color(LocalContext.current.config.textColor).copy(alpha),
+                        color = Color(LocalContext.current.config.textColor),
+                        fontSize = TextUnit(44F, TextUnitType.Sp),
+                    ),
+//                    lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+                )
+                Switch(
+                    modifier = Modifier
+                        .absolutePadding(left = 5.dp)
+                        .height(32.dp)
+//                        .background(Color.Yellow)
+                    ,
+                    checked = isOn,
+                    onCheckedChange = {
+                        callback.invoke()
+                    },
+                    thumbContent = if (isOn) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.padding(top = 5.dp)
+            ) {
+                SimpleText(
+                    text = alarmDays,
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+            Row(
+                modifier = Modifier.padding(top = 5.dp)
+            ) {
+                SimpleText(
+                    text = alarmDescription,
+                    alpha = 0.7f,
+                    fontSize = fontSize,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+        }
+    }
+}
+
+fun SpannableString.toAnnotatedString(): AnnotatedString {
+    val builder = AnnotatedString.Builder(this.toString())
+
+    getSpans(0, length, Any::class.java).forEach { span ->
+        val start = getSpanStart(span)
+        val end = getSpanEnd(span)
+
+        when (span) {
+            is StyleSpan -> {
+                if (span.style == Typeface.BOLD) {
+                    builder.addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
+                }
+            }
+            is ForegroundColorSpan -> {
+                builder.addStyle(SpanStyle(color = Color(span.foregroundColor)), start, end)
+            }
+        }
+    }
+
+    return builder.toAnnotatedString()
 }
