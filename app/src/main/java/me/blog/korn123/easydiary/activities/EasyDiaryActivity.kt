@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
 import com.squareup.seismic.ShakeDetector
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import java.util.Calendar
 
 /**
  * Created by hanjoong on 2017-05-03.
@@ -37,7 +35,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        hideSystemBarsInLandscape()
+        hideSystemBars()
     }
 
     override fun onResume() {

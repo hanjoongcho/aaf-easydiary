@@ -198,19 +198,18 @@ fun Activity.getRootViewHeight(): Int {
     return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
 }
 
-fun Activity.hideSystemBarsInLandscape() {
-    if (isLandScape()) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+fun Activity.hideSystemBars() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (isLandScape()) {
             window.insetsController?.hide(WindowInsets.Type.systemBars())
             window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            hideNavigationBars()
         }
-    } else {
-        hideNavigationBars()
     }
 }
 
 fun Activity.hideNavigationBars() {
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         window.insetsController?.hide(WindowInsets.Type.navigationBars())
         window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
