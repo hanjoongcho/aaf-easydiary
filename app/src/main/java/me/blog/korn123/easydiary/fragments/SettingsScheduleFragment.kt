@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -41,6 +42,7 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.removeBit
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
@@ -94,7 +96,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
         )
 
         mBinding.alarmRecyclerView.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, if (requireActivity().isLandScape()) 2 else 1)
             addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
             adapter = mAlarmAdapter
         }
