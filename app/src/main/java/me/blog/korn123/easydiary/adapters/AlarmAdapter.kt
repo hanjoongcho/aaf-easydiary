@@ -1,39 +1,43 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.CompoundButton
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.extensions.getSelectedDaysString
-import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.cancelAlarmClock
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.ui.components.AlarmCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class AlarmAdapter(
         val activity: Activity,
         private val alarmList: List<Alarm>,
         private val onItemClickListener: AdapterView.OnItemClickListener?
-) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
+) : RecyclerView.Adapter<AlarmAdapter.AlarmCardViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
-        return AlarmViewHolder(ItemAlarmBinding.inflate(activity.layoutInflater, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmCardViewHolder {
+        return AlarmCardViewHolder(parent)
     }
 
-    override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
-        holder.bindTo(alarmList[position])
+    override fun onBindViewHolder(holder: AlarmCardViewHolder, position: Int) {
+        holder.bind(alarmList[position], position)
     }
 
     override fun getItemCount() = alarmList.size
-
-    fun onItemHolderClick(itemHolder: AlarmViewHolder) {
-        onItemClickListener?.run {
-            onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
-        }
-    }
 
     fun onItemCheckedChange(position: Int, isChecked: Boolean) {
         val alarm = alarmList[position]
@@ -48,47 +52,48 @@ class AlarmAdapter(
         EasyDiaryDbHelper.commitTransaction()
     }
 
-    inner class AlarmViewHolder(
-            private val viewHolderAlarmBinding: ItemAlarmBinding
-    ) : RecyclerView.ViewHolder(viewHolderAlarmBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-        init {
-            activity.run {
-                initTextSize(viewHolderAlarmBinding.root)
-                updateTextColors(viewHolderAlarmBinding.root)
-                updateAppViews(viewHolderAlarmBinding.root)
-                updateCardViewPolicy(viewHolderAlarmBinding.root)
-                FontUtils.setFontsTypeface(this, null, viewHolderAlarmBinding.root)
-            }
+    inner class AlarmCardViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+                ItemAlarmBinding.inflate(activity.layoutInflater, parent, false).root
+    ) {
+        private val composeView: ComposeView = itemView.findViewById(R.id.compose_view)
 
-            viewHolderAlarmBinding.root.setOnClickListener(this@AlarmViewHolder)
-            viewHolderAlarmBinding.alarmSwitch.setOnCheckedChangeListener(this@AlarmViewHolder)
-        }
+        fun bind(alarm: Alarm, position: Int) {
+            composeView.setContent {
+                AppTheme {
+                    Row {
+                        val modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
 
-        fun bindTo(alarm: Alarm) {
-            viewHolderAlarmBinding.run {
-                alarmDays.text = activity.getSelectedDaysString(alarm.days)
-                alarmDays.setTextColor(activity.config.textColor)
-                alarmSwitch.isChecked = alarm.isEnabled
-                alarmDescription.text = alarm.label
-                editAlarmTime.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
+                        val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
+                        val alarmTag = when (alarm.workMode) {
+                            Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+                            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+                            Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
+                            else -> "${prefix}unclassified"
+                        }
 
-                val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
-                alarmLabel.text = when (alarm.workMode) {
-                    Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
-                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
-                    Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
-                    Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
-                    else -> "${prefix}unclassified"
+                        var isOn by remember { mutableStateOf(alarm.isEnabled) }
+                        AlarmCard(
+                            alarmTime = alarm.timeInMinutes,
+                            alarmDays = activity.getSelectedDaysString(alarm.days),
+                            alarmDescription =  alarm.label ?: "",
+                            modifier = modifier,
+                            isOn = isOn,
+                            alarmTag = alarmTag,
+                            checkedChangeCallback = {
+                                isOn = isOn.not()
+                                onItemCheckedChange(position, isOn)
+                            }
+                        ) {
+                            onItemClickListener?.run {
+                                onItemClick(null, null, position, 0)
+                            }
+                        }
+                    }
                 }
             }
-        }
-
-        override fun onClick(view: View?) {
-            onItemHolderClick(this)
-        }
-
-        override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-            onItemCheckedChange(this.adapterPosition, p1)
         }
     }
 }

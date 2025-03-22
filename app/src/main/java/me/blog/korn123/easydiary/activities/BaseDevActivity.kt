@@ -224,11 +224,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow
         ) {
             AlarmCard(
-                alarmTime = "07:00",
+                alarmTime = 7 * 60,
                 alarmDays = "Mon, Tue, Wed, Thu, Fri",
                 alarmDescription = "Google Calendar sync",
                 modifier = modifier,
                 isOn = true,
+                checkedChangeCallback = {}
             ) {}
             
             SwitchCardWithImage(

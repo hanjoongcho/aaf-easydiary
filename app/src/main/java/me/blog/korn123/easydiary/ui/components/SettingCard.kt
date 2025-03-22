@@ -47,12 +47,25 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import android.graphics.Typeface
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -97,6 +110,7 @@ fun SimpleText(
     alpha: Float = 1.0f,
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontColor: Color = Color(LocalContext.current.config.textColor),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
 ) {
     val density = LocalDensity.current
@@ -114,7 +128,7 @@ fun SimpleText(
             ),
             fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
-            color = Color(LocalContext.current.config.textColor).copy(alpha),
+            color = fontColor.copy(alpha),
             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
         ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
@@ -148,6 +162,7 @@ fun CategoryTitleCard(
             SimpleText(
                 text = title,
                 fontWeight = FontWeight.Bold,
+                fontColor = Color.White
             )
         }
     }
@@ -844,14 +859,16 @@ fun SymbolCard(
 
 @Composable
 fun AlarmCard(
-    alarmTime: String,
+    alarmTime: Int = 0,
     alarmDays: String,
     alarmDescription: String,
+    alarmTag: String = "test",
     modifier: Modifier,
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    checkedChangeCallback: () -> Unit,
     callback: () -> Unit
 ) {
 
@@ -875,11 +892,50 @@ fun AlarmCard(
             modifier = Modifier.padding(15.dp)
         ) {
             Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Box(
+                    modifier = Modifier
+                        .shadow(3.dp, shape = RoundedCornerShape(3.dp))
+                        .padding(2.dp)
+                ) {
+                    Text(
+                        text = alarmTag,
+                        style = TextStyle(
+                            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                                LocalContext.current
+                            ),
+//                        fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+//                        color = Color(LocalContext.current.config.textColor).copy(alpha),
+                            color = Color(LocalContext.current.config.primaryColor),
+                            fontSize = TextUnit(11F, TextUnitType.Sp),
+                        ),
+                        modifier = Modifier
+                            .background(
+                                Color.White
+                                , shape = RoundedCornerShape(3.dp)
+                            )
+//                            .shadow(
+//                                8.dp
+//                                , shape = RoundedCornerShape(3.dp)
+//                            )
+                            .border(
+                                1.dp
+                                , Color(LocalContext.current.config.primaryColor).copy(1.0f)
+                                , shape = RoundedCornerShape(3.dp)
+                            )
+                            .padding(5.dp)
+                    )
+                }
+            }
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = modifier,
-                    text = LocalContext.current.getFormattedTime(6.times(7).times(60), false, true).toAnnotatedString(),
+                    text = LocalContext.current.getFormattedTime(alarmTime.times(60), false, true).toAnnotatedString(),
                     style = TextStyle(
                         fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
                             LocalContext.current
@@ -900,7 +956,7 @@ fun AlarmCard(
                     ,
                     checked = isOn,
                     onCheckedChange = {
-                        callback.invoke()
+                        checkedChangeCallback.invoke()
                     },
                     thumbContent = if (isOn) {
                         {
