@@ -2,16 +2,12 @@ package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -30,21 +26,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
-import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
@@ -68,9 +59,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 //        )
 
         setContent {
-            val viewModel: QuickSettingsViewModel by viewModels()
-            viewModel.enablePhotoHighlight.value = config.enablePhotoHighlight
-
             AppTheme {
                 Scaffold(
                     topBar = {
@@ -80,7 +68,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     },
                     content = { innerPadding ->
                         QuickSettings(
-                            viewModel,
                             Modifier.padding(innerPadding)
                         )
                     },
@@ -92,8 +79,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                             shape = CircleShape,
                             elevation = FloatingActionButtonDefaults.elevation(8.dp),
                             modifier = Modifier.size(40.dp)
-
-
                         ) {
 //                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
                             Icon(
@@ -115,7 +100,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    fun QuickSettings(viewModel: QuickSettingsViewModel, modifier: Modifier = Modifier) {
+    fun QuickSettings(modifier: Modifier = Modifier) {
         val context = LocalContext.current
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
@@ -221,10 +206,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                             AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                         }
                     }
-
                 }
             }
-
         }
     }
 
@@ -239,13 +222,12 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 },
                 content = { innerPadding ->
                     QuickSettings(
-                        viewModel(),
                         Modifier.padding(innerPadding)
                     )
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { onBackPressed() },
+                        onClick = { finishActivityWithTransition() },
                         containerColor = Color(LocalContext.current.config.primaryColor),
                         contentColor = Color.White,
                         shape = CircleShape,
@@ -263,21 +245,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 },
                 floatingActionButtonPosition = FabPosition.Center,
             )
-
-        }
-    }
-
-
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
-    class QuickSettingsViewModel : ViewModel() {
-        var enablePhotoHighlight: MutableLiveData<Boolean> = MutableLiveData()
-            private set
-
-        fun toggle() {
-            enablePhotoHighlight.value = enablePhotoHighlight.value != true
         }
     }
 }
