@@ -153,7 +153,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             extraBottomOffset = 10f
 
             initializeXAxis(xAxis, StockXAxisValueFormatter(context, SimpleDateFormat.SHORT))
-            initializeCombineChartYAxis(axisLeft, true, null)
+            initializeCombineChartYAxis(axisLeft, true, null, 5)
             initializeCombineChartYAxis(axisRight, false)
             marker = KospiMarkerView(requireContext(), StockXAxisValueFormatter(context, SimpleDateFormat.FULL)).also { it.chartView = this }
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -683,13 +683,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun getCurrencyFormat() = NumberFormat.getCurrencyInstance(Locale.KOREA)
 
-    private fun initializeCombineChartYAxis(yAxis: YAxis, isEnable: Boolean = false, stockYAxisValueFormatter: IAxisValueFormatter? = null) {
+    private fun initializeCombineChartYAxis(yAxis: YAxis, isEnable: Boolean = false, stockYAxisValueFormatter: IAxisValueFormatter? = null, labelCount: Int = 8) {
         yAxis.run {
             isEnabled = isEnable
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
-            setLabelCount(8, false)
+            setLabelCount(labelCount, true)
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
             spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
@@ -710,7 +710,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             textColor = requireContext().config.textColor
             labelRotationAngle = -65F
             granularity = 1f // only intervals of 1 day
-            labelCount = 5
+            setLabelCount(6, true)
             stockXAxisValueFormatter?.let { valueFormatter = it }
         }
     }
