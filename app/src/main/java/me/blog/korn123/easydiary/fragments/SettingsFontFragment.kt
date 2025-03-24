@@ -23,7 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.font.FontFamily
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -68,7 +72,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRequestFontPick: ActivityResultLauncher<Intent>
     private lateinit var mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
-    private val mSettingsViewModel: SettingsViewModel by viewModels()
+    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -150,6 +154,9 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+                        LocalContext.current
+                    ))
 
                     val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
                     SimpleCard(
@@ -157,7 +164,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         description = fontSettingDescription,
                         fontSize = fontSize,
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -174,6 +182,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) { progressFloat ->
                         setFontsStyle()
@@ -186,6 +195,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                         callbackMinus = {
                             requireActivity().run {
@@ -220,6 +230,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) {
                         openCalendarFontScaleDialog()
@@ -231,6 +242,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) {
                         performFileSearch()
@@ -244,6 +256,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         isOn = boldStyleEnable,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) {
                         requireActivity().run {
@@ -327,6 +340,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     )
                 }
             )
+
+            mSettingsViewModel.setFontFamily(FontUtils.getComposeFontFamily(requireContext()))
         }
     }
 

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.viewmodels
 
+import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,5 +69,8 @@ class SettingsViewModel : ViewModel() {
     val fontSize: LiveData<Float> get() = _fontSize
     fun setFontSize(value: Float) { _fontSize.value = value }
 
+    private val _fontFamily: MutableLiveData<FontFamily?> = MutableLiveData<FontFamily?>()
+    val fontFamily: LiveData<FontFamily?> get() = _fontFamily
+    fun setFontFamily(value: FontFamily?) { _fontFamily.value = value }
 
 }

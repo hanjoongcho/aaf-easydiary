@@ -58,6 +58,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -111,6 +112,9 @@ fun SimpleText(
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontColor: Color = Color(LocalContext.current.config.textColor),
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
 ) {
     val density = LocalDensity.current
@@ -123,9 +127,7 @@ fun SimpleText(
         modifier = modifier,
         text = text,
         style = TextStyle(
-            fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-                LocalContext.current
-            ),
+            fontFamily = fontFamily,
             fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
             color = fontColor.copy(alpha),
@@ -138,7 +140,8 @@ fun SimpleText(
 @Composable
 fun CategoryTitleCard(
     title: String,
-    marginTop: Int = 6
+    marginTop: Int = 6,
+    fontFamily: FontFamily? = null,
 ) {
     val modifier = Modifier.fillMaxWidth()
     Card(
@@ -162,7 +165,8 @@ fun CategoryTitleCard(
             SimpleText(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                fontColor = Color.White
+                fontColor = Color.White,
+                fontFamily = fontFamily
             )
         }
     }
@@ -181,6 +185,7 @@ fun SimpleCard(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
@@ -193,6 +198,7 @@ fun SimpleCard(
         modifier = modifier,
         enableCardViewPolicy = enableCardViewPolicy,
         fontSize = fontSize,
+        fontFamily = fontFamily,
         lineSpacingScaleFactor = lineSpacingScaleFactor,
         callback = callback
     )
@@ -207,6 +213,7 @@ fun SimpleCardWithImage(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
@@ -231,6 +238,7 @@ fun SimpleCardWithImage(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -252,6 +260,7 @@ fun SimpleCardWithImage(
                         text = description,
                         alpha = 0.7f,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     )
                 }
@@ -266,6 +275,7 @@ fun SimpleCardWithImage(
                         text = subDescription,
                         alpha = 0.7f,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     )
                 }
@@ -288,6 +298,7 @@ fun SwitchCard(
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit
 ) {
@@ -319,6 +330,7 @@ fun SwitchCard(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
                 Switch(
@@ -352,6 +364,7 @@ fun SwitchCard(
                         text = description,
                         alpha = 0.7f,
                         fontSize = fontSize,
+                        fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     )
                 }
@@ -365,6 +378,7 @@ fun SwitchCardWithImage(
     title: String,
     imageResourceId: Int,
     description: String,
+    fontFamily: FontFamily? = null,
     modifier: Modifier,
     isOn: Boolean,
     callback: () -> Unit
@@ -393,6 +407,7 @@ fun SwitchCardWithImage(
                     modifier = Modifier.weight(1f),
                     text = title,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = fontFamily,
                 )
                 Switch(
                     modifier = Modifier
@@ -430,6 +445,7 @@ fun SwitchCardWithImage(
                 SimpleText(
                     text = description,
                     alpha = 0.7f,
+                    fontFamily = fontFamily,
                 )
             }
         }
@@ -443,6 +459,7 @@ fun SwitchCardTodo(
     modifier: Modifier,
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontFamily: FontFamily? = null,
     callback: () -> Unit
 ) {
 
@@ -469,6 +486,7 @@ fun SwitchCardTodo(
                     modifier = Modifier.weight(1f),
                     text = title,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = fontFamily,
                 )
                 Image(
                     painter = painterResource(id = R.drawable.ic_todo),
@@ -513,6 +531,7 @@ fun SwitchCardTodo(
                 SimpleText(
                     text = description,
                     alpha = 0.7f,
+                    fontFamily = fontFamily,
                 )
             }
         }
@@ -532,6 +551,7 @@ fun RadioGroupCard(
     modifier: Modifier,
     options: List<Map<String, Any>>,
     selectedKey: Int,
+    fontFamily: FontFamily? = null,
     callback: (key: Int) -> Unit
 ) {
 
@@ -555,6 +575,7 @@ fun RadioGroupCard(
                     modifier = Modifier.weight(1f),
                     text = title,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = fontFamily,
                 )
             }
             description?.let {
@@ -564,6 +585,7 @@ fun RadioGroupCard(
                     SimpleText(
                         text = description,
                         alpha = 0.7f,
+                        fontFamily = fontFamily,
                     )
                 }
             }
@@ -589,6 +611,7 @@ fun RadioGroupCard(
                     SimpleText(
                         text = option["title"] as String,
                         alpha = 0.7f,
+                        fontFamily = fontFamily,
                     )
                     Spacer(modifier = Modifier.width(15.dp))
                 }
@@ -612,6 +635,7 @@ fun ScrollableCard(
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    fontFamily: FontFamily? = null,
 ) {
 
     Card(
@@ -633,6 +657,7 @@ fun ScrollableCard(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = fontSize,
+                fontFamily = fontFamily,
                 lineSpacingScaleFactor = lineSpacingScaleFactor,
             )
             description?.let {
@@ -642,6 +667,7 @@ fun ScrollableCard(
                     text = description,
                     alpha = 0.7f,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -656,6 +682,7 @@ fun LineSpacing(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (progressFloat: Float) -> Unit = {}
 ) {
@@ -678,6 +705,7 @@ fun LineSpacing(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -736,6 +764,7 @@ fun LineSpacing(
                     text = description,
                     alpha = 0.7f,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -750,6 +779,7 @@ fun FontSize(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callbackMinus: () -> Unit = {},
     callbackPlus: () -> Unit = {}
@@ -777,6 +807,7 @@ fun FontSize(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -790,6 +821,7 @@ fun FontSize(
                     text = description,
                     alpha = 0.7f,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
                 Image(
@@ -827,6 +859,7 @@ fun FontSize(
 fun SymbolCard(
     modifier: Modifier,
     viewModel: BaseDevViewModel,
+    fontFamily: FontFamily? = null,
     callback: () -> Unit
 ) {
     val symbol by viewModel.symbol.observeAsState(1)
@@ -846,6 +879,7 @@ fun SymbolCard(
         ) {
             SimpleText(
                 text = symbol.toString(),
+                fontFamily = fontFamily,
             )
             Image(
                 painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
@@ -867,6 +901,7 @@ fun AlarmCard(
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = null,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     checkedChangeCallback: () -> Unit,
     callback: () -> Unit
@@ -978,6 +1013,7 @@ fun AlarmCard(
                     text = alarmDays,
                     alpha = 0.7f,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }
@@ -988,6 +1024,7 @@ fun AlarmCard(
                     text = alarmDescription,
                     alpha = 0.7f,
                     fontSize = fontSize,
+                    fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                 )
             }

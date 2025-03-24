@@ -13,11 +13,17 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.font.FontFamily
+import androidx.fragment.app.activityViewModels
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
@@ -27,6 +33,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 class SettingsLockFragment : androidx.fragment.app.Fragment() {
 
@@ -38,6 +45,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentSettingsLockBinding
     private val mActivity: Activity
         get() = requireActivity()
+    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
 
     /***************************************************************************************************
@@ -64,12 +72,17 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         .fillMaxWidth()
                         .weight(1f)
 
+                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
+
                     var aafPinLockEnable by remember { mutableStateOf(requireContext().config.aafPinLockEnable) }
                     SwitchCard(
                         title = getString(R.string.pin_lock_title),
                         description = getString(R.string.pin_lock_summary),
+                        fontSize = fontSize,
                         modifier = settingCardModifier,
-                        isOn = aafPinLockEnable
+                        isOn = aafPinLockEnable,
+                        fontFamily = fontFamily
                     ) {
                         mActivity.run {
                             when (config.aafPinLockEnable) {
@@ -102,8 +115,10 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                     SwitchCard(
                         title = getString(R.string.fingerprint_lock_title),
                         description = getString(R.string.fingerprint_lock_summary),
+                        fontSize = fontSize,
                         modifier = settingCardModifier,
-                        isOn = fingerprintLockEnable
+                        isOn = fingerprintLockEnable,
+                        fontFamily = fontFamily
                     ) {
                         mActivity.run {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
