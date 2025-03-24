@@ -25,8 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
@@ -67,7 +70,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
     private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
-    private val mSettingsViewModel: SettingsViewModel by viewModels()
+    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
 
     /***************************************************************************************************
@@ -118,12 +121,15 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         .weight(1f)
 
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
+                        FontUtils.getComposeFontFamily(requireContext()))
 
                     SimpleCard(
                         title = getString(R.string.setting_primary_color_title),
                         description = getString(R.string.setting_primary_color_summary),
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         TransitionHelper.startActivityWithTransition(
                             requireActivity()
@@ -137,7 +143,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.markdown_setting_summary),
                         modifier = settingCardModifier,
                         isOn = enableMarkdown,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             enableMarkdown = enableMarkdown.not()
@@ -151,7 +158,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.quick_setting_summary),
                         modifier = settingCardModifier,
                         isOn = enableShakeDetector,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             config.enableShakeDetector = enableShakeDetector.not()
@@ -165,7 +173,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.enable_welcome_dashboard_popup_description),
                         modifier = settingCardModifier,
                         isOn = enableWelcomeDashboardPopup,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             enableWelcomeDashboardPopup = enableWelcomeDashboardPopup.not()
@@ -179,7 +188,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.enable_photo_highlight_description),
                         modifier = settingCardModifier,
                         isOn = enablePhotoHighlight,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             enablePhotoHighlight = enablePhotoHighlight.not()
@@ -193,7 +203,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.task_symbol_top_order_description),
                         modifier = settingCardModifier,
                         isOn = enableTaskSymbolTopOrder,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         enableTaskSymbolTopOrder = enableTaskSymbolTopOrder.not()
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
@@ -202,11 +213,12 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                     val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.observeAsState(requireActivity().config.enableLocationInfo)
                     SwitchCard(
-                        title = getString(R.string.location_info_title)
-                        , description = getString(R.string.location_info_description)
-                        , modifier = settingCardModifier
-                        , isOn = enableLocationInfo
-                        , enableCardViewPolicy = enableCardViewPolicy
+                        title = getString(R.string.location_info_title),
+                        description = getString(R.string.location_info_description),
+                        modifier = settingCardModifier,
+                        isOn = enableLocationInfo,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             mSettingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
@@ -216,14 +228,19 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                         true -> {
                                             config.enableLocationInfo = true
                                         }
+
                                         false -> {
                                             config.enableLocationInfo = false
                                             mSettingsViewModel.setEnableLocationInfo(false)
                                             requireActivity().run {
                                                 if (this is EasyDiaryActivity) {
-                                                    acquireGPSPermissions(mRequestLocationSourceLauncher) {
+                                                    acquireGPSPermissions(
+                                                        mRequestLocationSourceLauncher
+                                                    ) {
                                                         config.enableLocationInfo = true
-                                                        mSettingsViewModel.setEnableLocationInfo(true)
+                                                        mSettingsViewModel.setEnableLocationInfo(
+                                                            true
+                                                        )
                                                         makeSnackBar("GPS provider setting is activated!!!")
                                                     }
                                                 }
@@ -231,6 +248,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                         }
                                     }
                                 }
+
                                 false -> {
                                     config.enableLocationInfo = false
                                 }
@@ -244,7 +262,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.thumbnail_setting_summary),
                         subDescription = settingThumbnailSize,
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         openThumbnailSettingDialog()
                     }
@@ -255,7 +274,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.datetime_setting_summary),
                         subDescription = settingDatetimeFormat,
                         modifier = settingCardModifier,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         openDatetimeFormattingSettingDialog()
                     }
@@ -266,7 +286,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.contents_summary_description),
                         modifier = settingCardModifier,
                         isOn = enableContentsSummary,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             enableContentsSummary = enableContentsSummary.not()
@@ -282,7 +303,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             description = getString(R.string.max_lines_summary),
                             subDescription = summaryMaxLines,
                             modifier = settingCardModifier,
-                            enableCardViewPolicy = enableCardViewPolicy
+                            enableCardViewPolicy = enableCardViewPolicy,
+                            fontFamily = fontFamily
                         ) {
                             openMaxLinesSettingDialog()
                         }
@@ -293,7 +315,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.enable_card_view_policy_summary),
                         modifier = settingCardModifier,
                         isOn = enableCardViewPolicy,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             config.enableCardViewPolicy = enableCardViewPolicy.not()
@@ -307,7 +330,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.diary_search_keyword_case_sensitive_summary),
                         modifier = settingCardModifier,
                         isOn = diarySearchQueryCaseSensitive,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             diarySearchQueryCaseSensitive = diarySearchQueryCaseSensitive.not()
@@ -334,7 +358,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 "key" to CALENDAR_START_DAY_MONDAY
                             )
                         ),
-                        selectedKey = calendarStartDay
+                        selectedKey = calendarStartDay,
+                        fontFamily = fontFamily
                     ) { key ->
                         calendarStartDay = key
                         config.calendarStartDay = calendarStartDay
@@ -355,7 +380,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 "key" to CALENDAR_SORTING_DESC
                             ),
                         ),
-                        selectedKey = calendarSorting
+                        selectedKey = calendarSorting,
+                        fontFamily = fontFamily
                     ) { key ->
                         config.calendarSorting = key
                         calendarSorting = key
@@ -367,7 +393,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.count_characters_summary),
                         modifier = settingCardModifier,
                         isOn = enableCountCharacters,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             enableCountCharacters = enableCountCharacters.not()
@@ -381,7 +408,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.hold_position_summary),
                         modifier = settingCardModifier,
                         isOn = holdPositionEnterEditScreen,
-                        enableCardViewPolicy = enableCardViewPolicy
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily
                     ) {
                         requireActivity().run {
                             holdPositionEnterEditScreen = holdPositionEnterEditScreen.not()
@@ -396,7 +424,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             description = getString(R.string.enable_review_flow_summary),
                             modifier = settingCardModifier,
                             isOn = enableReviewFlow,
-                            enableCardViewPolicy = enableCardViewPolicy
+                            enableCardViewPolicy = enableCardViewPolicy,
+                            fontFamily = fontFamily
                         ) {
                             requireActivity().run {
                                 enableReviewFlow = enableReviewFlow.not()

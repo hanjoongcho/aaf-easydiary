@@ -154,9 +154,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-                        LocalContext.current
-                    ))
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
 
                     val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
                     SimpleCard(

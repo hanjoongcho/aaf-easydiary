@@ -141,7 +141,9 @@ fun SimpleText(
 fun CategoryTitleCard(
     title: String,
     marginTop: Int = 6,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
 ) {
     val modifier = Modifier.fillMaxWidth()
     Card(
@@ -185,7 +187,9 @@ fun SimpleCard(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
@@ -213,7 +217,9 @@ fun SimpleCardWithImage(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
@@ -298,7 +304,9 @@ fun SwitchCard(
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit
 ) {
@@ -378,7 +386,9 @@ fun SwitchCardWithImage(
     title: String,
     imageResourceId: Int,
     description: String,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     modifier: Modifier,
     isOn: Boolean,
     callback: () -> Unit
@@ -459,7 +469,9 @@ fun SwitchCardTodo(
     modifier: Modifier,
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     callback: () -> Unit
 ) {
 
@@ -551,7 +563,9 @@ fun RadioGroupCard(
     modifier: Modifier,
     options: List<Map<String, Any>>,
     selectedKey: Int,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     callback: (key: Int) -> Unit
 ) {
 
@@ -635,7 +649,9 @@ fun ScrollableCard(
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
 ) {
 
     Card(
@@ -682,7 +698,9 @@ fun LineSpacing(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (progressFloat: Float) -> Unit = {}
 ) {
@@ -779,7 +797,9 @@ fun FontSize(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callbackMinus: () -> Unit = {},
     callbackPlus: () -> Unit = {}
@@ -859,7 +879,9 @@ fun FontSize(
 fun SymbolCard(
     modifier: Modifier,
     viewModel: BaseDevViewModel,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     callback: () -> Unit
 ) {
     val symbol by viewModel.symbol.observeAsState(1)
@@ -901,7 +923,9 @@ fun AlarmCard(
     isOn: Boolean,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = null,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     checkedChangeCallback: () -> Unit,
     callback: () -> Unit
