@@ -133,10 +133,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
-        requireActivity().run {
-            changeDrawableIconColor(config.textColor, R.drawable.ic_minus_6)
-            changeDrawableIconColor(config.textColor, R.drawable.ic_plus_6)
-        }
         updateFragmentUI(mBinding.root)
 //        initPreference()
 

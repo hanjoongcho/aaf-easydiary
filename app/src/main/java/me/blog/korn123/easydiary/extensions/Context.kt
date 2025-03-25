@@ -464,7 +464,7 @@ fun Context.openOverDueNotification() {
             NotificationManagerCompat.from(this)
                 .notify(notification.id, createNotification(notification).also {
                     val dday = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
-                    val contentTitle = "${if (dday.contains("＋")) "\uD83D\uDD25" else "\uD83C\uDF3F"}【${dday}】${DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)}"
+                    val contentTitle = "${if (dday.contains("＋")) "\uD83D\uDD34" else "\uD83D\uDFE2"} 《${dday}》 ${DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)}"
                     val contentText = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
 //                    contentText += diary.contents
                     it.setContentTitle(contentTitle)
