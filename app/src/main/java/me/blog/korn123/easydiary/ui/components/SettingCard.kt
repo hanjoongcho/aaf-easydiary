@@ -76,8 +76,9 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
-const val verticalPadding = 4F
-const val horizontalPadding = 3F
+const val verticalPadding = 5F
+const val horizontalPadding = 5F
+const val roundedCornerShapeSize = 5F
 
 /***************************************************************************************************
  *   Base Composable
@@ -147,7 +148,7 @@ fun CategoryTitleCard(
 ) {
     val modifier = Modifier.fillMaxWidth()
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(2.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
             start = 3.dp, top = marginTop.plus(3).dp,
@@ -225,14 +226,14 @@ fun SimpleCardWithImage(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp))
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp)
@@ -312,7 +313,7 @@ fun SwitchCard(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = if (enableCardViewPolicy) modifier.padding(
             horizontalPadding.dp,
@@ -322,7 +323,7 @@ fun SwitchCard(
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         onClick = {
             callback.invoke()
         }
@@ -395,14 +396,14 @@ fun SwitchCardWithImage(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         onClick = {
             callback.invoke()
         }
@@ -476,14 +477,14 @@ fun SwitchCardTodo(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         onClick = {
             callback.invoke()
         }
@@ -570,14 +571,14 @@ fun RadioGroupCard(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
             horizontalPadding.dp,
             verticalPadding.dp
         ) else modifier
             .padding(1.dp, 1.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp)
@@ -655,13 +656,13 @@ fun ScrollableCard(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(
             3.dp,
             3.dp
         ) else modifier.padding(1.dp, 1.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier
@@ -706,11 +707,11 @@ fun LineSpacing(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp)
@@ -806,14 +807,14 @@ fun FontSize(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(
             horizontalPadding.dp,
             verticalPadding.dp
         ) else modifier
             .padding(1.dp, 1.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier.padding(15.dp)
@@ -886,7 +887,7 @@ fun SymbolCard(
 ) {
     val symbol by viewModel.symbol.observeAsState(1)
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (LocalContext.current.config.enableCardViewPolicy) modifier.padding(
             3.dp,
@@ -894,7 +895,7 @@ fun SymbolCard(
         ) else modifier.padding(1.dp, 1.dp)).clickable {
             callback.invoke()
         },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Row(
             modifier = Modifier.padding(15.dp)
@@ -932,7 +933,7 @@ fun AlarmCard(
 ) {
 
     Card(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = if (enableCardViewPolicy) modifier.padding(
             horizontalPadding.dp,
@@ -942,7 +943,7 @@ fun AlarmCard(
             .clickable {
                 callback.invoke()
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         onClick = {
             callback.invoke()
         }

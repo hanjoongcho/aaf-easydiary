@@ -97,23 +97,13 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
         mBinding.alarmRecyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, if (requireActivity().isLandScape()) 2 else 1)
-            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
+//            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
+            addItemDecoration(SpacesItemDecoration(0))
             adapter = mAlarmAdapter
         }
 
         initProperties()
         updateAlarmList()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mActivity.changeDrawableIconColor(android.R.color.white, R.drawable.ic_delete_w)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateFragmentUI(mBinding.root)
-        mActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
     }
 
     override fun onRequestPermissionsResult(
@@ -258,7 +248,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                                     dialogAlarmBinding.editAlarmDescription.run {
                                         requestFocus()
                                         toast("Please input schedule description.")
-                                        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+                                        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
                                     }
                                 }
                                 else -> {
