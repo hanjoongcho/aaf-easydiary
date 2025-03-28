@@ -52,6 +52,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
@@ -935,15 +936,16 @@ fun AlarmCard(
     Card(
         shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = if (enableCardViewPolicy) modifier.padding(
+        modifier = (if (enableCardViewPolicy) modifier.padding(
             horizontalPadding.dp,
             verticalPadding.dp
         ) else modifier
             .padding(1.dp, 1.dp)
             .clickable {
                 callback.invoke()
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+            }).shadow(3.dp, RoundedCornerShape(roundedCornerShapeSize.dp)),
+            //.clip(RoundedCornerShape(roundedCornerShapeSize.dp)),
+//        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         onClick = {
             callback.invoke()
         }
