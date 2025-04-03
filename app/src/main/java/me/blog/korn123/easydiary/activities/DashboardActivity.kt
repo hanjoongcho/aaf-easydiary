@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.ColorUtils
 import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -273,6 +276,14 @@ class DashboardActivity : EasyDiaryActivity() {
                 }, 300)
             }
         }, 300)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
+        mBinding.contentsContainer.run {
+            val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
+            tempLayoutParams.topMargin = statusBarHeight()
+            layoutParams = tempLayoutParams
+        }
     }
 
 
