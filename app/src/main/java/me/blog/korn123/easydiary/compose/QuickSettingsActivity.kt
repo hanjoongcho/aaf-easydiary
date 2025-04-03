@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -59,6 +60,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 //        )
 
         setContent {
+            mSettingsViewModel = initSettingsViewModel()
+
             AppTheme {
                 Scaffold(
                     topBar = {
@@ -215,6 +218,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 //    @Preview(name = "Landscape Pixel 4 XL", device = "spec:width=1280dp,height=720dp")
     @Composable
     private fun QuickSettingsPreview() {
+        mSettingsViewModel = initSettingsViewModel()
+
         AppTheme {
             Scaffold(
                 topBar = {
