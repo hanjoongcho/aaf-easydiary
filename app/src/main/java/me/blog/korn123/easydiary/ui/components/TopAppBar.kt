@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
@@ -34,7 +35,7 @@ import me.blog.korn123.easydiary.extensions.config
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EasyDiaryActionBar(title: String? = null, subTitle: String, close: () -> Unit) {
+fun EasyDiaryActionBar(title: String? = null, subTitle: String, scrollBehavior: TopAppBarScrollBehavior? = null, close: () -> Unit) {
     val isDarkMode = isSystemInDarkTheme()
     val context = LocalContext.current
 
@@ -46,6 +47,7 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, close: () -> Uni
     }
 
     TopAppBar(
+        scrollBehavior = scrollBehavior,
         title = {
            Column {
                title?.let {
