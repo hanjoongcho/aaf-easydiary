@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -90,6 +91,21 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, scrollBehavior: 
 //                )
 //            }
 //        },
+        colors = TopAppBarColors(
+            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
+            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
+            Color.White,
+            Color.White,
+            Color.White,
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DummyActionBar() {
+    TopAppBar(
+        title = {},
         colors = TopAppBarColors(
             Color(LocalContext.current.config.primaryColor),
             Color(LocalContext.current.config.primaryColor),

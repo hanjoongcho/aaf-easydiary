@@ -144,6 +144,10 @@ fun Activity.statusBarHeight(): Int {
     return statusBarHeight
 }
 
+fun Activity.topBarHeight(): Int {
+    return actionBarHeight().plus(statusBarHeight())
+}
+
 fun Activity.navigationBarHeight(): Int {
     var navigationBarHeight = 0
     val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
