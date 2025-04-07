@@ -106,6 +106,12 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
         updateAlarmList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateFragmentUI(mBinding.root)
+        mActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

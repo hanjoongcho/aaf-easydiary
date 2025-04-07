@@ -169,7 +169,7 @@ class GoogleOAuthHelper {
                         SYMBOL_GOOGLE_CALENDAR,
                         item?.start?.dateTime == null
                     ).apply { isHoliday =
-                        calendarId.matches(Regex("ko.south_korea#holiday@group.v.calendar.google.com|en.south_korea.official#holiday@group.v.calendar.google.com"))
+                        calendarId.matches(Regex("ko.south_korea#holiday@group.v.calendar.google.com|en.south_korea#holiday@group.v.calendar.google.com"))
                     }
                 )
                 count = 1
