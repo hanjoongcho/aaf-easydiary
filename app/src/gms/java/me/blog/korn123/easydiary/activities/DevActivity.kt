@@ -72,8 +72,6 @@ class DevActivity : BaseDevActivity() {
             AppTheme {
                 val configuration = LocalConfiguration.current
                 val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-                val scrollState = rememberScrollState()
-
                 CardContainer {
                     val settingCardModifier = Modifier
                         .fillMaxWidth()
@@ -81,7 +79,7 @@ class DevActivity : BaseDevActivity() {
                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                     Notification(settingCardModifier, maxItemsInEachRow)
                     AlertDialog(settingCardModifier, maxItemsInEachRow)
-                    Etc(settingCardModifier, maxItemsInEachRow.minus(1), viewModel)
+                    Etc(settingCardModifier, maxItemsInEachRow, viewModel)
                     LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
                     DebugToast(settingCardModifier, maxItemsInEachRow)
                     Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)

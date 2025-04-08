@@ -219,19 +219,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun Etc(modifier: Modifier, maxItemsInEachRow: Int, viewModel: BaseDevViewModel) {
         val currentContext = LocalContext.current
         CategoryTitleCard(title = "Etc.")
+        AlarmCard(
+            alarmTime = 7 * 60,
+            alarmDays = "Mon, Tue, Wed, Thu, Fri",
+            alarmDescription = "Google Calendar sync",
+            modifier = Modifier,
+            isOn = true,
+            checkedChangeCallback = {}
+        ) {}
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow
         ) {
-            AlarmCard(
-                alarmTime = 7 * 60,
-                alarmDays = "Mon, Tue, Wed, Thu, Fri",
-                alarmDescription = "Google Calendar sync",
-                modifier = modifier,
-                isOn = true,
-                checkedChangeCallback = {}
-            ) {}
-            
             SwitchCardWithImage(
                 title = currentContext.getString(R.string.task_symbol_top_order_title),
                 description = currentContext.getString(R.string.task_symbol_top_order_description),
