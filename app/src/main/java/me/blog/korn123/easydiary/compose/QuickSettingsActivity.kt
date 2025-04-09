@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -40,7 +40,6 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.ui.components.DummyActionBar
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
@@ -68,20 +67,20 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
             AppTheme {
                 Scaffold(
-//                    topBar = {
-//                        EasyDiaryActionBar(
-//                            title = "QuickSettings"
-//                            , subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open"
-//                            , scrollBehavior = scrollBehavior
-//                        ) {
-//                            finishActivityWithTransition()
-//                        }
-//                    },
+                    topBar = {
+                        EasyDiaryActionBar(
+                            title = "QuickSettings"
+                            , subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open"
+                            , scrollBehavior = scrollBehavior
+                        ) {
+                            finishActivityWithTransition()
+                        }
+                    },
                     content = { innerPadding ->
                         QuickSettings(
                             Modifier
                                 .padding(innerPadding)
-//                                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                                .nestedScroll(scrollBehavior.nestedScrollConnection)
                             ,
                             state = rememberLazyGridState()
                         )
@@ -113,7 +112,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun QuickSettings(
         modifier: Modifier = Modifier,
@@ -132,112 +130,93 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             isLandScape() -> 2
             else -> 1
         }
-
-        Box(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(maxItemsInEachRow),
             modifier = modifier
                 .fillMaxWidth()
+                .background(Color(context.config.screenBackgroundColor)),
+            state = state,
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(maxItemsInEachRow),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(context.config.screenBackgroundColor)),
-                state = state,
-            ) {
-                repeat(maxItemsInEachRow) {
-                    item {
-                        DummyActionBar()
-                    }
+            item {
+                SwitchCard(
+                    title = stringResource(R.string.markdown_setting_title),
+                    description = stringResource(R.string.markdown_setting_summary),
+                    modifier = settingCardModifier,
+                    isOn = enableMarkdown,
+                    enableCardViewPolicy = enableCardViewPolicy
+                ) {
+                    context.config.enableMarkdown = !enableMarkdown
+                    enableMarkdown = !enableMarkdown
                 }
-                item {
-                    SwitchCard(
-                        title = stringResource(R.string.markdown_setting_title),
-                        description = stringResource(R.string.markdown_setting_summary),
-                        modifier = settingCardModifier,
-                        isOn = enableMarkdown,
-                        enableCardViewPolicy = enableCardViewPolicy
-                    ) {
-                        context.config.enableMarkdown = !enableMarkdown
-                        enableMarkdown = !enableMarkdown
-                    }
+            }
+            item {
+                SwitchCard(
+                    stringResource(R.string.enable_welcome_dashboard_popup_title),
+                    stringResource(R.string.enable_welcome_dashboard_popup_description),
+                    settingCardModifier,
+                    enableWelcomeDashboardPopup,
+                    enableCardViewPolicy = enableCardViewPolicy
+                ) {
+                    context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
+                    enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                 }
-                item {
-                    SwitchCard(
-                        stringResource(R.string.enable_welcome_dashboard_popup_title),
-                        stringResource(R.string.enable_welcome_dashboard_popup_description),
-                        settingCardModifier,
-                        enableWelcomeDashboardPopup,
-                        enableCardViewPolicy = enableCardViewPolicy
-                    ) {
-                        context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
-                        enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
-                    }
+            }
+            item {
+                var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+                SwitchCard(
+                    stringResource(R.string.enable_photo_highlight_title),
+                    stringResource(R.string.enable_photo_highlight_description),
+                    settingCardModifier,
+                    isOn = enablePhotoHighlight,
+                    enableCardViewPolicy = enableCardViewPolicy
+                ) {
+                    enablePhotoHighlight = enablePhotoHighlight.not()
+                    context.config.enablePhotoHighlight = enablePhotoHighlight
                 }
-                item {
-                    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
-                    SwitchCard(
-                        stringResource(R.string.enable_photo_highlight_title),
-                        stringResource(R.string.enable_photo_highlight_description),
-                        settingCardModifier,
-                        isOn = enablePhotoHighlight,
-                        enableCardViewPolicy = enableCardViewPolicy
-                    ) {
-                        enablePhotoHighlight = enablePhotoHighlight.not()
-                        context.config.enablePhotoHighlight = enablePhotoHighlight
-                    }
+            }
+            item {
+                SwitchCard(
+                    stringResource(R.string.enable_card_view_policy_title),
+                    stringResource(R.string.enable_card_view_policy_summary),
+                    settingCardModifier,
+                    isOn = enableCardViewPolicy,
+                    enableCardViewPolicy = enableCardViewPolicy
+                ) {
+                    context.config.enableCardViewPolicy = enableCardViewPolicy.not()
+                    mSettingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
                 }
-                item {
-                    SwitchCard(
-                        stringResource(R.string.enable_card_view_policy_title),
-                        stringResource(R.string.enable_card_view_policy_summary),
-                        settingCardModifier,
-                        isOn = enableCardViewPolicy,
-                        enableCardViewPolicy = enableCardViewPolicy
-                    ) {
-                        context.config.enableCardViewPolicy = enableCardViewPolicy.not()
-                        mSettingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
-                    }
-                }
-                item {
-                    SwitchCard(
-                        "미래일정 숨김",
-                        "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
-                        settingCardModifier,
-                        disableFutureDiary,
-                        enableCardViewPolicy = enableCardViewPolicy
-                    ) {
-                        context.config.disableFutureDiary = !disableFutureDiary
-                        disableFutureDiary = !disableFutureDiary
-                    }
-                }
-
-                if (BuildConfig.FLAVOR != "foss") {
-                    item {
-                        SimpleCard(
-                            stringResource(id = R.string.sync_google_calendar_event_title),
-                            stringResource(id = R.string.sync_google_calendar_event_summary),
-                            modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
-                            enableCardViewPolicy = enableCardViewPolicy,
-                        ) {
-                            val alarm = Alarm().apply {
-                                sequence = Int.MAX_VALUE
-                                workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                                label = "Quick Settings"
-                            }
-                            AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
-                        }
-                    }
+            }
+            item {
+                SwitchCard(
+                    "미래일정 숨김",
+                    "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
+                    settingCardModifier,
+                    disableFutureDiary,
+                    enableCardViewPolicy = enableCardViewPolicy
+                ) {
+                    context.config.disableFutureDiary = !disableFutureDiary
+                    disableFutureDiary = !disableFutureDiary
                 }
             }
 
-            EasyDiaryActionBar(
-                title = "QuickSettings"
-                , subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open"
-            ) {
-                finishActivityWithTransition()
+            if (BuildConfig.FLAVOR != "foss") {
+                item {
+                    SimpleCard(
+                        stringResource(id = R.string.sync_google_calendar_event_title),
+                        stringResource(id = R.string.sync_google_calendar_event_summary),
+                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                        enableCardViewPolicy = enableCardViewPolicy,
+                    ) {
+                        val alarm = Alarm().apply {
+                            sequence = Int.MAX_VALUE
+                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            label = "Quick Settings"
+                        }
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                    }
+                }
             }
         }
-
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

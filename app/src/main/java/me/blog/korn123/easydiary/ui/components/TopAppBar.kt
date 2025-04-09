@@ -92,8 +92,10 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, scrollBehavior: 
 //            }
 //        },
         colors = TopAppBarColors(
-            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
-            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
+//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
+//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
+            Color(LocalContext.current.config.primaryColor),
+            Color(LocalContext.current.config.primaryColor),
             Color.White,
             Color.White,
             Color.White,
