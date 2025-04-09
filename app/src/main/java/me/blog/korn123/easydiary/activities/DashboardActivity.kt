@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -277,12 +278,15 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }, 300)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
-        mBinding.contentsContainer.run {
-            val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
-            tempLayoutParams.topMargin = statusBarHeight()
-            layoutParams = tempLayoutParams
+        @Suppress("DEPRECATION")
+        if (isBelowVanillaIceCream()) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
+            mBinding.contentsContainer.run {
+                val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
+                tempLayoutParams.topMargin = statusBarHeight()
+                layoutParams = tempLayoutParams
+            }
         }
     }
 

@@ -186,6 +186,7 @@ import kotlin.math.pow
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
+
 /***************************************************************************************************
  *   Alarm Extension
  *
@@ -503,6 +504,8 @@ fun Context.openOverDueNotification() {
  *
  ***************************************************************************************************/
 val Context.config: Config get() = Config.newInstance(this)
+
+fun Context.isBelowVanillaIceCream() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
 
 fun Context.pendingIntentFlag() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
 fun Context.pendingIntentFlagMutable() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT

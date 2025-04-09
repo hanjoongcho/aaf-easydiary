@@ -12,6 +12,7 @@ import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getStatusBarColor
 import me.blog.korn123.easydiary.extensions.hideSystemBars
+import me.blog.korn123.easydiary.extensions.isBelowVanillaIceCream
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -34,7 +35,7 @@ open class EasyDiaryComposeBaseActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (isBelowVanillaIceCream()) {
             @Suppress("DEPRECATION")
             window.statusBarColor = getStatusBarColor(config.primaryColor)
         }
