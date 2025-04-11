@@ -14,6 +14,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
@@ -40,6 +41,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -203,19 +206,17 @@ fun Activity.getRootViewHeight(): Int {
 }
 
 fun Activity.hideSystemBars() {
-    if (!isBelowVanillaIceCream()) {
-        if (isLandScape()) {
-            window.insetsController?.hide(WindowInsets.Type.systemBars())
-            window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            hideNavigationBars()
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && isLandScape()) {
+        window.insetsController?.hide(WindowInsets.Type.systemBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    } else {
+        hideNavigationBars()
     }
 }
 
 fun Activity.hideNavigationBars() {
-    if (!isBelowVanillaIceCream()) {
-        makeToast("${getNavigationMode()}")
+    if (isVanillaIceCreamPlus()) {
+//        makeToast("${getNavigationMode()}")
 //        window.insetsController?.hide(WindowInsets.Type.navigationBars())
 //        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }

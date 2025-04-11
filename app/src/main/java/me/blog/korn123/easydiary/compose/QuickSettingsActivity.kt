@@ -76,6 +76,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                             finishActivityWithTransition()
                         }
                     },
+                    containerColor = Color(config.screenBackgroundColor),
                     content = { innerPadding ->
                         QuickSettings(
                             Modifier
