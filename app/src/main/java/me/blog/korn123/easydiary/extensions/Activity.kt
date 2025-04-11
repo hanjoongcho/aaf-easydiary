@@ -203,7 +203,7 @@ fun Activity.getRootViewHeight(): Int {
 }
 
 fun Activity.hideSystemBars() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+    if (!isBelowVanillaIceCream()) {
         if (isLandScape()) {
             window.insetsController?.hide(WindowInsets.Type.systemBars())
             window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -214,9 +214,10 @@ fun Activity.hideSystemBars() {
 }
 
 fun Activity.hideNavigationBars() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-        window.insetsController?.hide(WindowInsets.Type.navigationBars())
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    if (!isBelowVanillaIceCream()) {
+        makeToast("${getNavigationMode()}")
+//        window.insetsController?.hide(WindowInsets.Type.navigationBars())
+//        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 }
 
@@ -229,7 +230,7 @@ fun Activity.hideNavigationBars() {
  */
 fun Activity.getNavigationMode(): Int {
     try {
-        return Settings.Global.getInt(contentResolver, "navigation_mode")
+        return Settings.Secure.getInt(contentResolver, "navigation_mode");
     } catch (e: SettingNotFoundException) {
         e.printStackTrace()
         return -1 // 설정 값이 없을 경우
