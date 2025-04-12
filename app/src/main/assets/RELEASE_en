@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.330.202504120 (date: 2025.04.12)
+  * Improve UI/UX for Android 15
+
 # Changes in 1.4.329.202503170 (date: 2025.03.17)
   * Applied Jetpack Compose components to some settings screens
 
