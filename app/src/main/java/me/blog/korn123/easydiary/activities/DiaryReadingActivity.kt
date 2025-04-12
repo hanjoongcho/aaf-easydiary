@@ -16,6 +16,8 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
@@ -598,6 +600,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             setFontsTypeface()
             setFontsSize()
             initContents()
+
+            if (requireContext().isVanillaIceCreamPlus()) {
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryContents) { view, insets ->
+                    val navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                    val lp = view.layoutParams as ViewGroup.MarginLayoutParams
+                    lp.bottomMargin = navBarInsets.bottom
+                    view.layoutParams = lp
+                    insets
+                }
+            }
         }
 
 //        override fun onResume() {
