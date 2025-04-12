@@ -81,6 +81,66 @@
                             app:alignItems="stretch"
                             app:flexWrap="wrap" />
 
+                        <RelativeLayout
+                            android:id="@+id/layout_info_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/card_contents_padding"
+                            android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }">
+
+                            <me.blog.korn123.easydiary.views.FixedCardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignWithParentIfMissing="true"
+                                android:layout_toStartOf="@+id/card_contents_counting"
+                                android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
+                                app:fixedAppcompatPadding="true">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:padding="5dp">
+
+                                    <ImageView
+                                        android:id="@+id/locationSymbol"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_marginEnd="3dp"
+                                        android:src="@drawable/ic_map_marker_2" />
+
+                                    <TextView
+                                        android:id="@+id/locationLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:ellipsize="end"
+                                        android:singleLine="true"
+                                        android:text="There is no location information. Click to update location information."
+                                        android:textColor="?attr/colorPrimary" />
+                                </LinearLayout>
+                            </me.blog.korn123.easydiary.views.FixedCardView>
+
+                            <me.blog.korn123.easydiary.views.FixedCardView
+                                android:id="@+id/card_contents_counting"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginStart="5dp"
+                                android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
+                                app:fixedAppcompatPadding="true">
+
+                                <TextView
+                                    android:id="@+id/contentsLength"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:textColor="?attr/colorPrimary"
+                                    tools:text="100" />
+                            </me.blog.korn123.easydiary.views.FixedCardView>
+                        </RelativeLayout>
+
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/diaryContents"
                             style="@style/text_diary_read_fragment_inner_contents"
@@ -89,67 +149,7 @@
                     </LinearLayout>
                 </ScrollView>
 
-                <RelativeLayout
-                    android:id="@+id/layout_info_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/card_contents_padding"
-                    android:paddingRight="@dimen/card_contents_padding"
-                    android:paddingBottom="@dimen/card_contents_padding"
-                    android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }">
 
-                    <me.blog.korn123.easydiary.views.FixedCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignWithParentIfMissing="true"
-                        android:layout_toStartOf="@+id/card_contents_counting"
-                        android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
-                        app:fixedAppcompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?attr/selectableItemBackgroundBorderless"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:padding="5dp">
-
-                            <ImageView
-                                android:id="@+id/locationSymbol"
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_marginEnd="3dp"
-                                android:src="@drawable/ic_map_marker_2" />
-
-                            <TextView
-                                android:id="@+id/locationLabel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="There is no location information. Click to update location information."
-                                android:textColor="?attr/colorPrimary" />
-                        </LinearLayout>
-                    </me.blog.korn123.easydiary.views.FixedCardView>
-
-                    <me.blog.korn123.easydiary.views.FixedCardView
-                        android:id="@+id/card_contents_counting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="5dp"
-                        android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
-                        app:fixedAppcompatPadding="true">
-
-                        <TextView
-                            android:id="@+id/contentsLength"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="?attr/colorPrimary"
-                            tools:text="100" />
-                    </me.blog.korn123.easydiary.views.FixedCardView>
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/photoContainerScrollView"
