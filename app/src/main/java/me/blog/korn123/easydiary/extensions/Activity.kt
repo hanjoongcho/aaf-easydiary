@@ -206,19 +206,32 @@ fun Activity.getRootViewHeight(): Int {
 }
 
 fun Activity.hideSystemBars() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && isLandScape()) {
+    if (isVanillaIceCreamPlus() && isLandScape()) {
+        // From version 15, the system bar area is forcibly extended
+        // In landscape mode, the position of the navigation bar varies depending on system settings
+        // Buttons: Right side of the screen
+        // Gesture navigation: Bottom of the screen
+        // When the navigation bar is transparently (forcibly) placed on the right side,
+        // there is no way to properly handle the Material ActionBar area
         window.insetsController?.hide(WindowInsets.Type.systemBars())
         window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     } else {
-        hideNavigationBars()
+//        hideNavigationBars()
+    }
+}
+
+fun Activity.hideStatusBars() {
+    if (isRedVelvetCakePlus()) {
+        window.insetsController?.hide(WindowInsets.Type.statusBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 }
 
 fun Activity.hideNavigationBars() {
     if (isVanillaIceCreamPlus()) {
-//        makeToast("${getNavigationMode()}")
-//        window.insetsController?.hide(WindowInsets.Type.navigationBars())
-//        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        makeToast("${getNavigationMode()}")
+        window.insetsController?.hide(WindowInsets.Type.navigationBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 }
 
@@ -226,7 +239,6 @@ fun Activity.hideNavigationBars() {
  * 0 → 3버튼 네비게이션 (기본 소프트키)
  * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
  * 2 → 제스처 네비게이션
- * FIXME: 동작이 정확 하지 않아요!!! 😂
  * @return
  */
 fun Activity.getNavigationMode(): Int {

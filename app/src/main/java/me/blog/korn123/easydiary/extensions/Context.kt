@@ -507,6 +507,7 @@ val Context.config: Config get() = Config.newInstance(this)
 
 fun Context.isBelowVanillaIceCream() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
 fun Context.isVanillaIceCreamPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
+fun Context.isRedVelvetCakePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
 fun Context.pendingIntentFlag() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
 fun Context.pendingIntentFlagMutable() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
