@@ -22,6 +22,7 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.viewModels
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
@@ -32,6 +33,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.statusBarHeight
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
@@ -128,9 +130,9 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
             ViewHelper.setTranslationY(mBinding.appBar, translationY)
-            ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
-            val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
-            lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
+            ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
+            val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
+            lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
             (mBinding.mainHolder as View).requestLayout()
         }
         animator.start()

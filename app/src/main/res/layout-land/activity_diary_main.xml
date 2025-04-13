@@ -8,7 +8,7 @@
             type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,10 +28,10 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/main_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
             android:orientation="vertical"
             android:padding="@dimen/component_margin_small">
 
@@ -183,5 +183,5 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:visibility="gone" />
-    </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
