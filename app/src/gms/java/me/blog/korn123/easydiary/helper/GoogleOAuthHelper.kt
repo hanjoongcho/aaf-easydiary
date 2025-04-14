@@ -159,7 +159,9 @@ class GoogleOAuthHelper {
             val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
             if (EasyDiaryDbHelper.findDiary(item.summary)
                     .none { diary -> diary.currentTimeMillis == timeMillis }
-                && !(item.description == null && item.summary == null)) {
+                && !(item.description == null && item.summary == null)
+                && !item.description.contains("Observance")
+                ) {
                 EasyDiaryDbHelper.insertDiary(
                     Diary(
                         BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,

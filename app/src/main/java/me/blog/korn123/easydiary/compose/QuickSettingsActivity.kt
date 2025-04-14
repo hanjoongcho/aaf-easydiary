@@ -2,7 +2,9 @@ package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -67,6 +69,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
             AppTheme {
                 Scaffold(
+//                    contentWindowInsets = WindowInsets(0, 0, 0, 0), // 기본 inset 제거
                     topBar = {
                         EasyDiaryActionBar(
                             title = "QuickSettings"
