@@ -156,12 +156,18 @@ class GoogleOAuthHelper {
 
         fun calendarEventToDiary(item: Event, calendarId: String): Int {
             var count = 0
-            val timeMillis = if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value ?: 0
+            val timeMillis =
+                if (item.start?.dateTime != null) item.start.dateTime.value else item.start?.date?.value
+                    ?: 0
+            val holidayCalendarIdPattern =
+                "ko.south_korea#holiday@group.v.calendar.google.com|en.south_korea#holiday@group.v.calendar.google.com"
             if (EasyDiaryDbHelper.findDiary(item.summary)
                     .none { diary -> diary.currentTimeMillis == timeMillis }
                 && !(item.description == null && item.summary == null)
-                && !item.description.contains("Observance")
-                ) {
+                && !(calendarId.matches(Regex(holidayCalendarIdPattern)) && item.description.isNotEmpty() && item.description.contains(
+                    "Observance"
+                ))
+            ) {
                 EasyDiaryDbHelper.insertDiary(
                     Diary(
                         BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
@@ -170,8 +176,9 @@ class GoogleOAuthHelper {
                         item.description ?: item.summary,
                         SYMBOL_GOOGLE_CALENDAR,
                         item?.start?.dateTime == null
-                    ).apply { isHoliday =
-                        calendarId.matches(Regex("ko.south_korea#holiday@group.v.calendar.google.com|en.south_korea#holiday@group.v.calendar.google.com"))
+                    ).apply {
+                        isHoliday =
+                            calendarId.matches(Regex(holidayCalendarIdPattern))
                     }
                 )
                 count = 1
