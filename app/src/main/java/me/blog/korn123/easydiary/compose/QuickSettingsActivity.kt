@@ -1,13 +1,20 @@
 package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -36,10 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
@@ -67,9 +78,11 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             mSettingsViewModel = initSettingsViewModel()
             val topAppBarState = rememberTopAppBarState()
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+            val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
             AppTheme {
                 Scaffold(
 //                    contentWindowInsets = WindowInsets(0, 0, 0, 0), // 기본 inset 제거
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                     topBar = {
                         EasyDiaryActionBar(
                             title = "QuickSettings"
@@ -90,19 +103,21 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         )
                     },
                     floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = { finishActivityWithTransition() },
-                            containerColor = Color(config.primaryColor),
-                            contentColor = Color.White,
-                            shape = CircleShape,
-                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                            modifier = Modifier.size(40.dp)
-                        ) {
+                        Box(modifier = Modifier.padding(bottom = bottomPadding)) {
+                            FloatingActionButton(
+                                onClick = { finishActivityWithTransition() },
+                                containerColor = Color(config.primaryColor),
+                                contentColor = Color.White,
+                                shape = CircleShape,
+                                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                                modifier = Modifier.size(40.dp)
+                            ) {
 //                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_cross),
-                                contentDescription = "Finish Activity"
-                            )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_cross),
+                                    contentDescription = "Finish Activity"
+                                )
+                            }
                         }
                     },
                     floatingActionButtonPosition = FabPosition.Center,
@@ -205,10 +220,11 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 
             if (BuildConfig.FLAVOR != "foss") {
                 item {
+                    val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
                     SimpleCard(
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
-                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
+                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, bottomPadding.plus(70.dp)),
                         enableCardViewPolicy = enableCardViewPolicy,
                     ) {
                         val alarm = Alarm().apply {

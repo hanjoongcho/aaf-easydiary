@@ -91,6 +91,7 @@ import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -487,6 +488,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 viewModel,
             ) {
                 viewModel.plus()
+            }
+            SimpleCard(
+                "NavigationBar Height",
+                null,
+                modifier = modifier,
+            ) {
+                makeToast("${navigationBarHeight()}")
             }
         }
     }
