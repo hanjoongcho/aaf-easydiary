@@ -60,7 +60,7 @@ open class EasyDiaryComposeBaseActivity : ComponentActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        hideSystemBars()
+//        hideSystemBars()
     }
 
     fun finishActivityWithTransition() {
