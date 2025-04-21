@@ -282,12 +282,23 @@ class DashboardActivity : EasyDiaryActivity() {
         }, 300)
 
         if (isVanillaIceCreamPlus()) {
-            val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-            // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
-            // false: 어두운 배경 → 흰색 텍스트
-            windowInsetsController.isAppearanceLightStatusBars = true
+            if (isLandScape()) {
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.mainHolder as View) { v, insets ->
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                    val layoutParams = v.layoutParams
+                    if (layoutParams is ViewGroup.MarginLayoutParams) {
+                        layoutParams.rightMargin = systemBars.right
+                        layoutParams.leftMargin = systemBars.left
+                        v.layoutParams = layoutParams
+                    }
+                    insets
+                }
+            } else {
+                val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+                // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
+                // false: 어두운 배경 → 흰색 텍스트
+                windowInsetsController.isAppearanceLightStatusBars = true
 
-            if (!isLandScape()) {
                 ViewCompat.setOnApplyWindowInsetsListener(mBinding.statisticContainer as View) { v, insets ->
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val layoutParams = v.layoutParams
