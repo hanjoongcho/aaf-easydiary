@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:fitsSystemWindows="true"
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -158,6 +157,7 @@
             </HorizontalScrollView>
 
             <HorizontalScrollView
+                android:id="@+id/statisticContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="none">

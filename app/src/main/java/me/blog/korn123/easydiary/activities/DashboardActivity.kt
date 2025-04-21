@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -278,9 +280,34 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }, 300)
 
-        @Suppress("DEPRECATION")
-        if (isBelowVanillaIceCream()) {
+        if (isVanillaIceCreamPlus()) {
+            if (!isLandScape()) {
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.statisticContainer as View) { v, insets ->
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                    val layoutParams = v.layoutParams
+                    if (layoutParams is ViewGroup.MarginLayoutParams) {
+//                    layoutParams.bottomMargin = layoutParams.bottomMargin.plus(systemBars.bottom)
+                        layoutParams.bottomMargin = dpToPixel(62F).plus(systemBars.bottom)
+                        v.layoutParams = layoutParams
+                    }
+                    insets
+                }
+
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.close as View) { v, insets ->
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                    val layoutParams = v.layoutParams
+                    if (layoutParams is ViewGroup.MarginLayoutParams) {
+                        layoutParams.bottomMargin = dpToPixel(16F).plus(systemBars.bottom)
+                        v.layoutParams = layoutParams
+                    }
+                    insets
+                }
+            }
+
+        } else {
+            @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            @Suppress("DEPRECATION")
             window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
             mBinding.contentsContainer.run {
                 val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams

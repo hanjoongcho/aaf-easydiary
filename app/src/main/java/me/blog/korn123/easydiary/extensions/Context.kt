@@ -43,6 +43,7 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.Window
 import android.widget.Button
 import android.widget.CheckBox
@@ -656,13 +657,20 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                         }
                     }
                     is CardView -> {
+//                        val params = it.layoutParams as MarginLayoutParams
+
                         if (config.enableCardViewPolicy) {
                             it.useCompatPadding = true
                             it.cardElevation = dpToPixelFloatValue(2F)
+//                            params.marginStart = dpToPixel(3f)
+//                            params.marginEnd = dpToPixel(3f)
                         } else {
                             it.useCompatPadding = false
                             it.cardElevation = 0F
+//                            params.marginStart = 0
+//                            params.marginEnd = 0
                         }
+//                        it.layoutParams = params
 
                         updateCardViewPolicy(it)
                     }
