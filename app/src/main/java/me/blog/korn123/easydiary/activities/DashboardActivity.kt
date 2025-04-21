@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.FontUtils
@@ -281,6 +282,11 @@ class DashboardActivity : EasyDiaryActivity() {
         }, 300)
 
         if (isVanillaIceCreamPlus()) {
+            val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+            // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
+            // false: 어두운 배경 → 흰색 텍스트
+            windowInsetsController.isAppearanceLightStatusBars = true
+
             if (!isLandScape()) {
                 ViewCompat.setOnApplyWindowInsetsListener(mBinding.statisticContainer as View) { v, insets ->
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
@@ -303,7 +309,6 @@ class DashboardActivity : EasyDiaryActivity() {
                     insets
                 }
             }
-
         } else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
