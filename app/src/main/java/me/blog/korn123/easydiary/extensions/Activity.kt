@@ -219,17 +219,20 @@ fun Activity.applyHorizontalInsets() {
         }
         ViewCompat.requestApplyInsets(findViewById(R.id.main_holder))
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.app_bar)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val layoutParams = v.layoutParams
-            if (layoutParams is ViewGroup.MarginLayoutParams) {
-                layoutParams.rightMargin = systemBars.right
-                layoutParams.leftMargin = systemBars.left
-                v.layoutParams = layoutParams
+        val dashboardContainer = findViewById<View>(R.id.dashboard_container)
+        if (dashboardContainer == null) {
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.app_bar)) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                val layoutParams = v.layoutParams
+                if (layoutParams is ViewGroup.MarginLayoutParams) {
+                    layoutParams.rightMargin = systemBars.right
+                    layoutParams.leftMargin = systemBars.left
+                    v.layoutParams = layoutParams
+                }
+                insets
             }
-            insets
+            ViewCompat.requestApplyInsets(findViewById(R.id.app_bar))
         }
-        ViewCompat.requestApplyInsets(findViewById(R.id.app_bar))
     }
 }
 
