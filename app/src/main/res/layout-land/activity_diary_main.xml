@@ -103,7 +103,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    tools:visibility="visible"></androidx.appcompat.widget.LinearLayoutCompat>
+                    tools:visibility="visible" />
 
                 <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                     android:id="@+id/diaryListView"

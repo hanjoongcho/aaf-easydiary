@@ -17,9 +17,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,6 +60,7 @@ import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.migrateData
@@ -522,7 +525,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     val point = getDefaultDisplay()
                     val historyWidth = (point.x / 2.5).toInt()
                     mBinding.layoutBannerContainer.layoutParams.width = historyWidth
-                    mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+
+                    if (isVanillaIceCreamPlus()) {
+                        val rootWindowInsets = window.decorView.rootWindowInsets
+                        val insets = rootWindowInsets?.getInsets(WindowInsets.Type.systemBars())
+                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth).minus(insets?.left ?: 0).minus(insets?.right ?: 0)
+                    } else {
+                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+                    }
+
 //                    setRevealWidth(dpToPixel(10F))
 //                    create(historyItems)
                 } else {

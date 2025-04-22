@@ -35,7 +35,9 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (!arrayOf("DashboardActivity").contains(this::class.java.simpleName)) {
+        if (arrayOf("DiaryMainActivity", "DashboardActivity").contains(this::class.java.simpleName)) {
+            applyHorizontalInsets()
+        } else {
             hideSystemBars()
         }
     }

@@ -205,6 +205,34 @@ fun Activity.getRootViewHeight(): Int {
     return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
 }
 
+fun Activity.applyHorizontalInsets() {
+    if (isVanillaIceCreamPlus() && isLandScape()) {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_holder)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val layoutParams = v.layoutParams
+            if (layoutParams is ViewGroup.MarginLayoutParams) {
+                layoutParams.rightMargin = systemBars.right
+                layoutParams.leftMargin = systemBars.left
+                v.layoutParams = layoutParams
+            }
+            insets
+        }
+        ViewCompat.requestApplyInsets(findViewById(R.id.main_holder))
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.app_bar)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val layoutParams = v.layoutParams
+            if (layoutParams is ViewGroup.MarginLayoutParams) {
+                layoutParams.rightMargin = systemBars.right
+                layoutParams.leftMargin = systemBars.left
+                v.layoutParams = layoutParams
+            }
+            insets
+        }
+        ViewCompat.requestApplyInsets(findViewById(R.id.app_bar))
+    }
+}
+
 fun Activity.hideSystemBars() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
         // From version 15, the system bar area is forcibly extended
