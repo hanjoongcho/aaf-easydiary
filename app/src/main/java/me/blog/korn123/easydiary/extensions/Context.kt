@@ -171,6 +171,7 @@ import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
+import me.blog.korn123.easydiary.views.ItemCardView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -657,20 +658,25 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                         }
                     }
                     is CardView -> {
-//                        val params = it.layoutParams as MarginLayoutParams
+                        // Temporary code for Compose CardView UI/UX compatibility
+                        var additionalMargin = 0
 
                         if (config.enableCardViewPolicy) {
+                            if (it is ItemCardView && it.applyAdditionHorizontalMargin) {
+                                additionalMargin = dpToPixel(3f)
+                            }
+
                             it.useCompatPadding = true
                             it.cardElevation = dpToPixelFloatValue(2F)
-//                            params.marginStart = dpToPixel(3f)
-//                            params.marginEnd = dpToPixel(3f)
                         } else {
                             it.useCompatPadding = false
                             it.cardElevation = 0F
-//                            params.marginStart = 0
-//                            params.marginEnd = 0
                         }
-//                        it.layoutParams = params
+
+                        val params = it.layoutParams as MarginLayoutParams
+                        params.marginStart = additionalMargin
+                        params.marginEnd = additionalMargin
+                        it.layoutParams = params
 
                         updateCardViewPolicy(it)
                     }

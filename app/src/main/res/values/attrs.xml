@@ -8,6 +8,9 @@
         <attr name="applyCardBackgroundColor" format="boolean" />
         <attr name="dashboardInnerCard" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="ItemCardView">
+        <attr name="applyAdditionHorizontalMargin" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="FixedTextView">
         <attr name="applyGlobalSize" format="boolean" />
         <attr name="applyGlobalColor" format="boolean" />
