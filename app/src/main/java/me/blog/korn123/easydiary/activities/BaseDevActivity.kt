@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
+import androidx.activity.compose.LocalActivity
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -75,6 +76,8 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
+import me.blog.korn123.easydiary.compose.Demo1Activity
+import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -116,6 +119,7 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Diary
@@ -219,6 +223,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun Etc(modifier: Modifier, maxItemsInEachRow: Int, viewModel: BaseDevViewModel) {
         val currentContext = LocalContext.current
+        val currentActivity = LocalActivity.current
         CategoryTitleCard(title = "Etc.")
         AlarmCard(
             alarmTime = 7 * 60,
@@ -232,6 +237,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow
         ) {
+            SimpleCard(
+                "Compose Demo",
+                "LazyVerticalGrid",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java)
+                )
+            }
             SwitchCardWithImage(
                 title = currentContext.getString(R.string.task_symbol_top_order_title),
                 description = currentContext.getString(R.string.task_symbol_top_order_description),

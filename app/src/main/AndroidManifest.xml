@@ -177,6 +177,11 @@
         <activity
             android:name=".activities.GalleryViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".compose.Demo1Activity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
