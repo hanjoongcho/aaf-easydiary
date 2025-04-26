@@ -32,7 +32,7 @@ import me.blog.korn123.easydiary.extensions.config
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EasyDiaryActionBar(title: String? = null, subTitle: String, scrollBehavior: TopAppBarScrollBehavior? = null, close: () -> Unit) {
+fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBehavior: TopAppBarScrollBehavior? = null, close: () -> Unit) {
     val isDarkMode = isSystemInDarkTheme()
     val context = LocalContext.current
 
@@ -60,17 +60,19 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String, scrollBehavior: 
                        modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
                    )
                }
-               Text(
-                   text = subTitle,
-                   style = TextStyle(
-                       fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                       color = Color.White,
-                       fontSize = TextUnit(currentTextUnit.value.times(0.9F), TextUnitType.Sp),
-                   ),
+               subTitle?.let {
+                   Text(
+                       text = subTitle,
+                       style = TextStyle(
+                           fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
+                           color = Color.White,
+                           fontSize = TextUnit(currentTextUnit.value.times(0.9F), TextUnitType.Sp),
+                       ),
 //                   modifier = Modifier
 //                       .fillMaxWidth()
 //                       .wrapContentWidth(Alignment.End)
-               )
+                   )
+               }
            }
         },
         navigationIcon = {

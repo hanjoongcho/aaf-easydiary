@@ -244,7 +244,45 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java)
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 1)
+                    }
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "FullScreen",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 2)
+                    }
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "CollapsingTopAppBarFullScreen",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 3)
+                    }
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "CollapsingTopAppBarFullScreenTransparentStatusBar",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 4)
+                    }
                 )
             }
             SwitchCardWithImage(
