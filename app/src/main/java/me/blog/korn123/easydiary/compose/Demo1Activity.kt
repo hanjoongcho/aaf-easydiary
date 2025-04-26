@@ -229,6 +229,17 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             .background(Color(context.config.screenBackgroundColor)),
                         state = rememberLazyGridState(),
                     ) {
+                        item {
+                            val topPadding = if (isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
+                            SimpleCard(
+                                stringResource(id = R.string.sync_google_calendar_event_title),
+                                stringResource(id = R.string.sync_google_calendar_event_summary),
+                                modifier = settingCardModifier.padding(0.dp, topPadding, 0.dp, 0.dp),
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) {
+
+                            }
+                        }
                         items(20) {
                             SimpleCard(
                                 stringResource(id = R.string.sync_google_calendar_event_title),
