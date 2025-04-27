@@ -53,6 +53,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
@@ -62,6 +63,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowCompat
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -188,26 +190,26 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
+    @Suppress("DEPRECATION")
     fun FullScreen() {
+        // 시스템 창(상태바, 내비게이션바) 위로 그리기
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        if (isVanillaIceCreamPlus()) {
+            // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
+            // false: 어두운 배경 → 흰색 텍스트
+            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        } else {
+            window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
+            window.navigationBarColor = Color.Transparent.toArgb()
+        }
+
         mSettingsViewModel = initSettingsViewModel()
-        val topAppBarState = rememberTopAppBarState()
-//        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
-        // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
-        // false: 어두운 배경 → 흰색 텍스트
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+
         AppTheme {
             Scaffold(
-//                    contentWindowInsets = WindowInsets(0, 0, 0, 0), // 기본 inset 제거
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
-//                topBar = {
-//                    EasyDiaryActionBar(
-//                        title = "QuickSettings",
-////                        scrollBehavior = scrollBehavior
-//                    ) {
-//                        finishActivityWithTransition()
-//                    }
-//                },
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     val context = LocalContext.current
@@ -220,31 +222,29 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         isLandScape() -> 2
                         else -> 1
                     }
+                    val topPadding =
+                        WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                    val itemSize = 20
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(maxItemsInEachRow),
-                        modifier =  Modifier
+                        modifier = Modifier
                             .padding(innerPadding)
-//                            .nestedScroll(scrollBehavior.nestedScrollConnection)
                             .fillMaxWidth()
                             .background(Color(context.config.screenBackgroundColor)),
                         state = rememberLazyGridState(),
                     ) {
-                        item {
-                            val topPadding = if (isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
+                        items(itemSize) { index ->
                             SimpleCard(
                                 stringResource(id = R.string.sync_google_calendar_event_title),
                                 stringResource(id = R.string.sync_google_calendar_event_summary),
-                                modifier = settingCardModifier.padding(0.dp, topPadding, 0.dp, 0.dp),
-                                enableCardViewPolicy = enableCardViewPolicy,
-                            ) {
-
-                            }
-                        }
-                        items(20) {
-                            SimpleCard(
-                                stringResource(id = R.string.sync_google_calendar_event_title),
-                                stringResource(id = R.string.sync_google_calendar_event_summary),
-                                modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 0.dp),
+                                modifier = settingCardModifier.padding(
+                                    0.dp,
+                                    if (index < maxItemsInEachRow) topPadding else 0.dp,
+                                    0.dp,
+                                    if (index >= itemSize.minus(maxItemsInEachRow)) 72.dp.plus(
+                                        bottomPadding
+                                    ) else 0.dp
+                                ),
                                 enableCardViewPolicy = enableCardViewPolicy,
                             ) {}
                         }
@@ -260,7 +260,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             elevation = FloatingActionButtonDefaults.elevation(8.dp),
                             modifier = Modifier.size(40.dp)
                         ) {
-//                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_cross),
                                 contentDescription = "Finish Activity"
@@ -385,8 +384,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
             }
         )
     }
-
-
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
