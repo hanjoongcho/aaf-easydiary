@@ -281,13 +281,10 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }, 300)
 
+        updateSystemStatusBarColor()
+
         if (isVanillaIceCreamPlus()) {
             if (!isLandScape()) {
-                val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-                // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
-                // false: 어두운 배경 → 흰색 텍스트
-                windowInsetsController.isAppearanceLightStatusBars = true
-
                 ViewCompat.setOnApplyWindowInsetsListener(mBinding.statisticContainer as View) { v, insets ->
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val layoutParams = v.layoutParams
@@ -311,10 +308,9 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         } else {
             if (!isLandScape()) {
-                @Suppress("DEPRECATION")
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                @Suppress("DEPRECATION")
-                window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
+//                @Suppress("DEPRECATION")
+//                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                WindowCompat.setDecorFitsSystemWindows(window, false) // 시스템 창(상태바, 내비게이션바) 위로 그리기
                 mBinding.contentsContainer.run {
                     val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
                     tempLayoutParams.topMargin = statusBarHeight()

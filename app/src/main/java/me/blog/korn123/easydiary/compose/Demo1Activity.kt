@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.animateFloatAsState
@@ -71,6 +72,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isColorLight
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -198,14 +200,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
         // Control directly without using enableEdgeToEdge function
         WindowCompat.setDecorFitsSystemWindows(window, false) // 시스템 창(상태바, 내비게이션바) 위로 그리기
-        if (isVanillaIceCreamPlus()) {
-            // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
-            // false: 어두운 배경 → 흰색 텍스트
-            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =  LocalContext.current.isColorLight(LocalContext.current.config.backgroundColor)
-        } else {
-            window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
-            window.navigationBarColor = Color.Transparent.toArgb()
-        }
+        LocalActivity.current?.updateSystemStatusBarColor()
 
         mSettingsViewModel = initSettingsViewModel()
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp

@@ -38,10 +38,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -297,6 +301,17 @@ fun Activity.isNavigationBarVisible(): Boolean {
     return (fullHeight - visibleHeight) > 0
 }
 
+@Suppress("DEPRECATION")
+fun Activity.updateSystemStatusBarColor() {
+    if (isVanillaIceCreamPlus()) {
+        // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
+        // false: 어두운 배경 → 흰색 텍스트
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =  isColorLight(config.backgroundColor)
+    } else {
+        window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
+        window.navigationBarColor = androidx.compose.ui.graphics.Color.Transparent.toArgb()
+    }
+}
 
 /***************************************************************************************************
  *   etc functions
