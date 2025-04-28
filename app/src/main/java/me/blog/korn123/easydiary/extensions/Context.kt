@@ -500,6 +500,200 @@ fun Context.openOverDueNotification() {
 }
 
 
+/***************************************************************************************************
+ *   Messages
+ *
+ ***************************************************************************************************/
+fun Context.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.makeSnackBar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+}
+
+/**
+ * TODO
+ *
+ * @param message
+ * @param positiveListener
+ * @param negativeListener
+ * @param dialogMode
+ * @param cancelable
+ * @param paramTitle
+ * @param positiveButtonLabel
+ * @param negativeButtonLabel
+ */
+fun Context.showAlertDialog(
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    negativeListener: DialogInterface.OnClickListener?,
+    dialogMode: DialogMode = DialogMode.DEFAULT,
+    cancelable: Boolean = true,
+    paramTitle: String? = null,
+    positiveButtonLabel: String = getString(R.string.ok),
+    negativeButtonLabel: String = getString(R.string.cancel)
+) {
+    var iconResourceId: Int? = null
+    var title: String? = null
+    when (dialogMode) {
+        DialogMode.INFO -> {
+            title = getString(R.string.ok)
+            iconResourceId = R.drawable.ic_info
+        }
+        DialogMode.WARNING -> {
+            title = "WARNING"
+            iconResourceId = R.drawable.ic_warning
+        }
+        DialogMode.ERROR -> {
+            title = "ERROR"
+            iconResourceId = R.drawable.ic_error
+        }
+        DialogMode.SETTING -> {
+            title = getString(R.string.ok)
+            iconResourceId = R.drawable.ic_settings_7
+        }
+        DialogMode.DEFAULT -> {
+            title = getString(R.string.app_name)
+            iconResourceId = R.drawable.ic_easydiary
+        }
+    }
+
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setPositiveButton(positiveButtonLabel, positiveListener)
+    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
+    builder.create().apply {
+        updateAlertDialog(this, message, null, paramTitle ?: title, 255, iconResourceId)
+    }
+}
+
+@Deprecated(
+    message = "Legacy function",
+    replaceWith = ReplaceWith(
+        "showAlertDialogWithIcon()",
+        "me.blog.korn123.easydiary.extensions.Context"
+    )
+)
+fun Context.showAlertDialog(
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    cancelable: Boolean = true
+) {
+    showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
+}
+
+
+fun Context.showAlertDialog(
+    message: String
+) {
+    showAlertDialog(message, null, null, DialogMode.INFO, true)
+}
+
+fun Context.updateAlertDialogWithIcon(
+    dialogMode: DialogMode,
+    alertDialog: AlertDialog,
+    message: String? = null,
+    customView: View? = null,
+    customTitle: String? = null,
+    backgroundAlpha: Int = 255
+) {
+    var title: String? = null
+    var iconResourceId: Int? = null
+    when (dialogMode) {
+        DialogMode.INFO -> {
+            title = getString(R.string.ok)
+            iconResourceId = R.drawable.ic_info
+        }
+
+        DialogMode.SETTING -> {
+            title = getString(R.string.settings)
+            iconResourceId = R.drawable.ic_settings_7
+        }
+        else -> {}
+    }
+
+    updateAlertDialog(
+        alertDialog,
+        message,
+        customView,
+        customTitle ?: title,
+        backgroundAlpha,
+        iconResourceId
+    )
+}
+
+fun Context.updateAlertDialog(
+    alertDialog: AlertDialog,
+    message: String? = null,
+    customView: View? = null,
+    customTitle: String? = null,
+    backgroundAlpha: Int = 255,
+    customTitleIcon: Int? = null
+) {
+    alertDialog.run {
+        when (customView == null) {
+            true -> {
+                DialogMessageBinding.inflate(layoutInflater).apply {
+                    root.apply {
+                        simpleMessage.text = message
+                        if (this is ViewGroup) {
+                            this.setBackgroundColor(config.backgroundColor)
+                            initTextSize(this)
+                            updateTextColors(this)
+                            updateAppViews(this)
+                            FontUtils.setFontsTypeface(this@updateAlertDialog, null, this)
+                        }
+                    }
+                    setView(root)
+                }
+            }
+
+            false -> setView(customView)
+        }
+//        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(config.backgroundColor))
+        if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            setColor(config.backgroundColor)
+            cornerRadius = dpToPixelFloatValue(3F)
+            alpha = backgroundAlpha
+        })
+
+        val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        PartialDialogTitleBinding.inflate(layoutInflater).apply {
+            textDialogTitle.run {
+                text = customTitle ?: getString(R.string.app_name)
+//                    if (!isNightMode()) setTextColor(config.textColor)
+                if (!isNightMode()) setTextColor(Color.WHITE)
+                typeface = globalTypeface
+//                    val padding = dpToPixel(15F)
+//                    setPadding(padding * 2, padding, padding * 2, padding)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+            }
+            customTitleIcon?.let {
+                imgDialogTitle.run {
+                    visibility = View.VISIBLE
+                    setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
+//                        changeDrawableIconColor(config.textColor, this)
+                    changeDrawableIconColor(Color.WHITE, this)
+                }
+            }
+            setCustomTitle(this.root)
+        }
+        show()
+        getButton(AlertDialog.BUTTON_POSITIVE).run {
+            if (!isNightMode()) setTextColor(config.textColor)
+            typeface = globalTypeface
+        }
+        getButton(AlertDialog.BUTTON_NEGATIVE).run {
+            if (!isNightMode()) setTextColor(config.textColor)
+            typeface = globalTypeface
+        }
+        if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(config.textColor)
+    }
+}
+
 
 /***************************************************************************************************
  *   ETC Extension
@@ -765,201 +959,6 @@ fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
         } else {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
-    }
-}
-
-
-/***************************************************************************************************
- *   Messages
- *
- ***************************************************************************************************/
-fun Context.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-fun Context.makeSnackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-}
-
-/**
- * TODO
- *
- * @param message
- * @param positiveListener
- * @param negativeListener
- * @param dialogMode
- * @param cancelable
- * @param paramTitle
- * @param positiveButtonLabel
- * @param negativeButtonLabel
- */
-fun Context.showAlertDialog(
-    message: String,
-    positiveListener: DialogInterface.OnClickListener?,
-    negativeListener: DialogInterface.OnClickListener?,
-    dialogMode: DialogMode = DialogMode.DEFAULT,
-    cancelable: Boolean = true,
-    paramTitle: String? = null,
-    positiveButtonLabel: String = getString(R.string.ok),
-    negativeButtonLabel: String = getString(R.string.cancel)
-) {
-    var iconResourceId: Int? = null
-    var title: String? = null
-    when (dialogMode) {
-        DialogMode.INFO -> {
-            title = getString(R.string.ok)
-            iconResourceId = R.drawable.ic_info
-        }
-        DialogMode.WARNING -> {
-            title = "WARNING"
-            iconResourceId = R.drawable.ic_warning
-        }
-        DialogMode.ERROR -> {
-            title = "ERROR"
-            iconResourceId = R.drawable.ic_error
-        }
-        DialogMode.SETTING -> {
-            title = getString(R.string.ok)
-            iconResourceId = R.drawable.ic_settings_7
-        }
-        DialogMode.DEFAULT -> {
-            title = getString(R.string.app_name)
-            iconResourceId = R.drawable.ic_easydiary
-        }
-    }
-
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(positiveButtonLabel, positiveListener)
-    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
-    builder.create().apply {
-        updateAlertDialog(this, message, null, paramTitle ?: title, 255, iconResourceId)
-    }
-}
-
-@Deprecated(
-    message = "Legacy function",
-    replaceWith = ReplaceWith(
-        "showAlertDialogWithIcon()",
-        "me.blog.korn123.easydiary.extensions.Context"
-    )
-)
-fun Context.showAlertDialog(
-    message: String,
-    positiveListener: DialogInterface.OnClickListener?,
-    cancelable: Boolean = true
-) {
-    showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
-}
-
-
-fun Context.showAlertDialog(
-    message: String
-) {
-    showAlertDialog(message, null, null, DialogMode.INFO, true)
-}
-
-fun Context.updateAlertDialogWithIcon(
-    dialogMode: DialogMode,
-    alertDialog: AlertDialog,
-    message: String? = null,
-    customView: View? = null,
-    customTitle: String? = null,
-    backgroundAlpha: Int = 255
-) {
-    var title: String? = null
-    var iconResourceId: Int? = null
-    when (dialogMode) {
-        DialogMode.INFO -> {
-            title = getString(R.string.ok)
-            iconResourceId = R.drawable.ic_info
-        }
-
-        DialogMode.SETTING -> {
-            title = getString(R.string.settings)
-            iconResourceId = R.drawable.ic_settings_7
-        }
-        else -> {}
-    }
-
-    updateAlertDialog(
-        alertDialog,
-        message,
-        customView,
-        customTitle ?: title,
-        backgroundAlpha,
-        iconResourceId
-    )
-}
-
-fun Context.updateAlertDialog(
-    alertDialog: AlertDialog,
-    message: String? = null,
-    customView: View? = null,
-    customTitle: String? = null,
-    backgroundAlpha: Int = 255,
-    customTitleIcon: Int? = null
-) {
-    alertDialog.run {
-        when (customView == null) {
-            true -> {
-                DialogMessageBinding.inflate(layoutInflater).apply {
-                    root.apply {
-                        simpleMessage.text = message
-                        if (this is ViewGroup) {
-                            this.setBackgroundColor(config.backgroundColor)
-                            initTextSize(this)
-                            updateTextColors(this)
-                            updateAppViews(this)
-                            FontUtils.setFontsTypeface(this@updateAlertDialog, null, this)
-                        }
-                    }
-                    setView(root)
-                }
-            }
-
-            false -> setView(customView)
-        }
-//        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(config.backgroundColor))
-        if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setColor(config.backgroundColor)
-            cornerRadius = dpToPixelFloatValue(3F)
-            alpha = backgroundAlpha
-        })
-
-        val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        PartialDialogTitleBinding.inflate(layoutInflater).apply {
-            textDialogTitle.run {
-                text = customTitle ?: getString(R.string.app_name)
-//                    if (!isNightMode()) setTextColor(config.textColor)
-                if (!isNightMode()) setTextColor(Color.WHITE)
-                typeface = globalTypeface
-//                    val padding = dpToPixel(15F)
-//                    setPadding(padding * 2, padding, padding * 2, padding)
-                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
-            }
-            customTitleIcon?.let {
-                imgDialogTitle.run {
-                    visibility = View.VISIBLE
-                    setImageDrawable(ContextCompat.getDrawable(this@updateAlertDialog, it))
-//                        changeDrawableIconColor(config.textColor, this)
-                    changeDrawableIconColor(Color.WHITE, this)
-                }
-            }
-            setCustomTitle(this.root)
-        }
-        show()
-        getButton(AlertDialog.BUTTON_POSITIVE).run {
-            if (!isNightMode()) setTextColor(config.textColor)
-            typeface = globalTypeface
-        }
-        getButton(AlertDialog.BUTTON_NEGATIVE).run {
-            if (!isNightMode()) setTextColor(config.textColor)
-            typeface = globalTypeface
-        }
-        if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(config.textColor)
     }
 }
 
@@ -1452,3 +1451,12 @@ fun Context.applyBoldToDate(dateString: String, summary: String): SpannableStrin
 fun Context.parsedMarkdownString(markdownString: String): Spanned = Markwon.builder(this).build().toMarkdown(markdownString)
 
 fun Context.storedDatetimeFormat() = DateTimeFormat.valueOf(config.settingDatetimeFormat)
+
+fun Context.isColorLight(color: Int): Boolean {
+    val r = Color.red(color)
+    val g = Color.green(color)
+    val b = Color.blue(color)
+
+    val brightness = (0.299 * r + 0.587 * g + 0.114 * b)
+    return brightness > 128
+}
