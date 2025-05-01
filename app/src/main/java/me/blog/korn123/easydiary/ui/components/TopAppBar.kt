@@ -1,10 +1,12 @@
 package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -48,7 +50,11 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBe
         modifier = Modifier
             .padding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()),
         title = {
-           Column {
+           Column(
+               modifier = Modifier
+                   .fillMaxSize(),
+               verticalArrangement = Arrangement.Center,
+           ) {
                title?.let {
                    Text(
                        text = title,
@@ -57,7 +63,6 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBe
                            color = Color.White,
                            fontSize = TextUnit(currentTextUnit.value.times(1.0F), TextUnitType.Sp),
                        ),
-                       modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
                    )
                }
                subTitle?.let {
@@ -68,6 +73,7 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBe
                            color = Color.White,
                            fontSize = TextUnit(currentTextUnit.value.times(0.9F), TextUnitType.Sp),
                        ),
+                       modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
 //                   modifier = Modifier
 //                       .fillMaxWidth()
 //                       .wrapContentWidth(Alignment.End)

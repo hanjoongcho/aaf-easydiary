@@ -90,54 +90,9 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
         val mode = intent.getIntExtra("mode" ,1)
         setContent {
             mSettingsViewModel = initSettingsViewModel()
-            val topAppBarState = rememberTopAppBarState()
-            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-            val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
-
             when (mode) {
                 1 -> {
-                    AppTheme {
-                        Scaffold(
-//                    contentWindowInsets = WindowInsets(0, 0, 0, 0), // 기본 inset 제거
-                            contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                            topBar = {
-                                EasyDiaryActionBar(
-                                    title = "QuickSettings",
-                                    scrollBehavior = scrollBehavior
-                                ) {
-                                    finishActivityWithTransition()
-                                }
-                            },
-                            containerColor = Color(config.screenBackgroundColor),
-                            content = { innerPadding ->
-                                QuickSettings(
-                                    Modifier
-                                        .padding(innerPadding)
-                                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                                    state = rememberLazyGridState()
-                                )
-                            },
-                            floatingActionButton = {
-                                Box(modifier = Modifier.padding(bottom = bottomPadding)) {
-                                    FloatingActionButton(
-                                        onClick = { finishActivityWithTransition() },
-                                        containerColor = Color(config.primaryColor),
-                                        contentColor = Color.White,
-                                        shape = CircleShape,
-                                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                                        modifier = Modifier.size(40.dp)
-                                    ) {
-//                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_cross),
-                                            contentDescription = "Finish Activity"
-                                        )
-                                    }
-                                }
-                            },
-                            floatingActionButtonPosition = FabPosition.Center,
-                        )
-                    }
+                    NestedScrollConnection()
                 }
                 2 -> {
                     FullScreen()
@@ -159,42 +114,88 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
-    @Composable
-    fun QuickSettings(
-        modifier: Modifier = Modifier,
-        state: LazyGridState = rememberLazyGridState()
-    ) {
-        val context = LocalContext.current
-        val settingCardModifier = Modifier.fillMaxWidth()
-        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy
-        )
-        val maxItemsInEachRow = when {
-            LocalInspectionMode.current -> 1
-            isLandScape() -> 2
-            else -> 1
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(maxItemsInEachRow),
-            modifier = modifier
-                .fillMaxWidth()
-                .background(Color(context.config.screenBackgroundColor)),
-            state = state,
-        ) {
-            items(20) {
-                SimpleCard(
-                    stringResource(id = R.string.sync_google_calendar_event_title),
-                    stringResource(id = R.string.sync_google_calendar_event_summary),
-                    modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, 0.dp),
-                    enableCardViewPolicy = enableCardViewPolicy,
-                ) {}
-            }
-        }
-    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    @Suppress("DEPRECATION")
+    fun NestedScrollConnection() {
+        mSettingsViewModel = initSettingsViewModel()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+
+        AppTheme {
+            Scaffold(
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                topBar = {
+                    EasyDiaryActionBar(
+                        title = "QuickSettings",
+                        scrollBehavior = scrollBehavior
+                    ) {
+                        finishActivityWithTransition()
+                    }
+                },
+                containerColor = Color(config.screenBackgroundColor),
+                content = { innerPadding ->
+                    val context = LocalContext.current
+                    val settingCardModifier = Modifier.fillMaxWidth()
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+                        context.config.enableCardViewPolicy
+                    )
+                    val maxItemsInEachRow = when {
+                        LocalInspectionMode.current -> 1
+                        isLandScape() -> 2
+                        else -> 1
+                    }
+                    val itemSize = 20
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(maxItemsInEachRow),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .fillMaxWidth()
+                            .background(Color(context.config.screenBackgroundColor)),
+                        state = rememberLazyGridState(),
+                    ) {
+                        items(itemSize) { index ->
+                            SimpleCard(
+                                stringResource(id = R.string.sync_google_calendar_event_title),
+                                stringResource(id = R.string.sync_google_calendar_event_summary),
+                                modifier = settingCardModifier.padding(
+                                    0.dp,
+                                    0.dp,
+                                    0.dp,
+                                    if (index >= itemSize.minus(maxItemsInEachRow)) 72.dp.plus(
+                                        bottomPadding
+                                    ) else 0.dp
+                                ),
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) {}
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    Box(modifier = Modifier.padding(bottom = bottomPadding)) {
+                        FloatingActionButton(
+                            onClick = { finishActivityWithTransition() },
+                            containerColor = Color(config.primaryColor),
+                            contentColor = Color.White,
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cross),
+                                contentDescription = "Finish Activity"
+                            )
+                        }
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
+            )
+        }
+    }
+
+    @Composable
     fun FullScreen() {
         // enableEdgeToEdge()
 

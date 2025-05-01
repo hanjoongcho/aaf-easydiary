@@ -239,7 +239,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 "Compose Demo",
-                "LazyVerticalGrid",
+                "NestedScrollConnection",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
