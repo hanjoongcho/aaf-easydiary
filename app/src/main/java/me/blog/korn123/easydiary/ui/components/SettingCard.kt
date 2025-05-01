@@ -88,19 +88,14 @@ const val roundedCornerShapeSize = 5F
 
 @Composable
 fun CardContainer(
-    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
-        modifier = if (enableCardViewPolicy) Modifier
-//            .padding(6.dp, 0.dp)
+        modifier = modifier
             .fillMaxWidth()
             .verticalScroll(scrollState)
-        else Modifier
-            .fillMaxWidth()
-            .verticalScroll(scrollState)
-
     ) {
         content()
     }

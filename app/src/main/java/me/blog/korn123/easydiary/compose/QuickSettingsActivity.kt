@@ -69,11 +69,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // https://velog.io/@hyemdooly/enableEdgeToEdge-%EB%82%B4%EB%B6%80-%EC%BD%94%EB%93%9C-%EC%95%8C%EA%B3%A0-%EC%93%B0%EA%B8%B0
-//        enableEdgeToEdge(
-//            statusBarStyle = SystemBarStyle.auto(config.primaryColor, config.primaryColor)
-//        )
-
         setContent {
             mSettingsViewModel = initSettingsViewModel()
             val topAppBarState = rememberTopAppBarState()

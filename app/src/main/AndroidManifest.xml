@@ -126,7 +126,7 @@
             android:name=".compose.QuickSettingsActivity"
             android:label=""
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/Theme.MaterialComponents" />
         <activity
             android:name=".activities.CustomizationActivity"
             android:label="@string/customize_colors"
@@ -181,8 +181,7 @@
             android:name=".compose.Demo1Activity"
             android:label=""
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme" />
-
+            android:theme="@style/Theme.MaterialComponents" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

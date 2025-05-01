@@ -198,12 +198,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBaseDevBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        setSupportActionBar(mBinding.partialAppbarLayout.toolbar)
-        supportActionBar?.run {
-            title = "Easy-Diary Dev Mode"
-            subtitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
-            setDisplayHomeAsUpEnabled(true)
-        }
+//        setSupportActionBar(mBinding.partialAppbarLayout.toolbar)
+//        supportActionBar?.run {
+//            title = "Easy-Diary Dev Mode"
+//            subtitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
+//            setDisplayHomeAsUpEnabled(true)
+//        }
     }
 
     override fun onDestroy() {
