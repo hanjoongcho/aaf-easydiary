@@ -281,7 +281,7 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }, 300)
 
-        updateSystemStatusBarColor()
+        if (isLandScape()) updateSystemStatusBarColor()
 
         if (isVanillaIceCreamPlus()) {
             if (!isLandScape()) {

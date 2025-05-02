@@ -2,8 +2,12 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
 
@@ -71,6 +75,16 @@ class SettingsActivity : BaseSettingsActivity() {
             })
             dotsIndicator.setViewPager(viewPager)
             getProgressContainer().setOnTouchListener { _, _ -> true }
+
+            ViewCompat.setOnApplyWindowInsetsListener(dotsIndicator) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                val layoutParams = v.layoutParams
+                if (layoutParams is ViewGroup.MarginLayoutParams) {
+                    layoutParams.bottomMargin = systemBars.bottom
+                    v.layoutParams = layoutParams
+                }
+                insets
+            }
         }
     }
 
