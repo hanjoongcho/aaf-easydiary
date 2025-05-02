@@ -240,6 +240,18 @@ fun Activity.applyHorizontalInsets() {
     }
 }
 
+fun Activity.applyBottomInsets(view: View) {
+    ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+        val layoutParams = v.layoutParams
+        if (layoutParams is ViewGroup.MarginLayoutParams) {
+            layoutParams.bottomMargin = systemBars.bottom
+            v.layoutParams = layoutParams
+        }
+        insets
+    }
+}
+
 fun Activity.hideSystemBars() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
         // From version 15, the system bar area is forcibly extended
