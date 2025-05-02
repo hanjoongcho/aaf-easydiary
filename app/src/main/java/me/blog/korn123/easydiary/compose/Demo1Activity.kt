@@ -98,7 +98,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     FullScreen()
                 }
                 3 -> {
-                    CollapsingTopAppBarFullScreen()
+                    NestedScrollConnectionWithAutoInsets()
                 }
                 4 -> {
                     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -188,6 +188,80 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                 contentDescription = "Finish Activity"
                             )
                         }
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun NestedScrollConnectionWithAutoInsets() {
+        mSettingsViewModel = initSettingsViewModel()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+
+        AppTheme {
+            Scaffold(
+                topBar = {
+                    EasyDiaryActionBar(
+                        title = "QuickSettings",
+                        scrollBehavior = scrollBehavior
+                    ) {
+                        finishActivityWithTransition()
+                    }
+                },
+                containerColor = Color(config.screenBackgroundColor),
+                content = { innerPadding ->
+                    val context = LocalContext.current
+                    val settingCardModifier = Modifier.fillMaxWidth()
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+                        context.config.enableCardViewPolicy
+                    )
+                    val maxItemsInEachRow = when {
+                        LocalInspectionMode.current -> 1
+                        isLandScape() -> 2
+                        else -> 1
+                    }
+                    val itemSize = 20
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(maxItemsInEachRow),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .fillMaxWidth()
+                            .background(Color(context.config.screenBackgroundColor)),
+                        state = rememberLazyGridState(),
+                    ) {
+                        items(itemSize) { index ->
+                            SimpleCard(
+                                stringResource(id = R.string.sync_google_calendar_event_title),
+                                stringResource(id = R.string.sync_google_calendar_event_summary),
+                                modifier = settingCardModifier.padding(
+                                    0.dp,
+                                    0.dp,
+                                    0.dp,
+                                    if (index >= itemSize.minus(maxItemsInEachRow)) 72.dp else 0.dp
+                                ),
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) {}
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { finishActivityWithTransition() },
+                        containerColor = Color(config.primaryColor),
+                        contentColor = Color.White,
+                        shape = CircleShape,
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = "Finish Activity"
+                        )
                     }
                 },
                 floatingActionButtonPosition = FabPosition.Center,
