@@ -125,10 +125,95 @@ fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT
         .setAction("Action", null).show()
 }
 
+
 /***************************************************************************************************
  *   Screen Dimension
  *
  ***************************************************************************************************/
+/**
+ * 0 → 3버튼 네비게이션 (기본 소프트키)
+ * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
+ * 2 → 제스처 네비게이션
+ * @return
+ */
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+)
+fun Activity.getNavigationMode(): Int {
+    try {
+        return Settings.Secure.getInt(contentResolver, "navigation_mode");
+    } catch (e: SettingNotFoundException) {
+        e.printStackTrace()
+        return -1 // 설정 값이 없을 경우
+    }
+}
+
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+)
+fun Activity.hideStatusBars() {
+    if (isRedVelvetCakePlus()) {
+        window.insetsController?.hide(WindowInsets.Type.statusBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+}
+
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+)
+fun Activity.hideNavigationBars() {
+    if (isVanillaIceCreamPlus()) {
+        window.insetsController?.hide(WindowInsets.Type.navigationBars())
+        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+}
+
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+)
+@RequiresApi(Build.VERSION_CODES.R)
+fun Activity.isNavigationBarVisible(): Boolean {
+
+    // 전체 화면 크기 가져오기
+    val metrics = windowManager.currentWindowMetrics
+    val fullHeight = metrics.bounds.height()
+
+    // 현재 화면에서 사용 가능한 높이 가져오기
+    val visibleBounds: Rect = Rect()
+    window.decorView.getWindowVisibleDisplayFrame(visibleBounds)
+    val visibleHeight: Int = visibleBounds.height()
+
+    // 네비게이션 바 높이가 존재하면 보이는 상태
+    return (fullHeight - visibleHeight) > 0
+}
+
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+)
+fun Activity.printDisplayMetrics() {
+    val metrics = DisplayMetrics()
+    val realMetrics = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        display?.getRealMetrics(realMetrics)
+        display?.getMetrics(metrics)
+    } else {
+        val display = windowManager.defaultDisplay
+        display.getRealMetrics(realMetrics)
+        display.getMetrics(metrics)
+    }
+    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
+    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
+}
+
+@Deprecated(
+    message = "검증되지 않아서 사용하지 않는 기능임",
+    replaceWith =
+        ReplaceWith(""),
+)
+fun Activity.getRootViewHeight(): Int {
+    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
+}
+
 fun Activity.isLandScape(): Boolean {
     return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
@@ -190,25 +275,12 @@ fun Activity.getDisplayMetrics(): DisplayMetrics {
     return outMetrics
 }
 
-fun Activity.printDisplayMetrics() {
-    val metrics = DisplayMetrics()
-    val realMetrics = DisplayMetrics()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        display?.getRealMetrics(realMetrics)
-        display?.getMetrics(metrics)
-    } else {
-        val display = windowManager.defaultDisplay
-        display.getRealMetrics(realMetrics)
-        display.getMetrics(metrics)
-    }
-    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
-    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
-}
-
-fun Activity.getRootViewHeight(): Int {
-    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
-}
-
+/**
+ * 화면 좌우 시스템영역 인셋 처리를 함
+ *
+ * 머티리얼 앱바의 경우 XML레이아웃 사용 시 가로화면에서 앱바 UI가 시스템영역에 가려질 수 있으나 XML레벨에서 처리할 방법이 없어서
+ * 코드에서 직접 처리해야 함
+ */
 fun Activity.applyHorizontalInsets() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_holder)) { v, insets ->
@@ -240,6 +312,10 @@ fun Activity.applyHorizontalInsets() {
     }
 }
 
+/**
+ * 애플리케이션 화면이 하단 내비게이션 영역까지 확장되어 사용되는 경우 파라미터로 넘겨받은
+ * 뷰의 하단에 내비게이션영역 높이값만큼 마진을 추가함
+ */
 fun Activity.applyBottomInsets(view: View) {
     ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
         val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
@@ -252,6 +328,9 @@ fun Activity.applyBottomInsets(view: View) {
     }
 }
 
+/**
+ * Version SDK 35 이상의 가로화면 모드인 경우 강제로 시스템바를 숨김처리 함
+ */
 fun Activity.hideSystemBars() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
         // From version 15, the system bar area is forcibly extended
@@ -267,53 +346,11 @@ fun Activity.hideSystemBars() {
     }
 }
 
-fun Activity.hideStatusBars() {
-    if (isRedVelvetCakePlus()) {
-        window.insetsController?.hide(WindowInsets.Type.statusBars())
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    }
-}
-
-fun Activity.hideNavigationBars() {
-    if (isVanillaIceCreamPlus()) {
-        makeToast("${getNavigationMode()}")
-        window.insetsController?.hide(WindowInsets.Type.navigationBars())
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    }
-}
-
 /**
- * 0 → 3버튼 네비게이션 (기본 소프트키)
- * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
- * 2 → 제스처 네비게이션
- * @return
+ * 시스템 상태바의 배경컬러 또는 텍스트(아이콘) 컬러를 변경함
+ * Version SDK 35 이상: 텍스트(아이콘) 컬러를 변경함
+ * Version SDK 35 미만: 배경색을 반투명 처리함
  */
-fun Activity.getNavigationMode(): Int {
-    try {
-        return Settings.Secure.getInt(contentResolver, "navigation_mode");
-    } catch (e: SettingNotFoundException) {
-        e.printStackTrace()
-        return -1 // 설정 값이 없을 경우
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.R)
-fun Activity.isNavigationBarVisible(): Boolean {
-
-    // 전체 화면 크기 가져오기
-    val metrics = windowManager.currentWindowMetrics
-    val fullHeight = metrics.bounds.height()
-
-    // 현재 화면에서 사용 가능한 높이 가져오기
-    val visibleBounds: Rect = Rect()
-    window.decorView.getWindowVisibleDisplayFrame(visibleBounds)
-    val visibleHeight: Int = visibleBounds.height()
-
-    // 네비게이션 바 높이가 존재하면 보이는 상태
-    return (fullHeight - visibleHeight) > 0
-}
-
-@Suppress("DEPRECATION")
 fun Activity.updateSystemStatusBarColor() {
     if (isVanillaIceCreamPlus()) {
         // true: 밝은 배경 → 검정 텍스트 (light status bar icons)

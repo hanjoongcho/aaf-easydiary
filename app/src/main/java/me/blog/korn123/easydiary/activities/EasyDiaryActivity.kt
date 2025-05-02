@@ -38,7 +38,9 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         if (arrayOf("DiaryMainActivity", "DashboardActivity").contains(this::class.java.simpleName)) {
             applyHorizontalInsets()
         } else {
-            hideSystemBars()
+            if (!arrayOf("DevActivity").contains(this::class.java.simpleName)) {
+                hideSystemBars()
+            }
         }
     }
 

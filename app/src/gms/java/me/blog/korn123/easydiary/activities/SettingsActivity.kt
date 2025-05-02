@@ -77,7 +77,7 @@ class SettingsActivity : BaseSettingsActivity() {
             dotsIndicator.setViewPager(viewPager)
             getProgressContainer().setOnTouchListener { _, _ -> true }
 
-            this@SettingsActivity.applyBottomInsets(dotsIndicator)
+            applyBottomInsets(dotsIndicator)
         }
     }
 
