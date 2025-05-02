@@ -4,11 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <View
+        android:id="@+id/dummyStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        />
     <com.google.android.material.appbar.AppBarLayout
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        >
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,8 +28,13 @@
         android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            style="@style/AppCard.Customization">
+        <me.blog.korn123.easydiary.views.FixedCardView
+            style="@style/AppCard.Customization"
+            app:applyCardBackgroundColor="true"
+            app:cardCornerRadius="0dp"
+            app:contentPadding="0dp"
+            app:fixedAppcompatPadding="false"
+            >
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -151,6 +163,6 @@
                     </RelativeLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </ScrollView>
-        </androidx.cardview.widget.CardView>
+        </me.blog.korn123.easydiary.views.FixedCardView>
     </RelativeLayout>
 </LinearLayout>

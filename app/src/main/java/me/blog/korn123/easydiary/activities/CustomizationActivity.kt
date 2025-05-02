@@ -4,7 +4,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
 import me.blog.korn123.commons.utils.FontUtils
@@ -81,7 +85,22 @@ class CustomizationActivity : BaseSimpleActivity() {
                 colorChanged()
                 launcher = Launcher.GREEN
             }
+
+            //  Edge-to-Edge 정책이 활성화 상태가 아닌 경우 인셋 조정이 필요 없으나 방어 코드로 버전 체크를 추가함
+            if (isVanillaIceCreamPlus()) {
+                ViewCompat.setOnApplyWindowInsetsListener(dummyStatusBar) { v, insets ->
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+                    val layoutParams = v.layoutParams
+                    if (layoutParams is ViewGroup.MarginLayoutParams) {
+                        layoutParams.height = systemBars.top
+                        v.layoutParams = layoutParams
+                        v.setBackgroundColor(config.primaryColor)
+                    }
+                    insets
+                }
+            }
         }
+
     }
 
     override fun onPause() {

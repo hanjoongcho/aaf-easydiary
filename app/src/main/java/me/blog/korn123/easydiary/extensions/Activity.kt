@@ -767,6 +767,9 @@ fun Activity.getStatusBarColor(color: Int) = if (config.enableStatusBarDarkenCol
 
 fun Activity.updateStatusBarColor(color: Int) {
     window.statusBarColor = getStatusBarColor(color)
+
+    // SDK Version 35 이상인 경우 상태바 컨드롤을 직접 할 수 없어서 dummy view를 사용함
+    if (isVanillaIceCreamPlus()) findViewById<View>(R.id.dummyStatusBar)?.setBackgroundColor(getStatusBarColor(color))
 }
 
 fun EasyDiaryActivity.acquireGPSPermissions(
