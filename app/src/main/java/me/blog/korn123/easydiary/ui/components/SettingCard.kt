@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -52,6 +51,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -190,7 +190,6 @@ fun SimpleCard(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: () -> Unit = {}
 ) {
-
     SimpleCardWithImage(
         title = title,
         description = description,
@@ -236,7 +235,7 @@ fun SimpleCardWithImage(
         ) {
             Row(
                 modifier = Modifier,
-                verticalAlignment = Alignment.Top) {
+                verticalAlignment = Alignment.CenterVertically) {
                 SimpleText(
                     text = title,
                     fontWeight = FontWeight.Bold,
@@ -246,26 +245,28 @@ fun SimpleCardWithImage(
                 )
             }
 
-            Row(
-                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                imageResourceId?.let {
-                    Image(
-                        painter = painterResource(id = it),
-                        contentDescription = "Google Calendar",
-                        contentScale = ContentScale.Fit,
-                        modifier =  Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                }
-                description?.run {
-                    SimpleText(
-                        text = description,
-                        alpha = 0.7f,
-                        fontSize = fontSize,
-                        fontFamily = fontFamily,
-                        lineSpacingScaleFactor = lineSpacingScaleFactor,
-                    )
+            if (imageResourceId != null || description != null) {
+                Row(
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    imageResourceId?.let {
+                        Image(
+                            painter = painterResource(id = it),
+                            contentDescription = "Google Calendar",
+                            contentScale = ContentScale.Fit,
+                            modifier =  Modifier.size(32.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    description?.run {
+                        SimpleText(
+                            text = description,
+                            alpha = 0.7f,
+                            fontSize = fontSize,
+                            fontFamily = fontFamily,
+                            lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        )
+                    }
                 }
             }
 
