@@ -39,7 +39,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
             applyHorizontalInsets()
         } else {
             if (!arrayOf("DevActivity").contains(this::class.java.simpleName)) {
-                hideSystemBars()
+                hideSystemBarsVanillaIceCreamPlusIsLandScape()
             }
         }
     }
@@ -101,6 +101,8 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
      ***************************************************************************************************/
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
+            add(Release(332, R.string.release_332))
+            add(Release(331, R.string.release_331))
             add(Release(330, R.string.release_330))
             add(Release(329, R.string.release_329))
             add(Release(328, R.string.release_328))

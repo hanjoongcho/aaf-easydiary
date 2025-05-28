@@ -331,7 +331,7 @@ fun Activity.applyBottomInsets(view: View) {
 /**
  * Version SDK 35 이상의 가로화면 모드인 경우 강제로 시스템바를 숨김처리 함
  */
-fun Activity.hideSystemBars() {
+fun Activity.hideSystemBarsVanillaIceCreamPlusIsLandScape() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
         // From version 15, the system bar area is forcibly extended
         // In landscape mode, the position of the navigation bar varies depending on system settings
@@ -339,10 +339,14 @@ fun Activity.hideSystemBars() {
         // Gesture navigation: Bottom of the screen
         // When the navigation bar is transparently (forcibly) placed on the right side,
         // there is no way to properly handle the Material ActionBar area
+        hideSystemBars()
+    }
+}
+
+fun Activity.hideSystemBars() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         window.insetsController?.hide(WindowInsets.Type.systemBars())
         window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    } else {
-//        hideNavigationBars()
     }
 }
 

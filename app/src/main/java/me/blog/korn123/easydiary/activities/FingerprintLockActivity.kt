@@ -60,17 +60,24 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         setContentView(mBinding.root)
         mActivityMode = intent.getStringExtra(LAUNCHING_MODE)
 
-        mBinding.changePinLock.setOnClickListener {
-            startActivity(Intent(this, PinLockActivity::class.java).apply {
-                putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
-            })
-            finish()
+
+        mBinding.changePinLock.run {
+            setOnClickListener {
+                startActivity(Intent(this@FingerprintLockActivity, PinLockActivity::class.java).apply {
+                    putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
+                })
+                finish()
+            }
+
+            setOnLongClickListener {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
+                true
+            }
+
+            applyBottomInsets(this)
+            if (isLandScape()) hideSystemBars()
         }
 
-        mBinding.changePinLock.setOnLongClickListener {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
-            true
-        }
     }
 
     @SuppressLint("RestrictedApi")
