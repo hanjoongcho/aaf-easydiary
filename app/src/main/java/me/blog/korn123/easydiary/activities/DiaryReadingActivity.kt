@@ -548,7 +548,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
                         R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
                         R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
-                        R.id.push -> pushMarkDown(fragment.getTitle(), fragment.getContents())
+                        R.id.push -> {
+
+                            val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                            pushMarkDown(diary.title!!, diary.contents!!)
+                        }
                     }
                     popupWindow?.dismiss()
                 }
@@ -651,8 +655,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
             }
         }
-
-        fun getTitle() = mBinding.diaryTitle.text.toString()
 
         fun getContents() = mBinding.diaryContents.text.toString()
 
