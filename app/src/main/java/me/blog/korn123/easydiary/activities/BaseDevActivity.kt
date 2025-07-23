@@ -72,12 +72,10 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.compose.Demo1Activity
-import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -97,6 +95,7 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
+import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
@@ -142,7 +141,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Locale
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -390,6 +388,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "SYNC stock/knowledge",
                 modifier = modifier,
             ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
+            SimpleCard(
+                "GitHub MarkDown Page",
+                "Push",
+                modifier = modifier,
+            ) { pushMarkDown("test.md", "Hello World!!!") }
             SimpleCard(
                 "ReviewFlow",
                 null,

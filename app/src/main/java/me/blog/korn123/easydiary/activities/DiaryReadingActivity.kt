@@ -548,6 +548,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
                         R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
                         R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
+                        R.id.push -> pushMarkDown(fragment.getTitle(), fragment.getContents())
                     }
                     popupWindow?.dismiss()
                 }
@@ -555,11 +556,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 postcard.setOnClickListener(itemClickListener)
                 encryptData.setOnClickListener(itemClickListener)
                 decryptData.setOnClickListener(itemClickListener)
+                push.setOnClickListener(itemClickListener)
 
                 updateDrawableColorInnerCardView(imgPostcard)
                 updateDrawableColorInnerCardView(imgEncryptData)
                 updateDrawableColorInnerCardView(imgDecryptData)
                 updateDrawableColorInnerCardView(imgDelete)
+                updateDrawableColorInnerCardView(imgPush)
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
@@ -648,6 +651,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
             }
         }
+
+        fun getTitle() = mBinding.diaryTitle.text.toString()
 
         fun getContents() = mBinding.diaryContents.text.toString()
 

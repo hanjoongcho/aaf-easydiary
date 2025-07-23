@@ -108,6 +108,9 @@ import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
 import io.realm.Realm
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
@@ -118,12 +121,15 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.NotificationInfo
+import me.blog.korn123.easydiary.api.models.CommitRequest
+import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
 import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
@@ -174,6 +180,8 @@ import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar

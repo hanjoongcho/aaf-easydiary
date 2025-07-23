@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -69,6 +70,8 @@ import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
+import me.blog.korn123.easydiary.api.models.CommitRequest
+import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.enums.GridSpanMode
@@ -79,6 +82,8 @@ import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -1092,4 +1097,37 @@ fun Activity.holdCurrentOrientation() {
 
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+}
+
+fun Activity.pushMarkDown(path: String, contents: String) {
+    val token = EasyDiaryDbHelper.getToken()
+
+    CoroutineScope(Dispatchers.IO).launch {
+        val baseUrl = "https://api.github.com"
+        val retrofitApi: Retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
+        val commitRequest = CommitRequest(
+            "AUTOMATIC COMMIT: Easy Diary",
+            Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
+            "main"
+        )
+        val call = retrofitApiService.pushFile(token!!, "hanjoongcho", "self-development", path, commitRequest)
+        val response = call.execute()
+
+        runOnUiThread {
+            if (response.isSuccessful) {
+                val commitResponse = response.body()
+                if (commitResponse != null) {
+                    makeToast("Commit successful: ${commitResponse.commit?.message}")
+                } else {
+                    makeToast("Commit response is null")
+                }
+            } else {
+                makeToast("Commit failed: ${response.errorBody()?.string()}", Toast.LENGTH_LONG)
+            }
+        }
+    }
 }

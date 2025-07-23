@@ -421,5 +421,18 @@ object EasyDiaryDbHelper {
     fun countDDayAll(): Long {
         return getInstance().where(DDay::class.java).count()
     }
+
+    /***************************************************************************************************
+     *   Manage ETC.
+     *
+     ***************************************************************************************************/
+    fun getToken(): String? {
+        var token: String? = null
+        val tokenInfo = findDiary("GitHub Personal Access Token", false, 0, 0, 0)
+        tokenInfo.let {
+            if (it.isNotEmpty()) token = it[0].contents
+        }
+        return token
+    }
 }
 
