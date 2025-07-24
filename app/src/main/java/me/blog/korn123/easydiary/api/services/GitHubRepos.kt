@@ -20,6 +20,14 @@ interface GitHubRepos {
         @Path("path") path: String
     ): Call<List<Contents>>
 
+    @GET("/repos/{owner}/{repo}/contents/{path}")
+    fun getContentsDetail(
+        @Header("Authorization") token: String,
+        @Path("owner") owner: String,
+        @Path("repo") repo: String,
+        @Path("path") path: String
+    ): Call<Contents>
+
     @GET
     fun downloadContents(
         @Header("Authorization") token: String,

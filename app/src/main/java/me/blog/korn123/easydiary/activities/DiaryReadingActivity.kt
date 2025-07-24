@@ -549,7 +549,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
                         R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
                         R.id.push -> {
-
                             val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
                             pushMarkDown(diary.title!!, diary.contents!!)
                         }

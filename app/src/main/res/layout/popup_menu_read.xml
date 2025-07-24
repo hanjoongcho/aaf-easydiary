@@ -70,7 +70,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/push">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_delete_w"
+                    android:src="@drawable/ic_github_11"
                     android:id="@+id/img_push"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView

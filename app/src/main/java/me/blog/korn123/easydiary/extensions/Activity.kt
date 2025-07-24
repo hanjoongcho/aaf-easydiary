@@ -1099,6 +1099,7 @@ fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
 
+// Activity.kt 내 pushMarkDown 함수 개선
 fun Activity.pushMarkDown(path: String, contents: String) {
     val token = EasyDiaryDbHelper.getToken()
 
@@ -1109,24 +1110,38 @@ fun Activity.pushMarkDown(path: String, contents: String) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
+
+        // 1. 파일의 sha 값 조회
+        var sha: String? = null
+        val findCall = retrofitApiService.getContentsDetail(token!!, "hanjoongcho", "self-development", path)
+        val findResponse = findCall.execute()
+        if (findResponse.isSuccessful) {
+            val contentsList = findResponse.body()
+            if (contentsList != null) {
+                sha = contentsList.sha // 파일이 존재하면 sha 값 세팅
+            }
+        }
+
+        // 2. CommitRequest 생성 및 푸시
         val commitRequest = CommitRequest(
             "AUTOMATIC COMMIT: Easy Diary",
             Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
-            "main"
+            "main",
+            sha
         )
-        val call = retrofitApiService.pushFile(token!!, "hanjoongcho", "self-development", path, commitRequest)
+        val call = retrofitApiService.pushFile(token, "hanjoongcho", "self-development", path, commitRequest)
         val response = call.execute()
 
         runOnUiThread {
             if (response.isSuccessful) {
                 val commitResponse = response.body()
                 if (commitResponse != null) {
-                    makeToast("Commit successful: ${commitResponse.commit?.message}")
+                    makeToast("Commit successful: ${commitResponse.commit?.message}", Toast.LENGTH_LONG)
                 } else {
-                    makeToast("Commit response is null")
+                    makeToast("Commit response is null", Toast.LENGTH_LONG)
                 }
             } else {
-                makeToast("Commit failed: ${response.errorBody()?.string()}", Toast.LENGTH_LONG)
+                showAlertDialog("Commit failed[${sha}]: ${response.errorBody()?.string()}")
             }
         }
     }
