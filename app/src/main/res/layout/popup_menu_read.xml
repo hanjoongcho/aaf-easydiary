@@ -68,6 +68,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:visibility="gone"
                 android:id="@+id/push">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_github_11"

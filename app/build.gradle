@@ -57,25 +57,39 @@ android {
             dimension "buildType"
             signingConfig signingConfigs.config
         }
+        lab {
+            dimension "buildType"
+            signingConfig signingConfigs.config
+        }
     }
     sourceSets {
         gmsProd {
             manifest.srcFile 'src/gms/AndroidManifest.xml'
             java {
-                srcDirs 'src/main/java', 'src/gmsProd/java', 'src/gms/java'
+                srcDirs 'src/main/java', 'src/gmsProd/java', 'src/gms/java', 'src/dummy/java'
             }
         }
         gmsDev {
             manifest.srcFile 'src/gms/AndroidManifest.xml'
             java {
-                srcDirs 'src/main/java', 'src/gmsDev/java', 'src/gms/java'
+                srcDirs 'src/main/java', 'src/gmsDev/java', 'src/gms/java', 'src/dummy/java'
             }
         }
         foss {
             manifest.srcFile 'src/foss/AndroidManifest.xml'
             java {
-                srcDirs 'src/main/java', 'src/foss/java'
+                srcDirs 'src/main/java', 'src/foss/java', 'src/dummy/java'
             }
+        }
+        lab {
+            manifest.srcFile 'src/gms/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/gmsProd/java', 'src/gms/java', 'src/lab/java'
+            }
+            res {
+                srcDirs 'src/gmsProd/res'
+            }
+
         }
     }
     buildFeatures{
@@ -174,6 +188,15 @@ dependencies {
     gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsProdImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+
+    // google components for lab package (not foss)
+    labImplementation 'com.google.android.gms:play-services-auth:21.3.0'
+    labImplementation 'com.google.android.play:review:2.0.2'
+    labImplementation 'com.google.android.play:review-ktx:2.0.2'
+    labImplementation 'com.google.api-client:google-api-client-android:1.26.0'
+    labImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    labImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
+    labImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components common
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

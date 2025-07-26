@@ -6,7 +6,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -15,7 +14,6 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
@@ -33,14 +31,16 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
@@ -70,25 +70,38 @@ import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
-import me.blog.korn123.easydiary.api.models.CommitRequest
-import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.enums.GridSpanMode
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
+import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
+import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
+import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 
 /***************************************************************************************************
@@ -1097,52 +1110,4 @@ fun Activity.holdCurrentOrientation() {
 
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-}
-
-// Activity.kt 내 pushMarkDown 함수 개선
-fun Activity.pushMarkDown(path: String, contents: String) {
-    val token = EasyDiaryDbHelper.getToken()
-
-    CoroutineScope(Dispatchers.IO).launch {
-        val baseUrl = "https://api.github.com"
-        val retrofitApi: Retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
-
-        // 1. 파일의 sha 값 조회
-        var sha: String? = null
-        val findCall = retrofitApiService.getContentsDetail(token!!, "hanjoongcho", "self-development", path)
-        val findResponse = findCall.execute()
-        if (findResponse.isSuccessful) {
-            val contentsList = findResponse.body()
-            if (contentsList != null) {
-                sha = contentsList.sha // 파일이 존재하면 sha 값 세팅
-            }
-        }
-
-        // 2. CommitRequest 생성 및 푸시
-        val commitRequest = CommitRequest(
-            "AUTOMATIC COMMIT: Easy Diary",
-            Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
-            "main",
-            sha
-        )
-        val call = retrofitApiService.pushFile(token, "hanjoongcho", "self-development", path, commitRequest)
-        val response = call.execute()
-
-        runOnUiThread {
-            if (response.isSuccessful) {
-                val commitResponse = response.body()
-                if (commitResponse != null) {
-                    makeToast("Commit successful: ${commitResponse.commit?.message}", Toast.LENGTH_LONG)
-                } else {
-                    makeToast("Commit response is null", Toast.LENGTH_LONG)
-                }
-            } else {
-                showAlertDialog("Commit failed[${sha}]: ${response.errorBody()?.string()}")
-            }
-        }
-    }
 }

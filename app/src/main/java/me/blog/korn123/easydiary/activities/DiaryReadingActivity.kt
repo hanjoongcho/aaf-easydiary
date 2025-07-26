@@ -25,6 +25,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -559,13 +560,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 postcard.setOnClickListener(itemClickListener)
                 encryptData.setOnClickListener(itemClickListener)
                 decryptData.setOnClickListener(itemClickListener)
-                push.setOnClickListener(itemClickListener)
 
                 updateDrawableColorInnerCardView(imgPostcard)
                 updateDrawableColorInnerCardView(imgEncryptData)
                 updateDrawableColorInnerCardView(imgDecryptData)
                 updateDrawableColorInnerCardView(imgDelete)
-                updateDrawableColorInnerCardView(imgPush)
+
+                if (BuildConfig.FLAVOR == "lab") {
+                    push.visibility = View.VISIBLE
+                    push.setOnClickListener(itemClickListener)
+                    updateDrawableColorInnerCardView(imgPush)
+                }
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))

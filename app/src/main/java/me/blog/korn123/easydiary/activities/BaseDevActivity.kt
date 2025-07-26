@@ -73,8 +73,6 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFing
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.api.models.Contents
-import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
@@ -99,6 +97,7 @@ import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
+import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ALL
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_DEV
@@ -357,37 +356,37 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "GitHub MarkDown Page",
                 "SYNC ALL",
                 modifier = modifier,
-            ) { syncMarkDown() }
+            ) { syncMarkDown(mBinding) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC dev",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_DEV) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_DEV) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC life",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_LIFE) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_LIFE) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC etc",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_ETC) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_ETC) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/FICS",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_FICS) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_FICS) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/ETF",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_ETF) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_ETF) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC stock/knowledge",
                 modifier = modifier,
-            ) { syncMarkDown(DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
+            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "Push",
@@ -1398,109 +1397,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         return notificationBuilder
-    }
-
-    private fun syncMarkDown(syncMode: String = DEV_SYNC_MARKDOWN_ALL) {
-        mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
-        CoroutineScope(Dispatchers.IO).launch {
-            val baseUrl = "https://api.github.com"
-            var token: String? = null
-            var tokenInfo: List<Diary>?
-            var size = 0
-            EasyDiaryDbHelper.getTemporaryInstance().run {
-                tokenInfo = EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
-                tokenInfo?.let {
-                    size = it.size
-                    if (size > 0) token = it[0].contents
-                }
-                close()
-            }
-
-            if (size != 1) {
-                runOnUiThread { makeToast("No Data") }
-            } else {
-                val retrofitApi: Retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                val downloadApi: Retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build()
-                val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
-                val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-                fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC) {
-                    val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
-                    val response = call.execute()
-                    val contentsItems: List<Contents>? = response.body()
-                    contentsItems?.forEach { content ->
-                        if (content.download_url == null) {
-                            fetchContents(content.path, usingPathTitle, symbolSequence)
-                        } else {
-                            EasyDiaryDbHelper.getTemporaryInstance().run {
-                                val title = when (usingPathTitle) {
-                                    true -> content.path
-                                    false -> if (usingPathTitle) content.name else content.name.split(".")[0]
-                                }
-
-                                val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
-                                fun getUpdateDate(body: String): String {
-                                    val regex = Regex("""UPDATE:\s(\d{4}-\d{2}-\d{2})""")
-                                    val matchResult = regex.find(body)
-                                    if (matchResult != null) {
-                                        val dateString = matchResult.groupValues[1]
-                                        return dateString
-                                    } else {
-                                        return "";
-                                    }
-                                }
-                                if (items.size == 1) {
-                                    runOnUiThread {
-                                        mBinding.partialSettingsProgress.message.text = "Sync ${title}…"
-                                    }
-                                    val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
-                                    val diary = items[0]
-                                    this.beginTransaction()
-                                    diary.contents = re.body()
-                                    diary.weather = symbolSequence
-                                    val updateDateString = getUpdateDate(diary.contents!!)
-                                    if (updateDateString.isNotEmpty()) {
-                                        diary.currentTimeMillis = DateUtils.dateStringToTimeStamp(updateDateString)
-                                        diary.updateDateString()
-                                    }
-                                    this.commitTransaction()
-                                } else if (items.isEmpty()) {
-                                    runOnUiThread {
-                                        mBinding.partialSettingsProgress.message.text = "Download ${title}…"
-                                    }
-                                    val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
-                                    EasyDiaryDbHelper.insertDiary(Diary(
-                                        BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
-                                        System.currentTimeMillis()
-                                        , title
-                                        , re.body()!!
-                                        , symbolSequence
-                                        ,true
-                                    ), this)
-                                }
-                                this.close()
-                            }
-                        }
-                    }
-                }
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_DEV) fetchContents("dev", true)
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_ETC) fetchContents("etc", true)
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_LIFE) fetchContents("life", true)
-//                fetchContents("stock/KOSPI", true, 10031)
-//                fetchContents("stock/KOSDAQ", true, 10032)
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
-                if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
-                withContext(Dispatchers.Main) {
-                    mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
-                }
-            }
-        }
     }
 }
 
