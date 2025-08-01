@@ -208,7 +208,7 @@ class DiaryMainItemAdapter(
                     )
                 }
                 if (activity.config.enableDebugOptionVisibleDiarySequence) textDateTime.text =
-                    "[${diary.originSequence}] ${textDateTime.text}"
+                    "[${diary.sequence}, ${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
 
                 when ((diary.photoUris?.size ?: 0) > 0) {

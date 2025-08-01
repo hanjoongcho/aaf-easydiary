@@ -260,7 +260,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
 //            mBinding.diaryListView.setSelection(0)
-            mBinding.diaryListView.layoutManager?.scrollToPosition(0)
+            val maxSequence = EasyDiaryDbHelper.getMaxDiarySequence()
+            mBinding.diaryListView.layoutManager?.scrollToPosition(getIndexBySequence(maxSequence))
+//            mBinding.diaryListView.layoutManager?.scrollToPosition(maxSequence.minus(1))
             config.previousActivity = -1
         }
 
@@ -763,21 +765,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
             val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
             target?.let {
-                run outer@{
-                    mDiaryList.forEachIndexed { index, diary ->
-                        if (diary.sequence == it.sequence) {
-                            position = index
-                            return@outer
-                        }
-                    }
-                }
-
+                position = getIndexBySequence(target.sequence)
                 makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
                 if (position != -1) {
                     mBinding.diaryListView.scrollToPosition(position)
                 }
             }
-
             true
         }
 
@@ -790,6 +783,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 refreshList()
             }
         }
+    }
+
+    private fun getIndexBySequence(sequence: Int): Int {
+        var targetIndex = -1
+        mDiaryList.forEachIndexed { index, diary ->
+            if (diary.sequence == sequence) {
+                targetIndex  = index
+                return@forEachIndexed
+            }
+        }
+        return targetIndex
     }
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
