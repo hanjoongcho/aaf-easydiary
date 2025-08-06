@@ -227,6 +227,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         if (isLandScape()) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         }
+
+//        applyStatusBarInsets(mBinding.partialEditContents.root)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -346,6 +346,18 @@ fun Activity.applyBottomInsets(view: View) {
     }
 }
 
+fun Activity.applyStatusBarInsets(view: View) {
+    ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        val layoutParams = v.layoutParams
+        if (layoutParams is ViewGroup.MarginLayoutParams) {
+            layoutParams.topMargin = actionBarHeight().plus(systemBars.top)
+            v.layoutParams = layoutParams
+        }
+        insets
+    }
+}
+
 /**
  * Version SDK 35 이상의 가로화면 모드인 경우 강제로 시스템바를 숨김처리 함
  */
