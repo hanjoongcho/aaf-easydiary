@@ -21,7 +21,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -228,7 +227,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         }
 
-//        applyStatusBarInsets(mBinding.partialEditContents.root)
+        applyBottomImeInsets(mBinding.partialEditContents.root)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

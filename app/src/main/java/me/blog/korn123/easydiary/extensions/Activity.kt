@@ -346,15 +346,23 @@ fun Activity.applyBottomInsets(view: View) {
     }
 }
 
-fun Activity.applyStatusBarInsets(view: View) {
-    ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        val layoutParams = v.layoutParams
-        if (layoutParams is ViewGroup.MarginLayoutParams) {
-            layoutParams.topMargin = actionBarHeight().plus(systemBars.top)
-            v.layoutParams = layoutParams
+/**
+ * Version SDK 35 이상의 경우 IME 영역의 인셋을 적용함
+ * IME 영역은 키보드가 올라올 때 화면 하단에 나타나는 영역으로, 이 영역의 높이만큼
+ * 파라미터로 넘겨받은 뷰의 하단 마진을 조정함
+ * 이 기능은 세로화면 모드에서만 적용되며, 가로화면 모드에서는 적용되지 않음
+ */
+fun Activity.applyBottomImeInsets(view: View) {
+    if (isVanillaIceCreamPlus() && !isLandScape()) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val layoutParams = v.layoutParams
+            if (layoutParams is ViewGroup.MarginLayoutParams) {
+                layoutParams.bottomMargin = ime.bottom
+                v.layoutParams = layoutParams
+            }
+            insets
         }
-        insets
     }
 }
 
