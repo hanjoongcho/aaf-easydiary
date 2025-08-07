@@ -33,11 +33,18 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         if (config.enableDebugMode) setupMotionSensor()
     }
 
+    /**
+     * This function is called when the activity gains or loses focus.
+     */
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (arrayOf("DiaryMainActivity", "DashboardActivity").contains(this::class.java.simpleName)) {
+            // Edge to edge mode 대응이 완료 된 Activity인 경우
             applyHorizontalInsets()
         } else {
+            // Edge to edge mode 대응이 완료 되지 않은 Activity인 경우
+            // 강제로 시스템 바를 숨김 처리함
+            // DevActivity의 경우 내부적으로 ComposeView를 사용하기 때문에 강제적용 대상에서 제외함
             if (!arrayOf("DevActivity").contains(this::class.java.simpleName)) {
                 hideSystemBarsVanillaIceCreamPlusIsLandScape()
             }

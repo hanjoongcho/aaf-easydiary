@@ -10,7 +10,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPinLockBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.applyBottomInsets
+import me.blog.korn123.easydiary.extensions.applyBottomNavigationInsets
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hideSystemBars
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
@@ -59,7 +59,7 @@ class PinLockActivity : BaseSimpleActivity() {
             }
         }
 
-        applyBottomInsets(mBinding.rightContainer)
+        applyBottomNavigationInsets(mBinding.rightContainer)
         if (isLandScape()) hideSystemBars()
     }
 

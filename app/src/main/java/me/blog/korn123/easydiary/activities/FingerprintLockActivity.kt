@@ -74,7 +74,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 true
             }
 
-            applyBottomInsets(this)
+            applyBottomNavigationInsets(this)
             if (isLandScape()) hideSystemBars()
         }
 

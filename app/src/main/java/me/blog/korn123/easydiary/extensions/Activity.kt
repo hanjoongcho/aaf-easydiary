@@ -331,10 +331,12 @@ fun Activity.applyHorizontalInsets() {
 }
 
 /**
- * 애플리케이션 화면이 하단 내비게이션 영역까지 확장되어 사용되는 경우 파라미터로 넘겨받은
+ * - 애플리케이션 화면이 하단 내비게이션 영역까지 확장되어 사용되는 경우 파라미터로 넘겨받은
  * 뷰의 하단에 내비게이션영역 높이값만큼 마진을 추가함
+ * - Version SDK 35 미만인 경우 Edege to Edge 모드가 강제 적용되지 않고 앱이 시스템 UI 뒤로 확장되지 않기 때문에
+ * 버전 체크를 하지 않음
  */
-fun Activity.applyBottomInsets(view: View) {
+fun Activity.applyBottomNavigationInsets(view: View) {
     ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
         val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
         val layoutParams = v.layoutParams
