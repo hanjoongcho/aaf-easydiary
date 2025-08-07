@@ -119,11 +119,6 @@
             android:label=""
             android:theme="@style/SplashScreenTheme" />
         <activity
-            android:name=".activities.QuickSettingsActivity"
-            android:label=""
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".compose.QuickSettingsActivity"
             android:label=""
             android:launchMode="singleTask"
