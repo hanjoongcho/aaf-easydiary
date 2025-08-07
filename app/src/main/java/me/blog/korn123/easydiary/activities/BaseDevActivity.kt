@@ -74,6 +74,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
+import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -234,6 +235,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow
         ) {
+            SimpleCard(
+                "Self Development",
+                "Self Development Repository",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, SelfDevelopmentRepoActivity::class.java)
+                )
+            }
             SimpleCard(
                 "Compose Demo",
                 "NestedScrollConnection",

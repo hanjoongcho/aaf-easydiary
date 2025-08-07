@@ -50,6 +50,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -60,6 +61,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -76,6 +78,7 @@ import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import org.apache.poi.sl.usermodel.Line
 
 const val verticalPadding = 5F
 const val horizontalPadding = 5F
@@ -113,6 +116,7 @@ fun SimpleText(
         LocalContext.current
     ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     val density = LocalDensity.current
     val textUnit = with(density) {
@@ -130,7 +134,9 @@ fun SimpleText(
             color = fontColor.copy(alpha),
             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
         ),
-        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp)
+        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
@@ -972,17 +978,16 @@ fun AlarmCard(
                         ),
                         modifier = Modifier
                             .background(
-                                Color.White
-                                , shape = RoundedCornerShape(3.dp)
+                                Color.White, shape = RoundedCornerShape(3.dp)
                             )
 //                            .shadow(
 //                                8.dp
 //                                , shape = RoundedCornerShape(3.dp)
 //                            )
                             .border(
-                                1.dp
-                                , Color(LocalContext.current.config.primaryColor).copy(1.0f)
-                                , shape = RoundedCornerShape(3.dp)
+                                1.dp,
+                                Color(LocalContext.current.config.primaryColor).copy(1.0f),
+                                shape = RoundedCornerShape(3.dp)
                             )
                             .padding(5.dp)
                     )
@@ -1075,4 +1080,97 @@ fun SpannableString.toAnnotatedString(): AnnotatedString {
     }
 
     return builder.toAnnotatedString()
+}
+
+/***************************************************************************************************
+ *   Tree Card
+ *
+ ***************************************************************************************************/
+
+@Composable
+fun TreeToolbar(
+    title: String,
+    level: Int = 0,
+    modifier: Modifier,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callback: () -> Unit = {}
+) {
+    Card(
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+            .padding(1.dp, 1.dp))
+            .padding(start = (level * 20).dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically) {
+                SimpleText(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    fontFamily = fontFamily,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TreeCard(
+    title: String,
+    level: Int,
+    isFile: Boolean,
+    modifier: Modifier,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    callback: () -> Unit = {}
+) {
+    val color = if (isFile) Color.LightGray else Color.White
+    Card(
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = modifier
+            .padding(1.dp, 1.dp)
+            .padding(start = (level * 20).dp)
+            .clickable {
+                callback.invoke()
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier.background(Color.Yellow.copy(alpha = 0.2f))
+                    .padding(5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimpleText(
+                    text = if (isFile) "🗒️ $title" else "️📂 $title",
+                    fontWeight = FontWeight.Normal,
+                    fontSize = fontSize,
+                    fontFamily = fontFamily,
+                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                    maxLines = 1
+                )
+            }
+        }
+    }
 }
