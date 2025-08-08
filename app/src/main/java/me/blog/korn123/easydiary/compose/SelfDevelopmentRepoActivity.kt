@@ -58,6 +58,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -81,6 +82,7 @@ import me.blog.korn123.easydiary.extensions.isColorLight
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
@@ -140,26 +142,21 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
                         context.config.enableCardViewPolicy
                     )
-                    val diaryItems = EasyDiaryDbHelper.findDiary( null,
-                        false,
-                        0,
-                        0,
-                        DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC).sortedBy { diary -> diary.title }
-
-                    val fileNode = buildFileTree(diaryItems)
-
-                    val treeData = flattenTree(fileNode)
-
+                    var currentQuery by remember { mutableStateOf("") }
+                    fun findDiary(): List<Diary> {
+                        return EasyDiaryDbHelper.findDiary( currentQuery,
+                            false,
+                            0,
+                            0,
+                            DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC).sortedBy { diary -> diary.title }
+                    }
+                    fun findDiaryByTitle(): List<Diary> {
+                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
+                    }
+                    val fileNode = buildFileTree(findDiary())
+                    var treeData by remember { mutableStateOf(flattenTree(fileNode)) }
 
                     Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-//                        SimpleCard(
-//                            title = "툴바영역",
-//                            description = null,
-//                            modifier = settingCardModifier,
-//                            enableCardViewPolicy = enableCardViewPolicy,
-//                        ) {
-//                            // Handle card click
-//                        }
                         TreeToolbar(
                             title = "Toolbar Area",
                             modifier = settingCardModifier.padding(
@@ -170,8 +167,10 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             ),
                             level = 0,
                             enableCardViewPolicy = enableCardViewPolicy,
-                        ) {
-                            // Handle card click
+                        ) { query ->
+                            currentQuery = query.trim()
+                            val fileNode = buildFileTree(findDiary())
+                            treeData = flattenTree(fileNode)
                         }
                         LazyColumn(
                             modifier = Modifier
@@ -194,7 +193,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     makeSnackBar("Clicked on ${node.name} at level $level")
                                     val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
                                     detailIntent.putExtra(DIARY_SEQUENCE, node.sequence)
-//                                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+                                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, currentQuery)
                                     detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC)
                                     TransitionHelper.startActivityWithTransition(this@SelfDevelopmentRepoActivity, detailIntent)
                                 }

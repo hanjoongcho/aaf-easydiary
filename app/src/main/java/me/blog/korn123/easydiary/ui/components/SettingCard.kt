@@ -51,7 +51,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -1094,35 +1099,65 @@ fun TreeToolbar(
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontColor: Color = Color(LocalContext.current.config.textColor),
+    alpha: Float = 1.0f,
+    fontWeight: FontWeight = FontWeight.Normal,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
         LocalContext.current
     ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callback: () -> Unit = {}
+    callback: (query: String) -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
-            .padding(1.dp, 1.dp))
-            .padding(start = (level * 20).dp)
-            .clickable {
-                callback.invoke()
-            },
+            .padding(1.dp, 1.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier.padding(0.dp)
         ) {
             Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically) {
-                SimpleText(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = fontSize,
-                    fontFamily = fontFamily,
-                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                var text by remember { mutableStateOf("") }
+                val density = LocalDensity.current
+                val textUnit = with(density) {
+                    val temp = fontSize.toDp()
+                    temp.toSp()
+                }
+                TextField(
+                    value = text,
+                    onValueChange = {
+                        text = it
+                        callback.invoke(text)
+                    },
+                    label = { Text("category or title") },
+                    textStyle = TextStyle(
+                        fontFamily = fontFamily,
+                        fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+                        color = fontColor.copy(alpha),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    ),
+                    singleLine = true,
+                    trailingIcon = {
+                        if (text.isNotEmpty()) {
+                            IconButton(onClick = {
+                                text = ""
+                                callback.invoke(text)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Clear text"
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp)
                 )
             }
         }
@@ -1158,7 +1193,8 @@ fun TreeCard(
             horizontalAlignment = Alignment.Start
         ) {
             Row(
-                modifier = Modifier.background(Color.Yellow.copy(alpha = 0.2f))
+                modifier = Modifier
+                    .background(Color.Yellow.copy(alpha = 0.2f))
                     .padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
