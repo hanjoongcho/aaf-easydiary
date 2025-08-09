@@ -1135,7 +1135,6 @@ fun SpannableString.toAnnotatedString(): AnnotatedString {
 @Composable
 fun TreeToolbar(
     title: String,
-    level: Int = 0,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
@@ -1174,7 +1173,7 @@ fun TreeToolbar(
                         text = it
                         callback.invoke(text)
                     },
-                    label = { Text("category or title") },
+                    label = { Text(title) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color(LocalContext.current.config.backgroundColor),   // 포커스 시 배경
                         unfocusedContainerColor = Color(LocalContext.current.config.backgroundColor) // 포커스 없을 때 배경

@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -118,23 +119,26 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 //                    fun findDiaryByTitle(): List<Diary> {
 //                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
 //                    }
-                    val fileNode = buildFileTree(findDiary())
+                    val diaryItems = findDiary()
+                    val fileNode = buildFileTree(diaryItems)
                     var treeData by remember { mutableStateOf(flattenTree(fileNode)) }
+                    var total by remember { mutableIntStateOf(diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size) }
 
                     Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         TreeToolbar(
-                            title = "Toolbar Area",
+                            title = "[Total: $total] category or title",
                             modifier = settingCardModifier.padding(
                                 0.dp,
                                 0.dp,
                                 0.dp,
                                 0.dp
                             ),
-                            level = 0,
                             enableCardViewPolicy = enableCardViewPolicy,
                         ) { query ->
                             currentQuery = query.trim()
-                            val fileNode = buildFileTree(findDiary())
+                            val diaryItems = findDiary()
+                            val fileNode = buildFileTree(diaryItems)
+                            total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
                             treeData = flattenTree(fileNode)
                         }
                         LazyColumn(
