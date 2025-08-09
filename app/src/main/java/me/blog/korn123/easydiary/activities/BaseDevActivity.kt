@@ -19,7 +19,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.ContextThemeWrapper
-import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
@@ -100,14 +99,12 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.toggleLauncher
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ALL
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_DEV
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ETC
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_LIFE
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
@@ -121,7 +118,6 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
@@ -135,9 +131,6 @@ import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL

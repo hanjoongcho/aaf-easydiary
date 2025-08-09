@@ -54,6 +54,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -65,6 +66,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
@@ -84,10 +86,12 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.poi.sl.usermodel.Line
+import retrofit2.http.Query
 
 const val verticalPadding = 5F
 const val horizontalPadding = 5F
 const val roundedCornerShapeSize = 5F
+const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
 
 /***************************************************************************************************
  *   Base Composable
@@ -113,6 +117,42 @@ fun CardContainer(
 fun SimpleText(
     modifier: Modifier = Modifier,
     text: String,
+    alpha: Float = 1.0f,
+    fontWeight: FontWeight = FontWeight.Normal,
+    fontSize: Float = LocalContext.current.config.settingFontSize,
+    fontColor: Color = Color(LocalContext.current.config.textColor),
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
+    lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    maxLines: Int = Int.MAX_VALUE,
+) {
+    val density = LocalDensity.current
+    val textUnit = with(density) {
+        val temp = fontSize.toDp()
+        temp.toSp()
+    }
+
+    Text(
+        modifier = modifier,
+        text = text,
+        style = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+            color = fontColor.copy(alpha),
+            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+        ),
+        lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis
+    )
+}
+
+@Composable
+fun SimpleText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
     alpha: Float = 1.0f,
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: Float = LocalContext.current.config.settingFontSize,
@@ -1111,12 +1151,13 @@ fun TreeToolbar(
     Card(
         shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
-            .padding(1.dp, 1.dp)),
+        modifier = modifier.padding(0.dp, 0.dp, 0.dp, verticalPadding.dp),
+//        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
+//            .padding(5.dp, 5.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
-            modifier = Modifier.padding(0.dp)
+            modifier = Modifier.padding(5.dp)
         ) {
             Row(
                 modifier = Modifier,
@@ -1134,6 +1175,10 @@ fun TreeToolbar(
                         callback.invoke(text)
                     },
                     label = { Text("category or title") },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color(LocalContext.current.config.backgroundColor),   // 포커스 시 배경
+                        unfocusedContainerColor = Color(LocalContext.current.config.backgroundColor) // 포커스 없을 때 배경
+                    ),
                     textStyle = TextStyle(
                         fontFamily = fontFamily,
                         fontWeight = fontWeight,
@@ -1169,6 +1214,7 @@ fun TreeCard(
     title: String,
     level: Int,
     isFile: Boolean,
+    currentQuery: String,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -1194,12 +1240,34 @@ fun TreeCard(
         ) {
             Row(
                 modifier = Modifier
-                    .background(Color.Yellow.copy(alpha = 0.2f))
+//                    .background(Color.Yellow.copy(alpha = 0.2f))
                     .padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val originTitle = if (isFile) "🗒️ $title" else "️📂 $title";
+                val annotatedText = buildAnnotatedString {
+                    append(originTitle)
+                    if (currentQuery.isNotBlank()) {
+                        var startIndex = originTitle.indexOf(currentQuery, 0, ignoreCase = true)
+                        while (startIndex >= 0) {
+                            addStyle(
+                                style = SpanStyle(
+//                                    background = Color.Yellow.copy(alpha = 0.5f),
+                                    background = Color(HIGHLIGHT_COLOR),
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Normal
+                                ),
+                                start = startIndex,
+                                end = startIndex + currentQuery.length
+                            )
+                            startIndex = originTitle.indexOf(currentQuery, startIndex + currentQuery.length, ignoreCase = true)
+                        }
+                    }
+                }
+
                 SimpleText(
-                    text = if (isFile) "🗒️ $title" else "️📂 $title",
+//                    text = if (isFile) "🗒️ $annotatedText" else "️📂 $annotatedText",
+                    text = annotatedText,
                     fontWeight = FontWeight.Normal,
                     fontSize = fontSize,
                     fontFamily = fontFamily,

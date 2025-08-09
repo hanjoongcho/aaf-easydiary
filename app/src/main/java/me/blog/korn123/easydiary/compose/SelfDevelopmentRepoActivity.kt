@@ -2,16 +2,10 @@ package me.blog.korn123.easydiary.compose
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -20,40 +14,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -61,38 +35,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.WindowCompat
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isColorLight
-import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.makeToast
-import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.TreeCard
 import me.blog.korn123.easydiary.ui.components.TreeToolbar
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -127,14 +88,15 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 
         AppTheme {
             Scaffold(
+                // 하단 패딩은 수동 관리
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                topBar = {
-                    EasyDiaryActionBar(
-                        title = "QuickSettings",
-                    ) {
-                        finishActivityWithTransition()
-                    }
-                },
+//                topBar = {
+//                    EasyDiaryActionBar(
+//                        title = "QuickSettings",
+//                    ) {
+//                        finishActivityWithTransition()
+//                    }
+//                },
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     val context = LocalContext.current
@@ -146,13 +108,16 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     fun findDiary(): List<Diary> {
                         return EasyDiaryDbHelper.findDiary( currentQuery,
                             false,
-                            0,
-                            0,
-                            DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC).sortedBy { diary -> diary.title }
+                            listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
+                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
+                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
+                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
+                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
+                            )).sortedBy { diary -> diary.title }
                     }
-                    fun findDiaryByTitle(): List<Diary> {
-                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
-                    }
+//                    fun findDiaryByTitle(): List<Diary> {
+//                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
+//                    }
                     val fileNode = buildFileTree(findDiary())
                     var treeData by remember { mutableStateOf(flattenTree(fileNode)) }
 
@@ -183,6 +148,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     title = node.name,
                                     level = level,
                                     isFile = node.isFile,
+                                    currentQuery = currentQuery,
                                     modifier = Modifier.padding(
                                         0.dp,
                                         0.dp,
@@ -194,9 +160,12 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
                                     detailIntent.putExtra(DIARY_SEQUENCE, node.sequence)
                                     detailIntent.putExtra(SELECTED_SEARCH_QUERY, currentQuery)
-                                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC)
+                                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS)
                                     TransitionHelper.startActivityWithTransition(this@SelfDevelopmentRepoActivity, detailIntent)
                                 }
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(bottomPadding.plus(72.dp)))
                             }
                         }
                     }

@@ -20,7 +20,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_LIFE
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
@@ -114,7 +114,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = D
                 .build()
             val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
             val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-            fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC) {
+            fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS) {
                 val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                 val response = call.execute()
                 val contentsItems: List<Contents>? = response.body()

@@ -141,7 +141,7 @@ object EasyDiaryDbHelper {
             symbolSequence,
             false,
             realmInstance
-        );
+        )
     }
 
     /**
@@ -211,6 +211,26 @@ object EasyDiaryDbHelper {
                 results
             }
         }
+    }
+
+    fun findDiary(query: String, isSensitive: Boolean = false, symbolSequences: List<Int>): List<Diary> {
+        val realm = getInstance()
+        val result: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
+            true -> {
+                realm.where(Diary::class.java).findAll()
+
+            }
+            false -> {
+                if (isSensitive) {
+                    realm.where(Diary::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAll()
+                } else {
+                    realm.where(Diary::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAll()
+                }
+            }
+        }
+        return result.where().`in`("weather", symbolSequences.toTypedArray())
+                .findAll()
+                .toList()
     }
 
     fun findOldestDiary(): Diary? = getInstance().where(Diary::class.java).sort("currentTimeMillis", Sort.ASCENDING).findFirst()
