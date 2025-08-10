@@ -71,7 +71,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             mSettingsViewModel = initSettingsViewModel()
-            NestedScrollConnection()
+            SelfDevelopmentRepo()
         }
     }
 
@@ -83,7 +83,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun NestedScrollConnection() {
+    fun SelfDevelopmentRepo() {
         mSettingsViewModel = initSettingsViewModel()
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
 
