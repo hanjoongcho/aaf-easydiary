@@ -121,10 +121,18 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 //                    }
                     val diaryItems = findDiary()
                     val fileNode = buildFileTree(diaryItems)
-                    var treeData by remember { mutableStateOf(flattenTree(fileNode)) }
+                    val originTreeData = flattenTree(fileNode)
+                    var treeData by remember {
+                        mutableStateOf(originTreeData.map { pair ->
+                            if (pair.second == 1) pair.first.isOpen = true
+                            pair
+                        })
+                    }
                     var total by remember { mutableIntStateOf(diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size) }
 
-                    Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)) {
                         TreeToolbar(
                             title = "[Total: $total] category or title",
                             modifier = settingCardModifier.padding(
@@ -138,8 +146,12 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             currentQuery = query.trim()
                             val diaryItems = findDiary()
                             val fileNode = buildFileTree(diaryItems)
+                            val originTreeData = flattenTree(fileNode)
+                            treeData = originTreeData.map { pair ->
+                                if (pair.second == 1) pair.first.isOpen = true
+                                pair
+                            }
                             total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
-                            treeData = flattenTree(fileNode)
                         }
                         LazyColumn(
                             modifier = Modifier
@@ -150,9 +162,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             items(treeData) { (node, level) ->
                                 TreeCard(
                                     title = node.name,
+                                    subTitle = node.fullPath,
                                     level = level,
                                     isFile = node.isFile,
                                     currentQuery = currentQuery,
+                                    isOpen = node.isOpen,
                                     modifier = Modifier.padding(
                                         0.dp,
                                         0.dp,
@@ -160,12 +174,52 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                         0.dp
                                     ),
                                 ) {
-                                    makeSnackBar("Clicked on ${node.name} at level $level")
-                                    val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
-                                    detailIntent.putExtra(DIARY_SEQUENCE, node.sequence)
-                                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, currentQuery)
-                                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS)
-                                    TransitionHelper.startActivityWithTransition(this@SelfDevelopmentRepoActivity, detailIntent)
+                                    fun toggleChildren(fileNode: FileNode) {
+                                        treeData = treeData.map { data ->
+                                            if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
+                                                val newFirst = data.first.copy(isOpen = data.first.isOpen.not())
+                                                data.copy(first = newFirst)
+                                            } else {
+                                                data
+                                            }
+                                        }
+                                    }
+
+                                    treeData.find { data -> data.first.name == node.name }
+                                        ?.let { pair ->
+                                            if (pair.first.isFile) {
+                                                // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
+                                                val detailIntent = Intent(
+                                                    this@SelfDevelopmentRepoActivity,
+                                                    DiaryReadingActivity::class.java
+                                                )
+                                                detailIntent.putExtra(
+                                                    DIARY_SEQUENCE,
+                                                    pair.first.sequence
+                                                )
+                                                detailIntent.putExtra(
+                                                    SELECTED_SEARCH_QUERY,
+                                                    currentQuery
+                                                )
+                                                detailIntent.putExtra(
+                                                    SELECTED_SYMBOL_SEQUENCE,
+                                                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
+                                                )
+                                                TransitionHelper.startActivityWithTransition(
+                                                    this@SelfDevelopmentRepoActivity,
+                                                    detailIntent
+                                                )
+                                            } else {
+                                                // 폴더인 경우, 열고 닫기 토글
+                                                makeSnackBar("${pair.first.name} ${pair.first.children.size}")
+                                                toggleChildren(pair.first)
+                                            }
+                                        }
+//                                    val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
+//                                    detailIntent.putExtra(DIARY_SEQUENCE, node.sequence)
+//                                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, currentQuery)
+//                                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS)
+//                                    TransitionHelper.startActivityWithTransition(this@SelfDevelopmentRepoActivity, detailIntent)
                                 }
                             }
                             item {
@@ -218,13 +272,15 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         for (diary in items) {
             var current = root
             val parts = diary.title!!.split("/")
+            var partPath = ""
             for ((i, part) in parts.withIndex()) {
+                partPath += if (partPath.isEmpty()) part else "/$part"
                 val isFile = i == parts.lastIndex
                 val existing = current.children.find { it.name == part }
                 if (existing != null) {
                     current = existing
                 } else {
-                    val newNode = FileNode(name = part, isFile = isFile, sequence = diary.sequence)
+                    val newNode = FileNode(name = part, fullPath = partPath, isFile = isFile, sequence = diary.sequence)
                     current.children.add(newNode)
                     current = newNode
                 }
@@ -240,7 +296,9 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val name: String,
         val children: MutableList<FileNode> = mutableListOf(),
         val isFile: Boolean = false,
-        val sequence: Int
+        val sequence: Int,
+        var fullPath: String = "",
+        var isOpen: Boolean = true
     )
 }
 

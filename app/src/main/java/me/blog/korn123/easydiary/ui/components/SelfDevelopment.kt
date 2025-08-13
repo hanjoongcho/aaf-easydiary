@@ -136,9 +136,11 @@ fun TreeToolbar(
 @Composable
 fun TreeCard(
     title: String,
+    subTitle: String,
     level: Int,
     isFile: Boolean,
     currentQuery: String,
+    isOpen: Boolean = true,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -148,57 +150,72 @@ fun TreeCard(
     callback: () -> Unit = {}
 ) {
     val color = if (isFile) Color.LightGray else Color.White
-    Card(
-        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = modifier
-            .padding(1.dp, 1.dp)
-            .padding(start = (level * 20).dp)
-            .clickable {
-                callback.invoke()
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
-    ) {
-        Column(
-            horizontalAlignment = Alignment.Start
+//    if (isOpen) {
+        Card(
+            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+            modifier = modifier
+                .padding(1.dp, 1.dp)
+                .padding(start = (level.minus(1) * 20).dp)
+                .clickable {
+                    callback.invoke()
+                },
+            elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         ) {
-            Row(
-                modifier = Modifier
-//                    .background(Color.Yellow.copy(alpha = 0.2f))
-                    .padding(5.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                horizontalAlignment = Alignment.Start
             ) {
-                val originTitle = if (isFile) "🗒️ $title" else "️📂 $title";
-                val annotatedText = buildAnnotatedString {
-                    append(originTitle)
-                    if (currentQuery.isNotBlank()) {
-                        var startIndex = originTitle.indexOf(currentQuery, 0, ignoreCase = true)
-                        while (startIndex >= 0) {
-                            addStyle(
-                                style = SpanStyle(
+                Row(
+                    modifier = Modifier
+//                    .background(Color.Yellow.copy(alpha = 0.2f))
+                        .padding(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val originTitle = if (isFile) "🗒️ $title" else "📂 $title";
+                    val annotatedText = buildAnnotatedString {
+                        append(originTitle)
+                        if (currentQuery.isNotBlank()) {
+                            var startIndex = originTitle.indexOf(currentQuery, 0, ignoreCase = true)
+                            while (startIndex >= 0) {
+                                addStyle(
+                                    style = SpanStyle(
 //                                    background = Color.Yellow.copy(alpha = 0.5f),
-                                    background = Color(HIGHLIGHT_COLOR),
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Normal
-                                ),
-                                start = startIndex,
-                                end = startIndex + currentQuery.length
-                            )
-                            startIndex = originTitle.indexOf(currentQuery, startIndex + currentQuery.length, ignoreCase = true)
+                                        background = Color(HIGHLIGHT_COLOR),
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Normal
+                                    ),
+                                    start = startIndex,
+                                    end = startIndex + currentQuery.length
+                                )
+                                startIndex = originTitle.indexOf(currentQuery, startIndex + currentQuery.length, ignoreCase = true)
+                            }
                         }
                     }
-                }
 
-                SimpleText(
+                    SimpleText(
 //                    text = if (isFile) "🗒️ $annotatedText" else "️📂 $annotatedText",
-                    text = annotatedText,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = fontSize,
-                    fontFamily = fontFamily,
-                    lineSpacingScaleFactor = lineSpacingScaleFactor,
-                    maxLines = 1
-                )
+                        text = annotatedText,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = fontSize,
+                        fontFamily = fontFamily,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        maxLines = 1
+                    )
+                }
+                Row(
+                    modifier = Modifier.padding(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SimpleText(
+                        text = "[$isOpen][$level] $subTitle",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = fontSize.times(0.8f),
+                        fontFamily = fontFamily,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        maxLines = 1
+                    )
+                }
             }
         }
-    }
+//    }
 }
