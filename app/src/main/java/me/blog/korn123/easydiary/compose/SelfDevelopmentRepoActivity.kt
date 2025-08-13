@@ -177,7 +177,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     fun toggleChildren(fileNode: FileNode) {
                                         treeData = treeData.map { data ->
                                             if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
-                                                val newFirst = data.first.copy(isOpen = data.first.isOpen.not())
+                                                val newFirst = data.first.copy(isOpen = fileNode.isFolderOpen, isFolderOpen = fileNode.isFolderOpen)
                                                 data.copy(first = newFirst)
                                             } else {
                                                 data
@@ -210,9 +210,18 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                                     detailIntent
                                                 )
                                             } else {
-                                                // 폴더인 경우, 열고 닫기 토글
                                                 makeSnackBar("${pair.first.name} ${pair.first.children.size}")
-                                                toggleChildren(pair.first)
+                                                val newFirst = pair.first.copy(isFolderOpen = pair.first.isFolderOpen.not())
+                                                // pair 객체가 리컴포지션 되도록
+                                                treeData = treeData.map { data ->
+                                                    if (data.first.name == pair.first.name) {
+                                                        data.copy(first = newFirst)
+                                                    } else {
+                                                        data
+                                                    }
+                                                }
+                                                // 폴더인 경우, 열고 닫기 토글
+                                                toggleChildren(newFirst)
                                             }
                                         }
 //                                    val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
@@ -298,7 +307,8 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val isFile: Boolean = false,
         val sequence: Int,
         var fullPath: String = "",
-        var isOpen: Boolean = true
+        var isOpen: Boolean = true,
+        var isFolderOpen: Boolean = true
     )
 }
 

@@ -150,7 +150,7 @@ fun TreeCard(
     callback: () -> Unit = {}
 ) {
     val color = if (isFile) Color.LightGray else Color.White
-//    if (isOpen) {
+    if (isOpen) {
         Card(
             shape = RoundedCornerShape(roundedCornerShapeSize.dp),
             colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -217,5 +217,5 @@ fun TreeCard(
                 }
             }
         }
-//    }
+    }
 }
