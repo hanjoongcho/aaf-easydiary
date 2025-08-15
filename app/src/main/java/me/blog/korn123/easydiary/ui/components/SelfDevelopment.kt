@@ -140,7 +140,8 @@ fun TreeCard(
     level: Int,
     isFile: Boolean,
     currentQuery: String,
-    isOpen: Boolean = true,
+    isRootShow: Boolean = true,
+    isShow: Boolean = true,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -150,7 +151,7 @@ fun TreeCard(
     callback: () -> Unit = {}
 ) {
     val color = if (isFile) Color.LightGray else Color.White
-    if (isOpen) {
+    if (isRootShow && isShow) {
         Card(
             shape = RoundedCornerShape(roundedCornerShapeSize.dp),
             colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -207,7 +208,7 @@ fun TreeCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SimpleText(
-                        text = "[$isOpen][$level] $subTitle",
+                        text = "[$isRootShow][$isShow][$level] $subTitle",
                         fontWeight = FontWeight.Normal,
                         fontSize = fontSize.times(0.8f),
                         fontFamily = fontFamily,

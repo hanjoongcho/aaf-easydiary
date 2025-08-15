@@ -124,7 +124,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     val originTreeData = flattenTree(fileNode)
                     var treeData by remember {
                         mutableStateOf(originTreeData.map { pair ->
-                            if (pair.second == 1) pair.first.isOpen = true
+                            if (pair.second == 1) pair.first.isShow = true
                             pair
                         })
                     }
@@ -148,7 +148,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             val fileNode = buildFileTree(diaryItems)
                             val originTreeData = flattenTree(fileNode)
                             treeData = originTreeData.map { pair ->
-                                if (pair.second == 1) pair.first.isOpen = true
+                                if (pair.second == 1) pair.first.isShow = true
                                 pair
                             }
                             total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
@@ -166,7 +166,8 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     level = level,
                                     isFile = node.isFile,
                                     currentQuery = currentQuery,
-                                    isOpen = node.isOpen,
+                                    isRootShow = node.isRootShow,
+                                    isShow = node.isShow,
                                     modifier = Modifier.padding(
                                         0.dp,
                                         0.dp,
@@ -174,61 +175,72 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                         0.dp
                                     ),
                                 ) {
+                                    fun isRootNodeVisible (data: Pair<FileNode, Int>): Boolean {
+                                        if (data.second == 1) return true
+
+                                        var isShow = false
+                                        val parentNode = data.first.fullPath.split("/")
+                                        var currentPath = ""
+                                        for (i in 0 until parentNode.size.minus(1)) {
+                                            currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
+                                            isShow = treeData.find { it -> it.first.fullPath == currentPath }!!.first.isFolderOpen
+                                            if (!isShow) break
+                                        }
+                                        return isShow
+                                    }
+
                                     fun toggleChildren(fileNode: FileNode) {
                                         treeData = treeData.map { data ->
                                             if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
-                                                val newFirst = data.first.copy(isOpen = fileNode.isFolderOpen, isFolderOpen = fileNode.isFolderOpen)
-                                                data.copy(first = newFirst)
+                                                val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
+                                                if (isFirstChildNode) {
+                                                    data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(data)))
+                                                } else {
+                                                    data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
+                                                }
                                             } else {
+//                                                data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
                                                 data
                                             }
                                         }
                                     }
 
-                                    treeData.find { data -> data.first.name == node.name }
-                                        ?.let { pair ->
-                                            if (pair.first.isFile) {
-                                                // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
-                                                val detailIntent = Intent(
-                                                    this@SelfDevelopmentRepoActivity,
-                                                    DiaryReadingActivity::class.java
-                                                )
-                                                detailIntent.putExtra(
-                                                    DIARY_SEQUENCE,
-                                                    pair.first.sequence
-                                                )
-                                                detailIntent.putExtra(
-                                                    SELECTED_SEARCH_QUERY,
-                                                    currentQuery
-                                                )
-                                                detailIntent.putExtra(
-                                                    SELECTED_SYMBOL_SEQUENCE,
-                                                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
-                                                )
-                                                TransitionHelper.startActivityWithTransition(
-                                                    this@SelfDevelopmentRepoActivity,
-                                                    detailIntent
-                                                )
+                                    if (node.isFile) {
+                                        // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
+                                        val detailIntent = Intent(
+                                            this@SelfDevelopmentRepoActivity,
+                                            DiaryReadingActivity::class.java
+                                        )
+                                        detailIntent.putExtra(
+                                            DIARY_SEQUENCE,
+                                            node.sequence
+                                        )
+                                        detailIntent.putExtra(
+                                            SELECTED_SEARCH_QUERY,
+                                            currentQuery
+                                        )
+                                        detailIntent.putExtra(
+                                            SELECTED_SYMBOL_SEQUENCE,
+                                            DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
+                                        )
+                                        TransitionHelper.startActivityWithTransition(
+                                            this@SelfDevelopmentRepoActivity,
+                                            detailIntent
+                                        )
+                                    } else {
+                                        val newFirst =
+                                            node.copy(isFolderOpen = node.isFolderOpen.not())
+                                        // pair 객체가 리컴포지션 되도록
+                                        treeData = treeData.map { data ->
+                                            if (data.first.fullPath == node.fullPath) {
+                                                data.copy(first = newFirst)
                                             } else {
-                                                makeSnackBar("${pair.first.name} ${pair.first.children.size}")
-                                                val newFirst = pair.first.copy(isFolderOpen = pair.first.isFolderOpen.not())
-                                                // pair 객체가 리컴포지션 되도록
-                                                treeData = treeData.map { data ->
-                                                    if (data.first.name == pair.first.name) {
-                                                        data.copy(first = newFirst)
-                                                    } else {
-                                                        data
-                                                    }
-                                                }
-                                                // 폴더인 경우, 열고 닫기 토글
-                                                toggleChildren(newFirst)
+                                                data
                                             }
                                         }
-//                                    val detailIntent = Intent(this@SelfDevelopmentRepoActivity, DiaryReadingActivity::class.java)
-//                                    detailIntent.putExtra(DIARY_SEQUENCE, node.sequence)
-//                                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, currentQuery)
-//                                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS)
-//                                    TransitionHelper.startActivityWithTransition(this@SelfDevelopmentRepoActivity, detailIntent)
+                                        // 폴더인 경우, 열고 닫기 토글
+                                        toggleChildren(newFirst)
+                                    }
                                 }
                             }
                             item {
@@ -307,8 +319,9 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val isFile: Boolean = false,
         val sequence: Int,
         var fullPath: String = "",
-        var isOpen: Boolean = true,
-        var isFolderOpen: Boolean = true
+        var isShow: Boolean = true,
+        var isFolderOpen: Boolean = true,
+        var isRootShow: Boolean = true,
     )
 }
 
