@@ -115,16 +115,20 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 //                    fun findDiaryByTitle(): List<Diary> {
 //                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
 //                    }
-                    val diaryItems = findDiary()
-                    val fileNode = buildFileTree(diaryItems)
-                    val originTreeData = flattenTree(fileNode)
-                    var treeData by remember {
-                        mutableStateOf(originTreeData.map { pair ->
+                    var treeData by remember { mutableStateOf(emptyList<Pair<TreeTimelineActivity.FileNode, Int>>()) }
+                    var total by remember { mutableIntStateOf(0) }
+
+                    fun fetchDiary() {
+                        val diaryItems = findDiary()
+                        val fileNode = buildFileTree(diaryItems)
+                        val originTreeData = flattenTree(fileNode)
+                        treeData = originTreeData.map { pair ->
                             if (pair.second == 1) pair.first.isShow = true
                             pair
-                        })
+                        }
+                        total = diaryItems.size
                     }
-                    var total by remember { mutableIntStateOf(diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size) }
+                    fetchDiary()
 
                     Column(modifier = Modifier
                         .fillMaxSize()
@@ -140,14 +144,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                             enableCardViewPolicy = enableCardViewPolicy,
                         ) { query ->
                             currentQuery = query.trim()
-                            val diaryItems = findDiary()
-                            val fileNode = buildFileTree(diaryItems)
-                            val originTreeData = flattenTree(fileNode)
-                            treeData = originTreeData.map { pair ->
-                                if (pair.second == 1) pair.first.isShow = true
-                                pair
-                            }
-                            total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
+                            fetchDiary()
                         }
                         LazyColumn(
                             modifier = Modifier

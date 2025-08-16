@@ -88,11 +88,11 @@ fun TreeToolbar(
                 val focusRequester = remember { FocusRequester() }
 
                 // 화면이 그려진 직후 포커스 요청
-                LaunchedEffect(Unit) {
-                    // 약간의 delay를 주면 레이아웃이 안정된 후 포커스됨
-                    delay(100)
-                    focusRequester.requestFocus()
-                }
+//                LaunchedEffect(Unit) {
+//                    // 약간의 delay를 주면 레이아웃이 안정된 후 포커스됨
+//                    delay(100)
+//                    focusRequester.requestFocus()
+//                }
                 TextField(
                     value = text,
                     onValueChange = {

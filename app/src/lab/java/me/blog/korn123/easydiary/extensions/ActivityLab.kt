@@ -85,8 +85,8 @@ fun Activity.pushMarkDown(path: String, contents: String) {
     }
 }
 
-fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = DEV_SYNC_MARKDOWN_ALL) {
-    mBinding.partialSettingsProgress.progressContainer.visibility = View.VISIBLE
+fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: String = DEV_SYNC_MARKDOWN_ALL, onComplete: () -> Unit = {}) {
+    mBinding?.partialSettingsProgress?.progressContainer?.visibility = View.VISIBLE
     CoroutineScope(Dispatchers.IO).launch {
         val baseUrl = "https://api.github.com"
         var token: String? = null
@@ -141,7 +141,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = D
                             }
                             if (items.size == 1) {
                                 runOnUiThread {
-                                    mBinding.partialSettingsProgress.message.text = "Sync ${title}…"
+                                    mBinding?.partialSettingsProgress?.message?.text = "Sync ${title}…"
                                 }
                                 val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                 val diary = items[0]
@@ -156,7 +156,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = D
                                 this.commitTransaction()
                             } else if (items.isEmpty()) {
                                 runOnUiThread {
-                                    mBinding.partialSettingsProgress.message.text = "Download ${title}…"
+                                    mBinding?.partialSettingsProgress?.message?.text = "Download ${title}…"
                                 }
                                 val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                 EasyDiaryDbHelper.insertDiary(Diary(
@@ -181,8 +181,23 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = D
             if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
             if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
             if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
+
+            if (!listOf(
+                    DEV_SYNC_MARKDOWN_ALL,
+                    DEV_SYNC_MARKDOWN_DEV,
+                    DEV_SYNC_MARKDOWN_ETC,
+                    DEV_SYNC_MARKDOWN_LIFE,
+                    DEV_SYNC_MARKDOWN_STOCK_FICS,
+                    DEV_SYNC_MARKDOWN_STOCK_ETF,
+                    DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
+                ).contains(syncMode)
+            ) {
+                fetchContents(syncMode, true)
+            }
+
             withContext(Dispatchers.Main) {
-                mBinding.partialSettingsProgress.progressContainer.visibility = View.GONE
+                mBinding?.partialSettingsProgress?.progressContainer?.visibility = View.GONE
+                onComplete()
             }
         }
     }

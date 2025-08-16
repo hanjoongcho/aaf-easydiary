@@ -263,18 +263,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Compose Demo",
-                "NestedScrollConnection With Auto Insets",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 3)
-                    }
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
                 "FullScreen",
                 modifier = modifier,
             ) {
@@ -287,7 +275,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Compose Demo",
-                "CollapsingTopAppBarFullScreen",
+                "NestedScrollConnection With Auto Insets",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
@@ -299,13 +287,25 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Compose Demo",
-                "CollapsingTopAppBarFullScreenTransparentStatusBar",
+                "CollapsingTopAppBarFullScreen",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 4)
+                    }
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "CollapsingTopAppBarLazyColumn",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 5)
                     }
                 )
             }
