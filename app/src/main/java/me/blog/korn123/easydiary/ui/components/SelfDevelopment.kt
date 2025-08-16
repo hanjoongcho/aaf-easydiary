@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -133,8 +135,10 @@ fun TreeToolbar(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TreeCard(
+    sequence: Int = 0,
     title: String,
     subTitle: String,
     level: Int,
@@ -148,7 +152,8 @@ fun TreeCard(
         LocalContext.current
     ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callback: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
 ) {
     val color = if (isFile) Color.LightGray else Color.White
     if (isRootShow && isShow) {
@@ -158,9 +163,10 @@ fun TreeCard(
             modifier = modifier
                 .padding(1.dp, 1.dp)
                 .padding(start = (level.minus(1) * 20).dp)
-                .clickable {
-                    callback.invoke()
-                },
+                .combinedClickable(
+                    onClick = { onClick.invoke() },
+                    onLongClick = { onLongClick.invoke() }
+                ),
             elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         ) {
             Column(
@@ -172,7 +178,9 @@ fun TreeCard(
                         .padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val originTitle = if (isFile) "🗒️ $title" else "📂 $title";
+
+                    var originTitle = if (isFile) "🗒️ $title" else "📂 $title";
+                    originTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
                     val annotatedText = buildAnnotatedString {
                         append(originTitle)
                         if (currentQuery.isNotBlank()) {
@@ -203,19 +211,20 @@ fun TreeCard(
                         maxLines = 1
                     )
                 }
-                Row(
-                    modifier = Modifier.padding(5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SimpleText(
-                        text = "[$isRootShow][$isShow][$level] $subTitle",
-                        fontWeight = FontWeight.Normal,
-                        fontSize = fontSize.times(0.8f),
-                        fontFamily = fontFamily,
-                        lineSpacingScaleFactor = lineSpacingScaleFactor,
-                        maxLines = 1
-                    )
-                }
+                val displaySubTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
+                    Row(
+                        modifier = Modifier.padding(5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SimpleText(
+                            text = displaySubTitle,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = fontSize.times(0.8f),
+                            fontFamily = fontFamily,
+                            lineSpacingScaleFactor = lineSpacingScaleFactor,
+                            maxLines = 1
+                        )
+                    }
             }
         }
     }

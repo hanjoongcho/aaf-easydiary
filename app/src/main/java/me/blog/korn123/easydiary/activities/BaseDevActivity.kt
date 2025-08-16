@@ -74,6 +74,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
+import me.blog.korn123.easydiary.compose.TreeTimelineActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -236,6 +237,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
                     Intent(currentContext, SelfDevelopmentRepoActivity::class.java)
+                )
+            }
+            SimpleCard(
+                "Tree Timeline",
+                "Show timeline in a tree structure",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, TreeTimelineActivity::class.java)
                 )
             }
             SimpleCard(

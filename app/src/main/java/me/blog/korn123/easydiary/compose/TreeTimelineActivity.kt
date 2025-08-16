@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.extensions.config
@@ -60,7 +61,7 @@ import me.blog.korn123.easydiary.ui.components.TreeCard
 import me.blog.korn123.easydiary.ui.components.TreeToolbar
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
-class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
+class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 
 
     /***************************************************************************************************
@@ -108,14 +109,8 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     )
                     var currentQuery by remember { mutableStateOf("") }
                     fun findDiary(): List<Diary> {
-                        return EasyDiaryDbHelper.findDiary( currentQuery,
-                            false,
-                            listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
-                            )).sortedBy { diary -> diary.title }
+//                        return EasyDiaryDbHelper.findDiary( currentQuery).sortedBy { diary -> diary.title }
+                        return EasyDiaryDbHelper.findDiary(currentQuery)
                     }
 //                    fun findDiaryByTitle(): List<Diary> {
 //                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
@@ -160,8 +155,9 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                 .fillMaxWidth()
                                 .background(Color(context.config.screenBackgroundColor)),
                         ) {
-                            items(treeData) { (node, level) ->
+                            items(items = treeData.filter { data -> data.first.isRootShow && data.first.isShow }, key = { "${it.first.sequence}-${it.first.fullPath}"}) { (node, level) ->
                                 TreeCard(
+                                    sequence = node.sequence,
                                     title = node.name,
                                     subTitle = node.fullPath,
                                     level = level,
@@ -184,7 +180,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                             var currentPath = ""
                                             for (i in 0 until parentNode.size.minus(1)) {
                                                 currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
-                                                isShow = treeData.find { it -> it.first.fullPath == currentPath }!!.first.isFolderOpen
+                                                isShow = treeData.find { it -> it.first.fullPath == currentPath }?.first?.isFolderOpen ?: false
                                                 if (!isShow) break
                                             }
                                             return isShow
@@ -209,7 +205,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                         if (node.isFile) {
                                             // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
                                             val detailIntent = Intent(
-                                                this@SelfDevelopmentRepoActivity,
+                                                this@TreeTimelineActivity,
                                                 DiaryReadingActivity::class.java
                                             )
                                             detailIntent.putExtra(
@@ -220,12 +216,12 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                                 SELECTED_SEARCH_QUERY,
                                                 currentQuery
                                             )
-                                            detailIntent.putExtra(
-                                                SELECTED_SYMBOL_SEQUENCE,
-                                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
-                                            )
+//                                        detailIntent.putExtra(
+//                                            SELECTED_SYMBOL_SEQUENCE,
+//                                            DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
+//                                        )
                                             TransitionHelper.startActivityWithTransition(
-                                                this@SelfDevelopmentRepoActivity,
+                                                this@TreeTimelineActivity,
                                                 detailIntent
                                             )
                                         } else {
@@ -284,7 +280,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     fun flattenTree(node: FileNode, level: Int = 0): List<Pair<FileNode, Int>> {
         val list = mutableListOf<Pair<FileNode, Int>>()
         if (node.name != "root") list.add(node to level)
-        node.children.sortedBy { it.name }.forEach {
+        node.children.sortedByDescending { it.name }.forEach {
             list.addAll(flattenTree(it, level + 1))
         }
         return list
@@ -298,7 +294,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val root = FileNode("root", sequence = 0)
         for (diary in items) {
             var current = root
-            val parts = diary.title!!.split("/")
+            val parts = "${diary.dateString}-${EasyDiaryUtils.summaryDiaryLabel(diary)}".split("-")
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 partPath += if (partPath.isEmpty()) part else "/$part"
