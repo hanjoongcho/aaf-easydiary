@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.compose
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -46,6 +47,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
@@ -87,6 +89,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun SelfDevelopmentRepo() {
         mSettingsViewModel = initSettingsViewModel()
+        LocalActivity.current?.updateSystemStatusBarColor()
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
 
         AppTheme {

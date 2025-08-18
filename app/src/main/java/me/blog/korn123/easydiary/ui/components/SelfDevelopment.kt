@@ -99,7 +99,13 @@ fun TreeToolbar(
                         text = it
                         callback.invoke(text)
                     },
-                    label = { Text(title) },
+                    label = { Text(text = title, style = TextStyle(
+                        fontFamily = fontFamily,
+                        fontWeight = fontWeight,
+//                        fontStyle = FontStyle.Italic,
+                        color = fontColor.copy(alpha),
+                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                    )) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color(LocalContext.current.config.backgroundColor),   // 포커스 시 배경
                         unfocusedContainerColor = Color(LocalContext.current.config.backgroundColor) // 포커스 없을 때 배경
