@@ -176,12 +176,15 @@ fun TreeCard(
             elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
         ) {
             Column(
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .padding(10.dp, 7.dp),
+
             ) {
                 Row(
                     modifier = Modifier
 //                    .background(Color.Yellow.copy(alpha = 0.2f))
-                        .padding(5.dp),
+                        .padding(0.dp, 0.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
@@ -219,7 +222,7 @@ fun TreeCard(
                 }
                 val displaySubTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
                     Row(
-                        modifier = Modifier.padding(5.dp),
+                        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SimpleText(
