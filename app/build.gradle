@@ -98,15 +98,16 @@ android {
         compose true
     }
     buildTypes {
+        // test command for NT build
+        // .\gradlew.bat assembleGmsProdRelease assembleGmsDevRelease assembleFossRelease assembleLabRelease
         release {
             minifyEnabled true // Use Android app bundle
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def releaseFileName = "easy_diary-$versionName-${new Date().format('yyyyMMddHHmmss')}.apk"
-                    println(output.outputFileName)
-                    println("releaseFileName: $releaseFileName")
+                    def releaseFileName = "easy_diary-${variant.flavorName}-$versionName-${new Date().format('yyyyMMddHHmmss')}.apk"
                     output.outputFileName = releaseFileName
+                    println("Build file path: ${output.outputFile}")
                 }
             }
             signingConfig signingConfigs.config
@@ -143,6 +144,16 @@ configurations.all {
     exclude group: 'org.jetbrains', module: 'annotations-java5'
 }
 
+configurations.fossImplementation {
+    exclude group: 'com.google.android.gms', module: 'play-services-auth'
+    exclude group: 'com.google.android.play', module: 'review'
+    exclude group: 'com.google.android.play', module: 'review-ktx'
+    exclude group: 'com.google.api-client', module: 'google-api-client-android'
+    exclude group: 'com.google.apis', module: 'google-api-services-drive'
+    exclude group: 'com.google.apis', module: 'google-api-services-calendar'
+    exclude group: 'com.google.http-client', module: 'google-http-client-gson'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -173,30 +184,14 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.10.1'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.7.8'
 
-    // google components for develop package (not foss)
-    gmsDevImplementation 'com.google.android.gms:play-services-auth:21.3.0'
-    gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
-    gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
-    gmsDevImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
-    gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-
-    // google components for production package (not foss)
-    gmsProdImplementation 'com.google.android.gms:play-services-auth:21.3.0'
-    gmsProdImplementation 'com.google.android.play:review:2.0.2'
-    gmsProdImplementation 'com.google.android.play:review-ktx:2.0.2'
-    gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
-    gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
-    gmsProdImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
-    gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-
-    // google components for lab package (not foss)
-    labImplementation 'com.google.android.gms:play-services-auth:21.3.0'
-    labImplementation 'com.google.android.play:review:2.0.2'
-    labImplementation 'com.google.android.play:review-ktx:2.0.2'
-    labImplementation 'com.google.api-client:google-api-client-android:1.26.0'
-    labImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
-    labImplementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
-    labImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    // gms
+    implementation 'com.google.android.gms:play-services-auth:21.3.0'
+    implementation 'com.google.android.play:review:2.0.2'
+    implementation 'com.google.android.play:review-ktx:2.0.2'
+    implementation 'com.google.api-client:google-api-client-android:1.26.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components common
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

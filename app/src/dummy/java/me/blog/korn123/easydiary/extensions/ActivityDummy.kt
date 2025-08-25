@@ -6,4 +6,4 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ALL
 
 fun Activity.pushMarkDown(path: String, contents: String) {}
 
-fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding, syncMode: String = DEV_SYNC_MARKDOWN_ALL) {}
+fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: String = DEV_SYNC_MARKDOWN_ALL, onComplete: () -> Unit = {}) {}
