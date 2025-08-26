@@ -140,9 +140,6 @@ android {
     }
 }
 
-configurations.all {
-    exclude group: 'org.jetbrains', module: 'annotations-java5'
-}
 
 configurations.fossImplementation {
     exclude group: 'com.google.android.gms', module: 'play-services-auth'
@@ -152,6 +149,12 @@ configurations.fossImplementation {
     exclude group: 'com.google.apis', module: 'google-api-services-drive'
     exclude group: 'com.google.apis', module: 'google-api-services-calendar'
     exclude group: 'com.google.http-client', module: 'google-http-client-gson'
+}
+
+afterEvaluate {
+    configurations.all {
+        exclude group: 'org.jetbrains', module: 'annotations-java5'
+    }
 }
 
 dependencies {
