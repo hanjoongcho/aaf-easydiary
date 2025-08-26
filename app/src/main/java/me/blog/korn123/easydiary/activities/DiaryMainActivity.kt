@@ -207,6 +207,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             subtitle = "👀"
         }
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
+        FontUtils.checkFontSetting(this@DiaryMainActivity)
         initDiaryGrid()
         initDummyData()
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)

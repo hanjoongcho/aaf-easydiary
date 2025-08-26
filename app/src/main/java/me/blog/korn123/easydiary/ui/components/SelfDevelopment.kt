@@ -181,13 +181,13 @@ fun TreeCard(
                     .padding(10.dp, 7.dp),
 
             ) {
-                Row(
-                    modifier = Modifier
+                val nodeModifier = Modifier
 //                    .background(Color.Yellow.copy(alpha = 0.2f))
-                        .padding(0.dp, 0.dp),
+                    .padding(0.dp, 0.dp)
+                Row(
+                    modifier = nodeModifier,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     var originTitle = if (isFile) "🗒️ $title" else "📂 $title";
                     originTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
                     val annotatedText = buildAnnotatedString {
@@ -220,20 +220,21 @@ fun TreeCard(
                         maxLines = 1
                     )
                 }
-                val displaySubTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
-                    Row(
-                        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SimpleText(
-                            text = displaySubTitle,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = fontSize.times(0.8f),
-                            fontFamily = fontFamily,
-                            lineSpacingScaleFactor = lineSpacingScaleFactor,
-                            maxLines = 1
-                        )
-                    }
+                val displaySubTitle =
+                    if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
+                Row(
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SimpleText(
+                        text = displaySubTitle,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = fontSize.times(0.8f),
+                        fontFamily = fontFamily,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
