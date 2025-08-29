@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +12,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -39,6 +46,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -153,6 +161,7 @@ fun TreeCard(
     isRootShow: Boolean = true,
     isShow: Boolean = true,
     isFolderOpen: Boolean = true,
+    visibleSubTitle: Boolean = true,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -251,7 +260,7 @@ fun TreeCard(
                                 maxLines = 1
                             )
                         }
-                        if (isFile) {
+                        if (visibleSubTitle) {
                             val displaySubTitle =
                                 if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
                             Row(
@@ -272,8 +281,79 @@ fun TreeCard(
                 }
             }
         }
+    }
+}
 
+@Composable
+fun OptionDialog(
+    showDialog: Boolean,
+    optionEnabled: Boolean,
+    onOptionChangeVisibleSubTitle: (Boolean) -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                TextButton(onClick = onDismiss) { Text("확인") }
+            },
+            title = { Text("Tree Options") },
+            text = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Display subtitle")
+                    Switch(
+                        modifier = Modifier.padding(start = 10.dp),
+                        checked = optionEnabled,
+                        onCheckedChange = onOptionChangeVisibleSubTitle
+                    )
+                }
+            }
+        )
+    }
+}
 
+@Composable
+fun BottomToolBar(
+    bottomPadding: Dp,
+    showOptionDialog: (isShow: Boolean) -> Unit,
+    finishCallback: () -> Unit,
+) {
+    Box(modifier = Modifier.padding(bottom = bottomPadding)) {
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
+        ) {
+            FloatingActionButton(
+                onClick = { finishCallback() },
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_cross),
+                    contentDescription = "Finish Activity"
+                )
+            }
 
+            FloatingActionButton(
+                onClick = { showOptionDialog(true) },
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings_7),
+                    contentDescription = "옵션 설정"
+                )
+            }
+        }
     }
 }

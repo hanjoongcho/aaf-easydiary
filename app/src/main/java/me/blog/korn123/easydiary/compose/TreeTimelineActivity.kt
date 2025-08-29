@@ -59,6 +59,8 @@ import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.BottomToolBar
+import me.blog.korn123.easydiary.ui.components.OptionDialog
 import me.blog.korn123.easydiary.ui.components.TreeCard
 import me.blog.korn123.easydiary.ui.components.TreeToolbar
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -91,6 +93,8 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+        var showOptionDialog by remember { mutableStateOf(false) }
+        var visibleSubTitle by remember { mutableStateOf(false) }
 
         AppTheme {
             Scaffold(
@@ -133,6 +137,13 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     }
                     fetchDiary()
 
+                    OptionDialog (
+                        showDialog = showOptionDialog,
+                        optionEnabled = visibleSubTitle,
+                        onOptionChangeVisibleSubTitle = { visibleSubTitle = it },
+                        onDismiss = { showOptionDialog = false }
+                    )
+
                     Column(modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)) {
@@ -166,6 +177,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                                     isRootShow = node.isRootShow,
                                     isShow = node.isShow,
                                     isFolderOpen = node.isFolderOpen,
+                                    visibleSubTitle = visibleSubTitle,
                                     modifier = Modifier.padding(
                                         0.dp,
                                         0.dp,
@@ -253,21 +265,11 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     }
                 },
                 floatingActionButton = {
-                    Box(modifier = Modifier.padding(bottom = bottomPadding)) {
-                        FloatingActionButton(
-                            onClick = { finishActivityWithTransition() },
-                            containerColor = Color(config.primaryColor),
-                            contentColor = Color.White,
-                            shape = CircleShape,
-                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                            modifier = Modifier.size(40.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_cross),
-                                contentDescription = "Finish Activity"
-                            )
-                        }
-                    }
+                    BottomToolBar(
+                        bottomPadding = bottomPadding,
+                        showOptionDialog = { showOptionDialog = true },
+                        finishCallback = { finishActivityWithTransition() }
+                    )
                 },
                 floatingActionButtonPosition = FabPosition.Center,
             )
