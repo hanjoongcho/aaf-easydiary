@@ -165,6 +165,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                                     currentQuery = currentQuery,
                                     isRootShow = node.isRootShow,
                                     isShow = node.isShow,
+                                    isFolderOpen = node.isFolderOpen,
                                     modifier = Modifier.padding(
                                         0.dp,
                                         0.dp,
@@ -294,7 +295,8 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val root = FileNode("root", sequence = 0)
         for (diary in items) {
             var current = root
-            val parts = "${diary.dateString}-${EasyDiaryUtils.summaryDiaryLabel(diary)}".split("-")
+            val parts = "${diary.dateString}".split("-").toMutableList()
+            parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 partPath += if (partPath.isEmpty()) part else "/$part"

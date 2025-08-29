@@ -1,12 +1,12 @@
 package me.blog.korn123.easydiary.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,8 +38,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
-import kotlinx.coroutines.delay
+import androidx.compose.ui.res.painterResource
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 
 /***************************************************************************************************
@@ -152,6 +152,7 @@ fun TreeCard(
     currentQuery: String,
     isRootShow: Boolean = true,
     isShow: Boolean = true,
+    isFolderOpen: Boolean = true,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -163,79 +164,116 @@ fun TreeCard(
 ) {
     val color = if (isFile) Color.LightGray else Color.White
     if (isRootShow && isShow) {
-        Card(
-            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-            modifier = modifier
-                .padding(1.dp, 1.dp)
-                .padding(start = (level.minus(1) * 20).dp)
-                .combinedClickable(
-                    onClick = { onClick.invoke() },
-                    onLongClick = { onLongClick.invoke() }
-                ),
-            elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .padding(10.dp, 7.dp),
 
-            ) {
-                val nodeModifier = Modifier
-//                    .background(Color.Yellow.copy(alpha = 0.2f))
-                    .padding(0.dp, 0.dp)
-                Row(
-                    modifier = nodeModifier,
-                    verticalAlignment = Alignment.CenterVertically
+        Row{
+            if (!isFile) {
+                Column(
+                    Modifier
+                        .padding(start = (level.minus(1) * 20).dp)
                 ) {
-                    var originTitle = if (isFile) "🗒️ $title" else "📂 $title";
-                    originTitle = if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
-                    val annotatedText = buildAnnotatedString {
-                        append(originTitle)
-                        if (currentQuery.isNotBlank()) {
-                            var startIndex = originTitle.indexOf(currentQuery, 0, ignoreCase = true)
-                            while (startIndex >= 0) {
-                                addStyle(
-                                    style = SpanStyle(
+                    IconButton(onClick = onClick, modifier = Modifier.size(32.dp)) {
+                        Icon(
+                            painter = if (isFolderOpen) painterResource(id = R.drawable.arrow_drop_down_24px) else painterResource(id = R.drawable.arrow_right_24px),
+                            contentDescription = null,
+
+                            tint = Color(LocalContext.current.config.primaryColor),
+
+                            )
+                    }
+                }
+            }
+            Column(
+                modifier = if (isFile) Modifier
+                    .padding(start = ((level.minus(1) * 20) + 32).dp)
+                    .fillMaxWidth()
+                    .weight(1f) // 남은 공간 모두 차지
+                else Modifier.fillMaxWidth().weight(1f)
+            ) {
+
+                Card(
+                    shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+                    colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                    modifier = modifier
+                        .padding(1.dp, 1.dp)
+                        .combinedClickable(
+                            onClick = { onClick.invoke() },
+                            onLongClick = { onLongClick.invoke() }
+                        ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier
+                            .padding(10.dp, 7.dp),
+
+                        ) {
+                        val nodeModifier = Modifier
+//                    .background(Color.Yellow.copy(alpha = 0.2f))
+                            .padding(0.dp, 0.dp)
+                        Row(
+                            modifier = nodeModifier,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            var originTitle = if (isFile) "🗒️ $title" else "📂 $title";
+                            originTitle =
+                                if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
+                            val annotatedText = buildAnnotatedString {
+                                append(originTitle)
+                                if (currentQuery.isNotBlank()) {
+                                    var startIndex =
+                                        originTitle.indexOf(currentQuery, 0, ignoreCase = true)
+                                    while (startIndex >= 0) {
+                                        addStyle(
+                                            style = SpanStyle(
 //                                    background = Color.Yellow.copy(alpha = 0.5f),
-                                        background = Color(HIGHLIGHT_COLOR),
-                                        color = Color.Black,
-                                        fontWeight = FontWeight.Normal
-                                    ),
-                                    start = startIndex,
-                                    end = startIndex + currentQuery.length
+                                                background = Color(HIGHLIGHT_COLOR),
+                                                color = Color.Black,
+                                                fontWeight = FontWeight.Normal
+                                            ),
+                                            start = startIndex,
+                                            end = startIndex + currentQuery.length
+                                        )
+                                        startIndex = originTitle.indexOf(
+                                            currentQuery,
+                                            startIndex + currentQuery.length,
+                                            ignoreCase = true
+                                        )
+                                    }
+                                }
+                            }
+                            SimpleText(
+//                    text = if (isFile) "🗒️ $annotatedText" else "️📂 $annotatedText",
+                                text = annotatedText,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = fontSize,
+                                fontFamily = fontFamily,
+                                lineSpacingScaleFactor = lineSpacingScaleFactor,
+                                maxLines = 1
+                            )
+                        }
+                        if (isFile) {
+                            val displaySubTitle =
+                                if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
+                            Row(
+                                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SimpleText(
+                                    text = displaySubTitle,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = fontSize.times(0.8f),
+                                    fontFamily = fontFamily,
+                                    lineSpacingScaleFactor = lineSpacingScaleFactor,
+                                    maxLines = 1
                                 )
-                                startIndex = originTitle.indexOf(currentQuery, startIndex + currentQuery.length, ignoreCase = true)
                             }
                         }
                     }
-
-                    SimpleText(
-//                    text = if (isFile) "🗒️ $annotatedText" else "️📂 $annotatedText",
-                        text = annotatedText,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = fontSize,
-                        fontFamily = fontFamily,
-                        lineSpacingScaleFactor = lineSpacingScaleFactor,
-                        maxLines = 1
-                    )
-                }
-                val displaySubTitle =
-                    if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
-                Row(
-                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SimpleText(
-                        text = displaySubTitle,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = fontSize.times(0.8f),
-                        fontFamily = fontFamily,
-                        lineSpacingScaleFactor = lineSpacingScaleFactor,
-                        maxLines = 1
-                    )
                 }
             }
         }
+
+
+
     }
 }

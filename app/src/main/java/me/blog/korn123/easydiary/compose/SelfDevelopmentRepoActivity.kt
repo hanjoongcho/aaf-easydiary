@@ -180,6 +180,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                         currentQuery = currentQuery,
                                         isRootShow = node.isRootShow,
                                         isShow = node.isShow,
+                                        isFolderOpen = node.isFolderOpen,
                                         modifier = Modifier.padding(
                                             0.dp,
                                             0.dp,
