@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -20,6 +21,7 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -40,12 +42,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -196,7 +198,9 @@ fun TreeCard(
                     .padding(start = ((level.minus(1) * 20) + 32).dp)
                     .fillMaxWidth()
                     .weight(1f) // 남은 공간 모두 차지
-                else Modifier.fillMaxWidth().weight(1f)
+                else Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
 
                 Card(
@@ -288,23 +292,49 @@ fun TreeCard(
 fun OptionDialog(
     showDialog: Boolean,
     optionEnabled: Boolean,
+    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
+        LocalContext.current
+    ),
     onOptionChangeVisibleSubTitle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     if (showDialog) {
         AlertDialog(
+            containerColor = Color(LocalContext.current.config.backgroundColor),
             onDismissRequest = onDismiss,
             confirmButton = {
-                TextButton(onClick = onDismiss) { Text("확인") }
+                TextButton(onClick = onDismiss) {
+                    SimpleText(text = "확인")
+                }
             },
-            title = { Text("Tree Options") },
+            title = {
+                SimpleText(
+                    text = "트리뷰 옵션설정",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = LocalContext.current.config.settingFontSize.times(1.3f),
+                )
+            },
             text = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Display subtitle")
+                    SimpleText(
+                        modifier = Modifier.weight(1f),
+                        "Node 전체경로 표시",
+                    )
                     Switch(
                         modifier = Modifier.padding(start = 10.dp),
                         checked = optionEnabled,
-                        onCheckedChange = onOptionChangeVisibleSubTitle
+                        onCheckedChange = onOptionChangeVisibleSubTitle,
+                        thumbContent = if (optionEnabled) {
+                            {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(SwitchDefaults.IconSize),
+                                )
+                            }
+                        } else {
+                            null
+                        }
                     )
                 }
             }
@@ -317,6 +347,7 @@ fun BottomToolBar(
     bottomPadding: Dp,
     showOptionDialog: (isShow: Boolean) -> Unit,
     finishCallback: () -> Unit,
+    writeDiaryCallback: () -> Unit = { },
 ) {
     Box(modifier = Modifier.padding(bottom = bottomPadding)) {
         Row (
@@ -338,6 +369,20 @@ fun BottomToolBar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cross),
                     contentDescription = "Finish Activity"
+                )
+            }
+
+            FloatingActionButton(
+                onClick = { writeDiaryCallback() },
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = "Write Diary"
                 )
             }
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,16 +16,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,26 +31,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.commons.utils.FileNode
+import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
+import me.blog.korn123.commons.utils.TreeUtils.flattenTree
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ
-import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
-import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBar
@@ -77,7 +67,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             mSettingsViewModel = initSettingsViewModel()
-            SelfDevelopmentRepo()
+            TreeTimeline()
         }
     }
 
@@ -89,7 +79,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun SelfDevelopmentRepo() {
+    fun TreeTimeline() {
         mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
         val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
@@ -122,12 +112,14 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 //                    fun findDiaryByTitle(): List<Diary> {
 //                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
 //                    }
-                    var treeData by remember { mutableStateOf(emptyList<Pair<TreeTimelineActivity.FileNode, Int>>()) }
+                    var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
                     var total by remember { mutableIntStateOf(0) }
 
                     fun fetchDiary() {
                         val diaryItems = findDiary()
-                        val fileNode = buildFileTree(diaryItems)
+                        val fileNode = buildFileTree(diaryItems) {
+                            diary ->  "${diary.dateString}".split("-").toMutableList()
+                        }
                         val originTreeData = flattenTree(fileNode)
                         treeData = originTreeData.map { pair ->
                             if (pair.second == 1) pair.first.isShow = true
@@ -276,59 +268,94 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         }
     }
 
-    /**
-     * Flattens the file tree into a list of pairs containing the node and its level in the tree.
-     * The root node is excluded from the result.
-     */
-    fun flattenTree(node: FileNode, level: Int = 0): List<Pair<FileNode, Int>> {
-        val list = mutableListOf<Pair<FileNode, Int>>()
-        if (node.name != "root") list.add(node to level)
-        node.children.sortedByDescending { it.name }.forEach {
-            list.addAll(flattenTree(it, level + 1))
-        }
-        return list
-    }
-
-    /**
-     * Builds a file tree structure from a list of paths.
-     * Each path is expected to be in the format "dir1/dir2/file.txt".
-     */
-    fun buildFileTree(items: List<Diary>): FileNode {
-        val root = FileNode("root", sequence = 0)
-        for (diary in items) {
-            var current = root
-            val parts = "${diary.dateString}".split("-").toMutableList()
-            parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
-            var partPath = ""
-            for ((i, part) in parts.withIndex()) {
-                partPath += if (partPath.isEmpty()) part else "/$part"
-                val isFile = i == parts.lastIndex
-                val existing = current.children.find { it.name == part }
-                if (existing != null) {
-                    current = existing
-                } else {
-                    val newNode = FileNode(name = part, fullPath = partPath, isFile = isFile, sequence = diary.sequence)
-                    current.children.add(newNode)
-                    current = newNode
-                }
+    @Composable
+    @Preview(heightDp = 600)
+    private fun TreeTimelinePreview() {
+        AppTheme {
+            val context = LocalContext.current
+            val configuration = LocalConfiguration.current
+            val settingCardModifier = Modifier.fillMaxWidth()
+            val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+            var total by remember { mutableIntStateOf(0) }
+            var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
+            fun findDiary(): List<Diary> {
+                val list = mutableListOf<Diary>()
+                list.add(Diary().apply { sequence = 1; dateString = "2023-01-01"; title = "New Year" })
+                list.add(Diary().apply { sequence = 2; dateString = "2023-01-01"; title = "New Year Party" })
+                return list
             }
+            fun fetchDiary() {
+                val diaryItems = findDiary()
+                val fileNode = buildFileTree(diaryItems) {
+                        diary ->  "${diary.dateString}".split("-").toMutableList()
+                }
+                val originTreeData = flattenTree(fileNode)
+                treeData = originTreeData.map { pair ->
+                    if (pair.second == 1) pair.first.isShow = true
+                    pair
+                }
+                total = diaryItems.size
+            }
+            fetchDiary()
+            Scaffold(
+                content = { innerPadding ->
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)) {
+                        TreeToolbar(
+                            title = "[Total: $total] category or title",
+                            modifier = settingCardModifier.padding(
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                                0.dp
+                            ),
+                        ) { query ->
+                        }
+                        LazyColumn(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .background(Color(context.config.screenBackgroundColor)),
+                        ) {
+                            items(items = treeData.filter { data -> data.first.isRootShow && data.first.isShow }, key = { "${it.first.sequence}-${it.first.fullPath}"}) { (node, level) ->
+                                TreeCard(
+                                    sequence = node.sequence,
+                                    title = node.name,
+                                    subTitle = node.fullPath,
+                                    level = level,
+                                    isFile = node.isFile,
+                                    currentQuery = "dummy",
+                                    isRootShow = node.isRootShow,
+                                    isShow = node.isShow,
+                                    isFolderOpen = node.isFolderOpen,
+                                    visibleSubTitle = false,
+                                    modifier = Modifier.padding(
+                                        0.dp,
+                                        0.dp,
+                                        0.dp,
+                                        0.dp
+                                    ),
+                                    onClick = {}
+                                ) {}
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(bottomPadding.plus(72.dp)))
+                            }
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    BottomToolBar(
+                        bottomPadding = bottomPadding,
+                        showOptionDialog = {  },
+                        finishCallback = { finishActivityWithTransition() }
+                    )
+                },
+                floatingActionButtonPosition = FabPosition.Center,
+            )
         }
-        return root
     }
-
-    /**
-     * Represents a node in the file tree.
-     */
-    data class FileNode(
-        val name: String,
-        val children: MutableList<FileNode> = mutableListOf(),
-        val isFile: Boolean = false,
-        val sequence: Int,
-        var fullPath: String = "",
-        var isShow: Boolean = true,
-        var isFolderOpen: Boolean = true,
-        var isRootShow: Boolean = true,
-    )
 }
 
 
