@@ -117,10 +117,10 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 
                     fun fetchDiary() {
                         val diaryItems = findDiary()
-                        val fileNode = buildFileTree(diaryItems) {
+                        val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
                             diary ->  "${diary.dateString}".split("-").toMutableList()
                         }
-                        val originTreeData = flattenTree(fileNode)
+                        val originTreeData = flattenTree(fileNode, sortOption = "desc")
                         treeData = originTreeData.map { pair ->
                             if (pair.second == 1) pair.first.isShow = true
                             pair
@@ -281,15 +281,15 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             fun findDiary(): List<Diary> {
                 val list = mutableListOf<Diary>()
                 list.add(Diary().apply { sequence = 1; dateString = "2023-01-01"; title = "New Year" })
-                list.add(Diary().apply { sequence = 2; dateString = "2023-01-01"; title = "New Year Party" })
+                list.add(Diary().apply { sequence = 2; dateString = "2023-02-01"; title = "New Year Party" })
                 return list
             }
             fun fetchDiary() {
                 val diaryItems = findDiary()
-                val fileNode = buildFileTree(diaryItems) {
+                val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
                         diary ->  "${diary.dateString}".split("-").toMutableList()
                 }
-                val originTreeData = flattenTree(fileNode)
+                val originTreeData = flattenTree(fileNode, sortOption = "desc")
                 treeData = originTreeData.map { pair ->
                     if (pair.second == 1) pair.first.isShow = true
                     pair

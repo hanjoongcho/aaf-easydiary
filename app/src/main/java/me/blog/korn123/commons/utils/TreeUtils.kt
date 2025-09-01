@@ -9,11 +9,16 @@ object TreeUtils {
      * Flattens the file tree into a list of pairs containing the node and its level in the tree.
      * The root node is excluded from the result.
      */
-    fun flattenTree(node: FileNode, level: Int = 0): List<Pair<FileNode, Int>> {
+    fun flattenTree(node: FileNode, level: Int = 0, sortOption: String = "asc"): List<Pair<FileNode, Int>> {
         val list = mutableListOf<Pair<FileNode, Int>>()
         if (node.name != "root") list.add(node to level)
-        node.children.sortedByDescending { it.name }.forEach {
-            list.addAll(flattenTree(it, level + 1))
+        when (sortOption) {
+            "asc" -> node.children.sortedBy { it.fullPath }.forEach {
+                list.addAll(flattenTree(it, level + 1, sortOption))
+            }
+            "desc" -> node.children.sortedByDescending { it.fullPath }.forEach {
+                list.addAll(flattenTree(it, level + 1, sortOption))
+            }
         }
         return list
     }
@@ -21,14 +26,15 @@ object TreeUtils {
     /**
      * Builds a file tree structure from a list of paths.
      * Each path is expected to be in the format "dir1/dir2/file.txt".
+     * If addOptionalTitle is true, the file name is added as the last part of the path.
      */
-    fun buildFileTree(items: List<Diary>, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
+    fun buildFileTree(items: List<Diary>, addOptionalTitle: Boolean = false, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
         val root = FileNode("root", sequence = 0)
         for (diary in items) {
             var current = root
 //            val parts = "${diary.dateString}".split("-").toMutableList()
             val parts = partsGenerator(diary)
-            parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
+            if (addOptionalTitle) parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 partPath += if (partPath.isEmpty()) part else "/$part"
