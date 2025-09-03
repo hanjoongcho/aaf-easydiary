@@ -16,11 +16,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,13 +38,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeToast
@@ -257,10 +265,33 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     }
                 },
                 floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { finishActivityWithTransition() },
+                        containerColor = Color(LocalContext.current.config.primaryColor),
+                        contentColor = Color.White,
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = "Finish Activity"
+                        )
+                    }
+                },
+                bottomBar = {
                     BottomToolBar(
                         bottomPadding = bottomPadding,
                         showOptionDialog = { showOptionDialog = true },
-                        finishCallback = { finishActivityWithTransition() }
+                        writeDiaryCallback = {
+                            TransitionHelper.startActivityWithTransition(
+                                this@TreeTimelineActivity,
+                                Intent(
+                                    this@TreeTimelineActivity,
+                                    DiaryWritingActivity::class.java
+                                )
+                            )
+                        }
                     )
                 },
                 floatingActionButtonPosition = FabPosition.Center,
@@ -346,10 +377,24 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     }
                 },
                 floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {  },
+                        containerColor = Color(LocalContext.current.config.primaryColor),
+                        contentColor = Color.White,
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = "Finish Activity"
+                        )
+                    }
+                },
+                bottomBar = {
                     BottomToolBar(
                         bottomPadding = bottomPadding,
                         showOptionDialog = {  },
-                        finishCallback = { finishActivityWithTransition() }
                     )
                 },
                 floatingActionButtonPosition = FabPosition.Center,

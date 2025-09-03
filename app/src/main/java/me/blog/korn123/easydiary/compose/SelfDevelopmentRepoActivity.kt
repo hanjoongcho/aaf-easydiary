@@ -17,12 +17,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,14 +40,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
@@ -92,6 +100,75 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         var showOptionDialog by remember { mutableStateOf(false) }
         var visibleSubTitle by remember { mutableStateOf(false) }
 
+        var isLoading by remember { mutableStateOf(false) }
+
+        val context = LocalContext.current
+        val settingCardModifier = Modifier.fillMaxWidth()
+        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+            context.config.enableCardViewPolicy
+        )
+        var currentQuery by remember { mutableStateOf("") }
+        fun findDiary(): List<Diary> {
+            return EasyDiaryDbHelper.findDiary( currentQuery,
+                false,
+                listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
+                )).sortedBy { diary -> diary.title }
+        }
+//                    fun findDiaryByTitle(): List<Diary> {
+//                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
+//                    }
+        var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>())}
+        var total by remember { mutableIntStateOf(0) }
+
+        fun isRootNodeVisible (data: Pair<FileNode, Int>): Boolean {
+            if (data.second == 1) return true
+
+            var isShow = false
+            val parentNode = data.first.fullPath.split("/")
+            var currentPath = ""
+            for (i in 0 until parentNode.size.minus(1)) {
+                currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
+                isShow = treeData.find { it -> it.first.fullPath == currentPath }!!.first.isFolderOpen
+                if (!isShow) break
+            }
+            return isShow
+        }
+
+        fun toggleChildren(fileNode: FileNode) {
+            treeData = treeData.map { data ->
+                if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
+                    val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
+                    if (isFirstChildNode) {
+                        data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(data)))
+                    } else {
+                        data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
+                    }
+                } else {
+//                                                data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
+                    data
+                }
+            }
+        }
+
+        fun fetchDiary() {
+            val diaryItems = findDiary()
+            val fileNode = buildFileTree(diaryItems) { diary ->
+                diary.title!!.split("/").toMutableList()
+            }
+            val originTreeData = flattenTree(fileNode)
+            treeData = originTreeData.map { pair ->
+                if (pair.second == 1) pair.first.isShow = true
+                pair
+            }
+//                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
+            total = diaryItems.size
+        }
+        fetchDiary()
+
         AppTheme {
             Scaffold(
                 // 하단 패딩은 수동 관리
@@ -105,45 +182,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 //                },
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
-                    var isLoading by remember { mutableStateOf(false) }
-
-                    val context = LocalContext.current
-                    val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy
-                    )
-                    var currentQuery by remember { mutableStateOf("") }
-                    fun findDiary(): List<Diary> {
-                        return EasyDiaryDbHelper.findDiary( currentQuery,
-                            false,
-                            listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
-                                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
-                            )).sortedBy { diary -> diary.title }
-                    }
-//                    fun findDiaryByTitle(): List<Diary> {
-//                        return findDiary().filter { diary ->  diary.title!!.contains(currentQuery, ignoreCase= true) } .sortedBy { diary -> diary.title }
-//                    }
-                    var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>())}
-                    var total by remember { mutableIntStateOf(0) }
-
-                    fun fetchDiary() {
-                        val diaryItems = findDiary()
-                        val fileNode = buildFileTree(diaryItems) { diary ->
-                            diary.title!!.split("/").toMutableList()
-                        }
-                        val originTreeData = flattenTree(fileNode)
-                        treeData = originTreeData.map { pair ->
-                            if (pair.second == 1) pair.first.isShow = true
-                            pair
-                        }
-//                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
-                        total = diaryItems.size
-                    }
-                    fetchDiary()
-
                     OptionDialog (
                         showDialog = showOptionDialog,
                         optionEnabled = visibleSubTitle,
@@ -196,36 +234,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                             0.dp
                                         ),
                                         onClick = {
-                                            fun isRootNodeVisible (data: Pair<FileNode, Int>): Boolean {
-                                                if (data.second == 1) return true
-
-                                                var isShow = false
-                                                val parentNode = data.first.fullPath.split("/")
-                                                var currentPath = ""
-                                                for (i in 0 until parentNode.size.minus(1)) {
-                                                    currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
-                                                    isShow = treeData.find { it -> it.first.fullPath == currentPath }!!.first.isFolderOpen
-                                                    if (!isShow) break
-                                                }
-                                                return isShow
-                                            }
-
-                                            fun toggleChildren(fileNode: FileNode) {
-                                                treeData = treeData.map { data ->
-                                                    if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
-                                                        val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
-                                                        if (isFirstChildNode) {
-                                                            data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(data)))
-                                                        } else {
-                                                            data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
-                                                        }
-                                                    } else {
-//                                                data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(data)))
-                                                        data
-                                                    }
-                                                }
-                                            }
-
                                             if (node.isFile) {
                                                 // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
                                                 val detailIntent = Intent(
@@ -296,10 +304,24 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 
                 },
                 floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {  },
+                        containerColor = Color(LocalContext.current.config.primaryColor),
+                        contentColor = Color.White,
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = "Finish Activity"
+                        )
+                    }
+                },
+                bottomBar = {
                     BottomToolBar(
                         bottomPadding = bottomPadding,
                         showOptionDialog = { showOptionDialog = true },
-                        finishCallback = { finishActivityWithTransition() },
                         writeDiaryCallback = {
                             TransitionHelper.startActivityWithTransition(
                                 this@SelfDevelopmentRepoActivity,
@@ -308,8 +330,22 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                     DiaryWritingActivity::class.java
                                 )
                             )
+                        },
+                        expandTreeCallback = {},
+                        collapseTreeCallback = {
+                            makeToast("collapseTreeCallback")
+                            // pair 객체가 리컴포지션 되도록
+                            treeData = treeData.map { data ->
+                                if (!data.first.isFile) {
+                                    val node = data.first
+                                    val newNode = node.copy(isFolderOpen = node.isFolderOpen.not())
+                                    toggleChildren(newNode)
+                                    data.copy(first = newNode)
+                                } else {
+                                    data
+                                }
+                            }
                         }
-
                     )
                 },
                 floatingActionButtonPosition = FabPosition.Center,

@@ -11,15 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -343,11 +348,36 @@ fun OptionDialog(
 }
 
 @Composable
+fun ElevatedButtonWrapper(
+    text: String,
+    modifier: Modifier = Modifier,
+    fontColor: Color = Color.White,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
+    ElevatedButton(
+        onClick = onClick,
+        colors = ButtonDefaults.elevatedButtonColors(
+            containerColor = Color(LocalContext.current.config.primaryColor),   // 배경색
+            contentColor = fontColor,   // 텍스트/아이콘 색
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant, // 비활성화 배경색
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant // 비활성화 텍스트색
+        ),
+        shape = RoundedCornerShape(12.dp),
+        modifier = modifier,
+        enabled = enabled
+    ) {
+        SimpleText(text = text, fontColor = fontColor)
+    }
+}
+
+@Composable
 fun BottomToolBar(
     bottomPadding: Dp,
     showOptionDialog: (isShow: Boolean) -> Unit,
-    finishCallback: () -> Unit,
-    writeDiaryCallback: () -> Unit = { },
+    writeDiaryCallback: () -> Unit = {},
+    expandTreeCallback: () -> Unit = {},
+    collapseTreeCallback: () -> Unit = {},
 ) {
     Box(modifier = Modifier.padding(bottom = bottomPadding)) {
         Row (
@@ -358,20 +388,6 @@ fun BottomToolBar(
                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
                 .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
         ) {
-            FloatingActionButton(
-                onClick = { finishCallback() },
-                containerColor = Color(LocalContext.current.config.primaryColor),
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "Finish Activity"
-                )
-            }
-
             FloatingActionButton(
                 onClick = { writeDiaryCallback() },
                 containerColor = Color(LocalContext.current.config.primaryColor),
@@ -385,6 +401,9 @@ fun BottomToolBar(
                     contentDescription = "Write Diary"
                 )
             }
+
+            ElevatedButtonWrapper(text = "펼치기") { expandTreeCallback() }
+            ElevatedButtonWrapper(text = "접기") { collapseTreeCallback() }
 
             FloatingActionButton(
                 onClick = { showOptionDialog(true) },
