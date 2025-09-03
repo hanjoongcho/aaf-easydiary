@@ -124,6 +124,18 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>())}
         var total by remember { mutableIntStateOf(0) }
 
+        fun toggleWholeTree(isExpand: Boolean) {
+            treeData = treeData.map { data ->
+                if (data.second == 1) {
+                    data.copy(first = data.first.copy(isFolderOpen = isExpand))
+                } else if (data.first.isFile) {
+                    data.copy(first = data.first.copy(isShow = isExpand, isRootShow = isExpand))
+                } else {
+                    data.copy(first = data.first.copy(isFolderOpen = isExpand, isShow = isExpand, isRootShow = isExpand))
+                }
+            }
+        }
+
         fun isRootNodeVisible (data: Pair<FileNode, Int>): Boolean {
             if (data.second == 1) return true
 
@@ -305,7 +317,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = {  },
+                        onClick = { finishActivityWithTransition() },
                         containerColor = Color(LocalContext.current.config.primaryColor),
                         contentColor = Color.White,
                         shape = RoundedCornerShape(12.dp),
@@ -331,20 +343,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                                 )
                             )
                         },
-                        expandTreeCallback = {},
+                        expandTreeCallback = {
+                            toggleWholeTree(true)
+                        },
                         collapseTreeCallback = {
-                            makeToast("collapseTreeCallback")
-                            // pair 객체가 리컴포지션 되도록
-                            treeData = treeData.map { data ->
-                                if (!data.first.isFile) {
-                                    val node = data.first
-                                    val newNode = node.copy(isFolderOpen = node.isFolderOpen.not())
-                                    toggleChildren(newNode)
-                                    data.copy(first = newNode)
-                                } else {
-                                    data
-                                }
-                            }
+                            toggleWholeTree(false)
                         }
                     )
                 },
