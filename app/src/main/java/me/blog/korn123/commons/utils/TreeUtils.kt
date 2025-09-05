@@ -56,6 +56,47 @@ object TreeUtils {
         }
         return root
     }
+
+    fun toggleWholeTree(treeData: List<Pair<FileNode, Int>>, isExpand: Boolean): List<Pair<FileNode, Int>> {
+        return treeData.map { data ->
+            if (data.second == 1) {
+                data.copy(first = data.first.copy(isFolderOpen = isExpand))
+            } else if (data.first.isFile) {
+                data.copy(first = data.first.copy(isShow = isExpand, isRootShow = isExpand))
+            } else {
+                data.copy(first = data.first.copy(isFolderOpen = isExpand, isShow = isExpand, isRootShow = isExpand))
+            }
+        }
+    }
+
+    fun toggleChildren(treeData: List<Pair<FileNode, Int>>, fileNode: FileNode): List<Pair<FileNode, Int>> {
+        return treeData.map { data ->
+            if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
+                val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
+                if (isFirstChildNode) {
+                    data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(treeData, data)))
+                } else {
+                    data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(treeData, data)))
+                }
+            } else {
+                data
+            }
+        }
+    }
+
+    fun isRootNodeVisible (treeData: List<Pair<FileNode, Int>>, data: Pair<FileNode, Int>): Boolean {
+        if (data.second == 1) return true
+
+        var isShow = false
+        val parentNode = data.first.fullPath.split("/")
+        var currentPath = ""
+        for (i in 0 until parentNode.size.minus(1)) {
+            currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
+            isShow = treeData.find { it -> it.first.fullPath == currentPath }?.first?.isFolderOpen ?: false
+            if (!isShow) break
+        }
+        return isShow
+    }
 }
 
 data class FileNode(
