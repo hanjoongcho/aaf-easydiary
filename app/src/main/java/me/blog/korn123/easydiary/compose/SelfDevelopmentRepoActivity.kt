@@ -107,8 +107,8 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
 
         AppTheme {
             Scaffold(
-                // 하단 패딩은 수동 관리
-                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                // 상하단 패딩은 수동 관리
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     TreeContent(

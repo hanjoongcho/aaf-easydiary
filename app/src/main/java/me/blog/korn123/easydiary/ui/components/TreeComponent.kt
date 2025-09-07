@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.ui.components
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,6 +57,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -72,6 +75,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -106,11 +110,13 @@ fun TreeContent(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val bottomPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
     var visibleSubTitle by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val settingCardModifier = Modifier.fillMaxWidth()
     var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
+    var topToolbarHeight by remember { mutableStateOf(0.dp) }
 
     OptionDialog (
         showDialog = showOptionDialog,
@@ -125,27 +131,17 @@ fun TreeContent(
     ) {
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding)) {
-            TreeToolbar(
-                title = "[Total: $total] category or title",
-                modifier = settingCardModifier.padding(
-                    0.dp,
-                    0.dp,
-                    0.dp,
-                    0.dp
-                ),
-                enableCardViewPolicy = enableCardViewPolicy,
-            ) { query ->
-                updateQuery(query.trim())
-                fetchDiary()
-            }
-
+            .padding(innerPadding)
+        ) {
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
                     .background(Color(context.config.screenBackgroundColor)),
             ) {
+                item {
+                    Spacer(modifier = Modifier.height(topToolbarHeight.plus(statusBarPadding)))
+                }
                 items(items = treeData.filter { data -> data.first.isRootShow && data.first.isShow }, key = { "${it.first.sequence}-${it.first.fullPath}"}) { (node, level) ->
                     TreeCard(
                         title = node.name,
@@ -209,12 +205,31 @@ fun TreeContent(
         }
 
         val density = LocalDensity.current
+        TreeToolbar(
+            title = "[Total: $total] category or title",
+            modifier = settingCardModifier
+                .padding(
+                    0.dp,
+                    statusBarPadding,
+                    0.dp,
+                    0.dp
+                )
+                .align(Alignment.TopCenter)
+                .onGloballyPositioned {
+                    topToolbarHeight = with(density) { it.size.height.toDp() }
+                },
+            enableCardViewPolicy = enableCardViewPolicy,
+        ) { query ->
+            updateQuery(query.trim())
+            fetchDiary()
+        }
+
         BottomToolBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .onGloballyPositioned{
-                bottomToolbarHeight = with(density) { it.size.height.toDp() }
-            },
+                .onGloballyPositioned {
+                    bottomToolbarHeight = with(density) { it.size.height.toDp() }
+                },
             bottomPadding = bottomPadding,
             showOptionDialog = { showOptionDialog = true },
             closeCallback = { finishActivityWithTransition(activity) },
@@ -267,7 +282,8 @@ fun TreeToolbar(
     Card(
         shape = RoundedCornerShape(roundedCornerShapeSize.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-        modifier = modifier.padding(0.dp, 0.dp, 0.dp, verticalPadding.dp),
+        modifier = modifier.padding(0.dp, 0.dp, 0.dp, verticalPadding.dp).alpha(0.5f)
+        ,
 //        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
 //            .padding(5.dp, 5.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
