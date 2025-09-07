@@ -285,12 +285,13 @@ class DashboardActivity : EasyDiaryActivity() {
 
         if (isVanillaIceCreamPlus()) {
             if (!isLandScape()) {
-                ViewCompat.setOnApplyWindowInsetsListener(mBinding.statisticContainer as View) { v, insets ->
-                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.contentsContainer) { v, insets ->
+                    val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+                    val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val layoutParams = v.layoutParams
                     if (layoutParams is ViewGroup.MarginLayoutParams) {
-//                    layoutParams.bottomMargin = layoutParams.bottomMargin.plus(systemBars.bottom)
-                        layoutParams.bottomMargin = dpToPixel(62F).plus(systemBars.bottom)
+                        layoutParams.topMargin = statusBars.top
+                        layoutParams.bottomMargin = navigationBars.bottom
                         v.layoutParams = layoutParams
                     }
                     insets
@@ -314,6 +315,13 @@ class DashboardActivity : EasyDiaryActivity() {
                 mBinding.contentsContainer.run {
                     val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
                     tempLayoutParams.topMargin = statusBarHeight()
+                    tempLayoutParams.bottomMargin = navigationBarHeight()
+                    layoutParams = tempLayoutParams
+                }
+
+                mBinding.close.run {
+                    val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
+                    tempLayoutParams.bottomMargin = dpToPixel(16F).plus(navigationBarHeight())
                     layoutParams = tempLayoutParams
                 }
             }

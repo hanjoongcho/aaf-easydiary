@@ -148,11 +148,12 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </HorizontalScrollView>
 
+            <!--  16 + mini fab 40 + 16 -->
             <HorizontalScrollView
                 android:id="@+id/statisticContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="62dp"
+                android:layout_marginBottom="72dp"
                 android:scrollbars="none">
 
                 <androidx.appcompat.widget.LinearLayoutCompat

@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -109,6 +110,7 @@ fun TreeContent(
     var visibleSubTitle by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val settingCardModifier = Modifier.fillMaxWidth()
+    var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
 
     OptionDialog (
         showDialog = showOptionDialog,
@@ -200,12 +202,19 @@ fun TreeContent(
                     }
                 }
                 item {
-                    Spacer(modifier = Modifier.height(bottomPadding.plus(72.dp)))
+//                    Spacer(modifier = Modifier.height(bottomPadding.plus(bottomToolbarHeight)))
+                    Spacer(modifier = Modifier.height(bottomToolbarHeight.plus(5.dp)))
                 }
             }
         }
 
+        val density = LocalDensity.current
         BottomToolBar(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .onGloballyPositioned{
+                bottomToolbarHeight = with(density) { it.size.height.toDp() }
+            },
             bottomPadding = bottomPadding,
             showOptionDialog = { showOptionDialog = true },
             closeCallback = { finishActivityWithTransition(activity) },
@@ -224,7 +233,6 @@ fun TreeContent(
             collapseTreeCallback = {
                 toggleWholeTree(false)
             },
-            modifier = Modifier.align(Alignment.BottomCenter)
         )
 
         if (isLoading) {
@@ -558,7 +566,7 @@ fun BottomToolBar(
     expandTreeCallback: () -> Unit = {},
     collapseTreeCallback: () -> Unit = {},
 ) {
-    Box(modifier = modifier.padding(bottom = bottomPadding)) {
+    Box(modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))) {
         val scrollState = rememberScrollState()
         Row (
             horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
