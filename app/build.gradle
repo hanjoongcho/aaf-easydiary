@@ -33,7 +33,7 @@ android {
         minSdkVersion 21
         targetSdkVersion versions.compileSdk
         versionCode 334
-        versionName '1.4.334.202507xx0'
+        versionName '1.4.334.202509110'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -220,7 +220,6 @@ dependencies {
     // etc.
     implementation 'com.github.woxingxiao:BubbleSeekBar:3.20'
     implementation 'com.tbuonomo:dotsindicator:5.0'
-    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'id.zelory:compressor:2.1.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0'
