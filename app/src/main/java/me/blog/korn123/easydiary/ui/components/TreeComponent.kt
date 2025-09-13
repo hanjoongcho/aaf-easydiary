@@ -306,7 +306,7 @@ fun TreeToolbar(
 ) {
     Card(
         shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = modifier
             .padding(0.dp, 0.dp, 0.dp, verticalPadding.dp)
             .alpha(0.9f),
@@ -345,18 +345,21 @@ fun TreeToolbar(
                         fontFamily = fontFamily,
                         fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
-                        color = fontColor.copy(alpha),
+//                        color = fontColor.copy(alpha),
+                        color = Color.White,
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     )) },
                     colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(LocalContext.current.config.backgroundColor),   // 포커스 시 배경
-                        unfocusedContainerColor = Color(LocalContext.current.config.backgroundColor) // 포커스 없을 때 배경
+                        cursorColor = Color.White,
+                        focusedContainerColor = Color(LocalContext.current.config.primaryColor),   // 포커스 시 배경
+                        unfocusedContainerColor = Color(LocalContext.current.config.primaryColor) // 포커스 없을 때 배경
                     ),
                     textStyle = TextStyle(
                         fontFamily = fontFamily,
                         fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
-                        color = fontColor.copy(alpha),
+//                        color = fontColor.copy(alpha),
+                        color = Color.White,
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                     singleLine = true,
@@ -368,7 +371,8 @@ fun TreeToolbar(
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Clear text"
+                                    contentDescription = "Clear text",
+                                    tint = Color.White
                                 )
                             }
                         }
