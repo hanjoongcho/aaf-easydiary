@@ -394,13 +394,13 @@ fun Activity.hideSystemBars() {
  * 💡 시스템 상태바의 배경컬러 또는 텍스트(아이콘) 컬러를 변경함
  *  - Version SDK 35 이상: 텍스트(아이콘) 컬러를 변경함
  *  - Version SDK 35 미만: 배경색을 반투명 처리함
- *  - 상단 액션바 없이 전체화면으로 화면이 확장되어 사용되는 경우에 호출해야 함
+ *  - 상단 액션바 없이 전체화면으로 화면이 확장되어 사용되는 경우에 호출하는 것이 기본임
  */
-fun Activity.updateSystemStatusBarColor() {
+fun Activity.updateSystemStatusBarColor(checkColor: Int = config.screenBackgroundColor) {
     if (isVanillaIceCreamPlus()) {
         // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
         // false: 어두운 배경 → 흰색 텍스트
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =  isColorLight(config.screenBackgroundColor)
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =  isColorLight(checkColor)
     } else {
         window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
         window.navigationBarColor = androidx.compose.ui.graphics.Color.Transparent.toArgb()

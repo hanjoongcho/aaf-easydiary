@@ -62,7 +62,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     fun SelfDevelopmentRepo() {
         val context = LocalContext.current
         mSettingsViewModel = initSettingsViewModel()
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.updateSystemStatusBarColor(LocalContext.current.config.primaryColor)
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
@@ -109,7 +109,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
             Scaffold(
                 // 하단 패딩은 수동 관리
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-//                containerColor = Color(config.screenBackgroundColor),
                 containerColor = Color(config.primaryColor),
                 content = { innerPadding ->
                     TreeContent(

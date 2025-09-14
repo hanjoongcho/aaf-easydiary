@@ -18,7 +18,10 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -61,6 +64,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -115,7 +119,8 @@ fun TreeContent(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
-    val bottomPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+    val bottomPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding().plus(
+        WindowInsets.ime.asPaddingValues().calculateBottomPadding()) else 0.dp
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
     var visibleSubTitle by remember { mutableStateOf(false) }
@@ -305,16 +310,26 @@ fun TreeToolbar(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (query: String) -> Unit = {}
 ) {
-    Card(
+    Box(
 //        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
+//        shape = RoundedCornerShape(15.dp),
+//        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = modifier
-            .padding(0.dp, 0.dp, 0.dp, verticalPadding.dp)
-            .alpha(0.99f),
+            .padding(10.dp)
+            .shadow(
+                elevation = 15.dp,
+                shape = RoundedCornerShape(15.dp),
+                clip = false // 기본값
+            )
+            .background(
+                color = Color(LocalContext.current.config.primaryColor),
+                shape = RoundedCornerShape(15.dp)
+            )
+//            .alpha(0.8f)
+        ,
 //        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
 //            .padding(5.dp, 5.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+//        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
             modifier = Modifier.padding(5.dp)
@@ -353,8 +368,8 @@ fun TreeToolbar(
                     )) },
                     colors = TextFieldDefaults.colors(
                         cursorColor = Color.White,
-//                        focusedIndicatorColor = Color.White,
-                        unfocusedIndicatorColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         focusedContainerColor = Color(LocalContext.current.config.primaryColor),   // 포커스 시 배경
                         unfocusedContainerColor = Color(LocalContext.current.config.primaryColor) // 포커스 없을 때 배경
                     ),
@@ -415,8 +430,9 @@ fun TreeCard(
 ) {
     val color = if (isFile) Color.LightGray else Color.White
     if (isRootShow && isShow) {
-
-        Row{
+        Row(
+            modifier = Modifier.padding(bottom = 3.dp)
+        ) {
             if (!isFile) {
                 Column(
                     Modifier
@@ -618,7 +634,13 @@ fun BottomToolBar(
     scrollTop: () -> Unit = {},
     scrollEnd: () -> Unit = {},
 ) {
-    Box(modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))) {
+    Box(
+//        modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))
+        modifier = modifier
+            .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
+            .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+            .padding(bottom = 5.dp) // 최소 5dp 패딩 유지
+    ) {
         val scrollState = rememberScrollState()
         val focusManager = LocalFocusManager.current
 
