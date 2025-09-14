@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -305,11 +306,12 @@ fun TreeToolbar(
     callback: (query: String) -> Unit = {}
 ) {
     Card(
-        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+//        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
+        shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
         modifier = modifier
             .padding(0.dp, 0.dp, 0.dp, verticalPadding.dp)
-            .alpha(0.9f),
+            .alpha(0.99f),
 //        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
 //            .padding(5.dp, 5.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
@@ -351,6 +353,8 @@ fun TreeToolbar(
                     )) },
                     colors = TextFieldDefaults.colors(
                         cursorColor = Color.White,
+//                        focusedIndicatorColor = Color.White,
+                        unfocusedIndicatorColor = Color.White,
                         focusedContainerColor = Color(LocalContext.current.config.primaryColor),   // 포커스 시 배경
                         unfocusedContainerColor = Color(LocalContext.current.config.primaryColor) // 포커스 없을 때 배경
                     ),
@@ -616,6 +620,8 @@ fun BottomToolBar(
 ) {
     Box(modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))) {
         val scrollState = rememberScrollState()
+        val focusManager = LocalFocusManager.current
+
         Row (
             horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
             verticalAlignment = Alignment.CenterVertically,
@@ -641,25 +647,14 @@ fun BottomToolBar(
                 )
             }
 
-            FloatingActionButton(
-                onClick = { writeDiaryCallback() },
-                containerColor = Color(LocalContext.current.config.primaryColor),
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = "Write Diary"
-                )
-            }
-
+            ElevatedButtonWrapper(text = "작성") { writeDiaryCallback() }
             ElevatedButtonWrapper(text = "펼치기") { expandTreeCallback() }
             ElevatedButtonWrapper(text = "접기") { collapseTreeCallback() }
             ElevatedButtonWrapper(text = "위로") { scrollTop() }
             ElevatedButtonWrapper(text = "아래로") { scrollEnd() }
-            ElevatedButtonWrapper(text = "길어지면 스크롤") {  }
+            ElevatedButtonWrapper(text = "Clear Focus") {
+                focusManager.clearFocus()
+            }
 
             FloatingActionButton(
                 onClick = { showOptionDialog(true) },
