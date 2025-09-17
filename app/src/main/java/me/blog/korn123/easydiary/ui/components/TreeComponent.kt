@@ -78,6 +78,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -310,6 +311,7 @@ fun TreeToolbar(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     callback: (query: String) -> Unit = {}
 ) {
+    var isFocused by remember { mutableStateOf(false) }
     Box(
 //        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
 //        shape = RoundedCornerShape(15.dp),
@@ -322,7 +324,7 @@ fun TreeToolbar(
                 clip = false // 기본값
             )
             .background(
-                color = Color(LocalContext.current.config.primaryColor),
+                color = if (isFocused) Color(LocalContext.current.config.primaryColor) else Color(LocalContext.current.config.backgroundColor),
                 shape = RoundedCornerShape(15.dp)
             )
 //            .alpha(0.8f)
@@ -346,6 +348,7 @@ fun TreeToolbar(
 
                 val focusRequester = remember { FocusRequester() }
 
+
                 // 화면이 그려진 직후 포커스 요청
 //                LaunchedEffect(Unit) {
 //                    // 약간의 delay를 주면 레이아웃이 안정된 후 포커스됨
@@ -363,22 +366,22 @@ fun TreeToolbar(
                         fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                        color = Color.White,
+                        color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     )) },
                     colors = TextFieldDefaults.colors(
                         cursorColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        focusedContainerColor = Color(LocalContext.current.config.primaryColor),   // 포커스 시 배경
-                        unfocusedContainerColor = Color(LocalContext.current.config.primaryColor) // 포커스 없을 때 배경
+                        focusedContainerColor = Color.Transparent,   // 포커스 시 배경
+                        unfocusedContainerColor = Color.Transparent // 포커스 없을 때 배경
                     ),
                     textStyle = TextStyle(
                         fontFamily = fontFamily,
                         fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                        color = Color.White,
+                        color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                     ),
                     singleLine = true,
@@ -400,6 +403,9 @@ fun TreeToolbar(
                         .fillMaxWidth()
                         .padding(0.dp)
                         .focusRequester(focusRequester)
+                        .onFocusChanged { focusState ->
+                            isFocused = focusState.isFocused
+                        }
                 )
             }
         }
@@ -431,7 +437,7 @@ fun TreeCard(
     val color = if (isFile) Color.LightGray else Color.White
     if (isRootShow && isShow) {
         Row(
-            modifier = Modifier.padding(bottom = 3.dp)
+//            modifier = Modifier.padding(bottom = 1.dp)
         ) {
             if (!isFile) {
                 Column(
