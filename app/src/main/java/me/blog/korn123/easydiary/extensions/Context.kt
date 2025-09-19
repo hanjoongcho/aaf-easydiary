@@ -1335,17 +1335,17 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
             val codeBlockTheme = object : AbstractMarkwonPlugin() {
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     builder
-                        .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
                         .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
                         .headingBreakHeight(0)
-                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
-                        .codeBackgroundColor(0x5FFFFF00.toInt())
 
                         .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
                         .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
                         .codeBlockTextColor(config.textColor)
-                        .codeTextColor(Color.BLACK)
 
+                        .codeBackgroundColor(0x9FFFCC80.toInt())
+                        .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
+                        .codeTextColor(Color.BLACK)
+                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
                 }
 
 //                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
