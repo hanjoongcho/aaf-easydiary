@@ -417,8 +417,8 @@ object EasyDiaryUtils {
 
                 var indexOfKeyword = contentsLower.indexOf(inputLower)
                 while (indexOfKeyword >= 0) {
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(textView.context.config.textColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(ForegroundColorSpan(textView.context.config.backgroundColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
@@ -438,8 +438,8 @@ object EasyDiaryUtils {
                 var indexOfKeyword = spannableString.toString().indexOf(targetString)
                 while (indexOfKeyword >= 0) {
                     //Create a background color span on the keyword
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(textView.context.config.textColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(ForegroundColorSpan(textView.context.config.backgroundColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     //Get the next index of the keyword
                     indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)

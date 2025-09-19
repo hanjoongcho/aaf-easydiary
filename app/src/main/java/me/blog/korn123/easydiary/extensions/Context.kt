@@ -20,6 +20,7 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -36,8 +37,11 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.MenuItem
@@ -54,6 +58,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -98,6 +103,7 @@ import com.simplemobiletools.commons.views.MyTextView
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.core.MarkwonTheme
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
@@ -178,6 +184,8 @@ import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import org.commonmark.node.Code
+import org.commonmark.node.FencedCodeBlock
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -185,6 +193,7 @@ import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.pow
+import androidx.core.graphics.toColorInt
 
 
 /**
@@ -1308,6 +1317,9 @@ fun Context.getPermissionString(id: Int) = when (id) {
     else -> ""
 }
 
+fun Context.dp(px: Float): Int =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.displayMetrics).toInt()
+
 fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf(), isRecyclerItem: Boolean = false) {
 
     when (config.enableMarkdown) {
@@ -1327,54 +1339,26 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
                         .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
                         .headingBreakHeight(0)
                         .codeTextSize(config.settingFontSize.times(0.8).toInt())
-//                        .codeBackgroundColor(config.backgroundColor)
+                        .codeBackgroundColor(0x5FFFFF00.toInt())
 
                         .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
                         .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
                         .codeBlockTextColor(config.textColor)
-//                        .codeTextColor(Color.WHITE)
+                        .codeTextColor(Color.BLACK)
 
                 }
 
-//                @RequiresApi(Build.VERSION_CODES.Q)
 //                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-//                    builder
-//                        .appendFactory(
-//                        Code::class.java,
-//                        SpanFactory { _, _ ->
-//                            arrayOf<Any>(
-//                                BackgroundColorSpan(Color.WHITE),
-//                                ForegroundColorSpan(config.primaryColor),
-//                                RelativeSizeSpan(0.7f),
-//                                LineHeightSpan.Standard(config.settingFontSize.toInt()),
-////                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
-////                                UnderlineSpan(),
-////                                SuperscriptSpan(),
-////                                object : LineHeightSpan {
-////                                    override fun chooseHeight(
-////                                        text: CharSequence?,
-////                                        start: Int,
-////                                        end: Int,
-////                                        spanstartv: Int,
-////                                        lineHeight: Int,
-////                                        fm: Paint.FontMetricsInt?
-////                                    ) {
-////                                        fm?.run {
-////                                            fm.bottom += 100
-////                                        }
-////                                    }
-////
-////                                }
-//                            )
-//                        })
-////                        .appendFactory(Code::class.java
-////                        ) { _, _ ->
-////                            arrayOf<Any>(
-////                                RelativeSizeSpan(0.7f),
-////                            )
-////                        }
+//                    // apply to `code` only
+//                    builder.appendFactory(Code::class.java) { _, _ ->
+//                        RoundedBackgroundSpan(
+//                            bgColor = config.primaryColor,
+//                            textColor = Color.WHITE,                     // 기본 텍스트
+//                            cornerRadius = 12f,
+//                            keyword = "3"
+//                        )
+//                    }
 //                }
-
             }
             val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
                 val dip: Dip = Dip.create(this)
