@@ -125,6 +125,7 @@ import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.ScrollableCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.ui.components.SymbolCard
@@ -309,6 +310,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                 )
             }
+            SwitchCardWithImage(
+                title = currentContext.getString(R.string.task_symbol_top_order_title),
+                description = currentContext.getString(R.string.task_symbol_top_order_description),
+                modifier = modifier,
+                isOn = true,
+                imageResourceId = R.drawable.ic_select_symbol
+            ) {}
+            SimpleCardWithImage(
+                title = currentContext.getString(R.string.google_drive_account_information_title),
+                description = currentContext.getString(R.string.google_drive_account_sign_in_description),
+                modifier = modifier,
+                imageResourceId = R.drawable.ic_select_symbol
+            ) {}
             SwitchCardWithImage(
                 title = currentContext.getString(R.string.task_symbol_top_order_title),
                 description = currentContext.getString(R.string.task_symbol_top_order_description),

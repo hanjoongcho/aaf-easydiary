@@ -49,7 +49,7 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<Drawable>?,
+                        target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
                         bannerImage.scaleType = ImageView.ScaleType.CENTER
@@ -58,10 +58,10 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
                     }
 
                     override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
+                        resource: Drawable,
+                        model: Any,
                         target: Target<Drawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
                         bannerImage.clearColorFilter()

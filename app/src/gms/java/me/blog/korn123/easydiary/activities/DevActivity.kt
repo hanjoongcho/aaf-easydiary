@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration

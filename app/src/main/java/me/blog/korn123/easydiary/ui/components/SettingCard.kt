@@ -46,6 +46,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import android.graphics.Typeface
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -77,6 +78,8 @@ import androidx.compose.ui.unit.times
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -189,6 +192,7 @@ fun SimpleCardWithImage(
     description: String?,
     subDescription: String? = null,
     imageResourceId: Int?,
+    imageUrl: Uri? = null,
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
@@ -229,12 +233,25 @@ fun SimpleCardWithImage(
                     modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     imageResourceId?.let {
-                        Image(
-                            painter = painterResource(id = it),
-                            contentDescription = "Google Calendar",
-                            contentScale = ContentScale.Fit,
-                            modifier =  Modifier.size(32.dp)
+                        GlideImage(
+                            imageModel = {
+                                imageUrl ?: imageResourceId
+                            },
+                            imageOptions = ImageOptions(
+                                contentScale = ContentScale.Fit,
+                            ),
+                            modifier = Modifier
+                                .size(32.dp)
+//                                .clip(RoundedCornerShape(12.dp))
+                            ,
+                            failure = {
+                                Image(
+                                    painter = painterResource(imageResourceId),
+                                    contentDescription = "Load failed"
+                                )
+                            }
                         )
+
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                     description?.run {

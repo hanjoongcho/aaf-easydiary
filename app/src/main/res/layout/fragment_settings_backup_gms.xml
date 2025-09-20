@@ -12,211 +12,28 @@
         android:padding="@dimen/component_margin_small">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/signInGoogleOAuth"
-            style="@style/AppCard.Settings"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/signInGoogleOAuthTitle"
-                    style="@style/SettingsTitle"
-                    android:text="@string/google_drive_account_sign_in_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:src="@drawable/logo_google_oauth2"
-                    android:id="@+id/profilePhoto"
-                    android:layout_width="@dimen/settings_google_account_icon"
-                    android:layout_height="@dimen/settings_google_account_icon"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle" />
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/accountInfo"
-                    style="@style/SettingsSummary"
-                    android:layout_width="0dp"
-                    android:text="@string/google_drive_account_sign_in_description"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profilePhoto"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
-                    android:layout_marginStart="10dp"
-                    app:layout_goneMarginLeft="0dp" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/signOutGoogleOAuth"
-            style="@style/AppCard.Settings">
-
-            <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/google_drive_account_sign_out_title" />
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsSummary"
-                    android:text="@string/google_drive_account_sign_out_description" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/backupSetting"
-            style="@style/AppCard.Settings">
-            <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/backup_diary" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_google_drive"
-                        android:layout_width="@dimen/settings_google_account_icon"
-                        android:layout_height="@dimen/settings_google_account_icon" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/backup_diary_summary" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/restoreSetting"
-            style="@style/AppCard.Settings">
-
-            <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/restore_diary" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_google_drive"
-                        android:layout_width="@dimen/settings_google_account_icon"
-                        android:layout_height="@dimen/settings_google_account_icon" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/restore_diary_summary" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/backupAttachPhoto"
-            style="@style/AppCard.Settings">
-
-            <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/backup_attach_photo_title" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_google_drive"
-                        android:layout_width="@dimen/settings_google_account_icon"
-                        android:layout_height="@dimen/settings_google_account_icon" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/backup_attach_photo_summary" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/recoverAttachPhoto"
-            style="@style/AppCard.Settings">
-
-            <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/recover_attach_photo_title" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_google_drive"
-                        android:layout_width="@dimen/settings_google_account_icon"
-                        android:layout_height="@dimen/settings_google_account_icon" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/recover_attach_photo_summary" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
             android:id="@+id/syncGoogleCalendar"
-            style="@style/AppCard.Settings">
+            style="@style/AppCard.Settings"
+            android:visibility="gone"
+            >
 
             <LinearLayout style="@style/LinearLayoutVertical">
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/SettingsTitle"
-                    android:text="@string/sync_google_calendar_event_title" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:visibility="gone"
-                    android:layout_marginTop="5dp"
                     android:id="@+id/syncGoogleCalendarProgress"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@drawable/logo_google_calendar"
-                        android:layout_width="@dimen/settings_google_account_icon"
-                        android:layout_height="@dimen/settings_google_account_icon" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        style="@style/SettingsSummary"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/sync_google_calendar_event_summary" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                     />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </ScrollView>
 

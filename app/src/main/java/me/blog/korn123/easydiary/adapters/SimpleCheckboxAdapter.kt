@@ -61,7 +61,7 @@ class SimpleCheckboxAdapter (
             adapter.onItemHolderClick(this)
         }
 
-        override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+        override fun onCheckedChanged(p0: CompoundButton, p1: Boolean) {
             adapter.onItemCheckedChange(this.adapterPosition, p1)
         }
     }

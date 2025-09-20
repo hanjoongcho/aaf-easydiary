@@ -245,21 +245,17 @@ class DiaryMainItemAdapter(
                             override fun onLoadFailed(
                                 e: GlideException?,
                                 model: Any?,
-                                target: Target<Drawable>?,
+                                target: Target<Drawable?>,
                                 isFirstResource: Boolean
-                            ): Boolean {
-                                return false
-                            }
+                            ): Boolean { return false }
 
                             override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
+                                resource: Drawable,
+                                model: Any,
+                                target: Target<Drawable?>?,
+                                dataSource: DataSource,
                                 isFirstResource: Boolean
-                            ): Boolean {
-                                return false
-                            }
+                            ): Boolean { return false }
                         }
                         Glide.with(activity)
                             .load(EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath())

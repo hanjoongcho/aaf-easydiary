@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +18,20 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontFamily
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -68,6 +82,7 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
@@ -86,9 +101,14 @@ import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import java.util.Locale
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import kotlin.getValue
 
 class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
 
@@ -105,6 +125,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestGoogleDrivePermissions: ActivityResultLauncher<Intent>
     private lateinit var mRequestGoogleCalendarPermissions: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
+    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
 
     /***************************************************************************************************
@@ -191,6 +212,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
@@ -198,9 +220,117 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         // Clear google OAuth token generated prior to version 1.4.80
         if (!requireActivity().config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(requireActivity(), false)
 
-        bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
+                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
+
+                    val informationTitle: String by mSettingsViewModel.informationTitle.observeAsState(getString(R.string.google_drive_account_sign_in_title))
+                    val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.observeAsState(null)
+                    val accountInfo: String by mSettingsViewModel.accountInfo.observeAsState(getString(R.string.google_drive_account_sign_in_description))
+
+                    determineAccountInfo()
+                    SimpleCardWithImage(
+                        title = informationTitle,
+                        description = accountInfo,
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_oauth2,
+                        imageUrl = profileImageUrl
+                    ) {
+                        when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
+                            false -> {
+                                initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
+                                    requestDrivePermissions(account) {
+                                        determineAccountInfo()
+                                    }
+                                }
+                            }
+                            true -> {}
+                        }
+                    }
+                    SimpleCard(
+                        title = getString(R.string.google_drive_account_sign_out_title),
+                        description = getString(R.string.google_drive_account_sign_out_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        GoogleOAuthHelper.signOutGoogleOAuth(requireActivity())
+                        determineAccountInfo()
+                    }
+                    SimpleCardWithImage(
+                        title = getString(R.string.backup_diary),
+                        description = getString(R.string.backup_diary_summary),
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_drive,
+                    ) {
+                        mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
+                        if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            backupDiaryRealm()
+                        } else { // Permission has already been granted
+                            mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
+                        }
+                    }
+                    SimpleCardWithImage(
+                        title = getString(R.string.restore_diary),
+                        description = getString(R.string.restore_diary_summary),
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_drive,
+                    ) {
+                        mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
+                        if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            recoverDiaryRealm()
+                        } else { // Permission has already been granted
+                            mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
+                        }
+                    }
+                    SimpleCardWithImage(
+                        title = getString(R.string.backup_attach_photo_title),
+                        description = getString(R.string.backup_attach_photo_summary),
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_drive,
+                    ) {
+                        mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> backupDiaryPhoto()
+                            false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
+                        }
+                    }
+                    SimpleCardWithImage(
+                        title = getString(R.string.recover_attach_photo_title),
+                        description = getString(R.string.recover_attach_photo_summary),
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_drive,
+                    ) {
+                        mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> recoverDiaryPhoto()
+                            false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
+                        }
+                    }
+                    SimpleCardWithImage(
+                        title = getString(R.string.sync_google_calendar_event_title),
+                        description = getString(R.string.sync_google_calendar_event_summary),
+                        modifier = settingCardModifier,
+                        imageResourceId = R.drawable.logo_google_drive,
+                    ) {
+                        syncGoogleCalendar()
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -464,7 +594,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         var insertCount = 0
                         progressContainer.visibility = View.VISIBLE
                         mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
-                        mBinding.syncGoogleCalendarProgress.visibility = View.VISIBLE
+                        mBinding.syncGoogleCalendar.visibility = View.VISIBLE
 
                         CoroutineScope(Dispatchers.IO).launch {
                             val result = if (nextPageToken == null) {
@@ -501,7 +631,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 fetchData(calendarId, result.nextPageToken, total.plus(insertCount))
                             } else {
                                 withContext(Dispatchers.Main) {
-                                    mBinding.syncGoogleCalendarProgress.visibility = View.GONE
+                                    mBinding.syncGoogleCalendar.visibility = View.GONE
                                     requireActivity().showAlertDialog("${DateUtils.getDateTimeStringFromTimeMillis(mTimeMin.value)} ~ ${DateUtils.getDateTimeStringFromTimeMillis(mTimeMax.value)} 기간에 등록된 ${total.plus(insertCount)}건의 이벤트가 등록되었습니다.", null, null)
                                 }
                             }
@@ -597,98 +727,30 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        when (view.id) {
-            R.id.restoreSetting -> {
-                mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
-                if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    recoverDiaryRealm()
-                } else { // Permission has already been granted
-                    mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
-                }
-            }
-            R.id.backupSetting -> {
-                mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
-                if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    backupDiaryRealm()
-                } else { // Permission has already been granted
-                    mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
-                }
-            }
-            R.id.backupAttachPhoto -> {
-                mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
-                when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> backupDiaryPhoto()
-                    false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
-                }
-            }
-            R.id.recoverAttachPhoto -> {
-                mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
-                when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> recoverDiaryPhoto()
-                    false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
-                }
-            }
-            R.id.signInGoogleOAuth -> {
-                when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
-                    false -> {
-                        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-                            requestDrivePermissions(account) {
-                                determineAccountInfo()
-                            }
-                        }
-                    }
-                    true -> {}
-                }
-            }
-            R.id.signOutGoogleOAuth -> {
-                GoogleOAuthHelper.signOutGoogleOAuth(requireActivity())
-                determineAccountInfo()
-            }
-            R.id.syncGoogleCalendar -> {
-                syncGoogleCalendar()
-            }
-        }
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            restoreSetting.setOnClickListener(mOnClickListener)
-            backupSetting.setOnClickListener(mOnClickListener)
-            backupAttachPhoto.setOnClickListener(mOnClickListener)
-            recoverAttachPhoto.setOnClickListener(mOnClickListener)
-            signInGoogleOAuth.setOnClickListener(mOnClickListener)
-            signOutGoogleOAuth.setOnClickListener(mOnClickListener)
-            syncGoogleCalendar.setOnClickListener(mOnClickListener)
-        }
-    }
 
     private fun initPreference() {
         determineAccountInfo()
     }
 
-    private fun determineAccountInfo() {
-        mBinding.run {
-            when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
-                true -> {
-//                    profilePhoto.visibility = View.VISIBLE
-                    signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
-                    GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run {
+    fun determineAccountInfo() {
+        when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
+            true -> {
+                mSettingsViewModel.run {
+                    setInformationTitle(getString(R.string.google_drive_account_information_title))
+                    GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run account@ {
                         val sb = StringBuilder()
-                        sb.append(this.displayName +  System.getProperty("line.separator"))
+                        sb.append(this.displayName + System.lineSeparator())
                         sb.append(this.email)
-                        requireActivity().runOnUiThread { accountInfo.text = sb.toString() }
-                        Glide.with(requireActivity())
-                                .load(this.photoUrl)
-                                .apply(RequestOptions().circleCrop())
-                                .into(profilePhoto)
+                        setProfileImageUrl(this@account.photoUrl!!)
+                        setAccountInfo(sb.toString())
                     }
                 }
-                false -> {
-//                    profilePhoto.visibility = View.GONE
-                    signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
-                    accountInfo.text = getString(R.string.google_drive_account_sign_in_description)
-                    profilePhoto.setImageResource(R.drawable.logo_google_oauth2)
+            }
+            false -> {
+                mSettingsViewModel.run {
+                    setInformationTitle(getString(R.string.google_drive_account_sign_in_title))
+                    setProfileImageUrl(null)
+                    setAccountInfo(getString(R.string.google_drive_account_sign_in_description))
                 }
             }
         }

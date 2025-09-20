@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.viewmodels
 
+import android.net.Uri
 import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -73,4 +74,20 @@ class SettingsViewModel : ViewModel() {
     val fontFamily: LiveData<FontFamily?> get() = _fontFamily
     fun setFontFamily(value: FontFamily?) { _fontFamily.value = value }
 
+
+    /***************************************************************************************************
+     *   GMS Backup
+     *
+     ***************************************************************************************************/
+    private val _informationTitle: MutableLiveData<String> = MutableLiveData()
+    val informationTitle: LiveData<String> get() = _informationTitle
+    fun setInformationTitle(informationTitle: String) { _informationTitle.value = informationTitle }
+
+    private val _accountInfo: MutableLiveData<String> = MutableLiveData()
+    val accountInfo: LiveData<String> get() = _accountInfo
+    fun setAccountInfo(accountInfo: String) { _accountInfo.value = accountInfo }
+
+    private val _profileImageUrl: MutableLiveData<Uri?> = MutableLiveData()
+    val profileImageUrl: LiveData<Uri?> get() = _profileImageUrl
+    fun setProfileImageUrl(profileImageUrl: Uri?) { _profileImageUrl.value = profileImageUrl }
 }
