@@ -94,7 +94,7 @@ import retrofit2.http.Query
 
 const val verticalPadding = 5F
 const val horizontalPadding = 5F
-const val roundedCornerShapeSize = 5F
+const val roundedCornerShapeSize = 8F
 const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
 
 /***************************************************************************************************
