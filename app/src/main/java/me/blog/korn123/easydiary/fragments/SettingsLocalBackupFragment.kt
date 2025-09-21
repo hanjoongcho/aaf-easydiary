@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +16,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.DateUtils
 
@@ -34,6 +44,11 @@ import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
@@ -46,6 +61,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.getValue
 
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
@@ -59,6 +75,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestWriteFileWithSAF: ActivityResultLauncher<Intent>
     private lateinit var mRequestReadFileWithSAF: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
+    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,11 +129,131 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()
+
+        mBinding.composeView.setContent {
+            AppTheme {
+                val configuration = LocalConfiguration.current
+                FlowRow(
+                    maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                    modifier = Modifier
+                ) {
+                    val settingCardModifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+                        true
+                    )
+                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
+                        config.lineSpacingScaleFactor
+                    )
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
+                        FontUtils.getComposeFontFamily(requireContext())
+                    )
+
+                    val informationTitle: String by mSettingsViewModel.informationTitle.observeAsState(
+                        getString(R.string.google_drive_account_sign_in_title)
+                    )
+                    val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.observeAsState(
+                        null
+                    )
+                    val accountInfo: String by mSettingsViewModel.accountInfo.observeAsState(
+                        getString(R.string.google_drive_account_sign_in_description)
+                    )
+
+                    SimpleCard(
+                        title = getString(R.string.export_realm_title),
+                        description = getString(R.string.export_realm_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM) {
+                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.import_realm_title),
+                        description = getString(R.string.import_realm_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM) {
+                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.delete_realm_title),
+                        description = getString(R.string.delete_realm_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> deleteRealmFile()
+                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM) {
+                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.export_excel_title),
+                        description = getString(R.string.export_excel_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> createExportExcelUri()
+                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL) {
+                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.send_email_attach_excel_title),
+                        description = getString(R.string.send_email_attach_excel_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        sendEmailWithExcel()
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.export_full_backup_title),
+                        description = getString(R.string.export_full_backup_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                            true -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
+                                EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                            }
+                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
+                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            }
+                        }
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.import_full_backup_title),
+                        description = getString(R.string.import_full_backup_description),
+                        modifier = settingCardModifier,
+                    ) {
+                        setupLauncher(REQUEST_CODE_SAF_READ_ZIP) {
+                            EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -469,74 +606,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        requireActivity().run {
-            when (view.id) {
-                R.id.exportExcel -> {
-                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        true -> createExportExcelUri()
-                        false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL) {
-                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                        }
-                    }
-                }
-                R.id.exportFullBackupFile -> {
-                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        true -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
-                        }
-                        false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
-                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                        }
-                    }
-                }
-                R.id.importFullBackupFile -> {
-                    setupLauncher(REQUEST_CODE_SAF_READ_ZIP) {
-                        EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
-                    }
-                }
-                R.id.sendEmailWithExcel -> {
-                    sendEmailWithExcel()
-                }
-                R.id.exportRealmFile -> {
-                    when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
-                        false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM) {
-                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                        }
-                    }
-                }
-                R.id.importRealmFile -> {
-                    when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
-                        false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM) {
-                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                        }
-                    }
-                }
-                R.id.deleteRealmFile -> {
-                    when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        true -> deleteRealmFile()
-                        false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM) {
-                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun bindEvent() {
-        mBinding.run {
-            exportExcel.setOnClickListener(mOnClickListener)
-            sendEmailWithExcel.setOnClickListener(mOnClickListener)
-            exportRealmFile.setOnClickListener(mOnClickListener)
-            importRealmFile.setOnClickListener(mOnClickListener)
-            deleteRealmFile.setOnClickListener(mOnClickListener)
-            exportFullBackupFile.setOnClickListener(mOnClickListener)
-            importFullBackupFile.setOnClickListener(mOnClickListener)
-        }
-    }
 
     private fun initPreference() {}
 

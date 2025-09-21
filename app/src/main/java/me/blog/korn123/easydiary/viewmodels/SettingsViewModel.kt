@@ -90,4 +90,16 @@ class SettingsViewModel : ViewModel() {
     private val _profileImageUrl: MutableLiveData<Uri?> = MutableLiveData()
     val profileImageUrl: LiveData<Uri?> get() = _profileImageUrl
     fun setProfileImageUrl(profileImageUrl: Uri?) { _profileImageUrl.value = profileImageUrl }
+
+    /***************************************************************************************************
+     *   App Info
+     *
+     ***************************************************************************************************/
+    private val _rateAppSettingSummary: MutableLiveData<String> = MutableLiveData()
+    val rateAppSettingSummary: LiveData<String> get() = _rateAppSettingSummary
+    fun setRateAppSettingSummary(rateAppSettingSummary: String) { _rateAppSettingSummary.value = rateAppSettingSummary }
+
+    private val _inviteSummary: MutableLiveData<String> = MutableLiveData()
+    val inviteSummary: LiveData<String> get() = _inviteSummary
+    fun setInviteSummary(inviteSummary: String) { _inviteSummary.value = inviteSummary }
 }

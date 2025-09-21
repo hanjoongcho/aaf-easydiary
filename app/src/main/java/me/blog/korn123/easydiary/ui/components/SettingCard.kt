@@ -49,6 +49,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -170,7 +171,8 @@ fun SimpleCard(
         LocalContext.current
     ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callback: () -> Unit = {}
+    onLongClick: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     SimpleCardWithImage(
         title = title,
@@ -182,7 +184,8 @@ fun SimpleCard(
         fontSize = fontSize,
         fontFamily = fontFamily,
         lineSpacingScaleFactor = lineSpacingScaleFactor,
-        callback = callback
+        onLongClick = onLongClick,
+        onClick = onClick
     )
 }
 
@@ -200,7 +203,8 @@ fun SimpleCardWithImage(
         LocalContext.current
     ),
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callback: () -> Unit = {}
+    onLongClick: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
 
     Card(
@@ -208,9 +212,10 @@ fun SimpleCardWithImage(
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
             .padding(1.dp, 1.dp))
-            .clickable {
-                callback.invoke()
-            },
+            .combinedClickable(          // 👈 핵심
+                onClick = onClick,
+                onLongClick = onLongClick,
+            ),
         elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
