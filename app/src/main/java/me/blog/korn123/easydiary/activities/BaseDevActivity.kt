@@ -288,25 +288,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Compose Demo",
-                "CollapsingTopAppBarFullScreen",
+                "FastScrollLazyColumnSample",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 4)
-                    }
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "CollapsingTopAppBarLazyColumn",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 5)
                     }
                 )
             }
