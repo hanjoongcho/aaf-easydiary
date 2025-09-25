@@ -95,7 +95,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     NestedScrollConnectionWithAutoInsets()
                 }
                 4 -> {
-                    val items = List(300) { "Item #$it" }
+                    val items = List(130) { "Item #$it" }
                     FastScrollLazyColumnSample(items)
                 }
             }
@@ -462,12 +462,11 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 //                                                proportion = (thumbY + thumbHeightPx / 2f) / containerHeightPx
                                                 proportion =
                                                     thumbY / (containerHeightPx - thumbHeightPx)
-                                                val target = (proportion * (totalItems - 1)).toInt()
-                                                    .coerceIn(0, totalItems - 1)
-                                                offset = thumbY % itemHeight
+                                                val target = ((proportion * ((totalItems - visibleCount.minus(1)) * itemHeight)) / itemHeight).toInt().coerceIn(0, totalItems - 1)
+                                                offset = (proportion * ((totalItems - visibleCount.minus(1)) * itemHeight)) % itemHeight
                                                 coroutineScope.launch {
                                                     listState.scrollToItem(
-                                                        target, offset.toInt()
+                                                        target.coerceAtLeast(0), offset.toInt()
                                                     )
                                                 }
                                                 bubbleText = items.getOrNull(target) ?: ""
