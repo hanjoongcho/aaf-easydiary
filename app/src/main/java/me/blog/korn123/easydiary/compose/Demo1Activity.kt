@@ -95,7 +95,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     NestedScrollConnectionWithAutoInsets()
                 }
                 4 -> {
-                    val items = List(130) { "Item #$it" }
+                    val items = List(50) { "Item #$it" }
                     FastScrollLazyColumnSample(items)
                 }
             }
@@ -355,30 +355,21 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
                         context.config.enableCardViewPolicy
                     )
-                    val maxItemsInEachRow = when {
-                        LocalInspectionMode.current -> 1
-                        isLandScape() -> 2
-                        else -> 1
-                    }
 
-
+                    val density = LocalDensity.current
                     val listState = rememberLazyListState()
                     val coroutineScope = rememberCoroutineScope()
 
-                    // 컨테이너 높이(픽셀)
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) }
-                    val density = LocalDensity.current
+                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
+                    var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
 
-                    // 토글: 썸을 누르고 있는지
-                    var isDraggingThumb by remember { mutableStateOf(false) }
-                    // 썸의 y-offset (픽셀)
-                    var thumbY by remember { mutableStateOf(0f) }
-                    var dragY by remember { mutableStateOf(0f) }
-                    var proportion by remember { mutableStateOf(0f) }
-                    var offset by remember { mutableStateOf(0f) }
-                    // 버블 텍스트 (옵션)
-                    var bubbleText by remember { mutableStateOf<String?>(null) }
-                    // 썸 애니메이션/노출은 간단하게 상태로 제어 가능
+                    var thumbY by remember { mutableFloatStateOf(0f) } // 썸의 y-offset (픽셀)
+                    var dragY by remember { mutableFloatStateOf(0f) }
+                    var proportion by remember { mutableFloatStateOf(0f) }
+                    var offset by remember { mutableFloatStateOf(0f) }
+
+                    var bubbleText by remember { mutableStateOf<String?>(null) } // 버블 텍스트 (옵션)
+
                     Box(modifier = modifier
                         .padding(innerPadding)
                         .fillMaxSize()) {
@@ -389,15 +380,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                 .onSizeChanged { containerSize = it }
                         ) {
                             itemsIndexed(items) { index, item ->
-                                // 리스트 아이템 예시
-//                                Text(
-//                                    text = "$index: $item",
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .padding(16.dp)
-//                                )
-//                                Divider()
-
                                 SimpleCard(
                                     "$index: $item",
                                     stringResource(id = R.string.sync_google_calendar_event_summary),
@@ -414,26 +396,24 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
                         // --- Fast Scroll 트랙 + 썸 + 버블 ---
                         if (containerSize.height > 0) {
-                            val layoutInfo = listState.layoutInfo
-                            val totalItems = layoutInfo.totalItemsCount.coerceAtLeast(1)
+
+                            val layoutInfo = remember { derivedStateOf { listState.layoutInfo } }
+                            val totalItems = layoutInfo.value.totalItemsCount.coerceAtLeast(1)
                             val containerHeightPx = containerSize.height.toFloat()
 
-
                             // 보이는 첫 아이템 높이로 평균 높이 추정
-                            val itemHeight = layoutInfo.visibleItemsInfo.firstOrNull()?.size ?: 1
-                            val firstIndex = listState.firstVisibleItemIndex
-                            val firstOffset = listState.firstVisibleItemScrollOffset
+                            val itemHeight = layoutInfo.value.visibleItemsInfo.firstOrNull()?.size ?: 1
+
+                            val firstIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
+                            val firstOffset = remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
 
                             val totalContentHeightPx = (totalItems * itemHeight).toFloat()
                             val scrollablePx = (totalContentHeightPx - containerHeightPx).coerceAtLeast(1f)
 
-                            val scrolledPx = (firstIndex * itemHeight + firstOffset).toFloat()
+                            val scrolledPx = (firstIndex.value.times(itemHeight) + firstOffset.value).toFloat()
                             val progress = (scrolledPx / scrollablePx).coerceIn(0f, 1f)
 
-                            val visibleCount = layoutInfo.visibleItemsInfo.size.coerceAtLeast(1)
-                            val minThumbHeightPx = with(density) { 30.dp.toPx() }
-//                            val thumbHeightPx = (containerHeightPx * (visibleCount.toFloat() / totalItems)).coerceAtLeast(minThumbHeightPx)
-                            val thumbHeightPx = minThumbHeightPx
+                            val thumbHeightPx = with(density) { 30.dp.toPx() }
                             val baseThumbY = progress * (containerHeightPx - thumbHeightPx)
                             thumbY = if (isDraggingThumb) thumbY else baseThumbY
                             val drawThumbY = if (isDraggingThumb) thumbY.coerceIn(0f, containerHeightPx - thumbHeightPx) else baseThumbY
@@ -450,7 +430,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                             onDragStart = {
                                                 isDraggingThumb = true
                                                 bubbleText =
-                                                    items.getOrNull(firstIndex) ?: ""
+                                                    items.getOrNull(firstIndex.value) ?: ""
                                             },
                                             onDrag = { change, drag ->
                                                 dragY = drag.y
@@ -459,21 +439,16 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                                     0f,
                                                     containerHeightPx - thumbHeightPx
                                                 )
-//                                                proportion = (thumbY + thumbHeightPx / 2f) / containerHeightPx
                                                 proportion =
                                                     thumbY / (containerHeightPx - thumbHeightPx)
-                                                val target = ((proportion * ((totalItems - visibleCount.minus(1)) * itemHeight)) / itemHeight).toInt().coerceIn(0, totalItems - 1)
-                                                offset = (proportion * ((totalItems - visibleCount.minus(1)) * itemHeight)) % itemHeight
+                                                val target = ((scrollablePx * proportion) / itemHeight).toInt().coerceIn(0, totalItems - 1)
+                                                offset = (scrollablePx * proportion) % itemHeight
                                                 coroutineScope.launch {
                                                     listState.scrollToItem(
                                                         target.coerceAtLeast(0), offset.toInt()
                                                     )
                                                 }
                                                 bubbleText = items.getOrNull(target) ?: ""
-//                                                bubbleText =
-//                                                    "firstOffset: $firstOffset\noffset: $offset\nvisibleCount: $visibleCount, baseThumbY: $baseThumbY, thumbY: $thumbY, drag.y: ${drag.y}, target: $target | ${
-//                                                        items.getOrNull(target) ?: ""
-//                                                    }"
                                             },
                                             onDragEnd = {
                                                 isDraggingThumb = false
@@ -508,7 +483,19 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
                             ) {
                                 SimpleText(
-                                    text = "firstOffset: $firstOffset\noffset: $offset\nproportion: $proportion\nfirstIndex: $firstIndex\nscrollablePx: $scrollablePx\nscrolledPx: $scrolledPx\nprogress: $progress\nbaseThumbY: $baseThumbY\nthumbY: $thumbY\ndrawThumbY: $drawThumbY\ndragY: $dragY",
+                                    text = "" +
+                                            "firstIndex: ${firstIndex.value}\n" +
+                                            "firstOffset: ${firstOffset.value}\n" +
+                                            "offset: $offset\n" +
+                                            "proportion: $proportion\n" +
+                                            "scrollablePx: $scrollablePx\n" +
+                                            "scrolledPx: $scrolledPx\n" +
+                                            "progress: $progress\n" +
+                                            "baseThumbY: $baseThumbY\n" +
+                                            "drawThumbY: $drawThumbY\n" +
+                                            "dragY: $dragY\n" +
+                                            "thumbY: $thumbY\n" +
+                                            "",
 //                                    alpha = 0.8f,
                                     modifier = Modifier
 //                                        .align(Alignment.TopStart)
@@ -521,40 +508,12 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                 Box(
                                     modifier = Modifier
                                         .offset {
-                                            // 썸 왼쪽 80.dp 정도 위치
-                                            val bubbleX = (containerSize.width -
-                                                    with(density) { 80.dp.toPx() } -
-                                                    with(density) { 40.dp.toPx() }).toInt()
-                                                .coerceAtLeast(0)
                                             val bubbleY = (drawThumbY - 24f).toInt()
                                                 .coerceIn(0, containerSize.height - 48)
                                             IntOffset(0, bubbleY)
                                         }
-//                                        .size(64.dp)
-//                                        .clip(CircleShape)
-//                                        .background(Color(LocalContext.current.config.primaryColor))
-//                                        .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), CircleShape)
-//                                        .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
-                                        .align(Alignment.TopEnd)
-
-                                        ,
-//                                    contentAlignment = Alignment.CenterEnd
+                                        .align(Alignment.TopEnd),
                                 ) {
-//                                    Text(
-//                                        text = bubbleText ?: "",
-//                                        style = MaterialTheme.typography.titleSmall,
-//                                        color = Color.White,
-//                                        modifier = Modifier
-//                                            .padding(end = 60.dp)
-//                                            .background(Color(LocalContext.current.config.primaryColor))
-//                                    )
-//                                    SimpleCard(
-//                                        bubbleText ?: "",
-//                                        description = null,
-//                                        modifier = Modifier.padding(end = 30.dp),
-//                                        enableCardViewPolicy = enableCardViewPolicy,
-//                                    ) {}
-
                                     Card(
                                         shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp),
                                         colors = CardDefaults.cardColors(
