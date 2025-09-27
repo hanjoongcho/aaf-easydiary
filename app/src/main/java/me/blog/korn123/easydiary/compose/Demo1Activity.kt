@@ -73,6 +73,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.components.roundedCornerShapeSize
 
@@ -356,6 +357,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     val context = LocalContext.current
+                    val coroutineScope = rememberCoroutineScope()
                     val settingCardModifier = Modifier.fillMaxWidth()
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
                         context.config.enableCardViewPolicy
@@ -363,18 +365,16 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
                     val density = LocalDensity.current
                     val listState = rememberLazyListState()
-                    val coroutineScope = rememberCoroutineScope()
+
                     var thumbVisible by remember { mutableStateOf(false) }
 
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
 
-                    var thumbY by remember { mutableFloatStateOf(0f) } // 썸의 y-offset (픽셀)
-                    var dragY by remember { mutableFloatStateOf(0f) }
-                    var proportion by remember { mutableFloatStateOf(0f) }
-                    var offset by remember { mutableFloatStateOf(0f) }
 
-                    var bubbleText by remember { mutableStateOf<String?>(null) } // 버블 텍스트 (옵션)
+
+
+
 
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -420,172 +420,28 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             }
                         }
 
-                        // --- Fast Scroll 트랙 + 썸 + 버블 ---
-                        if (containerSize.height > 0) {
-
-                            val layoutInfo = remember { derivedStateOf { listState.layoutInfo } }
-                            val totalItems = layoutInfo.value.totalItemsCount.coerceAtLeast(1)
-                            val containerHeightPx = containerSize.height.toFloat()
-
-                            // 보이는 첫 아이템 높이로 평균 높이 추정
-                            val itemHeight = layoutInfo.value.visibleItemsInfo.firstOrNull()?.size ?: 1
-
-                            val firstIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
-                            val firstOffset = remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
-
-                            val totalContentHeightPx = (totalItems * itemHeight).toFloat()
-                            val scrollablePx = (totalContentHeightPx - containerHeightPx).coerceAtLeast(1f)
-
-                            val scrolledPx = (firstIndex.value.times(itemHeight) + firstOffset.value).toFloat()
-                            val progress = (scrolledPx / scrollablePx).coerceIn(0f, 1f)
-
-                            val thumbHeightPx = with(density) { 30.dp.toPx() }
-                            val baseThumbY = progress * (containerHeightPx - thumbHeightPx)
-                            thumbY = if (isDraggingThumb) thumbY else baseThumbY
-                            val drawThumbY = if (isDraggingThumb) thumbY.coerceIn(0f, containerHeightPx - thumbHeightPx) else baseThumbY
-
-                            // --- Fast Scroll 트랙 + 썸 ---
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .width(30.dp) // 트랙 + 터치 영역
-                                    .padding(end = 8.dp)
-                                    .align(Alignment.CenterEnd)
-                                    .pointerInput(totalItems) {
-                                        detectDragGestures(
-                                            onDragStart = {
-                                                thumbVisible = true
-                                                isDraggingThumb = true
-                                                bubbleText =
-                                                    items.getOrNull(firstIndex.value) ?: ""
-                                            },
-                                            onDrag = { change, drag ->
-                                                dragY = drag.y
-                                                change.consume()
-                                                thumbY = (thumbY + drag.y).coerceIn(
-                                                    0f,
-                                                    containerHeightPx - thumbHeightPx
-                                                )
-                                                proportion =
-                                                    thumbY / (containerHeightPx - thumbHeightPx)
-                                                val target =
-                                                    ((scrollablePx * proportion) / itemHeight).toInt()
-                                                        .coerceIn(0, totalItems - 1)
-                                                offset = (scrollablePx * proportion) % itemHeight
-                                                coroutineScope.launch {
-                                                    listState.scrollToItem(
-                                                        target.coerceAtLeast(0), offset.toInt()
-                                                    )
-                                                }
-                                                bubbleText = items.getOrNull(target) ?: ""
-                                            },
-                                            onDragEnd = {
-                                                isDraggingThumb = false
-                                                bubbleText = null
-                                                coroutineScope.launch {
-                                                    hideJob?.cancel()
-                                                    hideJob = launch {
-                                                        delay(delayTimeMillis)
-                                                        if (!isDraggingThumb) thumbVisible = false
-                                                    }
-                                                }
-                                            },
-                                            onDragCancel = {
-                                                isDraggingThumb = false
-                                                bubbleText = null
-                                                coroutineScope.launch {
-                                                    hideJob?.cancel()
-                                                    hideJob = launch {
-                                                        delay(delayTimeMillis)
-                                                        if (!isDraggingThumb) thumbVisible = false
-                                                    }
-                                                }
-                                            }
-                                        )
-                                    }
-                            ) {
-                                if (thumbVisible) {
-                                    Box(
-                                        Modifier
-                                            .fillMaxHeight()
-                                            .width(8.dp)
-                                            .padding(end = 4.dp)
-                                            .align(Alignment.CenterEnd)
-                                            .background(
-                                                MaterialTheme.colorScheme.onSurface.copy(
-                                                    alpha = 0.1f
-                                                )
-                                            )
-                                    )
-
-                                    Box(
-                                        Modifier
-                                            .offset { IntOffset(0, drawThumbY.toInt()) }
-                                            .width(12.dp)
-                                            .align(Alignment.TopEnd)
-                                            .height(with(density) { thumbHeightPx.toDp() })
-                                            .clip(CircleShape)
-                                            .background(MaterialTheme.colorScheme.primary)
-                                    )
-                                }
-                            }
-
-                            Card(
-                                shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-                                colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor).copy(alpha = 0.8f)),
-
-                            ) {
-                                SimpleText(
-                                    text = "" +
-                                            "firstIndex: ${firstIndex.value}\n" +
-                                            "firstOffset: ${firstOffset.value}\n" +
-                                            "offset: $offset\n" +
-                                            "proportion: $proportion\n" +
-                                            "scrollablePx: $scrollablePx\n" +
-                                            "scrolledPx: $scrolledPx\n" +
-                                            "progress: $progress\n" +
-                                            "baseThumbY: $baseThumbY\n" +
-                                            "drawThumbY: $drawThumbY\n" +
-                                            "dragY: $dragY\n" +
-                                            "thumbY: $thumbY\n" +
-                                            "",
-//                                    alpha = 0.8f,
-                                    modifier = Modifier
-//                                        .align(Alignment.TopStart)
-                                        .padding(16.dp),
-                                )
-                            }
-
-                            // --- 버블: ***왼쪽 방향*** ---
-                            if (isDraggingThumb && bubbleText != null) {
-                                Box(
-                                    modifier = Modifier
-                                        .offset {
-                                            val bubbleY = (drawThumbY - 24f).toInt()
-                                                .coerceIn(0, containerSize.height - 48)
-                                            IntOffset(0, bubbleY)
-                                        }
-                                        .align(Alignment.TopEnd),
-                                ) {
-                                    Card(
-                                        shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp),
-                                        colors = CardDefaults.cardColors(
-                                            Color(LocalContext.current.config.primaryColor).copy(
-                                                alpha = 1.0f
-                                            )
-                                        ),
-                                        modifier = Modifier.padding(end = 30.dp),
-                                    ) {
-                                        SimpleText(
-                                            text = bubbleText ?: "",
-                                            fontColor = Color.White,
-                                            modifier = Modifier
-                                                .padding(16.dp, 8.dp),
-                                        )
+                        FastScroll(
+                            items = items,
+                            listState = listState,
+                            containerHeightPx = containerSize.height.toFloat(),
+                            isDraggingThumb = isDraggingThumb,
+                            thumbVisible = thumbVisible,
+                            containerSize = containerSize,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd),
+                            showDebugCard = true,
+                            updateThumbVisible = { thumbVisible = it },
+                            updateDraggingThumb = { isDraggingThumb = it },
+                            dragEndCallback = {
+                                hideJob?.cancel()
+                                coroutineScope.launch {
+                                    hideJob = launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) thumbVisible = false
                                     }
                                 }
                             }
-                        }
+                        )
                     }
                 }
             )
