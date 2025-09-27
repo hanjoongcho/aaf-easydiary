@@ -3,6 +3,9 @@ package me.blog.korn123.easydiary.compose
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -68,6 +71,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.components.roundedCornerShapeSize
 
@@ -359,6 +364,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val density = LocalDensity.current
                     val listState = rememberLazyListState()
                     val coroutineScope = rememberCoroutineScope()
+                    var thumbVisible by remember { mutableStateOf(false) }
 
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
@@ -369,6 +375,26 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     var offset by remember { mutableFloatStateOf(0f) }
 
                     var bubbleText by remember { mutableStateOf<String?>(null) } // 버블 텍스트 (옵션)
+
+                    var hideJob: Job? by remember { mutableStateOf(null) }
+                    val delayTimeMillis = 1500L
+
+                    // 스크롤 이벤트 감지
+                    LaunchedEffect(listState) {
+                        snapshotFlow { listState.isScrollInProgress }
+                            .collect { isScrolling ->
+                                if (isScrolling) {
+                                    hideJob?.cancel()
+                                    thumbVisible = true
+                                } else {
+                                    hideJob?.cancel()
+                                    hideJob = launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) thumbVisible = false
+                                    }
+                                }
+                            }
+                    }
 
                     Box(modifier = modifier
                         .padding(innerPadding)
@@ -422,12 +448,13 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
-                                    .width(20.dp) // 트랙+터치 영역
+                                    .width(30.dp) // 트랙 + 터치 영역
+                                    .padding(end = 8.dp)
                                     .align(Alignment.CenterEnd)
-                                    .padding(end = 4.dp)
                                     .pointerInput(totalItems) {
                                         detectDragGestures(
                                             onDragStart = {
+                                                thumbVisible = true
                                                 isDraggingThumb = true
                                                 bubbleText =
                                                     items.getOrNull(firstIndex.value) ?: ""
@@ -441,7 +468,9 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                                 )
                                                 proportion =
                                                     thumbY / (containerHeightPx - thumbHeightPx)
-                                                val target = ((scrollablePx * proportion) / itemHeight).toInt().coerceIn(0, totalItems - 1)
+                                                val target =
+                                                    ((scrollablePx * proportion) / itemHeight).toInt()
+                                                        .coerceIn(0, totalItems - 1)
                                                 offset = (scrollablePx * proportion) % itemHeight
                                                 coroutineScope.launch {
                                                     listState.scrollToItem(
@@ -453,28 +482,52 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                             onDragEnd = {
                                                 isDraggingThumb = false
                                                 bubbleText = null
+                                                coroutineScope.launch {
+                                                    hideJob?.cancel()
+                                                    hideJob = launch {
+                                                        delay(delayTimeMillis)
+                                                        if (!isDraggingThumb) thumbVisible = false
+                                                    }
+                                                }
                                             },
                                             onDragCancel = {
-                                                isDraggingThumb = false; bubbleText = null
+                                                isDraggingThumb = false
+                                                bubbleText = null
+                                                coroutineScope.launch {
+                                                    hideJob?.cancel()
+                                                    hideJob = launch {
+                                                        delay(delayTimeMillis)
+                                                        if (!isDraggingThumb) thumbVisible = false
+                                                    }
+                                                }
                                             }
                                         )
                                     }
                             ) {
-                                Box(
-                                    Modifier
-                                        .fillMaxHeight()
-                                        .width(4.dp)
-                                        .align(Alignment.CenterEnd)
-                                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-                                )
-                                Box(
-                                    Modifier
-                                        .offset { IntOffset(0, drawThumbY.toInt()) }
-                                        .width(12.dp)
-                                        .height(with(density) { thumbHeightPx.toDp() })
-                                        .clip(CircleShape)
-                                        .background(MaterialTheme.colorScheme.primary)
-                                )
+                                if (thumbVisible) {
+                                    Box(
+                                        Modifier
+                                            .fillMaxHeight()
+                                            .width(8.dp)
+                                            .padding(end = 4.dp)
+                                            .align(Alignment.CenterEnd)
+                                            .background(
+                                                MaterialTheme.colorScheme.onSurface.copy(
+                                                    alpha = 0.1f
+                                                )
+                                            )
+                                    )
+
+                                    Box(
+                                        Modifier
+                                            .offset { IntOffset(0, drawThumbY.toInt()) }
+                                            .width(12.dp)
+                                            .align(Alignment.TopEnd)
+                                            .height(with(density) { thumbHeightPx.toDp() })
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.colorScheme.primary)
+                                    )
+                                }
                             }
 
                             Card(
