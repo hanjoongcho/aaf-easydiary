@@ -73,6 +73,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.components.roundedCornerShapeSize
@@ -103,6 +105,10 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 4 -> {
                     val items = List(50) { "Item #$it" }
                     FastScrollLazyColumnSample(items)
+                }
+                5 -> {
+                    val items = EasyDiaryDbHelper.findDiary(null)
+                    FastScrollLazyColumnSample2(items)
                 }
             }
         }
@@ -362,20 +368,10 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
                         context.config.enableCardViewPolicy
                     )
-
-                    val density = LocalDensity.current
                     val listState = rememberLazyListState()
-
                     var thumbVisible by remember { mutableStateOf(false) }
-
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
-
-
-
-
-
-
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
 
@@ -430,6 +426,99 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             modifier = Modifier
                                 .align(Alignment.TopEnd),
                             showDebugCard = true,
+                            updateThumbVisible = { thumbVisible = it },
+                            updateDraggingThumb = { isDraggingThumb = it },
+                            dragEndCallback = {
+                                hideJob?.cancel()
+                                coroutineScope.launch {
+                                    hideJob = launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) thumbVisible = false
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun FastScrollLazyColumnSample2(
+        items: List<Diary>,
+        modifier: Modifier = Modifier
+    ) {
+        LocalActivity.current?.updateSystemStatusBarColor()
+        AppTheme {
+            Scaffold(
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Vertical),
+                containerColor = Color(config.screenBackgroundColor),
+                content = { innerPadding ->
+                    val context = LocalContext.current
+                    val coroutineScope = rememberCoroutineScope()
+                    val settingCardModifier = Modifier.fillMaxWidth()
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+                        context.config.enableCardViewPolicy
+                    )
+                    val listState = rememberLazyListState()
+                    var thumbVisible by remember { mutableStateOf(false) }
+                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
+                    var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
+                    var hideJob: Job? by remember { mutableStateOf(null) }
+                    val delayTimeMillis = 1500L
+
+                    // 스크롤 이벤트 감지
+                    LaunchedEffect(listState) {
+                        snapshotFlow { listState.isScrollInProgress }
+                            .collect { isScrolling ->
+                                if (isScrolling) {
+                                    hideJob?.cancel()
+                                    thumbVisible = true
+                                } else {
+                                    hideJob?.cancel()
+                                    hideJob = launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) thumbVisible = false
+                                    }
+                                }
+                            }
+                    }
+
+                    Box(modifier = modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()) {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .onSizeChanged { containerSize = it }
+                        ) {
+                            itemsIndexed(items) { index, item ->
+                                SimpleCard(
+                                    item.title ?: "",
+                                    item.contents,
+                                    modifier = settingCardModifier.padding(
+                                        0.dp,
+                                        0.dp,
+                                        0.dp,
+                                        0.dp
+                                    ),
+                                    enableCardViewPolicy = enableCardViewPolicy,
+                                ) {}
+                            }
+                        }
+
+                        FastScroll(
+                            items = items,
+                            listState = listState,
+                            containerHeightPx = containerSize.height.toFloat(),
+                            isDraggingThumb = isDraggingThumb,
+                            thumbVisible = thumbVisible,
+                            containerSize = containerSize,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd),
+                            showDebugCard = false,
                             updateThumbVisible = { thumbVisible = it },
                             updateDraggingThumb = { isDraggingThumb = it },
                             dragEndCallback = {

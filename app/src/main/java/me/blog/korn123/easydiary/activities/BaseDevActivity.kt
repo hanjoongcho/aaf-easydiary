@@ -288,13 +288,25 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Compose Demo",
-                "FastScrollLazyColumnSample",
+                "FastScrollLazyColumnSample1",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 4)
+                    }
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "FastScrollLazyColumnSample2",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 5)
                     }
                 )
             }

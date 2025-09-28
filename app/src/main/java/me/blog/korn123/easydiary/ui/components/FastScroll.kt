@@ -36,11 +36,13 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.EasyDiaryUtils.summaryDiaryLabel
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.models.Diary
 
 @Composable
 fun FastScroll(
-    items: List<String>,
+    items: List<Any>,
     listState: LazyListState,
     containerHeightPx: Float,
     isDraggingThumb: Boolean,
@@ -94,8 +96,10 @@ fun FastScroll(
                     onDragStart = {
                         updateThumbVisible(true)
                         updateDraggingThumb(true)
-                        bubbleText =
-                            items.getOrNull(firstIndex.value) ?: ""
+                        bubbleText = when (items[firstIndex.value]) {
+                            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
+                            else -> items[firstIndex.value].toString()
+                        }
                     },
                     onDrag = { change, drag ->
                         dragY = drag.y
@@ -115,7 +119,10 @@ fun FastScroll(
                                 target.coerceAtLeast(0), offset.toInt()
                             )
                         }
-                        bubbleText = items.getOrNull(target) ?: ""
+                        bubbleText = when (items[target]) {
+                            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
+                            else -> items[target].toString()
+                        }
                     },
                     onDragEnd = {
                         updateDraggingThumb(false)
@@ -156,34 +163,36 @@ fun FastScroll(
         }
     }
 
-    Card(
-        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-        colors = CardDefaults.cardColors(
-            Color(LocalContext.current.config.backgroundColor).copy(
-                alpha = 0.8f
-            )
-        ),
+    if (showDebugCard) {
+        Card(
+            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+            colors = CardDefaults.cardColors(
+                Color(LocalContext.current.config.backgroundColor).copy(
+                    alpha = 0.8f
+                )
+            ),
 
-        ) {
-        SimpleText(
-            text = "" +
-                    "firstIndex: ${firstIndex.value}\n" +
-                    "firstOffset: ${firstOffset.value}\n" +
-                    "offset: $offset\n" +
-                    "proportion: $proportion\n" +
-                    "scrollablePx: $scrollablePx\n" +
-                    "scrolledPx: $scrolledPx\n" +
-                    "progress: $progress\n" +
-                    "baseThumbY: $baseThumbY\n" +
-                    "drawThumbY: $drawThumbY\n" +
-                    "dragY: $dragY\n" +
-                    "thumbY: $thumbY\n" +
-                    "",
+            ) {
+            SimpleText(
+                text = "" +
+                        "firstIndex: ${firstIndex.value}\n" +
+                        "firstOffset: ${firstOffset.value}\n" +
+                        "offset: $offset\n" +
+                        "proportion: $proportion\n" +
+                        "scrollablePx: $scrollablePx\n" +
+                        "scrolledPx: $scrolledPx\n" +
+                        "progress: $progress\n" +
+                        "baseThumbY: $baseThumbY\n" +
+                        "drawThumbY: $drawThumbY\n" +
+                        "dragY: $dragY\n" +
+                        "thumbY: $thumbY\n" +
+                        "",
 //                                    alpha = 0.8f,
-            modifier = Modifier
+                modifier = Modifier
 //                                        .align(Alignment.TopStart)
-                .padding(16.dp),
-        )
+                    .padding(16.dp),
+            )
+        }
     }
 
     // --- 버블: ***왼쪽 방향*** ---
