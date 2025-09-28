@@ -1,6 +1,13 @@
 package me.blog.korn123.easydiary.compose
 
+import android.animation.ArgbEvaluator
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -71,13 +78,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
+import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
+import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
+import me.blog.korn123.easydiary.enums.DiaryMode
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.FastScroll
+import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.SimpleText
+import me.blog.korn123.easydiary.ui.components.horizontalPadding
 import me.blog.korn123.easydiary.ui.components.roundedCornerShapeSize
+import me.blog.korn123.easydiary.ui.components.verticalPadding
+import org.apache.commons.lang3.StringUtils
 
 class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
@@ -88,6 +124,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
      ***************************************************************************************************/
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(getThemeId())
+
         super.onCreate(savedInstanceState)
         val mode = intent.getIntExtra("mode" ,1)
         setContent {
@@ -112,7 +150,11 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 }
             }
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        setTheme(getThemeId())
     }
 
 
@@ -456,6 +498,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     val context = LocalContext.current
+                    val activity = LocalActivity.current
                     val coroutineScope = rememberCoroutineScope()
                     val settingCardModifier = Modifier.fillMaxWidth()
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
@@ -485,6 +528,15 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             }
                     }
 
+
+                    fun itemClickCallback (diary: Diary) {
+                        activity?.toast("itemClickCallback: ${diary.title}")
+                    }
+
+                    fun itemLongClickCallback () {
+                        activity?.toast("itemLongClickCallback")
+                    }
+
                     Box(modifier = modifier
                         .padding(innerPadding)
                         .fillMaxSize()) {
@@ -494,18 +546,23 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                 .fillMaxSize()
                                 .onSizeChanged { containerSize = it }
                         ) {
-                            itemsIndexed(items) { index, item ->
-                                SimpleCard(
-                                    item.title ?: "",
-                                    item.contents,
-                                    modifier = settingCardModifier.padding(
-                                        0.dp,
-                                        0.dp,
-                                        0.dp,
-                                        0.dp
-                                    ),
-                                    enableCardViewPolicy = enableCardViewPolicy,
-                                ) {}
+                            itemsIndexed(items) { index, diary ->
+                                Card(
+                                    shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+                                    colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                                    modifier = (if (enableCardViewPolicy) modifier.padding(
+                                        horizontalPadding.dp,
+                                        verticalPadding.dp
+                                    ) else modifier
+                                        .padding(1.dp, 1.dp)),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+                                ) {
+                                    LegacyDiaryItemCard(
+                                        diary = diary,
+                                        itemClickCallback = { itemClickCallback(it) },
+                                        itemLongClickCallback = { itemLongClickCallback() }
+                                    )
+                                }
                             }
                         }
 

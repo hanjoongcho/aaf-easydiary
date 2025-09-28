@@ -24,6 +24,7 @@ import android.view.animation.BounceInterpolator
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
@@ -97,6 +98,7 @@ import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
+import androidx.core.view.isGone
 
 
 /**
@@ -243,7 +245,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         if (config.enableDebugMode) openOverDueNotification()
 
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mBinding.progressDialog.isGone) ActivityCompat.finishAffinity(this@DiaryMainActivity)
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -435,11 +441,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
         }
         return true
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
 //    override fun hearShake() {
