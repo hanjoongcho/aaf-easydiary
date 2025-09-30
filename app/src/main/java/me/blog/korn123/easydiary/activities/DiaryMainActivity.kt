@@ -27,6 +27,23 @@ import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -99,7 +116,11 @@ import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
 import androidx.core.view.isGone
-
+import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
+import me.blog.korn123.easydiary.ui.components.BottomToolBar
+import me.blog.korn123.easydiary.ui.components.BottomToolBarButton
+import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.ui.components.ElevatedButtonWrapper
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -195,6 +216,44 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
         })
+
+        mBinding.composeView.setContent {
+            Column (
+                modifier = Modifier
+            ) {
+                val density = LocalDensity.current
+                var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
+                val bottomPadding = if (isVanillaIceCreamPlus()) androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding().plus(
+                    androidx.compose.foundation.layout.WindowInsets.ime.asPaddingValues().calculateBottomPadding()) else 0.dp
+                BottomToolBarContainer(
+                    modifier = Modifier
+//                        .align(Alignment.BottomCenter)
+                        .onGloballyPositioned {
+                            bottomToolbarHeight = with(density) { it.size.height.toDp() }
+                        },
+                ) {
+                    BottomToolBarButton(iconResourceId = R.drawable.ic_edit) {
+                        val createDiary =
+                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            createDiary
+                        )
+                    }
+                    BottomToolBarButton(text = "메뉴") {
+                        openCustomOptionMenu()
+                    }
+                    BottomToolBarButton(iconResourceId = R.drawable.ic_bug_2) {
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            Intent(this@DiaryMainActivity, DevActivity::class.java)
+                        )
+                    }
+                }
+
+//                Spacer(modifier = Modifier.height(bottomToolbarHeight.plus(5.dp)))
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setOnExitAnimationListener()
 
