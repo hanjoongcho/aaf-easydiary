@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -50,7 +51,8 @@ fun SimpleText(
         ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
         maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
+
     )
 }
 
