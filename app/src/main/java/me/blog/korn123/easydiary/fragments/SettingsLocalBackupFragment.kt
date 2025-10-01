@@ -44,7 +44,6 @@ import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
