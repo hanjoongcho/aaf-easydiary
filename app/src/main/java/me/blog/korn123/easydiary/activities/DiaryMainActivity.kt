@@ -249,6 +249,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             Intent(this@DiaryMainActivity, DevActivity::class.java)
                         )
                     }
+                    BottomToolBarButton(iconResourceId = R.drawable.ic_running) {
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
+                        )
+                    }
                 }
 
 //                Spacer(modifier = Modifier.height(bottomToolbarHeight.plus(5.dp)))
@@ -333,6 +339,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+
+        if (config.enableDebugMode) {
+            mBinding.composeView.visibility = View.VISIBLE
+            mBinding.insertDiaryButtonContainer.visibility = View.GONE
+        } else {
+            mBinding.composeView.visibility = View.GONE
+            mBinding.insertDiaryButtonContainer.visibility = View.VISIBLE
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -696,9 +710,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
 
-        val isVisible = if (config.enableDebugMode) View.VISIBLE else View.GONE
-        mPopupMenuBinding.devConsole.visibility = isVisible
-        mPopupMenuBinding.quickSettings.visibility = isVisible
+//        val isVisible = if (config.enableDebugMode) View.VISIBLE else View.GONE
+//        mPopupMenuBinding.devConsole.visibility = isVisible
+//        mPopupMenuBinding.quickSettings.visibility = isVisible
 
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(
             mPopupMenuBinding.root,

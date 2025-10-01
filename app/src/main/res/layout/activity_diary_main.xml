@@ -122,7 +122,7 @@
 
         <LinearLayout
             android:fitsSystemWindows="true"
-            android:visibility="gone"
+            android:id="@+id/insertDiaryButtonContainer"
             android:layout_gravity="bottom|end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
