@@ -32,8 +32,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 21
         targetSdkVersion versions.compileSdk
-        versionCode 335
-        versionName '1.4.335.202510020'
+        versionCode 336
+        versionName '1.4.336.202510021'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -124,11 +124,11 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "18"
     }
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_17
-        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_18
     }
 //    composeOptions {
 //        kotlinCompilerExtensionVersion = "1.5.2"
