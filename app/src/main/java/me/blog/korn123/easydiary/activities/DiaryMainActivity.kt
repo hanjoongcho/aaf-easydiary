@@ -232,6 +232,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             bottomToolbarHeight = with(density) { it.size.height.toDp() }
                         },
                 ) {
+
                     BottomToolBarButton(text = "TODAY") {
                         moveToday()
                     }
@@ -347,10 +348,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         if (config.enableDebugMode) {
             mBinding.composeView.visibility = View.VISIBLE
-            mBinding.insertDiaryButton.visibility = View.GONE
+            mBinding.insertDiaryButtonContainer.visibility = View.GONE
         } else {
             mBinding.composeView.visibility = View.GONE
-            mBinding.insertDiaryButton.visibility = View.VISIBLE
+            mBinding.insertDiaryButtonContainer.visibility = View.VISIBLE
         }
     }
 

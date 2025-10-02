@@ -138,11 +138,6 @@
                 android:layout_margin="@dimen/fab_margin"
                 android:contentDescription="@string/write_diary"
                 app:srcCompat="@drawable/ic_edit" />
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/compose_view"
-                android:layout_gravity="bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -189,5 +184,11 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
