@@ -232,7 +232,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             bottomToolbarHeight = with(density) { it.size.height.toDp() }
                         },
                 ) {
-                    BottomToolBarButton(iconResourceId = R.drawable.ic_edit) {
+                    BottomToolBarButton(text = "TODAY") {
+                        moveToday()
+                    }
+                    BottomToolBarButton(
+                        iconResourceId = R.drawable.ic_edit,
+                    ) {
                         val createDiary =
                             Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
                         TransitionHelper.startActivityWithTransition(
@@ -240,9 +245,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             createDiary
                         )
                     }
-                    BottomToolBarButton(text = "메뉴") {
-                        openCustomOptionMenu()
-                    }
+//                    BottomToolBarButton(text = "메뉴") {
+//                        openCustomOptionMenu()
+//                    }
                     BottomToolBarButton(iconResourceId = R.drawable.ic_bug_2) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
@@ -342,10 +347,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         if (config.enableDebugMode) {
             mBinding.composeView.visibility = View.VISIBLE
-            mBinding.insertDiaryButtonContainer.visibility = View.GONE
+            mBinding.insertDiaryButton.visibility = View.GONE
         } else {
             mBinding.composeView.visibility = View.GONE
-            mBinding.insertDiaryButtonContainer.visibility = View.VISIBLE
+            mBinding.insertDiaryButton.visibility = View.VISIBLE
         }
     }
 
@@ -833,19 +838,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         mBinding.insertDiaryButton.setOnLongClickListener {
-            var position = -1
-            val tomorrowTimeMillis =
-                EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
-            val filteredDiary =
-                mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
-            val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
-            target?.let {
-                position = getIndexBySequence(target.sequence)
-                makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
-                if (position != -1) {
-                    mBinding.diaryListView.scrollToPosition(position)
-                }
-            }
+            moveToday()
             true
         }
 
@@ -860,6 +853,21 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
+    private fun moveToday() {
+        var position = -1
+        val tomorrowTimeMillis =
+            EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+        val filteredDiary =
+            mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+        val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+        target?.let {
+            position = getIndexBySequence(target.sequence)
+            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+            if (position != -1) {
+                mBinding.diaryListView.scrollToPosition(position)
+            }
+        }
+    }
     private fun getIndexBySequence(sequence: Int): Int {
         var targetIndex = -1
         mDiaryList.forEachIndexed { index, diary ->
