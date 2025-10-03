@@ -1,107 +1,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/main_holder"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
-        <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/partial_bottom_toolbar"
+            layout="@layout/partial_bottom_toolbar" />
+
+        <include
+            android:id="@+id/partial_edit_photo_container"
+            layout="@layout/partial_edit_photo_container" />
+
         <me.blog.korn123.easydiary.views.FixedCardView
-            app:fixedAppcompatPadding="false"
+            style="@style/AppCard"
+            android:layout_height="0dp"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
             app:applyCardBackgroundColor="true"
             app:cardCornerRadius="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="0dp"
-            style="@style/AppCard">
+            app:fixedAppcompatPadding="false">
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:id="@+id/feelingSymbolButton"
-                                android:gravity="center"
-                                android:orientation="horizontal"
-                                android:minHeight="32dp"
-                                android:background="?attr/selectableItemBackgroundBorderless"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <ImageView
-                                    android:visibility="gone"
-                                    android:id="@+id/symbol"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_width="@dimen/diary_symbol_width"
-                                    android:layout_height="@dimen/diary_symbol_height" />
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:id="@+id/symbolText"
-                                    android:text="@string/diary_symbol"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:id="@+id/symbolTextArrow"
-                                    android:text="▼"
-                                    android:textSize="10dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                            </LinearLayout>
-                            <com.simplemobiletools.commons.views.MyEditText
-                                android:id="@+id/diaryTitle"
-                                style="@style/edit_diary_edit_inner_contents"
-                                android:layout_gravity="center_vertical"
-                                android:background="@android:color/transparent"
-                                android:gravity="center_vertical"
-                                android:hint="@string/guide_message"
-                                android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
-                            />
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical|end"
-                            style="@style/edit_diary_edit_inner_contents">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:id="@+id/date"
-                                tools:text="2021년10월23일 토요일 05:14"
-                                android:textColor="@color/default_text_color"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                style="@style/text_diary_read_fragment_inner_contents"/>
-                            <LinearLayout
-                                android:id="@+id/allDayContainer"
-                                android:orientation="horizontal"
-                                android:layout_marginStart="5dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <androidx.appcompat.widget.AppCompatCheckBox
-                                    app:buttonTint="@android:color/white"
-                                    android:id="@+id/allDay"
-                                    android:clickable="false"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:text="@string/all_day"
-                                    android:textColor="@android:color/white"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                            </LinearLayout>
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-                    </LinearLayout>
 
                     <ScrollView
                         android:id="@+id/contentsContainer"
@@ -110,76 +44,174 @@
                         android:layout_weight="1"
                         android:fillViewport="true">
 
-                        <com.simplemobiletools.commons.views.MyEditText
-                            android:id="@+id/diaryContents"
-                            style="@style/edit_diary_edit_inner_contents"
-                            android:background="@android:color/transparent"
-                            android:gravity="top"
-                            android:hint="@string/contents_text_hint"
-                            android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
+                        <LinearLayout style="@style/LinearLayoutVertical">
+
+                            <LinearLayout style="@style/LinearLayoutVertical">
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:id="@+id/feelingSymbolButton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="?attr/selectableItemBackgroundBorderless"
+                                        android:gravity="center"
+                                        android:minHeight="32dp"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:id="@+id/symbol"
+                                            android:layout_width="@dimen/diary_symbol_width"
+                                            android:layout_height="@dimen/diary_symbol_height"
+                                            android:layout_marginEnd="10dp"
+                                            android:visibility="gone" />
+
+                                        <com.simplemobiletools.commons.views.MyTextView
+                                            android:id="@+id/symbolText"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="10dp"
+                                            android:text="@string/diary_symbol" />
+
+                                        <com.simplemobiletools.commons.views.MyTextView
+                                            android:id="@+id/symbolTextArrow"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="10dp"
+                                            android:text="▼"
+                                            android:textSize="10dp" />
+                                    </LinearLayout>
+
+                                    <com.simplemobiletools.commons.views.MyEditText
+                                        android:id="@+id/diaryTitle"
+                                        style="@style/edit_diary_edit_inner_contents"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@android:color/transparent"
+                                        android:gravity="center_vertical"
+                                        android:hint="@string/guide_message"
+                                        android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    style="@style/edit_diary_edit_inner_contents"
+                                    android:gravity="center_vertical|end"
+                                    android:orientation="horizontal">
+
+                                    <com.simplemobiletools.commons.views.MyTextView
+                                        android:id="@+id/date"
+                                        style="@style/text_diary_read_fragment_inner_contents"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="@color/default_text_color"
+                                        tools:text="2021년10월23일 토요일 05:14" />
+
+                                    <LinearLayout
+                                        android:id="@+id/allDayContainer"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="5dp"
+                                        android:orientation="horizontal">
+
+                                        <androidx.appcompat.widget.AppCompatCheckBox
+                                            android:id="@+id/allDay"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:clickable="false"
+                                            app:buttonTint="@android:color/white" />
+
+                                        <com.simplemobiletools.commons.views.MyTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/all_day"
+                                            android:textColor="@android:color/white" />
+                                    </LinearLayout>
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+                            </LinearLayout>
+
+                            <com.simplemobiletools.commons.views.MyEditText
+                                android:id="@+id/diaryContents"
+                                style="@style/edit_diary_edit_inner_contents"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:gravity="top"
+                                android:hint="@string/contents_text_hint"
+                                android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
+                        </LinearLayout>
+
+
                     </ScrollView>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <me.blog.korn123.easydiary.views.FixedCardView
-                            app:fixedAppcompatPadding="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignWithParentIfMissing="true"
                             android:layout_toStartOf="@id/contentsLengthContainer"
-                            android:layout_alignWithParentIfMissing="true">
+                            app:fixedAppcompatPadding="true">
+
                             <LinearLayout
                                 android:id="@+id/locationContainer"
-                                tools:visibility="visible"
-                                android:visibility="gone"
-                                android:padding="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:gravity="center"
                                 android:orientation="horizontal"
-                                android:foreground="?attr/selectableItemBackgroundBorderless"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:padding="5dp"
+                                android:visibility="gone"
+                                tools:visibility="visible">
+
                                 <ImageView
-                                    android:layout_marginRight="3dp"
                                     android:id="@+id/locationSymbol"
-                                    android:src="@drawable/ic_map_marker_2"
                                     android:layout_width="10dp"
-                                    android:layout_height="10dp"/>
+                                    android:layout_height="10dp"
+                                    android:layout_marginRight="3dp"
+                                    android:src="@drawable/ic_map_marker_2" />
+
                                 <TextView
                                     android:id="@+id/locationLabel"
-                                    android:text="There is no location information. Click to update location information."
-                                    android:textColor="?attr/colorPrimary"
                                     android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:ellipsize="end"
                                     android:singleLine="true"
-                                    android:layout_height="wrap_content"/>
+                                    android:text="There is no location information. Click to update location information."
+                                    android:textColor="?attr/colorPrimary" />
                             </LinearLayout>
                         </me.blog.korn123.easydiary.views.FixedCardView>
+
                         <me.blog.korn123.easydiary.views.FixedCardView
                             android:id="@+id/contentsLengthContainer"
-                            android:layout_marginStart="5dp"
-                            android:layout_alignParentEnd="true"
-                            app:fixedAppcompatPadding="true"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="5dp"
+                            app:fixedAppcompatPadding="true">
+
                             <TextView
-                                tools:text="100"
                                 android:id="@+id/contentsLength"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:textColor="?attr/colorPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                tools:text="100" />
                         </me.blog.korn123.easydiary.views.FixedCardView>
                     </RelativeLayout>
                 </LinearLayout>
 
                 <androidx.core.widget.ContentLoadingProgressBar
-                    style="?android:progressBarStyleLarge"
-                    tools:visibility="visible"
-                    android:visibility="gone"
                     android:id="@+id/locationProgress"
-                    android:layout_gravity="center"
+                    style="?android:progressBarStyleLarge"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"/>
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
             </FrameLayout>
         </me.blog.korn123.easydiary.views.FixedCardView>
     </LinearLayout>
