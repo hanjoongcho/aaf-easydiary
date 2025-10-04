@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -125,6 +126,7 @@ fun TreeContent(
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
     var visibleSubTitle by remember { mutableStateOf(false) }
+    var stretchCard by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val settingCardModifier = Modifier.fillMaxWidth()
     var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
@@ -140,8 +142,10 @@ fun TreeContent(
 
     OptionDialog (
         showDialog = showOptionDialog,
-        optionEnabled = visibleSubTitle,
-        onOptionChangeVisibleSubTitle = { visibleSubTitle = it },
+        visibleSubTitle = visibleSubTitle,
+        visibleSubTitleChaneCallback = { visibleSubTitle = it },
+        stretchCard = stretchCard,
+        stretchCardChaneCallback = { stretchCard = it },
         onDismiss = { showOptionDialog = false }
     )
 
@@ -195,6 +199,7 @@ fun TreeContent(
                         isShow = node.isShow,
                         isFolderOpen = node.isFolderOpen,
                         visibleSubTitle = visibleSubTitle,
+                        stretchCard = stretchCard,
                         modifier = Modifier.padding(
                             0.dp,
                             0.dp,
@@ -425,6 +430,7 @@ fun TreeCard(
     isShow: Boolean = true,
     isFolderOpen: Boolean = true,
     visibleSubTitle: Boolean = true,
+    stretchCard: Boolean = false,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
@@ -465,15 +471,19 @@ fun TreeCard(
                     .weight(1f)
             ) {
 
+                val cardModifier = modifier
+                    .padding(1.dp, 1.dp)
+                    .combinedClickable(
+                        onClick = { onClick.invoke() },
+                        onLongClick = { onLongClick.invoke() }
+                    )
+                if (stretchCard) {
+                    cardModifier.fillMaxWidth()
+                }
                 Card(
                     shape = RoundedCornerShape(roundedCornerShapeSize.dp),
                     colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                    modifier = modifier
-                        .padding(1.dp, 1.dp)
-                        .combinedClickable(
-                            onClick = { onClick.invoke() },
-                            onLongClick = { onLongClick.invoke() }
-                        ),
+                    modifier = if (stretchCard) cardModifier.fillMaxWidth() else cardModifier,
                     elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
                 ) {
                     Column(
@@ -553,21 +563,32 @@ fun TreeCard(
 @Composable
 fun OptionDialog(
     showDialog: Boolean,
-    optionEnabled: Boolean,
     fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
         LocalContext.current
     ),
-    onOptionChangeVisibleSubTitle: (Boolean) -> Unit,
+    visibleSubTitle: Boolean,
+    visibleSubTitleChaneCallback: (Boolean) -> Unit,
+    stretchCard: Boolean,
+    stretchCardChaneCallback: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     if (showDialog) {
         AlertDialog(
+            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
             containerColor = Color(LocalContext.current.config.backgroundColor),
             onDismissRequest = onDismiss,
             confirmButton = {
-                TextButton(onClick = onDismiss) {
+                TextButton (onClick = onDismiss) {
                     SimpleText(text = "확인")
                 }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_easydiary),
+                    contentDescription = null,
+                    tint = Color(LocalContext.current.config.textColor),
+//                    modifier = Modifier.size(20.dp)
+                )
             },
             title = {
                 SimpleText(
@@ -577,27 +598,51 @@ fun OptionDialog(
                 )
             },
             text = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    SimpleText(
-                        modifier = Modifier.weight(1f),
-                        "Node 전체경로 표시",
-                    )
-                    Switch(
-                        modifier = Modifier.padding(start = 10.dp),
-                        checked = optionEnabled,
-                        onCheckedChange = onOptionChangeVisibleSubTitle,
-                        thumbContent = if (optionEnabled) {
-                            {
-                                Icon(
-                                    imageVector = Icons.Filled.Check,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                                )
+                Column {
+                    Row {
+                        SimpleText(
+                            modifier = Modifier.weight(1f),
+                            "Node 전체경로 표시",
+                        )
+                        Switch(
+                            modifier = Modifier.padding(start = 10.dp),
+                            checked = visibleSubTitle,
+                            onCheckedChange = visibleSubTitleChaneCallback,
+                            thumbContent = if (visibleSubTitle) {
+                                {
+                                    Icon(
+                                        imageVector = Icons.Filled.Check,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                                    )
+                                }
+                            } else {
+                                null
                             }
-                        } else {
-                            null
-                        }
-                    )
+                        )
+                    }
+                    Row {
+                        SimpleText(
+                            modifier = Modifier.weight(1f),
+                            "아이템 카드 스트레치",
+                        )
+                        Switch(
+                            modifier = Modifier.padding(start = 10.dp),
+                            checked = stretchCard,
+                            onCheckedChange = stretchCardChaneCallback,
+                            thumbContent = if (stretchCard) {
+                                {
+                                    Icon(
+                                        imageVector = Icons.Filled.Check,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                                    )
+                                }
+                            } else {
+                                null
+                            }
+                        )
+                    }
                 }
             }
         )
