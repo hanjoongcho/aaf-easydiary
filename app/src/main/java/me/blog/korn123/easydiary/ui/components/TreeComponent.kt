@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.ui.components
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,22 +30,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -57,36 +49,33 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.zIndex
-import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.FontUtils
@@ -125,7 +114,7 @@ fun TreeContent(
         WindowInsets.ime.asPaddingValues().calculateBottomPadding()) else 0.dp
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
-    var visibleSubTitle by remember { mutableStateOf(false) }
+    var visibleSubTitle by remember { mutableStateOf(true) }
     var stretchCard by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val settingCardModifier = Modifier.fillMaxWidth()
@@ -329,7 +318,9 @@ fun TreeToolbar(
                 clip = false // 기본값
             )
             .background(
-                color = if (isFocused) Color(LocalContext.current.config.primaryColor) else Color(LocalContext.current.config.backgroundColor),
+                color = if (isFocused) Color(LocalContext.current.config.primaryColor) else Color(
+                    LocalContext.current.config.backgroundColor
+                ),
                 shape = RoundedCornerShape(15.dp)
             )
 //            .alpha(0.8f)
@@ -599,7 +590,7 @@ fun OptionDialog(
             },
             text = {
                 Column {
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         SimpleText(
                             modifier = Modifier.weight(1f),
                             "Node 전체경로 표시",
@@ -621,7 +612,7 @@ fun OptionDialog(
                             }
                         )
                     }
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         SimpleText(
                             modifier = Modifier.weight(1f),
                             "아이템 카드 스트레치",
@@ -646,30 +637,6 @@ fun OptionDialog(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun ElevatedButtonWrapper(
-    text: String,
-    modifier: Modifier = Modifier,
-    fontColor: Color = Color.White,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    ElevatedButton(
-        onClick = onClick,
-        colors = ButtonDefaults.elevatedButtonColors(
-            containerColor = Color(LocalContext.current.config.primaryColor),   // 배경색
-            contentColor = fontColor,   // 텍스트/아이콘 색
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant, // 비활성화 배경색
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant // 비활성화 텍스트색
-        ),
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier,
-        enabled = enabled
-    ) {
-        SimpleText(text = text, fontColor = fontColor)
     }
 }
 
@@ -720,12 +687,12 @@ fun BottomToolBar(
                 )
             }
 
-            ElevatedButtonWrapper(text = "작성") { writeDiaryCallback() }
-            ElevatedButtonWrapper(text = "펼치기") { expandTreeCallback() }
-            ElevatedButtonWrapper(text = "접기") { collapseTreeCallback() }
-            ElevatedButtonWrapper(text = "위로") { scrollTop() }
-            ElevatedButtonWrapper(text = "아래로") { scrollEnd() }
-            ElevatedButtonWrapper(text = "Clear Focus") {
+            CustomElevatedButton(text = "작성") { writeDiaryCallback() }
+            CustomElevatedButton(text = "펼치기") { expandTreeCallback() }
+            CustomElevatedButton(text = "접기") { collapseTreeCallback() }
+            CustomElevatedButton(text = "위로") { scrollTop() }
+            CustomElevatedButton(text = "아래로") { scrollEnd() }
+            CustomElevatedButton(text = "Clear Focus") {
                 focusManager.clearFocus()
             }
 

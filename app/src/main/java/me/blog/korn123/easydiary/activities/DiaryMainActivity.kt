@@ -20,32 +20,26 @@ import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.BounceInterpolator
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -111,16 +105,12 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
-import androidx.core.view.isGone
-import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
-import me.blog.korn123.easydiary.ui.components.BottomToolBar
-import me.blog.korn123.easydiary.ui.components.BottomToolBarButton
-import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.ui.components.ElevatedButtonWrapper
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -233,10 +223,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         },
                 ) {
 
-                    BottomToolBarButton(text = "TODAY") {
+                    CustomElevatedButton(text = "TODAY") {
                         moveToday()
                     }
-                    BottomToolBarButton(
+                    CustomElevatedButton(
                         iconResourceId = R.drawable.ic_edit,
                     ) {
                         val createDiary =
@@ -249,13 +239,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //                    BottomToolBarButton(text = "메뉴") {
 //                        openCustomOptionMenu()
 //                    }
-                    BottomToolBarButton(iconResourceId = R.drawable.ic_bug_2) {
+                    CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
                             Intent(this@DiaryMainActivity, DevActivity::class.java)
                         )
                     }
-                    BottomToolBarButton(iconResourceId = R.drawable.ic_running) {
+                    CustomElevatedButton(iconResourceId = R.drawable.ic_running) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
                             Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
