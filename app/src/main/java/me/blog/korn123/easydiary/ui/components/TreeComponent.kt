@@ -115,7 +115,7 @@ fun TreeContent(
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
     var visibleSubTitle by remember { mutableStateOf(true) }
-    var stretchCard by remember { mutableStateOf(false) }
+    var stretchCard by remember { mutableStateOf(true) }
     var isLoading by remember { mutableStateOf(false) }
     val settingCardModifier = Modifier.fillMaxWidth()
     var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
