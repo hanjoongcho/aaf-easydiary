@@ -100,6 +100,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivit
 fun TreeContent(
     innerPadding: PaddingValues,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+    isReverseMode: Boolean = false,
     total: Int,
     treeData: List<Pair<FileNode, Int>>,
     currentQuery: String,
@@ -126,8 +127,18 @@ fun TreeContent(
 
     // 패딩이 변경되면 스크롤을 맨 위로 이동
     LaunchedEffect(topToolbarHeight) {
-        listState.scrollToItem(0)
+        if (isReverseMode) {
+            listState.scrollToItem(filteredTreeData.size.minus(1))
+        } else {
+            listState.scrollToItem(0)
+        }
     }
+
+//    LaunchedEffect(filteredTreeData.size) {
+//        if (isReverseMode && filteredTreeData.isNotEmpty()) {
+//            listState.scrollToItem(filteredTreeData.size - 1) // 마지막 아이템으로 즉시 이동
+//        }
+//    }
 
     OptionDialog (
         showDialog = showOptionDialog,

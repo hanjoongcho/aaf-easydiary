@@ -1,25 +1,17 @@
 package me.blog.korn123.easydiary.compose
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -41,31 +33,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryReadingActivity
-import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
-import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
-import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBar
-import me.blog.korn123.easydiary.ui.components.OptionDialog
-import me.blog.korn123.easydiary.ui.components.TreeCard
 import me.blog.korn123.easydiary.ui.components.TreeContent
-import me.blog.korn123.easydiary.ui.components.TreeToolbar
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.TreeViewModel
 
 class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
+    val treeViewModel: TreeViewModel by viewModels()
 
 
     /***************************************************************************************************
@@ -81,12 +65,15 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchDiary()
+    }
 
     /***************************************************************************************************
      *   Define Compose
      *
      ***************************************************************************************************/
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun TreeTimeline() {
@@ -97,34 +84,21 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
         )
-        var currentQuery by remember { mutableStateOf("") }
-        var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
-        var total by remember { mutableIntStateOf(0) }
+//        var currentQuery by remember { mutableStateOf("") }
+//        var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
+//        var total by remember { mutableIntStateOf(0) }
+        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
+        val total: Int by treeViewModel.total.observeAsState(0)
 
         fun toggleWholeTree(isExpand: Boolean) {
-            treeData = TreeUtils.toggleWholeTree(treeData, isExpand)
+            treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))
         }
 
         fun toggleChildren(fileNode: FileNode) {
-            treeData = TreeUtils.toggleChildren(treeData, fileNode)
+            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, fileNode))
         }
 
-        fun findDiary(): List<Diary> {
-            return EasyDiaryDbHelper.findDiary(currentQuery)
-        }
-
-        fun fetchDiary() {
-            val diaryItems = findDiary()
-            val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
-                    diary ->  "${diary.dateString}".split("-").toMutableList()
-            }
-            val originTreeData = flattenTree(fileNode, sortOption = "desc")
-            treeData = originTreeData.map { pair ->
-                if (pair.second == 1) pair.first.isShow = true
-                pair
-            }
-            total = diaryItems.size
-        }
         fetchDiary()
 
         AppTheme {
@@ -136,23 +110,24 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     TreeContent(
                         innerPadding = innerPadding,
                         enableCardViewPolicy = enableCardViewPolicy,
+                        isReverseMode = true,
                         total = total,
                         treeData = treeData,
                         currentQuery = currentQuery,
                         fetchDiary = { fetchDiary() },
-                        updateQuery = { currentQuery = it },
+                        updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
                         folderOnClick = { node ->
                             val newFirst =
                                 node.copy(isFolderOpen = node.isFolderOpen.not())
                             // pair 객체가 리컴포지션 되도록
-                            treeData = treeData.map { data ->
+                            treeViewModel.setTreeData(treeData.map { data ->
                                 if (data.first.fullPath == node.fullPath) {
                                     data.copy(first = newFirst)
                                 } else {
                                     data
                                 }
-                            }
+                            })
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
@@ -244,6 +219,29 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                 floatingActionButtonPosition = FabPosition.Center,
             )
         }
+    }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+
+    fun findDiary(): List<Diary> {
+        return EasyDiaryDbHelper.findDiary(query = treeViewModel.currentQuery.value, checkFutureDiaryOption = true)
+    }
+
+    fun fetchDiary() {
+        val diaryItems = findDiary()
+        val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
+                diary ->  "${diary.dateString}".split("-").toMutableList()
+        }
+        val originTreeData = flattenTree(fileNode, sortOption = "asc")
+        treeViewModel.setTreeData(treeData = originTreeData.map { pair ->
+            if (pair.second == 1) pair.first.isShow = true
+            pair
+        })
+        treeViewModel.setTotal(diaryItems.size)
     }
 }
 

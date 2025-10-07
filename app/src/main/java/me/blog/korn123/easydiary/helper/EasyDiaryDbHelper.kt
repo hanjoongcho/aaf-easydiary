@@ -149,7 +149,7 @@ object EasyDiaryDbHelper {
      *
      * @return an in-memory detached copy of managed RealmObjects.
      */
-    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, isDiaryMain: Boolean = false, realmInstance: Realm = getInstance()): List<Diary> {
+    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, checkFutureDiaryOption: Boolean = false, realmInstance: Realm = getInstance()): List<Diary> {
         var results: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
             true -> {
                 realmInstance.where(Diary::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
@@ -172,7 +172,7 @@ object EasyDiaryDbHelper {
             else -> results
         }
 
-        if (isDiaryMain && EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
+        if (checkFutureDiaryOption && EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
             results = results.where().lessThanOrEqualTo("currentTimeMillis", System.currentTimeMillis()).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
         }
 

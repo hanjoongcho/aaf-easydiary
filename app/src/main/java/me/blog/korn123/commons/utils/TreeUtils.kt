@@ -34,7 +34,7 @@ object TreeUtils {
             var current = root
 //            val parts = "${diary.dateString}".split("-").toMutableList()
             val parts = partsGenerator(diary)
-            if (addOptionalTitle) parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
+            if (addOptionalTitle) parts.add("${diary.currentTimeMillis.div(1000)}_${EasyDiaryUtils.summaryDiaryLabel(diary)}")
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 partPath += if (partPath.isEmpty()) part else "/$part"
