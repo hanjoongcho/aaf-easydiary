@@ -34,11 +34,11 @@ object TreeUtils {
             var current = root
 //            val parts = "${diary.dateString}".split("-").toMutableList()
             val parts = partsGenerator(diary)
-            if (addOptionalTitle) parts.add("${diary.currentTimeMillis.div(1000)}_${EasyDiaryUtils.summaryDiaryLabel(diary)}")
+            if (addOptionalTitle) parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
-                partPath += if (partPath.isEmpty()) part else "/$part"
                 val isFile = i == parts.lastIndex
+                partPath += if (partPath.isEmpty()) part else if (isFile) "/${diary.currentTimeMillis.div(1000)}_$part" else "/$part"
                 val existing = current.children.find { it.name == part }
                 if (existing != null) {
                     current = existing
