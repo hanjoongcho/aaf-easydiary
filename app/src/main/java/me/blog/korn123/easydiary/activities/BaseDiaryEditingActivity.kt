@@ -710,7 +710,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 mBinding.partialEditContents.contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (mBinding.partialEditContents.feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
             }
         } else {
-            mBinding.partialEditContents.diaryContents.requestFocus()
+//            mBinding.partialEditContents.diaryContents.requestFocus()
         }
 
         // TODO fixme elegance

@@ -134,8 +134,8 @@
                             <com.simplemobiletools.commons.views.MyEditText
                                 android:id="@+id/diaryContents"
                                 style="@style/edit_diary_edit_inner_contents"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:minHeight="500dp"
+                                android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
                                 android:gravity="top"
                                 android:hint="@string/contents_text_hint"
