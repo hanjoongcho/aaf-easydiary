@@ -6,18 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,24 +17,17 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.ui.components.BottomToolBar
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.TreeViewModel
@@ -70,6 +54,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         fetchDiary()
     }
 
+
     /***************************************************************************************************
      *   Define Compose
      *
@@ -84,9 +69,6 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
         )
-//        var currentQuery by remember { mutableStateOf("") }
-//        var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
-//        var total by remember { mutableIntStateOf(0) }
         val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
         val total: Int by treeViewModel.total.observeAsState(0)
@@ -133,34 +115,14 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         },
                     )
                 },
-//                floatingActionButton = {
-//                    FloatingActionButton(
-//                        onClick = { finishActivityWithTransition() },
-//                        containerColor = Color(LocalContext.current.config.primaryColor),
-//                        contentColor = Color.White,
-//                        shape = RoundedCornerShape(12.dp),
-//                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
-//                        modifier = Modifier.size(40.dp)
-//                    ) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.ic_cross),
-//                            contentDescription = "Finish Activity"
-//                        )
-//                    }
-//                },
-//                floatingActionButtonPosition = FabPosition.Center,
             )
         }
     }
 
     @Composable
-    @Preview(heightDp = 600)
+    @Preview(heightDp = 800)
     private fun TreeTimelinePreview() {
         AppTheme {
-            val context = LocalContext.current
-            val configuration = LocalConfiguration.current
-            val settingCardModifier = Modifier.fillMaxWidth()
-            val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
             var total by remember { mutableIntStateOf(0) }
             var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
             fun findDiary(): List<Diary> {
@@ -183,6 +145,8 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             }
             fetchDiary()
             Scaffold(
+                // 하단 패딩은 수동 관리
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                 content = { innerPadding ->
                     TreeContent(
                         innerPadding = innerPadding,
@@ -195,28 +159,6 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         folderOnClick = {},
                     )
                 },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {  },
-                        containerColor = Color(LocalContext.current.config.primaryColor),
-                        contentColor = Color.White,
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cross),
-                            contentDescription = "Finish Activity"
-                        )
-                    }
-                },
-                bottomBar = {
-                    BottomToolBar(
-                        bottomPadding = bottomPadding,
-                        showOptionDialog = {  },
-                    )
-                },
-                floatingActionButtonPosition = FabPosition.Center,
             )
         }
     }
