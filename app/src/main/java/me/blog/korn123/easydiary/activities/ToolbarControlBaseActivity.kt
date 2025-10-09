@@ -106,7 +106,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
             val targetView = if (config.enableDebugMode) composeView else insertDiaryButton
             targetView.run {
 //                visibility = View.GONE
-                animate().alpha(0.1F).setDuration(100).setListener(object : Animator.AnimatorListener {
+                animate().alpha(0F).setDuration(300).setListener(object : Animator.AnimatorListener {
                     //                    override fun onAnimationStart(animation: android.animation.Animator?) {}
 //                    override fun onAnimationEnd(animation: android.animation.Animator?) {
 //                        visibility = View.GONE

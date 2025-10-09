@@ -76,6 +76,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.FontUtils
@@ -125,13 +126,24 @@ fun TreeContent(
     val coroutineScope = rememberCoroutineScope()
     val filteredTreeData: List<Pair<FileNode, Int>> = treeData.filter { data -> data.first.isRootShow && data.first.isShow }
 
+
+    fun moveScrollPosition() {
+        coroutineScope.launch {
+            if (isReverseMode && filteredTreeData.isNotEmpty()) {
+                listState.scrollToItem(filteredTreeData.size.minus(1))
+            } else {
+                listState.scrollToItem(0)
+            }
+        }
+    }
+
     // 패딩이 변경되면 스크롤을 맨 위로 이동
     LaunchedEffect(topToolbarHeight) {
-        if (isReverseMode) {
-            listState.scrollToItem(filteredTreeData.size.minus(1))
-        } else {
-            listState.scrollToItem(0)
-        }
+        moveScrollPosition()
+    }
+
+    LaunchedEffect(filteredTreeData.size) {
+        moveScrollPosition()
     }
 
 //    LaunchedEffect(filteredTreeData.size) {
@@ -156,7 +168,7 @@ fun TreeContent(
     ) {
         val density = LocalDensity.current
         TreeToolbar(
-            title = "[Total: $total] category or title",
+            title = "${filteredTreeData.size}[Total: $total] category or title",
             modifier = settingCardModifier
                 .padding(
                     0.dp,
@@ -171,7 +183,7 @@ fun TreeContent(
                 },
             enableCardViewPolicy = enableCardViewPolicy,
         ) { query ->
-            updateQuery(query.trim())
+            updateQuery(query)
             fetchDiary()
         }
 
