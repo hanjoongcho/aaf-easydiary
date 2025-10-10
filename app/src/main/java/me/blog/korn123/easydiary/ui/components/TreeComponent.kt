@@ -49,10 +49,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -61,6 +63,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -72,10 +75,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FileNode
@@ -126,7 +131,6 @@ fun TreeContent(
     val coroutineScope = rememberCoroutineScope()
     val filteredTreeData: List<Pair<FileNode, Int>> = treeData.filter { data -> data.first.isRootShow && data.first.isShow }
 
-
     fun moveScrollPosition() {
         coroutineScope.launch {
             if (isReverseMode && filteredTreeData.isNotEmpty()) {
@@ -152,6 +156,29 @@ fun TreeContent(
 //        }
 //    }
 
+    var thumbVisible by remember { mutableStateOf(false) }
+    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
+    var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
+    var hideJob: Job? by remember { mutableStateOf(null) }
+    val delayTimeMillis = 1500L
+
+    // 스크롤 이벤트 감지
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.isScrollInProgress }
+            .collect { isScrolling ->
+                if (isScrolling) {
+                    hideJob?.cancel()
+                    thumbVisible = true
+                } else {
+                    hideJob?.cancel()
+                    hideJob = launch {
+                        delay(delayTimeMillis)
+                        if (!isDraggingThumb) thumbVisible = false
+                    }
+                }
+            }
+    }
+
     OptionDialog (
         showDialog = showOptionDialog,
         visibleSubTitle = visibleSubTitle,
@@ -165,6 +192,7 @@ fun TreeContent(
         modifier = Modifier
             .padding(innerPadding)
             .fillMaxSize()
+            .onSizeChanged { containerSize = it }
     ) {
         val density = LocalDensity.current
         TreeToolbar(
@@ -310,6 +338,29 @@ fun TreeContent(
                 )
             }
         }
+
+        FastScroll(
+            items = filteredTreeData,
+            listState = listState,
+            containerHeightPx = containerSize.height.toFloat(),
+            isDraggingThumb = isDraggingThumb,
+            thumbVisible = thumbVisible,
+            containerSize = containerSize,
+            modifier = Modifier
+                .align(Alignment.TopEnd),
+            showDebugCard = true,
+            updateThumbVisible = { thumbVisible = it },
+            updateDraggingThumb = { isDraggingThumb = it },
+            dragEndCallback = {
+                hideJob?.cancel()
+                coroutineScope.launch {
+                    hideJob = launch {
+                        delay(delayTimeMillis)
+                        if (!isDraggingThumb) thumbVisible = false
+                    }
+                }
+            }
+        )
     }
 }
 

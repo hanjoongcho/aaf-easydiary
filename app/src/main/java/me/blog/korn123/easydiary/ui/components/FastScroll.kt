@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -165,14 +166,14 @@ fun FastScroll(
 
     if (showDebugCard) {
         Card(
+            modifier = Modifier.zIndex(3f),
             shape = RoundedCornerShape(roundedCornerShapeSize.dp),
             colors = CardDefaults.cardColors(
                 Color(LocalContext.current.config.backgroundColor).copy(
                     alpha = 0.8f
                 )
             ),
-
-            ) {
+        ) {
             SimpleText(
                 text = "" +
                         "firstIndex: ${firstIndex.value}\n" +
