@@ -20,11 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.android.material.snackbar.Snackbar
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
@@ -47,6 +50,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             mSettingsViewModel = initSettingsViewModel()
             TreeTimeline()
         }
+        showBetaFeatureMessage()
     }
 
     override fun onResume() {

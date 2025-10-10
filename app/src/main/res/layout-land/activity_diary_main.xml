@@ -125,22 +125,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:fitsSystemWindows="true"
-            android:id="@+id/insertDiaryButtonContainer"
-            android:layout_gravity="bottom|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <com.simplemobiletools.commons.views.MyFloatingActionButton
-                android:id="@+id/insertDiaryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                android:contentDescription="@string/write_diary"
-                app:srcCompat="@drawable/ic_edit" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/modalContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

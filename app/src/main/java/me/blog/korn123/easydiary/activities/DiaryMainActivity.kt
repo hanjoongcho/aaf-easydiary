@@ -57,6 +57,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
+import me.blog.korn123.easydiary.compose.TreeTimelineActivity
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -126,7 +127,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private lateinit var mGridLayoutManager: GridLayoutManager
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
-    private var mShowcaseIndex = 0
+    private var mShowcaseIndex = 1
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
     private var mLastHistoryCheckMillis = System.currentTimeMillis()
@@ -223,11 +224,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         },
                 ) {
 
-                    CustomElevatedButton(text = "TODAY") {
-                        moveToday()
-                    }
                     CustomElevatedButton(
-                        iconResourceId = R.drawable.ic_edit,
+                        text = getString(R.string.button_new_entry), iconResourceId = R.drawable.ic_edit, iconSize = 16.dp
                     ) {
                         val createDiary =
                             Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
@@ -236,20 +234,32 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             createDiary
                         )
                     }
-//                    BottomToolBarButton(text = "메뉴") {
-//                        openCustomOptionMenu()
-//                    }
-                    CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
+                    CustomElevatedButton(text = getString(R.string.button_tree_view), iconResourceId = R.drawable.ic_tree_structure, iconSize = 16.dp) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, DevActivity::class.java)
+                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java)
                         )
                     }
-                    CustomElevatedButton(iconResourceId = R.drawable.ic_running) {
+                    CustomElevatedButton(text = getString(R.string.button_quick_settings), iconResourceId = R.drawable.ic_running, iconSize = 16.dp) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
                             Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
                         )
+                    }
+                    CustomElevatedButton(text = "MENU", iconResourceId = R.drawable.ic_options_three_dots, iconSize = 16.dp) {
+                        openCustomOptionMenu()
+                    }
+
+                    if (config.enableDebugMode) {
+                        CustomElevatedButton(text = "TODAY") {
+                            moveToday()
+                        }
+                           CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, DevActivity::class.java)
+                            )
+                        }
                     }
                 }
 
@@ -336,13 +346,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
 
-        if (config.enableDebugMode) {
-            mBinding.composeView.visibility = View.VISIBLE
-            mBinding.insertDiaryButtonContainer.visibility = View.GONE
-        } else {
-            mBinding.composeView.visibility = View.GONE
-            mBinding.insertDiaryButtonContainer.visibility = View.VISIBLE
-        }
+        mBinding.composeView.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
@@ -752,12 +756,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         val showcaseViewOnClickListener = View.OnClickListener {
             mShowcaseView?.run {
                 when (mShowcaseIndex) {
-                    0 -> {
-                        setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(mBinding.query), true)
-                        setContentTitle(getString(R.string.read_diary_showcase_title_2))
-                        setContentText(getString(R.string.read_diary_showcase_message_2))
-                    }
                     1 -> {
                         setButtonPosition(centerParams)
                         setShowcase(ViewTarget(mBinding.diaryListView), true)
@@ -791,9 +789,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mShowcaseView = ShowcaseView.Builder(this)
             .withMaterialShowcase()
-            .setTarget(ViewTarget(mBinding.insertDiaryButton))
-            .setContentTitle(getString(R.string.read_diary_showcase_title_1))
-            .setContentText(getString(R.string.read_diary_showcase_message_1))
+            .setTarget(ViewTarget(mBinding.query))
+            .setContentTitle(getString(R.string.read_diary_showcase_title_2))
+            .setContentText(getString(R.string.read_diary_showcase_message_2))
             .setStyle(R.style.ShowcaseTheme)
             .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
             .setOnClickListener(showcaseViewOnClickListener)
@@ -820,18 +818,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
-
-        mBinding.insertDiaryButton.setOnClickListener {
-            val createDiary = Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-            //                startActivity(createDiary);
-            //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
-            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
-        }
-
-        mBinding.insertDiaryButton.setOnLongClickListener {
-            moveToday()
-            true
-        }
 
         mBinding.feelingSymbolButton.setOnClickListener {
             openFeelingSymbolDialog(

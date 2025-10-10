@@ -1111,4 +1111,7 @@
     <string name="sync_google_calendar_event_summary">구글캘린더에 등록된 이벤트를 이용하여 다이어리를 자동으로 생성합니다. 이미 동기화된 다이어리의 이벤트는 추가로 생성되지 않습니다.</string>
     <string name="quick_setting_title">[BETA] 빠른 설정</string>
     <string name="quick_setting_summary">이 옵션을 활성화 시키면 디바이스를 흔들어서 빠른설정 화면을 열 수 있습니다.</string>
+    <string name="button_new_entry">새로운 기록</string>
+    <string name="button_tree_view">트리뷰</string>
+    <string name="button_quick_settings">빠른설정</string>
 </resources>

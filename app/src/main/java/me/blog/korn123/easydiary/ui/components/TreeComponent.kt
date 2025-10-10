@@ -168,7 +168,7 @@ fun TreeContent(
     ) {
         val density = LocalDensity.current
         TreeToolbar(
-            title = "${filteredTreeData.size}[Total: $total] category or title",
+            title = "[Total: $total] category or title",
             modifier = settingCardModifier
                 .padding(
                     0.dp,
@@ -696,25 +696,12 @@ fun BottomToolBar(
 
             Spacer(modifier = Modifier.width(5.dp))
 
-            FloatingActionButton(
-                onClick = { closeCallback() },
-                containerColor = Color(LocalContext.current.config.primaryColor),
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "Finish Activity"
-                )
-            }
-
-            CustomElevatedButton(text = "작성") { writeDiaryCallback() }
-            CustomElevatedButton(text = "펼치기") { expandTreeCallback() }
-            CustomElevatedButton(text = "접기") { collapseTreeCallback() }
-            CustomElevatedButton(text = "위로") { scrollTop() }
-            CustomElevatedButton(text = "아래로") { scrollEnd() }
+            CustomElevatedButton(text = "Close", iconResourceId = R.drawable.ic_cross, iconSize = 16.dp) { closeCallback() }
+            CustomElevatedButton(text = "New Entry", iconResourceId = R.drawable.ic_edit, iconSize = 16.dp) { writeDiaryCallback() }
+            CustomElevatedButton(text = "Expand All", iconResourceId = R.drawable.ic_expand, iconSize = 16.dp) { expandTreeCallback() }
+            CustomElevatedButton(text = "Collapse All", iconResourceId = R.drawable.ic_collapse, iconSize = 16.dp) { collapseTreeCallback() }
+            CustomElevatedButton(text = "↑ Top") { scrollTop() }
+            CustomElevatedButton(text = "↓  Bottom") { scrollEnd() }
             CustomElevatedButton(text = "Clear Focus") {
                 focusManager.clearFocus()
             }

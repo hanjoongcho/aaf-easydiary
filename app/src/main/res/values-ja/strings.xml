@@ -1111,4 +1111,7 @@
     <string name="sync_google_calendar_event_summary">Googleカレンダーに登録されたイベントを使用して日記を自動的に作成します。 すでに同期されている日記のイベントは追加されません。</string>
     <string name="quick_setting_title">[BETA] クイック設定</string>
     <string name="quick_setting_summary">このオプションを有効にすると、デバイスを振ってクイック設定画面を開くことができます。</string>
+    <string name="button_new_entry">新規作成</string>
+    <string name="button_tree_view">ツリービュー</string>
+    <string name="button_quick_settings">クイック設定</string>
 </resources>

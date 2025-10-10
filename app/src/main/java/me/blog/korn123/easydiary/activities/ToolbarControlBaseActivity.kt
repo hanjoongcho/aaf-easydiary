@@ -91,8 +91,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         moveToolbar(0F)
         if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
         mBinding.run {
-            val targetView = if (config.enableDebugMode) composeView else insertDiaryButton
-            targetView.run {
+            composeView.run {
                 visibility = View.VISIBLE
                 animate().alpha(1F).setDuration(300).setListener(null)
             }
@@ -103,8 +102,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         moveToolbar(-mBinding.appBar.height.toFloat())
         mBinding.searchCard.useCompatPadding = false
         mBinding.run {
-            val targetView = if (config.enableDebugMode) composeView else insertDiaryButton
-            targetView.run {
+            composeView.run {
 //                visibility = View.GONE
                 animate().alpha(0F).setDuration(300).setListener(object : Animator.AnimatorListener {
                     //                    override fun onAnimationStart(animation: android.animation.Animator?) {}

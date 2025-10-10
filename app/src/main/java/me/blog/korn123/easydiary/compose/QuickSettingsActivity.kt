@@ -51,6 +51,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.navigationBarHeight
+import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
@@ -119,6 +120,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 )
             }
         }
+        showBetaFeatureMessage()
     }
 
 

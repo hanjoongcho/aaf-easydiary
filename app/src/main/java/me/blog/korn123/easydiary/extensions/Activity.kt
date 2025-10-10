@@ -14,6 +14,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
@@ -140,8 +141,15 @@ fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activi
 fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar
         .make(findViewById(android.R.id.content), message, duration)
+        .setBackgroundTint(config.primaryColor)
+        .setTextColor(Color.WHITE)
         .setAction("Action", null).show()
 }
+
+fun Activity.showBetaFeatureMessage() {
+    makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
+}
+
 
 
 /***************************************************************************************************
