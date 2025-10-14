@@ -180,7 +180,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
 
     fun fetchDiary() {
         val diaryItems = findDiary()
-        val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
+        val fileNode = buildFileTree(diaryItems, addOptionalTitle = true, addOptionalSortPrefix = true) {
                 diary ->  "${diary.dateString}".split("-").toMutableList()
         }
         val originTreeData = flattenTree(fileNode, sortOption = "asc")

@@ -28,7 +28,7 @@ object TreeUtils {
      * Each path is expected to be in the format "dir1/dir2/file.txt".
      * If addOptionalTitle is true, the file name is added as the last part of the path.
      */
-    fun buildFileTree(items: List<Diary>, addOptionalTitle: Boolean = false, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
+    fun buildFileTree(items: List<Diary>, addOptionalTitle: Boolean = false, addOptionalSortPrefix: Boolean = false, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
         val root = FileNode("root", sequence = 0)
         for (diary in items) {
             var current = root
@@ -38,7 +38,7 @@ object TreeUtils {
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 val isFile = i == parts.lastIndex
-                partPath += if (partPath.isEmpty()) part else if (isFile) "/${diary.currentTimeMillis.div(1000)}_$part" else "/$part"
+                partPath += if (partPath.isEmpty()) part else if (isFile && addOptionalSortPrefix) "/${diary.currentTimeMillis.div(1000)}_$part" else "/$part"
                 val existing = current.children.find { it.name == part }
                 if (existing != null) {
                     current = existing
