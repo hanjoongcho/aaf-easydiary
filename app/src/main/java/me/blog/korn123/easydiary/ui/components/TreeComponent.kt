@@ -107,6 +107,7 @@ fun TreeContent(
     innerPadding: PaddingValues,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     isReverseMode: Boolean = false,
+    showDebugCard: Boolean = false,
     total: Int,
     treeData: List<Pair<FileNode, Int>>,
     currentQuery: String,
@@ -348,7 +349,7 @@ fun TreeContent(
             containerSize = containerSize,
             modifier = Modifier
                 .align(Alignment.TopEnd),
-            showDebugCard = true,
+            showDebugCard = showDebugCard,
             updateThumbVisible = { thumbVisible = it },
             updateDraggingThumb = { isDraggingThumb = it },
             dragEndCallback = {

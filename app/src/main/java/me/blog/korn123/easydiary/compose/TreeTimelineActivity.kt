@@ -97,6 +97,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         innerPadding = innerPadding,
                         enableCardViewPolicy = enableCardViewPolicy,
                         isReverseMode = true,
+                        showDebugCard = false,
                         total = total,
                         treeData = treeData,
                         currentQuery = currentQuery,
