@@ -38,6 +38,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils.summaryDiaryLabel
+import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.Diary
 
@@ -87,6 +88,13 @@ fun FastScroll(
         if (isDraggingThumb) thumbY.coerceIn(0f, containerHeightPx - thumbHeightPx) else baseThumbY
 
     // --- Fast Scroll 트랙 + 썸 ---
+    fun parseBubbleText(item: Any): String {
+        return when (item) {
+            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
+            is Pair<*, *> -> (item.first as? FileNode)?.name.orEmpty()
+            else -> item.toString()
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxHeight()
@@ -97,10 +105,7 @@ fun FastScroll(
                     onDragStart = {
                         updateThumbVisible(true)
                         updateDraggingThumb(true)
-                        bubbleText = when (items[firstIndex.value]) {
-                            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
-                            else -> items[firstIndex.value].toString()
-                        }
+                        bubbleText = parseBubbleText(items[firstIndex.value])
                     },
                     onDrag = { change, drag ->
                         dragY = drag.y
@@ -120,10 +125,7 @@ fun FastScroll(
                                 target.coerceAtLeast(0), offset.toInt()
                             )
                         }
-                        bubbleText = when (items[target]) {
-                            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
-                            else -> items[target].toString()
-                        }
+                        bubbleText = parseBubbleText(items[target])
                     },
                     onDragEnd = {
                         updateDraggingThumb(false)

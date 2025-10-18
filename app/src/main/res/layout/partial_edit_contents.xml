@@ -21,6 +21,7 @@
 
         <me.blog.korn123.easydiary.views.FixedCardView
             style="@style/AppCard"
+            app:contentPaddingTop="0dp"
             android:layout_height="0dp"
             android:layout_margin="0dp"
             android:layout_weight="1"
@@ -46,9 +47,12 @@
                         android:fadeScrollbars="false"
                         >
 
-                        <LinearLayout style="@style/LinearLayoutVertical">
+                        <LinearLayout style="@style/LinearLayoutVertical"
+                            >
 
-                            <LinearLayout style="@style/LinearLayoutVertical">
+                            <LinearLayout style="@style/LinearLayoutVertical"
+                                android:layout_marginTop="@dimen/card_contents_padding"
+                                >
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -134,6 +138,7 @@
                             </LinearLayout>
 
                             <com.simplemobiletools.commons.views.MyEditText
+                                android:layout_marginBottom="@dimen/card_contents_padding"
                                 android:id="@+id/diaryContents"
                                 style="@style/edit_diary_edit_inner_contents"
                                 android:minHeight="500dp"

@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -32,6 +33,7 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
@@ -1141,4 +1143,12 @@ fun Activity.holdCurrentOrientation() {
 
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+}
+
+fun Activity.hideSoftInputFromWindow() {
+    val currentView = this.currentFocus
+    if (currentView != null) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentView.windowToken, 0)
+    }
 }

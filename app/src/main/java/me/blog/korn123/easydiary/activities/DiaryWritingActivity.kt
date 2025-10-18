@@ -197,9 +197,15 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
             }
         }
 
-        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message), mSelectedItemPosition) { symbolSequence ->
-            selectFeelingSymbol(symbolSequence)
-        }}
+        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener {
+            mBinding.partialEditContents.diaryContents.clearFocus()
+            openFeelingSymbolDialog(
+                getString(R.string.diary_symbol_guide_message),
+                mSelectedItemPosition
+            ) { symbolSequence ->
+                selectFeelingSymbol(symbolSequence)
+            }
+        }
     }
 
     companion object {

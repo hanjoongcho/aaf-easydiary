@@ -2,6 +2,13 @@ package me.blog.korn123.easydiary.ui.components
 
 import android.content.Intent
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -161,7 +168,7 @@ fun TreeContent(
     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
     var hideJob: Job? by remember { mutableStateOf(null) }
-    val delayTimeMillis = 1500L
+    val delayTimeMillis = 500L
 
     // 스크롤 이벤트 감지
     LaunchedEffect(listState) {
@@ -196,26 +203,6 @@ fun TreeContent(
             .onSizeChanged { containerSize = it }
     ) {
         val density = LocalDensity.current
-        TreeToolbar(
-            title = "[Total: $total] category or title",
-            modifier = settingCardModifier
-                .padding(
-                    0.dp,
-                    0.dp,
-                    0.dp,
-                    0.dp
-                )
-                .zIndex(1f)
-                .align(Alignment.TopCenter)
-                .onGloballyPositioned {
-                    topToolbarHeight = with(density) { it.size.height.toDp() }
-                },
-            enableCardViewPolicy = enableCardViewPolicy,
-        ) { query ->
-            updateQuery(query)
-            fetchDiary()
-        }
-
         Column(modifier = Modifier
             .fillMaxSize()
         ) {
@@ -292,41 +279,71 @@ fun TreeContent(
             }
         }
 
-        BottomToolBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .onGloballyPositioned {
-                    bottomToolbarHeight = with(density) { it.size.height.toDp() }
-                },
-            bottomPadding = bottomPadding,
-            showOptionDialog = { showOptionDialog = true },
-            closeCallback = { finishActivityWithTransition(activity) },
-            writeDiaryCallback = {
-                TransitionHelper.startActivityWithTransition(
-                    activity,
-                    Intent(
-                        context,
-                        DiaryWritingActivity::class.java
-                    )
+        AnimatedVisibility(
+            visible = !thumbVisible,
+            enter = fadeIn(animationSpec = tween(350)),
+            exit = fadeOut(animationSpec = tween(300))
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TreeToolbar(
+                    title = "[Total: $total] category or title",
+                    modifier = settingCardModifier
+                        .padding(
+                            0.dp,
+                            0.dp,
+                            0.dp,
+                            0.dp
+                        )
+                        .zIndex(1f)
+                        .align(Alignment.TopCenter)
+                        .onGloballyPositioned {
+                            topToolbarHeight = with(density) { it.size.height.toDp() }
+                        },
+                    enableCardViewPolicy = enableCardViewPolicy,
+                ) { query ->
+                    updateQuery(query)
+                    fetchDiary()
+                }
+
+                BottomToolBar(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .onGloballyPositioned {
+                            bottomToolbarHeight = with(density) { it.size.height.toDp() }
+                        },
+                    bottomPadding = bottomPadding,
+                    showOptionDialog = { showOptionDialog = true },
+                    closeCallback = { finishActivityWithTransition(activity) },
+                    writeDiaryCallback = {
+                        TransitionHelper.startActivityWithTransition(
+                            activity,
+                            Intent(
+                                context,
+                                DiaryWritingActivity::class.java
+                            )
+                        )
+                    },
+                    expandTreeCallback = {
+                        toggleWholeTree(true)
+                    },
+                    collapseTreeCallback = {
+                        toggleWholeTree(false)
+                    },
+                    scrollTop = {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(0)
+                        }
+                    },
+                    scrollEnd = {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(filteredTreeData.size.minus(1))
+                        }
+                    },
                 )
-            },
-            expandTreeCallback = {
-                toggleWholeTree(true)
-            },
-            collapseTreeCallback = {
-                toggleWholeTree(false)
-            },
-            scrollTop = {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(0)
-                }
-            },
-            scrollEnd = {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(filteredTreeData.size.minus(1))
-                }
-            },
-        )
+            }
+        }
 
         if (isLoading) {
             Box(
