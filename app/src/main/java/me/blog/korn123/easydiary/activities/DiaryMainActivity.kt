@@ -246,15 +246,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
                         )
                     }
-                    CustomElevatedButton(text = "MENU", iconResourceId = R.drawable.ic_options_three_dots, iconSize = 16.dp) {
-                        openCustomOptionMenu()
-                    }
 
                     if (config.enableDebugMode) {
+                        CustomElevatedButton(
+                            text = "MENU",
+                            iconResourceId = R.drawable.ic_options_three_dots,
+                            iconSize = 16.dp
+                        ) {
+                            openCustomOptionMenu()
+                        }
                         CustomElevatedButton(text = "TODAY") {
                             moveToday()
                         }
-                           CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
+                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java)

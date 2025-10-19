@@ -289,6 +289,7 @@ fun TreeContent(
             ) {
                 TreeToolbar(
                     title = "[Total: $total] category or title",
+                    currentQuery = currentQuery,
                     modifier = settingCardModifier
                         .padding(
                             0.dp,
@@ -385,6 +386,7 @@ fun TreeContent(
 @Composable
 fun TreeToolbar(
     title: String,
+    currentQuery: String = "",
     modifier: Modifier,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
@@ -427,7 +429,7 @@ fun TreeToolbar(
             Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically) {
-                var text by remember { mutableStateOf("") }
+                var text by remember { mutableStateOf(currentQuery) }
                 val density = LocalDensity.current
                 val textUnit = with(density) {
                     val temp = fontSize.toDp()
