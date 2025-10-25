@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.338.202510250 (date: 2025.10.25)
+  * Migrate layout from XML to Jetpack Compose
+
 # Changes in 1.4.337.202510090 (date: 2025.10.09)
   * Migrate layout from XML to Jetpack Compose
 
