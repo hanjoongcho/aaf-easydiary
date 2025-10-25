@@ -287,7 +287,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         title = getString(R.string.restore_diary),
                         description = getString(R.string.restore_diary_summary),
                         modifier = settingCardModifier,
-                        imageResourceId = R.drawable.logo_google_drive,
+                        imageResourceId = R.drawable.logo_google_drive
                     ) {
                         mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
                         if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -324,7 +324,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         title = getString(R.string.sync_google_calendar_event_title),
                         description = getString(R.string.sync_google_calendar_event_summary),
                         modifier = settingCardModifier,
-                        imageResourceId = R.drawable.logo_google_drive,
+                        imageResourceId = R.drawable.logo_google_calendar,
                     ) {
                         syncGoogleCalendar()
                     }

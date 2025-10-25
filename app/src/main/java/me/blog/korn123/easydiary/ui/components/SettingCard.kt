@@ -79,6 +79,8 @@ import androidx.compose.ui.unit.times
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.xw.repo.BubbleSeekBar
@@ -236,12 +238,12 @@ fun SimpleCardWithImage(
             if (imageResourceId != null || description != null) {
                 Row(
                     modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     imageResourceId?.let {
+                        val model = imageUrl ?: "android.resource://${LocalContext.current.packageName}/${imageResourceId}"
                         GlideImage(
-                            imageModel = {
-                                imageUrl ?: imageResourceId
-                            },
+                            imageModel = { model },
                             imageOptions = ImageOptions(
                                 contentScale = ContentScale.Fit,
                             ),
