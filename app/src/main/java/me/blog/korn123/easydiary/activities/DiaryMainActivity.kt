@@ -240,29 +240,29 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java)
                         )
                     }
-                    CustomElevatedButton(text = getString(R.string.button_quick_settings), iconResourceId = R.drawable.ic_running, iconSize = 16.dp) {
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
-                        )
+                    CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+                        moveToday()
                     }
 
                     if (config.enableDebugMode) {
-                        CustomElevatedButton(
-                            text = "MENU",
-                            iconResourceId = R.drawable.ic_options_three_dots,
-                            iconSize = 16.dp
-                        ) {
-                            openCustomOptionMenu()
-                        }
-                        CustomElevatedButton(text = "TODAY") {
-                            moveToday()
+                        CustomElevatedButton(text = getString(R.string.button_quick_settings), iconResourceId = R.drawable.ic_running, iconSize = 16.dp) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
+                            )
                         }
                         CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java)
                             )
+                        }
+                        CustomElevatedButton(
+                            text = "MENU",
+                            iconResourceId = R.drawable.ic_options_three_dots,
+                            iconSize = 16.dp
+                        ) {
+                            openCustomOptionMenu()
                         }
                     }
                 }
@@ -845,7 +845,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             position = getIndexBySequence(target.sequence)
             makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
             if (position != -1) {
-                mBinding.diaryListView.scrollToPosition(position)
+                (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
+                    position,
+                    0
+                )
             }
         }
     }
