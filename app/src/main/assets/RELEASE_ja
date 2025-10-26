@@ -8,10 +8,10 @@
   * GlideImage のキャッシュ競合を修正
 
 # Changes in 1.4.338.202510250 (date: 2025.10.25)
-  * XMLレイアウトをJetpack Composeに移行"
+  * XMLレイアウトをJetpack Composeに移行
 
 # Changes in 1.4.337.202510090 (date: 2025.10.09)
-  * XMLレイアウトをJetpack Composeに移行"
+  * XMLレイアウトをJetpack Composeに移行
 
 # Changes in 1.4.334.202509110 (date: 2025.09.11)
   * Android 15 の UI/UX を改善
