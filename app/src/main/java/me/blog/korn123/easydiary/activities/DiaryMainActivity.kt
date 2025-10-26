@@ -251,7 +251,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java)
                             )
                         }
-                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2) {
+                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java)

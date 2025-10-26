@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.339.202510260 (date: 2025.10.26)
+  * Fixed GlideImage cache conflict
+
 # Changes in 1.4.338.202510250 (date: 2025.10.25)
   * Migrate layout from XML to Jetpack Compose
 

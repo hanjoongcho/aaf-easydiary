@@ -832,6 +832,10 @@
         v1.4.338.202510250 / 2025.10.25\n
         Migrate layout from XML to Jetpack Compose
     </string>
+    <string name="release_339">
+        v1.4.339.202510260 / 2025.10.26\n
+        Fixed GlideImage cache conflict
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
