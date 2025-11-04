@@ -155,7 +155,7 @@ fun TreeContent(
     }
 
     LaunchedEffect(filteredTreeData.size) {
-        moveScrollPosition()
+//        moveScrollPosition()
     }
 
 //    LaunchedEffect(filteredTreeData.size) {
@@ -168,7 +168,7 @@ fun TreeContent(
     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
     var hideJob: Job? by remember { mutableStateOf(null) }
-    val delayTimeMillis = 500L
+    val delayTimeMillis = 300L
 
     // 스크롤 이벤트 감지
     LaunchedEffect(listState) {
@@ -281,8 +281,8 @@ fun TreeContent(
 
         AnimatedVisibility(
             visible = !thumbVisible,
-            enter = fadeIn(animationSpec = tween(350)),
-            exit = fadeOut(animationSpec = tween(300))
+            enter = fadeIn(animationSpec = tween(600)),
+            exit = fadeOut(animationSpec = tween(600))
         ) {
             Box(
                 modifier = Modifier.fillMaxSize()
