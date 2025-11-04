@@ -3,12 +3,9 @@ package me.blog.korn123.easydiary.ui.components
 import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -56,7 +53,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -169,6 +165,7 @@ fun TreeContent(
     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
     var hideJob: Job? by remember { mutableStateOf(null) }
     val delayTimeMillis = 300L
+    val durationMillis = 1000
 
     // 스크롤 이벤트 감지
     LaunchedEffect(listState) {
@@ -281,8 +278,8 @@ fun TreeContent(
 
         AnimatedVisibility(
             visible = !thumbVisible,
-            enter = fadeIn(animationSpec = tween(600)),
-            exit = fadeOut(animationSpec = tween(600))
+            enter = fadeIn(animationSpec = tween(durationMillis)),
+            exit = fadeOut(animationSpec = tween(durationMillis))
         ) {
             Box(
                 modifier = Modifier.fillMaxSize()
