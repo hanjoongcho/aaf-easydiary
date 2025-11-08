@@ -20,13 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.android.material.snackbar.Snackbar
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -183,9 +181,19 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val fileNode = buildFileTree(diaryItems, addOptionalTitle = true, addOptionalSortPrefix = true) {
                 diary ->  "${diary.dateString}".split("-").toMutableList()
         }
-        val originTreeData = flattenTree(fileNode, sortOption = "asc")
-        treeViewModel.setTreeData(treeData = originTreeData.map { pair ->
+        val newTreeData = flattenTree(fileNode, sortOption = "asc")
+        val originTreeData = treeViewModel.treeData.value
+        treeViewModel.setTreeData(treeData = newTreeData.map { pair ->
             if (pair.second == 1) pair.first.isShow = true
+
+            // 이전 상태 유지
+            val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+            if (originNode != null) {
+                pair.first.isFolderOpen = originNode.first.isFolderOpen
+                pair.first.isShow = originNode.first.isShow
+                pair.first.isRootShow = originNode.first.isRootShow
+            }
+            
             pair
         })
         treeViewModel.setTotal(diaryItems.size)

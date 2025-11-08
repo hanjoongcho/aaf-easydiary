@@ -620,7 +620,7 @@ fun TreeCard(
                         }
                         if (visibleSubTitle) {
                             val displaySubTitle =
-                                if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$isRootShow][$isShow][$level] $subTitle" else subTitle
+                                if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[level: $level] $subTitle" else subTitle
                             Row(
                                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -632,6 +632,21 @@ fun TreeCard(
                                     fontFamily = fontFamily,
                                     lineSpacingScaleFactor = lineSpacingScaleFactor,
                                     maxLines = 1
+                                )
+                            }
+                        }
+                        if (LocalContext.current.config.enableDebugMode) {
+                            val displaySubTitle = "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level]"
+                            Row(
+                                modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SimpleText(
+                                    text = displaySubTitle,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = fontSize.times(0.8f),
+                                    fontFamily = fontFamily,
+                                    lineSpacingScaleFactor = lineSpacingScaleFactor,
                                 )
                             }
                         }

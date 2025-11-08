@@ -71,13 +71,17 @@ object TreeUtils {
 
     fun toggleChildren(treeData: List<Pair<FileNode, Int>>, fileNode: FileNode): List<Pair<FileNode, Int>> {
         return treeData.map { data ->
+            // 자식 노드인 경우
             if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
                 val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
+
+                // 폴더인 경우, isFolderOpen 상태에 따라 isShow 결정
                 if (isFirstChildNode) {
                     data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(treeData, data)))
                 } else {
                     data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(treeData, data)))
                 }
+            // 자기 자신인 경우
             } else {
                 data
             }
@@ -105,7 +109,7 @@ data class FileNode(
     val isFile: Boolean = false,
     val sequence: Int,
     var fullPath: String = "",
-    var isShow: Boolean = true,
-    var isFolderOpen: Boolean = true,
-    var isRootShow: Boolean = true,
+    var isShow: Boolean = true, // 현재 보이는 지 여부
+    var isFolderOpen: Boolean = true, // 자기 자신이 폴더 일때 열려 있는지 여부
+    var isRootShow: Boolean = true, // 루트 폴더가 보이는 지 여부
 )
