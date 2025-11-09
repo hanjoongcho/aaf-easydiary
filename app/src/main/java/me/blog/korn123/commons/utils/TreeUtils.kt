@@ -47,7 +47,8 @@ object TreeUtils {
                         name = part,
                         fullPath = partPath,
                         isFile = isFile,
-                        sequence = diary.sequence
+                        sequence = diary.sequence,
+                        currentTimeMillis = diary.currentTimeMillis,
                     )
                     current.children.add(newNode)
                     current = newNode
@@ -107,6 +108,7 @@ data class FileNode(
     val name: String,
     val children: MutableList<FileNode> = mutableListOf(),
     val isFile: Boolean = false,
+    val currentTimeMillis: Long = 0,
     val sequence: Int,
     var fullPath: String = "",
     var isShow: Boolean = true, // 현재 보이는 지 여부

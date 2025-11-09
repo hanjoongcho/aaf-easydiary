@@ -83,9 +83,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -93,11 +95,14 @@ import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
+import java.util.Calendar
 
 /***************************************************************************************************
  *
@@ -218,6 +223,7 @@ fun TreeContent(
                         title = node.name,
                         subTitle = node.fullPath,
                         level = level,
+                        currentTimeMillis = node.currentTimeMillis,
                         isFile = node.isFile,
                         currentQuery = currentQuery,
                         isRootShow = node.isRootShow,
@@ -312,6 +318,7 @@ fun TreeContent(
                             bottomToolbarHeight = with(density) { it.size.height.toDp() }
                         },
                     bottomPadding = bottomPadding,
+                    treeData = treeData,
                     showOptionDialog = { showOptionDialog = true },
                     closeCallback = { finishActivityWithTransition(activity) },
                     writeDiaryCallback = {
@@ -337,6 +344,12 @@ fun TreeContent(
                     scrollEnd = {
                         coroutineScope.launch {
                             listState.animateScrollToItem(filteredTreeData.size.minus(1))
+                        }
+                    },
+                    scrollToPosition = { position ->
+                        toggleWholeTree(true)
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(position)
                         }
                     },
                 )
@@ -506,6 +519,7 @@ fun TreeCard(
     title: String,
     subTitle: String,
     level: Int,
+    currentTimeMillis: Long = 0,
     isFile: Boolean,
     currentQuery: String,
     isRootShow: Boolean = true,
@@ -636,7 +650,7 @@ fun TreeCard(
                             }
                         }
                         if (LocalContext.current.config.enableDebugMode) {
-                            val displaySubTitle = "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level]"
+                            val displaySubTitle = "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level][currentTimeMillis: $currentTimeMillis]"
                             Row(
                                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -750,6 +764,7 @@ fun OptionDialog(
 fun BottomToolBar(
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
+    treeData: List<Pair<FileNode, Int>>,
     showOptionDialog: (isShow: Boolean) -> Unit,
     closeCallback: () -> Unit = {},
     writeDiaryCallback: () -> Unit = {},
@@ -757,6 +772,7 @@ fun BottomToolBar(
     collapseTreeCallback: () -> Unit = {},
     scrollTop: () -> Unit = {},
     scrollEnd: () -> Unit = {},
+    scrollToPosition: (position: Int) -> Unit = {},
 ) {
     Box(
 //        modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))
@@ -767,6 +783,8 @@ fun BottomToolBar(
     ) {
         val scrollState = rememberScrollState()
         val focusManager = LocalFocusManager.current
+        val context = LocalContext.current
+        val activity = LocalActivity.current
 
         Row (
             horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
@@ -781,6 +799,24 @@ fun BottomToolBar(
 
             CustomElevatedButton(text = "Close", iconResourceId = R.drawable.ic_cross, iconSize = 16.dp) { closeCallback() }
             CustomElevatedButton(text = "New Entry", iconResourceId = R.drawable.ic_edit, iconSize = 16.dp) { writeDiaryCallback() }
+            CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+                val tomorrowTimeMillis =
+                    EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+                val filteredDiary =
+                    treeData.filter { data -> data.first.currentTimeMillis < tomorrowTimeMillis }
+                val target = filteredDiary.maxByOrNull { data -> data.first.currentTimeMillis }
+                target?.let {
+                    val position = getIndexBySequence(treeData, target.first.sequence)
+                    if (position != -1) {
+                        scrollToPosition(position)
+//                        (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
+//                            position,
+//                            0
+//                        )
+
+                    }
+                }
+            }
             CustomElevatedButton(text = "Expand All", iconResourceId = R.drawable.ic_expand, iconSize = 16.dp) { expandTreeCallback() }
             CustomElevatedButton(text = "Collapse All", iconResourceId = R.drawable.ic_collapse, iconSize = 16.dp) { collapseTreeCallback() }
             CustomElevatedButton(text = "↑ Top") { scrollTop() }
@@ -806,4 +842,15 @@ fun BottomToolBar(
             Spacer(modifier = Modifier.width(5.dp))
         }
     }
+}
+
+private fun getIndexBySequence(treeData: List<Pair<FileNode, Int>>, sequence: Int): Int {
+    var targetIndex = -1
+    treeData.forEachIndexed { index, data ->
+        if (data.first.sequence == sequence) {
+            targetIndex  = index
+            return@forEachIndexed
+        }
+    }
+    return targetIndex
 }
