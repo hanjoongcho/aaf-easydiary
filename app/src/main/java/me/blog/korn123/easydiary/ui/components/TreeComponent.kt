@@ -649,7 +649,7 @@ fun TreeCard(
                                 )
                             }
                         }
-                        if (LocalContext.current.config.enableDebugMode) {
+                        if (LocalContext.current.config.enableDebugOptionVisibleTreeStatus) {
                             val displaySubTitle = "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level][currentTimeMillis: $currentTimeMillis]"
                             Row(
                                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
@@ -796,8 +796,20 @@ fun BottomToolBar(
         ) {
 
             Spacer(modifier = Modifier.width(5.dp))
+            FloatingActionButton(
+                onClick = { closeCallback() },
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_cross),
+                    contentDescription = "Close"
+                )
+            }
 
-            CustomElevatedButton(text = "Close", iconResourceId = R.drawable.ic_cross, iconSize = 16.dp) { closeCallback() }
             CustomElevatedButton(text = "New Entry", iconResourceId = R.drawable.ic_edit, iconSize = 16.dp) { writeDiaryCallback() }
             CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
                 val tomorrowTimeMillis =

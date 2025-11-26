@@ -350,6 +350,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence.not()
                 config.enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence
             }
+            var enableDebugOptionVisibleTreeStatus by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleTreeStatus) }
+            SwitchCard(
+                "Display Tree Status",
+                null,
+                modifier,
+                enableDebugOptionVisibleTreeStatus
+            ) {
+                enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus.not()
+                config.enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus
+            }
             var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
             SwitchCard(
                 "Stock",

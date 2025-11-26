@@ -296,6 +296,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, false)
         set(enableDebugOptionVisibleAlarmSequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, enableDebugOptionVisibleAlarmSequence).apply()
 
+    var enableDebugOptionVisibleTreeStatus: Boolean
+        get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS, false)
+        set(enableDebugOptionVisibleTreeStatus) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS, enableDebugOptionVisibleTreeStatus).apply()
+
     var enableDebugOptionVisibleChartWeight: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, false)
         set(enableDebugOptionVisibleChartWeight) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, enableDebugOptionVisibleChartWeight).apply()

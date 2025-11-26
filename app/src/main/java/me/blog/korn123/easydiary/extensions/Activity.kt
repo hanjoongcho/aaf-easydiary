@@ -149,7 +149,7 @@ fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT
 }
 
 fun Activity.showBetaFeatureMessage() {
-    makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
+       makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
 }
 
 
