@@ -213,7 +213,7 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun findDiary(query: String, isSensitive: Boolean = false, symbolSequences: List<Int>): List<Diary> {
+    fun findDiary(query: String?, isSensitive: Boolean = false, symbolSequences: List<Int>): List<Diary> {
         val realm = getInstance()
         val result: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
             true -> {

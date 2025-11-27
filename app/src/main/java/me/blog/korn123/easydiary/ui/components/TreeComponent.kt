@@ -84,6 +84,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.recyclerview.widget.GridLayoutManager
+import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -141,6 +142,9 @@ fun TreeContent(
     val filteredTreeData: List<Pair<FileNode, Int>> = treeData.filter { data -> data.first.isRootShow && data.first.isShow }
 
     fun moveScrollPosition() {
+        if (context.config.enableDebugOptionVisibleTreeStatus) {
+            context.toast("moveScrollPosition")
+        }
         coroutineScope.launch {
             if (isReverseMode && filteredTreeData.isNotEmpty()) {
                 listState.scrollToItem(filteredTreeData.size.minus(1))

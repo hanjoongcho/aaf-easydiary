@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.compose
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
@@ -34,8 +35,11 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.TreeViewModel
+import kotlin.getValue
 
 class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
+    val treeViewModel: TreeViewModel by viewModels()
 
 
     /***************************************************************************************************
@@ -49,6 +53,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
             mSettingsViewModel = initSettingsViewModel()
             SelfDevelopmentRepo()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchDiary()
     }
 
 
@@ -67,42 +76,18 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
         )
-        var currentQuery by remember { mutableStateOf("") }
-        var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>())}
-        var total by remember { mutableIntStateOf(0) }
+        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
+        val total: Int by treeViewModel.total.observeAsState(0)
 
         fun toggleWholeTree(isExpand: Boolean) {
-            treeData = TreeUtils.toggleWholeTree(treeData, isExpand)
+            treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))
         }
 
         fun toggleChildren(fileNode: FileNode) {
-            treeData = TreeUtils.toggleChildren(treeData, fileNode)
+            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, fileNode))
         }
 
-        fun findDiary(): List<Diary> {
-            return EasyDiaryDbHelper.findDiary( currentQuery,
-                false,
-                listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
-                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
-                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
-                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
-                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
-                )).sortedBy { diary -> diary.title }
-        }
-
-        fun fetchDiary() {
-            val diaryItems = findDiary()
-            val fileNode = buildFileTree(diaryItems) { diary ->
-                diary.title!!.split("/").toMutableList()
-            }
-            val originTreeData = flattenTree(fileNode)
-            treeData = originTreeData.map { pair ->
-                if (pair.second == 1) pair.first.isShow = true
-                pair
-            }
-//                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
-            total = diaryItems.size
-        }
         fetchDiary()
 
         AppTheme {
@@ -118,19 +103,19 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                         treeData = treeData,
                         currentQuery = currentQuery,
                         fetchDiary = { fetchDiary() },
-                        updateQuery = { currentQuery = it },
+                        updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
                         folderOnClick = { node ->
                             val newFirst =
                                 node.copy(isFolderOpen = node.isFolderOpen.not())
                             // pair 객체가 리컴포지션 되도록
-                            treeData = treeData.map { data ->
+                            treeViewModel.setTreeData(treeData.map { data ->
                                 if (data.first.fullPath == node.fullPath) {
                                     data.copy(first = newFirst)
                                 } else {
                                     data
                                 }
-                            }
+                            })
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
@@ -139,6 +124,45 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                 floatingActionButtonPosition = FabPosition.Center,
             )
         }
+    }
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    fun findDiary(): List<Diary> {
+        return EasyDiaryDbHelper.findDiary( treeViewModel.currentQuery.value,
+            false,
+            listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
+                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
+                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
+                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
+                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
+            )).sortedBy { diary -> diary.title }
+    }
+
+    fun fetchDiary() {
+        val diaryItems = findDiary()
+        val fileNode = buildFileTree(diaryItems) { diary ->
+            diary.title!!.split("/").toMutableList()
+        }
+        val newTreeData = flattenTree(fileNode)
+        val originTreeData = treeViewModel.treeData.value
+        treeViewModel.setTreeData(treeData = newTreeData.map { pair ->
+            if (pair.second == 1) pair.first.isShow = true
+
+            // 이전 상태 유지
+            val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+            if (originNode != null) {
+                pair.first.isFolderOpen = originNode.first.isFolderOpen
+                pair.first.isShow = originNode.first.isShow
+                pair.first.isRootShow = originNode.first.isRootShow
+            }
+
+            pair
+        })
+//                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
+        treeViewModel.setTotal(diaryItems.size)
     }
 }
 
