@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
@@ -139,6 +140,12 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                                     return "";
                                 }
                             }
+
+                            val checkedSymbolSequence = when {
+                                title.startsWith("stock/ETF") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
+                                else -> symbolSequence
+                            }
+
                             if (items.size == 1) {
                                 runOnUiThread {
                                     mBinding?.partialSettingsProgress?.message?.text = "Sync ${title}…"
@@ -147,7 +154,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                                 val diary = items[0]
                                 this.beginTransaction()
                                 diary.contents = re.body()
-                                diary.weather = symbolSequence
+                                diary.weather = checkedSymbolSequence
                                 val updateDateString = getUpdateDate(diary.contents!!)
                                 if (updateDateString.isNotEmpty()) {
                                     diary.currentTimeMillis = DateUtils.dateStringToTimeStamp(updateDateString)
@@ -164,7 +171,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                                     System.currentTimeMillis()
                                     , title
                                     , re.body()!!
-                                    , symbolSequence
+                                    , checkedSymbolSequence
                                     ,true
                                 ), this)
                             }
