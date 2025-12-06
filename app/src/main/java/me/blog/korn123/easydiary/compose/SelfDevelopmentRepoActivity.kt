@@ -131,6 +131,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
      *
      ***************************************************************************************************/
     fun findDiary(): List<Diary> {
+        EasyDiaryDbHelper.forceRefresh()
         return EasyDiaryDbHelper.findDiary( treeViewModel.currentQuery.value,
             false,
             listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,

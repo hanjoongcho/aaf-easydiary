@@ -213,6 +213,13 @@ object EasyDiaryDbHelper {
         }
     }
 
+    /**
+     * Main Thread가 아닌 Background Thread에서 Realm DB 변경 사항을 즉시 반영하기 위해 호출
+     */
+    fun forceRefresh() {
+        getInstance().refresh()
+    }
+
     fun findDiary(query: String?, isSensitive: Boolean = false, symbolSequences: List<Int>): List<Diary> {
         val realm = getInstance()
         val result: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
