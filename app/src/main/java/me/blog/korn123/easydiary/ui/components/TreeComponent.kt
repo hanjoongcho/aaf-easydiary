@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.recyclerview.widget.GridLayoutManager
 import com.simplemobiletools.commons.extensions.toast
+import com.tbuonomo.viewpagerdotsindicator.dpToPx
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -103,6 +104,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
+import me.blog.korn123.easydiary.models.Diary
 import java.util.Calendar
 
 /***************************************************************************************************
@@ -110,6 +112,7 @@ import java.util.Calendar
  *   SelfDevelopmentRepo Compose Components
  *
  ***************************************************************************************************/
+
 
 @Composable
 fun TreeContent(
@@ -120,13 +123,16 @@ fun TreeContent(
     total: Int,
     treeData: List<Pair<FileNode, Int>>,
     currentQuery: String,
+    isResultAPI: Boolean = false,
     fetchDiary: () -> Unit,
     updateQuery: (String) -> Unit,
     toggleWholeTree: (Boolean) -> Unit,
     folderOnClick: (FileNode) -> Unit,
+    resultAPICallback: (Int) -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
+    val density =  LocalDensity.current
     val bottomPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding().plus(
         WindowInsets.ime.asPaddingValues().calculateBottomPadding()) else 0.dp
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
@@ -146,17 +152,40 @@ fun TreeContent(
             context.toast("moveScrollPosition")
         }
         coroutineScope.launch {
-            if (isReverseMode && filteredTreeData.isNotEmpty()) {
-                listState.scrollToItem(filteredTreeData.size.minus(1))
-            } else {
-                listState.scrollToItem(0)
+//            if (isReverseMode && filteredTreeData.isNotEmpty()) {
+//                listState.scrollToItem(filteredTreeData.size.minus(1))
+//            } else {
+//                listState.scrollToItem(0)
+//            }
+        }
+
+
+    }
+
+    fun moveToTodayEntry(treeData: List<Pair<FileNode, Int>>) {
+        val tomorrowTimeMillis =
+            EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
+        val filteredDiary =
+            treeData.filter { data -> data.first.currentTimeMillis < tomorrowTimeMillis }
+        val target = filteredDiary.maxByOrNull { data -> data.first.currentTimeMillis }
+        target?.let {
+            val position = getIndexBySequence(treeData, target.first.sequence)
+            if (position != -1) {
+                coroutineScope.launch {
+                    toggleWholeTree(true)
+                    listState.scrollToItem(position.plus(1), with(density) { topToolbarHeight.toPx().toInt() }.unaryMinus())
+                }
             }
         }
     }
 
-    // 패딩이 변경되면 스크롤을 맨 위로 이동
+    // move to today entry when topToolbarHeight changed
+    // this is because we need to wait until topToolbarHeight is measured
     LaunchedEffect(topToolbarHeight) {
-        moveScrollPosition()
+//        moveScrollPosition()
+
+        // move to today entry
+        moveToTodayEntry(treeData)
     }
 
     LaunchedEffect(filteredTreeData.size) {
@@ -243,27 +272,31 @@ fun TreeContent(
                         ),
                         onClick = {
                             if (node.isFile) {
-                                // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
-                                val detailIntent = Intent(
-                                    context,
-                                    DiaryReadingActivity::class.java
-                                )
-                                detailIntent.putExtra(
-                                    DIARY_SEQUENCE,
-                                    node.sequence
-                                )
-                                detailIntent.putExtra(
-                                    SELECTED_SEARCH_QUERY,
-                                    currentQuery
-                                )
+                                if (isResultAPI) {
+                                   resultAPICallback(node.sequence)
+                                } else {
+                                    // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
+                                    val detailIntent = Intent(
+                                        context,
+                                        DiaryReadingActivity::class.java
+                                    )
+                                    detailIntent.putExtra(
+                                        DIARY_SEQUENCE,
+                                        node.sequence
+                                    )
+                                    detailIntent.putExtra(
+                                        SELECTED_SEARCH_QUERY,
+                                        currentQuery
+                                    )
 //                                                detailIntent.putExtra(
 //                                                    SELECTED_SYMBOL_SEQUENCE,
 //                                                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 //                                                )
-                                TransitionHelper.startActivityWithTransition(
-                                    activity,
-                                    detailIntent
-                                )
+                                    TransitionHelper.startActivityWithTransition(
+                                        activity,
+                                        detailIntent
+                                    )
+                                }
                             } else {
                                 folderOnClick(node)
                             }
@@ -356,6 +389,10 @@ fun TreeContent(
                             listState.animateScrollToItem(position)
                         }
                     },
+                    moveToTodayEntry = {
+                        // move to today entry
+                        moveToTodayEntry(treeData)
+                    }
                 )
             }
         }
@@ -777,6 +814,7 @@ fun BottomToolBar(
     scrollTop: () -> Unit = {},
     scrollEnd: () -> Unit = {},
     scrollToPosition: (position: Int) -> Unit = {},
+    moveToTodayEntry: () -> Unit = {},
 ) {
     Box(
 //        modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))
@@ -813,25 +851,10 @@ fun BottomToolBar(
                     contentDescription = "Close"
                 )
             }
-
             CustomElevatedButton(text = "New Entry", iconResourceId = R.drawable.ic_edit, iconSize = 16.dp) { writeDiaryCallback() }
             CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
-                val tomorrowTimeMillis =
-                    EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
-                val filteredDiary =
-                    treeData.filter { data -> data.first.currentTimeMillis < tomorrowTimeMillis }
-                val target = filteredDiary.maxByOrNull { data -> data.first.currentTimeMillis }
-                target?.let {
-                    val position = getIndexBySequence(treeData, target.first.sequence)
-                    if (position != -1) {
-                        scrollToPosition(position)
-//                        (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
-//                            position,
-//                            0
-//                        )
-
-                    }
-                }
+                // move to today entry
+                moveToTodayEntry()
             }
             CustomElevatedButton(text = "Expand All", iconResourceId = R.drawable.ic_expand, iconSize = 16.dp) { expandTreeCallback() }
             CustomElevatedButton(text = "Collapse All", iconResourceId = R.drawable.ic_collapse, iconSize = 16.dp) { collapseTreeCallback() }

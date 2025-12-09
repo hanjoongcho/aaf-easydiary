@@ -64,6 +64,7 @@ import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
+import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileNotFoundException
@@ -107,6 +108,11 @@ object EasyDiaryUtils {
      *
      ***************************************************************************************************/
     fun summaryDiaryLabel(diary: Diary): String {
+//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
+        return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
+    }
+
+    fun summaryDiaryLabel(diary: DiaryUiModel): String {
 //        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
         return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
     }
@@ -194,6 +200,7 @@ object EasyDiaryUtils {
         cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
         cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
         cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        cal.set(Calendar.MILLISECOND, if (isFullHour) 999 else 0)
         if (amount != 0) cal.add(field, amount)
         return cal
     }

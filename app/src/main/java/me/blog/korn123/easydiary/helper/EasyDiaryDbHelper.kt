@@ -17,7 +17,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
             .name("diary.realm")
-            .schemaVersion(23)
+            .schemaVersion(24)
             .migration(EasyDiaryMigration())
             .modules(Realm.getDefaultModule()!!)
             .allowWritesOnUiThread(true)
@@ -239,6 +239,12 @@ object EasyDiaryDbHelper {
                 .findAll()
                 .toList()
     }
+
+    fun findParentDiariesOf(sequence: Int, realmInstance: Realm = getInstance()): List<Diary> {
+        return realmInstance.where(Diary::class.java)
+            .equalTo("linkedDiaries", sequence).findAll().sort("currentTimeMillis", Sort.ASCENDING).toList()
+    }
+
 
     fun findOldestDiary(): Diary? = getInstance().where(Diary::class.java).sort("currentTimeMillis", Sort.ASCENDING).findFirst()
 

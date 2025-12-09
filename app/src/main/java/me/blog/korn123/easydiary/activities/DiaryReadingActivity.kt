@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -12,9 +13,32 @@ import android.speech.tts.UtteranceProgressListener
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextWatcher
-import android.view.*
-import android.widget.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.RelativeLayout
+import android.widget.ScrollView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,19 +47,60 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import me.blog.korn123.commons.utils.*
+import com.simplemobiletools.commons.extensions.toast
+import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
+import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.*
+import me.blog.korn123.easydiary.compose.TreeTimelineActivity
+import me.blog.korn123.easydiary.databinding.ActivityDiaryReadingBinding
+import me.blog.korn123.easydiary.databinding.DialogHighlightKeywordBinding
+import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
+import me.blog.korn123.easydiary.databinding.PopupEncryptionBinding
+import me.blog.korn123.easydiary.databinding.PopupMenuReadBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.clearHoldOrientation
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isAccessFromOutside
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pushMarkDown
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.fragments.DiaryFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
+import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
+import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
+import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
+import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import org.apache.commons.lang3.StringUtils
-import java.util.*
+import java.util.Locale
 
 
 /**
@@ -59,6 +124,46 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
+
+    private val selectValueLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
+            val selectedValue = result.data?.getIntExtra("sequence", 0)
+
+            showAlertDialog(getString(R.string.link_entry_confirm)
+                , { _, _ ->
+                    selectedValue?.let {
+                        val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                        if (diary.linkedDiaries.contains(selectedValue)) {
+                            makeSnackBar("이미 연결된 항목 입니다.")
+                        } else {
+                            EasyDiaryDbHelper.beginTransaction()
+                            diary.linkedDiaries.add(selectedValue)
+                            EasyDiaryDbHelper.commitTransaction()
+                            fragment.initContents()
+                        }
+                    }
+                }
+                , { _, _ ->
+                    selectedValue?.let {
+                        val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
+                        if (diary.linkedDiaries.contains(fragment.getSequence())) {
+                            makeSnackBar("이미 연결된 항목 입니다.")
+                        } else {
+                            EasyDiaryDbHelper.beginTransaction()
+                            diary.linkedDiaries.add(fragment.getSequence())
+                            EasyDiaryDbHelper.commitTransaction()
+                            fragment.initContents()
+                        }
+                    }
+                }
+                , { _, _ -> }
+                , DialogMode.INFO, true, getString(R.string.link_entry), getString(R.string.link_entry_as_child), getString(R.string.link_entry_as_parent), getString(R.string.link_entry_later)
+            )
+        }
+    }
 
     companion object {
         const val ENCRYPTION = "encryption"
@@ -553,6 +658,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
                             pushMarkDown(diary.title!!, diary.contents!!)
                         }
+                        R.id.linkEntry -> {
+                            Intent(this@DiaryReadingActivity, TreeTimelineActivity::class.java).apply {
+                                putExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, false)
+                                selectValueLauncher.launch(this)
+                            }
+                        }
                     }
                     popupWindow?.dismiss()
                 }
@@ -560,11 +671,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 postcard.setOnClickListener(itemClickListener)
                 encryptData.setOnClickListener(itemClickListener)
                 decryptData.setOnClickListener(itemClickListener)
+                linkEntry.setOnClickListener(itemClickListener)
 
                 updateDrawableColorInnerCardView(imgPostcard)
                 updateDrawableColorInnerCardView(imgEncryptData)
                 updateDrawableColorInnerCardView(imgDecryptData)
                 updateDrawableColorInnerCardView(imgDelete)
+                updateDrawableColorInnerCardView(imgContains)
 
                 if (BuildConfig.FLAVOR == "lab") {
                     push.visibility = View.VISIBLE
@@ -585,6 +698,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private val mViewModel: DiaryReadViewModel by viewModels()
         private var mPrimaryColor = 0
         private var mStoredContents: String? = null
+
+        private var diaryViewModel: DiaryViewModel = DiaryViewModel()
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
             mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
@@ -613,12 +728,105 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             initContents()
 
             if (requireContext().isVanillaIceCreamPlus()) {
-                ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryContents) { view, insets ->
+                ViewCompat.setOnApplyWindowInsetsListener(mBinding.composeView) { view, insets ->
                     val navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val lp = view.layoutParams as ViewGroup.MarginLayoutParams
                     lp.bottomMargin = navBarInsets.bottom
                     view.layoutParams = lp
                     insets
+                }
+            }
+
+            mBinding.composeView.setContent {
+//                val diary = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
+                AppTheme {
+                    Column {
+                        val parentDiaries by diaryViewModel.parentDiaries.collectAsState()
+                        // diary parents items
+                        if (parentDiaries.isNotEmpty()) {
+                            CategoryTitleCard(title = getString(R.string.link_entry_category_parent), marginTop = 0)
+                            for (parentDiary in parentDiaries) {
+                                LegacyDiarySubItemCard(
+                                    diary = parentDiary,
+                                    itemClickCallback = {
+                                        val intent = Intent(
+                                            requireContext(),
+                                            DiaryReadingActivity::class.java
+                                        ).apply {
+                                            putExtra(DIARY_SEQUENCE, parentDiary.sequence)
+                                        }
+                                        TransitionHelper.startActivityWithTransition(
+                                            requireActivity(),
+                                            intent
+                                        )
+                                    },
+                                    itemLongClickCallback = {
+                                        requireActivity().showAlertDialog(
+                                            "Are you sure you want to unlink this diary?", { _, _ ->
+                                                EasyDiaryDbHelper.findDiaryBy(parentDiary.sequence)
+                                                    ?.run {
+                                                        linkedDiaries.filter { it != getSequence() }
+                                                            .let { newLinkedDiaries ->
+                                                                EasyDiaryDbHelper.beginTransaction()
+                                                                linkedDiaries.clear()
+                                                                linkedDiaries.addAll(
+                                                                    newLinkedDiaries
+                                                                )
+                                                                EasyDiaryDbHelper.commitTransaction()
+                                                                initContents()
+                                                            }
+                                                    }
+                                            }, { _, _ -> }, DialogMode.INFO
+                                        )
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+
+                        val childDiaries by diaryViewModel.childDiaries.collectAsState()
+                        // diary child items
+                        if (childDiaries.isNotEmpty()) {
+                            CategoryTitleCard(title = getString(R.string.link_entry_category_child), marginTop = 0)
+                            for (childDiary in childDiaries) {
+                                LegacyDiarySubItemCard(
+                                    diary = childDiary,
+                                    itemClickCallback = {
+                                        val intent = Intent(
+                                            requireContext(),
+                                            DiaryReadingActivity::class.java
+                                        ).apply {
+                                            putExtra(DIARY_SEQUENCE, childDiary.sequence)
+                                        }
+                                        TransitionHelper.startActivityWithTransition(
+                                            requireActivity(),
+                                            intent
+                                        )
+                                    },
+                                    itemLongClickCallback = {
+                                        requireActivity().showAlertDialog(
+                                            "Are you sure you want to unlink this diary?", { _, _ ->
+                                                EasyDiaryDbHelper.findDiaryBy(getSequence())
+                                                    ?.run {
+                                                        linkedDiaries.filter { it != childDiary.sequence }
+                                                            .let { newLinkedDiaries ->
+                                                                EasyDiaryDbHelper.beginTransaction()
+                                                                linkedDiaries.clear()
+                                                                linkedDiaries.addAll(
+                                                                    newLinkedDiaries
+                                                                )
+                                                                EasyDiaryDbHelper.commitTransaction()
+                                                                initContents()
+                                                            }
+                                                    }
+                                            }, { _, _ -> }, DialogMode.INFO
+                                        )
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+                    }
                 }
             }
         }
@@ -753,6 +961,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     }
                 }
             }
+
+            diaryViewModel.updateParentDiaries(EasyDiaryDbHelper.findParentDiariesOf(diaryDto.sequence))
+
+            val linkedDiaries = mutableListOf<Diary>()
+            if (diaryDto.linkedDiaries.isNotEmpty()) {
+                for (linkedDiarySequence in diaryDto.linkedDiaries) {
+                    EasyDiaryDbHelper.findDiaryBy(linkedDiarySequence)?.let {
+                        linkedDiaries.add(it)
+                    }
+                }
+            }
+            diaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
         }
 
         private fun initBottomContainer() {
@@ -817,7 +1037,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         fun getContentsPositionY(): Int {
-            return (mBinding.diaryContents.parent.parent as ScrollView).scrollY
+            return (mBinding.diaryContents.parent.parent.parent as ScrollView).scrollY
         }
 
         companion object {

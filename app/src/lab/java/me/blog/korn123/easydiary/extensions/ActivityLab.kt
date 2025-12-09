@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
+import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
@@ -142,6 +143,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                             }
 
                             val checkedSymbolSequence = when {
+                                title.startsWith("stock/FICS") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
                                 title.startsWith("stock/ETF") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
                                 else -> symbolSequence
                             }

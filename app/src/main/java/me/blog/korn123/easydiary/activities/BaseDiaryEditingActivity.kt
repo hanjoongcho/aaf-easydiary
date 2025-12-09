@@ -141,6 +141,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var mIsDiarySaved = false
     protected var mSymbolSequence = 0
 
+    protected var mLinkedDiaries: RealmList<Int> = RealmList()
+
     /**
      * mMonth is not Calendar.MONTH
      * mMonth range is 1 ~ 12

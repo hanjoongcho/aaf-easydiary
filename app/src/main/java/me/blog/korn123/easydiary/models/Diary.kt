@@ -7,6 +7,7 @@ import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
+import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -32,6 +33,7 @@ open class Diary : RealmObject {
      */
     var weather: Int = 0
     var photoUris: RealmList<PhotoUri>? = null
+    var linkedDiaries: RealmList<Int> = RealmList()
     var fontName: String? = null
     var fontSize: Float = 0.toFloat()
     var isAllDay: Boolean = false
@@ -74,4 +76,14 @@ open class Diary : RealmObject {
         true -> { photoUris?.map { PhotoUri("") } }
         false -> photoUris
     }
+
+    fun toUiModel() = DiaryUiModel(
+        sequence = sequence,
+        title = title.orEmpty(),
+        contents = contents.orEmpty(),
+        dateString = dateString.orEmpty(),
+        currentTimeMillis = currentTimeMillis,
+        isAllDay = isAllDay,
+        weather = weather
+    )
 }

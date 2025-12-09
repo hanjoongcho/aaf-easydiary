@@ -549,6 +549,35 @@ fun Context.showAlertDialog(
     positiveButtonLabel: String = getString(R.string.ok),
     negativeButtonLabel: String = getString(R.string.cancel)
 ) {
+    showAlertDialog(message, positiveListener, negativeListener, null,  dialogMode, cancelable, paramTitle, positiveButtonLabel, negativeButtonLabel)
+}
+
+/**
+ * TODO
+ *
+ * @param message
+ * @param positiveListener
+ * @param negativeListener
+ * @param neutralListener
+ * @param dialogMode
+ * @param cancelable
+ * @param paramTitle
+ * @param positiveButtonLabel
+ * @param negativeButtonLabel
+ * @param neutralButtonLabel
+ */
+fun Context.showAlertDialog(
+    message: String,
+    positiveListener: DialogInterface.OnClickListener?,
+    negativeListener: DialogInterface.OnClickListener?,
+    neutralListener: DialogInterface.OnClickListener?,
+    dialogMode: DialogMode = DialogMode.DEFAULT,
+    cancelable: Boolean = true,
+    paramTitle: String? = null,
+    positiveButtonLabel: String = getString(R.string.ok),
+    negativeButtonLabel: String = getString(R.string.cancel),
+    neutralButtonLabel: String = "-"
+) {
     var iconResourceId: Int? = null
     var title: String? = null
     when (dialogMode) {
@@ -577,7 +606,8 @@ fun Context.showAlertDialog(
     val builder = AlertDialog.Builder(this)
     builder.setCancelable(cancelable)
     builder.setPositiveButton(positiveButtonLabel, positiveListener)
-    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, negativeListener) }
+    negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, it) }
+    neutralListener?.let { builder.setNeutralButton(neutralButtonLabel, it) }
     builder.create().apply {
         updateAlertDialog(this, message, null, paramTitle ?: title, 255, iconResourceId)
     }

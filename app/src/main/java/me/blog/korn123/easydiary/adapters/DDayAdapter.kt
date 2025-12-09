@@ -38,14 +38,14 @@ class DDayAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (dDayItems.size == position.plus(1)) {
+        return when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
             true -> 1
             false -> 0
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        return when (dDayItems.size == position.plus(1)) {
+        return when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
             true -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
             false -> (holder as DDayViewHolder).bindTo(dDayItems[position])
         }

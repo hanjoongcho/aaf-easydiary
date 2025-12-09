@@ -1122,4 +1122,11 @@
     <string name="button_new_entry">새로운 기록</string>
     <string name="button_tree_view">트리뷰</string>
     <string name="button_quick_settings">빠른설정</string>
+    <string name="link_entry">항목 연결</string>
+    <string name="link_entry_category_parent">🌳 상위 항목</string>
+    <string name="link_entry_category_child">🍃 하위 항목</string>
+    <string name="link_entry_confirm">선택한 항목을 연결 하시겠습니까?</string>
+    <string name="link_entry_as_parent">상위항목으로</string>
+    <string name="link_entry_as_child">하위항목으로</string>
+    <string name="link_entry_later">다음에</string>
 </resources>

@@ -66,12 +66,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
      *
      ***************************************************************************************************/
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SelfDevelopmentRepo() {
         val context = LocalContext.current
         mSettingsViewModel = initSettingsViewModel()
-        LocalActivity.current?.updateSystemStatusBarColor(LocalContext.current.config.primaryColor)
+        LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
@@ -94,7 +93,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
             Scaffold(
                 // 하단 패딩은 수동 관리
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                containerColor = Color(config.primaryColor),
+                containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     TreeContent(
                         innerPadding = innerPadding,
@@ -119,6 +118,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
+                        resultAPICallback = { /* no-op */ }
                     )
                 },
                 floatingActionButtonPosition = FabPosition.Center,

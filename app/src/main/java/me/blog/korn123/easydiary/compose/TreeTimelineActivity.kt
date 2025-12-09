@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.compose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
@@ -28,6 +29,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -44,9 +47,10 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val isResultAPI = !intent.getBooleanExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, true)
         setContent {
             mSettingsViewModel = initSettingsViewModel()
-            TreeTimeline()
+            TreeTimeline(isResultAPI = isResultAPI)
         }
         showBetaFeatureMessage()
     }
@@ -61,12 +65,13 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun TreeTimeline() {
+    fun TreeTimeline(
+        isResultAPI: Boolean = false
+    ) {
         val context = LocalContext.current
         mSettingsViewModel = initSettingsViewModel()
-        LocalActivity.current?.updateSystemStatusBarColor(LocalContext.current.config.primaryColor)
+        LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy
@@ -89,7 +94,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             Scaffold(
                 // 하단 패딩은 수동 관리
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                containerColor = Color(config.primaryColor),
+                containerColor = Color(config.screenBackgroundColor),
                 content = { innerPadding ->
                     TreeContent(
                         innerPadding = innerPadding,
@@ -99,6 +104,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         total = total,
                         treeData = treeData,
                         currentQuery = currentQuery,
+                        isResultAPI = isResultAPI,
                         fetchDiary = { fetchDiary() },
                         updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
@@ -116,6 +122,13 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
+                        resultAPICallback = { sequence ->
+                            val resultIntent = Intent().apply {
+                                putExtra("sequence", sequence)
+                            }
+                            setResult(RESULT_OK, resultIntent)
+                            finish()
+                        }
                     )
                 },
             )
@@ -160,6 +173,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         updateQuery = {},
                         toggleWholeTree = {},
                         folderOnClick = {},
+                        resultAPICallback = { /* no-op */ }
                     )
                 },
             )

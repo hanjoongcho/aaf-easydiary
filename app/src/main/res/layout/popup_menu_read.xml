@@ -68,6 +68,17 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/linkEntry">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/ic_delete_link"
+                    android:id="@+id/img_contains"
+                    style="@style/image_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/link_entry" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:visibility="gone"
                 android:id="@+id/push">
                 <androidx.appcompat.widget.AppCompatImageView

@@ -37,6 +37,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
 //            title = getString(R.string.update_diary_title)
             setDisplayShowTitleEnabled(false)
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 //        mCustomLineSpacing = false
 
@@ -79,6 +80,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
         mSymbolSequence = diaryDto.weather
+        mLinkedDiaries = diaryDto.linkedDiaries
         initData(diaryDto)
     }
 
@@ -118,6 +120,8 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                 diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
+                diaryDto.linkedDiaries.clear()
+                diaryDto.linkedDiaries.addAll(mLinkedDiaries)
                 EasyDiaryDbHelper.updateDiaryBy(diaryDto)
                 TransitionHelper.finishActivityWithTransition(this)
                 mIsDiarySaved = true

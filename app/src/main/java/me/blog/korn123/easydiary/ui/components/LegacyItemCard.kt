@@ -9,9 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -25,9 +37,11 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainMigBinding
+import me.blog.korn123.easydiary.databinding.ItemDiarySubBinding
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -37,6 +51,7 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.lang3.StringUtils
 
 @SuppressLint("SetTextI18n")
@@ -228,4 +243,85 @@ fun LegacyDiaryItemCard(
         },
         update = {},
     )
+}
+
+@SuppressLint("SetTextI18n")
+@Composable
+fun LegacyDiarySubItemCard(
+    diary: DiaryUiModel,
+    itemClickCallback: (diary: DiaryUiModel) -> Unit,
+    itemLongClickCallback: () -> Unit,
+) {
+    Card(
+        shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+        modifier = Modifier
+            .padding(horizontalPadding.dp, verticalPadding.dp)
+//            .border(
+//                1.dp,
+//                Color(LocalContext.current.config.backgroundColor.darkenColor()).copy(1.0f),
+//                shape = RoundedCornerShape(3.dp)
+//            )
+            .combinedClickable(
+                onClick = { itemClickCallback(diary) },
+                onLongClick = itemLongClickCallback,
+            )
+        ,
+        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+    ) {
+        AndroidView(
+            modifier = Modifier
+                .fillMaxWidth(),
+            factory = { ctx ->
+                val activity = ctx as Activity
+                val currentQuery = ""
+                val binding = ItemDiarySubBinding.inflate(LayoutInflater.from(ctx)).apply {
+                    activity.run {
+                        root.run {
+//                            setOnClickListener { itemClickCallback(diary) }
+//                            setOnLongClickListener {
+//                                itemLongClickCallback()
+//                                true
+//                            }
+                            updateTextColors(this, 0, 0)
+                            updateAppViews(this)
+                            initTextSize(this)
+                            updateCardViewPolicy(this)
+                            FontUtils.setFontsTypeface(context, null, this)
+                        }
+                    }
+
+                    selection.visibility = View.GONE
+                }
+
+                binding.root
+            },
+            update = { rootView ->
+                val context = rootView.context
+                ItemDiarySubBinding.bind(rootView).run {
+                    if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                        viewFutureDiaryBadge.visibility = View.VISIBLE
+                        cardFutureDiaryBadge.visibility = View.VISIBLE
+                        textDDayCount.text =
+                            DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                    } else {
+                        viewFutureDiaryBadge.visibility = View.GONE
+                        cardFutureDiaryBadge.visibility = View.GONE
+                    }
+
+                    textDateTime.text = when (diary.isAllDay) {
+                        true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                        false -> DateUtils.getDateTimeStringForceFormatting(
+                            diary.currentTimeMillis, context
+                        )
+                    }
+
+                    EasyDiaryUtils.boldString(context, textTitle)
+                    context.applyMarkDownPolicy(textTitle, EasyDiaryUtils.summaryDiaryLabel(diary), false, arrayListOf(), true)
+
+                    FlavorUtils.initWeatherView(context, imageSymbol, diary.weather)
+                }
+            }
+        )
+    }
 }

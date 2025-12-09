@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.helper
 import me.blog.korn123.commons.utils.DateUtils
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
+import io.realm.RealmList
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
 
@@ -294,6 +295,18 @@ class EasyDiaryMigration : RealmMigration {
         if (currentVersion == 22L) {
             schema.get("Diary")?.let {
                 it.addField("isHoliday", Boolean::class.java)
+            }
+            currentVersion++
+        }
+
+        // Migration from version 23 to 24
+        if (currentVersion == 23L) {
+            schema.get("Diary")?.let {
+                it.addRealmListField("linkedDiaries", Int::class.java)
+                    // 강제로 required 속성 제거
+                    // 마이그 시 Int를 optional로 생성 하는거 같음
+                    // RealmList로 관리되는 Int값에 null이 들어갈 수 없는 구조임
+                    .setRequired("linkedDiaries", false)
             }
             currentVersion++
         }

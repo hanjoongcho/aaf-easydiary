@@ -94,7 +94,9 @@ class DDayFragment : Fragment() {
     private fun updateDDayList(sortOrder: Sort) {
         mDDayItems.run {
             clear()
-            addAll(EasyDiaryDbHelper.findDDayAll(sortOrder))
+            val dDayItems = EasyDiaryDbHelper.findDDayAll(sortOrder)
+            if (dDayItems.isNotEmpty()) add(DDay("New D-Day!!!"))
+            addAll(dDayItems)
             add(DDay("New D-Day!!!"))
         }
         mDDayAdapter.notifyDataSetChanged()
