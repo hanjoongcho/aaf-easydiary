@@ -836,6 +836,10 @@
         v1.4.339.202510260 / 2025.10.26\n
         Fixed GlideImage cache conflict
     </string>
+    <string name="release_340">
+        v1.4.340.202512250 / 2025.12.25\n
+        Add linking between diary entries
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

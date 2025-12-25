@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.340.202512250 (date: 2025.12.25)
+  * Add linking between diary entries
+
 # Changes in 1.4.339.202510260 (date: 2025.10.26)
   * Fixed GlideImage cache conflict
 
