@@ -67,7 +67,9 @@ class ZipHelper(val context: Context) {
     }
 
     private fun updateCompressProgress(progress: Int) {
-        if (isOnProgress) {
+        val currentTime = System.currentTimeMillis()
+        if (isOnProgress && progress == mFileNames.size.minus(1) || currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+            lastUpdateTime = currentTime
             val message = mFileNames[progress]
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
@@ -78,8 +80,12 @@ class ZipHelper(val context: Context) {
         }
     }
 
+    private var lastUpdateTime = 0L
+    private val UPDATE_INTERVAL = 1000L
     private fun updateDecompressProgress(progress: Int, totalCount: Int, fileName: String) {
-        if (isOnProgress) {
+        val currentTime = System.currentTimeMillis()
+        if (isOnProgress && progress == totalCount - 1 || currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+            lastUpdateTime = currentTime
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.setProgress(totalCount, progress.plus(1), false)
                     .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_COMPRESS_ID] ${progress.plus(1)}/$totalCount" else "${progress.plus(1)}/$totalCount")

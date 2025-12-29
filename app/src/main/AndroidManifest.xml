@@ -186,7 +186,6 @@
         <activity
             android:name=".compose.TreeTimelineActivity"
             android:label=""
-            android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <provider
             android:name="androidx.core.content.FileProvider"

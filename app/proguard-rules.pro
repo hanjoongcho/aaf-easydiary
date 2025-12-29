@@ -59,3 +59,14 @@
 
 -keep class retrofit2.** { *; }
 -dontwarn retrofit2.**
+
+# Keep generic signatures for Gson TypeToken
+-keepattributes Signature
+
+# Keep Gson TypeToken
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
+
+# Keep your data classes used with Gson (replace with your actual package)
+-keep class me.blog.korn123.easydiary.models.** { *; }
+-keep class your.package.name.data.** { *; }

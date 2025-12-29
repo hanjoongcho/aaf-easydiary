@@ -194,6 +194,9 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.math.pow
 import androidx.core.graphics.toColorInt
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 
 /**
@@ -1324,9 +1327,9 @@ fun Context.spToPixelFloatValue(sp: Float): Float {
 fun Context.dpToPixel(dp: Float, policy: Calculation = Calculation.CEIL): Int {
     val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
     return when (policy) {
-        Calculation.CEIL -> Math.ceil(px.toDouble()).toInt()
-        Calculation.ROUND -> Math.round(px)
-        Calculation.FLOOR -> Math.floor(px.toDouble()).toInt()
+        Calculation.CEIL -> ceil(px).toInt()
+        Calculation.ROUND -> px.roundToInt()
+        Calculation.FLOOR -> px.toInt()
     }
 }
 

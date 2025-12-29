@@ -621,11 +621,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         mCombineChart.run {
                             axisLeft.run {
                                 axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mKrPrincipalDataSet.yMax.plus(2000000)
+                                axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
                             }
                             axisRight.run {
                                 axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mKrPrincipalDataSet.yMax.plus(2000000)
+                                axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
                             }
                         }
                     }

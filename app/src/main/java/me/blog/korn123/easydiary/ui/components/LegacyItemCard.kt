@@ -257,11 +257,11 @@ fun LegacyDiarySubItemCard(
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier = Modifier
             .padding(horizontalPadding.dp, verticalPadding.dp)
-//            .border(
-//                1.dp,
-//                Color(LocalContext.current.config.backgroundColor.darkenColor()).copy(1.0f),
-//                shape = RoundedCornerShape(3.dp)
-//            )
+            .border(
+                1.dp,
+                Color(LocalContext.current.config.backgroundColor.darkenColor()).copy(1.0f),
+                shape = RoundedCornerShape(roundedCornerShapeSize.dp)
+            )
             .combinedClickable(
                 onClick = { itemClickCallback(diary) },
                 onLongClick = itemLongClickCallback,

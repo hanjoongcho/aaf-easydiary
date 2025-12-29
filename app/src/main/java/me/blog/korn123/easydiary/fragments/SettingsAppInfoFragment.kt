@@ -9,12 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -183,6 +186,8 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                             putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
                         })
                     }
+
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }

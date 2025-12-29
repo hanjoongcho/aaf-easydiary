@@ -45,7 +45,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.google.common.reflect.TypeToken
+import com.google.gson.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
@@ -71,6 +71,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.FileReader
 import java.util.*
+import kotlin.math.roundToInt
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -244,13 +245,12 @@ object EasyDiaryUtils {
             activity.isLandScape()  -> 5
             else -> 1
         }
+        val attachCardContentPadding = ATTACH_PHOTO_CARD_CONTENT_PADDING_DP.div(spanCount)
         val thumbnailSize =
             (activity.getDefaultDisplay().x
-                    - activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP, Calculation.FLOOR)
-                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_MARGIN_DP * 2f))
-                    - activity.dpToPixel(spanCount * (ATTACH_PHOTO_CARD_CONTENT_PADDING_DP * 2f /* Card ContentPadding*/), Calculation.FLOOR)
-                    //- activity.?dpToPixel((spanCount.minus(1)) * ATTACH_PHOTO_CARD_COMPAT_PADDING_DP /* Card Compat Padding*/, Calculation.FLOOR)
-
+                    - activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP)
+                    - (activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)).times(spanCount).times(2)
+                    - (activity.dpToPixel(attachCardContentPadding)).times(spanCount).times(2)
             ).div(spanCount)
         val cornerRadius = thumbnailSize.times(PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL)
         val imageView = ImageView(activity)
@@ -266,8 +266,8 @@ object EasyDiaryUtils {
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
 
-        val margin = activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)
-        val contentPadding = activity.dpToPixel(ATTACH_PHOTO_CARD_CONTENT_PADDING_DP)
+        val margin = activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP, Calculation.FLOOR)
+        val contentPadding = activity.dpToPixel(attachCardContentPadding, Calculation.FLOOR)
         return me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
             activity.updateDashboardInnerCard(this)
             setLayoutParams(ViewGroup.MarginLayoutParams(

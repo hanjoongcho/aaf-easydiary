@@ -1,6 +1,11 @@
 package me.blog.korn123.easydiary.ui.components
 
+import android.app.Activity
 import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -82,6 +87,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.recyclerview.widget.GridLayoutManager
 import com.simplemobiletools.commons.extensions.toast
@@ -89,16 +95,24 @@ import com.tbuonomo.viewpagerdotsindicator.dpToPx
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FileNode
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.databinding.ItemDiarySubBinding
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.syncMarkDown
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
@@ -253,6 +267,7 @@ fun TreeContent(
                 }
                 items(items = filteredTreeData, key = { "${it.first.sequence}-${it.first.fullPath}"}) { (node, level) ->
                     TreeCard(
+                        weather = node.weather,
                         title = node.name,
                         subTitle = node.fullPath,
                         level = level,
@@ -557,6 +572,7 @@ fun TreeToolbar(
 @Composable
 fun TreeCard(
     sequence: Int = 0,
+    weather: Int = 0,
     title: String,
     subTitle: String,
     level: Int,
@@ -630,13 +646,12 @@ fun TreeCard(
 
                         ) {
                         val nodeModifier = Modifier
-//                    .background(Color.Yellow.copy(alpha = 0.2f))
                             .padding(0.dp, 0.dp)
                         Row(
                             modifier = nodeModifier,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            var originTitle = if (isFile) "🗒️ $title" else "📂 $title";
+                            var originTitle = if (isFile) title else "📂 $title";
                             originTitle =
                                 if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
                             val annotatedText = buildAnnotatedString {
@@ -647,7 +662,6 @@ fun TreeCard(
                                     while (startIndex >= 0) {
                                         addStyle(
                                             style = SpanStyle(
-//                                    background = Color.Yellow.copy(alpha = 0.5f),
                                                 background = Color(HIGHLIGHT_COLOR),
                                                 color = Color.Black,
                                                 fontWeight = FontWeight.Normal
@@ -663,8 +677,28 @@ fun TreeCard(
                                     }
                                 }
                             }
+                            if (isFile) {
+                                AndroidView(
+                                    modifier = Modifier
+                                        .width(20.dp).height(20.dp),
+                                    factory = { ctx ->
+                                        ImageView(ctx).apply {
+//                                            layoutParams = ViewGroup.LayoutParams(
+//                                                ViewGroup.LayoutParams.MATCH_PARENT,
+//                                                ViewGroup.LayoutParams.WRAP_CONTENT
+//                                            )
+//                                            adjustViewBounds = true
+//                                            scaleType = ImageView.ScaleType.FIT_CENTER
+                                        }
+                                    },
+                                    update = { rootView ->
+                                        val context = rootView.context
+                                        FlavorUtils.initWeatherView(context, rootView, weather)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                            }
                             SimpleText(
-//                    text = if (isFile) "🗒️ $annotatedText" else "️📂 $annotatedText",
                                 text = annotatedText,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = fontSize,

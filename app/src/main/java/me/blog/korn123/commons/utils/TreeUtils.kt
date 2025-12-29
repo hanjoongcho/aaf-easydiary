@@ -29,7 +29,7 @@ object TreeUtils {
      * If addOptionalTitle is true, the file name is added as the last part of the path.
      */
     fun buildFileTree(items: List<Diary>, addOptionalTitle: Boolean = false, addOptionalSortPrefix: Boolean = false, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
-        val root = FileNode("root", sequence = 0)
+        val root = FileNode("root", sequence = 0, weather = 0)
         for (diary in items) {
             var current = root
 //            val parts = "${diary.dateString}".split("-").toMutableList()
@@ -48,6 +48,7 @@ object TreeUtils {
                         fullPath = partPath,
                         isFile = isFile,
                         sequence = diary.sequence,
+                        weather = diary.weather,
                         currentTimeMillis = diary.currentTimeMillis,
                     )
                     current.children.add(newNode)
@@ -110,6 +111,7 @@ data class FileNode(
     val isFile: Boolean = false,
     val currentTimeMillis: Long = 0,
     val sequence: Int,
+    val weather: Int,
     var fullPath: String = "",
     var isShow: Boolean = true, // 현재 보이는 지 여부
     var isFolderOpen: Boolean = true, // 자기 자신이 폴더 일때 열려 있는지 여부

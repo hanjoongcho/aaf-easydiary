@@ -15,7 +15,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -259,14 +262,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-//                    SimpleCard(
-//                        title = "🍿🌭🍕🍔🍟",
-//                        description = "Testing...",
-//                        modifier = settingCardModifier,
-//                        enableCardViewPolicy = enableCardViewPolicy
-//                    ) {
-//                        mSettingsViewModel.setLineSpacingScaleFactor(mSettingsViewModel.lineSpacingScaleFactor.value!!.plus(0.1f))
-//                    }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }

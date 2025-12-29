@@ -3,14 +3,18 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.R
@@ -21,6 +25,8 @@ import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.AlarmCard
+import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class AlarmAdapter(
@@ -60,39 +66,49 @@ class AlarmAdapter(
         fun bind(alarm: Alarm, position: Int) {
             composeView.setContent {
                 AppTheme {
-                    Row {
-                        val modifier = Modifier
+                    Column(
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
+                    ) {
+                        Row {
+                            val modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
 
-                        val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
-                        val alarmTag = when (alarm.workMode) {
-                            Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
-                            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
-                            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
-                            Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
-                            else -> "${prefix}unclassified"
+                            val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
+                            val alarmTag = when (alarm.workMode) {
+                                Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+                                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                                Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+                                Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
+                                else -> "${prefix}unclassified"
+                            }
+
+                            var isOn by remember { mutableStateOf(alarm.isEnabled) }
+                            AlarmCard(
+                                alarmTime = alarm.timeInMinutes,
+                                alarmDays = activity.getSelectedDaysString(alarm.days),
+                                alarmDescription =  alarm.label ?: "",
+                                modifier = modifier,
+                                isOn = isOn,
+                                alarmTag = alarmTag,
+                                checkedChangeCallback = {
+                                    isOn = isOn.not()
+                                    onItemCheckedChange(position, isOn)
+                                }
+                            ) {
+                                onItemClickListener?.run {
+                                    onItemClick(null, null, position, 0)
+                                }
+                            }
                         }
 
-                        var isOn by remember { mutableStateOf(alarm.isEnabled) }
-                        AlarmCard(
-                            alarmTime = alarm.timeInMinutes,
-                            alarmDays = activity.getSelectedDaysString(alarm.days),
-                            alarmDescription =  alarm.label ?: "",
-                            modifier = modifier,
-                            isOn = isOn,
-                            alarmTag = alarmTag,
-                            checkedChangeCallback = {
-                                isOn = isOn.not()
-                                onItemCheckedChange(position, isOn)
-                            }
-                        ) {
-                            onItemClickListener?.run {
-                                onItemClick(null, null, position, 0)
-                            }
+                        if (position == alarmList.size - 1) {
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
                 }
+
             }
         }
     }

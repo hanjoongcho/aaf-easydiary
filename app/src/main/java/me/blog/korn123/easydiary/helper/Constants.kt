@@ -644,9 +644,9 @@ const val DOZE_SCHEDULE = "doze_schedule"
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
-const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP = 30F
-const val ATTACH_PHOTO_MARGIN_DP = 5F
-const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 0F
+const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP = 30F // workaround for cardview inner padding issue
+const val ATTACH_PHOTO_MARGIN_DP = 3F
+const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 3F
 
 const val IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT = "is_tree_timeline_launch_mode_default"
 

@@ -254,7 +254,7 @@ object EasyDiaryDbHelper {
     }
 
     fun findDiaryBy(photoUri: String, realmInstance: Realm = getInstance()): Diary? {
-        val result = realmInstance.where(PhotoUri::class.java).contains("photoUri", photoUri).findFirst()?.diary
+        val result = realmInstance.where(PhotoUri::class.java).contains("photoUri", photoUri).isNotEmpty("diary").findFirst()?.diary
         var diary: Diary? = null
         result?.let {
             if (it.isValid && it.isNotEmpty()) {
