@@ -45,8 +45,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.reflect.TypeToken
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
 import me.blog.korn123.easydiary.R
@@ -103,7 +103,6 @@ object EasyDiaryUtils {
             return easyDiaryMimeType
         }
 
-
     /***************************************************************************************************
      *   String Utils
      *
@@ -118,7 +117,10 @@ object EasyDiaryUtils {
         return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
     }
 
-    fun searchWordIndexes(contents: String, searchWord: String): List<Int> {
+    fun searchWordIndexes(
+        contents: String,
+        searchWord: String,
+    ): List<Int> {
         val indexes = arrayListOf<Int>()
         if (searchWord.isNotEmpty()) {
             var index = contents.indexOf(searchWord, 0, true)
@@ -130,20 +132,15 @@ object EasyDiaryUtils {
         return indexes
     }
 
-
     /***************************************************************************************************
      *   Number Utils
      *
      ***************************************************************************************************/
     fun isNumberString(string: String?): Boolean = string?.toFloatOrNull() != null
 
-    fun isContainNumber(string: String?): Boolean {
-        return string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
-    }
+    fun isContainNumber(string: String?): Boolean = string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
 
-    fun isStockNumber(string: String?): Boolean {
-        return "$string,".matches("^(\\d+,)+$".toRegex())
-    }
+    fun isStockNumber(string: String?): Boolean = "$string,".matches("^(\\d+,)+$".toRegex())
 
     fun findNumber(string: String?): Float {
         var number = 0f
@@ -154,12 +151,19 @@ object EasyDiaryUtils {
         return number
     }
 
-
     /***************************************************************************************************
      *   Date Utils
      *
      ***************************************************************************************************/
-    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
+    fun datePickerToTimeMillis(
+        dayOfMonth: Int,
+        month: Int,
+        year: Int,
+        isFullHour: Boolean = false,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+    ): Long {
         val cal = Calendar.getInstance(Locale.getDefault())
         cal.set(Calendar.YEAR, year)
         cal.set(Calendar.MONTH, month)
@@ -171,7 +175,14 @@ object EasyDiaryUtils {
         return cal.timeInMillis
     }
 
-    fun convDateToTimeMillis(field: Int, amount: Int, isZeroHour: Boolean = true, isZeroMinute: Boolean = true, isZeroSecond: Boolean = true, isZeroMilliSecond: Boolean = true): Long {
+    fun convDateToTimeMillis(
+        field: Int,
+        amount: Int,
+        isZeroHour: Boolean = true,
+        isZeroMinute: Boolean = true,
+        isZeroSecond: Boolean = true,
+        isZeroMilliSecond: Boolean = true,
+    ): Long {
         val calendar = Calendar.getInstance(Locale.getDefault())
         if (isZeroHour) calendar.set(Calendar.HOUR_OF_DAY, 0)
         if (isZeroMinute) calendar.set(Calendar.MINUTE, 0)
@@ -183,7 +194,10 @@ object EasyDiaryUtils {
         return calendar.timeInMillis
     }
 
-    fun convDateToTimeMillis(isFullHour: Boolean = false, addYears: Int = 0): Long {
+    fun convDateToTimeMillis(
+        isFullHour: Boolean = false,
+        addYears: Int = 0,
+    ): Long {
         val cal = Calendar.getInstance(Locale.getDefault())
         cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
         cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
@@ -192,11 +206,16 @@ object EasyDiaryUtils {
         return cal.timeInMillis
     }
 
-    fun getCalendarInstance(isFullHour: Boolean = false, addYears: Int = 0): Calendar {
-        return getCalendarInstance(isFullHour, Calendar.YEAR, addYears)
-    }
+    fun getCalendarInstance(
+        isFullHour: Boolean = false,
+        addYears: Int = 0,
+    ): Calendar = getCalendarInstance(isFullHour, Calendar.YEAR, addYears)
 
-    fun getCalendarInstance(isFullHour: Boolean = false, field: Int, amount: Int): Calendar {
+    fun getCalendarInstance(
+        isFullHour: Boolean = false,
+        field: Int,
+        amount: Int,
+    ): Calendar {
         val cal = Calendar.getInstance(Locale.getDefault())
         cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
         cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
@@ -206,51 +225,74 @@ object EasyDiaryUtils {
         return cal
     }
 
-
     /***************************************************************************************************
      *   Image Utils
      *
      ***************************************************************************************************/
-    fun createBackgroundGradientDrawable(color: Int, alpha: Int, cornerRadius: Float): Drawable {
-        val gradientDrawable = GradientDrawable().apply {
-            setColor(ColorUtils.setAlphaComponent(color, alpha))
-            setCornerRadius(cornerRadius)
-        }
+    fun createBackgroundGradientDrawable(
+        color: Int,
+        alpha: Int,
+        cornerRadius: Float,
+    ): Drawable {
+        val gradientDrawable =
+            GradientDrawable().apply {
+                setColor(ColorUtils.setAlphaComponent(color, alpha))
+                setCornerRadius(cornerRadius)
+            }
         return gradientDrawable
     }
 
-    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
+    fun createAttachedPhotoView(
+        context: Context,
+        photoUri: PhotoUri,
+        marginLeft: Float = 0F,
+        marginTop: Float = 0F,
+        marginRight: Float = 3F,
+        marginBottom: Float = 0F,
+    ): ImageView {
         val thumbnailSize = context.dpToPixel(context.config.settingThumbnailSize)
         val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
-        layoutParams.setMargins(context.dpToPixel(marginLeft), context.dpToPixel(marginTop), context.dpToPixel(marginRight), context.dpToPixel(marginBottom))
+        layoutParams.setMargins(
+            context.dpToPixel(marginLeft),
+            context.dpToPixel(marginTop),
+            context.dpToPixel(marginRight),
+            context.dpToPixel(marginBottom),
+        )
         imageView.layoutParams = layoutParams
         imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
         imageView.scaleType = ImageView.ScaleType.CENTER
         val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
-        Glide.with(context)
+        Glide
+            .with(context)
             .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
         return imageView
     }
 
-    fun createAttachedPhotoViewForFlexBox(activity: Activity, photoUri: PhotoUri, attachedCount:Int): CardView {
-        val spanCount = when {
-            !activity.isLandScape() && attachedCount == 1 -> 1
-            !activity.isLandScape() && attachedCount == 2 -> 2
-            !activity.isLandScape() && attachedCount > 2 -> 3
-            activity.isLandScape()  -> 5
-            else -> 1
-        }
+    fun createAttachedPhotoViewForFlexBox(
+        activity: Activity,
+        photoUri: PhotoUri,
+        attachedCount: Int,
+    ): CardView {
+        val spanCount =
+            when {
+                !activity.isLandScape() && attachedCount == 1 -> 1
+                !activity.isLandScape() && attachedCount == 2 -> 2
+                !activity.isLandScape() && attachedCount > 2 -> 3
+                activity.isLandScape() -> 5
+                else -> 1
+            }
         val attachCardContentPadding = ATTACH_PHOTO_CARD_CONTENT_PADDING_DP.div(spanCount)
         val thumbnailSize =
-            (activity.getDefaultDisplay().x
-                    - activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP)
-                    - (activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)).times(spanCount).times(2)
-                    - (activity.dpToPixel(attachCardContentPadding)).times(spanCount).times(2)
+            (
+                activity.getDefaultDisplay().x -
+                    activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP) -
+                    (activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)).times(spanCount).times(2) -
+                    (activity.dpToPixel(attachCardContentPadding)).times(spanCount).times(2)
             ).div(spanCount)
         val cornerRadius = thumbnailSize.times(PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL)
         val imageView = ImageView(activity)
@@ -261,7 +303,8 @@ object EasyDiaryUtils {
         imageView.scaleType = ImageView.ScaleType.CENTER
 //        val padding = (activity.dpToPixel(1F, Calculation.FLOOR))
 //        imageView.setPadding(padding, padding, padding, padding)
-        Glide.with(activity)
+        Glide
+            .with(activity)
             .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
@@ -270,12 +313,15 @@ object EasyDiaryUtils {
         val contentPadding = activity.dpToPixel(attachCardContentPadding, Calculation.FLOOR)
         return me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
             activity.updateDashboardInnerCard(this)
-            setLayoutParams(ViewGroup.MarginLayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(margin, margin, margin, margin)
-            })
+            setLayoutParams(
+                ViewGroup
+                    .MarginLayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        setMargins(margin, margin, margin, margin)
+                    },
+            )
 
             radius = cornerRadius
             fixedAppcompatPadding = false
@@ -285,7 +331,11 @@ object EasyDiaryUtils {
 //        return imageView
     }
 
-    fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
+    fun downSamplingImage(
+        context: Context,
+        uri: Uri,
+        destFile: File,
+    ): String {
         val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
         val uriStream = context.contentResolver.openInputStream(uri)
         when (mimeType) {
@@ -296,6 +346,7 @@ object EasyDiaryUtils {
                 uriStream?.close()
                 fos.close()
             }
+
             else -> {
                 val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
                 val fos = FileOutputStream(tempFile)
@@ -310,20 +361,30 @@ object EasyDiaryUtils {
         return mimeType
     }
 
-    fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
+    fun downSamplingImage(
+        context: Context,
+        srcFile: File,
+        destFile: File,
+    ) {
         val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
         compressedFile.copyTo(destFile, true)
     }
 
-    fun createThumbnailGlideOptions(radius: Float, isEncrypt: Boolean = false): RequestOptions = createThumbnailGlideOptions(radius.toInt(), isEncrypt)
+    fun createThumbnailGlideOptions(
+        radius: Float,
+        isEncrypt: Boolean = false,
+    ): RequestOptions = createThumbnailGlideOptions(radius.toInt(), isEncrypt)
 
-    fun createThumbnailGlideOptions(radius: Int, isEncrypt: Boolean = false): RequestOptions = RequestOptions()
-        /*.error(R.drawable.error_7)*/
-        .placeholder(if (isEncrypt) R.drawable.ic_padlock else R.drawable.ic_error_7)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
-        .transform(MultiTransformation(CenterCrop(), RoundedCorners(radius)))
-
+    fun createThumbnailGlideOptions(
+        radius: Int,
+        isEncrypt: Boolean = false,
+    ): RequestOptions =
+        RequestOptions()
+            // .error(R.drawable.error_7)
+            .placeholder(if (isEncrypt) R.drawable.ic_padlock else R.drawable.ic_error_7)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .priority(Priority.HIGH)
+            .transform(MultiTransformation(CenterCrop(), RoundedCorners(radius)))
 
     /***************************************************************************************************
      *   File Utils
@@ -336,12 +397,12 @@ object EasyDiaryUtils {
 
     fun initWorkingDirectory(context: Context) {
 //        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
-            makeDirectory(getApplicationDataDirectory(context) + DIARY_POSTCARD_DIRECTORY)
-            makeDirectory(getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY)
-            makeDirectory(getApplicationDataDirectory(context) + MARKDOWN_DIRECTORY)
-            makeDirectory(getApplicationDataDirectory(context) + BACKUP_EXCEL_DIRECTORY)
-            makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + DIARY_POSTCARD_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + MARKDOWN_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + BACKUP_EXCEL_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
 //        }
     }
 
@@ -358,33 +419,44 @@ object EasyDiaryUtils {
         return context.applicationInfo.dataDir
     }
 
-    fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = mimeType
-        }
+    fun readFileWithSAF(
+        mimeType: String,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        val intent =
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = mimeType
+            }
         activityResultLauncher.launch(intent)
     }
 
-    fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            // Filter to only show results that can be "opened", such as
-            // a file (as opposed to a list of contacts or timezones).
-            addCategory(Intent.CATEGORY_OPENABLE)
+    fun writeFileWithSAF(
+        fileName: String,
+        mimeType: String,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT)
+            .apply {
+                // Filter to only show results that can be "opened", such as
+                // a file (as opposed to a list of contacts or timezones).
+                addCategory(Intent.CATEGORY_OPENABLE)
 
-            type = mimeType
-            // Create a file with the requested MIME type.
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }.run {
-            activityResultLauncher.launch(this)
-        }
+                type = mimeType
+                // Create a file with the requested MIME type.
+                putExtra(Intent.EXTRA_TITLE, fileName)
+            }.run {
+                activityResultLauncher.launch(this)
+            }
     }
-
 
     /***************************************************************************************************
      *   View Utils
      *
      ***************************************************************************************************/
-    fun boldString(context: Context, textView: TextView?) {
+    fun boldString(
+        context: Context,
+        textView: TextView?,
+    ) {
         if (context.config.boldStyleEnable) {
             boldStringForce(textView)
         }
@@ -414,7 +486,11 @@ object EasyDiaryUtils {
         textView.text = spannableString
     }
 
-    fun highlightStringIgnoreCase(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
+    fun highlightStringIgnoreCase(
+        textView: TextView?,
+        input: String?,
+        highlightColor: Int = HIGHLIGHT_COLOR,
+    ) {
         textView?.let { tv ->
             input?.let { targetString ->
                 val inputLower = targetString.toLowerCase()
@@ -424,8 +500,18 @@ object EasyDiaryUtils {
 
                 var indexOfKeyword = contentsLower.indexOf(inputLower)
                 while (indexOfKeyword >= 0) {
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        BackgroundColorSpan(highlightColor),
+                        indexOfKeyword,
+                        indexOfKeyword + inputLower.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.BLACK),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
 
                     indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
@@ -434,25 +520,39 @@ object EasyDiaryUtils {
         }
     }
 
-    fun highlightString(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
+    fun highlightString(
+        textView: TextView?,
+        input: String?,
+        highlightColor: Int = HIGHLIGHT_COLOR,
+    ) {
         textView?.let { tv ->
             input?.let { targetString ->
-                //Get the text from text view and create a spannable string
+                // Get the text from text view and create a spannable string
                 val spannableString = SpannableString(tv.text)
                 removeSpans(spannableString)
 
-                //Search for all occurrences of the keyword in the string
+                // Search for all occurrences of the keyword in the string
                 var indexOfKeyword = spannableString.toString().indexOf(targetString)
                 while (indexOfKeyword >= 0) {
-                    //Create a background color span on the keyword
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    // Create a background color span on the keyword
+                    spannableString.setSpan(
+                        BackgroundColorSpan(highlightColor),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.BLACK),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
 
-                    //Get the next index of the keyword
+                    // Get the next index of the keyword
                     indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
                 }
 
-                //Set the final text on TextView
+                // Set the final text on TextView
                 tv.text = spannableString
             }
         }
@@ -468,7 +568,11 @@ object EasyDiaryUtils {
         view.setOnTouchListener { _, _ -> true }
     }
 
-    fun applyMarkDownEllipsize(textContents: TextView, sequence: Int, delayMillis: Long = 0) {
+    fun applyMarkDownEllipsize(
+        textContents: TextView,
+        sequence: Int,
+        delayMillis: Long = 0,
+    ) {
         Handler(Looper.getMainLooper()).postDelayed({
             if (textContents.tag == sequence) {
                 val max = textContents.maxLines
@@ -486,7 +590,11 @@ object EasyDiaryUtils {
      *   Dialog Utils
      *
      ***************************************************************************************************/
-    fun createSecondsPickerBuilder(context: Context, itemClickListener: AdapterView.OnItemClickListener, second: Int): AlertDialog.Builder {
+    fun createSecondsPickerBuilder(
+        context: Context,
+        itemClickListener: AdapterView.OnItemClickListener,
+        second: Int,
+    ): AlertDialog.Builder {
         val builder = AlertDialog.Builder(context)
         builder.setNegativeButton(context.getString(android.R.string.cancel), null)
         builder.setTitle(context.getString(R.string.common_create_seconds))
@@ -507,14 +615,18 @@ object EasyDiaryUtils {
         return builder
     }
 
-    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
+    fun openCustomOptionMenu(
+        content: View,
+        parent: View,
+    ): PopupWindow {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
+        val popup: PopupWindow =
+            PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, parent.context.dpToPixel(24F))
-        }
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                showAtLocation(parent, Gravity.TOP or Gravity.RIGHT, 0, parent.context.dpToPixel(24F))
+            }
         content.x = 1000f
         content.y = 0f
         val animX = ObjectAnimator.ofFloat(content, "x", 0f)
@@ -527,12 +639,14 @@ object EasyDiaryUtils {
         return popup
     }
 
-
     /***************************************************************************************************
      *   Conversion Utils
      *
      ***************************************************************************************************/
-    fun sequenceToPageIndex(diaryList: List<Diary>, sequence: Int): Int {
+    fun sequenceToPageIndex(
+        diaryList: List<Diary>,
+        sequence: Int,
+    ): Int {
         var pageIndex = 0
         if (sequence > -1) {
             for (i in diaryList.indices) {
@@ -545,26 +659,29 @@ object EasyDiaryUtils {
         return pageIndex
     }
 
-    fun queryName(resolver: ContentResolver, uri: Uri): String {
+    fun queryName(
+        resolver: ContentResolver,
+        uri: Uri,
+    ): String {
         val returnCursor: Cursor? = resolver.query(uri, null, null, null, null)
         var name: String? = null
         returnCursor?.let {
             val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             it.moveToFirst()
-            name = returnCursor.getString(nameIndex);
+            name = returnCursor.getString(nameIndex)
             returnCursor.close()
         }
         return name ?: UUID.randomUUID().toString()
     }
 
     fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
-        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        val type = object : TypeToken<HashMap<String, Any>>() {}.type
         return GsonBuilder().create().fromJson(jsonString, type)
     }
 
     fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
         val reader = JsonReader(FileReader(filename))
-        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        val type = object : TypeToken<HashMap<String, Any>>() {}.type
         val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
         reader.close()
         return map
@@ -579,15 +696,18 @@ object EasyDiaryUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return Html.fromHtml(target)
         }
-        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
+        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY)
     }
-
 
     /***************************************************************************************************
      *   Chart Utils
      *
      ***************************************************************************************************/
-    fun getSymbolUsedCountMap(isReverse: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): Map<Int, Int> {
+    fun getSymbolUsedCountMap(
+        isReverse: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+    ): Map<Int, Int> {
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, startTimeMillis, endTimeMillis, realmInstance = realmInstance)
 
@@ -603,13 +723,12 @@ object EasyDiaryUtils {
                 }
             }
             realmInstance.close()
-            return when(isReverse) {
+            return when (isReverse) {
                 true -> map.toList().sortedByDescending { (_, value) -> value }.toMap()
                 false -> map.toList().sortedBy { (_, value) -> value }.toMap()
             }
         }
     }
-
 
     /***************************************************************************************************
      *   Legacy Utils
@@ -620,45 +739,68 @@ object EasyDiaryUtils {
         photoUri: PhotoUri,
         requiredSize: Int = 50,
         fixedWidth: Int = 45,
-        fixedHeight: Int = 45
-    ): Bitmap = try {
-        when (photoUri.isContentUri()) {
-            true -> {
-                BitmapUtils.decodeFile(context, Uri.parse(photoUri.photoUri), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR), context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR))
-            }
-            false -> {
-                when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUri.getFilePath(), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR))
-                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath(), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR), context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR))
-                }
-
-            }
-        }
-    } catch (fe: FileNotFoundException) {
-        fe.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-    } catch (se: SecurityException) {
-        se.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-    }
-
-    fun photoUriToBitmap(context: Context, photoUri: PhotoUri): Bitmap? {
-        val bitmap: Bitmap? = try {
+        fixedHeight: Int = 45,
+    ): Bitmap =
+        try {
             when (photoUri.isContentUri()) {
                 true -> {
-                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUri.photoUri)))
+                    BitmapUtils.decodeFile(
+                        context,
+                        Uri.parse(photoUri.photoUri),
+                        context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
+                        context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR),
+                    )
                 }
+
                 false -> {
-                    BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath())
+                    when (fixedWidth == fixedHeight) {
+                        true -> {
+                            BitmapUtils.decodeFileCropCenter(
+                                getApplicationDataDirectory(context) + photoUri.getFilePath(),
+                                context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
+                            )
+                        }
+
+                        false -> {
+                            BitmapUtils.decodeFile(
+                                getApplicationDataDirectory(context) + photoUri.getFilePath(),
+                                context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
+                                context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR),
+                            )
+                        }
+                    }
                 }
             }
+        } catch (fe: FileNotFoundException) {
+            fe.printStackTrace()
+            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
+        } catch (se: SecurityException) {
+            se.printStackTrace()
+            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
         }
+
+    fun photoUriToBitmap(
+        context: Context,
+        photoUri: PhotoUri,
+    ): Bitmap? {
+        val bitmap: Bitmap? =
+            try {
+                when (photoUri.isContentUri()) {
+                    true -> {
+                        BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUri.photoUri)))
+                    }
+
+                    false -> {
+                        BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath())
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         return bitmap
     }
 
@@ -666,47 +808,71 @@ object EasyDiaryUtils {
      *   ETC.
      *
      ***************************************************************************************************/
-    fun applyFilter(mode: String?) : List<Diary> {
-        val diaryList: List<Diary> = when (mode) {
-            DiaryFragment.MODE_TASK_TODO -> EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                0
-            ).filter { item -> item.weather in 80..81 }.reversed()
-            DiaryFragment.MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                81
-            )
-            DiaryFragment.MODE_TASK_DONE -> EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                0
-            ).filter { item -> item.weather in 82..83 }
-            DiaryFragment.MODE_TASK_CANCEL -> EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                83
-            )
-            DiaryFragment.MODE_FUTURE -> EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                0
-            ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }.reversed()
-            else -> EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0)
-                .filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis <= System.currentTimeMillis() }
-                .run { if (this.size > 100) this.subList(0, 100) else this }
-        }
+    fun applyFilter(mode: String?): List<Diary> {
+        val diaryList: List<Diary> =
+            when (mode) {
+                DiaryFragment.MODE_TASK_TODO -> {
+                    EasyDiaryDbHelper
+                        .findDiary(
+                            null,
+                            false,
+                            0,
+                            0,
+                            0,
+                        ).filter { item -> item.weather in 80..81 }
+                        .reversed()
+                }
+
+                DiaryFragment.MODE_TASK_DOING -> {
+                    EasyDiaryDbHelper.findDiary(
+                        null,
+                        false,
+                        0,
+                        0,
+                        81,
+                    )
+                }
+
+                DiaryFragment.MODE_TASK_DONE -> {
+                    EasyDiaryDbHelper
+                        .findDiary(
+                            null,
+                            false,
+                            0,
+                            0,
+                            0,
+                        ).filter { item -> item.weather in 82..83 }
+                }
+
+                DiaryFragment.MODE_TASK_CANCEL -> {
+                    EasyDiaryDbHelper.findDiary(
+                        null,
+                        false,
+                        0,
+                        0,
+                        83,
+                    )
+                }
+
+                DiaryFragment.MODE_FUTURE -> {
+                    EasyDiaryDbHelper
+                        .findDiary(
+                            null,
+                            false,
+                            0,
+                            0,
+                            0,
+                        ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
+                        .reversed()
+                }
+
+                else -> {
+                    EasyDiaryDbHelper
+                        .findDiary(null, false, 0, 0, 0)
+                        .filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis <= System.currentTimeMillis() }
+                        .run { if (this.size > 100) this.subList(0, 100) else this }
+                }
+            }
 
         return diaryList
     }

@@ -25,19 +25,27 @@ import kotlin.math.ceil
 import kotlin.math.sqrt
 
 class PhotoAdapter(
-        val activity: AppCompatActivity,
-        val postCardPhotoItems: List<PostCardPhotoItem>,
-        private val dialogPositiveCallback: () -> Unit
+    val activity: AppCompatActivity,
+    val postCardPhotoItems: List<PostCardPhotoItem>,
+    private val dialogPositiveCallback: () -> Unit,
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val view = LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): PhotoViewHolder {
+        val view =
+            LayoutInflater
+                .from(parent.context)
                 .inflate(R.layout.item_photo, parent, false)
         return PhotoViewHolder(view, activity, itemCount, this)
     }
 
-    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: PhotoViewHolder,
+        position: Int,
+    ) {
         postCardPhotoItems[position].let { postCardPhotoItem ->
 //            if (itemCount == 2) {
 //                holder.itemView.layoutParams = (holder.itemView.layoutParams as FlexboxLayoutManager.LayoutParams).apply {
@@ -58,18 +66,20 @@ class PhotoAdapter(
 
     fun onItemHolderClick(itemHolder: PhotoViewHolder) {
         val postCardPhotoItem = postCardPhotoItems[itemHolder.adapterPosition]
-        PhotoFlexItemOptionFragment.newInstance(postCardPhotoItem).apply {
-            positiveCallback = { viewMode, filterMode, forceSinglePhotoPosition ->
-                postCardPhotoItem.viewMode = viewMode
-                postCardPhotoItem.filterMode = filterMode
-                postCardPhotoItem.forceSinglePhotoPosition = forceSinglePhotoPosition
-                itemHolder.bindTo(postCardPhotoItem)
-                dialogPositiveCallback.invoke()
-                notifyDataSetChanged()
-            }
-        }.show(activity.supportFragmentManager, "")
+        PhotoFlexItemOptionFragment
+            .newInstance(postCardPhotoItem)
+            .apply {
+                positiveCallback = { viewMode, filterMode, forceSinglePhotoPosition ->
+                    postCardPhotoItem.viewMode = viewMode
+                    postCardPhotoItem.filterMode = filterMode
+                    postCardPhotoItem.forceSinglePhotoPosition = forceSinglePhotoPosition
+                    itemHolder.bindTo(postCardPhotoItem)
+                    dialogPositiveCallback.invoke()
+                    notifyDataSetChanged()
+                }
+            }.show(activity.supportFragmentManager, "")
     }
-    
+
 //    fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
 //        true -> {
 //            when (itemCount) {
@@ -81,21 +91,23 @@ class PhotoAdapter(
 //    }
 
     class PhotoViewHolder(
-            itemView: View,
-            val activity: Activity,
-            private val itemCount: Int,
-            val adapter: PhotoAdapter
+        itemView: View,
+        val activity: Activity,
+        private val itemCount: Int,
+        val adapter: PhotoAdapter,
     ) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.photo)
 
         init {
-            if (itemView is ViewGroup) itemView.setOnClickListener {
-                adapter.onItemHolderClick(this)
+            if (itemView is ViewGroup) {
+                itemView.setOnClickListener {
+                    adapter.onItemHolderClick(this)
+                }
             }
         }
 
         fun bindTo(postCardPhotoItem: PostCardPhotoItem) {
-            val point =  activity.getDefaultDisplay()
+            val point = activity.getDefaultDisplay()
             val height = PostcardActivity.calcPhotoGridHeight(activity)
             val size = if (point.x > point.y) height else point.x
 
@@ -108,6 +120,7 @@ class PhotoAdapter(
                         imageView.layoutParams.width = size
                         imageView.layoutParams.height = size
                     }
+
                     else -> {
                         size.div(ceil(sqrt(itemCount.toFloat()))).toInt().run {
                             imageView.layoutParams.width = this
@@ -130,15 +143,16 @@ class PhotoAdapter(
         }
 
         companion object {
-            fun getCropType(viewMode: Int): CropTransformation.CropType? = when (viewMode) {
-                1 -> CropTransformation.CropType.TOP
-                2 -> CropTransformation.CropType.CENTER
-                3 -> CropTransformation.CropType.BOTTOM
-                else -> null
-            }
+            fun getCropType(viewMode: Int): CropTransformation.CropType? =
+                when (viewMode) {
+                    1 -> CropTransformation.CropType.TOP
+                    2 -> CropTransformation.CropType.CENTER
+                    3 -> CropTransformation.CropType.BOTTOM
+                    else -> null
+                }
 
-            private fun createBitmapTransformation(filterMode: Int) : BitmapTransformation {
-                return when (filterMode) {
+            private fun createBitmapTransformation(filterMode: Int): BitmapTransformation =
+                when (filterMode) {
                     1 -> ToonFilterTransformation()
                     2 -> SepiaFilterTransformation()
                     3 -> ContrastFilterTransformation()
@@ -151,28 +165,62 @@ class PhotoAdapter(
                     10 -> VignetteFilterTransformation()
                     else -> GrayscaleTransformation()
                 }
-            }
 
-            fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
+            fun applyOption(
+                context: Context,
+                photoUri: String,
+                viewMode: Int,
+                filterMode: Int,
+                imageView: ImageView,
+            ) {
                 val glide = Glide.with(context).load(photoUri)
                 val radius = (imageView.layoutParams.width * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL).toInt()
                 when (viewMode) {
                     0 -> {
                         if (filterMode == 0) {
-                            glide.apply(RequestOptions().transform(MultiTransformation(RoundedCorners(radius))))
-                                    .into(imageView)
+                            glide
+                                .apply(RequestOptions().transform(MultiTransformation(RoundedCorners(radius))))
+                                .into(imageView)
                         } else {
-                            glide.apply(RequestOptions().transform(MultiTransformation(createBitmapTransformation(filterMode), RoundedCorners(radius))))
-                                    .into(imageView)
+                            glide
+                                .apply(
+                                    RequestOptions().transform(
+                                        MultiTransformation(createBitmapTransformation(filterMode), RoundedCorners(radius)),
+                                    ),
+                                ).into(imageView)
                         }
                     }
+
                     else -> {
                         if (filterMode == 0) {
-                            glide.apply(RequestOptions().transform(MultiTransformation(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)), RoundedCorners(radius))))
-                                .into(imageView)
+                            glide
+                                .apply(
+                                    RequestOptions().transform(
+                                        MultiTransformation(
+                                            CropTransformation(
+                                                imageView.layoutParams.width,
+                                                imageView.layoutParams.height,
+                                                getCropType(viewMode),
+                                            ),
+                                            RoundedCorners(radius),
+                                        ),
+                                    ),
+                                ).into(imageView)
                         } else {
-                            glide.apply(RequestOptions().transform(MultiTransformation(createBitmapTransformation(filterMode), CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)), RoundedCorners(radius))))
-                                .into(imageView)
+                            glide
+                                .apply(
+                                    RequestOptions().transform(
+                                        MultiTransformation(
+                                            createBitmapTransformation(filterMode),
+                                            CropTransformation(
+                                                imageView.layoutParams.width,
+                                                imageView.layoutParams.height,
+                                                getCropType(viewMode),
+                                            ),
+                                            RoundedCorners(radius),
+                                        ),
+                                    ),
+                                ).into(imageView)
                         }
                     }
                 }
@@ -180,5 +228,11 @@ class PhotoAdapter(
         }
     }
 
-    data class PostCardPhotoItem(val photoUri: String, val position: Int, var viewMode: Int, var filterMode: Int, var forceSinglePhotoPosition: Boolean = false)
+    data class PostCardPhotoItem(
+        val photoUri: String,
+        val position: Int,
+        var viewMode: Int,
+        var filterMode: Int,
+        var forceSinglePhotoPosition: Boolean = false,
+    )
 }

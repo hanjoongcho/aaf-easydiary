@@ -137,7 +137,6 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 open class BaseDevActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   global properties
@@ -148,40 +147,68 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private var mCoroutineJob1: Job? = null
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    private val mNetworkLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugOptionToastLocation) makeToast("Network location has been updated")
-            mLocationManager.removeUpdates(this)
-        }
-        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String) {}
-        override fun onProviderDisabled(p0: String) {}
-    }
-    private val mGPSLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location) {
-            if (config.enableDebugOptionToastLocation) makeToast("GPS location has been updated")
-            mLocationManager.removeUpdates(this)
-        }
-        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String) {}
-        override fun onProviderDisabled(p0: String) {}
-    }
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
-    }
-    protected val mFlexboxLayoutParams = FlexboxLayout.LayoutParams(
-        FlexboxLayout.LayoutParams.WRAP_CONTENT
-        , FlexboxLayout.LayoutParams.WRAP_CONTENT
-    )
+    private val mNetworkLocationListener =
+        object : LocationListener {
+            override fun onLocationChanged(p0: Location) {
+                if (config.enableDebugOptionToastLocation) makeToast("Network location has been updated")
+                mLocationManager.removeUpdates(this)
+            }
 
-    private val mPickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
-        if (uris.isNotEmpty()) {
-            showAlertDialog(uris.joinToString(",") { uri -> uri.toString() }, null, null, DialogMode.INFO, false)
-        } else {
-            makeToast("There are no photos selected.")
-        }
-    }
+            override fun onStatusChanged(
+                p0: String?,
+                p1: Int,
+                p2: Bundle?,
+            ) {
+            }
 
+            override fun onProviderEnabled(p0: String) {}
+
+            override fun onProviderDisabled(p0: String) {}
+        }
+    private val mGPSLocationListener =
+        object : LocationListener {
+            override fun onLocationChanged(p0: Location) {
+                if (config.enableDebugOptionToastLocation) makeToast("GPS location has been updated")
+                mLocationManager.removeUpdates(this)
+            }
+
+            override fun onStatusChanged(
+                p0: String?,
+                p1: Int,
+                p2: Bundle?,
+            ) {
+            }
+
+            override fun onProviderEnabled(p0: String) {}
+
+            override fun onProviderDisabled(p0: String) {}
+        }
+    private val mRequestLocationSourceLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            makeSnackBar(
+                if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.",
+            )
+        }
+    protected val mFlexboxLayoutParams =
+        FlexboxLayout.LayoutParams(
+            FlexboxLayout.LayoutParams.WRAP_CONTENT,
+            FlexboxLayout.LayoutParams.WRAP_CONTENT,
+        )
+
+    private val mPickMultipleMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
+            if (uris.isNotEmpty()) {
+                showAlertDialog(
+                    uris.joinToString(",") { uri -> uri.toString() },
+                    null,
+                    null,
+                    DialogMode.INFO,
+                    false,
+                )
+            } else {
+                makeToast("There are no photos selected.")
+            }
+        }
 
     /***************************************************************************************************
      *   override functions
@@ -207,14 +234,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-
     /***************************************************************************************************
      *   Define Compose
      *
      ***************************************************************************************************/
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    protected fun Etc(modifier: Modifier, maxItemsInEachRow: Int, viewModel: BaseDevViewModel) {
+    protected fun Etc(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel,
+    ) {
         val currentContext = LocalContext.current
         val currentActivity = LocalActivity.current
         CategoryTitleCard(title = "Etc.")
@@ -224,11 +254,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
             alarmDescription = "Google Calendar sync",
             modifier = Modifier,
             isOn = true,
-            checkedChangeCallback = {}
+            checkedChangeCallback = {},
         ) {}
         FlowRow(
             modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 "Self Development",
@@ -237,7 +267,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
-                    Intent(currentContext, SelfDevelopmentRepoActivity::class.java)
+                    Intent(currentContext, SelfDevelopmentRepoActivity::class.java),
                 )
             }
             SimpleCard(
@@ -247,7 +277,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
-                    Intent(currentContext, TreeTimelineActivity::class.java)
+                    Intent(currentContext, TreeTimelineActivity::class.java),
                 )
             }
             SimpleCard(
@@ -259,7 +289,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 1)
-                    }
+                    },
                 )
             }
             SimpleCard(
@@ -271,7 +301,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 2)
-                    }
+                    },
                 )
             }
             SimpleCard(
@@ -283,7 +313,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 3)
-                    }
+                    },
                 )
             }
             SimpleCard(
@@ -295,7 +325,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 4)
-                    }
+                    },
                 )
             }
             SimpleCard(
@@ -307,7 +337,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 5)
-                    }
+                    },
                 )
             }
             SwitchCardWithImage(
@@ -315,37 +345,45 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 description = currentContext.getString(R.string.task_symbol_top_order_description),
                 modifier = modifier,
                 isOn = true,
-                imageResourceId = R.drawable.ic_select_symbol
+                imageResourceId = R.drawable.ic_select_symbol,
             ) {}
             SimpleCardWithImage(
                 title = currentContext.getString(R.string.google_drive_account_information_title),
                 description = currentContext.getString(R.string.google_drive_account_sign_in_description),
                 modifier = modifier,
-                imageResourceId = R.drawable.ic_select_symbol
+                imageResourceId = R.drawable.ic_select_symbol,
             ) {}
             SwitchCardWithImage(
                 title = currentContext.getString(R.string.task_symbol_top_order_title),
                 description = currentContext.getString(R.string.task_symbol_top_order_description),
                 modifier = modifier,
                 isOn = true,
-                imageResourceId = R.drawable.ic_select_symbol
+                imageResourceId = R.drawable.ic_select_symbol,
             ) {}
-            var enableDebugOptionVisibleDiarySequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleDiarySequence) }
+            var enableDebugOptionVisibleDiarySequence by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionVisibleDiarySequence,
+                )
+            }
             SwitchCard(
                 "Display Diary Sequence",
                 null,
                 modifier,
-                enableDebugOptionVisibleDiarySequence
+                enableDebugOptionVisibleDiarySequence,
             ) {
                 enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence.not()
                 config.enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence
             }
-            var enableDebugOptionVisibleAlarmSequence by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleAlarmSequence) }
+            var enableDebugOptionVisibleAlarmSequence by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionVisibleAlarmSequence,
+                )
+            }
             SwitchCard(
                 "Display Alarm Sequence",
                 null,
                 modifier,
-                enableDebugOptionVisibleAlarmSequence
+                enableDebugOptionVisibleAlarmSequence,
             ) {
                 enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence.not()
                 config.enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence
@@ -355,7 +393,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Display Tree Status",
                 null,
                 modifier,
-                enableDebugOptionVisibleTreeStatus
+                enableDebugOptionVisibleTreeStatus,
             ) {
                 enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus.not()
                 config.enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus
@@ -365,17 +403,21 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Stock",
                 null,
                 modifier,
-                enableDebugOptionVisibleChartStock
+                enableDebugOptionVisibleChartStock,
             ) {
                 enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
                 config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
             }
-            var enableDebugOptionVisibleChartWeight by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartWeight) }
+            var enableDebugOptionVisibleChartWeight by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionVisibleChartWeight,
+                )
+            }
             SwitchCard(
                 "Weight",
                 null,
                 modifier,
-                enableDebugOptionVisibleChartWeight
+                enableDebugOptionVisibleChartWeight,
             ) {
                 enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
                 config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
@@ -388,7 +430,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
                 ActionLogDialog(
                     this@BaseDevActivity,
-                    actionLogs
+                    actionLogs,
                 ) { EasyDiaryDbHelper.deleteActionLogAll() }
             }
             SimpleCard(
@@ -442,22 +484,26 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
-                    edit().putBoolean(
-                        "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
-                        false
-                    ).apply()
-                    edit().putBoolean(
-                        "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
-                        false
-                    ).apply()
-                    edit().putBoolean(
-                        "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
-                        false
-                    ).apply()
-                    edit().putBoolean(
-                        "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
-                        false
-                    ).apply()
+                    edit()
+                        .putBoolean(
+                            "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
+                            false,
+                        ).apply()
+                    edit()
+                        .putBoolean(
+                            "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
+                            false,
+                        ).apply()
+                    edit()
+                        .putBoolean(
+                            "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
+                            false,
+                        ).apply()
+                    edit()
+                        .putBoolean(
+                            "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
+                            false,
+                        ).apply()
                 }
             }
             SimpleCard(
@@ -470,13 +516,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 makeToast(
                     "DP:${
                         dpToPixelFloatValue(
-                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat(),
                         )
                     } , SP:${
                         spToPixelFloatValue(
-                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()
+                            UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat(),
                         )
-                    }"
+                    }",
                 )
             }
             SimpleCard(
@@ -519,7 +565,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
                 customTabsIntent.launchUrl(
                     this@BaseDevActivity,
-                    Uri.parse("https://github.com/AAFactory/aafactory-commons")
+                    Uri.parse("https://github.com/AAFactory/aafactory-commons"),
                 )
             }
             SimpleCard(
@@ -541,8 +587,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                 }
                 showAlertDialog(
-                    unUsedPhotos.size.toString(), null,
-                    { _, _ -> }, DialogMode.WARNING
+                    unUsedPhotos.size.toString(),
+                    null,
+                    { _, _ -> },
+                    DialogMode.WARNING,
                 )
             }
             SimpleCard(
@@ -582,9 +630,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         makeToast(
                             "Next: ${
                                 DateUtils.getDateTimeStringFromTimeMillis(
-                                    alarmInfo.triggerTime
+                                    alarmInfo.triggerTime,
                                 )
-                            }"
+                            }",
                         )
                     } ?: makeToast("Next schedule does not exist.")
                 }
@@ -609,12 +657,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun Notification(
         modifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Notification")
         FlowRow(
             modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 "Notification-01",
@@ -659,7 +707,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun LocationManager(
         settingCardModifier: Modifier,
         maxItemsInEachRow: Int,
-        viewModel: BaseDevViewModel
+        viewModel: BaseDevViewModel,
     ) {
         val currentContext = LocalContext.current
         CategoryTitleCard(title = "Location Manager")
@@ -671,14 +719,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {}
         FlowRow(
             modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             var enableDebugOptionToastLocation by remember { mutableStateOf(currentContext.config.enableDebugOptionToastLocation) }
             SwitchCard(
                 "Toast Message",
                 "Location Toast",
                 settingCardModifier,
-                enableDebugOptionToastLocation
+                enableDebugOptionToastLocation,
             ) {
                 enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
                 config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
@@ -709,12 +757,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun AlertDialog(
         settingCardModifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Alert Dialog")
         FlowRow(
             modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 "Dialog",
@@ -745,7 +793,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Dialog",
                 "확인(INFO)",
                 modifier = settingCardModifier,
-            ) { showAlertDialog("message", null, { _,_ -> }, DialogMode.INFO) }
+            ) { showAlertDialog("message", null, { _, _ -> }, DialogMode.INFO) }
         }
     }
 
@@ -753,52 +801,72 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun DebugToast(
         settingCardModifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         val currentContext = LocalContext.current
         CategoryTitleCard(title = "Debug Toast")
         FlowRow(
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
-            var enableDebugOptionToastAttachedPhoto by remember { mutableStateOf(currentContext.config.enableDebugOptionToastAttachedPhoto) }
+            var enableDebugOptionToastAttachedPhoto by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionToastAttachedPhoto,
+                )
+            }
             SwitchCard(
                 "Attached Photo Toast",
                 null,
                 settingCardModifier,
-                enableDebugOptionToastAttachedPhoto
+                enableDebugOptionToastAttachedPhoto,
             ) {
                 enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
                 config.enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto
             }
-            var enableDebugOptionToastNotificationInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastNotificationInfo) }
+            var enableDebugOptionToastNotificationInfo by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionToastNotificationInfo,
+                )
+            }
             SwitchCard(
                 "Notification Info",
                 null,
                 settingCardModifier,
-                enableDebugOptionToastNotificationInfo
+                enableDebugOptionToastNotificationInfo,
             ) {
-                enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo.not()
-                config.enableDebugOptionToastNotificationInfo = enableDebugOptionToastNotificationInfo
+                enableDebugOptionToastNotificationInfo =
+                    enableDebugOptionToastNotificationInfo.not()
+                config.enableDebugOptionToastNotificationInfo =
+                    enableDebugOptionToastNotificationInfo
             }
-            var enableDebugOptionToastReviewFlowInfo by remember { mutableStateOf(currentContext.config.enableDebugOptionToastReviewFlowInfo) }
+            var enableDebugOptionToastReviewFlowInfo by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionToastReviewFlowInfo,
+                )
+            }
             SwitchCard(
                 "ReviewFlow Info",
                 null,
                 settingCardModifier,
-                enableDebugOptionToastReviewFlowInfo
+                enableDebugOptionToastReviewFlowInfo,
             ) {
                 enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
                 config.enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo
             }
-            var enableDebugOptionToastPhotoHighlightUpdateTime by remember { mutableStateOf(currentContext.config.enableDebugOptionToastPhotoHighlightUpdateTime) }
+            var enableDebugOptionToastPhotoHighlightUpdateTime by remember {
+                mutableStateOf(
+                    currentContext.config.enableDebugOptionToastPhotoHighlightUpdateTime,
+                )
+            }
             SwitchCard(
                 "Photo-Highlight Update Time",
                 null,
                 settingCardModifier,
-                enableDebugOptionToastPhotoHighlightUpdateTime
+                enableDebugOptionToastPhotoHighlightUpdateTime,
             ) {
-                enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime.not()
-                config.enableDebugOptionToastPhotoHighlightUpdateTime = enableDebugOptionToastPhotoHighlightUpdateTime
+                enableDebugOptionToastPhotoHighlightUpdateTime =
+                    enableDebugOptionToastPhotoHighlightUpdateTime.not()
+                config.enableDebugOptionToastPhotoHighlightUpdateTime =
+                    enableDebugOptionToastPhotoHighlightUpdateTime
             }
         }
     }
@@ -807,12 +875,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun CustomLauncher(
         modifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Custom Launcher", marginTop = 0)
         FlowRow(
             maxItemsInEachRow = maxItemsInEachRow,
-            modifier = Modifier
+            modifier = Modifier,
         ) {
             SimpleCard(
                 "EasyDiary Launcher",
@@ -842,13 +910,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun Coroutine(
         modifier: Modifier,
         maxItemsInEachRow: Int,
-        viewModel: BaseDevViewModel
+        viewModel: BaseDevViewModel,
     ) {
         CategoryTitleCard(title = "Coroutine")
         val coroutine1Console by viewModel.coroutine1Console.observeAsState("")
         val state = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
-        fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
+
+        fun updateConsole(
+            message: String,
+            tag: String = Thread.currentThread().name,
+        ) {
             mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
             coroutineScope.launch {
                 state.animateScrollBy(Float.MAX_VALUE)
@@ -858,14 +930,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             "Coroutine Info",
             coroutine1Console,
             Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
 //                        .height(100.dp)
 //                        .verticalScroll(state)
-            ,
-            state
+            state,
         )
         FlowRow(
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 "[T1] Start",
@@ -876,14 +947,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     updateConsole("Job has already started.")
                 } else {
                     mCoroutineJob1 =
-                        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                        GlobalScope.launch {
+                            // launch a new coroutine and keep a reference to its Job
                             for (i in 1..50) {
                                 if (isActive) {
                                     val currentThreadName = Thread.currentThread().name
                                     withContext(Dispatchers.Main) {
                                         updateConsole(
                                             i.toString(),
-                                            currentThreadName
+                                            currentThreadName,
                                         )
                                     }
                                     delay(500)
@@ -923,7 +995,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 for (k in 1..3) {
-                    GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                    GlobalScope.launch {
+                        // launch a new coroutine and keep a reference to its Job
                         for (i in 1..10) {
                             val currentThreadName = Thread.currentThread().name
                             runOnUiThread { updateConsole(i.toString(), currentThreadName) }
@@ -968,11 +1041,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @Composable
     protected fun FingerPrint(
         modifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Finger Print")
         FlowRow(
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 "Fingerprint",
@@ -1033,11 +1106,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun EtcPreview() {
         AppTheme {
             val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+            val maxItemsInEachRow =
+                if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
             Column {
-                val settingCardModifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                val settingCardModifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                 Etc(settingCardModifier, maxItemsInEachRow.minus(1), viewModel())
             }
         }
@@ -1103,8 +1178,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 //        }
 //    }
 
-
-
     /***************************************************************************************************
      *   etc functions
      *
@@ -1115,241 +1188,293 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 // hasGPSPermissions 대체가능하나 lint error 때문에 직접 체크
                 if (ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                    ) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     mLocationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         0,
                         0F,
-                        mGPSLocationListener
+                        mGPSLocationListener,
                     )
                 }
             }
 
-            false -> makeSnackBar("GPS Provider is not available.")
+            false -> {
+                makeSnackBar("GPS Provider is not available.")
+            }
         }
     }
 
     private fun updateNetWorkProvider() {
         when (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             true -> {
-                if (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+                if (checkPermission(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                        ),
+                    )
+                ) {
                     mLocationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
                         0,
                         0F,
-                        mNetworkLocationListener
+                        mNetworkLocationListener,
                     )
                 }
             }
-            false -> makeSnackBar("Network Provider is not available.")
+
+            false -> {
+                makeSnackBar("Network Provider is not available.")
+            }
         }
     }
 
     private fun createNotificationBigTextStyle() {
-        val notification = NotificationInfo(
-            R.drawable.ic_done,
-            useActionButton = true,
-            mNotificationCount
-        )
+        val notification =
+            NotificationInfo(
+                R.drawable.ic_done,
+                useActionButton = true,
+                mNotificationCount,
+            )
         if (ActivityCompat.checkSelfPermission(
                 this@BaseDevActivity,
-                Manifest.permission.POST_NOTIFICATIONS
+                Manifest.permission.POST_NOTIFICATIONS,
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            NotificationManagerCompat.from(this@BaseDevActivity)
-                .notify(notification.id, createNotification(notification).also {
-                    val contentTitle = "[${notification.id}] BigTextStyle Title"
-                    val contentText =
-                        "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
-                    it.setStyle(
-                        NotificationCompat.BigTextStyle()
-                            .setSummaryText("[BigTextStyle] $contentTitle")
-                            .bigText("[BigTextStyle] $contentText")
-                    )
-                    it.setLargeIcon(
-                        BitmapFactory.decodeResource(
-                            resources,
-                            notification.largeIconResourceId
-                        )
-                    )
-                }.build())
+            NotificationManagerCompat
+                .from(this@BaseDevActivity)
+                .notify(
+                    notification.id,
+                    createNotification(notification)
+                        .also {
+                            val contentTitle = "[${notification.id}] BigTextStyle Title"
+                            val contentText =
+                                "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                            it.setStyle(
+                                NotificationCompat
+                                    .BigTextStyle()
+                                    .setSummaryText("[BigTextStyle] $contentTitle")
+                                    .bigText("[BigTextStyle] $contentText"),
+                            )
+                            it.setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    resources,
+                                    notification.largeIconResourceId,
+                                ),
+                            )
+                        }.build(),
+                )
         }
     }
 
-
-
     private fun createNotificationCustomView(context: Context) {
-        val notification = NotificationInfo(
-            R.drawable.ic_diary_backup_local,
-            useActionButton = true,
-            mNotificationCount++
-        )
+        val notification =
+            NotificationInfo(
+                R.drawable.ic_diary_backup_local,
+                useActionButton = true,
+                mNotificationCount++,
+            )
         CoroutineScope(Dispatchers.IO).launch {
             val bitmap =
                 Glide
-                    .with(context).asBitmap()
+                    .with(context)
+                    .asBitmap()
                     .load(R.drawable.bg_travel_4514822_1280)
                     .transform(
                         CenterCrop(),
-                        RoundedCorners(context.dpToPixel(5F))
-                    )
-                    .submit(200, 200).get()
+                        RoundedCorners(context.dpToPixel(5F)),
+                    ).submit(200, 200)
+                    .get()
             withContext(Dispatchers.Main) {
                 if (ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
-                        Manifest.permission.POST_NOTIFICATIONS
+                        Manifest.permission.POST_NOTIFICATIONS,
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    NotificationManagerCompat.from(this@BaseDevActivity)
-                        .notify(notification.id, createNotification(notification, bitmap).apply {
-                            setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                            setCustomContentView(
-                                RemoteViews(
-                                    applicationContext.packageName,
-                                    R.layout.partial_notification_contents
-                                ).apply {
-                                    setTextViewText(
-                                        R.id.text_notification_content,
-                                        "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects."
+                    NotificationManagerCompat
+                        .from(this@BaseDevActivity)
+                        .notify(
+                            notification.id,
+                            createNotification(notification, bitmap)
+                                .apply {
+                                    setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                                    setCustomContentView(
+                                        RemoteViews(
+                                            applicationContext.packageName,
+                                            R.layout.partial_notification_contents,
+                                        ).apply {
+                                            setTextViewText(
+                                                R.id.text_notification_content,
+                                                "[${notification.id}] This package is part of the Android support library which is no longer maintained. The support library has been superseded by AndroidX which is part of Jetpack. We recommend using the AndroidX libraries in all new projects.",
+                                            )
+                                            setImageViewBitmap(
+                                                R.id.img_notification_content,
+                                                bitmap,
+                                            )
+                                        },
                                     )
-                                    setImageViewBitmap(R.id.img_notification_content, bitmap)
-                                })
-                            setCustomBigContentView(
-                                RemoteViews(
-                                    applicationContext.packageName,
-                                    R.layout.partial_notification
-                                ).apply {
-                                    setImageViewResource(
-                                        R.id.img_notification_content,
-                                        R.drawable.bg_travel_4514822_1280
+                                    setCustomBigContentView(
+                                        RemoteViews(
+                                            applicationContext.packageName,
+                                            R.layout.partial_notification,
+                                        ).apply {
+                                            setImageViewResource(
+                                                R.id.img_notification_content,
+                                                R.drawable.bg_travel_4514822_1280,
+                                            )
+                                        },
                                     )
-                                })
-                            //                                        setColor(config.primaryColor)
-                            //                                        setColorized(true)
-                            //                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
-                            addAction(
-                                R.drawable.ic_easydiary,
-                                "Toast",
-                                PendingIntent.getService(
-                                    this@BaseDevActivity,
-                                    notification.id /*Private request code for the sender*/,
-                                    Intent(
-                                        this@BaseDevActivity,
-                                        NotificationService::class.java
-                                    ).apply {
-                                        action = BaseNotificationService.ACTION_DEV_TOAST
-                                        putExtra(
-                                            NOTIFICATION_ID,
-                                            notification.id /*An identifier for this notification unique within your application.*/
-                                        )
-                                    },
-                                    pendingIntentFlag()
-                                )
-                            )
-                        }.build())
+                                    //                                        setColor(config.primaryColor)
+                                    //                                        setColorized(true)
+                                    //                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
+                                    addAction(
+                                        R.drawable.ic_easydiary,
+                                        "Toast",
+                                        PendingIntent.getService(
+                                            this@BaseDevActivity,
+                                            notification.id, // Private request code for the sender
+                                            Intent(
+                                                this@BaseDevActivity,
+                                                NotificationService::class.java,
+                                            ).apply {
+                                                action = BaseNotificationService.ACTION_DEV_TOAST
+                                                putExtra(
+                                                    NOTIFICATION_ID,
+                                                    notification.id, // An identifier for this notification unique within your application.
+                                                )
+                                            },
+                                            pendingIntentFlag(),
+                                        ),
+                                    )
+                                }.build(),
+                        )
                 }
             }
         }
     }
 
     private fun createNotificationBasicWithBitmapIcon(context: Context) {
-        val notification = NotificationInfo(
-            R.drawable.ic_diary_writing,
-            useActionButton = true,
-            id = mNotificationCount++
-        )
+        val notification =
+            NotificationInfo(
+                R.drawable.ic_diary_writing,
+                useActionButton = true,
+                id = mNotificationCount++,
+            )
         CoroutineScope(Dispatchers.IO).launch {
             val bitmap =
                 Glide
-                    .with(context).asBitmap()
+                    .with(context)
+                    .asBitmap()
                     .load(R.drawable.bg_travel_4514822_1280)
                     .transform(
                         CenterCrop(),
-                        RoundedCorners(context.dpToPixel(5F))
-                    )
-                    .submit(200, 200).get()
+                        RoundedCorners(context.dpToPixel(5F)),
+                    ).submit(200, 200)
+                    .get()
             withContext(Dispatchers.Main) {
                 if (ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
-                        Manifest.permission.POST_NOTIFICATIONS
+                        Manifest.permission.POST_NOTIFICATIONS,
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    NotificationManagerCompat.from(this@BaseDevActivity)
-                        .notify(notification.id, createNotification(notification).also {
-                            val contentTitle = "[${notification.id}] Basic Notification"
-                            val contentText =
-                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                            it.setContentTitle(contentTitle)
-                            it.setContentText(contentText)
-                            it.setLargeIcon(bitmap)
-                        }.build())
+                    NotificationManagerCompat
+                        .from(this@BaseDevActivity)
+                        .notify(
+                            notification.id,
+                            createNotification(notification)
+                                .also {
+                                    val contentTitle = "[${notification.id}] Basic Notification"
+                                    val contentText =
+                                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                    it.setContentTitle(contentTitle)
+                                    it.setContentText(contentText)
+                                    it.setLargeIcon(bitmap)
+                                }.build(),
+                        )
                 }
             }
         }
     }
 
     private fun createNotificationBasic() {
-        val notification = NotificationInfo(
-            R.drawable.ic_diary_writing,
-            useActionButton = true,
-            id = mNotificationCount++
-        )
+        val notification =
+            NotificationInfo(
+                R.drawable.ic_diary_writing,
+                useActionButton = true,
+                id = mNotificationCount++,
+            )
         if (ActivityCompat.checkSelfPermission(
                 this@BaseDevActivity,
-                Manifest.permission.POST_NOTIFICATIONS
+                Manifest.permission.POST_NOTIFICATIONS,
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            NotificationManagerCompat.from(this@BaseDevActivity)
-                .notify(notification.id, createNotification(notification).also {
-                    val contentTitle = "[${notification.id}] Basic Notification"
-                    val contentText =
-                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
-                    it.setContentTitle(contentTitle)
-                    it.setContentText(contentText)
-                    it.setLargeIcon(
-                        BitmapFactory.decodeResource(
-                            resources,
-                            notification.largeIconResourceId
-                        )
-                    )
-                    it.setLargeIcon(
-                        BitmapFactory.decodeResource(
-                            resources,
-                            notification.largeIconResourceId
-                        )
-                    )
-                }.build())
+            NotificationManagerCompat
+                .from(this@BaseDevActivity)
+                .notify(
+                    notification.id,
+                    createNotification(notification)
+                        .also {
+                            val contentTitle = "[${notification.id}] Basic Notification"
+                            val contentText =
+                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                            it.setContentTitle(contentTitle)
+                            it.setContentText(contentText)
+                            it.setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    resources,
+                                    notification.largeIconResourceId,
+                                ),
+                            )
+                            it.setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    resources,
+                                    notification.largeIconResourceId,
+                                ),
+                            )
+                        }.build(),
+                )
         }
     }
 
-    protected fun createBaseCardView(cardTitle: String, descriptionTag: String? = null, vararg buttons: Button): CardView {
+    protected fun createBaseCardView(
+        cardTitle: String,
+        descriptionTag: String? = null,
+        vararg buttons: Button,
+    ): CardView {
         val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
         val descriptionContextTheme = ContextThemeWrapper(this, R.style.SettingsSummary)
         val cardContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.AppCard_Settings)
-        val linearContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
+        val linearContextTheme =
+            ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
         return CardView(cardContextTheme).apply {
             addView(
                 LinearLayout(linearContextTheme).apply {
-                    addView(MyTextView(titleContextTheme).apply {
-                        text = cardTitle
-                    })
-                    addView(FlexboxLayout(this@BaseDevActivity).apply {
-                        flexDirection = FlexDirection.ROW
-                        flexWrap = FlexWrap.WRAP
-                        buttons.forEach { addView(it) }
-                    })
+                    addView(
+                        MyTextView(titleContextTheme).apply {
+                            text = cardTitle
+                        },
+                    )
+                    addView(
+                        FlexboxLayout(this@BaseDevActivity).apply {
+                            flexDirection = FlexDirection.ROW
+                            flexWrap = FlexWrap.WRAP
+                            buttons.forEach { addView(it) }
+                        },
+                    )
                     descriptionTag?.let {
-                        addView(MyTextView(descriptionContextTheme).apply {
-                            tag = descriptionTag
-                        })
+                        addView(
+                            MyTextView(descriptionContextTheme).apply {
+                                tag = descriptionTag
+                            },
+                        )
                     }
-                }
+                },
             )
         }
     }
@@ -1369,7 +1494,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
         when (hasGPSPermissions()) {
-            true -> setLocationInfo()
+            true -> {
+                setLocationInfo()
+            }
+
             false -> {
                 acquireGPSPermissions(mRequestLocationSourceLauncher) {
                     setLocationInfo()
@@ -1379,11 +1507,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun createNotification(notificationInfo: NotificationInfo, bitmap: Bitmap? = null): NotificationCompat.Builder {
+    private fun createNotification(
+        notificationInfo: NotificationInfo,
+        bitmap: Bitmap? = null,
+    ): NotificationCompat.Builder {
         if (isOreoPlus()) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", getString(R.string.notification_channel_name_dev), importance)
+            val channel =
+                NotificationChannel(
+                    "${NOTIFICATION_CHANNEL_ID}_dev",
+                    getString(R.string.notification_channel_name_dev),
+                    importance,
+                )
             channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
 
             // Register the channel with the system; you can't change the importance
@@ -1392,29 +1528,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
-            setDefaults(Notification.DEFAULT_ALL)
-            setWhen(System.currentTimeMillis())
-            setSmallIcon(R.drawable.ic_easydiary)
-            setOnlyAlertOnce(true)
-            setOngoing(false)
-            setAutoCancel(true)
-            setContentIntent(
-                PendingIntent.getActivity(
-                    this@BaseDevActivity,
-                    notificationInfo.id /*Private request code for the sender*/,
-                    Intent(this@BaseDevActivity, DiaryMainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        putExtra(NOTIFICATION_ID, notificationInfo.id)
-                        putExtra(
-                            NOTIFICATION_INFO,
-                            "Test Notification Count: $mNotificationCount"
-                        )
-                    },
-                    pendingIntentFlag()
+        val notificationBuilder =
+            NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
+                setDefaults(Notification.DEFAULT_ALL)
+                setWhen(System.currentTimeMillis())
+                setSmallIcon(R.drawable.ic_easydiary)
+                setOnlyAlertOnce(true)
+                setOngoing(false)
+                setAutoCancel(true)
+                setContentIntent(
+                    PendingIntent.getActivity(
+                        this@BaseDevActivity,
+                        notificationInfo.id, // Private request code for the sender
+                        Intent(this@BaseDevActivity, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra(NOTIFICATION_ID, notificationInfo.id)
+                            putExtra(
+                                NOTIFICATION_INFO,
+                                "Test Notification Count: $mNotificationCount",
+                            )
+                        },
+                        pendingIntentFlag(),
+                    ),
                 )
-            )
-        }
+            }
 
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
@@ -1422,23 +1559,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 getString(R.string.dismiss),
                 PendingIntent.getService(
                     this,
-                    notificationInfo.id /*Private request code for the sender*/,
+                    notificationInfo.id, // Private request code for the sender
                     Intent(this, NotificationService::class.java).apply {
                         action = BaseNotificationService.ACTION_DEV_DISMISS
                         putExtra(
                             NOTIFICATION_ID,
-                            notificationInfo.id /*An identifier for this notification unique within your application.*/
+                            notificationInfo.id, // An identifier for this notification unique within your application.
                         )
                     },
-                    pendingIntentFlag()
-                )
+                    pendingIntentFlag(),
+                ),
             )
         }
 
         return notificationBuilder
     }
 }
-
 
 /***************************************************************************************************
  *   classes
@@ -1447,34 +1583,27 @@ open class BaseDevActivity : EasyDiaryActivity() {
 data class NotificationInfo(
     var largeIconResourceId: Int,
     var useActionButton: Boolean = false,
-    var id: Int = 0
+    var id: Int = 0,
 )
-
 
 /***************************************************************************************************
  *   extensions
  *
  ***************************************************************************************************/
-//fun fun1(param1: String, block: (responseData: String) -> String): String {
+// fun fun1(param1: String, block: (responseData: String) -> String): String {
 //    println(param1)
 //    return block("")
-//}
+// }
 //
-//fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
+// fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
 //    println(param1)
 //    var blockReturn = block(param1)
 //    return param1
-//}
+// }
 //
-//fun test1() {
+// fun test1() {
 //    val result = fun1("banana") { responseData ->
 //        "data: $responseData"
 //    }
 //    println(result)
-//}
-
-
-
-
-
-
+// }

@@ -13,7 +13,6 @@ import android.Manifest
 const val WORK_MANAGER_BACKUP = "work_manager_backup"
 const val WORK_MANAGER_RECOVERY = "work_manager_recovery"
 
-
 /***************************************************************************************************
  *   Diary Symbols
  *
@@ -343,7 +342,6 @@ const val FLAG_BRAZIL = 704
 const val FLAG_UNITED_KINGDOM = 709
 const val FLAG_THAILAND = 710
 
-
 /***************************************************************************************************
  *   Save Instance State
  *
@@ -367,23 +365,22 @@ const val FILTER_END_MONTH = "filter_end_month"
 const val FILTER_END_DATE = "filter_end_date"
 const val FILTER_QUERY = "filter_query"
 
-
 /***************************************************************************************************
  *   Calendar constants
  *
  ***************************************************************************************************/
 const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
-const val SETTING_CALENDAR_SORTING   = "setting_calendar_sorting"
-const val CALENDAR_SORTING_ASC  = 1
+const val SETTING_CALENDAR_SORTING = "setting_calendar_sorting"
+const val CALENDAR_SORTING_ASC = 1
 const val CALENDAR_SORTING_DESC = 2
-const val CALENDAR_START_DAY_SUNDAY    = 1
-const val CALENDAR_START_DAY_MONDAY    = 2
-//const val CALENDAR_START_DAY_TUESDAY   = 3
-//const val CALENDAR_START_DAY_WEDNESDAY = 4
-//const val CALENDAR_START_DAY_THURSDAY  = 5
-//const val CALENDAR_START_DAY_FRIDAY    = 6
-const val CALENDAR_START_DAY_SATURDAY  = 7
+const val CALENDAR_START_DAY_SUNDAY = 1
+const val CALENDAR_START_DAY_MONDAY = 2
 
+// const val CALENDAR_START_DAY_TUESDAY   = 3
+// const val CALENDAR_START_DAY_WEDNESDAY = 4
+// const val CALENDAR_START_DAY_THURSDAY  = 5
+// const val CALENDAR_START_DAY_FRIDAY    = 6
+const val CALENDAR_START_DAY_SATURDAY = 7
 
 /***************************************************************************************************
  *   Showcase constants
@@ -393,7 +390,6 @@ const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2
 const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
-
 
 /***************************************************************************************************
  *   Notification constants
@@ -411,20 +407,18 @@ const val NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID = 1006
 const val NOTIFICATION_ID = "notification_id"
 const val NOTIFICATION_INFO = "notification_info"
 
-
 /***************************************************************************************************
  *   Path constants
  *
  ***************************************************************************************************/
-const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
-const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"
-const val DIARY_POSTCARD_DIRECTORY    = "${WORKING_DIRECTORY}Postcards/"
+const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
+const val DIARY_PHOTO_DIRECTORY = "${WORKING_DIRECTORY}Photos/"
+const val DIARY_POSTCARD_DIRECTORY = "${WORKING_DIRECTORY}Postcards/"
 const val USER_CUSTOM_FONTS_DIRECTORY = "${WORKING_DIRECTORY}Fonts/"
-const val MARKDOWN_DIRECTORY          = "${WORKING_DIRECTORY}Markdown/"
-const val BACKUP_EXCEL_DIRECTORY      = "${WORKING_DIRECTORY}Backup/Excel/"
-const val BACKUP_DB_DIRECTORY         = "${WORKING_DIRECTORY}Backup/Database/"
+const val MARKDOWN_DIRECTORY = "${WORKING_DIRECTORY}Markdown/"
+const val BACKUP_EXCEL_DIRECTORY = "${WORKING_DIRECTORY}Backup/Excel/"
+const val BACKUP_DB_DIRECTORY = "${WORKING_DIRECTORY}Backup/Database/"
 const val DIARY_DB_NAME = "diary.realm"
-
 
 /***************************************************************************************************
  *   Request code constants
@@ -433,35 +427,37 @@ const val DIARY_DB_NAME = "diary.realm"
 // startActivityForResult Request Code: Permission
 const val REQUEST_CODE_EXTERNAL_STORAGE = 1
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2
-//const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
+
+// const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN = 4
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM = 7
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM = 8
-//const val REQUEST_CODE_CAPTURE_CAMERA = 9
+
+// const val REQUEST_CODE_CAPTURE_CAMERA = 9
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP = 10
-//const val REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS = 11
+
+// const val REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS = 11
 const val REQUEST_CODE_NOTIFICATION = 12
 const val REQUEST_CODE_SCHEDULE_EXACT_ALARM = 13
 
 // startActivityForResult Request Code: Etc
-//const val REQUEST_CODE_LOCK_SETTING = 21
+// const val REQUEST_CODE_LOCK_SETTING = 21
 
 // startActivityForResult Request Code: ColorPicker
-//const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
-//const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
+// const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
+// const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
 
 const val REQUEST_CODE_SAF_WRITE_ZIP = 40
 const val REQUEST_CODE_SAF_WRITE_XLS = 41
 const val REQUEST_CODE_SAF_WRITE_REALM = 42
 const val REQUEST_CODE_SAF_READ_ZIP = 43
 const val REQUEST_CODE_SAF_READ_REALM = 44
-//const val REQUEST_CODE_SAF_HTML_BOOK = 45
+// const val REQUEST_CODE_SAF_HTML_BOOK = 45
 
-//const val REQUEST_CODE_FONT_PICK = 103
-//const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
-
+// const val REQUEST_CODE_FONT_PICK = 103
+// const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
 
 /***************************************************************************************************
  *   Diary execution mode (Intent)
@@ -480,25 +476,22 @@ const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outsi
 // Diary Mode Case02: Automatically open Dashboard popup when app is restarting after finish
 const val EXECUTION_MODE_WELCOME_DASHBOARD = "execution_mode_welcome_dashboard"
 
-
 /***************************************************************************************************
  *   Diary view mode for DiaryMainActivity grid item layout (Bundle)
  *   me.blog.korn123.easydiary.enums.DiaryMode
  ***************************************************************************************************/
 const val DIARY_MODE = "diary_mode"
 
-
 /***************************************************************************************************
  *   SAF mime type
  *
  ***************************************************************************************************/
-const val MIME_TYPE_BINARY =  "application/octet-stream"
+const val MIME_TYPE_BINARY = "application/octet-stream"
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 const val MIME_TYPE_REALM = "application/octet-stream"
 const val MIME_TYPE_JPEG = "image/jpeg"
 const val MIME_TYPE_HTML = "text/html"
-
 
 /***************************************************************************************************
  *   Theme Color
@@ -518,24 +511,22 @@ const val GREEN_THEME_BACKGROUND_COLOR = "#FFF5E0"
 const val GREEN_THEME_SCREEN_BACKGROUND_COLOR = "#EFFFEF"
 const val GREEN_THEME_TEXT_COLOR = "#4D4C4C"
 
-
 /***************************************************************************************************
  *   Debug Options
  *
  ***************************************************************************************************/
-const val SETTING_DEBUG_OPTION_TOAST_LOCATION                     = "setting_debug_option_toast_location"
-const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO               = "setting_debug_option_toast_attached_photo"
-const val SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO            = "setting_debug_option_toast_notification_info"
-const val SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO             = "setting_debug_option_toast_review_flow_info"
-const val SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME  = "setting_debug_option_toast_photo_highlight_update_time"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE     = "setting_debug_option_visible_diary_sequence"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE     = "setting_debug_option_visible_alarm_sequence"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT       = "setting_debug_option_visible_chart_weight"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK        = "setting_debug_option_visible_chart_stock"
+const val SETTING_DEBUG_OPTION_TOAST_LOCATION = "setting_debug_option_toast_location"
+const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO = "setting_debug_option_toast_attached_photo"
+const val SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO = "setting_debug_option_toast_notification_info"
+const val SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO = "setting_debug_option_toast_review_flow_info"
+const val SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME = "setting_debug_option_toast_photo_highlight_update_time"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE = "setting_debug_option_visible_diary_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE = "setting_debug_option_visible_alarm_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT = "setting_debug_option_visible_chart_weight"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK = "setting_debug_option_visible_chart_stock"
 const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI = "setting_debug_option_visible_font_preview_emoji"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY    = "setting_debug_option_visible_temporary_diary"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS        = "setting_debug_option_visible_tree_status"
-
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY = "setting_debug_option_visible_temporary_diary"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS = "setting_debug_option_visible_tree_status"
 
 /***************************************************************************************************
  *   Etc constants
@@ -546,7 +537,8 @@ val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_ST
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
 const val APP_LOCK_ENABLE = "application_lock"
-//const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
+
+// const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
 const val APP_LOCK_SAVED_PASSWORD = "application_lock_password"
 const val APP_LOCK_DEFAULT_PASSWORD = "0000"
 
@@ -558,15 +550,15 @@ const val DIARY_ATTACH_PHOTO_INDEX = "diary_attach_photo_index"
 const val DIARY_ENCRYPT_PASSWORD = "diary_encrypt_password"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
-//const val OPEN_URL_INFO = "open_url_info"
+// const val OPEN_URL_INFO = "open_url_info"
 const val THUMBNAIL_BACKGROUND_ALPHA = 170
 const val THUMBNAIL_BACKGROUND_ALPHA_HIGH = 220
 const val THUMBNAIL_BACKGROUND_ALPHA_LOW = 70
 
-const val SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP    = 20
+const val SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 20
 const val UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 15
-const val CHART_LABEL_FONT_SIZE_DEFAULT_DP         = 11F
-const val THUMBNAIL_SIZE_DEFAULT_DP                = 50
+const val CHART_LABEL_FONT_SIZE_DEFAULT_DP = 11F
+const val THUMBNAIL_SIZE_DEFAULT_DP = 50
 const val DEFAULT_CALENDAR_FONT_SCALE = -1F
 
 const val POSTCARD_BG_COLOR = "postcard_bg_color"
@@ -575,8 +567,8 @@ const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
 const val POSTCARD_CROP_MODE = "postcard_crop_mode"
 
-//const val APP_BACKGROUND_ALPHA = 200
-//const val INTRO_BACKGROUND_ALPHA = 255
+// const val APP_BACKGROUND_ALPHA = 200
+// const val INTRO_BACKGROUND_ALPHA = 255
 const val SETTING_FONT_SIZE = "font_size"
 const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
 const val SETTING_FONT_NAME = "font_setting"
@@ -659,7 +651,6 @@ const val PERMISSION_ACCESS_FINE_LOCATION = 11
 
 const val AAF_PIN_LOCK_PAUSE_MILLIS = "aaf_pin_lock_pause_millis"
 const val AAF_THEME_CHANGE = "aaf_theme_change"
-
 
 /***************************************************************************************************
  *   Dev

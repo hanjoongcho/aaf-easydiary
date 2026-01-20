@@ -15,7 +15,14 @@ class PrepareRelease {
         const val SYNC_RELEASE_NOTE = "sync_release_note"
     }
 
-    data class Release(var currentVersion: Int = -1, var currentVersionName: String = "", var currentVersionReleaseDate: String = "", var releaseInfoLines: ArrayList<String> = arrayListOf(), var startIndex: Int = -1, var endIndex: Int = -1)
+    data class Release(
+        var currentVersion: Int = -1,
+        var currentVersionName: String = "",
+        var currentVersionReleaseDate: String = "",
+        var releaseInfoLines: ArrayList<String> = arrayListOf(),
+        var startIndex: Int = -1,
+        var endIndex: Int = -1,
+    )
 
     fun determineLastReleaseStartLine(values: List<String>?): Release {
         val defaultRelease = Release()
@@ -41,7 +48,11 @@ class PrepareRelease {
         return defaultRelease
     }
 
-    fun determineLastReleaseEndLine(values: List<String>?, release: Release, updateInfoLines: Boolean = false): Int {
+    fun determineLastReleaseEndLine(
+        values: List<String>?,
+        release: Release,
+        updateInfoLines: Boolean = false,
+    ): Int {
         var endIndex = -1
         values?.let {
             for (lineNum in release.startIndex until it.size) {
@@ -57,7 +68,7 @@ class PrepareRelease {
                 }
             }
         }
-        return endIndex;
+        return endIndex
     }
 
     @SuppressLint("NewApi")
@@ -100,11 +111,13 @@ class PrepareRelease {
                                                 valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
                                             }
                                         }
+
                                         defaultReleaseCurrentVersion > otherRelease.currentVersion -> {
                                             defaultRelease?.let {
                                                 valuesOther.addAll(otherRelease.endIndex.plus(1), it.releaseInfoLines)
                                             }
                                         }
+
                                         defaultReleaseCurrentVersion == otherRelease.currentVersion -> {
                                             println("remove line : ${otherRelease.startIndex} ~ ${otherRelease.endIndex}")
                                             for (removeLineNum in otherRelease.startIndex..otherRelease.endIndex) {
@@ -124,16 +137,18 @@ class PrepareRelease {
                     }
                 }
             }
+
             SYNC_RELEASE_NOTE -> {
                 println("======================================> Start: sync release note")
                 File("./app/src/main/assets/").listFiles()?.map { file ->
                     println(file.absolutePath)
                     if (file.name.startsWith("RELEASE")) {
-                        val locale = when {
-                            file.name.startsWith("RELEASE_en") -> "en"
-                            file.name.startsWith("RELEASE_ja") -> "ja"
-                            else -> "ko"
-                        }
+                        val locale =
+                            when {
+                                file.name.startsWith("RELEASE_en") -> "en"
+                                file.name.startsWith("RELEASE_ja") -> "ja"
+                                else -> "ko"
+                            }
                         val releaseNotes = FileUtils.readLines(file, StandardCharsets.UTF_8)
                         releaseNotes?.let {
                             val infoLine = it[6]
@@ -146,7 +161,10 @@ class PrepareRelease {
                                 println("Update release note version to ${release.currentVersionName} from $releaseNoteVersionName")
                                 release.let { it ->
                                     println(it.currentVersionName)
-                                    val newLines = arrayListOf("\n# Changes in ${release.currentVersionName} (date: ${release.currentVersionReleaseDate})")
+                                    val newLines =
+                                        arrayListOf(
+                                            "\n# Changes in ${release.currentVersionName} (date: ${release.currentVersionReleaseDate})",
+                                        )
                                     for (lineIndex in 2..it.releaseInfoLines.size.minus(2)) {
                                         val newLine = "  * ${it.releaseInfoLines[lineIndex].replace("\\n", "").trim()}"
                                         println(newLine)

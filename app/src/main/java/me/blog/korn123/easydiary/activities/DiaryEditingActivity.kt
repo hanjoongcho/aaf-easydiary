@@ -13,7 +13,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
-
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -24,7 +23,6 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
      *
      ***************************************************************************************************/
     private var mSequence: Int = 0
-
 
     /***************************************************************************************************
      *   override functions
@@ -94,26 +92,38 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-                val diaryDto = when (encryptionPass == null) {
-                    true -> {
-                        Diary(
-                            mSequence,
-                            mCurrentTimeMillis,
-                            mBinding.partialEditContents.diaryTitle.text.toString(),
-                            mBinding.partialEditContents.diaryContents.text.toString()
-                        )
+                val diaryDto =
+                    when (encryptionPass == null) {
+                        true -> {
+                            Diary(
+                                mSequence,
+                                mCurrentTimeMillis,
+                                mBinding.partialEditContents.diaryTitle.text
+                                    .toString(),
+                                mBinding.partialEditContents.diaryContents.text
+                                    .toString(),
+                            )
+                        }
+
+                        false -> {
+                            Diary(
+                                mSequence,
+                                mCurrentTimeMillis,
+                                JasyptUtils.encrypt(
+                                    mBinding.partialEditContents.diaryTitle.text
+                                        .toString(),
+                                    encryptionPass,
+                                ),
+                                JasyptUtils.encrypt(
+                                    mBinding.partialEditContents.diaryContents.text
+                                        .toString(),
+                                    encryptionPass,
+                                ),
+                                true,
+                                JasyptUtils.sha256(encryptionPass),
+                            )
+                        }
                     }
-                    false -> {
-                        Diary(
-                            mSequence,
-                            mCurrentTimeMillis,
-                            JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),
-                            JasyptUtils.encrypt(mBinding.partialEditContents.diaryContents.text.toString(), encryptionPass),
-                            true,
-                            JasyptUtils.sha256(encryptionPass)
-                        )
-                    }
-                }
 
                 if (mLocation != null) diaryDto.location = mLocation
                 diaryDto.weather = mSelectedItemPosition
@@ -130,8 +140,10 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
     }
 
     private fun bindEvent() {
-        mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
-        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView
+            .setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera
+            .setOnClickListener(mClickListener)
         mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
@@ -151,7 +163,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
             mBinding.partialEditContents.diaryContents.clearFocus()
             openFeelingSymbolDialog(
                 getString(R.string.diary_symbol_guide_message),
-                mSelectedItemPosition
+                mSelectedItemPosition,
             ) { symbolSequence ->
                 selectFeelingSymbol(symbolSequence)
             }

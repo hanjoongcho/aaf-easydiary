@@ -1,10 +1,10 @@
 package me.blog.korn123.easydiary.models
 
-import me.blog.korn123.commons.utils.DateUtils
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
@@ -45,7 +45,12 @@ open class Diary : RealmObject {
 
     constructor()
 
-    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, isEncrypt: Boolean, encryptKeyHash: String) : this(sequence, currentTimeMillis, title, contents) {
+    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, isEncrypt: Boolean, encryptKeyHash: String) : this(
+        sequence,
+        currentTimeMillis,
+        title,
+        contents,
+    ) {
         this.isEncrypt = isEncrypt
         this.encryptKeyHash = encryptKeyHash
     }
@@ -72,18 +77,25 @@ open class Diary : RealmObject {
         this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
     }
 
-    fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? = when (isEncrypt) {
-        true -> { photoUris?.map { PhotoUri("") } }
-        false -> photoUris
-    }
+    fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
+        when (isEncrypt) {
+            true -> {
+                photoUris?.map { PhotoUri("") }
+            }
 
-    fun toUiModel() = DiaryUiModel(
-        sequence = sequence,
-        title = title.orEmpty(),
-        contents = contents.orEmpty(),
-        dateString = dateString.orEmpty(),
-        currentTimeMillis = currentTimeMillis,
-        isAllDay = isAllDay,
-        weather = weather
-    )
+            false -> {
+                photoUris
+            }
+        }
+
+    fun toUiModel() =
+        DiaryUiModel(
+            sequence = sequence,
+            title = title.orEmpty(),
+            contents = contents.orEmpty(),
+            dateString = dateString.orEmpty(),
+            currentTimeMillis = currentTimeMillis,
+            isAllDay = isAllDay,
+            weather = weather,
+        )
 }

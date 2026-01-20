@@ -23,7 +23,6 @@ import java.util.concurrent.Executor
 
 class BiometricUtils {
     companion object {
-
         /*
          * Condition I: Check if the android version in device is greater than
          * Marshmallow, since fingerprint authentication is only supported
@@ -32,17 +31,11 @@ class BiometricUtils {
          * then you won't need to perform this check.
          *
          * */
-        private fun isSdkVersionSupported(): Boolean {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        }
+        private fun isSdkVersionSupported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
-        private fun isBiometricPromptEnabled(): Boolean {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-        }
+        private fun isBiometricPromptEnabled(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
-        private fun isBiometricManagerEnabled(): Boolean {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-        }
+        private fun isBiometricManagerEnabled(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
         fun startListening(activity: AppCompatActivity) {
             when {
@@ -61,28 +54,41 @@ class BiometricUtils {
         @Suppress("DEPRECATION")
         fun startListeningFingerprint(activity: AppCompatActivity) {
             val cancellationSignal = CancellationSignal()
-            FingerprintManagerCompat.from(activity)
-                .authenticate(null, 0 /* flags */, cancellationSignal, object : FingerprintManagerCompat.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        activity.makeToast("onAuthenticationSucceeded")
-                    }
+            FingerprintManagerCompat
+                .from(activity)
+                .authenticate(
+                    null,
+                    0 /* flags */,
+                    cancellationSignal,
+                    object : FingerprintManagerCompat.AuthenticationCallback() {
+                        override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
+                            super.onAuthenticationSucceeded(result)
+                            activity.makeToast("onAuthenticationSucceeded")
+                        }
 
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        activity.makeToast("onAuthenticationError")
-                    }
+                        override fun onAuthenticationError(
+                            errorCode: Int,
+                            errString: CharSequence,
+                        ) {
+                            super.onAuthenticationError(errorCode, errString)
+                            activity.makeToast("onAuthenticationError")
+                        }
 
-                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence) {
-                        super.onAuthenticationHelp(helpCode, helpString)
-                        activity.makeToast("onAuthenticationHelp")
-                    }
+                        override fun onAuthenticationHelp(
+                            helpCode: Int,
+                            helpString: CharSequence,
+                        ) {
+                            super.onAuthenticationHelp(helpCode, helpString)
+                            activity.makeToast("onAuthenticationHelp")
+                        }
 
-                    override fun onAuthenticationFailed() {
-                        super.onAuthenticationFailed()
-                        activity.makeToast("onAuthenticationFailed")
-                    }
-                }, null)
+                        override fun onAuthenticationFailed() {
+                            super.onAuthenticationFailed()
+                            activity.makeToast("onAuthenticationFailed")
+                        }
+                    },
+                    null,
+                )
         }
 
         /*
@@ -104,9 +110,7 @@ class BiometricUtils {
          * screen lock 설정여부 확인
          */
         @RequiresApi(Build.VERSION_CODES.M)
-        fun isKeyguardSecure(context: Context): Boolean {
-            return context.getSystemService(KeyguardManager::class.java).isKeyguardSecure
-        }
+        fun isKeyguardSecure(context: Context): Boolean = context.getSystemService(KeyguardManager::class.java).isKeyguardSecure
 
         /*
          * Condition III: Fingerprint authentication can be matched with a
@@ -122,7 +126,6 @@ class BiometricUtils {
             return fingerprintManager.hasEnrolledFingerprints()
         }
 
-
         /*
          * Condition IV: Check if the permission has been added to
          * the app. This permission will be granted as soon as the user
@@ -131,9 +134,8 @@ class BiometricUtils {
          * */
         @RequiresApi(Build.VERSION_CODES.M)
         @Suppress("DEPRECATION")
-        fun isPermissionGranted(context: Context): Boolean {
-            return ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
-        }
+        fun isPermissionGranted(context: Context): Boolean =
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
 
         /**
          * Indicate whether this device can authenticate the user with biometrics
@@ -145,7 +147,9 @@ class BiometricUtils {
             val biometricManager = context.getSystemService(BiometricManager::class.java)
             return if (biometricManager != null) {
                 biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
-            } else false
+            } else {
+                false
+            }
         }
 
         private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
@@ -165,21 +169,26 @@ class BiometricUtils {
                 val mBiometricPrompt = BiometricPrompt(this, getMainThreadExecutor(), authenticationCallback)
 
                 // Set prompt info
-                val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setDescription(getString(R.string.place_finger_description))
-                    .setTitle(getString(R.string.app_name))
+                val promptInfo =
+                    BiometricPrompt.PromptInfo
+                        .Builder()
+                        .setDescription(getString(R.string.place_finger_description))
+                        .setTitle(getString(R.string.app_name))
 //                .setSubtitle("Subtitle")
-                    .setNegativeButtonText(getString(R.string.cancel))
-                    .build()
+                        .setNegativeButtonText(getString(R.string.cancel))
+                        .build()
 
                 mBiometricPrompt.authenticate(promptInfo)
             }
         }
 
         @RequiresApi(Build.VERSION_CODES.P)
-        private fun getAuthenticationCallback(activity: Activity): BiometricPrompt.AuthenticationCallback {
-            return object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+        private fun getAuthenticationCallback(activity: Activity): BiometricPrompt.AuthenticationCallback =
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence,
+                ) {
                     super.onAuthenticationError(errorCode, errString)
                     activity.makeSnackBar(errString.toString())
                 }
@@ -194,6 +203,5 @@ class BiometricUtils {
                     activity.makeSnackBar("onAuthenticationFailed")
                 }
             }
-        }
     }
 }

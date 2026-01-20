@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -43,14 +41,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
@@ -60,8 +55,6 @@ import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
-
-
     /***************************************************************************************************
      *   override functions
      *
@@ -74,16 +67,23 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             mSettingsViewModel = initSettingsViewModel()
             val topAppBarState = rememberTopAppBarState()
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-            val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+            val bottomPadding =
+                if (isVanillaIceCreamPlus()) {
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding()
+                } else {
+                    0.dp
+                }
             AppTheme {
                 Scaffold(
 //                    contentWindowInsets = WindowInsets(0, 0, 0, 0), // 기본 inset 제거
                     contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                     topBar = {
                         EasyDiaryActionBar(
-                            title = "QuickSettings"
-                            , subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open"
-                            , scrollBehavior = scrollBehavior
+                            title = "QuickSettings",
+                            subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open",
+                            scrollBehavior = scrollBehavior,
                         ) {
                             finishActivityWithTransition()
                         }
@@ -93,9 +93,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         QuickSettings(
                             Modifier
                                 .padding(innerPadding)
-                                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            ,
-                            state = rememberLazyGridState()
+                                .nestedScroll(scrollBehavior.nestedScrollConnection),
+                            state = rememberLazyGridState(),
                         )
                     },
                     floatingActionButton = {
@@ -106,12 +105,12 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                                 contentColor = Color.White,
                                 shape = CircleShape,
                                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(40.dp),
                             ) {
 //                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_cross),
-                                    contentDescription = "Finish Activity"
+                                    contentDescription = "Finish Activity",
                                 )
                             }
                         }
@@ -123,7 +122,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         showBetaFeatureMessage()
     }
 
-
     /***************************************************************************************************
      *   Define Compose
      *
@@ -131,7 +129,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun QuickSettings(
         modifier: Modifier = Modifier,
-        state: LazyGridState = rememberLazyGridState()
+        state: LazyGridState = rememberLazyGridState(),
     ) {
         val context = LocalContext.current
         var disableFutureDiary by remember { mutableStateOf(context.config.disableFutureDiary) }
@@ -139,18 +137,20 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         val settingCardModifier = Modifier.fillMaxWidth()
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy
+            context.config.enableCardViewPolicy,
         )
-        val maxItemsInEachRow = when {
-            LocalInspectionMode.current -> 1
-            isLandScape() -> 2
-            else -> 1
-        }
+        val maxItemsInEachRow =
+            when {
+                LocalInspectionMode.current -> 1
+                isLandScape() -> 2
+                else -> 1
+            }
         LazyVerticalGrid(
             columns = GridCells.Fixed(maxItemsInEachRow),
-            modifier = modifier
-                .fillMaxWidth()
-                .background(Color(context.config.screenBackgroundColor)),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .background(Color(context.config.screenBackgroundColor)),
             state = state,
         ) {
             item {
@@ -159,7 +159,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     description = stringResource(R.string.markdown_setting_summary),
                     modifier = settingCardModifier,
                     isOn = enableMarkdown,
-                    enableCardViewPolicy = enableCardViewPolicy
+                    enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     context.config.enableMarkdown = !enableMarkdown
                     enableMarkdown = !enableMarkdown
@@ -171,7 +171,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     stringResource(R.string.enable_welcome_dashboard_popup_description),
                     settingCardModifier,
                     enableWelcomeDashboardPopup,
-                    enableCardViewPolicy = enableCardViewPolicy
+                    enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
                     enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
@@ -184,7 +184,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     stringResource(R.string.enable_photo_highlight_description),
                     settingCardModifier,
                     isOn = enablePhotoHighlight,
-                    enableCardViewPolicy = enableCardViewPolicy
+                    enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     enablePhotoHighlight = enablePhotoHighlight.not()
                     context.config.enablePhotoHighlight = enablePhotoHighlight
@@ -196,7 +196,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     stringResource(R.string.enable_card_view_policy_summary),
                     settingCardModifier,
                     isOn = enableCardViewPolicy,
-                    enableCardViewPolicy = enableCardViewPolicy
+                    enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     context.config.enableCardViewPolicy = enableCardViewPolicy.not()
                     mSettingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
@@ -208,7 +208,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
                     settingCardModifier,
                     disableFutureDiary,
-                    enableCardViewPolicy = enableCardViewPolicy
+                    enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     context.config.disableFutureDiary = !disableFutureDiary
                     disableFutureDiary = !disableFutureDiary
@@ -216,18 +216,32 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             }
             if (BuildConfig.FLAVOR != "foss") {
                 item {
-                    val bottomPadding = if (isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() else 0.dp
+                    val bottomPadding =
+                        if (isVanillaIceCreamPlus()) {
+                            WindowInsets.navigationBars
+                                .asPaddingValues()
+                                .calculateBottomPadding()
+                        } else {
+                            0.dp
+                        }
                     SimpleCard(
                         stringResource(id = R.string.sync_google_calendar_event_title),
                         stringResource(id = R.string.sync_google_calendar_event_summary),
-                        modifier = settingCardModifier.padding(0.dp, 0.dp, 0.dp, bottomPadding.plus(70.dp)),
+                        modifier =
+                            settingCardModifier.padding(
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                                bottomPadding.plus(70.dp),
+                            ),
                         enableCardViewPolicy = enableCardViewPolicy,
                     ) {
-                        val alarm = Alarm().apply {
-                            sequence = Int.MAX_VALUE
-                            workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                            label = "Quick Settings"
-                        }
+                        val alarm =
+                            Alarm().apply {
+                                sequence = Int.MAX_VALUE
+                                workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                                label = "Quick Settings"
+                            }
                         AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
                 }
@@ -245,11 +259,14 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         AppTheme {
             Scaffold(
                 topBar = {
-                    EasyDiaryActionBar(title = "QuickSettings", subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open") {}
+                    EasyDiaryActionBar(
+                        title = "QuickSettings",
+                        subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open",
+                    ) {}
                 },
                 content = { innerPadding ->
                     QuickSettings(
-                        Modifier.padding(innerPadding)
+                        Modifier.padding(innerPadding),
                     )
                 },
                 floatingActionButton = {
@@ -259,11 +276,11 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         contentColor = Color.White,
                         shape = CircleShape,
                         elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(40.dp),
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_cross),
-                            contentDescription = "액션 아이콘"
+                            contentDescription = "액션 아이콘",
                         )
                     }
                 },
@@ -272,5 +289,3 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         }
     }
 }
-
-

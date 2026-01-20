@@ -106,14 +106,17 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
-
 /***************************************************************************************************
  *   Confirm Permissions
  *
  ***************************************************************************************************/
-fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
-        AlertDialog.Builder(this)
+fun Activity.confirmPermission(
+    permissions: Array<String>,
+    requestCode: Int,
+) {
+    if (permissions.any { permission -> ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog
+            .Builder(this)
             .setMessage(getString(R.string.permission_confirmation_dialog_message))
             .setTitle(getString(R.string.permission_confirmation_dialog_title))
             .setPositiveButton(getString(R.string.ok)) { _, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode) }
@@ -123,9 +126,13 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
     }
 }
 
-fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
-    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
-        AlertDialog.Builder(this)
+fun Activity.confirmExternalStoragePermission(
+    permissions: Array<String>,
+    activityResultLauncher: ActivityResultLauncher<Array<String>>,
+) {
+    if (permissions.any { permission -> ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog
+            .Builder(this)
             .setMessage(getString(R.string.permission_confirmation_dialog_message))
             .setTitle(getString(R.string.permission_confirmation_dialog_title))
             .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
@@ -135,29 +142,31 @@ fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activi
     }
 }
 
-
 /***************************************************************************************************
  *   Messages
  *
  ***************************************************************************************************/
-fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+fun Activity.makeSnackBar(
+    message: String,
+    duration: Int = Snackbar.LENGTH_SHORT,
+) {
     Snackbar
         .make(findViewById(android.R.id.content), message, duration)
         .setBackgroundTint(config.primaryColor)
         .setTextColor(Color.WHITE)
-        .setAction("Action", null).show()
+        .setAction("Action", null)
+        .show()
 }
 
 fun Activity.showBetaFeatureMessage() {
-       makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
+    makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
 }
-
-
 
 /***************************************************************************************************
  *   Screen Dimension
  *
  ***************************************************************************************************/
+
 /**
  * 0 → 3버튼 네비게이션 (기본 소프트키)
  * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
@@ -169,7 +178,7 @@ fun Activity.showBetaFeatureMessage() {
 )
 fun Activity.getNavigationMode(): Int {
     try {
-        return Settings.Secure.getInt(contentResolver, "navigation_mode");
+        return Settings.Secure.getInt(contentResolver, "navigation_mode")
     } catch (e: SettingNotFoundException) {
         e.printStackTrace()
         return -1 // 설정 값이 없을 경우
@@ -201,7 +210,6 @@ fun Activity.hideNavigationBars() {
 )
 @RequiresApi(Build.VERSION_CODES.R)
 fun Activity.isNavigationBarVisible(): Boolean {
-
     // 전체 화면 크기 가져오기
     val metrics = windowManager.currentWindowMetrics
     val fullHeight = metrics.bounds.height()
@@ -238,18 +246,14 @@ fun Activity.printDisplayMetrics() {
     replaceWith =
         ReplaceWith(""),
 )
-fun Activity.getRootViewHeight(): Int {
-    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
-}
+fun Activity.getRootViewHeight(): Int = getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
 
-fun Activity.isLandScape(): Boolean {
-    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-}
+fun Activity.isLandScape(): Boolean = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 fun Activity.actionBarHeight(): Int {
     val typedValue = TypedValue()
     var actionBarHeight = 0
-    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)){
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
         actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
     }
     return actionBarHeight
@@ -264,9 +268,7 @@ fun Activity.statusBarHeight(): Int {
     return statusBarHeight
 }
 
-fun Activity.topBarHeight(): Int {
-    return actionBarHeight().plus(statusBarHeight())
-}
+fun Activity.topBarHeight(): Int = actionBarHeight().plus(statusBarHeight())
 
 fun Activity.navigationBarHeight(): Int {
     var navigationBarHeight = 0
@@ -286,7 +288,11 @@ fun Activity.getDefaultDisplay(): Point {
 
 fun Activity.getDashboardCardWidth(ratio: Float): Int {
     val scaleFactor = if (isLandScape()) 0.5F else 1F
-    return getDefaultDisplay().x.times(ratio).times(scaleFactor).toInt()
+    return getDefaultDisplay()
+        .x
+        .times(ratio)
+        .times(scaleFactor)
+        .toInt()
 }
 
 fun Activity.getDisplayMetrics(): DisplayMetrics {
@@ -410,13 +416,14 @@ fun Activity.updateSystemStatusBarColor(checkColor: Int = config.screenBackgroun
     if (isVanillaIceCreamPlus()) {
         // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
         // false: 어두운 배경 → 흰색 텍스트
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =  isColorLight(checkColor)
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = isColorLight(checkColor)
     } else {
         window.statusBarColor = ColorUtils.setAlphaComponent(config.primaryColor, 150)
-        window.navigationBarColor = androidx.compose.ui.graphics.Color.Transparent.toArgb()
+        window.navigationBarColor =
+            androidx.compose.ui.graphics.Color.Transparent
+                .toArgb()
     }
 }
-
 
 /***************************************************************************************************
  *   etc functions
@@ -426,14 +433,19 @@ fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
         when {
             config.fingerprintLockEnable -> {
-                startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-                    putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
-                })
+                startActivity(
+                    Intent(this, FingerprintLockActivity::class.java).apply {
+                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
+                    },
+                )
             }
+
             config.aafPinLockEnable -> {
-                startActivity(Intent(this, PinLockActivity::class.java).apply {
-                    putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
-                })
+                startActivity(
+                    Intent(this, PinLockActivity::class.java).apply {
+                        putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
+                    },
+                )
             }
         }
     }
@@ -452,18 +464,28 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     // To count with Play market backstack, After pressing back button,
     // to taken back to our application, we need to add following flags to intent.
-    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+    goToMarket.addFlags(
+        Intent.FLAG_ACTIVITY_NO_HISTORY or
             Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-            Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+            Intent.FLAG_ACTIVITY_MULTIPLE_TASK,
+    )
     try {
         startActivity(goToMarket)
     } catch (e: ActivityNotFoundException) {
-        startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=" + targetAppId)))
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://play.google.com/store/apps/details?id=" + targetAppId),
+            ),
+        )
     }
 }
 
-fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
+fun Activity.checkWhatsNew(
+    releases: List<Release>,
+    currVersion: Int,
+    applyFilter: Boolean = true,
+) {
     when (applyFilter) {
         true -> {
             if (baseConfig.lastVersion == 0) {
@@ -480,6 +502,7 @@ fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilte
 
             baseConfig.lastVersion = currVersion
         }
+
         false -> {
             WhatsNewDialog(this, releases)
         }
@@ -491,7 +514,7 @@ fun Activity.startActivityWithTransition(intent: Intent) {
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 }
 
-//fun Activity.restartApp() {
+// fun Activity.restartApp() {
 //    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
 //    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
 //    val mPendingIntentId = 123456
@@ -501,7 +524,7 @@ fun Activity.startActivityWithTransition(intent: Intent) {
 //    ActivityCompat.finishAffinity(this)
 //    //System.runFinalizersOnExit(true)
 //    exitProcess(0)
-//}
+// }
 
 fun Activity.refreshApp() {
     val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
@@ -520,20 +543,32 @@ fun Activity.startMainActivityWithClearTask() {
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 // FIXME: WIP START
-fun getCustomSymbolPaths(symbolSequence: Int, realmInstance: Realm? = null): List<PhotoUri> {
+fun getCustomSymbolPaths(
+    symbolSequence: Int,
+    realmInstance: Realm? = null,
+): List<PhotoUri> {
     // EasyDiaryUtils.getApplicationDataDirectory(this)
-    val items = if (realmInstance == null) EasyDiaryDbHelper.findDiary(
-        null,
-        false,
-        0,
-        0,
-        symbolSequence
-    ) else EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
+    val items =
+        if (realmInstance == null) {
+            EasyDiaryDbHelper.findDiary(
+                null,
+                false,
+                0,
+                0,
+                symbolSequence,
+            )
+        } else {
+            EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
+        }
     val diary = if (items.isNotEmpty()) items[0] else null
     return diary?.photoUris ?: listOf()
 }
 
-fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequence: Int = 0, callback: (Int) -> Unit) {
+fun Activity.openFeelingSymbolDialog(
+    guideMessage: String,
+    selectedSymbolSequence: Int = 0,
+    callback: (Int) -> Unit,
+) {
     var dialog: Dialog? = null
     val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
@@ -547,7 +582,15 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
         categoryList.add(getString(R.string.recently_used_symbol))
-        itemList.add(arrayOf(getUncheckedSymbolItem(), *symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key] ?: "🎃"}" }.toTypedArray()))
+        itemList.add(
+            arrayOf(
+                getUncheckedSymbolItem(),
+                *symbolUsedCountMap.entries
+                    .map { entry ->
+                        "${entry.key}|${symbolMap[entry.key] ?: "🎃"}"
+                    }.toTypedArray(),
+            ),
+        )
         tabIndex++
     }
 
@@ -564,30 +607,39 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     // Append user customization symbols
     addUserCustomSymbols(categoryList, itemList)
 
-    val currentItem = when (selectedSymbolSequence) {
-        in 1..39 -> tabIndex
-        in 100..199 -> tabIndex.plus(1)
-        in 80..83 -> tabIndex.plus(3)
-        in 40..99 -> tabIndex.plus(2)
-        in 250..299 -> tabIndex.plus(4)
-        in 300..349 -> tabIndex.plus(5)
-        in 200..249 -> tabIndex.plus(6)
-        in 350..449 -> tabIndex.plus(7)
-        in 450..749 -> tabIndex.plus(8)
-        else -> 0
-    }
+    val currentItem =
+        when (selectedSymbolSequence) {
+            in 1..39 -> tabIndex
+            in 100..199 -> tabIndex.plus(1)
+            in 80..83 -> tabIndex.plus(3)
+            in 40..99 -> tabIndex.plus(2)
+            in 250..299 -> tabIndex.plus(4)
+            in 300..349 -> tabIndex.plus(5)
+            in 200..249 -> tabIndex.plus(6)
+            in 350..449 -> tabIndex.plus(7)
+            in 450..749 -> tabIndex.plus(8)
+            else -> 0
+        }
 
-    val viewPager = symbolDialog.findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).apply { setBackgroundColor(config.backgroundColor) }
+    val viewPager =
+        symbolDialog.findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).apply {
+            setBackgroundColor(config.backgroundColor)
+        }
     symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide)?.let {
         it.text = guideMessage
     }
-    val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList, selectedSymbolSequence) { symbolSequence ->
-        callback.invoke(symbolSequence)
-        dialog?.dismiss()
-    }
+    val symbolPagerAdapter =
+        SymbolPagerAdapter(this, itemList, categoryList, selectedSymbolSequence) { symbolSequence ->
+            callback.invoke(symbolSequence)
+            dialog?.dismiss()
+        }
     viewPager.adapter = symbolPagerAdapter
 
-    val slidingTabLayout = symbolDialog.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply { setBackgroundColor(config.backgroundColor) }
+    val slidingTabLayout =
+        symbolDialog
+            .findViewById<SlidingTabLayout>(
+                R.id.sliding_tabs,
+            ).apply { setBackgroundColor(config.backgroundColor) }
     slidingTabLayout.setViewPager(viewPager)
     viewPager.setCurrentItem(currentItem, true)
 
@@ -610,7 +662,10 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     dialog.show()
 }
 
-fun Activity.addUserCustomSymbols(categoryList: ArrayList<String>, itemList: ArrayList<Array<String>>) {
+fun Activity.addUserCustomSymbols(
+    categoryList: ArrayList<String>,
+    itemList: ArrayList<Array<String>>,
+) {
     // FIXME: WIP START
     var customSymbolSequence = SYMBOL_USER_CUSTOM_START
     if (config.enableDebugMode) {
@@ -625,7 +680,12 @@ fun Activity.addUserCustomSymbols(categoryList: ArrayList<String>, itemList: Arr
     // FIXME: WIP END
 }
 
-fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: ArrayList<String>, resourceName: String, categoryName: String) {
+fun Activity.addCategory(
+    itemList: ArrayList<Array<String>>,
+    categoryList: ArrayList<String>,
+    resourceName: String,
+    categoryName: String,
+) {
     val resourceId = resources.getIdentifier(resourceName, "array", packageName)
     if (resourceId != 0) {
         if (resourceName == "weather_item_array") {
@@ -642,11 +702,13 @@ fun Activity.getUncheckedSymbolItem(): String {
     return if (resourceId != 0) resources.getStringArray(resourceId)[0] else "-1|N/A"
 }
 
-fun Activity.getLayoutLayoutInflater(): LayoutInflater{
-    return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-}
+fun Activity.getLayoutLayoutInflater(): LayoutInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
+fun Activity.scaledDrawable(
+    id: Int,
+    width: Int,
+    height: Int,
+): Drawable? {
     var drawable = AppCompatResources.getDrawable(this, id)
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         drawable = (DrawableCompat.wrap(drawable!!)).mutate()
@@ -659,10 +721,10 @@ fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
     return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
 }
 
-//}
+// }
 
-//@TargetApi(Build.VERSION_CODES.KITKAT)
-//fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+// @TargetApi(Build.VERSION_CODES.KITKAT)
+// fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
 //    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
 //        // Filter to only show results that can be "opened", such as
 //        // a file (as opposed to a list of contacts or timezones).
@@ -674,7 +736,10 @@ fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
 //    }
 //    startActivityForResult(intent, requestCode)
 
-fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<Diary>) {
+fun Activity.exportHtmlBook(
+    uri: Uri?,
+    diaryList: List<Diary>,
+) {
     uri?.let {
         val os = contentResolver.openOutputStream(it)
         IOUtils.write(createHtmlString(diaryList), os, "UTF-8")
@@ -688,24 +753,45 @@ fun Activity.createHtmlString(diaryList: List<Diary>): String {
         val html = StringBuilder()
         val resourceId = FlavorUtils.sequenceToSymbolResourceId(it.weather)
         when (resourceId > 0) {
-            true -> html.append("<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${it.title}</div> </div>")
-            false -> html.append("<div class='title'> <div class='title-right'>${it.title}</div> </div>")
+            true -> {
+                html.append(
+                    "<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(
+                        resourceId,
+                    )}' /></div> <div class='title-right'>${it.title}</div> </div>",
+                )
+            }
+
+            false -> {
+                html.append("<div class='title'> <div class='title-right'>${it.title}</div> </div>")
+            }
         }
-        html.append("<div class='datetime'>${DateUtils.getDateTimeStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)}</div>")
+        html.append(
+            "<div class='datetime'>${DateUtils.getDateTimeStringFromTimeMillis(
+                it.currentTimeMillis,
+                SimpleDateFormat.FULL,
+                SimpleDateFormat.FULL,
+            )}</div>",
+        )
         html.append("<pre class='contents'>")
         html.append(it.contents)
         html.append("</pre>")
         html.append("<div class='photo-container'>")
 
         it.photoUris?.let { photoUriList ->
-            val imageColumn = when (photoUriList.size) {
-                1 -> 1
-//                photoUriList.size % 2 == 0 -> 2
-                else -> 2
-            }
+            val imageColumn =
+                when (photoUriList.size) {
+                    1 -> 1
+
+                    //                photoUriList.size % 2 == 0 -> 2
+                    else -> 2
+                }
             photoUriList.forEach { photoUriDto ->
-            html.append("<div class='photo col${imageColumn}'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath())}' /></div>")
-        }
+                html.append(
+                    "<div class='photo col$imageColumn'><img src='data:image/png;base64, ${photoToBase64(
+                        EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(),
+                    )}' /></div>",
+                )
+            }
         }
         html.append("</div>")
         html.append("<hr>")
@@ -727,9 +813,13 @@ fun Activity.createHtmlString(diaryList: List<Diary>): String {
     template.append("       .title-left { display:inline-block; }")
     template.append("       .title-right { display:inline-block; white-space: pre-wrap; word-break: break-all; }")
     template.append("       .datetime { font-size: 0.8rem; text-align: right; }")
-    template.append("       .contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; word-break: break-all; }")
+    template.append(
+        "       .contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; word-break: break-all; }",
+    )
     template.append("       .photo-container { display: flex; flex-wrap: wrap; }")
-    template.append("       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }")
+    template.append(
+        "       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }",
+    )
     template.append("       .photo.col1 { width: calc(100% - 0.5rem); }")
     template.append("       .photo.col2 { width: calc(50% - 0.5rem); }")
     template.append("       .photo img { width: 100%; display: block; border-radius: 5px; }")
@@ -771,7 +861,11 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     return image64
 }
 
-fun Activity.openGridSettingDialog(rootView: ViewGroup, gridSpanMode: GridSpanMode, callback: (spanCount: Int) -> Unit) {
+fun Activity.openGridSettingDialog(
+    rootView: ViewGroup,
+    gridSpanMode: GridSpanMode,
+    callback: (spanCount: Int) -> Unit,
+) {
     var alertDialog: AlertDialog? = null
     val builder = AlertDialog.Builder(this)
     builder.setNegativeButton(getString(android.R.string.cancel), null)
@@ -779,13 +873,14 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, gridSpanMode: GridSpanMo
     val containerView = inflater.inflate(R.layout.dialog_option_item, rootView, false)
     val listView = containerView.findViewById<ListView>(R.id.listView)
 
-    val maxSpanCount = when {
-        isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 5
-        !isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 3
-        isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 10
-        !isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 5
-        else -> 2
-    }
+    val maxSpanCount =
+        when {
+            isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 5
+            !isLandScape() && gridSpanMode == GridSpanMode.DIARY_MAIN -> 3
+            isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 10
+            !isLandScape() && (gridSpanMode == GridSpanMode.POSTCARD || gridSpanMode == GridSpanMode.GALLERY) -> 5
+            else -> 2
+        }
     val optionItems = mutableListOf<Map<String, String>>()
     for (i in 1..maxSpanCount) {
         optionItems.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
@@ -796,33 +891,37 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, gridSpanMode: GridSpanMo
     optionItems.mapIndexed { index, map ->
         val size = map["optionValue"] ?: "0"
         when (isLandScape()) {
-             true -> {
+            true -> {
                 when {
                     gridSpanMode == GridSpanMode.POSTCARD && config.postcardSpanCountLandscape == size.toInt() -> {
                         spanCount = config.postcardSpanCountLandscape
                         selectedIndex = index
                     }
+
                     gridSpanMode == GridSpanMode.DIARY_MAIN && config.diaryMainSpanCountLandscape == size.toInt() -> {
                         spanCount = config.diaryMainSpanCountLandscape
                         selectedIndex = index
                     }
+
                     gridSpanMode == GridSpanMode.GALLERY && config.gallerySpanCountLandscape == size.toInt() -> {
                         spanCount = config.gallerySpanCountLandscape
                         selectedIndex = index
                     }
                 }
-
             }
+
             false -> {
                 when {
                     gridSpanMode == GridSpanMode.POSTCARD && config.postcardSpanCountPortrait == size.toInt() -> {
                         spanCount = config.postcardSpanCountPortrait
                         selectedIndex = index
                     }
+
                     gridSpanMode == GridSpanMode.DIARY_MAIN && config.diaryMainSpanCountPortrait == size.toInt() -> {
                         spanCount = config.diaryMainSpanCountPortrait
                         selectedIndex = index
                     }
+
                     gridSpanMode == GridSpanMode.GALLERY && config.gallerySpanCountPortrait == size.toInt() -> {
                         spanCount = config.gallerySpanCountPortrait
                         selectedIndex = index
@@ -834,31 +933,34 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, gridSpanMode: GridSpanMo
 
     val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, optionItems, spanCount.toFloat())
     listView.adapter = arrayAdapter
-    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-        @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
-        optionInfo["optionValue"]?.let {
+    listView.onItemClickListener =
+        AdapterView.OnItemClickListener { parent, _, position, _ ->
+            @Suppress("UNCHECKED_CAST")
+            val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            optionInfo["optionValue"]?.let {
 //                config.summaryMaxLines = it.toInt()
 //                initPreference()
-            when (isLandScape()) {
-                true -> {
-                    when (gridSpanMode) {
-                        GridSpanMode.POSTCARD -> config.postcardSpanCountLandscape = it.toInt()
-                        GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountLandscape = it.toInt()
-                        GridSpanMode.GALLERY -> config.gallerySpanCountLandscape = it.toInt()
+                when (isLandScape()) {
+                    true -> {
+                        when (gridSpanMode) {
+                            GridSpanMode.POSTCARD -> config.postcardSpanCountLandscape = it.toInt()
+                            GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountLandscape = it.toInt()
+                            GridSpanMode.GALLERY -> config.gallerySpanCountLandscape = it.toInt()
+                        }
+                    }
+
+                    false -> {
+                        when (gridSpanMode) {
+                            GridSpanMode.POSTCARD -> config.postcardSpanCountPortrait = it.toInt()
+                            GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountPortrait = it.toInt()
+                            GridSpanMode.GALLERY -> config.gallerySpanCountPortrait = it.toInt()
+                        }
                     }
                 }
-                false -> {
-                    when (gridSpanMode) {
-                        GridSpanMode.POSTCARD -> config.postcardSpanCountPortrait = it.toInt()
-                        GridSpanMode.DIARY_MAIN -> config.diaryMainSpanCountPortrait = it.toInt()
-                        GridSpanMode.GALLERY -> config.gallerySpanCountPortrait = it.toInt()
-                    }
-                }
+                callback.invoke(it.toInt())
             }
-            callback.invoke(it.toInt())
+            alertDialog?.cancel()
         }
-        alertDialog?.cancel()
-    }
 
     alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.postcard_grid_option_title)) }
     listView.setSelection(selectedIndex)
@@ -879,23 +981,25 @@ fun Activity.updateStatusBarColor(color: Int) {
 
 fun EasyDiaryActivity.acquireGPSPermissions(
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    callback: () -> Unit
+    callback: () -> Unit,
 ) {
-
-    when (arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ).any { permission ->
-        ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            permission
-        )
-    }) {
+    when (
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ).any { permission ->
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                permission,
+            )
+        }
+    ) {
         true -> {
             // If authorization is denied
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", packageName, null)
-            }
+            val intent =
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", packageName, null)
+                }
             startActivity(intent)
         }
 
@@ -919,7 +1023,7 @@ fun EasyDiaryActivity.acquireGPSPermissions(
     }
 }
 
-//fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+// fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
 //    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 //    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 //    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
@@ -953,7 +1057,7 @@ fun EasyDiaryActivity.acquireGPSPermissions(
 //            }
 //        }
 //    }
-//}
+// }
 
 fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
     CoroutineScope(Dispatchers.IO).launch {
@@ -969,7 +1073,8 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
         for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
             if (dto.isContentUri()) {
-                val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                val photoPath =
+                    EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 uriToFile(Uri.parse(dto.photoUri), photoPath)
                 realmInstance.beginTransaction()
                 dto.photoUri = FILE_URI_PREFIX + photoPath
@@ -984,7 +1089,13 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + WORKING_DIRECTORY).listFiles()?.let {
                     it.forEach { file ->
-                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY), true)
+                        if (file.extension.equals("jpg", true)) {
+                            FileUtils.moveFileToDirectory(
+                                file,
+                                File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY),
+                                true,
+                            )
+                        }
                     }
                 }
 
@@ -1067,9 +1178,13 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             binging.progressDialog.visibility = View.GONE
             binging.modalContainer.visibility = View.GONE
             if (isFontDirMigrate) {
-                showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
-                    triggerRestart(DiaryMainActivity::class.java)
-                }, false)
+                showAlertDialog(
+                    "Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.",
+                    DialogInterface.OnClickListener { _, _ ->
+                        triggerRestart(DiaryMainActivity::class.java)
+                    },
+                    false,
+                )
             }
         }
     }
@@ -1082,14 +1197,14 @@ fun Activity.appLaunched() {
     packageManager.setComponentEnabledSetting(
         ComponentName(appId, defaultClassName),
         PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-        PackageManager.DONT_KILL_APP
+        PackageManager.DONT_KILL_APP,
     )
 
     val lineClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity.Line"
     packageManager.setComponentEnabledSetting(
         ComponentName(appId, lineClassName),
         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-        PackageManager.DONT_KILL_APP
+        PackageManager.DONT_KILL_APP,
     )
 }
 
@@ -1097,16 +1212,26 @@ fun Activity.clearLockSettingsTemporary() {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
     val parsedDate: Date? = dateFormat.parse("2022-05-14 23:59:59")
     parsedDate?.let {
-        val remainMinutes = it.time.minus(System.currentTimeMillis()).div(1000).div(60)
+        val remainMinutes =
+            it.time
+                .minus(System.currentTimeMillis())
+                .div(1000)
+                .div(60)
         if (remainMinutes > 0) {
             config.aafPinLockEnable = false
             config.fingerprintLockEnable = false
-            showAlertDialog("Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.", null)
+            showAlertDialog(
+                "Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.",
+                null,
+            )
         }
     }
 }
 
-fun Activity.uriToFile(uri: Uri, photoPath: String): Boolean {
+fun Activity.uriToFile(
+    uri: Uri,
+    photoPath: String,
+): Boolean {
     var result = false
     try {
         val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
