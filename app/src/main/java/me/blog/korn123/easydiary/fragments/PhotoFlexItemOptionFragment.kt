@@ -38,52 +38,85 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         dialog?.setTitle(getString(R.string.title_dialog_postcard_photo_option))
         mBinding = DialogPostcardPhotoOptionBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.run {
             spinnerViewMode.run {
-                val arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.options_spinner_view_mode, R.layout.item_spinner)
+                val arrayAdapter =
+                    ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.options_spinner_view_mode,
+                        R.layout.item_spinner,
+                    )
                 adapter = arrayAdapter
                 setSelection(viewMode)
 
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                        viewMode = position
-                        applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
-                    }
+                onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            p1: View?,
+                            position: Int,
+                            p3: Long,
+                        ) {
+                            viewMode = position
+                            applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
+                        }
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                }
+                        override fun onNothingSelected(p0: AdapterView<*>?) {}
+                    }
             }
 
             applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
 
             spinnerFilterMode.run {
-                val arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.options_spinner_filter_mode, R.layout.item_spinner)
+                val arrayAdapter =
+                    ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.options_spinner_filter_mode,
+                        R.layout.item_spinner,
+                    )
                 adapter = arrayAdapter
                 setSelection(filterMode)
 
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                        filterMode = position
-                        applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
-                    }
+                onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            p1: View?,
+                            position: Int,
+                            p3: Long,
+                        ) {
+                            filterMode = position
+                            applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
+                        }
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                }
+                        override fun onNothingSelected(p0: AdapterView<*>?) {}
+                    }
             }
 
             checkForceSinglePhoto.isChecked = forceSinglePhotoPosition
 
             buttonOk.setOnClickListener {
                 dismiss()
-                positiveCallback.invoke(spinnerViewMode.selectedItemPosition, spinnerFilterMode.selectedItemPosition, checkForceSinglePhoto.isChecked)
+                positiveCallback.invoke(
+                    spinnerViewMode.selectedItemPosition,
+                    spinnerFilterMode.selectedItemPosition,
+                    checkForceSinglePhoto.isChecked,
+                )
             }
             buttonCancel.setOnClickListener { dismiss() }
         }
@@ -96,14 +129,16 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         private const val PHOTO_URI = "photo_uri"
         private const val FORCE_SINGLE_PHOTO_POSITION = "force_single_photo_position"
 
-        fun newInstance(postCardPhotoItem: PhotoAdapter.PostCardPhotoItem) = PhotoFlexItemOptionFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ITEM_INDEX, postCardPhotoItem.position)
-                putInt(VIEW_MODE, postCardPhotoItem.viewMode)
-                putInt(FILTER_MODE, postCardPhotoItem.filterMode)
-                putBoolean(FORCE_SINGLE_PHOTO_POSITION, postCardPhotoItem.forceSinglePhotoPosition)
-                putString(PHOTO_URI, postCardPhotoItem.photoUri)
+        fun newInstance(postCardPhotoItem: PhotoAdapter.PostCardPhotoItem) =
+            PhotoFlexItemOptionFragment().apply {
+                arguments =
+                    Bundle().apply {
+                        putInt(ITEM_INDEX, postCardPhotoItem.position)
+                        putInt(VIEW_MODE, postCardPhotoItem.viewMode)
+                        putInt(FILTER_MODE, postCardPhotoItem.filterMode)
+                        putBoolean(FORCE_SINGLE_PHOTO_POSITION, postCardPhotoItem.forceSinglePhotoPosition)
+                        putString(PHOTO_URI, postCardPhotoItem.photoUri)
+                    }
             }
-        }
     }
 }

@@ -36,9 +36,7 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
-class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
-
-
+class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
      *
@@ -50,12 +48,19 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentSettingsAppInfoBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         bindEvent()
         updateFragmentUI(mBinding.root)
@@ -66,20 +71,21 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                 val configuration = LocalConfiguration.current
                 FlowRow(
                     maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
-                    val settingCardModifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                    val settingCardModifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        true
+                        true,
                     )
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
-                        config.lineSpacingScaleFactor
+                        config.lineSpacingScaleFactor,
                     )
                     val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
-                        FontUtils.getComposeFontFamily(requireContext())
+                        FontUtils.getComposeFontFamily(requireContext()),
                     )
                     val rateAppSettingSummary: String by mSettingsViewModel.rateAppSettingSummary.observeAsState("")
                     val inviteSummary: String by mSettingsViewModel.inviteSummary.observeAsState("")
@@ -105,7 +111,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                         description = inviteSummary,
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
                         val text = String.format(getString(R.string.share_text), getString(R.string.app_name), getStoreUrl())
                         Intent().apply {
@@ -122,13 +128,16 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                         description = getString(R.string.faq_description),
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
-                        TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
-                            putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.faq_url))
-                            putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
-                            putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
-                        })
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
+                                putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.faq_url))
+                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
+                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                            },
+                        )
                     }
 
                     SimpleCard(
@@ -136,13 +145,16 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                         description = getString(R.string.privacy_policy_description),
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
-                        TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
-                            putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
-                            putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
-                            putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
-                        })
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
+                                putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
+                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                            },
+                        )
                     }
 
                     SimpleCard(
@@ -150,7 +162,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                         description = getString(R.string.release_notes_summary),
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
                         (requireActivity() as SettingsActivity).checkWhatsNewDialog(false)
                     }
@@ -170,6 +182,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                                         makeToast("Debug console is disabled.")
                                         toggleLauncher(Launcher.EASY_DIARY)
                                     }
+
                                     false -> {
                                         config.enableDebugMode = true
                                         makeToast("Debug console is enabled.")
@@ -178,13 +191,19 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                                 }
                                 true
                             }
-                        }
+                        },
                     ) {
-                        TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
-                            putExtra(MarkDownViewerActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md")
-                            putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
-                            putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
-                        })
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
+                                putExtra(
+                                    MarkDownViewerActivity.OPEN_URL_INFO,
+                                    "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md",
+                                )
+                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
+                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                            },
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -199,7 +218,6 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         initPreference()
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
@@ -209,7 +227,9 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {
-        mSettingsViewModel.setRateAppSettingSummary(String.format("v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE))
+        mSettingsViewModel.setRateAppSettingSummary(
+            String.format("v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
+        )
     }
 
     @SuppressLint("StringFormatInvalid")
@@ -217,7 +237,12 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         mSettingsViewModel.setInviteSummary(String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name)))
     }
 
-    private fun getStoreUrl(): String {
-        return if (BuildConfig.FLAVOR == "foss") "https://f-droid.org/packages/${requireActivity().packageName}/" else "https://play.google.com/store/apps/details?id=${requireActivity().packageName}"
-    }
+    private fun getStoreUrl(): String =
+        if (BuildConfig.FLAVOR ==
+            "foss"
+        ) {
+            "https://f-droid.org/packages/${requireActivity().packageName}/"
+        } else {
+            "https://play.google.com/store/apps/details?id=${requireActivity().packageName}"
+        }
 }

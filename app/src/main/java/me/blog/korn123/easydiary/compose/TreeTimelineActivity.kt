@@ -30,7 +30,6 @@ import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
-import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -38,7 +37,6 @@ import me.blog.korn123.easydiary.viewmodels.TreeViewModel
 
 class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     val treeViewModel: TreeViewModel by viewModels()
-
 
     /***************************************************************************************************
      *   override functions
@@ -60,21 +58,18 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         fetchDiary()
     }
 
-
     /***************************************************************************************************
      *   Define Compose
      *
      ***************************************************************************************************/
     @Composable
-    fun TreeTimeline(
-        isResultAPI: Boolean = false
-    ) {
+    fun TreeTimeline(isResultAPI: Boolean = false) {
         val context = LocalContext.current
         mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy
+            context.config.enableCardViewPolicy,
         )
         val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
@@ -112,23 +107,26 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                             val newFirst =
                                 node.copy(isFolderOpen = node.isFolderOpen.not())
                             // pair 객체가 리컴포지션 되도록
-                            treeViewModel.setTreeData(treeData.map { data ->
-                                if (data.first.fullPath == node.fullPath) {
-                                    data.copy(first = newFirst)
-                                } else {
-                                    data
-                                }
-                            })
+                            treeViewModel.setTreeData(
+                                treeData.map { data ->
+                                    if (data.first.fullPath == node.fullPath) {
+                                        data.copy(first = newFirst)
+                                    } else {
+                                        data
+                                    }
+                                },
+                            )
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
                         resultAPICallback = { sequence ->
-                            val resultIntent = Intent().apply {
-                                putExtra("sequence", sequence)
-                            }
+                            val resultIntent =
+                                Intent().apply {
+                                    putExtra("sequence", sequence)
+                                }
                             setResult(RESULT_OK, resultIntent)
                             finish()
-                        }
+                        },
                     )
                 },
             )
@@ -141,22 +139,38 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         AppTheme {
             var total by remember { mutableIntStateOf(0) }
             var treeData by remember { mutableStateOf(emptyList<Pair<FileNode, Int>>()) }
+
             fun findDiary(): List<Diary> {
                 val list = mutableListOf<Diary>()
-                list.add(Diary().apply { sequence = 1; dateString = "2023-01-01"; title = "New Year" })
-                list.add(Diary().apply { sequence = 2; dateString = "2023-02-01"; title = "New Year Party" })
+                list.add(
+                    Diary().apply {
+                        sequence = 1
+                        dateString = "2023-01-01"
+                        title = "New Year"
+                    },
+                )
+                list.add(
+                    Diary().apply {
+                        sequence = 2
+                        dateString = "2023-02-01"
+                        title = "New Year Party"
+                    },
+                )
                 return list
             }
+
             fun fetchDiary() {
                 val diaryItems = findDiary()
-                val fileNode = buildFileTree(diaryItems, addOptionalTitle = true) {
-                        diary ->  "${diary.dateString}".split("-").toMutableList()
-                }
+                val fileNode =
+                    buildFileTree(diaryItems, addOptionalTitle = true) { diary ->
+                        "${diary.dateString}".split("-").toMutableList()
+                    }
                 val originTreeData = flattenTree(fileNode, sortOption = "desc")
-                treeData = originTreeData.map { pair ->
-                    if (pair.second == 1) pair.first.isShow = true
-                    pair
-                }
+                treeData =
+                    originTreeData.map { pair ->
+                        if (pair.second == 1) pair.first.isShow = true
+                        pair
+                    }
                 total = diaryItems.size
             }
             fetchDiary()
@@ -173,45 +187,52 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         updateQuery = {},
                         toggleWholeTree = {},
                         folderOnClick = {},
-                        resultAPICallback = { /* no-op */ }
+                        resultAPICallback = { /* no-op */ },
                     )
                 },
             )
         }
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
 
-    fun findDiary(): List<Diary> {
-        return EasyDiaryDbHelper.findDiary(query = treeViewModel.currentQuery.value, checkFutureDiaryOption = true)
-    }
+    fun findDiary(): List<Diary> =
+        EasyDiaryDbHelper.findDiary(
+            query = treeViewModel.currentQuery.value,
+            checkFutureDiaryOption = true,
+        )
 
     fun fetchDiary() {
         val diaryItems = findDiary()
-        val fileNode = buildFileTree(diaryItems, addOptionalTitle = true, addOptionalSortPrefix = true) {
-                diary ->  "${diary.dateString}".split("-").toMutableList()
-        }
+        val fileNode =
+            buildFileTree(
+                diaryItems,
+                addOptionalTitle = true,
+                addOptionalSortPrefix = true,
+            ) { diary ->
+                "${diary.dateString}".split("-").toMutableList()
+            }
         val newTreeData = flattenTree(fileNode, sortOption = "asc")
         val originTreeData = treeViewModel.treeData.value
-        treeViewModel.setTreeData(treeData = newTreeData.map { pair ->
-            if (pair.second == 1) pair.first.isShow = true
+        treeViewModel.setTreeData(
+            treeData =
+                newTreeData.map { pair ->
+                    if (pair.second == 1) pair.first.isShow = true
 
-            // 이전 상태 유지
-            val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
-            if (originNode != null) {
-                pair.first.isFolderOpen = originNode.first.isFolderOpen
-                pair.first.isShow = originNode.first.isShow
-                pair.first.isRootShow = originNode.first.isRootShow
-            }
-            
-            pair
-        })
+                    // 이전 상태 유지
+                    val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+                    if (originNode != null) {
+                        pair.first.isFolderOpen = originNode.first.isFolderOpen
+                        pair.first.isShow = originNode.first.isShow
+                        pair.first.isRootShow = originNode.first.isRootShow
+                    }
+
+                    pair
+                },
+        )
         treeViewModel.setTotal(diaryItems.size)
     }
 }
-
-

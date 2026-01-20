@@ -102,13 +102,11 @@ import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.Locale
 
-
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
 class DiaryReadingActivity : EasyDiaryActivity() {
-
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -125,45 +123,56 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
 
-    private val selectValueLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
-            val selectedValue = result.data?.getIntExtra("sequence", 0)
+    private val selectValueLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val fragment =
+                    mSectionsPagerAdapter.instantiateItem(
+                        mBinding.diaryViewPager,
+                        mBinding.diaryViewPager.currentItem,
+                    ) as PlaceholderFragment
+                val selectedValue = result.data?.getIntExtra("sequence", 0)
 
-            showAlertDialog(getString(R.string.link_entry_confirm)
-                , { _, _ ->
-                    selectedValue?.let {
-                        val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                        if (diary.linkedDiaries.contains(selectedValue)) {
-                            makeSnackBar("이미 연결된 항목 입니다.")
-                        } else {
-                            EasyDiaryDbHelper.beginTransaction()
-                            diary.linkedDiaries.add(selectedValue)
-                            EasyDiaryDbHelper.commitTransaction()
-                            fragment.initContents()
+                showAlertDialog(
+                    getString(R.string.link_entry_confirm),
+                    { _, _ ->
+                        selectedValue?.let {
+                            val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                            if (diary.linkedDiaries.contains(selectedValue)) {
+                                makeSnackBar("이미 연결된 항목 입니다.")
+                            } else {
+                                EasyDiaryDbHelper.beginTransaction()
+                                diary.linkedDiaries.add(selectedValue)
+                                EasyDiaryDbHelper.commitTransaction()
+                                fragment.initContents()
+                            }
                         }
-                    }
-                }
-                , { _, _ ->
-                    selectedValue?.let {
-                        val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
-                        if (diary.linkedDiaries.contains(fragment.getSequence())) {
-                            makeSnackBar("이미 연결된 항목 입니다.")
-                        } else {
-                            EasyDiaryDbHelper.beginTransaction()
-                            diary.linkedDiaries.add(fragment.getSequence())
-                            EasyDiaryDbHelper.commitTransaction()
-                            fragment.initContents()
+                    },
+                    { _, _ ->
+                        selectedValue?.let {
+                            val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
+                            if (diary.linkedDiaries.contains(fragment.getSequence())) {
+                                makeSnackBar("이미 연결된 항목 입니다.")
+                            } else {
+                                EasyDiaryDbHelper.beginTransaction()
+                                diary.linkedDiaries.add(fragment.getSequence())
+                                EasyDiaryDbHelper.commitTransaction()
+                                fragment.initContents()
+                            }
                         }
-                    }
-                }
-                , { _, _ -> }
-                , DialogMode.INFO, true, getString(R.string.link_entry), getString(R.string.link_entry_as_child), getString(R.string.link_entry_as_parent), getString(R.string.link_entry_later)
-            )
+                    },
+                    { _, _ -> },
+                    DialogMode.INFO,
+                    true,
+                    getString(R.string.link_entry),
+                    getString(R.string.link_entry_as_child),
+                    getString(R.string.link_entry_as_parent),
+                    getString(R.string.link_entry_later),
+                )
+            }
         }
-    }
 
     companion object {
         const val ENCRYPTION = "encryption"
@@ -185,16 +194,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        val diaryList: List<Diary> = when (intent.getStringExtra(DiaryFragment.MODE_FLAG) == null) {
-            true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
-            false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryFragment.MODE_FLAG))
-        }
+        val diaryList: List<Diary> =
+            when (intent.getStringExtra(DiaryFragment.MODE_FLAG) == null) {
+                true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
+                false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryFragment.MODE_FLAG))
+            }
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
-        val startPageIndex = when(savedInstanceState == null) {
-            true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
-            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt(DIARY_SEQUENCE, -1))
-        }
+        val startPageIndex =
+            when (savedInstanceState == null) {
+                true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
+                false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt(DIARY_SEQUENCE, -1))
+            }
 
         setupViewPager()
         if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { mBinding.diaryViewPager.setCurrentItem(startPageIndex, false) }
@@ -211,7 +222,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
     }
-    
+
     override fun onPause() {
         super.onPause()
         destroyModule()
@@ -228,18 +239,21 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     var mDialogSearch: AlertDialog? = null
     var mSearchIndexes = arrayListOf<Int>()
     var mCurrentIndexesSequence = 0
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
 //        val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
-                android.R.id.home ->
+                android.R.id.home -> {
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
                     } else {
                         this.onBackPressed()
                     }
+                }
+
                 R.id.edit -> {
                     if (fragment.isEncryptContents()) {
                         showEncryptPagePopup(fragment, EDITING) { inputPass ->
@@ -249,8 +263,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         startEditing(fragment)
                     }
                 }
-                R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
-//                R.id.postCard -> {
+
+                R.id.speechOutButton -> {
+                    textToSpeech(fragment.getDiaryContents())
+                }
+
+                //                R.id.postCard -> {
 //                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
 //                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
 //                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
@@ -262,53 +280,84 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                R.id.decryptData -> {
 //                    showEncryptPagePopup(fragment, DECRYPTION)
 //                }
-                R.id.popupMenu -> createCustomOptionMenu()
+                R.id.popupMenu -> {
+                    createCustomOptionMenu()
+                }
+
                 R.id.highlightText -> {
                     fun highLight() {
                         // Dialog for search keyword
-                        when (mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString().isNotEmpty()) {
+                        when (
+                            mDialogHighlightKeywordBinding.searchKeywordQuery.text
+                                .toString()
+                                .isNotEmpty()
+                        ) {
                             true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(), true)
                             false -> fragment.clearHighLight()
                         }
 //                        mDialogSearch?.dismiss()
                     }
+
                     fun updateLabel() {
                         mDialogHighlightKeywordBinding.indexes.text = "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
                     }
                     mDialogSearch?.show() ?: run {
-                        val builder = AlertDialog.Builder(this).apply {
-                            setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                        val builder =
+                            AlertDialog.Builder(this).apply {
+                                setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                                }
                             }
-                        }
                         mDialogSearch = builder.create()
                         mDialogHighlightKeywordBinding.run {
                             next.setOnClickListener {
                                 if (mCurrentIndexesSequence < mSearchIndexes.size) {
                                     mCurrentIndexesSequence = mCurrentIndexesSequence.plus(1)
-                                    fragment.moveScroll(searchKeywordQuery.text.toString(), mSearchIndexes[mCurrentIndexesSequence.minus(1)])
+                                    fragment.moveScroll(
+                                        searchKeywordQuery.text.toString(),
+                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                    )
                                     updateLabel()
                                 }
                             }
                             previous.setOnClickListener {
                                 if (mCurrentIndexesSequence > 1) {
                                     mCurrentIndexesSequence = mCurrentIndexesSequence.minus(1)
-                                    fragment.moveScroll(searchKeywordQuery.text.toString(), mSearchIndexes[mCurrentIndexesSequence.minus(1)])
+                                    fragment.moveScroll(
+                                        searchKeywordQuery.text.toString(),
+                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                    )
                                     updateLabel()
                                 }
                             }
-                            searchKeywordQuery.addTextChangedListener(object : TextWatcher {
-                                override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-                                override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                            searchKeywordQuery.addTextChangedListener(
+                                object : TextWatcher {
+                                    override fun beforeTextChanged(
+                                        charSequence: CharSequence,
+                                        i: Int,
+                                        i1: Int,
+                                        i2: Int,
+                                    ) {}
+
+                                    override fun onTextChanged(
+                                        charSequence: CharSequence,
+                                        i: Int,
+                                        i1: Int,
+                                        i2: Int,
+                                    ) {
 //                                    makeToast(charSequence.toString())
-                                    mCurrentIndexesSequence = 0
-                                    mSearchIndexes.clear()
-                                    mSearchIndexes.addAll(EasyDiaryUtils.searchWordIndexes(fragment.getContents(), charSequence.toString()))
-                                    highLight()
-                                    if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
-                                    updateLabel()
-                                }
-                                override fun afterTextChanged(editable: Editable) {}
-                            })
+                                        mCurrentIndexesSequence = 0
+                                        mSearchIndexes.clear()
+                                        mSearchIndexes.addAll(
+                                            EasyDiaryUtils.searchWordIndexes(fragment.getContents(), charSequence.toString()),
+                                        )
+                                        highLight()
+                                        if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
+                                        updateLabel()
+                                    }
+
+                                    override fun afterTextChanged(editable: Editable) {}
+                                },
+                            )
                             root.run {
                                 updateTextColors(this)
                                 FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
@@ -333,36 +382,44 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         return true
     }
 
-    private fun startEditing(fragment: PlaceholderFragment, inputPass: String? = null) {
-        val updateDiaryIntent = Intent(this@DiaryReadingActivity, DiaryEditingActivity::class.java).apply {
-            putExtra(DIARY_SEQUENCE, fragment.getSequence())
-            putExtra(DIARY_CONTENTS_SCROLL_Y, fragment.getContentsPositionY())
-            inputPass?.let {
-                putExtra(DIARY_ENCRYPT_PASSWORD, it)
+    private fun startEditing(
+        fragment: PlaceholderFragment,
+        inputPass: String? = null,
+    ) {
+        val updateDiaryIntent =
+            Intent(this@DiaryReadingActivity, DiaryEditingActivity::class.java).apply {
+                putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                putExtra(DIARY_CONTENTS_SCROLL_Y, fragment.getContentsPositionY())
+                inputPass?.let {
+                    putExtra(DIARY_ENCRYPT_PASSWORD, it)
+                }
             }
-
-        }
         TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, updateDiaryIntent)
     }
 
-    private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
-
+    private fun showEncryptPagePopup(
+        fragment: PlaceholderFragment,
+        workMode: String,
+        callback: ((inputPass: String) -> Unit)? = null,
+    ) {
         mPopupEncryptionBinding.run {
             updateDrawableColorInnerCardView(closePopup)
             var inputPass = ""
             var confirmPass = ""
             holdCurrentOrientation()
-            val popupView = root.apply {
-                setBackgroundColor(ColorUtils.setAlphaComponent(config.backgroundColor, 250))
-                decMode1.setTextColor(config.textColor)
-                decMode2.setTextColor(config.textColor)
-            }
+            val popupView =
+                root.apply {
+                    setBackgroundColor(ColorUtils.setAlphaComponent(config.backgroundColor, 250))
+                    decMode1.setTextColor(config.textColor)
+                    decMode2.setTextColor(config.textColor)
+                }
 
             val width = LinearLayout.LayoutParams.MATCH_PARENT
             val height = LinearLayout.LayoutParams.MATCH_PARENT
-            val popupWindow = PopupWindow(popupView, width, height, true).apply {
-                showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
-            }
+            val popupWindow =
+                PopupWindow(popupView, width, height, true).apply {
+                    showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+                }
 
             closePopup.setOnClickListener {
                 it.postDelayed({
@@ -386,98 +443,138 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     guideMessage.text = getString(R.string.diary_encryption_guide)
                     decMode.visibility = View.GONE
                 }
+
                 DECRYPTION -> {
-                    description.text =  getString(R.string.diary_decryption_title)
+                    description.text = getString(R.string.diary_decryption_title)
                     guideMessage.text = getString(R.string.diary_decryption_guide)
                     decMode.visibility = View.VISIBLE
                 }
+
                 EDITING -> {
-                    description.text =  getString(R.string.diary_decryption_title)
+                    description.text = getString(R.string.diary_decryption_title)
                     guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
                     decMode.visibility = View.GONE
                 }
             }
             EasyDiaryUtils.warningString(guideMessage)
 
-            val onclickListener = View.OnClickListener {
-                clearPassView()
-                when (it.id) {
-                    R.id.button1 -> inputPass += "1"
-                    R.id.button2 -> inputPass += "2"
-                    R.id.button3 -> inputPass += "3"
-                    R.id.button4 -> inputPass += "4"
-                    R.id.button5 -> inputPass += "5"
-                    R.id.button6 -> inputPass += "6"
-                    R.id.button7 -> inputPass += "7"
-                    R.id.button8 -> inputPass += "8"
-                    R.id.button9 -> inputPass += "9"
-                    R.id.button0 -> inputPass += "0"
-                    R.id.buttonDel -> {
-                        if (inputPass.isNotEmpty()) inputPass = inputPass.substring(0, inputPass.length.minus(1))
-                    }
-                }
-
-                if (inputPass.isNotEmpty()) pass1.text = "*"
-                if (inputPass.length > 1) pass2.text = "*"
-                if (inputPass.length > 2) pass3.text = "*"
-                if (inputPass.length > 3) pass4.text = "*"
-                if (inputPass.length > 4) pass5.text = "*"
-                if (inputPass.length > 5) pass6.text = "*"
-
-                if (inputPass.length == 6) {
-
-                    when {
-                        confirmPass.length == 6 -> {
-                            when (confirmPass == inputPass) {
-                                true -> {
-                                    fragment.encryptData(inputPass)
-                                    popupWindow.dismiss()
-                                    clearHoldOrientation()
-                                }
-                                false -> guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
-                            }
-                            inputPass = ""
-                            confirmPass = ""
-                        }
-                        workMode == DECRYPTION -> {
-                            when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                true -> {
-                                    if (decMode1.isChecked) {
-                                        fragment.decryptDataOnce(inputPass)
-                                    } else {
-                                        fragment.decryptData(inputPass)
-                                    }
-                                    popupWindow.dismiss()
-                                    clearHoldOrientation()
-                                }
-                                false -> {
-                                    inputPass = ""
-                                    guideMessage.text = getString(R.string.diary_pin_number_verification_error)
-                                }
-                            }
-                        }
-                        workMode == EDITING -> {
-                            when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                true -> {
-                                    callback?.invoke(inputPass)
-                                    popupWindow.dismiss()
-                                    clearHoldOrientation()
-                                }
-                                else -> {
-                                    inputPass = ""
-                                    guideMessage.text = getString(R.string.diary_pin_number_verification_error)
-                                }
-                            }
-                        }
-                        else -> {
-                            confirmPass = inputPass
-                            inputPass = ""
-                            guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
-                        }
-                    }
+            val onclickListener =
+                View.OnClickListener {
                     clearPassView()
+                    when (it.id) {
+                        R.id.button1 -> {
+                            inputPass += "1"
+                        }
+
+                        R.id.button2 -> {
+                            inputPass += "2"
+                        }
+
+                        R.id.button3 -> {
+                            inputPass += "3"
+                        }
+
+                        R.id.button4 -> {
+                            inputPass += "4"
+                        }
+
+                        R.id.button5 -> {
+                            inputPass += "5"
+                        }
+
+                        R.id.button6 -> {
+                            inputPass += "6"
+                        }
+
+                        R.id.button7 -> {
+                            inputPass += "7"
+                        }
+
+                        R.id.button8 -> {
+                            inputPass += "8"
+                        }
+
+                        R.id.button9 -> {
+                            inputPass += "9"
+                        }
+
+                        R.id.button0 -> {
+                            inputPass += "0"
+                        }
+
+                        R.id.buttonDel -> {
+                            if (inputPass.isNotEmpty()) inputPass = inputPass.substring(0, inputPass.length.minus(1))
+                        }
+                    }
+
+                    if (inputPass.isNotEmpty()) pass1.text = "*"
+                    if (inputPass.length > 1) pass2.text = "*"
+                    if (inputPass.length > 2) pass3.text = "*"
+                    if (inputPass.length > 3) pass4.text = "*"
+                    if (inputPass.length > 4) pass5.text = "*"
+                    if (inputPass.length > 5) pass6.text = "*"
+
+                    if (inputPass.length == 6) {
+                        when {
+                            confirmPass.length == 6 -> {
+                                when (confirmPass == inputPass) {
+                                    true -> {
+                                        fragment.encryptData(inputPass)
+                                        popupWindow.dismiss()
+                                        clearHoldOrientation()
+                                    }
+
+                                    false -> {
+                                        guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
+                                    }
+                                }
+                                inputPass = ""
+                                confirmPass = ""
+                            }
+
+                            workMode == DECRYPTION -> {
+                                when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                                    true -> {
+                                        if (decMode1.isChecked) {
+                                            fragment.decryptDataOnce(inputPass)
+                                        } else {
+                                            fragment.decryptData(inputPass)
+                                        }
+                                        popupWindow.dismiss()
+                                        clearHoldOrientation()
+                                    }
+
+                                    false -> {
+                                        inputPass = ""
+                                        guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                                    }
+                                }
+                            }
+
+                            workMode == EDITING -> {
+                                when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                                    true -> {
+                                        callback?.invoke(inputPass)
+                                        popupWindow.dismiss()
+                                        clearHoldOrientation()
+                                    }
+
+                                    else -> {
+                                        inputPass = ""
+                                        guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                                    }
+                                }
+                            }
+
+                            else -> {
+                                confirmPass = inputPass
+                                inputPass = ""
+                                guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
+                            }
+                        }
+                        clearPassView()
+                    }
                 }
-            }
             button1.setOnClickListener(onclickListener)
             button2.setOnClickListener(onclickListener)
             button3.setOnClickListener(onclickListener)
@@ -503,19 +600,25 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private fun setupViewPager() {
         // Set up the ViewPager with the sections adapter.
         mBinding.diaryViewPager.adapter = mSectionsPagerAdapter
-        mBinding.diaryViewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+        mBinding.diaryViewPager.addOnPageChangeListener(
+            object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int,
+                ) {}
 
-            override fun onPageSelected(position: Int) {
-                val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
-                fragment.let {
+                override fun onPageSelected(position: Int) {
+                    val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
+                    fragment.let {
 //                    it.setFontsTypeface()
 //                    it.setFontsSize()
+                    }
                 }
-            }
 
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
+                override fun onPageScrollStateChanged(state: Int) {}
+            },
+        )
     }
 
     private fun setupShowcase() {
@@ -526,35 +629,43 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         centerParams.setMargins(0, 0, 0, margin)
 
-        val showcaseViewOnClickListener = View.OnClickListener {
-            mShowcaseView?.run {
-                when (mShowcaseIndex) {
-                    1 -> {
-                        setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(mBinding.diaryViewPager), false)
-                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_1))
-                        setContentText(getString(R.string.read_diary_detail_showcase_message_1))
-                    }
-                    2 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.edit, this@DiaryReadingActivity))
-                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_2))
-                        setContentText(getString(R.string.read_diary_detail_showcase_message_2))
-                    }
-                    3 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadingActivity))
-                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
-                        setContentText(getString(R.string.read_diary_detail_showcase_message_3))
-                        setButtonText(getString(R.string.create_diary_showcase_button_2))
-                    }
-                    4 -> hide()
-                }
-            }
-            mShowcaseIndex++
-        }
+        val showcaseViewOnClickListener =
+            View.OnClickListener {
+                mShowcaseView?.run {
+                    when (mShowcaseIndex) {
+                        1 -> {
+                            setButtonPosition(centerParams)
+                            setShowcase(ViewTarget(mBinding.diaryViewPager), false)
+                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_1))
+                            setContentText(getString(R.string.read_diary_detail_showcase_message_1))
+                        }
 
-        mShowcaseView = ShowcaseView.Builder(this)
+                        2 -> {
+                            setButtonPosition(centerParams)
+                            setTarget(ViewTarget(R.id.edit, this@DiaryReadingActivity))
+                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_2))
+                            setContentText(getString(R.string.read_diary_detail_showcase_message_2))
+                        }
+
+                        3 -> {
+                            setButtonPosition(centerParams)
+                            setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadingActivity))
+                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
+                            setContentText(getString(R.string.read_diary_detail_showcase_message_3))
+                            setButtonText(getString(R.string.create_diary_showcase_button_2))
+                        }
+
+                        4 -> {
+                            hide()
+                        }
+                    }
+                }
+                mShowcaseIndex++
+            }
+
+        mShowcaseView =
+            ShowcaseView
+                .Builder(this)
                 .withMaterialShowcase()
                 .setContentTitle(getString(R.string.read_diary_detail_showcase_title_0))
                 .setContentText(getString(R.string.read_diary_detail_showcase_message_0))
@@ -570,15 +681,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     private fun initModule() {
-        mTextToSpeech = TextToSpeech(this@DiaryReadingActivity) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                mTextToSpeech?.run {
-                    language = Locale.getDefault()
-                    setPitch(1.3f)
-                    setSpeechRate(1f)
+        mTextToSpeech =
+            TextToSpeech(this@DiaryReadingActivity) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    mTextToSpeech?.run {
+                        language = Locale.getDefault()
+                        setPitch(1.3f)
+                        setSpeechRate(1f)
+                    }
                 }
             }
-        }
     }
 
     private fun destroyModule() {
@@ -601,13 +713,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private fun ttsUnder20(text: String) {
         val map = HashMap<String, String>()
         map[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "MessageId"
-        mTextToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String) {}
+        mTextToSpeech?.setOnUtteranceProgressListener(
+            object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String) {}
 
-            override fun onError(utteranceId: String) {}
+                override fun onError(utteranceId: String) {}
 
-            override fun onDone(utteranceId: String) {}
-        })
+                override fun onDone(utteranceId: String) {}
+            },
+        )
         mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, map)
     }
 
@@ -620,72 +734,88 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private fun createCustomOptionMenu() {
         val pmrBinding = PopupMenuReadBinding.inflate(layoutInflater)
         var popupWindow: PopupWindow? = null
-        val popupView = pmrBinding.root.apply {
-            updateAppViews(this)
-            updateTextColors(this)
-            FontUtils.setFontsTypeface(applicationContext, null, this, true)
-            val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
-            pmrBinding.run {
-                when (fragment.isEncryptContents()) {
-                    true -> decryptData.visibility = View.VISIBLE
-                    false -> encryptData.visibility = View.VISIBLE
-                }
-                val itemClickListener = View.OnClickListener { view ->
-                    when (view.id) {
-                        R.id.delete -> {
-                            val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                                EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                                TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
-                            }
-                            showAlertDialog(
-                                getString(R.string.delete_confirm),
-                                positiveListener,
-                                { _, _ -> },
-                                DialogMode.WARNING,
-                                true,
-                                getString(R.string.delete),
-                                getString(R.string.delete)
-                            )
-                        }
-                        R.id.postcard -> {
-                            val postCardIntent = Intent(this@DiaryReadingActivity, PostcardActivity::class.java)
-                            postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                            TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, postCardIntent)
-                        }
-                        R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
-                        R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
-                        R.id.push -> {
-                            val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                            pushMarkDown(diary.title!!, diary.contents!!)
-                        }
-                        R.id.linkEntry -> {
-                            Intent(this@DiaryReadingActivity, TreeTimelineActivity::class.java).apply {
-                                putExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, false)
-                                selectValueLauncher.launch(this)
-                            }
-                        }
+        val popupView =
+            pmrBinding.root.apply {
+                updateAppViews(this)
+                updateTextColors(this)
+                FontUtils.setFontsTypeface(applicationContext, null, this, true)
+                val fragment =
+                    mSectionsPagerAdapter.instantiateItem(
+                        mBinding.diaryViewPager,
+                        mBinding.diaryViewPager.currentItem,
+                    ) as PlaceholderFragment
+                pmrBinding.run {
+                    when (fragment.isEncryptContents()) {
+                        true -> decryptData.visibility = View.VISIBLE
+                        false -> encryptData.visibility = View.VISIBLE
                     }
-                    popupWindow?.dismiss()
-                }
-                delete.setOnClickListener(itemClickListener)
-                postcard.setOnClickListener(itemClickListener)
-                encryptData.setOnClickListener(itemClickListener)
-                decryptData.setOnClickListener(itemClickListener)
-                linkEntry.setOnClickListener(itemClickListener)
+                    val itemClickListener =
+                        View.OnClickListener { view ->
+                            when (view.id) {
+                                R.id.delete -> {
+                                    val positiveListener =
+                                        DialogInterface.OnClickListener { _, _ ->
+                                            EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
+                                            TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
+                                        }
+                                    showAlertDialog(
+                                        getString(R.string.delete_confirm),
+                                        positiveListener,
+                                        { _, _ -> },
+                                        DialogMode.WARNING,
+                                        true,
+                                        getString(R.string.delete),
+                                        getString(R.string.delete),
+                                    )
+                                }
 
-                updateDrawableColorInnerCardView(imgPostcard)
-                updateDrawableColorInnerCardView(imgEncryptData)
-                updateDrawableColorInnerCardView(imgDecryptData)
-                updateDrawableColorInnerCardView(imgDelete)
-                updateDrawableColorInnerCardView(imgContains)
+                                R.id.postcard -> {
+                                    val postCardIntent = Intent(this@DiaryReadingActivity, PostcardActivity::class.java)
+                                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                                    TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, postCardIntent)
+                                }
 
-                if (BuildConfig.FLAVOR == "lab") {
-                    push.visibility = View.VISIBLE
-                    push.setOnClickListener(itemClickListener)
-                    updateDrawableColorInnerCardView(imgPush)
+                                R.id.encryptData -> {
+                                    showEncryptPagePopup(fragment, ENCRYPTION)
+                                }
+
+                                R.id.decryptData -> {
+                                    showEncryptPagePopup(fragment, DECRYPTION)
+                                }
+
+                                R.id.push -> {
+                                    val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                                    pushMarkDown(diary.title!!, diary.contents!!)
+                                }
+
+                                R.id.linkEntry -> {
+                                    Intent(this@DiaryReadingActivity, TreeTimelineActivity::class.java).apply {
+                                        putExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, false)
+                                        selectValueLauncher.launch(this)
+                                    }
+                                }
+                            }
+                            popupWindow?.dismiss()
+                        }
+                    delete.setOnClickListener(itemClickListener)
+                    postcard.setOnClickListener(itemClickListener)
+                    encryptData.setOnClickListener(itemClickListener)
+                    decryptData.setOnClickListener(itemClickListener)
+                    linkEntry.setOnClickListener(itemClickListener)
+
+                    updateDrawableColorInnerCardView(imgPostcard)
+                    updateDrawableColorInnerCardView(imgEncryptData)
+                    updateDrawableColorInnerCardView(imgDecryptData)
+                    updateDrawableColorInnerCardView(imgDelete)
+                    updateDrawableColorInnerCardView(imgContains)
+
+                    if (BuildConfig.FLAVOR == "lab") {
+                        push.visibility = View.VISIBLE
+                        push.setOnClickListener(itemClickListener)
+                        updateDrawableColorInnerCardView(imgPush)
+                    }
                 }
             }
-        }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
     }
 
@@ -701,7 +831,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         private var diaryViewModel: DiaryViewModel = DiaryViewModel()
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?,
+        ): View {
             mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
             mBinding.lifecycleOwner = this
             mBinding.viewModel = mViewModel
@@ -711,12 +845,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //            return mRootView
         }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        override fun onViewCreated(
+            view: View,
+            savedInstanceState: Bundle?,
+        ) {
             super.onViewCreated(view, savedInstanceState)
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.ic_map_marker_2)
             mRootView.let {
                 context?.run {
-                    updateTextColors(it,0,0)
+                    updateTextColors(it, 0, 0)
                     updateAppViews(it)
                     updateCardViewPolicy(it)
                 }
@@ -749,36 +886,42 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 LegacyDiarySubItemCard(
                                     diary = parentDiary,
                                     itemClickCallback = {
-                                        val intent = Intent(
-                                            requireContext(),
-                                            DiaryReadingActivity::class.java
-                                        ).apply {
-                                            putExtra(DIARY_SEQUENCE, parentDiary.sequence)
-                                        }
+                                        val intent =
+                                            Intent(
+                                                requireContext(),
+                                                DiaryReadingActivity::class.java,
+                                            ).apply {
+                                                putExtra(DIARY_SEQUENCE, parentDiary.sequence)
+                                            }
                                         TransitionHelper.startActivityWithTransition(
                                             requireActivity(),
-                                            intent
+                                            intent,
                                         )
                                     },
                                     itemLongClickCallback = {
                                         requireActivity().showAlertDialog(
-                                            "Are you sure you want to unlink this diary?", { _, _ ->
-                                                EasyDiaryDbHelper.findDiaryBy(parentDiary.sequence)
+                                            "Are you sure you want to unlink this diary?",
+                                            { _, _ ->
+                                                EasyDiaryDbHelper
+                                                    .findDiaryBy(parentDiary.sequence)
                                                     ?.run {
-                                                        linkedDiaries.filter { it != getSequence() }
+                                                        linkedDiaries
+                                                            .filter { it != getSequence() }
                                                             .let { newLinkedDiaries ->
                                                                 EasyDiaryDbHelper.beginTransaction()
                                                                 linkedDiaries.clear()
                                                                 linkedDiaries.addAll(
-                                                                    newLinkedDiaries
+                                                                    newLinkedDiaries,
                                                                 )
                                                                 EasyDiaryDbHelper.commitTransaction()
                                                                 initContents()
                                                             }
                                                     }
-                                            }, { _, _ -> }, DialogMode.INFO
+                                            },
+                                            { _, _ -> },
+                                            DialogMode.INFO,
                                         )
-                                    }
+                                    },
                                 )
                             }
                             Spacer(modifier = Modifier.height(20.dp))
@@ -792,36 +935,42 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 LegacyDiarySubItemCard(
                                     diary = childDiary,
                                     itemClickCallback = {
-                                        val intent = Intent(
-                                            requireContext(),
-                                            DiaryReadingActivity::class.java
-                                        ).apply {
-                                            putExtra(DIARY_SEQUENCE, childDiary.sequence)
-                                        }
+                                        val intent =
+                                            Intent(
+                                                requireContext(),
+                                                DiaryReadingActivity::class.java,
+                                            ).apply {
+                                                putExtra(DIARY_SEQUENCE, childDiary.sequence)
+                                            }
                                         TransitionHelper.startActivityWithTransition(
                                             requireActivity(),
-                                            intent
+                                            intent,
                                         )
                                     },
                                     itemLongClickCallback = {
                                         requireActivity().showAlertDialog(
-                                            "Are you sure you want to unlink this diary?", { _, _ ->
-                                                EasyDiaryDbHelper.findDiaryBy(getSequence())
+                                            "Are you sure you want to unlink this diary?",
+                                            { _, _ ->
+                                                EasyDiaryDbHelper
+                                                    .findDiaryBy(getSequence())
                                                     ?.run {
-                                                        linkedDiaries.filter { it != childDiary.sequence }
+                                                        linkedDiaries
+                                                            .filter { it != childDiary.sequence }
                                                             .let { newLinkedDiaries ->
                                                                 EasyDiaryDbHelper.beginTransaction()
                                                                 linkedDiaries.clear()
                                                                 linkedDiaries.addAll(
-                                                                    newLinkedDiaries
+                                                                    newLinkedDiaries,
                                                                 )
                                                                 EasyDiaryDbHelper.commitTransaction()
                                                                 initContents()
                                                             }
                                                     }
-                                            }, { _, _ -> }, DialogMode.INFO
+                                            },
+                                            { _, _ -> },
+                                            DialogMode.INFO,
                                         )
-                                    }
+                                    },
                                 )
                             }
                             Spacer(modifier = Modifier.height(20.dp))
@@ -844,7 +993,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun getPasswordHash() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.encryptKeyHash
 
-        fun highlightDiary(query: String, moveScroll: Boolean = false) {
+        fun highlightDiary(
+            query: String,
+            moveScroll: Boolean = false,
+        ) {
             context?.config?.run {
                 if (diarySearchQueryCaseSensitive) {
                     EasyDiaryUtils.highlightString(mBinding.diaryTitle, query)
@@ -860,8 +1012,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-        fun moveScroll(query: String, startIndex: Int = 0) {
-            val index = mBinding.diaryContents.text.toString().indexOf(query, startIndex, true)
+        fun moveScroll(
+            query: String,
+            startIndex: Int = 0,
+        ) {
+            val index =
+                mBinding.diaryContents.text
+                    .toString()
+                    .indexOf(query, startIndex, true)
             if (index > 0) {
                 val layout = mBinding.diaryContents.layout
                 mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
@@ -891,10 +1049,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     mStoredContents = diaryDto.contents
                     Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
                 }
-                date.text = when (diaryDto.isAllDay) {
-                    true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, requireContext())
-                }
+                date.text =
+                    when (diaryDto.isAllDay) {
+                        true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                        false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, requireContext())
+                    }
                 initBottomContainer()
 
                 arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
@@ -929,10 +1088,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     createAttachedPhotoViewForFlexBox(
                                         requireActivity(),
                                         item,
-                                        photoCount
+                                        photoCount,
                                     ).apply {
                                         setOnClickListener(PhotoClickListener(getSequence(), index))
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -948,7 +1107,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
                             locationLabel.text = it.address
-                        } ?: { mViewModel.isShowAddress.value = false } ()
+                        } ?: { mViewModel.isShowAddress.value = false }()
                     }
 
                     mViewModel.isShowContentsCounting.value = config.enableCountCharacters
@@ -1036,16 +1195,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             return result
         }
 
-        fun getContentsPositionY(): Int {
-            return (mBinding.diaryContents.parent.parent.parent as ScrollView).scrollY
-        }
+        fun getContentsPositionY(): Int = (mBinding.diaryContents.parent.parent.parent as ScrollView).scrollY
 
         companion object {
             /**
              * Returns a new instance of this fragment for the given section
              * number.
              */
-            fun newInstance(sequence: Int, query: String?): PlaceholderFragment {
+            fun newInstance(
+                sequence: Int,
+                query: String?,
+            ): PlaceholderFragment {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
                 args.putInt(DIARY_SEQUENCE, sequence)
@@ -1055,7 +1215,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-        inner class PhotoClickListener(private var diarySequence: Int, var index: Int) : View.OnClickListener {
+        inner class PhotoClickListener(
+            private var diarySequence: Int,
+            var index: Int,
+        ) : View.OnClickListener {
             override fun onClick(v: View) {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
@@ -1070,23 +1233,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
      * one of the sections/tabs/pages.
      */
     inner class SectionsPagerAdapter(
-            fm: androidx.fragment.app.FragmentManager,
-            private val diaryList: List<Diary>,
-            private val query: String?
+        fm: androidx.fragment.app.FragmentManager,
+        private val diaryList: List<Diary>,
+        private val query: String?,
     ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
         override fun getItem(position: Int): androidx.fragment.app.Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(diaryList[position].sequence, query)
         }
 
-        fun sequenceToPageIndex(sequence: Int): Int {
-            return EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
-        }
+        fun sequenceToPageIndex(sequence: Int): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
 
-        override fun getCount(): Int {
-            return diaryList.size
-        }
+        override fun getCount(): Int = diaryList.size
     }
 }

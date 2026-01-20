@@ -14,9 +14,20 @@ open class FixedCardView : CardView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        fixedAppcompatPadding = context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_fixedAppcompatPadding, false)
-        applyCardBackgroundColor = context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_applyCardBackgroundColor, false)
-        dashboardInnerCard = context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_dashboardInnerCard, false)
+        fixedAppcompatPadding =
+            context
+                .obtainStyledAttributes(
+                    attrs,
+                    R.styleable.FixedCardView,
+                ).getBoolean(R.styleable.FixedCardView_fixedAppcompatPadding, false)
+        applyCardBackgroundColor =
+            context
+                .obtainStyledAttributes(
+                    attrs,
+                    R.styleable.FixedCardView,
+                ).getBoolean(R.styleable.FixedCardView_applyCardBackgroundColor, false)
+        dashboardInnerCard =
+            context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_dashboardInnerCard, false)
     }
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 

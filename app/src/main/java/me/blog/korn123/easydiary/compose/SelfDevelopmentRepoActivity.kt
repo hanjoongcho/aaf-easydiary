@@ -14,10 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import me.blog.korn123.commons.utils.FileNode
@@ -36,11 +32,9 @@ import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.TreeViewModel
-import kotlin.getValue
 
 class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     val treeViewModel: TreeViewModel by viewModels()
-
 
     /***************************************************************************************************
      *   override functions
@@ -60,7 +54,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         fetchDiary()
     }
 
-
     /***************************************************************************************************
      *   Define Compose
      *
@@ -73,7 +66,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy
+            context.config.enableCardViewPolicy,
         )
         val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
@@ -108,17 +101,19 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                             val newFirst =
                                 node.copy(isFolderOpen = node.isFolderOpen.not())
                             // pair 객체가 리컴포지션 되도록
-                            treeViewModel.setTreeData(treeData.map { data ->
-                                if (data.first.fullPath == node.fullPath) {
-                                    data.copy(first = newFirst)
-                                } else {
-                                    data
-                                }
-                            })
+                            treeViewModel.setTreeData(
+                                treeData.map { data ->
+                                    if (data.first.fullPath == node.fullPath) {
+                                        data.copy(first = newFirst)
+                                    } else {
+                                        data
+                                    }
+                                },
+                            )
                             // 폴더인 경우, 열고 닫기 토글
                             toggleChildren(newFirst)
                         },
-                        resultAPICallback = { /* no-op */ }
+                        resultAPICallback = { /* no-op */ },
                     )
                 },
                 floatingActionButtonPosition = FabPosition.Center,
@@ -132,39 +127,45 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
      ***************************************************************************************************/
     fun findDiary(): List<Diary> {
         EasyDiaryDbHelper.forceRefresh()
-        return EasyDiaryDbHelper.findDiary( treeViewModel.currentQuery.value,
-            false,
-            listOf(DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
-                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
-                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
-                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
-                DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
-            )).sortedBy { diary -> diary.title }
+        return EasyDiaryDbHelper
+            .findDiary(
+                treeViewModel.currentQuery.value,
+                false,
+                listOf(
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS,
+                    DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF,
+                ),
+            ).sortedBy { diary -> diary.title }
     }
 
     fun fetchDiary() {
         val diaryItems = findDiary()
-        val fileNode = buildFileTree(diaryItems) { diary ->
-            diary.title!!.split("/").toMutableList()
-        }
+        val fileNode =
+            buildFileTree(diaryItems) { diary ->
+                diary.title!!.split("/").toMutableList()
+            }
         val newTreeData = flattenTree(fileNode)
         val originTreeData = treeViewModel.treeData.value
-        treeViewModel.setTreeData(treeData = newTreeData.map { pair ->
-            if (pair.second == 1) pair.first.isShow = true
+        treeViewModel.setTreeData(
+            treeData =
+                newTreeData.map { pair ->
+                    if (pair.second == 1) pair.first.isShow = true
 
-            // 이전 상태 유지
-            val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
-            if (originNode != null) {
-                pair.first.isFolderOpen = originNode.first.isFolderOpen
-                pair.first.isShow = originNode.first.isShow
-                pair.first.isRootShow = originNode.first.isRootShow
-            }
+                    // 이전 상태 유지
+                    val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+                    if (originNode != null) {
+                        pair.first.isFolderOpen = originNode.first.isFolderOpen
+                        pair.first.isShow = originNode.first.isShow
+                        pair.first.isRootShow = originNode.first.isRootShow
+                    }
 
-            pair
-        })
+                    pair
+                },
+        )
 //                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
         treeViewModel.setTotal(diaryItems.size)
     }
 }
-
-

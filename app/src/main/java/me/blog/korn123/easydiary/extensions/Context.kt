@@ -72,6 +72,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.toColorInt
 import androidx.core.location.LocationManagerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
@@ -192,12 +193,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.pow
-import androidx.core.graphics.toColorInt
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.pow
 import kotlin.math.roundToInt
-
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -205,7 +204,6 @@ import kotlin.math.roundToInt
  * You can see original 'Simple-Commons' from below link.
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
-
 
 /***************************************************************************************************
  *   Alarm Extension
@@ -222,13 +220,21 @@ fun Context.openNotification(alarm: Alarm) {
         scheduleNextAlarm(alarm, true)
     } else {
         scheduleNextAlarm(alarm, false)
-        powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
-            acquire(3000)
-        }
+        powerManager
+            .newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE,
+                "myApp:notificationLock",
+            ).apply {
+                acquire(3000)
+            }
     }
 }
 
-fun Context.reExecuteGmsBackup(alarm: Alarm, errorMessage: String, className: String) {
+fun Context.reExecuteGmsBackup(
+    alarm: Alarm,
+    errorMessage: String,
+    className: String,
+) {
     EasyDiaryDbHelper.insertActionLog(ActionLog(className, "reExecuteGmsBackup", "ERROR", errorMessage), this)
     EasyDiaryDbHelper.beginTransaction()
     alarm.retryCount = alarm.retryCount.plus(1)
@@ -236,7 +242,7 @@ fun Context.reExecuteGmsBackup(alarm: Alarm, errorMessage: String, className: St
     openSnoozeNotification(alarm)
 }
 
-//fun Context.executeGmsBackup(alarm: Alarm) {
+// fun Context.executeGmsBackup(alarm: Alarm) {
 //    val realmPath = EasyDiaryDbHelper.getRealmPath()
 //    GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
 //        DriveServiceHelper(this, account).run {
@@ -255,48 +261,73 @@ fun Context.reExecuteGmsBackup(alarm: Alarm, errorMessage: String, className: St
 //            }
 //        }
 //    }
-//}
+// }
 
 @SuppressLint("NewApi", "LaunchActivityFromNotification")
 fun Context.openSnoozeNotification(alarm: Alarm) {
     val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
     if (isOreoPlus()) {
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
+        val channel =
+            NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
         channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         notificationManager.createNotificationChannel(channel)
     }
 
-    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
-        .setDefaults(Notification.DEFAULT_ALL)
-        .setWhen(System.currentTimeMillis())
-        .setSmallIcon(R.drawable.ic_easydiary)
-        .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
-        .setOngoing(false)
-        .setAutoCancel(true)
-        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${getString(R.string.schedule_gms_error_title)}" else getString(R.string.schedule_gms_error_title))
-        .setContentText(getString(R.string.schedule_gms_error_message))
-        .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
-        .setContentIntent(
-            PendingIntent.getBroadcast(this, alarm.id, Intent(this, AlarmReceiver::class.java).apply {
-                putExtra(DOZE_SCHEDULE, true)
-            }, pendingIntentFlag())
-        )
+    val builder =
+        NotificationCompat
+            .Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_easydiary)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setContentTitle(
+                if (config.enableDebugOptionVisibleAlarmSequence) {
+                    "[${alarm.id}] ${getString(
+                        R.string.schedule_gms_error_title,
+                    )}"
+                } else {
+                    getString(R.string.schedule_gms_error_title)
+                },
+            ).setContentText(getString(R.string.schedule_gms_error_message))
+            .setStyle(
+                NotificationCompat
+                    .BigTextStyle()
+                    .bigText(
+                        getString(R.string.schedule_gms_error_message),
+                    ).setSummaryText(getString(R.string.schedule_gms_error_title)),
+            ).setContentIntent(
+                PendingIntent.getBroadcast(
+                    this,
+                    alarm.id,
+                    Intent(this, AlarmReceiver::class.java).apply {
+                        putExtra(DOZE_SCHEDULE, true)
+                    },
+                    pendingIntentFlag(),
+                ),
+            )
     notificationManager.notify(alarm.id, builder.build())
 }
 
 fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
-    val intent: Intent? = when (alarm.workMode) {
-        Alarm.WORK_MODE_DIARY_WRITING -> {
-            Intent(this, DiaryWritingActivity::class.java).apply {
-                putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+    val intent: Intent? =
+        when (alarm.workMode) {
+            Alarm.WORK_MODE_DIARY_WRITING -> {
+                Intent(this, DiaryWritingActivity::class.java).apply {
+                    putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+                }
+            }
+
+            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS, Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
+                Intent(this, DiaryMainActivity::class.java)
+            }
+
+            else -> {
+                null
             }
         }
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS, Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
-            Intent(this, DiaryMainActivity::class.java)
-        }
-        else -> null
-    }
     return PendingIntent.getActivity(this, alarm.id, intent, pendingIntentFlag())
 }
 
@@ -311,7 +342,10 @@ fun Context.cancelAlarmClock(alarm: Alarm) {
     alarmManager.cancel(getAlarmIntent(alarm))
 }
 
-fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
+fun Context.scheduleNextAlarm(
+    alarm: Alarm,
+    showToast: Boolean,
+) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) return
 
@@ -335,7 +369,10 @@ fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
     }
 }
 
-fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
+fun Context.setupAlarmClock(
+    alarm: Alarm,
+    triggerInSeconds: Int,
+) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
     AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(alarm), getAlarmIntent(alarm))
@@ -357,11 +394,15 @@ fun Context.rescheduleEnabledAlarms() {
 }
 
 @SuppressLint("NewApi")
-fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): Notification {
+fun Context.getAlarmNotification(
+    pendingIntent: PendingIntent,
+    alarm: Alarm,
+): Notification {
     if (isOreoPlus()) {
         // Create the NotificationChannel
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
+        val channel =
+            NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
         channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
@@ -376,37 +417,41 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
             description = getString(R.string.schedule_diary_writing_complete)
         }
+
         Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
             description = getString(R.string.schedule_backup_local_complete)
         }
+
         Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
             description = getString(R.string.schedule_backup_gms_complete)
         }
+
         Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo_google_calendar)
             description = "Calendar schedule has been created as a diary."
         }
     }
-    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
-        .setDefaults(Notification.DEFAULT_ALL)
-        .setWhen(System.currentTimeMillis())
-        .setSmallIcon(R.drawable.ic_easydiary)
-        .setLargeIcon(largeIcon)
-        .setOngoing(false)
-        .setAutoCancel(true)
-        .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${alarm.label}" else alarm.label)
-        .setContentText(description)
-        .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
-        .setContentIntent(pendingIntent)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
+    val builder =
+        NotificationCompat
+            .Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_easydiary)
+            .setLargeIcon(largeIcon)
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${alarm.label}" else alarm.label)
+            .setContentText(description)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     val notification = builder.build()
 //    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
 }
-
 
 /***************************************************************************************************
  *   Task Notification
@@ -414,24 +459,29 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
  ***************************************************************************************************/
 
 fun Context.openOverDueNotification() {
-
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
-    val diaryList = EasyDiaryDbHelper.findDiary(
-        null,
-        false,
-        0,
-        0,
-        0
-    ).filter { item -> item.weather in 80..81 }
+    val diaryList =
+        EasyDiaryDbHelper
+            .findDiary(
+                null,
+                false,
+                0,
+                0,
+                0,
+            ).filter { item -> item.weather in 80..81 }
 
     val notificationStartId = 9000
 
-    fun createNotification(notificationInfo: NotificationInfo, bitmap: Bitmap? = null): NotificationCompat.Builder {
+    fun createNotification(
+        notificationInfo: NotificationInfo,
+        bitmap: Bitmap? = null,
+    ): NotificationCompat.Builder {
         if (isOreoPlus()) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", getString(R.string.notification_channel_name_dev), importance)
+            val channel =
+                NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", getString(R.string.notification_channel_name_dev), importance)
             channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
 
             // Register the channel with the system; you can't change the importance
@@ -440,14 +490,15 @@ fun Context.openOverDueNotification() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
-            setDefaults(Notification.DEFAULT_ALL)
-            setWhen(System.currentTimeMillis())
-            setSmallIcon(R.drawable.ic_easydiary)
-            setOnlyAlertOnce(true)
-            setOngoing(false)
-            setAutoCancel(true)
-        }
+        val notificationBuilder =
+            NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev").apply {
+                setDefaults(Notification.DEFAULT_ALL)
+                setWhen(System.currentTimeMillis())
+                setSmallIcon(R.drawable.ic_easydiary)
+                setOnlyAlertOnce(true)
+                setOngoing(false)
+                setAutoCancel(true)
+            }
 
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
@@ -460,11 +511,11 @@ fun Context.openOverDueNotification() {
                         action = BaseNotificationService.ACTION_DEV_DISMISS
                         putExtra(
                             NOTIFICATION_ID,
-                            notificationInfo.id /*An identifier for this notification unique within your application.*/
+                            notificationInfo.id, // An identifier for this notification unique within your application.
                         )
                     },
-                    pendingIntentFlag()
-                )
+                    pendingIntentFlag(),
+                ),
             )
         }
 
@@ -472,43 +523,55 @@ fun Context.openOverDueNotification() {
     }
 
     fun sendNotification(diary: Diary) {
-        val notification = NotificationInfo(
-            if (diary.weather == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
-            useActionButton = true,
-            notificationStartId + diary.sequence
-        )
+        val notification =
+            NotificationInfo(
+                if (diary.weather == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
+                useActionButton = true,
+                notificationStartId + diary.sequence,
+            )
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.POST_NOTIFICATIONS
+                Manifest.permission.POST_NOTIFICATIONS,
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            NotificationManagerCompat.from(this)
-                .notify(notification.id, createNotification(notification).also {
-                    val dday = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
-                    val contentTitle = "${if (dday.contains("＋")) "\uD83D\uDD34" else "\uD83D\uDFE2"} 《${dday}》 ${DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)}"
-                    val contentText = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
+            NotificationManagerCompat
+                .from(this)
+                .notify(
+                    notification.id,
+                    createNotification(notification)
+                        .also {
+                            val dday = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                            val contentTitle = "${if (dday.contains(
+                                    "＋",
+                                )
+                            ) {
+                                "\uD83D\uDD34"
+                            } else {
+                                "\uD83D\uDFE2"
+                            }} 《$dday》 ${DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)}"
+                            val contentText = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
 //                    contentText += diary.contents
-                    it.setContentTitle(contentTitle)
-                    it.setContentText(contentText)
+                            it.setContentTitle(contentTitle)
+                            it.setContentText(contentText)
 //                    it.setLargeIcon(
 //                        BitmapFactory.decodeResource(
 //                            resources,
 //                            notification.largeIconResourceId
 //                        )
 //                    )
-                    it.setContentIntent(
-                        PendingIntent.getActivity(
-                            this,
-                            notification.id /*Private request code for the sender*/,
-                            Intent(this, DiaryReadingActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                putExtra(DIARY_SEQUENCE, diary.sequence)
-
-                            },
-                            pendingIntentFlag()
-                        )
-                    )
-                }.build())
+                            it.setContentIntent(
+                                PendingIntent.getActivity(
+                                    this,
+                                    notification.id /*Private request code for the sender*/,
+                                    Intent(this, DiaryReadingActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        putExtra(DIARY_SEQUENCE, diary.sequence)
+                                    },
+                                    pendingIntentFlag(),
+                                ),
+                            )
+                        }.build(),
+                )
         }
     }
 
@@ -517,16 +580,21 @@ fun Context.openOverDueNotification() {
     }
 }
 
-
 /***************************************************************************************************
  *   Messages
  *
  ***************************************************************************************************/
-fun Context.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.makeToast(
+    message: String,
+    duration: Int = Toast.LENGTH_SHORT,
+) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Context.makeSnackBar(view: View, message: String) {
+fun Context.makeSnackBar(
+    view: View,
+    message: String,
+) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
 }
 
@@ -550,9 +618,19 @@ fun Context.showAlertDialog(
     cancelable: Boolean = true,
     paramTitle: String? = null,
     positiveButtonLabel: String = getString(R.string.ok),
-    negativeButtonLabel: String = getString(R.string.cancel)
+    negativeButtonLabel: String = getString(R.string.cancel),
 ) {
-    showAlertDialog(message, positiveListener, negativeListener, null,  dialogMode, cancelable, paramTitle, positiveButtonLabel, negativeButtonLabel)
+    showAlertDialog(
+        message,
+        positiveListener,
+        negativeListener,
+        null,
+        dialogMode,
+        cancelable,
+        paramTitle,
+        positiveButtonLabel,
+        negativeButtonLabel,
+    )
 }
 
 /**
@@ -579,7 +657,7 @@ fun Context.showAlertDialog(
     paramTitle: String? = null,
     positiveButtonLabel: String = getString(R.string.ok),
     negativeButtonLabel: String = getString(R.string.cancel),
-    neutralButtonLabel: String = "-"
+    neutralButtonLabel: String = "-",
 ) {
     var iconResourceId: Int? = null
     var title: String? = null
@@ -588,18 +666,22 @@ fun Context.showAlertDialog(
             title = getString(R.string.ok)
             iconResourceId = R.drawable.ic_info
         }
+
         DialogMode.WARNING -> {
             title = "WARNING"
             iconResourceId = R.drawable.ic_warning
         }
+
         DialogMode.ERROR -> {
             title = "ERROR"
             iconResourceId = R.drawable.ic_error
         }
+
         DialogMode.SETTING -> {
             title = getString(R.string.ok)
             iconResourceId = R.drawable.ic_settings_7
         }
+
         DialogMode.DEFAULT -> {
             title = getString(R.string.app_name)
             iconResourceId = R.drawable.ic_easydiary
@@ -618,23 +700,21 @@ fun Context.showAlertDialog(
 
 @Deprecated(
     message = "Legacy function",
-    replaceWith = ReplaceWith(
-        "showAlertDialogWithIcon()",
-        "me.blog.korn123.easydiary.extensions.Context"
-    )
+    replaceWith =
+        ReplaceWith(
+            "showAlertDialogWithIcon()",
+            "me.blog.korn123.easydiary.extensions.Context",
+        ),
 )
 fun Context.showAlertDialog(
     message: String,
     positiveListener: DialogInterface.OnClickListener?,
-    cancelable: Boolean = true
+    cancelable: Boolean = true,
 ) {
     showAlertDialog(message, positiveListener, null, DialogMode.INFO, cancelable)
 }
 
-
-fun Context.showAlertDialog(
-    message: String
-) {
+fun Context.showAlertDialog(message: String) {
     showAlertDialog(message, null, null, DialogMode.INFO, true)
 }
 
@@ -644,7 +724,7 @@ fun Context.updateAlertDialogWithIcon(
     message: String? = null,
     customView: View? = null,
     customTitle: String? = null,
-    backgroundAlpha: Int = 255
+    backgroundAlpha: Int = 255,
 ) {
     var title: String? = null
     var iconResourceId: Int? = null
@@ -658,6 +738,7 @@ fun Context.updateAlertDialogWithIcon(
             title = getString(R.string.settings)
             iconResourceId = R.drawable.ic_settings_7
         }
+
         else -> {}
     }
 
@@ -667,7 +748,7 @@ fun Context.updateAlertDialogWithIcon(
         customView,
         customTitle ?: title,
         backgroundAlpha,
-        iconResourceId
+        iconResourceId,
     )
 }
 
@@ -677,7 +758,7 @@ fun Context.updateAlertDialog(
     customView: View? = null,
     customTitle: String? = null,
     backgroundAlpha: Int = 255,
-    customTitleIcon: Int? = null
+    customTitleIcon: Int? = null,
 ) {
     alertDialog.run {
         when (customView == null) {
@@ -697,15 +778,21 @@ fun Context.updateAlertDialog(
                 }
             }
 
-            false -> setView(customView)
+            false -> {
+                setView(customView)
+            }
         }
 //        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(config.backgroundColor))
-        if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setColor(config.backgroundColor)
-            cornerRadius = dpToPixelFloatValue(3F)
-            alpha = backgroundAlpha
-        })
+        if (!isNightMode()) {
+            window?.setBackgroundDrawable(
+                GradientDrawable().apply {
+                    shape = GradientDrawable.RECTANGLE
+                    setColor(config.backgroundColor)
+                    cornerRadius = dpToPixelFloatValue(3F)
+                    alpha = backgroundAlpha
+                },
+            )
+        }
 
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -742,7 +829,6 @@ fun Context.updateAlertDialog(
     }
 }
 
-
 /***************************************************************************************************
  *   ETC Extension
  *
@@ -750,136 +836,212 @@ fun Context.updateAlertDialog(
 val Context.config: Config get() = Config.newInstance(this)
 
 fun Context.isBelowVanillaIceCream() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+
 fun Context.isVanillaIceCreamPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
+
 fun Context.isRedVelvetCakePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
-fun Context.pendingIntentFlag() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
-fun Context.pendingIntentFlagMutable() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+fun Context.pendingIntentFlag() =
+    if (Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.M
+    ) {
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
 
-fun Context.isNightMode() = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-    Configuration.UI_MODE_NIGHT_YES -> false
-    Configuration.UI_MODE_NIGHT_NO -> false
-    else -> false
-}
+fun Context.pendingIntentFlagMutable() =
+    if (Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.M
+    ) {
+        PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
+
+fun Context.isNightMode() =
+    when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+        Configuration.UI_MODE_NIGHT_YES -> false
+        Configuration.UI_MODE_NIGHT_NO -> false
+        else -> false
+    }
 
 fun Context.pauseLock() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
-
         // FIXME remove test code
 //        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
         config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 }
 
-fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAccentColor: Int = 0) {
+fun Context.updateTextColors(
+    viewGroup: ViewGroup,
+    tmpTextColor: Int = 0,
+    tmpAccentColor: Int = 0,
+) {
     if (isNightMode()) return
 
     val textColor = if (tmpTextColor == 0) config.textColor else tmpTextColor
     val backgroundColor = config.backgroundColor
-    val accentColor = if (tmpAccentColor == 0) {
-        if (isBlackAndWhiteTheme()) {
-            Color.WHITE
+    val accentColor =
+        if (tmpAccentColor == 0) {
+            if (isBlackAndWhiteTheme()) {
+                Color.WHITE
+            } else {
+                config.primaryColor
+            }
         } else {
-            config.primaryColor
+            tmpAccentColor
         }
-    } else {
-        tmpAccentColor
-    }
 
     val cnt = viewGroup.childCount
     (0 until cnt)
-            .map { viewGroup.getChildAt(it) }
-            .forEach {
-                when (it) {
-                    is MyTextView -> it.setColors(textColor, accentColor, backgroundColor)
-                    is FixedTextView -> {
-                        if (it.applyGlobalColor) it.setColors(textColor, accentColor, backgroundColor)
-                    }
-                    is MyAppCompatSpinner -> it.setColors(textColor, accentColor, backgroundColor)
-                    is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
-//                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
+        .map { viewGroup.getChildAt(it) }
+        .forEach {
+            when (it) {
+                is MyTextView -> {
+                    it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                is FixedTextView -> {
+                    if (it.applyGlobalColor) it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                is MyAppCompatSpinner -> {
+                    it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                is MySwitchCompat -> {
+                    it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                //                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
-                    is MyEditText -> {
-                        it.setTextColor(textColor)
-                        it.setHintTextColor(textColor.adjustAlpha(0.5f))
-                        it.setLinkTextColor(accentColor)
-                    }
-                    is MyFloatingActionButton -> it.backgroundTintList = ColorStateList.valueOf(accentColor)
-                    is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
-                    is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
-                    is ViewGroup -> updateTextColors(it, textColor, accentColor)
+                is MyEditText -> {
+                    it.setTextColor(textColor)
+                    it.setHintTextColor(textColor.adjustAlpha(0.5f))
+                    it.setLinkTextColor(accentColor)
+                }
+
+                is MyFloatingActionButton -> {
+                    it.backgroundTintList = ColorStateList.valueOf(accentColor)
+                }
+
+                is MySeekBar -> {
+                    it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                is MyButton -> {
+                    it.setColors(textColor, accentColor, backgroundColor)
+                }
+
+                is ViewGroup -> {
+                    updateTextColors(it, textColor, accentColor)
                 }
             }
+        }
 }
 
 fun Context.updateDashboardInnerCard(cardView: CardView) {
     if (config.backgroundColor != -1) cardView.setCardBackgroundColor(config.backgroundColor.darkenColor(-2))
 }
 
-fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
+fun Context.updateAppViews(
+    viewGroup: ViewGroup,
+    tmpBackgroundColor: Int = 0,
+) {
     if (isNightMode()) return
 
     val backgroundColor = if (tmpBackgroundColor == 0) config.backgroundColor else tmpBackgroundColor
     val cnt = viewGroup.childCount
     (0 until cnt)
-            .map { viewGroup.getChildAt(it) }
-            .forEach {
-                when (it) {
-                    is CardView -> {
-                        when (it is FixedCardView) {
-                            true -> {
-                                if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor)
-                                if (it.dashboardInnerCard) {
-                                    updateDashboardInnerCard(it)
-                                }
-                            }
-                            false -> it.setCardBackgroundColor(backgroundColor)
-                        }
-                        updateAppViews(it)
-                    }
-                    is ViewGroup -> updateAppViews(it)
-                    is RadioButton -> {
-                        it.run {
-                            setTextColor(config.textColor)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                buttonTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        config.textColor,
-                                        config.textColor
-                                ))
+        .map { viewGroup.getChildAt(it) }
+        .forEach {
+            when (it) {
+                is CardView -> {
+                    when (it is FixedCardView) {
+                        true -> {
+                            if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor)
+                            if (it.dashboardInnerCard) {
+                                updateDashboardInnerCard(it)
                             }
                         }
-                    }
-                    is CheckBox -> {
-                        it.run {
-                            setTextColor(config.textColor)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                buttonTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        config.textColor,
-                                        config.textColor
-                                ))
-                            }
-                        }
-                    }
-                    is SwitchCompat -> {
-                        it.run {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && config.primaryColor == config.backgroundColor) {
-                                trackTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        ColorUtils.setAlphaComponent(config.textColor, 190),
-                                        config.textColor
-                                ))
-                                thumbTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        ColorUtils.setAlphaComponent(config.textColor, 255),
-                                        config.textColor
-                                ))
-                            }
-                        }
-                    }
-                    is ProgressBar -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  it.indeterminateTintList = ColorStateList.valueOf(config.primaryColor)
-                    }
 
+                        false -> {
+                            it.setCardBackgroundColor(backgroundColor)
+                        }
+                    }
+                    updateAppViews(it)
+                }
+
+                is ViewGroup -> {
+                    updateAppViews(it)
+                }
+
+                is RadioButton -> {
+                    it.run {
+                        setTextColor(config.textColor)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            buttonTintList =
+                                ColorStateList(
+                                    arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                                    intArrayOf(
+                                        config.textColor,
+                                        config.textColor,
+                                    ),
+                                )
+                        }
+                    }
+                }
+
+                is CheckBox -> {
+                    it.run {
+                        setTextColor(config.textColor)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            buttonTintList =
+                                ColorStateList(
+                                    arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                                    intArrayOf(
+                                        config.textColor,
+                                        config.textColor,
+                                    ),
+                                )
+                        }
+                    }
+                }
+
+                is SwitchCompat -> {
+                    it.run {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && config.primaryColor == config.backgroundColor) {
+                            trackTintList =
+                                ColorStateList(
+                                    arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                                    intArrayOf(
+                                        ColorUtils.setAlphaComponent(config.textColor, 190),
+                                        config.textColor,
+                                    ),
+                                )
+                            thumbTintList =
+                                ColorStateList(
+                                    arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                                    intArrayOf(
+                                        ColorUtils.setAlphaComponent(config.textColor, 255),
+                                        config.textColor,
+                                    ),
+                                )
+                        }
+                    }
+                }
+
+                is ProgressBar -> {
+                    if (Build.VERSION.SDK_INT >=
+                        Build.VERSION_CODES.LOLLIPOP
+                    ) {
+                        it.indeterminateTintList = ColorStateList.valueOf(config.primaryColor)
+                    }
                 }
             }
+        }
 }
 
 fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
@@ -887,61 +1049,72 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
 
     val cnt = viewGroup.childCount
     (0 until cnt)
-            .map { viewGroup.getChildAt(it) }
-            .forEach {
-                when (it) {
-                    is FixedCardView -> {
-                        if (it.fixedAppcompatPadding) {
-                            it.useCompatPadding = true
-                            it.cardElevation = dpToPixelFloatValue(2F)
-                        } else {
-                            it.useCompatPadding = false
-                            it.cardElevation = 0F
-                        }
+        .map { viewGroup.getChildAt(it) }
+        .forEach {
+            when (it) {
+                is FixedCardView -> {
+                    if (it.fixedAppcompatPadding) {
+                        it.useCompatPadding = true
+                        it.cardElevation = dpToPixelFloatValue(2F)
+                    } else {
+                        it.useCompatPadding = false
+                        it.cardElevation = 0F
                     }
-                    is CardView -> {
-                        // Temporary code for Compose CardView UI/UX compatibility
-                        var additionalMargin = 0
+                }
 
-                        if (config.enableCardViewPolicy) {
-                            if (it is ItemCardView && it.applyAdditionHorizontalMargin) {
-                                additionalMargin = dpToPixel(3f)
-                            }
+                is CardView -> {
+                    // Temporary code for Compose CardView UI/UX compatibility
+                    var additionalMargin = 0
 
-                            it.useCompatPadding = true
-                            it.cardElevation = dpToPixelFloatValue(2F)
-                        } else {
-                            it.useCompatPadding = false
-                            it.cardElevation = 0F
+                    if (config.enableCardViewPolicy) {
+                        if (it is ItemCardView && it.applyAdditionHorizontalMargin) {
+                            additionalMargin = dpToPixel(3f)
                         }
 
-                        val params = it.layoutParams as MarginLayoutParams
-                        params.marginStart = additionalMargin
-                        params.marginEnd = additionalMargin
-                        it.layoutParams = params
-
-                        updateCardViewPolicy(it)
+                        it.useCompatPadding = true
+                        it.cardElevation = dpToPixelFloatValue(2F)
+                    } else {
+                        it.useCompatPadding = false
+                        it.cardElevation = 0F
                     }
-                    is ViewGroup -> updateCardViewPolicy(it)
+
+                    val params = it.layoutParams as MarginLayoutParams
+                    params.marginStart = additionalMargin
+                    params.marginEnd = additionalMargin
+                    it.layoutParams = params
+
+                    updateCardViewPolicy(it)
+                }
+
+                is ViewGroup -> {
+                    updateCardViewPolicy(it)
                 }
             }
+        }
 }
 
-fun Context.updateTextSize(viewGroup: ViewGroup, context: Context, addSize: Int) {
+fun Context.updateTextSize(
+    viewGroup: ViewGroup,
+    context: Context,
+    addSize: Int,
+) {
     if (isNightMode()) return
 
     val cnt = viewGroup.childCount
     val settingFontSize: Float = config.settingFontSize + addSize
     (0 until cnt)
-            .map { index -> viewGroup.getChildAt(index) }
-            .forEach {
-                when (it) {
-                    is TextView -> {
-                        it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
-                    }
-                    is ViewGroup -> updateTextSize(it, context, addSize)
+        .map { index -> viewGroup.getChildAt(index) }
+        .forEach {
+            when (it) {
+                is TextView -> {
+                    it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                }
+
+                is ViewGroup -> {
+                    updateTextSize(it, context, addSize)
                 }
             }
+        }
 }
 
 fun Context.initTextSize(viewGroup: ViewGroup) {
@@ -951,31 +1124,44 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
     val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
-            .map { index -> viewGroup.getChildAt(index) }
-            .forEach {
-                when (it) {
-                    is me.blog.korn123.easydiary.views.CalendarItem -> {
-                        if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE) {
-                            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * config.settingCalendarFontScale)
+        .map { index -> viewGroup.getChildAt(index) }
+        .forEach {
+            when (it) {
+                is me.blog.korn123.easydiary.views.CalendarItem -> {
+                    if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE) {
+                        it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * config.settingCalendarFontScale)
+                    }
+                }
+
+                is FixedTextView -> {
+                    if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                }
+
+                is Button -> {}
+
+                is TextView -> {
+                    if (it.tag == "tabTitle") return
+                    if (it.text == "Dashboard") return
+                    when (it.id) {
+                        R.id.contentsLength, R.id.locationLabel -> {
+                            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
+                        }
+
+                        R.id.symbolTextArrow -> {}
+
+                        R.id.createdDate -> {}
+
+                        else -> {
+                            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                         }
                     }
-                    is FixedTextView -> {
-                        if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
-                    }
-                    is Button -> {}
-                    is TextView -> { 
-                        if (it.tag == "tabTitle") return
-                        if (it.text == "Dashboard") return
-                        when (it.id) {
-                            R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
-                            R.id.symbolTextArrow -> {}
-                            R.id.createdDate -> {}
-                            else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
-                        }
-                    }
-                    is ViewGroup -> initTextSize(it)
+                }
+
+                is ViewGroup -> {
+                    initTextSize(it)
                 }
             }
+        }
 }
 
 fun Context.initTextSize(textView: TextView) {
@@ -986,21 +1172,33 @@ fun Context.initTextSize(textView: TextView) {
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
 
-fun Context.updateDrawableColorInnerCardView(resourceId: Int, color: Int = config.textColor) {
+fun Context.updateDrawableColorInnerCardView(
+    resourceId: Int,
+    color: Int = config.textColor,
+) {
     if (isNightMode()) return
     changeDrawableIconColor(color, resourceId)
 }
 
-fun Context.updateDrawableColorInnerCardView(imageView: ImageView, color: Int = config.textColor) {
+fun Context.updateDrawableColorInnerCardView(
+    imageView: ImageView,
+    color: Int = config.textColor,
+) {
     if (isNightMode()) return
     changeDrawableIconColor(color, imageView)
 }
 
-fun Context.changeDrawableIconColor(color: Int, imageView: ImageView) {
+fun Context.changeDrawableIconColor(
+    color: Int,
+    imageView: ImageView,
+) {
     imageView.setColorFilter(color, PorterDuff.Mode.SRC_IN)
 }
 
-fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
+fun Context.changeDrawableIconColor(
+    color: Int,
+    resourceId: Int,
+) {
     AppCompatResources.getDrawable(this, resourceId)?.apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN)
@@ -1010,18 +1208,20 @@ fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
     }
 }
 
-fun Context.checkPermission(permissions: Array<String>): Boolean {
-    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && permissions === EXTERNAL_STORAGE_PERMISSIONS) {
-        true -> true
+fun Context.checkPermission(permissions: Array<String>): Boolean =
+    when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && permissions === EXTERNAL_STORAGE_PERMISSIONS) {
+        true -> {
+            true
+        }
+
         false -> {
-            val listDeniedPermissions: List<String> = permissions.filter { permission ->
-                ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED
-            }
+            val listDeniedPermissions: List<String> =
+                permissions.filter { permission ->
+                    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED
+                }
             listDeniedPermissions.isEmpty()
         }
     }
-
-}
 
 fun Context.preferencesContains(key: String): Boolean {
     val preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -1036,10 +1236,19 @@ fun Context.applyFontToMenuItem(mi: MenuItem) {
 
 fun Context.getUriForFile(targetFile: File): Uri {
     val authority = "${this.packageName}.provider"
-    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) FileProvider.getUriForFile(this, authority, targetFile) else Uri.fromFile(targetFile)
+    return if (Build.VERSION.SDK_INT >
+        Build.VERSION_CODES.M
+    ) {
+        FileProvider.getUriForFile(this, authority, targetFile)
+    } else {
+        Uri.fromFile(targetFile)
+    }
 }
 
-fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false): File {
+fun Context.createTemporaryPhotoFile(
+    uri: Uri? = null,
+    fromUri: Boolean = false,
+): File {
     val temporaryFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY, CAPTURE_CAMERA_FILE_NAME)
     if (temporaryFile.exists()) temporaryFile.delete()
 
@@ -1049,7 +1258,10 @@ fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false)
             IOUtils.copy(inputStream, FileOutputStream(temporaryFile.absoluteFile))
             IOUtils.closeQuietly(inputStream)
         }
-        false -> temporaryFile.createNewFile()
+
+        false -> {
+            temporaryFile.createNewFile()
+        }
     }
 
     return temporaryFile
@@ -1096,7 +1308,10 @@ fun Context.shareFile(targetFile: File) {
     shareFile(targetFile, contentResolver.getType(getUriForFile(targetFile)) ?: MIME_TYPE_BINARY)
 }
 
-fun Context.shareFile(targetFile: File, mimeType: String) {
+fun Context.shareFile(
+    targetFile: File,
+    mimeType: String,
+) {
     Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_STREAM, getUriForFile(targetFile))
@@ -1113,7 +1328,13 @@ fun Context.exportRealmFile() {
     config.diaryBackupLocal = System.currentTimeMillis()
 }
 
-fun Context.formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+fun Context.formatTime(
+    showSeconds: Boolean,
+    use24HourFormat: Boolean,
+    hours: Int,
+    minutes: Int,
+    seconds: Int,
+): String {
     val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
     var format = "$hoursFormat:%02d"
 
@@ -1125,7 +1346,11 @@ fun Context.formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: In
     }
 }
 
-fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmSmaller: Boolean): SpannableString {
+fun Context.getFormattedTime(
+    passedSeconds: Int,
+    showSeconds: Boolean,
+    makeAmPmSmaller: Boolean,
+): SpannableString {
     val use24HourFormat = config.use24HourFormat
     val hours = (passedSeconds / 3600) % 24
     val minutes = (passedSeconds / 60) % 60
@@ -1143,7 +1368,12 @@ fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmS
     }
 }
 
-fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+fun Context.formatTo12HourFormat(
+    showSeconds: Boolean,
+    hours: Int,
+    minutes: Int,
+    seconds: Int,
+): String {
     val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
     val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
     return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
@@ -1153,14 +1383,19 @@ fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerMana
 
 @ColorInt
 @SuppressLint("ResourceAsColor")
-fun Context.getColorResCompat(@AttrRes id: Int): Int {
+fun Context.getColorResCompat(
+    @AttrRes id: Int,
+): Int {
     val resolvedAttr = TypedValue()
     theme.resolveAttribute(id, resolvedAttr, true)
     val colorRes = resolvedAttr.run { if (resourceId != 0) resourceId else data }
     return ContextCompat.getColor(this, colorRes)
 }
 
-fun Context.changeBitmapColor(drawableResourceId: Int, color: Int): Bitmap {
+fun Context.changeBitmapColor(
+    drawableResourceId: Int,
+    color: Int,
+): Bitmap {
     val drawable = AppCompatResources.getDrawable(this, drawableResourceId)
     val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
@@ -1176,14 +1411,26 @@ fun Context.changeBitmapColor(drawableResourceId: Int, color: Int): Bitmap {
     return bitmap
 }
 
-fun Context.createBackupContentText(localDeviceFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
+fun Context.createBackupContentText(
+    localDeviceFileCount: Int,
+    duplicateFileCount: Int,
+    successCount: Int,
+    failCount: Int,
+): StringBuilder =
+    StringBuilder()
         .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
         .append(getString(R.string.notification_msg_device_file_count, "*", localDeviceFileCount, "<br>"))
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
 
-fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
+fun Context.createRecoveryContentText(
+    remoteDriveFileCount: Int,
+    duplicateFileCount: Int,
+    successCount: Int,
+    failCount: Int,
+): StringBuilder =
+    StringBuilder()
         .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
         .append(getString(R.string.notification_msg_google_drive_file_count, "*", remoteDriveFileCount, "<br>"))
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
@@ -1202,11 +1449,15 @@ fun Context.isLocationEnabled(): Boolean {
     return LocationManagerCompat.isLocationEnabled(locationManager)
 }
 
-fun Context.hasGPSPermissions() = checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
+fun Context.hasGPSPermissions() =
+    checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
 
 fun Context.getLastKnownLocation(): Location? {
     val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    return when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()) {
+    return when (
+        checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) &&
+            isLocationEnabled()
+    ) {
         true -> {
             val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             val networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
@@ -1220,23 +1471,34 @@ fun Context.getLastKnownLocation(): Location? {
                         networkLocation
                     }
                 }
+
                 gpsLocation != null -> {
                     if (config.enableDebugOptionToastLocation) toast("GPS Location")
                     gpsLocation
                 }
+
                 networkLocation != null -> {
                     if (config.enableDebugOptionToastLocation) toast("Network Location")
                     networkLocation
                 }
-                else -> null
+
+                else -> {
+                    null
+                }
             }
         }
-        false -> null
+
+        false -> {
+            null
+        }
     }
 }
 
-
-fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int): List<Address>? {
+fun Context.getFromLocation(
+    latitude: Double,
+    longitude: Double,
+    maxResults: Int,
+): List<Address>? {
 //    val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
 //    val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
     val addressList = arrayListOf<Address>()
@@ -1248,11 +1510,13 @@ fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int
     return addressList
 }
 
-
 fun Context.fullAddress(address: Address): String {
     val sb = StringBuilder()
     when (address.getAddressLine(0) != null) {
-        true -> sb.append(address.getAddressLine(0))
+        true -> {
+            sb.append(address.getAddressLine(0))
+        }
+
         false -> {
             if (address.countryName != null) sb.append(address.countryName).append(" ")
             if (address.adminArea != null) sb.append(address.adminArea).append(" ")
@@ -1282,13 +1546,17 @@ fun Context.getLabelBackground(): GradientDrawable {
 }
 
 val themeItems = listOf(Launcher.EASY_DIARY, Launcher.DARK, Launcher.GREEN, Launcher.DEBUG)
+
 fun Context.toggleLauncher(launcher: Launcher) {
     themeItems.forEach {
-        checkAppIconColor(it.themeName,it == launcher)
+        checkAppIconColor(it.themeName, it == launcher)
     }
 }
 
-fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
+fun Context.checkAppIconColor(
+    colorName: String,
+    enable: Boolean = false,
+) {
     val appId = BuildConfig.APPLICATION_ID
     toggleAppIconColor(appId, -1, -1, enable, colorName)
 //    if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
@@ -1304,7 +1572,13 @@ fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
 //    }
 }
 
-fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean, colorName: String) {
+fun Context.toggleAppIconColor(
+    appId: String,
+    colorIndex: Int,
+    color: Int,
+    enable: Boolean,
+    colorName: String,
+) {
 //    val className = "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
     val className = "${appId.removeSuffix(".debug")}.activities.DiaryMainActivity.$colorName"
     val state = if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
@@ -1313,18 +1587,18 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
 //        if (enable) {
 //            baseConfig.lastIconColor = color
 //        }
-    } catch (e: Exception) {}
+    } catch (e: Exception) {
+    }
 }
 
-fun Context.dpToPixelFloatValue(dp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
-}
+fun Context.dpToPixelFloatValue(dp: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 
-fun Context.spToPixelFloatValue(sp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics)
-}
+fun Context.spToPixelFloatValue(sp: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics)
 
-fun Context.dpToPixel(dp: Float, policy: Calculation = Calculation.CEIL): Int {
+fun Context.dpToPixel(
+    dp: Float,
+    policy: Calculation = Calculation.CEIL,
+): Int {
     val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
     return when (policy) {
         Calculation.CEIL -> ceil(px).toInt()
@@ -1333,53 +1607,66 @@ fun Context.dpToPixel(dp: Float, policy: Calculation = Calculation.CEIL): Int {
     }
 }
 
-fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(this, getPermissionString(permId)) == PackageManager.PERMISSION_GRANTED
+fun Context.hasPermission(permId: Int) =
+    ContextCompat.checkSelfPermission(this, getPermissionString(permId)) == PackageManager.PERMISSION_GRANTED
 
-fun Context.getPermissionString(id: Int) = when (id) {
-    PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
-    PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
-    PERMISSION_CAMERA -> Manifest.permission.CAMERA
-    PERMISSION_RECORD_AUDIO -> Manifest.permission.RECORD_AUDIO
-    PERMISSION_READ_CONTACTS -> Manifest.permission.READ_CONTACTS
-    PERMISSION_WRITE_CONTACTS -> Manifest.permission.WRITE_CONTACTS
-    PERMISSION_READ_CALENDAR -> Manifest.permission.READ_CALENDAR
-    PERMISSION_WRITE_CALENDAR -> Manifest.permission.WRITE_CALENDAR
-    PERMISSION_CALL_PHONE -> Manifest.permission.CALL_PHONE
-    PERMISSION_ACCESS_FINE_LOCATION ->  Manifest.permission.ACCESS_FINE_LOCATION
-    PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
-    else -> ""
-}
+fun Context.getPermissionString(id: Int) =
+    when (id) {
+        PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
+        PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
+        PERMISSION_CAMERA -> Manifest.permission.CAMERA
+        PERMISSION_RECORD_AUDIO -> Manifest.permission.RECORD_AUDIO
+        PERMISSION_READ_CONTACTS -> Manifest.permission.READ_CONTACTS
+        PERMISSION_WRITE_CONTACTS -> Manifest.permission.WRITE_CONTACTS
+        PERMISSION_READ_CALENDAR -> Manifest.permission.READ_CALENDAR
+        PERMISSION_WRITE_CALENDAR -> Manifest.permission.WRITE_CALENDAR
+        PERMISSION_CALL_PHONE -> Manifest.permission.CALL_PHONE
+        PERMISSION_ACCESS_FINE_LOCATION -> Manifest.permission.ACCESS_FINE_LOCATION
+        PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
+        else -> ""
+    }
 
-fun Context.dp(px: Float): Int =
-    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.displayMetrics).toInt()
+fun Context.dp(px: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.displayMetrics).toInt()
 
-fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf(), isRecyclerItem: Boolean = false) {
-
+fun Context.applyMarkDownPolicy(
+    contentsView: TextView,
+    contents: String,
+    isTimeline: Boolean = false,
+    lineBreakStrings: ArrayList<String> = arrayListOf(),
+    isRecyclerItem: Boolean = false,
+) {
     when (config.enableMarkdown) {
         true -> {
             val transformLineBreak = contents.replace("\n", "  \n")
-            val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}  \n$transformLineBreak" else transformLineBreak
-            val timelineTitle = when {
-                isTimeline && config.boldStyleEnable -> "**${lineBreakStrings[0]}**"
-                isTimeline -> lineBreakStrings[0]
-                else -> ""
-            }
-            val markdownContents = if (isTimeline) "$timelineTitle  \n$mergedContents" else mergedContents
-            val codeBlockTheme = object : AbstractMarkwonPlugin() {
-                override fun configureTheme(builder: MarkwonTheme.Builder) {
-                    builder
-                        .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
-                        .headingBreakHeight(0)
-
-                        .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
-                        .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
-                        .codeBlockTextColor(config.textColor)
-
-                        .codeBackgroundColor(0x9FFFCC80.toInt())
-                        .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
-                        .codeTextColor(Color.BLACK)
-                        .codeTextSize(config.settingFontSize.times(0.8).toInt())
+            val mergedContents =
+                if (lineBreakStrings.size > 1 &&
+                    lineBreakStrings[1].isNotBlank()
+                ) {
+                    "${lineBreakStrings[1]}  \n$transformLineBreak"
+                } else {
+                    transformLineBreak
                 }
+            val timelineTitle =
+                when {
+                    isTimeline && config.boldStyleEnable -> "**${lineBreakStrings[0]}**"
+                    isTimeline -> lineBreakStrings[0]
+                    else -> ""
+                }
+            val markdownContents = if (isTimeline) "$timelineTitle  \n$mergedContents" else mergedContents
+            val codeBlockTheme =
+                object : AbstractMarkwonPlugin() {
+                    override fun configureTheme(builder: MarkwonTheme.Builder) {
+                        builder
+                            .headingTextSizeMultipliers(floatArrayOf(1.3F, 1.2F, 1.1F, 1.0F, .83F, .67F))
+                            .headingBreakHeight(0)
+                            .codeBlockTextSize(config.settingFontSize.times(0.8).toInt())
+                            .codeBlockBackgroundColor(config.backgroundColor.darkenColor())
+                            .codeBlockTextColor(config.textColor)
+                            .codeBackgroundColor(0x9FFFCC80.toInt())
+                            .codeTypeface(FontUtils.getCommonTypeface(this@applyMarkDownPolicy)!!)
+                            .codeTextColor(Color.BLACK)
+                            .codeTextSize(config.settingFontSize.times(0.8).toInt())
+                    }
 
 //                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
 //                    // apply to `code` only
@@ -1392,80 +1679,104 @@ fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTime
 //                        )
 //                    }
 //                }
-            }
-            val tablePlugin = TablePlugin.create { builder: TableTheme.Builder ->
-                val dip: Dip = Dip.create(this)
-                builder
-                    .tableBorderWidth(dip.toPx(1))
-                    .tableBorderColor(Color.BLACK)
-                    .tableCellPadding(dip.toPx(6))
-                    .tableHeaderRowBackgroundColor(
-                        io.noties.markwon.utils.ColorUtils.applyAlpha(
-                            config.primaryColor,
-                            50
-                        )
-                    )
-                    .tableEvenRowBackgroundColor(config.backgroundColor)
-                    .tableOddRowBackgroundColor(config.backgroundColor)
-            }
+                }
+            val tablePlugin =
+                TablePlugin.create { builder: TableTheme.Builder ->
+                    val dip: Dip = Dip.create(this)
+                    builder
+                        .tableBorderWidth(dip.toPx(1))
+                        .tableBorderColor(Color.BLACK)
+                        .tableCellPadding(dip.toPx(6))
+                        .tableHeaderRowBackgroundColor(
+                            io.noties.markwon.utils.ColorUtils.applyAlpha(
+                                config.primaryColor,
+                                50,
+                            ),
+                        ).tableEvenRowBackgroundColor(config.backgroundColor)
+                        .tableOddRowBackgroundColor(config.backgroundColor)
+                }
             val strikeoutPlugin = StrikethroughPlugin.create()
 
             when (isRecyclerItem) {
-                true -> Markwon.builder(this)
-                    .usePlugin(MovementMethodPlugin.none())
-                    .usePlugin(codeBlockTheme)
-                    .usePlugin(ImagesPlugin.create())
-                    .usePlugin(HtmlPlugin.create())
-                    .usePlugin(tablePlugin)
-                    .usePlugin(strikeoutPlugin)
-                    .build()
-                    .apply {
-                        setMarkdown(contentsView, markdownContents)
-                    }
-                false -> Markwon.builder(this)
-                    .usePlugin(codeBlockTheme)
-                    .usePlugin(ImagesPlugin.create())
-                    .usePlugin(HtmlPlugin.create())
-                    .usePlugin(tablePlugin)
-                    .usePlugin(strikeoutPlugin)
-                    .usePlugin(MovementMethodPlugin.link())
-                    .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                    .usePlugin(object : AbstractMarkwonPlugin() {
-                        override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                            super.configureConfiguration(builder)
-                            builder.linkResolver { view, link ->
-                                val customTabsIntent = CustomTabsIntent
-                                    .Builder()
-                                    .setToolbarColor(config.primaryColor)
-                                    .setUrlBarHidingEnabled(true)
-                                    .setShowTitle(false)
-                                    .build()
-                                customTabsIntent.launchUrl(
-                                    this@applyMarkDownPolicy,
-                                    Uri.parse(link)
-                                )
-                            }
+                true -> {
+                    Markwon
+                        .builder(this)
+                        .usePlugin(MovementMethodPlugin.none())
+                        .usePlugin(codeBlockTheme)
+                        .usePlugin(ImagesPlugin.create())
+                        .usePlugin(HtmlPlugin.create())
+                        .usePlugin(tablePlugin)
+                        .usePlugin(strikeoutPlugin)
+                        .build()
+                        .apply {
+                            setMarkdown(contentsView, markdownContents)
                         }
-                    })
-                    .build()
-                    .apply {
-                        setMarkdown(contentsView, markdownContents)
-                    }
+                }
+
+                false -> {
+                    Markwon
+                        .builder(this)
+                        .usePlugin(codeBlockTheme)
+                        .usePlugin(ImagesPlugin.create())
+                        .usePlugin(HtmlPlugin.create())
+                        .usePlugin(tablePlugin)
+                        .usePlugin(strikeoutPlugin)
+                        .usePlugin(MovementMethodPlugin.link())
+                        .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                        .usePlugin(
+                            object : AbstractMarkwonPlugin() {
+                                override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                                    super.configureConfiguration(builder)
+                                    builder.linkResolver { view, link ->
+                                        val customTabsIntent =
+                                            CustomTabsIntent
+                                                .Builder()
+                                                .setToolbarColor(config.primaryColor)
+                                                .setUrlBarHidingEnabled(true)
+                                                .setShowTitle(false)
+                                                .build()
+                                        customTabsIntent.launchUrl(
+                                            this@applyMarkDownPolicy,
+                                            Uri.parse(link),
+                                        )
+                                    }
+                                }
+                            },
+                        ).build()
+                        .apply {
+                            setMarkdown(contentsView, markdownContents)
+                        }
+                }
             }
         }
+
         false -> {
-            contentsView.text = when (isTimeline) {
-                true -> {
-                    val mergedContents = if (lineBreakStrings.size > 1 && lineBreakStrings[1].isNotBlank()) "${lineBreakStrings[1]}\n$contents" else contents
-                    applyBoldToDate(lineBreakStrings[0], mergedContents)
+            contentsView.text =
+                when (isTimeline) {
+                    true -> {
+                        val mergedContents =
+                            if (lineBreakStrings.size > 1 &&
+                                lineBreakStrings[1].isNotBlank()
+                            ) {
+                                "${lineBreakStrings[1]}\n$contents"
+                            } else {
+                                contents
+                            }
+                        applyBoldToDate(lineBreakStrings[0], mergedContents)
+                    }
+
+                    false -> {
+                        contents
+                    }
                 }
-                false -> contents
-            }
         }
     }
 }
 
-fun Context.applyBoldToDate(dateString: String, summary: String): SpannableString {
+fun Context.applyBoldToDate(
+    dateString: String,
+    summary: String,
+): SpannableString {
     val spannableString = SpannableString("$dateString\n$summary")
     if (config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
     return spannableString
