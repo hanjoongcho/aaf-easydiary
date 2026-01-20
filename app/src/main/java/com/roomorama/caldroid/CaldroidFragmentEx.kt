@@ -21,21 +21,16 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.ViewPager
-
 import com.antonyt.infiniteviewpager.InfinitePagerAdapter
 import com.antonyt.infiniteviewpager.InfiniteViewPager
 import com.caldroid.R
-
+import hirondelle.date4j.DateTime
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Date
 import java.util.Formatter
-import java.util.HashMap
 import java.util.Locale
 import java.util.TimeZone
-
-import hirondelle.date4j.DateTime
 
 /**
  * Caldroid is a fragment that display calendar with dates in a month. Caldroid
@@ -71,7 +66,6 @@ import hirondelle.date4j.DateTime
 
 @SuppressLint("DefaultLocale")
 abstract class CaldroidFragmentEx : DialogFragment() {
-
     /**
      * First day of month time
      */
@@ -81,12 +75,16 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * Reuse formatter to print "MMMM yyyy" format
      */
     private val monthYearStringBuilder = StringBuilder(50)
-    private val monthYearFormatter = Formatter(
-            monthYearStringBuilder, Locale.getDefault())
+    private val monthYearFormatter =
+        Formatter(
+            monthYearStringBuilder,
+            Locale.getDefault(),
+        )
 
     /**
      * Caldroid view components
      */
+
     /**
      * To let user customize the navigation buttons
      */
@@ -94,10 +92,12 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         private set
     var rightArrowButton: Button? = null
         private set
+
     /**
      * To let client customize month title textview
      */
     var monthTitleTextView: TextView? = null
+
     /**
      * For client to customize the weekDayGridView
      *
@@ -105,6 +105,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      */
     var weekdayGridView: GridView? = null
         private set
+
     /**
      * For client wants to access dateViewPager
      *
@@ -113,6 +114,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
     var dateViewPager: InfiniteViewPager? = null
         private set
     private var pageChangeListener: DatePageChangeListener? = null
+
     /**
      * For client to access array of rotating fragments
      */
@@ -125,12 +127,14 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * Initial data
      */
     protected var dialogTitle: String? = null
+
     /**
      * Retrieve current month
      * @return
      */
     var month = -1
         protected set
+
     /**
      * Retrieve current year
      * @return
@@ -156,6 +160,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      *
      * @return
      */
+
     /**
      * Client can set custom data in this HashMap
      *
@@ -187,6 +192,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
     /**
      * datePagerAdapters hold 4 adapters, meant to be reused
      */
+
     /**
      * Get 4 adapters of the date grid views. Useful to set custom data and
      * refresh date grid view
@@ -224,6 +230,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * caldroidListener inform library client of the event happens inside
      * Caldroid
      */
+
     /**
      * Set caldroid listener when user click on a date
      *
@@ -247,13 +254,17 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             }
 
             if (selectedDates != null && selectedDates!!.size > 0) {
-                bundle.putStringArrayList(SELECTED_DATES,
-                        CalendarHelper.convertToStringList(selectedDates!!))
+                bundle.putStringArrayList(
+                    SELECTED_DATES,
+                    CalendarHelper.convertToStringList(selectedDates!!),
+                )
             }
 
             if (mDisableDates != null && mDisableDates!!.size > 0) {
-                bundle.putStringArrayList(DISABLE_DATES,
-                        CalendarHelper.convertToStringList(mDisableDates!!))
+                bundle.putStringArrayList(
+                    DISABLE_DATES,
+                    CalendarHelper.convertToStringList(mDisableDates!!),
+                )
             }
 
             if (minDateTime != null) {
@@ -292,6 +303,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      *
      * @return
      */
+
     /**
      * Show or hide the navigation arrows
      *
@@ -344,7 +356,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      *
      * @return "SUN, MON, TUE, WED, THU, FRI, SAT"
      */
-    protected// 17 Feb 2013 is Sunday
+    protected // 17 Feb 2013 is Sunday
     val daysOfWeek: ArrayList<String>
         get() {
             val list = ArrayList<String>()
@@ -355,7 +367,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
 
             for (i in 0..6) {
                 val date = CalendarHelper.convertDateTimeToDate(nextDay)
-                list.add(fmt.format(date).toUpperCase())
+                list.add(fmt.format(date).uppercase())
                 nextDay = nextDay.plusDays(1)
             }
 
@@ -366,32 +378,36 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * Meant to be subclassed. User who wants to provide custom view, need to
      * provide custom adapter here
      */
-    open fun getNewDatesGridAdapter(month: Int, year: Int): CaldroidGridAdapter {
-        return CaldroidGridAdapter(requireActivity(), month, year,
-                getCaldroidData(), extraData)
-    }
+    open fun getNewDatesGridAdapter(
+        month: Int,
+        year: Int,
+    ): CaldroidGridAdapter =
+        CaldroidGridAdapter(
+            requireActivity(),
+            month,
+            year,
+            getCaldroidData(),
+            extraData,
+        )
 
     /**
      * Meant to be subclassed. User who wants to provide custom view, need to
      * provide custom adapter here
      */
-    open fun getNewWeekdayAdapter(themeResource: Int): WeekdayArrayAdapter {
-        return WeekdayArrayAdapter(
-                activity, android.R.layout.simple_list_item_1,
-                daysOfWeek, themeResource)
-    }
-
+    open fun getNewWeekdayAdapter(themeResource: Int): WeekdayArrayAdapter =
+        WeekdayArrayAdapter(
+            activity,
+            android.R.layout.simple_list_item_1,
+            daysOfWeek,
+            themeResource,
+        )
 
     /*
      * For client to access background and text color maps
      */
-    fun getBackgroundForDateTimeMap(): Map<DateTime, Drawable> {
-        return mBackgroundForDateTimeMap
-    }
+    fun getBackgroundForDateTimeMap(): Map<DateTime, Drawable> = mBackgroundForDateTimeMap
 
-    fun getTextColorForDateTimeMap(): Map<DateTime, Int> {
-        return mTextColorForDateTimeMap
-    }
+    fun getTextColorForDateTimeMap(): Map<DateTime, Int> = mTextColorForDateTimeMap
 
     /**
      * mCaldroidData return data belong to Caldroid
@@ -409,7 +425,6 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         mCaldroidData[SQUARE_TEXT_VIEW_CELL] = squareTextViewCell
         mCaldroidData[THEME_RESOURCE] = themeResource
 
-
         // For internal use
         mCaldroidData[_BACKGROUND_FOR_DATETIME_MAP] = mBackgroundForDateTimeMap
         mCaldroidData[_TEXT_COLOR_FOR_DATETIME_MAP] = mTextColorForDateTimeMap
@@ -421,7 +436,8 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * Set backgroundForDateMap
      */
     fun setBackgroundDrawableForDates(
-            backgroundForDateMap: Map<Date, Drawable>?) {
+        backgroundForDateMap: Map<Date, Drawable>?,
+    ) {
         if (backgroundForDateMap == null || backgroundForDateMap.size == 0) {
             return
         }
@@ -446,7 +462,8 @@ abstract class CaldroidFragmentEx : DialogFragment() {
     }
 
     fun setBackgroundDrawableForDateTimes(
-            backgroundForDateTimeMap: Map<DateTime, Drawable>) {
+        backgroundForDateTimeMap: Map<DateTime, Drawable>,
+    ) {
         this.mBackgroundForDateTimeMap.putAll(backgroundForDateTimeMap)
     }
 
@@ -458,7 +475,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         }
     }
 
-    fun setBackgroundDrawableForDate(drawable: Drawable, date: Date) {
+    fun setBackgroundDrawableForDate(
+        drawable: Drawable,
+        date: Date,
+    ) {
         val dateTime = CalendarHelper.convertDateToDateTime(date)
         mBackgroundForDateTimeMap[dateTime] = drawable
     }
@@ -468,8 +488,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         mBackgroundForDateTimeMap.remove(dateTime)
     }
 
-    fun setBackgroundDrawableForDateTime(drawable: Drawable,
-                                         dateTime: DateTime) {
+    fun setBackgroundDrawableForDateTime(
+        drawable: Drawable,
+        dateTime: DateTime,
+    ) {
         mBackgroundForDateTimeMap[dateTime] = drawable
     }
 
@@ -505,11 +527,15 @@ abstract class CaldroidFragmentEx : DialogFragment() {
     }
 
     fun setTextColorForDateTimes(
-            textColorForDateTimeMap: Map<DateTime, Int>) {
+        textColorForDateTimeMap: Map<DateTime, Int>,
+    ) {
         this.mTextColorForDateTimeMap.putAll(textColorForDateTimeMap)
     }
 
-    fun setTextColorForDate(textColorRes: Int, date: Date) {
+    fun setTextColorForDate(
+        textColorRes: Int,
+        date: Date,
+    ) {
         val dateTime = CalendarHelper.convertDateToDateTime(date)
         mTextColorForDateTimeMap[dateTime] = textColorRes
     }
@@ -519,7 +545,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         mTextColorForDateTimeMap.remove(dateTime)
     }
 
-    fun setTextColorForDateTime(textColorRes: Int, dateTime: DateTime) {
+    fun setTextColorForDateTime(
+        textColorRes: Int,
+        dateTime: DateTime,
+    ) {
         mTextColorForDateTimeMap[dateTime] = textColorRes
     }
 
@@ -529,7 +558,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param outState
      * @param key
      */
-    fun saveStatesToKey(outState: Bundle, key: String) {
+    fun saveStatesToKey(
+        outState: Bundle,
+        key: String,
+    ) {
         outState.putBundle(key, savedStates)
     }
 
@@ -539,7 +571,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param savedInstanceState
      * @param key
      */
-    fun restoreStatesFromKey(savedInstanceState: Bundle?, key: String) {
+    fun restoreStatesFromKey(
+        savedInstanceState: Bundle?,
+        key: String,
+    ) {
         if (savedInstanceState != null && savedInstanceState.containsKey(key)) {
             val caldroidSavedState = savedInstanceState.getBundle(key)
             arguments = caldroidSavedState
@@ -553,11 +588,16 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param key
      * @param dialogTag
      */
-    fun restoreDialogStatesFromKey(manager: FragmentManager,
-                                   savedInstanceState: Bundle, key: String, dialogTag: String) {
+    fun restoreDialogStatesFromKey(
+        manager: FragmentManager,
+        savedInstanceState: Bundle,
+        key: String,
+        dialogTag: String,
+    ) {
         restoreStatesFromKey(savedInstanceState, key)
 
-        val existingDialog = manager
+        val existingDialog =
+            manager
                 .findFragmentByTag(dialogTag) as CaldroidFragment?
         if (existingDialog != null) {
             existingDialog.dismiss()
@@ -580,7 +620,6 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param dateTime
      */
     fun moveToDateTime(dateTime: DateTime) {
-
         val firstOfMonth = DateTime(year, month, 1, 0, 0, 0, 0)
         val lastOfMonth = firstOfMonth.endOfMonth
 
@@ -591,8 +630,17 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         if (dateTime.lt(firstOfMonth)) {
             // Get next month of dateTime. When swipe left, month will
             // decrease
-            val firstDayNextMonth = dateTime.plus(0, 1, 0, 0, 0, 0, 0,
-                    DateTime.DayOverflow.LastDay)
+            val firstDayNextMonth =
+                dateTime.plus(
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    DateTime.DayOverflow.LastDay,
+                )
 
             // Refresh adapters
             pageChangeListener!!.setCurrentDateTime(firstDayNextMonth)
@@ -604,8 +652,17 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         } else if (dateTime.gt(lastOfMonth)) {
             // Get last month of dateTime. When swipe right, the month will
             // increase
-            val firstDayLastMonth = dateTime.minus(0, 1, 0, 0, 0, 0, 0,
-                    DateTime.DayOverflow.LastDay)
+            val firstDayLastMonth =
+                dateTime.minus(
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    DateTime.DayOverflow.LastDay,
+                )
 
             // Refresh adapters
             pageChangeListener!!.setCurrentDateTime(firstDayLastMonth)
@@ -614,8 +671,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
 
             // Swipe right
             dateViewPager!!.currentItem = currentItem + 1
-        }// Calendar swipe right when dateTime is in the future
-
+        } // Calendar swipe right when dateTime is in the future
     }
 
     /**
@@ -679,7 +735,6 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             val dateTime = CalendarHelper.convertDateToDateTime(date)
             mDisableDates!!.add(dateTime)
         }
-
     }
 
     /**
@@ -692,8 +747,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param dateFormat
      */
     @JvmOverloads
-    fun setDisableDatesFromString(disableDateStrings: ArrayList<String>?,
-                                  dateFormat: String? = null) {
+    fun setDisableDatesFromString(
+        disableDateStrings: ArrayList<String>?,
+        dateFormat: String? = null,
+    ) {
         if (disableDateStrings == null) {
             return
         }
@@ -701,8 +758,11 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         mDisableDates!!.clear()
 
         for (dateString in disableDateStrings) {
-            val dateTime = CalendarHelper.getDateTimeFromString(
-                    dateString, dateFormat)
+            val dateTime =
+                CalendarHelper.getDateTimeFromString(
+                    dateString,
+                    dateFormat,
+                )
             mDisableDates!!.add(dateTime)
         }
     }
@@ -725,7 +785,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param fromDate
      * @param toDate
      */
-    fun setSelectedDates(fromDate: Date?, toDate: Date?) {
+    fun setSelectedDates(
+        fromDate: Date?,
+        toDate: Date?,
+    ) {
         // Ensure fromDate is before toDate
         if (fromDate == null || toDate == null || fromDate.after(toDate)) {
             return
@@ -753,12 +816,18 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @throws ParseException
      */
     @Throws(ParseException::class)
-    fun setSelectedDateStrings(fromDateString: String,
-                               toDateString: String, dateFormat: String) {
-
-        val fromDate = CalendarHelper.getDateFromString(fromDateString,
-                dateFormat)
-        val toDate = CalendarHelper
+    fun setSelectedDateStrings(
+        fromDateString: String,
+        toDateString: String,
+        dateFormat: String,
+    ) {
+        val fromDate =
+            CalendarHelper.getDateFromString(
+                fromDateString,
+                dateFormat,
+            )
+        val toDate =
+            CalendarHelper
                 .getDateFromString(toDateString, dateFormat)
         setSelectedDates(fromDate, toDate)
     }
@@ -819,12 +888,18 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param minDateString
      * @param dateFormat
      */
-    fun setMinDateFromString(minDateString: String?, dateFormat: String) {
+    fun setMinDateFromString(
+        minDateString: String?,
+        dateFormat: String,
+    ) {
         if (minDateString == null) {
             setMinDate(null)
         } else {
-            minDateTime = CalendarHelper.getDateTimeFromString(minDateString,
-                    dateFormat)
+            minDateTime =
+                CalendarHelper.getDateTimeFromString(
+                    minDateString,
+                    dateFormat,
+                )
         }
     }
 
@@ -848,12 +923,18 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * @param maxDateString
      * @param dateFormat
      */
-    fun setMaxDateFromString(maxDateString: String?, dateFormat: String) {
+    fun setMaxDateFromString(
+        maxDateString: String?,
+        dateFormat: String,
+    ) {
         if (maxDateString == null) {
             setMaxDate(null)
         } else {
-            maxDateTime = CalendarHelper.getDateTimeFromString(maxDateString,
-                    dateFormat)
+            maxDateTime =
+                CalendarHelper.getDateTimeFromString(
+                    maxDateString,
+                    dateFormat,
+                )
         }
     }
 
@@ -865,26 +946,31 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      */
     fun getDateItemClickListener(): OnItemClickListener {
         if (dateItemClickListener == null) {
-            dateItemClickListener = OnItemClickListener { parent, view, position, id ->
-                val dateTime = dateInMonthsList[position]
+            dateItemClickListener =
+                OnItemClickListener { parent, view, position, id ->
+                    val dateTime = dateInMonthsList[position]
 
-                if (caldroidListener != null) {
-                    if (!enableClickOnDisabledDates) {
-                        if (minDateTime != null && dateTime
-                                        .lt(minDateTime)
-                                || maxDateTime != null && dateTime
-                                        .gt(maxDateTime)
-                                || mDisableDates != null && mDisableDates!!
-                                        .indexOf(dateTime) != -1) {
-                            return@OnItemClickListener
+                    if (caldroidListener != null) {
+                        if (!enableClickOnDisabledDates) {
+                            if (minDateTime != null &&
+                                dateTime
+                                    .lt(minDateTime) ||
+                                maxDateTime != null &&
+                                dateTime
+                                    .gt(maxDateTime) ||
+                                mDisableDates != null && mDisableDates!!
+                                    .indexOf(dateTime) != -1
+                            ) {
+                                return@OnItemClickListener
+                            }
                         }
-                    }
 
-                    val date = CalendarHelper
-                            .convertDateTimeToDate(dateTime)
-                    caldroidListener!!.onSelectDate(date, view)
+                        val date =
+                            CalendarHelper
+                                .convertDateTimeToDate(dateTime)
+                        caldroidListener!!.onSelectDate(date, view)
+                    }
                 }
-            }
         }
 
         return dateItemClickListener!!
@@ -898,27 +984,32 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      */
     fun getDateItemLongClickListener(): OnItemLongClickListener {
         if (dateItemLongClickListener == null) {
-            dateItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
-                val dateTime = dateInMonthsList[position]
+            dateItemLongClickListener =
+                OnItemLongClickListener { parent, view, position, id ->
+                    val dateTime = dateInMonthsList[position]
 
-                if (caldroidListener != null) {
-                    if (!enableClickOnDisabledDates) {
-                        if (minDateTime != null && dateTime
-                                        .lt(minDateTime)
-                                || maxDateTime != null && dateTime
-                                        .gt(maxDateTime)
-                                || mDisableDates != null && mDisableDates!!
-                                        .indexOf(dateTime) != -1) {
-                            return@OnItemLongClickListener false
+                    if (caldroidListener != null) {
+                        if (!enableClickOnDisabledDates) {
+                            if (minDateTime != null &&
+                                dateTime
+                                    .lt(minDateTime) ||
+                                maxDateTime != null &&
+                                dateTime
+                                    .gt(maxDateTime) ||
+                                mDisableDates != null && mDisableDates!!
+                                    .indexOf(dateTime) != -1
+                            ) {
+                                return@OnItemLongClickListener false
+                            }
                         }
+                        val date =
+                            CalendarHelper
+                                .convertDateTimeToDate(dateTime)
+                        caldroidListener!!.onLongClickDate(date, view)
                     }
-                    val date = CalendarHelper
-                            .convertDateTimeToDate(dateTime)
-                    caldroidListener!!.onLongClickDate(date, view)
-                }
 
-                true
-            }
+                    true
+                }
         }
 
         return dateItemLongClickListener!!
@@ -937,10 +1028,17 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // This is the method used by the platform Calendar app to get a
         // correctly localized month name for display on a wall calendar
         monthYearStringBuilder.setLength(0)
-        val monthTitle = DateUtils.formatDateRange(activity,
-                monthYearFormatter, millis, millis, MONTH_YEAR_FLAG).toString()
+        val monthTitle =
+            DateUtils
+                .formatDateRange(
+                    activity,
+                    monthYearFormatter,
+                    millis,
+                    millis,
+                    MONTH_YEAR_FLAG,
+                ).toString()
 
-        monthTitleTextView!!.text = monthTitle.toUpperCase(Locale.getDefault())
+        monthTitleTextView!!.text = monthTitle.uppercase(Locale.getDefault())
     }
 
     /**
@@ -1021,7 +1119,8 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             }
 
             // Should show arrow
-            mShowNavigationArrows = args
+            mShowNavigationArrows =
+                args
                     .getBoolean(SHOW_NAVIGATION_ARROWS, true)
 
             // Should enable swipe to change month
@@ -1040,29 +1139,40 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             }
 
             // Get clickable setting
-            enableClickOnDisabledDates = args.getBoolean(
-                    ENABLE_CLICK_ON_DISABLED_DATES, false)
+            enableClickOnDisabledDates =
+                args.getBoolean(
+                    ENABLE_CLICK_ON_DISABLED_DATES,
+                    false,
+                )
 
             // Get disable dates
-            val disableDateStrings = args
+            val disableDateStrings =
+                args
                     .getStringArrayList(DISABLE_DATES)
             if (disableDateStrings != null && disableDateStrings.size > 0) {
                 mDisableDates!!.clear()
                 for (dateString in disableDateStrings) {
-                    val dt = CalendarHelper.getDateTimeFromString(
-                            dateString, null)
+                    val dt =
+                        CalendarHelper.getDateTimeFromString(
+                            dateString,
+                            null,
+                        )
                     mDisableDates!!.add(dt)
                 }
             }
 
             // Get selected dates
-            val selectedDateStrings = args
+            val selectedDateStrings =
+                args
                     .getStringArrayList(SELECTED_DATES)
             if (selectedDateStrings != null && selectedDateStrings.size > 0) {
                 selectedDates!!.clear()
                 for (dateString in selectedDateStrings) {
-                    val dt = CalendarHelper.getDateTimeFromString(
-                            dateString, null)
+                    val dt =
+                        CalendarHelper.getDateTimeFromString(
+                            dateString,
+                            null,
+                        )
                     selectedDates!!.add(dt)
                 }
             }
@@ -1070,14 +1180,20 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             // Get min date and max date
             val minDateTimeString = args.getString(MIN_DATE)
             if (minDateTimeString != null) {
-                minDateTime = CalendarHelper.getDateTimeFromString(
-                        minDateTimeString, null)
+                minDateTime =
+                    CalendarHelper.getDateTimeFromString(
+                        minDateTimeString,
+                        null,
+                    )
             }
 
             val maxDateTimeString = args.getString(MAX_DATE)
             if (maxDateTimeString != null) {
-                maxDateTime = CalendarHelper.getDateTimeFromString(
-                        maxDateTimeString, null)
+                maxDateTime =
+                    CalendarHelper.getDateTimeFromString(
+                        maxDateTimeString,
+                        null,
+                    )
             }
 
             // Get theme
@@ -1109,8 +1225,11 @@ abstract class CaldroidFragmentEx : DialogFragment() {
     /**
      * Setup view
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         retrieveInitialArgs()
 
         // To support keeping instance for dialog
@@ -1120,7 +1239,6 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             }
-
         }
 
         val localInflater = getThemeInflater(activity, inflater, themeResource)
@@ -1130,16 +1248,23 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // for app that wants to change theme dynamically.
         requireActivity().setTheme(themeResource)
 
-        val view = localInflater.inflate(me.blog.korn123.easydiary.R.layout.partial_calendar_view, container, false)
+        val view =
+            localInflater.inflate(
+                me.blog.korn123.easydiary.R.layout.partial_calendar_view,
+                container,
+                false,
+            )
         view.setBackgroundColor(getBackgroundColor())
 
         // For the monthTitleTextView
-        monthTitleTextView = view
+        monthTitleTextView =
+            view
                 .findViewById<View>(R.id.calendar_month_year_textview) as TextView
 
         // For the left arrow button
         leftArrowButton = view.findViewById<View>(R.id.calendar_left_arrow) as Button
-        rightArrowButton = view
+        rightArrowButton =
+            view
                 .findViewById<View>(R.id.calendar_right_arrow) as Button
 
         // Navigate to previous month when user click
@@ -1165,7 +1290,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Inform client that all views are created and not null
@@ -1191,29 +1319,68 @@ abstract class CaldroidFragmentEx : DialogFragment() {
 
         // Setup adapters for the grid views
         // Current month
-        val adapter0 = getNewDatesGridAdapter(
-                currentDateTime.month!!, currentDateTime.year!!)
+        val adapter0 =
+            getNewDatesGridAdapter(
+                currentDateTime.month!!,
+                currentDateTime.year!!,
+            )
 
         // Setup dateInMonthsList
         dateInMonthsList = adapter0.getDatetimeList()
 
         // Next month
-        val nextDateTime = currentDateTime.plus(0, 1, 0, 0, 0, 0, 0,
-                DateTime.DayOverflow.LastDay)
-        val adapter1 = getNewDatesGridAdapter(
-                nextDateTime.month!!, nextDateTime.year!!)
+        val nextDateTime =
+            currentDateTime.plus(
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                DateTime.DayOverflow.LastDay,
+            )
+        val adapter1 =
+            getNewDatesGridAdapter(
+                nextDateTime.month!!,
+                nextDateTime.year!!,
+            )
 
         // Next 2 month
-        val next2DateTime = nextDateTime.plus(0, 1, 0, 0, 0, 0, 0,
-                DateTime.DayOverflow.LastDay)
-        val adapter2 = getNewDatesGridAdapter(
-                next2DateTime.month!!, next2DateTime.year!!)
+        val next2DateTime =
+            nextDateTime.plus(
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                DateTime.DayOverflow.LastDay,
+            )
+        val adapter2 =
+            getNewDatesGridAdapter(
+                next2DateTime.month!!,
+                next2DateTime.year!!,
+            )
 
         // Previous month
-        val prevDateTime = currentDateTime.minus(0, 1, 0, 0, 0, 0, 0,
-                DateTime.DayOverflow.LastDay)
-        val adapter3 = getNewDatesGridAdapter(
-                prevDateTime.month!!, prevDateTime.year!!)
+        val prevDateTime =
+            currentDateTime.minus(
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                DateTime.DayOverflow.LastDay,
+            )
+        val adapter3 =
+            getNewDatesGridAdapter(
+                prevDateTime.month!!,
+                prevDateTime.year!!,
+            )
 
         // Add to the array of adapters
         datePagerAdapters.add(adapter0)
@@ -1228,7 +1395,8 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // Setup InfiniteViewPager and InfinitePagerAdapter. The
         // InfinitePagerAdapter is responsible
         // for reuse the fragments
-        dateViewPager = view
+        dateViewPager =
+            view
                 .findViewById<View>(R.id.months_infinite_pager) as InfiniteViewPager
 
         // Set enable swipe
@@ -1244,8 +1412,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // MonthPagerAdapter actually provides 4 real fragments. The
         // InfinitePagerAdapter only recycles fragment provided by this
         // MonthPagerAdapter
-        val pagerAdapter = MonthPagerAdapter(
-                childFragmentManager)
+        val pagerAdapter =
+            MonthPagerAdapter(
+                childFragmentManager,
+            )
 
         // Provide initial data to the fragments, before they are attached to
         // view.
@@ -1261,8 +1431,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         }
 
         // Setup InfinitePagerAdapter to wrap around MonthPagerAdapter
-        val infinitePagerAdapter = InfinitePagerAdapter(
-                pagerAdapter)
+        val infinitePagerAdapter =
+            InfinitePagerAdapter(
+                pagerAdapter,
+            )
 
         // Use the infinitePagerAdapter to provide data for dateViewPager
         dateViewPager!!.adapter = infinitePagerAdapter
@@ -1287,6 +1459,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          */
         var currentPage = InfiniteViewPager.OFFSET
         private var currentDateTime: DateTime? = null
+
         /**
          * Return 4 adapters
          *
@@ -1299,9 +1472,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          *
          * @return
          */
-        fun getCurrentDateTime(): DateTime? {
-            return currentDateTime
-        }
+        fun getCurrentDateTime(): DateTime? = currentDateTime
 
         fun setCurrentDateTime(dateTime: DateTime) {
             this.currentDateTime = dateTime
@@ -1314,9 +1485,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          * @param position
          * @return
          */
-        private fun getNext(position: Int): Int {
-            return (position + 1) % CaldroidFragment.NUMBER_OF_PAGES
-        }
+        private fun getNext(position: Int): Int = (position + 1) % CaldroidFragment.NUMBER_OF_PAGES
 
         /**
          * Return virtual previous position
@@ -1324,9 +1493,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          * @param position
          * @return
          */
-        private fun getPrevious(position: Int): Int {
-            return (position + 3) % CaldroidFragment.NUMBER_OF_PAGES
-        }
+        private fun getPrevious(position: Int): Int = (position + 3) % CaldroidFragment.NUMBER_OF_PAGES
 
         /**
          * Return virtual current position
@@ -1334,13 +1501,16 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          * @param position
          * @return
          */
-        fun getCurrent(position: Int): Int {
-            return position % CaldroidFragment.NUMBER_OF_PAGES
-        }
+        fun getCurrent(position: Int): Int = position % CaldroidFragment.NUMBER_OF_PAGES
 
         override fun onPageScrollStateChanged(position: Int) {}
 
-        override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {}
+        override fun onPageScrolled(
+            arg0: Int,
+            arg1: Float,
+            arg2: Int,
+        ) {
+        }
 
         fun refreshAdapters(position: Int) {
             // Get adapters to refresh
@@ -1355,34 +1525,91 @@ abstract class CaldroidFragmentEx : DialogFragment() {
                 currentAdapter.notifyDataSetChanged()
 
                 // Refresh previous adapter
-                prevAdapter.setAdapterDateTime(currentDateTime!!.minus(0, 1, 0,
-                        0, 0, 0, 0, DateTime.DayOverflow.LastDay))
+                prevAdapter.setAdapterDateTime(
+                    currentDateTime!!.minus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    ),
+                )
                 prevAdapter.notifyDataSetChanged()
 
                 // Refresh next adapter
-                nextAdapter.setAdapterDateTime(currentDateTime!!.plus(0, 1, 0, 0,
-                        0, 0, 0, DateTime.DayOverflow.LastDay))
+                nextAdapter.setAdapterDateTime(
+                    currentDateTime!!.plus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    ),
+                )
                 nextAdapter.notifyDataSetChanged()
             } else if (position > currentPage) {
                 // Update current date time to next month
-                currentDateTime = currentDateTime!!.plus(0, 1, 0, 0, 0, 0, 0,
-                        DateTime.DayOverflow.LastDay)
+                currentDateTime =
+                    currentDateTime!!.plus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    )
 
                 // Refresh the adapter of next gridview
-                nextAdapter.setAdapterDateTime(currentDateTime!!.plus(0, 1, 0, 0,
-                        0, 0, 0, DateTime.DayOverflow.LastDay))
+                nextAdapter.setAdapterDateTime(
+                    currentDateTime!!.plus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    ),
+                )
                 nextAdapter.notifyDataSetChanged()
-
             } else {
                 // Update current date time to previous month
-                currentDateTime = currentDateTime!!.minus(0, 1, 0, 0, 0, 0, 0,
-                        DateTime.DayOverflow.LastDay)
+                currentDateTime =
+                    currentDateTime!!.minus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    )
 
                 // Refresh the adapter of previous gridview
-                prevAdapter.setAdapterDateTime(currentDateTime!!.minus(0, 1, 0,
-                        0, 0, 0, 0, DateTime.DayOverflow.LastDay))
+                prevAdapter.setAdapterDateTime(
+                    currentDateTime!!.minus(
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        DateTime.DayOverflow.LastDay,
+                    ),
+                )
                 prevAdapter.notifyDataSetChanged()
-            }// Swipe left
+            } // Swipe left
             // Detect if swipe right or swipe left
             // Swipe right
 
@@ -1406,7 +1633,6 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             dateInMonthsList.clear()
             dateInMonthsList.addAll(currentAdapter.getDatetimeList())
         }
-
     }
 
 //    https://stackoverflow.com/questions/56618453/after-migrating-to-androidx-application-crashes-with-attempt-to-invoke-androidx
@@ -1438,8 +1664,10 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         /**
          * Flags to display month
          */
-        private val MONTH_YEAR_FLAG = (DateUtils.FORMAT_SHOW_DATE
-                or DateUtils.FORMAT_NO_MONTH_DAY or DateUtils.FORMAT_SHOW_YEAR)
+        private val MONTH_YEAR_FLAG = (
+            DateUtils.FORMAT_SHOW_DATE
+                or DateUtils.FORMAT_NO_MONTH_DAY or DateUtils.FORMAT_SHOW_YEAR
+        )
 
         val NUMBER_OF_PAGES = 4
 
@@ -1483,8 +1711,11 @@ abstract class CaldroidFragmentEx : DialogFragment() {
          * @param year
          * @return
          */
-        fun newInstance(dialogTitle: String, month: Int,
-                        year: Int): CaldroidFragment {
+        fun newInstance(
+            dialogTitle: String,
+            month: Int,
+            year: Int,
+        ): CaldroidFragment {
             val f = CaldroidFragment()
 
             // Supply num input as an argument.
@@ -1498,7 +1729,11 @@ abstract class CaldroidFragmentEx : DialogFragment() {
             return f
         }
 
-        fun getThemeInflater(context: Context?, origInflater: LayoutInflater, themeResource: Int): LayoutInflater {
+        fun getThemeInflater(
+            context: Context?,
+            origInflater: LayoutInflater,
+            themeResource: Int,
+        ): LayoutInflater {
             val wrapped = ContextThemeWrapper(context, themeResource)
             return origInflater.cloneInContext(wrapped)
         }

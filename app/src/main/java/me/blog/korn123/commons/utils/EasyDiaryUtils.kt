@@ -28,12 +28,16 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
@@ -51,17 +55,29 @@ import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
-import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.fragments.DiaryFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CARD_CONTENT_PADDING_DP
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_MARGIN_DP
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
+import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
+import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
+import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
@@ -70,8 +86,9 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.FileReader
-import java.util.*
-import kotlin.math.roundToInt
+import java.util.Calendar
+import java.util.Locale
+import java.util.UUID
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -261,7 +278,12 @@ object EasyDiaryUtils {
             context.dpToPixel(marginBottom),
         )
         imageView.layoutParams = layoutParams
-        imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+        imageView.background =
+            createBackgroundGradientDrawable(
+                context.config.primaryColor,
+                THUMBNAIL_BACKGROUND_ALPHA,
+                cornerRadius,
+            )
         imageView.scaleType = ImageView.ScaleType.CENTER
         val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
@@ -472,15 +494,35 @@ object EasyDiaryUtils {
 
     fun warningString(textView: TextView) {
         val spannableString = SpannableString(textView.text)
-        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            UnderlineSpan(),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        spannableString.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
         textView.text = spannableString
     }
 
     fun highlightString(textView: TextView) {
         val spannableString = SpannableString(textView.text)
-        spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(ForegroundColorSpan(Color.BLACK), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            BackgroundColorSpan(HIGHLIGHT_COLOR),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.BLACK),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
 //        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 //        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         textView.text = spannableString
@@ -493,8 +535,8 @@ object EasyDiaryUtils {
     ) {
         textView?.let { tv ->
             input?.let { targetString ->
-                val inputLower = targetString.toLowerCase()
-                val contentsLower = tv.text.toString().toLowerCase()
+                val inputLower = targetString.lowercase()
+                val contentsLower = tv.text.toString().lowercase()
                 val spannableString = SpannableString(tv.text)
                 removeSpans(spannableString)
 
@@ -513,7 +555,8 @@ object EasyDiaryUtils {
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
 
-                    indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
+                    indexOfKeyword =
+                        contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
                 tv.text = spannableString
             }
@@ -549,7 +592,10 @@ object EasyDiaryUtils {
                     )
 
                     // Get the next index of the keyword
-                    indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
+                    indexOfKeyword =
+                        spannableString
+                            .toString()
+                            .indexOf(targetString, indexOfKeyword + targetString.length)
                 }
 
                 // Set the final text on TextView
@@ -559,8 +605,12 @@ object EasyDiaryUtils {
     }
 
     fun removeSpans(spannableString: SpannableString) {
-        spannableString.getSpans(0, spannableString.length, BackgroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
-        spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
+        spannableString
+            .getSpans(0, spannableString.length, BackgroundColorSpan::class.java)
+            ?.forEach { spannableString.removeSpan(it) }
+        spannableString
+            .getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
+            ?.forEach { spannableString.removeSpan(it) }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -579,7 +629,10 @@ object EasyDiaryUtils {
                 val layout = textContents.layout
                 if ((layout?.lineCount ?: 0) > max) {
                     val end = layout.getLineEnd(max - 1)
-                    textContents.setText(textContents.text.subSequence(0, end - 1), TextView.BufferType.SPANNABLE)
+                    textContents.setText(
+                        textContents.text.subSequence(0, end - 1),
+                        TextView.BufferType.SPANNABLE,
+                    )
                     textContents.append("…")
                 }
             }
@@ -625,7 +678,12 @@ object EasyDiaryUtils {
             PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
                 setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                showAtLocation(parent, Gravity.TOP or Gravity.RIGHT, 0, parent.context.dpToPixel(24F))
+                showAtLocation(
+                    parent,
+                    Gravity.TOP or Gravity.RIGHT,
+                    0,
+                    parent.context.dpToPixel(24F),
+                )
             }
         content.x = 1000f
         content.y = 0f
@@ -709,7 +767,14 @@ object EasyDiaryUtils {
         endTimeMillis: Long = 0,
     ): Map<Int, Int> {
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-            val listDiary = EasyDiaryDbHelper.findDiary(null, false, startTimeMillis, endTimeMillis, realmInstance = realmInstance)
+            val listDiary =
+                EasyDiaryDbHelper.findDiary(
+                    null,
+                    false,
+                    startTimeMillis,
+                    endTimeMillis,
+                    realmInstance = realmInstance,
+                )
 
             val map = hashMapOf<Int, Int>()
             listDiary.map { diaryDto ->
@@ -790,7 +855,13 @@ object EasyDiaryUtils {
             try {
                 when (photoUri.isContentUri()) {
                     true -> {
-                        BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUri.photoUri)))
+                        BitmapFactory.decodeStream(
+                            context.contentResolver.openInputStream(
+                                Uri.parse(
+                                    photoUri.photoUri,
+                                ),
+                            ),
+                        )
                     }
 
                     false -> {

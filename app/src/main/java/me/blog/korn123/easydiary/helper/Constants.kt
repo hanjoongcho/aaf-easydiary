@@ -396,7 +396,8 @@ const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
  *
  ***************************************************************************************************/
 const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
-const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
+const val NOTIFICATION_CHANNEL_DESCRIPTION =
+    "This channel is used for 'Easy-Diary' data backup and recovery operations."
 const val NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID = 1000
 const val NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID = 1001
 const val NOTIFICATION_GMS_BACKUP_COMPLETE_ID = 1002
@@ -517,22 +518,33 @@ const val GREEN_THEME_TEXT_COLOR = "#4D4C4C"
  ***************************************************************************************************/
 const val SETTING_DEBUG_OPTION_TOAST_LOCATION = "setting_debug_option_toast_location"
 const val SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO = "setting_debug_option_toast_attached_photo"
-const val SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO = "setting_debug_option_toast_notification_info"
-const val SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO = "setting_debug_option_toast_review_flow_info"
-const val SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME = "setting_debug_option_toast_photo_highlight_update_time"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE = "setting_debug_option_visible_diary_sequence"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE = "setting_debug_option_visible_alarm_sequence"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT = "setting_debug_option_visible_chart_weight"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK = "setting_debug_option_visible_chart_stock"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI = "setting_debug_option_visible_font_preview_emoji"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY = "setting_debug_option_visible_temporary_diary"
-const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS = "setting_debug_option_visible_tree_status"
+const val SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO =
+    "setting_debug_option_toast_notification_info"
+const val SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO =
+    "setting_debug_option_toast_review_flow_info"
+const val SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME =
+    "setting_debug_option_toast_photo_highlight_update_time"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE =
+    "setting_debug_option_visible_diary_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE =
+    "setting_debug_option_visible_alarm_sequence"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT =
+    "setting_debug_option_visible_chart_weight"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK =
+    "setting_debug_option_visible_chart_stock"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI =
+    "setting_debug_option_visible_font_preview_emoji"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY =
+    "setting_debug_option_visible_temporary_diary"
+const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS =
+    "setting_debug_option_visible_tree_status"
 
 /***************************************************************************************************
  *   Etc constants
  *
  ***************************************************************************************************/
-val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+val EXTERNAL_STORAGE_PERMISSIONS =
+    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
@@ -636,7 +648,8 @@ const val DOZE_SCHEDULE = "doze_schedule"
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
-const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP = 30F // workaround for cardview inner padding issue
+const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP =
+    30F // workaround for cardview inner padding issue
 const val ATTACH_PHOTO_MARGIN_DP = 3F
 const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 3F
 
@@ -672,3 +685,14 @@ const val DEV_SYNC_MARKDOWN_LIFE = "dev_sync_markdown_life"
 const val DEV_SYNC_MARKDOWN_STOCK_FICS = "dev_sync_markdown_stock_fics"
 const val DEV_SYNC_MARKDOWN_STOCK_ETF = "dev_sync_markdown_stock_etf"
 const val DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE = "dev_sync_markdown_stock_knowledge"
+
+object ColorConstants {
+    const val DARK_GREY = -13421773
+    const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
+}
+
+object ComposeConstants {
+    const val VERTICAL_PADDING = 5F
+    const val HORIZONTAL_PADDING = 5F
+    const val ROUNDED_CORNER_SHAPE_SIZE = 8F
+}

@@ -5,7 +5,9 @@ import me.blog.korn123.easydiary.extensions.exportRealmFile
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.models.Alarm
 
-open class BaseAlarmWorkExecutor(val context: Context) {
+open class BaseAlarmWorkExecutor(
+    val context: Context,
+) {
     open fun executeWork(alarm: Alarm) {
         context.run {
             when (alarm.workMode) {
@@ -13,7 +15,10 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     exportRealmFile()
                     openNotification(alarm)
                 }
-                Alarm.WORK_MODE_DIARY_WRITING -> openNotification(alarm)
+
+                Alarm.WORK_MODE_DIARY_WRITING -> {
+                    openNotification(alarm)
+                }
             }
         }
     }

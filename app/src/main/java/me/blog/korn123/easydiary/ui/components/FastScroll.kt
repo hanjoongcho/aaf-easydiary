@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.ui.components
 
-import androidx.annotation.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
@@ -34,12 +33,11 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils.summaryDiaryLabel
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.models.Diary
 
 @Composable

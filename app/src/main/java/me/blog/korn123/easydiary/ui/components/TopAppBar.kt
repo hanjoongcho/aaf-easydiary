@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -34,58 +33,92 @@ import me.blog.korn123.easydiary.extensions.config
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBehavior: TopAppBarScrollBehavior? = null, close: () -> Unit) {
+fun EasyDiaryActionBar(
+    title: String? = null,
+    subTitle: String? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    close: () -> Unit,
+) {
     val isDarkMode = isSystemInDarkTheme()
     val context = LocalContext.current
 
     val pixelValue = context.config.settingFontSize
     val density = LocalDensity.current
-    val currentTextUnit = with (density) {
-        val temp = pixelValue.toDp()
-        temp.toSp()
-    }
+    val currentTextUnit =
+        with(density) {
+            val temp = pixelValue.toDp()
+            temp.toSp()
+        }
 
     TopAppBar(
         scrollBehavior = scrollBehavior,
-        modifier = Modifier
-            .padding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()),
+        modifier =
+            Modifier
+                .padding(
+                    WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues(),
+                ),
         title = {
-           Column(
-               modifier = Modifier
-                   .fillMaxSize(),
-               verticalArrangement = Arrangement.Center,
-           ) {
-               title?.let {
-                   Text(
-                       text = title,
-                       style = TextStyle(
-                           fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                           color = Color.White,
-                           fontSize = TextUnit(currentTextUnit.value.times(1.0F), TextUnitType.Sp),
-                       ),
-                   )
-               }
-               subTitle?.let {
-                   Text(
-                       text = subTitle,
-                       style = TextStyle(
-                           fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(LocalContext.current),
-                           color = Color.White,
-                           fontSize = TextUnit(currentTextUnit.value.times(0.9F), TextUnitType.Sp),
-                       ),
-                       modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
+            Column(
+                modifier =
+                Modifier,
+//                        .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                title?.let {
+                    Text(
+                        text = title,
+                        style =
+                            TextStyle(
+                                fontFamily =
+                                    if (LocalInspectionMode.current) {
+                                        null
+                                    } else {
+                                        FontUtils.getComposeFontFamily(
+                                            LocalContext.current,
+                                        )
+                                    },
+                                color = Color.White,
+                                fontSize =
+                                    TextUnit(
+                                        currentTextUnit.value.times(1.0F),
+                                        TextUnitType.Sp,
+                                    ),
+                            ),
+                    )
+                }
+                subTitle?.let {
+                    Text(
+                        text = subTitle,
+                        style =
+                            TextStyle(
+                                fontFamily =
+                                    if (LocalInspectionMode.current) {
+                                        null
+                                    } else {
+                                        FontUtils.getComposeFontFamily(
+                                            LocalContext.current,
+                                        )
+                                    },
+                                color = Color.White,
+                                fontSize =
+                                    TextUnit(
+                                        currentTextUnit.value.times(0.9F),
+                                        TextUnitType.Sp,
+                                    ),
+                            ),
+                        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
 //                   modifier = Modifier
 //                       .fillMaxWidth()
 //                       .wrapContentWidth(Alignment.End)
-                   )
-               }
-           }
+                    )
+                }
+            }
         },
         navigationIcon = {
             IconButton(onClick = { close.invoke() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "액션 아이콘"
+                    contentDescription = "액션 아이콘",
                 )
             }
         },
@@ -97,15 +130,16 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBe
 //                )
 //            }
 //        },
-        colors = TopAppBarColors(
+        colors =
+            TopAppBarColors(
 //            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
 //            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
-            Color(LocalContext.current.config.primaryColor),
-            Color(LocalContext.current.config.primaryColor),
-            Color.White,
-            Color.White,
-            Color.White,
-        )
+                Color(LocalContext.current.config.primaryColor),
+                Color(LocalContext.current.config.primaryColor),
+                Color.White,
+                Color.White,
+                Color.White,
+            ),
     )
 }
 
@@ -114,12 +148,13 @@ fun EasyDiaryActionBar(title: String? = null, subTitle: String? = null, scrollBe
 fun DummyActionBar() {
     TopAppBar(
         title = {},
-        colors = TopAppBarColors(
-            Color(LocalContext.current.config.primaryColor),
-            Color(LocalContext.current.config.primaryColor),
-            Color.White,
-            Color.White,
-            Color.White,
-        )
+        colors =
+            TopAppBarColors(
+                Color(LocalContext.current.config.primaryColor),
+                Color(LocalContext.current.config.primaryColor),
+                Color.White,
+                Color.White,
+                Color.White,
+            ),
     )
 }

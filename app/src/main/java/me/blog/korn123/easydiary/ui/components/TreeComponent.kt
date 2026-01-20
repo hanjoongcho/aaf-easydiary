@@ -1,10 +1,6 @@
 package me.blog.korn123.easydiary.ui.components
 
-import android.app.Activity
 import android.content.Intent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
@@ -89,13 +85,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
-import androidx.recyclerview.widget.GridLayoutManager
 import com.simplemobiletools.commons.extensions.toast
-import com.tbuonomo.viewpagerdotsindicator.dpToPx
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -103,22 +96,15 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
-import me.blog.korn123.easydiary.databinding.ItemDiarySubBinding
-import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.syncMarkDown
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
-import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.ColorConstants.HIGHLIGHT_COLOR
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
-import me.blog.korn123.easydiary.models.Diary
 import java.util.Calendar
 
 /***************************************************************************************************
@@ -126,7 +112,6 @@ import java.util.Calendar
  *   SelfDevelopmentRepo Compose Components
  *
  ***************************************************************************************************/
-
 
 @Composable
 fun TreeContent(
@@ -146,9 +131,18 @@ fun TreeContent(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
-    val density =  LocalDensity.current
-    val bottomPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding().plus(
-        WindowInsets.ime.asPaddingValues().calculateBottomPadding()) else 0.dp
+    val density = LocalDensity.current
+    val bottomPadding =
+        if (context.isVanillaIceCreamPlus()) {
+            WindowInsets.navigationBars
+                .asPaddingValues()
+                .calculateBottomPadding()
+                .plus(
+                    WindowInsets.ime.asPaddingValues().calculateBottomPadding(),
+                )
+        } else {
+            0.dp
+        }
 //    val statusBarPadding = if (context.isVanillaIceCreamPlus()) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp
     var showOptionDialog by remember { mutableStateOf(false) }
     var visibleSubTitle by remember { mutableStateOf(true) }
@@ -159,7 +153,8 @@ fun TreeContent(
     var topToolbarHeight by remember { mutableStateOf(0.dp) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val filteredTreeData: List<Pair<FileNode, Int>> = treeData.filter { data -> data.first.isRootShow && data.first.isShow }
+    val filteredTreeData: List<Pair<FileNode, Int>> =
+        treeData.filter { data -> data.first.isRootShow && data.first.isShow }
 
     fun moveScrollPosition() {
         if (context.config.enableDebugOptionVisibleTreeStatus) {
@@ -172,8 +167,6 @@ fun TreeContent(
 //                listState.scrollToItem(0)
 //            }
         }
-
-
     }
 
     fun moveToTodayEntry(treeData: List<Pair<FileNode, Int>>) {
@@ -187,7 +180,10 @@ fun TreeContent(
             if (position != -1) {
                 coroutineScope.launch {
                     toggleWholeTree(true)
-                    listState.scrollToItem(position.plus(1), with(density) { topToolbarHeight.toPx().toInt() }.unaryMinus())
+                    listState.scrollToItem(
+                        position.plus(1),
+                        with(density) { topToolbarHeight.toPx().toInt() }.unaryMinus(),
+                    )
                 }
             }
         }
@@ -228,44 +224,52 @@ fun TreeContent(
                     thumbVisible = true
                 } else {
                     hideJob?.cancel()
-                    hideJob = launch {
-                        delay(delayTimeMillis)
-                        if (!isDraggingThumb) thumbVisible = false
-                    }
+                    hideJob =
+                        launch {
+                            delay(delayTimeMillis)
+                            if (!isDraggingThumb) thumbVisible = false
+                        }
                 }
             }
     }
 
-    OptionDialog (
+    OptionDialog(
         showDialog = showOptionDialog,
         visibleSubTitle = visibleSubTitle,
         visibleSubTitleChaneCallback = { visibleSubTitle = it },
         stretchCard = stretchCard,
         stretchCardChaneCallback = { stretchCard = it },
-        onDismiss = { showOptionDialog = false }
+        onDismiss = { showOptionDialog = false },
     )
 
     Box(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-            .onSizeChanged { containerSize = it }
+        modifier =
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .onSizeChanged { containerSize = it },
     ) {
         val density = LocalDensity.current
-        Column(modifier = Modifier
-            .fillMaxSize()
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             LazyColumn(
                 state = listState,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .background(Color(context.config.screenBackgroundColor)),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(Color(context.config.screenBackgroundColor)),
             ) {
                 item {
                     Spacer(modifier = Modifier.height(topToolbarHeight))
                 }
-                items(items = filteredTreeData, key = { "${it.first.sequence}-${it.first.fullPath}"}) { (node, level) ->
+                items(
+                    items = filteredTreeData,
+                    key = { "${it.first.sequence}-${it.first.fullPath}" },
+                ) { (node, level) ->
                     TreeCard(
                         weather = node.weather,
                         title = node.name,
@@ -279,29 +283,31 @@ fun TreeContent(
                         isFolderOpen = node.isFolderOpen,
                         visibleSubTitle = visibleSubTitle,
                         stretchCard = stretchCard,
-                        modifier = Modifier.padding(
-                            0.dp,
-                            0.dp,
-                            0.dp,
-                            0.dp
-                        ),
+                        modifier =
+                            Modifier.padding(
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                            ),
                         onClick = {
                             if (node.isFile) {
                                 if (isResultAPI) {
-                                   resultAPICallback(node.sequence)
+                                    resultAPICallback(node.sequence)
                                 } else {
                                     // 파일인 경우, 해당 다이어리 읽기 화면으로 이동
-                                    val detailIntent = Intent(
-                                        context,
-                                        DiaryReadingActivity::class.java
-                                    )
+                                    val detailIntent =
+                                        Intent(
+                                            context,
+                                            DiaryReadingActivity::class.java,
+                                        )
                                     detailIntent.putExtra(
                                         DIARY_SEQUENCE,
-                                        node.sequence
+                                        node.sequence,
                                     )
                                     detailIntent.putExtra(
                                         SELECTED_SEARCH_QUERY,
-                                        currentQuery
+                                        currentQuery,
                                     )
 //                                                detailIntent.putExtra(
 //                                                    SELECTED_SYMBOL_SEQUENCE,
@@ -309,13 +315,13 @@ fun TreeContent(
 //                                                )
                                     TransitionHelper.startActivityWithTransition(
                                         activity,
-                                        detailIntent
+                                        detailIntent,
                                     )
                                 }
                             } else {
                                 folderOnClick(node)
                             }
-                        }
+                        },
                     ) {
                         if (!node.isFile) {
 //                                        makeToast(node.fullPath)
@@ -337,26 +343,26 @@ fun TreeContent(
         AnimatedVisibility(
             visible = !thumbVisible,
             enter = fadeIn(animationSpec = tween(durationMillis)),
-            exit = fadeOut(animationSpec = tween(durationMillis))
+            exit = fadeOut(animationSpec = tween(durationMillis)),
         ) {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 TreeToolbar(
                     title = "[Total: $total] category or title",
                     currentQuery = currentQuery,
-                    modifier = settingCardModifier
-                        .padding(
-                            0.dp,
-                            0.dp,
-                            0.dp,
-                            0.dp
-                        )
-                        .zIndex(1f)
-                        .align(Alignment.TopCenter)
-                        .onGloballyPositioned {
-                            topToolbarHeight = with(density) { it.size.height.toDp() }
-                        },
+                    modifier =
+                        settingCardModifier
+                            .padding(
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                            ).zIndex(1f)
+                            .align(Alignment.TopCenter)
+                            .onGloballyPositioned {
+                                topToolbarHeight = with(density) { it.size.height.toDp() }
+                            },
                     enableCardViewPolicy = enableCardViewPolicy,
                 ) { query ->
                     updateQuery(query)
@@ -364,11 +370,12 @@ fun TreeContent(
                 }
 
                 BottomToolBar(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .onGloballyPositioned {
-                            bottomToolbarHeight = with(density) { it.size.height.toDp() }
-                        },
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .onGloballyPositioned {
+                                bottomToolbarHeight = with(density) { it.size.height.toDp() }
+                            },
                     bottomPadding = bottomPadding,
                     treeData = treeData,
                     showOptionDialog = { showOptionDialog = true },
@@ -378,8 +385,8 @@ fun TreeContent(
                             activity,
                             Intent(
                                 context,
-                                DiaryWritingActivity::class.java
-                            )
+                                DiaryWritingActivity::class.java,
+                            ),
                         )
                     },
                     expandTreeCallback = {
@@ -407,19 +414,20 @@ fun TreeContent(
                     moveToTodayEntry = {
                         // move to today entry
                         moveToTodayEntry(treeData)
-                    }
+                    },
                 )
             }
         }
 
         if (isLoading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
 //                                    .background(Color(0x88624747))
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
         }
@@ -431,20 +439,22 @@ fun TreeContent(
             isDraggingThumb = isDraggingThumb,
             thumbVisible = thumbVisible,
             containerSize = containerSize,
-            modifier = Modifier
-                .align(Alignment.TopEnd),
+            modifier =
+                Modifier
+                    .align(Alignment.TopEnd),
             showDebugCard = showDebugCard,
             updateThumbVisible = { thumbVisible = it },
             updateDraggingThumb = { isDraggingThumb = it },
             dragEndCallback = {
                 hideJob?.cancel()
                 coroutineScope.launch {
-                    hideJob = launch {
-                        delay(delayTimeMillis)
-                        if (!isDraggingThumb) thumbVisible = false
-                    }
+                    hideJob =
+                        launch {
+                            delay(delayTimeMillis)
+                            if (!isDraggingThumb) thumbVisible = false
+                        }
                 }
-            }
+            },
         )
     }
 }
@@ -459,51 +469,61 @@ fun TreeToolbar(
     fontColor: Color = Color(LocalContext.current.config.textColor),
     alpha: Float = 1.0f,
     fontWeight: FontWeight = FontWeight.Normal,
-    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-        LocalContext.current
-    ),
+    fontFamily: FontFamily? =
+        if (LocalInspectionMode.current) {
+            null
+        } else {
+            FontUtils.getComposeFontFamily(
+                LocalContext.current,
+            )
+        },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callback: (query: String) -> Unit = {}
+    callback: (query: String) -> Unit = {},
 ) {
     var isFocused by remember { mutableStateOf(false) }
     Box(
 //        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
 //        shape = RoundedCornerShape(15.dp),
 //        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
-        modifier = modifier
-            .padding(10.dp)
-            .shadow(
-                elevation = 15.dp,
-                shape = RoundedCornerShape(15.dp),
-                clip = false // 기본값
-            )
-            .background(
-                color = if (isFocused) Color(LocalContext.current.config.primaryColor) else Color(
-                    LocalContext.current.config.backgroundColor
+        modifier =
+            modifier
+                .padding(10.dp)
+                .shadow(
+                    elevation = 15.dp,
+                    shape = RoundedCornerShape(15.dp),
+                    clip = false, // 기본값
+                ).background(
+                    color =
+                        if (isFocused) {
+                            Color(LocalContext.current.config.primaryColor)
+                        } else {
+                            Color(
+                                LocalContext.current.config.backgroundColor,
+                            )
+                        },
+                    shape = RoundedCornerShape(15.dp),
                 ),
-                shape = RoundedCornerShape(15.dp)
-            )
-//            .alpha(0.8f)
-        ,
+        //            .alpha(0.8f)
 //        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
 //            .padding(5.dp, 5.dp)),
 //        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
     ) {
         Column(
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp),
         ) {
             Row(
                 modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically) {
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 var text by remember { mutableStateOf(currentQuery) }
                 val density = LocalDensity.current
-                val textUnit = with(density) {
-                    val temp = fontSize.toDp()
-                    temp.toSp()
-                }
+                val textUnit =
+                    with(density) {
+                        val temp = fontSize.toDp()
+                        temp.toSp()
+                    }
 
                 val focusRequester = remember { FocusRequester() }
-
 
                 // 화면이 그려진 직후 포커스 요청
 //                LaunchedEffect(Unit) {
@@ -517,29 +537,37 @@ fun TreeToolbar(
                         text = it
                         callback.invoke(text)
                     },
-                    label = { Text(text = title, style = TextStyle(
-                        fontFamily = fontFamily,
-                        fontWeight = fontWeight,
+                    label = {
+                        Text(
+                            text = title,
+                            style =
+                                TextStyle(
+                                    fontFamily = fontFamily,
+                                    fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                        color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    )) },
-                    colors = TextFieldDefaults.colors(
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,   // 포커스 시 배경
-                        unfocusedContainerColor = Color.Transparent // 포커스 없을 때 배경
-                    ),
-                    textStyle = TextStyle(
-                        fontFamily = fontFamily,
-                        fontWeight = fontWeight,
+                                    color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
+                                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                                ),
+                        )
+                    },
+                    colors =
+                        TextFieldDefaults.colors(
+                            cursorColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = Color.Transparent, // 포커스 시 배경
+                            unfocusedContainerColor = Color.Transparent, // 포커스 없을 때 배경
+                        ),
+                    textStyle =
+                        TextStyle(
+                            fontFamily = fontFamily,
+                            fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                        color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
-                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                    ),
+                            color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
+                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                        ),
                     singleLine = true,
                     trailingIcon = {
                         if (text.isNotEmpty()) {
@@ -550,18 +578,19 @@ fun TreeToolbar(
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Clear text",
-                                    tint = Color.White
+                                    tint = Color.White,
                                 )
                             }
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            isFocused = focusState.isFocused
-                        }
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+                                isFocused = focusState.isFocused
+                            },
                 )
             }
         }
@@ -586,9 +615,14 @@ fun TreeCard(
     stretchCard: Boolean = false,
     modifier: Modifier,
     fontSize: Float = LocalContext.current.config.settingFontSize,
-    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-        LocalContext.current
-    ),
+    fontFamily: FontFamily? =
+        if (LocalInspectionMode.current) {
+            null
+        } else {
+            FontUtils.getComposeFontFamily(
+                LocalContext.current,
+            )
+        },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
@@ -601,86 +635,101 @@ fun TreeCard(
             if (!isFile) {
                 Column(
                     Modifier
-                        .padding(start = (level.minus(1) * 20).dp)
+                        .padding(start = (level.minus(1) * 20).dp),
                 ) {
                     IconButton(onClick = onClick, modifier = Modifier.size(32.dp)) {
                         Icon(
-                            painter = if (isFolderOpen) painterResource(id = R.drawable.arrow_drop_down_24px) else painterResource(id = R.drawable.arrow_right_24px),
+                            painter =
+                                if (isFolderOpen) {
+                                    painterResource(id = R.drawable.arrow_drop_down_24px)
+                                } else {
+                                    painterResource(
+                                        id = R.drawable.arrow_right_24px,
+                                    )
+                                },
                             contentDescription = null,
-
                             tint = Color(LocalContext.current.config.primaryColor),
-
-                            )
+                        )
                     }
                 }
             }
             Column(
-                modifier = if (isFile) Modifier
-                    .padding(start = ((level.minus(1) * 20) + 32).dp)
-                    .fillMaxWidth()
-                    .weight(1f) // 남은 공간 모두 차지
-                else Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                modifier =
+                    if (isFile) {
+                        Modifier
+                            .padding(start = ((level.minus(1) * 20) + 32).dp)
+                            .fillMaxWidth()
+                            .weight(1f) // 남은 공간 모두 차지
+                    } else {
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    },
             ) {
-
-                val cardModifier = modifier
-                    .padding(1.dp, 1.dp)
-                    .combinedClickable(
-                        onClick = { onClick.invoke() },
-                        onLongClick = { onLongClick.invoke() }
-                    )
+                val cardModifier =
+                    modifier
+                        .padding(1.dp, 1.dp)
+                        .combinedClickable(
+                            onClick = { onClick.invoke() },
+                            onLongClick = { onLongClick.invoke() },
+                        )
                 if (stretchCard) {
                     cardModifier.fillMaxWidth()
                 }
                 Card(
-                    shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+                    shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                     colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                     modifier = if (stretchCard) cardModifier.fillMaxWidth() else cardModifier,
-                    elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
-                        modifier = Modifier
-                            .padding(10.dp, 7.dp),
-
-                        ) {
-                        val nodeModifier = Modifier
-                            .padding(0.dp, 0.dp)
+                        modifier =
+                            Modifier
+                                .padding(10.dp, 7.dp),
+                    ) {
+                        val nodeModifier =
+                            Modifier
+                                .padding(0.dp, 0.dp)
                         Row(
                             modifier = nodeModifier,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            var originTitle = if (isFile) title else "📂 $title";
+                            var originTitle = if (isFile) title else "📂 $title"
                             originTitle =
                                 if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[$sequence] $originTitle" else originTitle
-                            val annotatedText = buildAnnotatedString {
-                                append(originTitle)
-                                if (currentQuery.isNotBlank()) {
-                                    var startIndex =
-                                        originTitle.indexOf(currentQuery, 0, ignoreCase = true)
-                                    while (startIndex >= 0) {
-                                        addStyle(
-                                            style = SpanStyle(
-                                                background = Color(HIGHLIGHT_COLOR),
-                                                color = Color.Black,
-                                                fontWeight = FontWeight.Normal
-                                            ),
-                                            start = startIndex,
-                                            end = startIndex + currentQuery.length
-                                        )
-                                        startIndex = originTitle.indexOf(
-                                            currentQuery,
-                                            startIndex + currentQuery.length,
-                                            ignoreCase = true
-                                        )
+                            val annotatedText =
+                                buildAnnotatedString {
+                                    append(originTitle)
+                                    if (currentQuery.isNotBlank()) {
+                                        var startIndex =
+                                            originTitle.indexOf(currentQuery, 0, ignoreCase = true)
+                                        while (startIndex >= 0) {
+                                            addStyle(
+                                                style =
+                                                    SpanStyle(
+                                                        background = Color(HIGHLIGHT_COLOR),
+                                                        color = Color.Black,
+                                                        fontWeight = FontWeight.Normal,
+                                                    ),
+                                                start = startIndex,
+                                                end = startIndex + currentQuery.length,
+                                            )
+                                            startIndex =
+                                                originTitle.indexOf(
+                                                    currentQuery,
+                                                    startIndex + currentQuery.length,
+                                                    ignoreCase = true,
+                                                )
+                                        }
                                     }
                                 }
-                            }
                             if (isFile) {
                                 AndroidView(
-                                    modifier = Modifier
-                                        .width(20.dp).height(20.dp),
+                                    modifier =
+                                        Modifier
+                                            .width(20.dp)
+                                            .height(20.dp),
                                     factory = { ctx ->
                                         ImageView(ctx).apply {
 //                                            layoutParams = ViewGroup.LayoutParams(
@@ -694,7 +743,7 @@ fun TreeCard(
                                     update = { rootView ->
                                         val context = rootView.context
                                         FlavorUtils.initWeatherView(context, rootView, weather)
-                                    }
+                                    },
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
                             }
@@ -704,7 +753,7 @@ fun TreeCard(
                                 fontSize = fontSize,
                                 fontFamily = fontFamily,
                                 lineSpacingScaleFactor = lineSpacingScaleFactor,
-                                maxLines = 1
+                                maxLines = 1,
                             )
                         }
                         if (visibleSubTitle) {
@@ -712,7 +761,7 @@ fun TreeCard(
                                 if (LocalContext.current.config.enableDebugOptionVisibleDiarySequence) "[level: $level] $subTitle" else subTitle
                             Row(
                                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 SimpleText(
                                     text = displaySubTitle,
@@ -720,15 +769,16 @@ fun TreeCard(
                                     fontSize = fontSize.times(0.8f),
                                     fontFamily = fontFamily,
                                     lineSpacingScaleFactor = lineSpacingScaleFactor,
-                                    maxLines = 1
+                                    maxLines = 1,
                                 )
                             }
                         }
                         if (LocalContext.current.config.enableDebugOptionVisibleTreeStatus) {
-                            val displaySubTitle = "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level][currentTimeMillis: $currentTimeMillis]"
+                            val displaySubTitle =
+                                "[isFolderOpen: $isFolderOpen][isRootShow: $isRootShow][isShow: $isShow][level: $level][currentTimeMillis: $currentTimeMillis]"
                             Row(
                                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 SimpleText(
                                     text = displaySubTitle,
@@ -749,22 +799,27 @@ fun TreeCard(
 @Composable
 fun OptionDialog(
     showDialog: Boolean,
-    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-        LocalContext.current
-    ),
+    fontFamily: FontFamily? =
+        if (LocalInspectionMode.current) {
+            null
+        } else {
+            FontUtils.getComposeFontFamily(
+                LocalContext.current,
+            )
+        },
     visibleSubTitle: Boolean,
     visibleSubTitleChaneCallback: (Boolean) -> Unit,
     stretchCard: Boolean,
     stretchCardChaneCallback: (Boolean) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     if (showDialog) {
         AlertDialog(
-            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
             containerColor = Color(LocalContext.current.config.backgroundColor),
             onDismissRequest = onDismiss,
             confirmButton = {
-                TextButton (onClick = onDismiss) {
+                TextButton(onClick = onDismiss) {
                     SimpleText(text = "확인")
                 }
             },
@@ -780,7 +835,9 @@ fun OptionDialog(
                 SimpleText(
                     text = "트리뷰 옵션설정",
                     fontWeight = FontWeight.Bold,
-                    fontSize = LocalContext.current.config.settingFontSize.times(1.3f),
+                    fontSize =
+                        LocalContext.current.config.settingFontSize
+                            .times(1.3f),
                 )
             },
             text = {
@@ -794,17 +851,18 @@ fun OptionDialog(
                             modifier = Modifier.padding(start = 10.dp),
                             checked = visibleSubTitle,
                             onCheckedChange = visibleSubTitleChaneCallback,
-                            thumbContent = if (visibleSubTitle) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            }
+                            thumbContent =
+                                if (visibleSubTitle) {
+                                    {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                                        )
+                                    }
+                                } else {
+                                    null
+                                },
                         )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -816,21 +874,22 @@ fun OptionDialog(
                             modifier = Modifier.padding(start = 10.dp),
                             checked = stretchCard,
                             onCheckedChange = stretchCardChaneCallback,
-                            thumbContent = if (stretchCard) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            }
+                            thumbContent =
+                                if (stretchCard) {
+                                    {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                                        )
+                                    }
+                                } else {
+                                    null
+                                },
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -852,25 +911,26 @@ fun BottomToolBar(
 ) {
     Box(
 //        modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))
-        modifier = modifier
-            .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
-            .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
-            .padding(bottom = 5.dp) // 최소 5dp 패딩 유지
+        modifier =
+            modifier
+                .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
+                .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+                .padding(bottom = 5.dp), // 최소 5dp 패딩 유지
     ) {
         val scrollState = rememberScrollState()
         val focusManager = LocalFocusManager.current
         val context = LocalContext.current
         val activity = LocalActivity.current
 
-        Row (
-            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End), // 우측정렬 + 간격
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
-                .horizontalScroll(scrollState) // 가로 스크롤 적용
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
+                    .horizontalScroll(scrollState), // 가로 스크롤 적용
         ) {
-
             Spacer(modifier = Modifier.width(5.dp))
             FloatingActionButton(
                 onClick = { closeCallback() },
@@ -878,20 +938,36 @@ fun BottomToolBar(
                 contentColor = Color.White,
                 shape = RoundedCornerShape(12.dp),
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "Close"
+                    contentDescription = "Close",
                 )
             }
-            CustomElevatedButton(text = "New Entry", iconResourceId = R.drawable.ic_edit, iconSize = 16.dp) { writeDiaryCallback() }
-            CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+            CustomElevatedButton(
+                text = "New Entry",
+                iconResourceId = R.drawable.ic_edit,
+                iconSize = 16.dp,
+            ) { writeDiaryCallback() }
+            CustomElevatedButton(
+                text = "TODAY",
+                iconResourceId = R.drawable.ic_time_8_w,
+                iconSize = 16.dp,
+            ) {
                 // move to today entry
                 moveToTodayEntry()
             }
-            CustomElevatedButton(text = "Expand All", iconResourceId = R.drawable.ic_expand, iconSize = 16.dp) { expandTreeCallback() }
-            CustomElevatedButton(text = "Collapse All", iconResourceId = R.drawable.ic_collapse, iconSize = 16.dp) { collapseTreeCallback() }
+            CustomElevatedButton(
+                text = "Expand All",
+                iconResourceId = R.drawable.ic_expand,
+                iconSize = 16.dp,
+            ) { expandTreeCallback() }
+            CustomElevatedButton(
+                text = "Collapse All",
+                iconResourceId = R.drawable.ic_collapse,
+                iconSize = 16.dp,
+            ) { collapseTreeCallback() }
             CustomElevatedButton(text = "↑ Top") { scrollTop() }
             CustomElevatedButton(text = "↓  Bottom") { scrollEnd() }
             CustomElevatedButton(text = "Clear Focus") {
@@ -904,11 +980,11 @@ fun BottomToolBar(
                 contentColor = Color.White,
                 shape = RoundedCornerShape(12.dp),
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_settings_7),
-                    contentDescription = "옵션 설정"
+                    contentDescription = "옵션 설정",
                 )
             }
 
@@ -917,11 +993,14 @@ fun BottomToolBar(
     }
 }
 
-private fun getIndexBySequence(treeData: List<Pair<FileNode, Int>>, sequence: Int): Int {
+private fun getIndexBySequence(
+    treeData: List<Pair<FileNode, Int>>,
+    sequence: Int,
+): Int {
     var targetIndex = -1
     treeData.forEachIndexed { index, data ->
         if (data.first.sequence == sequence) {
-            targetIndex  = index
+            targetIndex = index
             return@forEachIndexed
         }
     }

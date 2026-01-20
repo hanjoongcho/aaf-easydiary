@@ -13,8 +13,8 @@ import android.widget.LinearLayout
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
-import me.blog.korn123.commons.utils.DateUtils
 import io.realm.Sort
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity.Companion.INITIALIZE_TIME_MILLIS
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
@@ -23,10 +23,17 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.fragments.CalendarFragment
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Formatter
+import java.util.Locale
 
 /**
  * Created by Hanjoong.Cho on 2017-03-28
@@ -35,7 +42,6 @@ import java.util.*
  */
 
 class CalendarActivity : EasyDiaryActivity() {
-
     /***************************************************************************************************
      *   global properties
      *
@@ -47,7 +53,6 @@ class CalendarActivity : EasyDiaryActivity() {
     private var mDiaryList: MutableList<Diary> = mutableListOf()
     private var mArrayAdapterDiary: ArrayAdapter<Diary>? = null
 
-
     /***************************************************************************************************
      *   override functions
      *
@@ -57,20 +62,29 @@ class CalendarActivity : EasyDiaryActivity() {
         mBinding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE && !isLandScape()) {
-            mBinding.calendarCard.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 6F)
-            mBinding.frameBottom?.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 4F)
+            mBinding.calendarCard.layoutParams =
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 6F)
+            mBinding.frameBottom?.layoutParams =
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 4F)
         }
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = getString(R.string.calendar_title)
-            setDisplayHomeAsUpEnabled(true)    
+            setDisplayHomeAsUpEnabled(true)
         }
 
-        mDatePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-            mCalendar.set(year, month, dayOfMonth)
-            mCalendarFragment.moveToDate(mCalendar.time)
-            selectDateAndRefreshView()
-        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
+        mDatePickerDialog =
+            DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    mCalendar.set(year, month, dayOfMonth)
+                    mCalendarFragment.moveToDate(mCalendar.time)
+                    selectDateAndRefreshView()
+                },
+                mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH),
+            )
 
         if (config.enableCardViewPolicy) {
             mBinding.calendarCard.useCompatPadding = true
@@ -79,18 +93,20 @@ class CalendarActivity : EasyDiaryActivity() {
             mBinding.calendarCard.useCompatPadding = false
             mBinding.calendarCard.cardElevation = 0F
         }
-        
+
         val cal = Calendar.getInstance()
         val currentDate = cal.time
         refreshList()
-        mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
+        mArrayAdapterDiary =
+            DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
         mBinding.selectedList.adapter = mArrayAdapterDiary
-        mBinding.selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val diaryDto = adapterView.adapter.getItem(i) as Diary
-            val detailIntent = Intent(this@CalendarActivity, DiaryReadingActivity::class.java)
-            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
-        }
+        mBinding.selectedList.onItemClickListener =
+            AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                val diaryDto = adapterView.adapter.getItem(i) as Diary
+                val detailIntent = Intent(this@CalendarActivity, DiaryReadingActivity::class.java)
+                detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+                TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
+            }
 
         mCalendarFragment = CalendarFragment()
 
@@ -116,31 +132,55 @@ class CalendarActivity : EasyDiaryActivity() {
         t.replace(R.id.calendar1, mCalendarFragment)
         t.commit()
 
-        mCalendarFragment.caldroidListener = object : CaldroidListener() {
-            override fun onSelectDate(date: Date, view: View) {
-                mCalendar.time = date
-                syncDatePicker()
-                selectDateAndRefreshView()
-            }
+        mCalendarFragment.caldroidListener =
+            object : CaldroidListener() {
+                override fun onSelectDate(
+                    date: Date,
+                    view: View,
+                ) {
+                    mCalendar.time = date
+                    syncDatePicker()
+                    selectDateAndRefreshView()
+                }
 
-            override fun onChangeMonth(month: Int, year: Int) {
-                val monthYearFlag = android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
-                val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
-                val calendar = Calendar.getInstance(Locale.getDefault())
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month - 1)
-                calendar.set(Calendar.DATE, 1)
-                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, calendar.timeInMillis, calendar.timeInMillis, monthYearFlag).toString()
-                supportActionBar?.subtitle = monthTitle.toUpperCase(Locale.getDefault())
+                override fun onChangeMonth(
+                    month: Int,
+                    year: Int,
+                ) {
+                    val monthYearFlag =
+                        android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
+                    val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
+                    val calendar = Calendar.getInstance(Locale.getDefault())
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, month - 1)
+                    calendar.set(Calendar.DATE, 1)
+                    val monthTitle =
+                        android.text.format.DateUtils
+                            .formatDateRange(
+                                this@CalendarActivity,
+                                monthYearFormatter,
+                                calendar.timeInMillis,
+                                calendar.timeInMillis,
+                                monthYearFlag,
+                            ).toString()
+                    supportActionBar?.subtitle = monthTitle.uppercase(Locale.getDefault())
+                }
+
+                override fun onLongClickDate(
+                    date: Date?,
+                    view: View?,
+                ) {}
+
+                override fun onCaldroidViewCreated() {}
             }
-            override fun onLongClickDate(date: Date?, view: View?) { }
-            override fun onCaldroidViewCreated() { }
-        }
 
         mBinding.writeDiary.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryWritingActivity::class.java).apply {
-                putExtra(INITIALIZE_TIME_MILLIS, mCalendar.timeInMillis)
-            })
+            TransitionHelper.startActivityWithTransition(
+                this,
+                Intent(this, DiaryWritingActivity::class.java).apply {
+                    putExtra(INITIALIZE_TIME_MILLIS, mCalendar.timeInMillis)
+                },
+            )
         }
     }
 
@@ -149,7 +189,7 @@ class CalendarActivity : EasyDiaryActivity() {
         refreshList()
         mCalendarFragment.refreshView()
     }
-    
+
     /**
      * Save current states of the Caldroid here
      */
@@ -173,16 +213,21 @@ class CalendarActivity : EasyDiaryActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
     private fun refreshList() {
         val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-        val sort: Sort = if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
+        val sort: Sort =
+            if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.findDiaryByDateString(formatter.format(mCalendar.time), sort))
+        mDiaryList.addAll(
+            EasyDiaryDbHelper.findDiaryByDateString(
+                formatter.format(mCalendar.time),
+                sort,
+            ),
+        )
         mArrayAdapterDiary?.notifyDataSetChanged()
         mBinding.selectedList.setSelection(0)
 
@@ -203,6 +248,10 @@ class CalendarActivity : EasyDiaryActivity() {
     }
 
     private fun syncDatePicker() {
-        mDatePickerDialog.updateDate(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
+        mDatePickerDialog.updateDate(
+            mCalendar.get(Calendar.YEAR),
+            mCalendar.get(Calendar.MONTH),
+            mCalendar.get(Calendar.DAY_OF_MONTH),
+        )
     }
 }

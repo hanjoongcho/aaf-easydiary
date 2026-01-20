@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+include(":app")
+// include ':app', ':aafactory-commons'
+// project(':aafactory-commons').projectDir = new File(settingsDir, "../aafactory-commons/commons")

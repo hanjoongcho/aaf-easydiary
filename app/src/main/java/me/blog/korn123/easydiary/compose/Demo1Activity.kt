@@ -65,15 +65,15 @@ import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
+import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
+import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.horizontalPadding
-import me.blog.korn123.easydiary.ui.components.roundedCornerShapeSize
-import me.blog.korn123.easydiary.ui.components.verticalPadding
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class Demo1Activity : EasyDiaryComposeBaseActivity() {
@@ -553,20 +553,20 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         ) {
                             itemsIndexed(items) { index, diary ->
                                 Card(
-                                    shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+                                    shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                                     colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                                     modifier = (
                                         if (enableCardViewPolicy) {
                                             modifier.padding(
-                                                horizontalPadding.dp,
-                                                verticalPadding.dp,
+                                                HORIZONTAL_PADDING.dp,
+                                                VERTICAL_PADDING.dp,
                                             )
                                         } else {
                                             modifier
                                                 .padding(1.dp, 1.dp)
                                         }
                                     ),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                                 ) {
                                     LegacyDiaryItemCard(
                                         diary = diary,

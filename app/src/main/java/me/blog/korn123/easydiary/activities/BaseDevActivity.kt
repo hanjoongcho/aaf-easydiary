@@ -44,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -59,7 +60,6 @@ import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -340,22 +340,23 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     },
                 )
             }
+
             SwitchCardWithImage(
-                title = currentContext.getString(R.string.task_symbol_top_order_title),
-                description = currentContext.getString(R.string.task_symbol_top_order_description),
+                title = stringResource(R.string.task_symbol_top_order_title),
+                description = stringResource(R.string.task_symbol_top_order_description),
                 modifier = modifier,
                 isOn = true,
                 imageResourceId = R.drawable.ic_select_symbol,
             ) {}
             SimpleCardWithImage(
-                title = currentContext.getString(R.string.google_drive_account_information_title),
-                description = currentContext.getString(R.string.google_drive_account_sign_in_description),
+                title = stringResource(R.string.google_drive_account_information_title),
+                description = stringResource(R.string.google_drive_account_sign_in_description),
                 modifier = modifier,
                 imageResourceId = R.drawable.ic_select_symbol,
             ) {}
             SwitchCardWithImage(
-                title = currentContext.getString(R.string.task_symbol_top_order_title),
-                description = currentContext.getString(R.string.task_symbol_top_order_description),
+                title = stringResource(R.string.task_symbol_top_order_title),
+                description = stringResource(R.string.task_symbol_top_order_description),
                 modifier = modifier,
                 isOn = true,
                 imageResourceId = R.drawable.ic_select_symbol,
@@ -947,7 +948,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     updateConsole("Job has already started.")
                 } else {
                     mCoroutineJob1 =
-                        GlobalScope.launch {
+                        CoroutineScope(Dispatchers.IO).launch {
                             // launch a new coroutine and keep a reference to its Job
                             for (i in 1..50) {
                                 if (isActive) {
@@ -995,7 +996,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 for (k in 1..3) {
-                    GlobalScope.launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         // launch a new coroutine and keep a reference to its Job
                         for (i in 1..10) {
                             val currentThreadName = Thread.currentThread().name
