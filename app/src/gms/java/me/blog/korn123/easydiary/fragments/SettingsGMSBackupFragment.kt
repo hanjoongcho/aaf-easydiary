@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -47,7 +48,6 @@ import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -625,7 +625,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 .Builder(NetHttpTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
                 .build()
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 calendarService.calendarList().list().execute()
                 mPermissionCallback.invoke()
@@ -659,7 +659,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 .Builder(NetHttpTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
                 .build()
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 calendarService.calendarList().list().execute()
                 mPermissionCallback.invoke()
@@ -711,7 +711,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
                         mBinding.syncGoogleCalendar.visibility = View.VISIBLE
 
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch(Dispatchers.IO) {
                             val result =
                                 if (nextPageToken == null) {
                                     calendarService
@@ -780,7 +780,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
 
                     fun fetchCalendarList() {
                         var alertDialog: AlertDialog? = null
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch(Dispatchers.IO) {
                             val result = calendarService.calendarList().list().execute()
                             withContext(Dispatchers.Main) {
                                 val builder = AlertDialog.Builder(requireActivity())

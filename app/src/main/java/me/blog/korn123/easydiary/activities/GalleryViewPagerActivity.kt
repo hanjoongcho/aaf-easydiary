@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +44,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val attachedPhotos = GalleryActivity.getAttachedPhotos(this@GalleryViewPagerActivity)
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()
@@ -59,15 +60,21 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
 
                 mBinding.run {
                     viewPager.adapter = GalleryPagerAdapter()
-                    viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    viewPager.addOnPageChangeListener(
+                        object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                            override fun onPageScrolled(
+                                position: Int,
+                                positionOffset: Float,
+                                positionOffsetPixels: Int,
+                            ) {}
 
-                        override fun onPageSelected(position: Int) {
-                            toolbar.title = "${position + 1} / $mAttachedPhotoCount"
-                        }
+                            override fun onPageSelected(position: Int) {
+                                toolbar.title = "${position + 1} / $mAttachedPhotoCount"
+                            }
 
-                        override fun onPageScrollStateChanged(state: Int) {}
-                    })
+                            override fun onPageScrollStateChanged(state: Int) {}
+                        },
+                    )
                     viewPager.setCurrentItem(sequence, false)
                 }
             }
@@ -91,10 +98,14 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                         }
 
                         false -> {
-                            if (attachedPhoto.diary.isEncrypt) makeToast("Encrypted files cannot be shared.") else shareFile(
-                                attachedPhoto.file,
-                                MIME_TYPE_JPEG
-                            )
+                            if (attachedPhoto.diary.isEncrypt) {
+                                makeToast("Encrypted files cannot be shared.")
+                            } else {
+                                shareFile(
+                                    attachedPhoto.file,
+                                    MIME_TYPE_JPEG,
+                                )
+                            }
                         }
                     }
                 }
@@ -105,10 +116,10 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                             this@GalleryViewPagerActivity,
                             Intent(
                                 this@GalleryViewPagerActivity,
-                                DiaryReadingActivity::class.java
+                                DiaryReadingActivity::class.java,
                             ).apply {
                                 putExtra(DIARY_SEQUENCE, it.sequence)
-                            }
+                            },
                         )
                     } ?: run { makeToast("There is no linked diary information.") }
                 }
@@ -120,11 +131,12 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
     }
 
     inner class GalleryPagerAdapter : androidx.viewpager.widget.PagerAdapter() {
-        override fun getCount(): Int {
-            return mAttachedPhotos.size
-        }
+        override fun getCount(): Int = mAttachedPhotos.size
 
-        override fun instantiateItem(container: ViewGroup, position: Int): View {
+        override fun instantiateItem(
+            container: ViewGroup,
+            position: Int,
+        ): View {
             val photoView = PhotoView(container.context)
             val attachedPhoto = mAttachedPhotos[position]
             val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) "" else attachedPhoto.file.path)
@@ -138,23 +150,29 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                     textView.typeface = FontUtils.getCommonTypeface(container.context)
                     textView.text = if (attachedPhoto.diary?.isEncrypt == true) "The diary is encrypted. You will need to decrypt the diary to see the attached photos." else container.context.getString(R.string.photo_view_error_info)
                     container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return textView    
+                    return textView
                 }
+
                 false -> {
                     // Now just add PhotoView to ViewPager and return it
                     photoView.setImageBitmap(bitmap)
                     container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return photoView    
+                    return photoView
                 }
             }
         }
 
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        override fun destroyItem(
+            container: ViewGroup,
+            position: Int,
+            `object`: Any,
+        ) {
             container.removeView(`object` as View)
         }
 
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object`
-        }
+        override fun isViewFromObject(
+            view: View,
+            `object`: Any,
+        ): Boolean = view === `object`
     }
 }

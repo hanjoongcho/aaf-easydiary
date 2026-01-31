@@ -28,36 +28,42 @@ import me.blog.korn123.easydiary.helper.SETTING_DATETIME_FORMAT
 import java.util.TimeZone
 
 class CaldroidItemAdapter(
-        val activity: Activity,
-        month: Int,
-        year: Int,
-        caldroidData: Map<String, Any?>,
-        extraData: Map<String, Any>
+    val activity: Activity,
+    month: Int,
+    year: Int,
+    caldroidData: Map<String, Any?>,
+    extraData: Map<String, Any>,
 ) : CaldroidGridAdapter(activity, month, year, caldroidData, extraData) {
     var mDiameter = 0
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        val itemView: View = convertView ?: run {
-            val binding = FragmentCustomCellBinding.inflate(activity.layoutInflater)
-            binding.root.apply {
-                tag = binding
-                context?.initTextSize(this)
-                FontUtils.setFontsTypeface(context, null, this)
-                setBackgroundColor(context.config.backgroundColor)
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View? {
+        val itemView: View =
+            convertView ?: run {
+                val binding = FragmentCustomCellBinding.inflate(activity.layoutInflater)
+                binding.root.apply {
+                    tag = binding
+                    context?.initTextSize(this)
+                    FontUtils.setFontsTypeface(context, null, this)
+                    setBackgroundColor(context.config.backgroundColor)
+                }
             }
-        }
 
         val binding = itemView.tag as FragmentCustomCellBinding
 
         // Get dateTime of this cell
         val dateTime = this.datetimeList[position]
-        val calendarDate = binding.calendarDate.apply {
+        val calendarDate =
+            binding.calendarDate.apply {
 //            changeDateColor(binding, dateTime)
-            text = datetimeList[position].day.toString()
-            if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(activity , paint, "22", 1.3F)
-            layoutParams?.width = mDiameter
-            layoutParams?.height = mDiameter
-        }
+                text = datetimeList[position].day.toString()
+                if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(activity, paint, "22", 1.3F)
+                layoutParams?.width = mDiameter
+                layoutParams?.height = mDiameter
+            }
 
         if (dateTime.month != month) { // Set color of the dates in previous / next month
             calendarDate.alpha = 0.5F
@@ -95,8 +101,6 @@ class CaldroidItemAdapter(
                         (item3.getChildAt(1) as TextView).setTextColor(context.config.textColor)
                     }
 
-
-
                     // Somehow after setBackgroundResource, the padding collapse.
                     // This is to recover the padding
                     root.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
@@ -105,13 +109,14 @@ class CaldroidItemAdapter(
                     val mDiaryList = EasyDiaryDbHelper.findDiaryByDateString(dateString, sort)
                     itemCount.run {
                         setTextColor(Color.RED)
-                        text = if (count > 3) {
-                            context.getString(R.string.diary_item_count, count - 3)
-                        } else {
-                            null
-                        }
+                        text =
+                            if (count > 3) {
+                                context.getString(R.string.diary_item_count, count - 3)
+                            } else {
+                                null
+                            }
                     }
-                    if (mDiaryList.isNotEmpty() && mDiaryList.any {diary -> diary.isHoliday}) calendarDate.setTextColor(Color.RED)
+                    if (mDiaryList.isNotEmpty() && mDiaryList.any { diary -> diary.isHoliday }) calendarDate.setTextColor(Color.RED)
 
                     if (!activity.isDestroyed) {
                         when {
@@ -129,13 +134,13 @@ class CaldroidItemAdapter(
                                     (getChildAt(1) as TextView).text = " "
                                 }
                             }
+
                             mDiaryList.size == 1 -> {
                                 item1.run {
                                     val item = mDiaryList[0]
                                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
-
                                 }
                                 item2.run {
                                     (getChildAt(0) as ImageView).setImageResource(0)
@@ -146,6 +151,7 @@ class CaldroidItemAdapter(
                                     (getChildAt(1) as TextView).text = " "
                                 }
                             }
+
                             mDiaryList.size == 2 -> {
                                 item1.run {
                                     val item = mDiaryList[0]
@@ -164,6 +170,7 @@ class CaldroidItemAdapter(
                                     (getChildAt(1) as TextView).text = " "
                                 }
                             }
+
                             else -> {
                                 item1.run {
                                     val item = mDiaryList[0]
@@ -195,7 +202,11 @@ class CaldroidItemAdapter(
         return itemView
     }
 
-    private fun changeDateColor(binding: FragmentCustomCellBinding, dateTime: DateTime, isSelect: Boolean = false) {
+    private fun changeDateColor(
+        binding: FragmentCustomCellBinding,
+        dateTime: DateTime,
+        isSelect: Boolean = false,
+    ) {
         binding.calendarDate.run {
             if (dateTime == getToday()) {
                 setBackgroundResource(R.drawable.bg_calendar_circle)
@@ -204,8 +215,14 @@ class CaldroidItemAdapter(
                 setBackgroundResource(0)
             }
             when (dateTime.weekDay) {
-                1 -> setTextColor(Color.RED)
-                7 -> setTextColor(Color.rgb(0, 0, 139))
+                1 -> {
+                    setTextColor(Color.RED)
+                }
+
+                7 -> {
+                    setTextColor(Color.rgb(0, 0, 139))
+                }
+
                 else -> {
                     if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
                 }

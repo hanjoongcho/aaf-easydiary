@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.BarLineChartBase
 import com.github.mikephil.charting.components.AxisBase
@@ -40,11 +41,16 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private var mCoroutineJob: Job? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_writing_barchart, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? = inflater.inflate(R.layout.fragment_writing_barchart, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         mBarChart = view.findViewById(R.id.barChart)
         mChartTitle = view.findViewById(R.id.chartTitle)
@@ -126,13 +132,13 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                     it.visibility = View.VISIBLE
                     requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
                     it.setOnClickListener { view ->
-                        view.postDelayed( {
+                        view.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
                                     requireActivity(),
-                                    StatisticsActivity::class.java
-                                )
+                                    StatisticsActivity::class.java,
+                                ),
                             )
                         }, 300)
                     }
@@ -140,39 +146,41 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val barEntries = setData()
-            withContext(Dispatchers.Main) {
-                if (barEntries.isNotEmpty()) {
-                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
-                    val iValueFormatter = IValueFormatterExt(context)
-                    barDataSet.valueFormatter = iValueFormatter
-                    val colors = intArrayOf(
-                        Color.rgb(0, 19, 26),
-                        Color.rgb(0, 71, 96),
-                        Color.rgb(0, 117, 158),
-                        Color.rgb(0, 176, 240),
-                        Color.rgb(0, 161, 218),
-                        Color.rgb(0, 117, 158),
-                        Color.rgb(0, 71, 96),
-                        Color.rgb(0, 19, 26)
-                    )
-                    barDataSet.setColors(*colors)
-                    barDataSet.setDrawIcons(false)
-                    barDataSet.setDrawValues(true)
-                    val dataSets = ArrayList<IBarDataSet>()
-                    dataSets.add(barDataSet)
-                    val barData = BarData(dataSets)
-                    barData.setValueTextSize(10f)
-                    barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    barData.setValueTextColor(requireContext().config.textColor)
-                    barData.barWidth = 0.9f
-                    mBarChart.data = barData
-                    mBarChart.animateY(2000)
+        mCoroutineJob =
+            lifecycleScope.launch(Dispatchers.IO) {
+                val barEntries = setData()
+                withContext(Dispatchers.Main) {
+                    if (barEntries.isNotEmpty()) {
+                        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
+                        val iValueFormatter = IValueFormatterExt(context)
+                        barDataSet.valueFormatter = iValueFormatter
+                        val colors =
+                            intArrayOf(
+                                Color.rgb(0, 19, 26),
+                                Color.rgb(0, 71, 96),
+                                Color.rgb(0, 117, 158),
+                                Color.rgb(0, 176, 240),
+                                Color.rgb(0, 161, 218),
+                                Color.rgb(0, 117, 158),
+                                Color.rgb(0, 71, 96),
+                                Color.rgb(0, 19, 26),
+                            )
+                        barDataSet.setColors(*colors)
+                        barDataSet.setDrawIcons(false)
+                        barDataSet.setDrawValues(true)
+                        val dataSets = ArrayList<IBarDataSet>()
+                        dataSets.add(barDataSet)
+                        val barData = BarData(dataSets)
+                        barData.setValueTextSize(10f)
+                        barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                        barData.setValueTextColor(requireContext().config.textColor)
+                        barData.barWidth = 0.9f
+                        mBarChart.data = barData
+                        mBarChart.animateY(2000)
+                    }
+                    mBarChartProgressBar.visibility = View.GONE
                 }
-                mBarChartProgressBar.visibility = View.GONE
             }
-        }
     }
 
     override fun onDestroy() {
@@ -206,31 +214,39 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         return barEntries
     }
 
-    private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 1..3 -> 1
-        in 4..6 -> 2
-        in 7..9 -> 3
-        in 10..12 -> 4
-        in 13..15 -> 5
-        in 16..18 -> 6
-        in 19..21 -> 7
-        else -> 8
-    }
+    private fun hourToItemNumber(hour: Int): Int =
+        when (hour) {
+            in 1..3 -> 1
+            in 4..6 -> 2
+            in 7..9 -> 3
+            in 10..12 -> 4
+            in 13..15 -> 5
+            in 16..18 -> 6
+            in 19..21 -> 7
+            else -> 8
+        }
 
     companion object {
         const val CHART_TITLE = "chartTitle"
     }
 
-    class DayAxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase?): String = when (value.toInt()) {
-            1 -> context!!.getString(R.string.range_a)
-            2 -> context!!.getString(R.string.range_b)
-            3 -> context!!.getString(R.string.range_c)
-            4 -> context!!.getString(R.string.range_d)
-            5 -> context!!.getString(R.string.range_e)
-            6 -> context!!.getString(R.string.range_f)
-            7 -> context!!.getString(R.string.range_g)
-            else -> context!!.getString(R.string.range_h)
-        }
+    class DayAxisValueFormatter(
+        private var context: Context?,
+        private val chart: BarLineChartBase<*>,
+    ) : IAxisValueFormatter {
+        override fun getFormattedValue(
+            value: Float,
+            axis: AxisBase?,
+        ): String =
+            when (value.toInt()) {
+                1 -> context!!.getString(R.string.range_a)
+                2 -> context!!.getString(R.string.range_b)
+                3 -> context!!.getString(R.string.range_c)
+                4 -> context!!.getString(R.string.range_d)
+                5 -> context!!.getString(R.string.range_e)
+                6 -> context!!.getString(R.string.range_f)
+                7 -> context!!.getString(R.string.range_g)
+                else -> context!!.getString(R.string.range_h)
+            }
     }
 }

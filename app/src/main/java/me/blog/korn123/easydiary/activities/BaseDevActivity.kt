@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -58,7 +59,6 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -531,7 +531,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 null,
                 modifier = modifier,
             ) {
-                CoroutineScope(Dispatchers.IO).launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     val url =
                         URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
                     val httpConn = url.openConnection() as HttpURLConnection
@@ -948,7 +948,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     updateConsole("Job has already started.")
                 } else {
                     mCoroutineJob1 =
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch(Dispatchers.IO) {
                             // launch a new coroutine and keep a reference to its Job
                             for (i in 1..50) {
                                 if (isActive) {
@@ -996,7 +996,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 for (k in 1..3) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    lifecycleScope.launch(Dispatchers.IO) {
                         // launch a new coroutine and keep a reference to its Job
                         for (i in 1..10) {
                             val currentThreadName = Thread.currentThread().name
@@ -1027,7 +1027,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 updateConsole("1")
-                CoroutineScope(Dispatchers.IO).launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     val name = Thread.currentThread().name
                     withContext(Dispatchers.Main) { updateConsole("3", name) }
                     delay(2000)
@@ -1180,7 +1180,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 //    }
 
     /***************************************************************************************************
-     *   etc functions .
+     *   etc functions
      *
      ***************************************************************************************************/
     private fun updateGPSProvider() {
@@ -1281,7 +1281,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 useActionButton = true,
                 mNotificationCount++,
             )
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val bitmap =
                 Glide
                     .with(context)
@@ -1367,7 +1367,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 useActionButton = true,
                 id = mNotificationCount++,
             )
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val bitmap =
                 Glide
                     .with(context)

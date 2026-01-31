@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.*
 import com.github.mikephil.charting.data.Entry
@@ -48,12 +49,19 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private var mChartMode = "A"
     private val mDataSets = ArrayList<ILineDataSet>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentWeightLineChartBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
@@ -140,13 +148,13 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     it.visibility = View.VISIBLE
                     requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
                     it.setOnClickListener { view ->
-                        view.postDelayed( {
+                        view.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
                                     requireActivity(),
-                                    StatisticsActivity::class.java
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_LINE_CHART_WEIGHT)
+                                    StatisticsActivity::class.java,
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_LINE_CHART_WEIGHT),
                             )
                         }, 300)
                     }
@@ -163,6 +171,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         mChartMode = "A"
                         drawChart()
                     }
+
                     R.id.radio_button_option_b -> {
                         mChartMode = "B"
                         drawChart()
@@ -181,22 +190,23 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun drawChart() {
-        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            mDataSets.clear()
-            if (mChartMode == "A") {
-                val barEntries = setData()
-                if (barEntries.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        val lineDataSet = LineDataSet(barEntries, "Weight")
-                        val iValueFormatter = WeightIValueFormatter(context)
-                        lineDataSet.valueFormatter = iValueFormatter
-                        lineDataSet.setDrawIcons(false)
-                        lineDataSet.setDrawValues(true)
-                        lineDataSet.setDrawFilled(true)
-                        mDataSets.add(lineDataSet)
-                        val lineData = LineData(mDataSets)
-                        lineData.setValueTextSize(10f)
-                        lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+        mCoroutineJob =
+            lifecycleScope.launch(Dispatchers.IO) {
+                mDataSets.clear()
+                if (mChartMode == "A") {
+                    val barEntries = setData()
+                    if (barEntries.isNotEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            val lineDataSet = LineDataSet(barEntries, "Weight")
+                            val iValueFormatter = WeightIValueFormatter(context)
+                            lineDataSet.valueFormatter = iValueFormatter
+                            lineDataSet.setDrawIcons(false)
+                            lineDataSet.setDrawValues(true)
+                            lineDataSet.setDrawFilled(true)
+                            mDataSets.add(lineDataSet)
+                            val lineData = LineData(mDataSets)
+                            lineData.setValueTextSize(10f)
+                            lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
 //                        Color.rgb(
 //                            Random.nextInt(0, 255),
 //                            Random.nextInt(0, 255),
@@ -206,118 +216,121 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 //                            lineDataSet.color = it
 //                            lineDataSet.fillColor = it
 //                        }
-                        requireContext().config.primaryColor.also { color ->
-                            lineDataSet.circleColors = arrayListOf(color)
-                            lineDataSet.color = color
-                            lineDataSet.fillColor = color
+                            requireContext().config.primaryColor.also { color ->
+                                lineDataSet.circleColors = arrayListOf(color)
+                                lineDataSet.color = color
+                                lineDataSet.fillColor = color
+                            }
+                            mLineChart.data = lineData
+                            mLineChart.animateY(600)
+                            mBinding.barChartProgressBar.visibility = View.GONE
                         }
-                        mLineChart.data = lineData
-                        mLineChart.animateY(600)
-                        mBinding.barChartProgressBar.visibility = View.GONE
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            mBinding.barChartProgressBar.visibility = View.GONE
+                        }
                     }
                 } else {
-                    withContext(Dispatchers.Main) {
-                        mBinding.barChartProgressBar.visibility = View.GONE
-                    }
-                }
-            } else {
-                EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-                    val listDiary = EasyDiaryDbHelper.findDiary(
-                        null,
-                        false,
-                        0,
-                        0,
-                        DAILY_SCALE,
-                        realmInstance = realmInstance
-                    )
+                    EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
+                        val listDiary =
+                            EasyDiaryDbHelper.findDiary(
+                                null,
+                                false,
+                                0,
+                                0,
+                                DAILY_SCALE,
+                                realmInstance = realmInstance,
+                            )
 
-                    var sumWeight = 0F
-                    val filteredItems = arrayListOf<Diary>()
-                    listDiary.reversed().forEach { diary ->
-                        diary.title?.let {
-                            if (EasyDiaryUtils.isContainNumber(it)) {
-                                val weight = EasyDiaryUtils.findNumber(it)
-                                sumWeight += weight
-                                filteredItems.add(diary)
+                        var sumWeight = 0F
+                        val filteredItems = arrayListOf<Diary>()
+                        listDiary.reversed().forEach { diary ->
+                            diary.title?.let {
+                                if (EasyDiaryUtils.isContainNumber(it)) {
+                                    val weight = EasyDiaryUtils.findNumber(it)
+                                    sumWeight += weight
+                                    filteredItems.add(diary)
+                                }
                             }
                         }
-                    }
 
-                    val yearlyMap = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }
-                    val iterator = yearlyMap.iterator()
+                        val yearlyMap = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }
+                        val iterator = yearlyMap.iterator()
 //                    val color = requireContext().config.primaryColor
-                    var itemIndex = yearlyMap.count()
-                    while (iterator.hasNext()) {
-                        val element = iterator.next()
-                        val barEntries = ArrayList<Entry>()
+                        var itemIndex = yearlyMap.count()
+                        while (iterator.hasNext()) {
+                            val element = iterator.next()
+                            val barEntries = ArrayList<Entry>()
 
-                        val monthMap = element.value.groupBy { it.dateString!!.substring(5, 7) }
-                        fun monthlyWeight(key: String): Float {
-                            return monthMap[key]?.let { monthlyItems ->
-                                var average = 0F
-                                var sum = 0F
-                                monthlyItems.map { sum += EasyDiaryUtils.findNumber(it.title) }
-                                average = sum.div(monthlyItems.size)
-                                average
-                            } ?: 0F
-                        }
+                            val monthMap = element.value.groupBy { it.dateString!!.substring(5, 7) }
 
-                        val averageInfo = arrayListOf<Float>().apply {
+                            fun monthlyWeight(key: String): Float =
+                                monthMap[key]?.let { monthlyItems ->
+                                    var average = 0F
+                                    var sum = 0F
+                                    monthlyItems.map { sum += EasyDiaryUtils.findNumber(it.title) }
+                                    average = sum.div(monthlyItems.size)
+                                    average
+                                } ?: 0F
+
+                            val averageInfo =
+                                arrayListOf<Float>().apply {
+                                    for (i in 1..12) {
+                                        add(monthlyWeight("$i".padStart(2, '0')))
+                                    }
+                                }
                             for (i in 1..12) {
-                                add(monthlyWeight("$i".padStart(2, '0')))
+                                if (averageInfo[i.minus(1)] > 0f) barEntries.add(Entry(i.toFloat(), averageInfo[i.minus(1)]))
                             }
-                        }
-                        for (i in 1..12) {
-                            if (averageInfo[i.minus(1)] > 0f) barEntries.add(Entry(i.toFloat(), averageInfo[i.minus(1)]))
-                        }
-                        val lineDataSet = LineDataSet(barEntries, element.key)
-                        val iValueFormatter = WeightIValueFormatter(context)
-                        lineDataSet.valueFormatter = iValueFormatter
-                        lineDataSet.setDrawIcons(false)
-                        lineDataSet.setDrawValues(true)
-                        lineDataSet.setDrawFilled(true)
-                        Color.argb(
-                            50,
-                            Random.nextInt(0, 255),
-                            Random.nextInt(0, 255),
-                            Random.nextInt(0, 255)
-                        ).also {
-                            var color = it
-                            if (itemIndex == 1) {
-                                color = requireContext().config.primaryColor
-                                lineDataSet.setCircleColorHole(color)
-                            }
-                            lineDataSet.circleColors = arrayListOf(color)
-                            lineDataSet.color = color
-                            lineDataSet.fillColor = color
-                        }
+                            val lineDataSet = LineDataSet(barEntries, element.key)
+                            val iValueFormatter = WeightIValueFormatter(context)
+                            lineDataSet.valueFormatter = iValueFormatter
+                            lineDataSet.setDrawIcons(false)
+                            lineDataSet.setDrawValues(true)
+                            lineDataSet.setDrawFilled(true)
+                            Color
+                                .argb(
+                                    50,
+                                    Random.nextInt(0, 255),
+                                    Random.nextInt(0, 255),
+                                    Random.nextInt(0, 255),
+                                ).also {
+                                    var color = it
+                                    if (itemIndex == 1) {
+                                        color = requireContext().config.primaryColor
+                                        lineDataSet.setCircleColorHole(color)
+                                    }
+                                    lineDataSet.circleColors = arrayListOf(color)
+                                    lineDataSet.color = color
+                                    lineDataSet.fillColor = color
+                                }
 //                        val darkenColor = color.darkenColor(itemIndex.times(-5))
 //                        lineDataSet.circleColors = arrayListOf(color)
 //                        lineDataSet.color = darkenColor
 //                        lineDataSet.fillColor = darkenColor
-                        mDataSets.add(lineDataSet)
-                        itemIndex--
-                    }
-                    withContext(Dispatchers.Main) {
-                        if (sumWeight > 0) {
-                            val average = sumWeight.div(filteredItems.size)
-                            mLineChart.axisLeft.axisMinimum = average.minus(10)
-                            mLineChart.axisLeft.axisMaximum = average.plus(10)
-                            mLineChart.axisRight.axisMinimum = average.minus(10)
-                            mLineChart.axisRight.axisMaximum = average.plus(10)
+                            mDataSets.add(lineDataSet)
+                            itemIndex--
                         }
+                        withContext(Dispatchers.Main) {
+                            if (sumWeight > 0) {
+                                val average = sumWeight.div(filteredItems.size)
+                                mLineChart.axisLeft.axisMinimum = average.minus(10)
+                                mLineChart.axisLeft.axisMaximum = average.plus(10)
+                                mLineChart.axisRight.axisMinimum = average.minus(10)
+                                mLineChart.axisRight.axisMaximum = average.plus(10)
+                            }
 
-                        val lineData = LineData(mDataSets)
-                        lineData.setValueTextSize(10f)
-                        lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                        mLineChart.data = lineData
-                        mLineChart.animateY(600)
-                        mBinding.barChartProgressBar.visibility = View.GONE
+                            val lineData = LineData(mDataSets)
+                            lineData.setValueTextSize(10f)
+                            lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                            mLineChart.data = lineData
+                            mLineChart.animateY(600)
+                            mBinding.barChartProgressBar.visibility = View.GONE
+                        }
+                        realmInstance.close()
                     }
-                    realmInstance.close()
                 }
             }
-        }
     }
 
     override fun onDestroy() {
@@ -354,8 +367,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         return barEntries
     }
 
-    private fun xAxisTimeMillisToDate(timeMillis: Long): String =
-        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.MEDIUM) else "N/A"
+    private fun xAxisTimeMillisToDate(timeMillis: Long): String = if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.MEDIUM) else "N/A"
 
     private fun fillValueForward(averageInfo: ArrayList<Float>) {
         Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
@@ -390,30 +402,40 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         const val CHART_TITLE = "chartTitle"
     }
 
-    inner class WeightXAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            val label = when (mChartMode == "A") {
-                true -> {
-                    val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
-                    xAxisTimeMillisToDate(timeMillis)
-                }
-                false -> {
-                    value.toInt().toString().padStart(2, '0')
-                }
+    inner class WeightXAxisValueFormatter(
+        private var context: Context?,
+    ) : IAxisValueFormatter {
+        override fun getFormattedValue(
+            value: Float,
+            axis: AxisBase,
+        ): String {
+            val label =
+                when (mChartMode == "A") {
+                    true -> {
+                        val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
+                        xAxisTimeMillisToDate(timeMillis)
+                    }
 
-            }
+                    false -> {
+                        value.toInt().toString().padStart(2, '0')
+                    }
+                }
             return label
         }
     }
 
-    inner class WeightYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            return "${value}kg"
-        }
+    inner class WeightYAxisValueFormatter(
+        private var context: Context?,
+    ) : IAxisValueFormatter {
+        override fun getFormattedValue(
+            value: Float,
+            axis: AxisBase,
+        ): String = "${value}kg"
     }
 
-    inner class WeightIValueFormatter(private var context: Context?) : IValueFormatter {
-
+    inner class WeightIValueFormatter(
+        private var context: Context?,
+    ) : IValueFormatter {
         /**
          * Called when a value (from labels inside the chart) is formatted
          * before being drawn. For performance reasons, avoid excessive calculations
@@ -425,17 +447,26 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
          * @param viewPortHandler provides information about the current chart state (scale, translation, ...)
          * @return the formatted label ready for being drawn
          */
-        override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
-            return "${value}kg"
-        }
+        override fun getFormattedValue(
+            value: Float,
+            entry: Entry,
+            dataSetIndex: Int,
+            viewPortHandler: ViewPortHandler,
+        ): String = "${value}kg"
     }
 
-    inner class WeightMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_custom_marker_view) {
+    inner class WeightMarkerView(
+        context: Context,
+        private val xAxisValueFormatter: IAxisValueFormatter,
+    ) : MarkerView(context, R.layout.partial_custom_marker_view) {
         private val tvContent: TextView = findViewById(R.id.tvContent)
 
         // callbacks everytime the MarkerView is redrawn, can be used to update the
         // content (user-interface)
-        override fun refreshContent(e: Entry?, highlight: Highlight?) {
+        override fun refreshContent(
+            e: Entry?,
+            highlight: Highlight?,
+        ) {
             e?.let { entry ->
 
                 tvContent.run {
@@ -446,8 +477,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        override fun getOffset(): MPPointF {
-            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
-        }
+        override fun getOffset(): MPPointF = MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
     }
 }
