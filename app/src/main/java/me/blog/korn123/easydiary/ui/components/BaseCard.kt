@@ -27,32 +27,38 @@ fun SimpleText(
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontColor: Color = Color(LocalContext.current.config.textColor),
-    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-        LocalContext.current
-    ),
+    fontFamily: FontFamily? =
+        if (LocalInspectionMode.current) {
+            null
+        } else {
+            FontUtils.getComposeFontFamily(
+                LocalContext.current,
+            )
+        },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     maxLines: Int = Int.MAX_VALUE,
 ) {
     val density = LocalDensity.current
-    val textUnit = with(density) {
-        val temp = fontSize.toDp()
-        temp.toSp()
-    }
+    val textUnit =
+        with(density) {
+            val temp = fontSize.toDp()
+            temp.toSp()
+        }
 
     Text(
         modifier = modifier,
         text = text,
-        style = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = fontWeight,
+        style =
+            TextStyle(
+                fontFamily = fontFamily,
+                fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
-            color = fontColor.copy(alpha),
-            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-        ),
+                color = fontColor.copy(alpha),
+                fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+            ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
-
     )
 }
 
@@ -64,30 +70,37 @@ fun SimpleText(
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontColor: Color = Color(LocalContext.current.config.textColor),
-    fontFamily: FontFamily? = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(
-        LocalContext.current
-    ),
+    fontFamily: FontFamily? =
+        if (LocalInspectionMode.current) {
+            null
+        } else {
+            FontUtils.getComposeFontFamily(
+                LocalContext.current,
+            )
+        },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     maxLines: Int = Int.MAX_VALUE,
 ) {
     val density = LocalDensity.current
-    val textUnit = with(density) {
-        val temp = fontSize.toDp()
-        temp.toSp()
-    }
+    val textUnit =
+        with(density) {
+            val temp = fontSize.toDp()
+            temp.toSp()
+        }
 
     Text(
         modifier = modifier,
         text = text,
-        style = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = fontWeight,
+        style =
+            TextStyle(
+                fontFamily = fontFamily,
+                fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
-            color = fontColor.copy(alpha),
-            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-        ),
+                color = fontColor.copy(alpha),
+                fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+            ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
         maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
     )
 }

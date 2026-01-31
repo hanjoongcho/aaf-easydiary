@@ -56,7 +56,6 @@ fun FastScroll(
     updateDraggingThumb: (isDraggingThumb: Boolean) -> Unit,
     dragEndCallback: () -> Unit,
 ) {
-
     // --- Fast Scroll 트랙 + 썸 + 버블 ---
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
@@ -70,7 +69,10 @@ fun FastScroll(
     val totalItems = layoutInfo.value.totalItemsCount.coerceAtLeast(1)
 
     // 보이는 첫 아이템 높이로 평균 높이 추정
-    val itemHeight = layoutInfo.value.visibleItemsInfo.firstOrNull()?.size ?: 1
+    val itemHeight =
+        layoutInfo.value.visibleItemsInfo
+            .firstOrNull()
+            ?.size ?: 1
 
     val firstIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val firstOffset = remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
@@ -88,57 +90,60 @@ fun FastScroll(
         if (isDraggingThumb) thumbY.coerceIn(0f, containerHeightPx - thumbHeightPx) else baseThumbY
 
     // --- Fast Scroll 트랙 + 썸 ---
-    fun parseBubbleText(item: Any): String {
-        return when (item) {
+    fun parseBubbleText(item: Any): String =
+        when (item) {
             is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
             is Pair<*, *> -> (item.first as? FileNode)?.name.orEmpty()
             else -> item.toString()
         }
-    }
     Box(
-        modifier = modifier
-            .fillMaxHeight()
-            .width(30.dp) // 트랙 + 터치 영역
-            .padding(end = 8.dp)
-            .pointerInput(totalItems) {
-                detectDragGestures(
-                    onDragStart = {
-                        updateThumbVisible(true)
-                        updateDraggingThumb(true)
-                        bubbleText = parseBubbleText(items[firstIndex.value])
-                    },
-                    onDrag = { change, drag ->
-                        dragY = drag.y
-                        change.consume()
-                        thumbY = (thumbY + drag.y).coerceIn(
-                            0f,
-                            containerHeightPx - thumbHeightPx
-                        )
-                        proportion =
-                            thumbY / (containerHeightPx - thumbHeightPx)
-                        val target =
-                            ((scrollablePx * proportion) / itemHeight).toInt()
-                                .coerceIn(0, totalItems - 1)
-                        offset = (scrollablePx * proportion) % itemHeight
-                        coroutineScope.launch {
-                            listState.scrollToItem(
-                                target.coerceAtLeast(0), offset.toInt()
-                            )
-                        }
-                        bubbleText = parseBubbleText(items[target])
-                    },
-                    onDragEnd = {
-                        updateDraggingThumb(false)
-                        bubbleText = null
-                        dragEndCallback()
-                    },
-                    onDragCancel = {
-                        updateDraggingThumb(false)
-                        bubbleText = null
-                        dragEndCallback()
-                    }
-                )
-            }
+        modifier =
+            modifier
+                .fillMaxHeight()
+                .width(30.dp) // 트랙 + 터치 영역
+                .padding(end = 8.dp)
+                .pointerInput(totalItems) {
+                    detectDragGestures(
+                        onDragStart = {
+                            updateThumbVisible(true)
+                            updateDraggingThumb(true)
+                            bubbleText = parseBubbleText(items[firstIndex.value])
+                        },
+                        onDrag = { change, drag ->
+                            dragY = drag.y
+                            change.consume()
+                            thumbY =
+                                (thumbY + drag.y).coerceIn(
+                                    0f,
+                                    containerHeightPx - thumbHeightPx,
+                                )
+                            proportion =
+                                thumbY / (containerHeightPx - thumbHeightPx)
+                            val target =
+                                ((scrollablePx * proportion) / itemHeight)
+                                    .toInt()
+                                    .coerceIn(0, totalItems - 1)
+                            offset = (scrollablePx * proportion) % itemHeight
+                            coroutineScope.launch {
+                                listState.scrollToItem(
+                                    target.coerceAtLeast(0),
+                                    offset.toInt(),
+                                )
+                            }
+                            bubbleText = parseBubbleText(items[target])
+                        },
+                        onDragEnd = {
+                            updateDraggingThumb(false)
+                            bubbleText = null
+                            dragEndCallback()
+                        },
+                        onDragCancel = {
+                            updateDraggingThumb(false)
+                            bubbleText = null
+                            dragEndCallback()
+                        },
+                    )
+                },
     ) {
         if (thumbVisible) {
             Box(
@@ -149,9 +154,9 @@ fun FastScroll(
                     .align(Alignment.CenterEnd)
                     .background(
                         MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = 0.1f
-                        )
-                    )
+                            alpha = 0.1f,
+                        ),
+                    ),
             )
 
             Box(
@@ -161,7 +166,7 @@ fun FastScroll(
                     .align(Alignment.TopEnd)
                     .height(with(density) { thumbHeightPx.toDp() })
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.primary),
             )
         }
     }
@@ -170,14 +175,16 @@ fun FastScroll(
         Card(
             modifier = Modifier.zIndex(3f),
             shape = RoundedCornerShape(roundedCornerShapeSize.dp),
-            colors = CardDefaults.cardColors(
-                Color(LocalContext.current.config.backgroundColor).copy(
-                    alpha = 0.8f
-                )
-            ),
+            colors =
+                CardDefaults.cardColors(
+                    Color(LocalContext.current.config.backgroundColor).copy(
+                        alpha = 0.8f,
+                    ),
+                ),
         ) {
             SimpleText(
-                text = "" +
+                text =
+                    "" +
                         "firstIndex: ${firstIndex.value}\n" +
                         "firstOffset: ${firstOffset.value}\n" +
                         "offset: $offset\n" +
@@ -190,10 +197,11 @@ fun FastScroll(
                         "dragY: $dragY\n" +
                         "thumbY: $thumbY\n" +
                         "",
-//                                    alpha = 0.8f,
-                modifier = Modifier
+                //                                    alpha = 0.8f,
+                modifier =
+                    Modifier
 //                                        .align(Alignment.TopStart)
-                    .padding(16.dp),
+                        .padding(16.dp),
             )
         }
     }
@@ -201,27 +209,32 @@ fun FastScroll(
     // --- 버블: ***왼쪽 방향*** ---
     if (isDraggingThumb && bubbleText != null) {
         Box(
-            modifier = modifier
-                .offset {
-                    val bubbleY = (drawThumbY - 24f).toInt()
-                        .coerceIn(0, containerSize.height - 48)
-                    IntOffset(0, bubbleY)
-                }
+            modifier =
+                modifier
+                    .offset {
+                        val bubbleY =
+                            (drawThumbY - 24f)
+                                .toInt()
+                                .coerceIn(0, containerSize.height - 48)
+                        IntOffset(0, bubbleY)
+                    },
         ) {
             Card(
                 shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp),
-                colors = CardDefaults.cardColors(
-                    Color(LocalContext.current.config.primaryColor).copy(
-                        alpha = 1.0f
-                    )
-                ),
+                colors =
+                    CardDefaults.cardColors(
+                        Color(LocalContext.current.config.primaryColor).copy(
+                            alpha = 1.0f,
+                        ),
+                    ),
                 modifier = Modifier.padding(end = 30.dp),
             ) {
                 SimpleText(
                     text = bubbleText ?: "",
                     fontColor = Color.White,
-                    modifier = Modifier
-                        .padding(16.dp, 8.dp),
+                    modifier =
+                        Modifier
+                            .padding(16.dp, 8.dp),
                 )
             }
         }

@@ -27,18 +27,18 @@ fun CustomElevatedButton(
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-
     ElevatedButton(
         onClick = onClick,
-        colors = ButtonDefaults.elevatedButtonColors(
-            containerColor = Color(LocalContext.current.config.primaryColor),   // 배경색
-            contentColor = fontColor,   // 텍스트/아이콘 색
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant, // 비활성화 배경색
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant // 비활성화 텍스트색
-        ),
+        colors =
+            ButtonDefaults.elevatedButtonColors(
+                containerColor = Color(LocalContext.current.config.primaryColor), // 배경색
+                contentColor = fontColor, // 텍스트/아이콘 색
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant, // 비활성화 배경색
+                disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant, // 비활성화 텍스트색
+            ),
         contentPadding = PaddingValues(12.dp, 8.dp),
         shape = RoundedCornerShape(12.dp),
-        enabled = enabled
+        enabled = enabled,
     ) {
         if (iconResourceId != null) {
             Icon(
