@@ -20,6 +20,9 @@ Go to the Releases and download latest apk or click badges below.
 Since 2023, we have been using notion and YouTube to create Easy Diary user manuals.  
 * [Easy Diary Manual v0.1](https://spiced-skirt-15c.notion.site/User-Manual-v0-1-909b1fc94f5e40ccb8e8e560911c2e52)
 
+## Dev Docs
+* [Guide](./docs/README.en.md)
+
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=hanjoongcho/aaf-easydiary,hanjoongcho/aaf-easyphotomap,hanjoongcho/aaf-easypassword&type=Date)](https://star-history.com/#hanjoongcho/aaf-easydiary&hanjoongcho/aaf-easyphotomap&hanjoongcho/aaf-easypassword&Date)
 
