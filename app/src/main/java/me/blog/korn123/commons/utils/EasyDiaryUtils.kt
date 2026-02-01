@@ -68,8 +68,10 @@ import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP
 import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_MARGIN_DP
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
+import me.blog.korn123.easydiary.helper.ColorConstants
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
@@ -98,8 +100,6 @@ object EasyDiaryUtils {
      *   Constants
      *
      ***************************************************************************************************/
-    private const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
-
     val easyDiaryMimeType: String
         get() {
             val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
@@ -512,7 +512,7 @@ object EasyDiaryUtils {
     fun highlightString(textView: TextView) {
         val spannableString = SpannableString(textView.text)
         spannableString.setSpan(
-            BackgroundColorSpan(HIGHLIGHT_COLOR),
+            BackgroundColorSpan(ColorConstants.HIGHLIGHT_COLOR),
             0,
             textView.text.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
@@ -531,7 +531,7 @@ object EasyDiaryUtils {
     fun highlightStringIgnoreCase(
         textView: TextView?,
         input: String?,
-        highlightColor: Int = HIGHLIGHT_COLOR,
+        highlightColor: Int = ColorConstants.HIGHLIGHT_COLOR,
     ) {
         textView?.let { tv ->
             input?.let { targetString ->
@@ -566,7 +566,7 @@ object EasyDiaryUtils {
     fun highlightString(
         textView: TextView?,
         input: String?,
-        highlightColor: Int = HIGHLIGHT_COLOR,
+        highlightColor: Int = ColorConstants.HIGHLIGHT_COLOR,
     ) {
         textView?.let { tv ->
             input?.let { targetString ->
@@ -882,7 +882,7 @@ object EasyDiaryUtils {
     fun applyFilter(mode: String?): List<Diary> {
         val diaryList: List<Diary> =
             when (mode) {
-                DiaryFragment.MODE_TASK_TODO -> {
+                DiaryComponentConstants.MODE_TASK_TODO -> {
                     EasyDiaryDbHelper
                         .findDiary(
                             null,
@@ -894,7 +894,7 @@ object EasyDiaryUtils {
                         .reversed()
                 }
 
-                DiaryFragment.MODE_TASK_DOING -> {
+                DiaryComponentConstants.MODE_TASK_DOING -> {
                     EasyDiaryDbHelper.findDiary(
                         null,
                         false,
@@ -904,7 +904,7 @@ object EasyDiaryUtils {
                     )
                 }
 
-                DiaryFragment.MODE_TASK_DONE -> {
+                DiaryComponentConstants.MODE_TASK_DONE -> {
                     EasyDiaryDbHelper
                         .findDiary(
                             null,
@@ -915,7 +915,7 @@ object EasyDiaryUtils {
                         ).filter { item -> item.weather in 82..83 }
                 }
 
-                DiaryFragment.MODE_TASK_CANCEL -> {
+                DiaryComponentConstants.MODE_TASK_CANCEL -> {
                     EasyDiaryDbHelper.findDiary(
                         null,
                         false,
@@ -925,7 +925,7 @@ object EasyDiaryUtils {
                     )
                 }
 
-                DiaryFragment.MODE_FUTURE -> {
+                DiaryComponentConstants.MODE_FUTURE -> {
                     EasyDiaryDbHelper
                         .findDiary(
                             null,

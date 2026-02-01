@@ -43,6 +43,7 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.services.FullBackupService
 import me.blog.korn123.easydiary.ui.components.CardContainer
@@ -54,13 +55,11 @@ import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import java.util.Locale
 
 class DevActivity : BaseDevActivity() {
-
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
     private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
-
 
     /***************************************************************************************************
      *   override functions
@@ -70,23 +69,25 @@ class DevActivity : BaseDevActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRequestGoogleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
-            pauseLock()
-            when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                true -> {
-                    // The Task returned from this call is always completed, no need to attach
-                    // a listener.
-                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-                    val googleSignAccount = task.getResult(ApiException::class.java)
-                    googleSignAccount?.account?.let { account ->
-                        GoogleOAuthHelper.callAccountCallback(account)
+        mRequestGoogleSignInLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+                pauseLock()
+                when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                    true -> {
+                        // The Task returned from this call is always completed, no need to attach
+                        // a listener.
+                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                        val googleSignAccount = task.getResult(ApiException::class.java)
+                        googleSignAccount?.account?.let { account ->
+                            GoogleOAuthHelper.callAccountCallback(account)
+                        }
+                    }
+
+                    false -> {
+                        makeSnackBar("Google account verification failed.")
                     }
                 }
-                false -> {
-                    makeSnackBar("Google account verification failed.")
-                }
             }
-        }
         val viewModel: BaseDevViewModel by viewModels()
 
         mBinding.composeView.setContent {
@@ -101,7 +102,7 @@ class DevActivity : BaseDevActivity() {
                     topBar = {
                         EasyDiaryActionBar(
                             title = "Easy-Diary Dev Mode",
-                            subTitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
+                            subTitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                         ) {
                             onBackPressed()
                         }
@@ -109,11 +110,12 @@ class DevActivity : BaseDevActivity() {
                     containerColor = Color(config.screenBackgroundColor),
                     content = { innerPadding ->
                         CardContainer(
-                            modifier = Modifier.padding(innerPadding)
+                            modifier = Modifier.padding(innerPadding),
                         ) {
-                            val settingCardModifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
+                            val settingCardModifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
                             CustomLauncher(settingCardModifier, maxItemsInEachRow)
                             Etc(settingCardModifier, maxItemsInEachRow, viewModel)
                             Notification(settingCardModifier, maxItemsInEachRow)
@@ -124,7 +126,7 @@ class DevActivity : BaseDevActivity() {
                             FingerPrint(settingCardModifier, maxItemsInEachRow)
                             GoogleMobileService(settingCardModifier, maxItemsInEachRow)
                             Spacer(
-                                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding)
+                                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
                             )
                         }
                     },
@@ -132,7 +134,6 @@ class DevActivity : BaseDevActivity() {
             }
         }
     }
-
 
     /***************************************************************************************************
      *   Define Compose
@@ -142,12 +143,12 @@ class DevActivity : BaseDevActivity() {
     @Composable
     private fun GoogleMobileService(
         modifier: Modifier,
-        maxItemsInEachRow: Int
+        maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Google Mobile Service")
         FlowRow(
             modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow
+            maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
                 title = "Check Google Sign Account",
@@ -169,12 +170,12 @@ class DevActivity : BaseDevActivity() {
             ) {
                 GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
                     DriveServiceHelper(this@DevActivity, account).run {
-                        initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                        initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                             if (photoFolderId != null) {
                                 Intent(context, FullBackupService::class.java).apply {
                                     putExtra(
-                                        DriveServiceHelper.WORKING_FOLDER_ID,
-                                        photoFolderId
+                                        GDriveConstants.WORKING_FOLDER_ID,
+                                        photoFolderId,
                                     )
                                     ContextCompat.startForegroundService(context, this)
                                 }
@@ -197,9 +198,10 @@ class DevActivity : BaseDevActivity() {
             val scrollState = rememberScrollState()
 
             CardContainer {
-                val settingCardModifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                val settingCardModifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                 CustomLauncher(settingCardModifier, maxItemsInEachRow)
                 Notification(settingCardModifier, maxItemsInEachRow)
                 AlertDialog(settingCardModifier, maxItemsInEachRow)
@@ -213,11 +215,8 @@ class DevActivity : BaseDevActivity() {
         }
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
 }
-
-

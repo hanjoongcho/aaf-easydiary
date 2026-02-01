@@ -34,8 +34,10 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
@@ -136,7 +138,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
         // determine title parameter
         arguments?.let { bundle ->
-            val title = bundle.getString(CHART_TITLE)
+            val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
                 mBinding.chartTitle.text = title
                 mBinding.chartTitle.visibility = View.VISIBLE
@@ -154,7 +156,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                                 Intent(
                                     requireActivity(),
                                     StatisticsActivity::class.java,
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_LINE_CHART_WEIGHT),
+                                ).putExtra(StatisticsConstants.CHART_MODE, StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT),
                             )
                         }, 300)
                     }
@@ -396,10 +398,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
         Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
-    }
-
-    companion object {
-        const val CHART_TITLE = "chartTitle"
     }
 
     inner class WeightXAxisValueFormatter(

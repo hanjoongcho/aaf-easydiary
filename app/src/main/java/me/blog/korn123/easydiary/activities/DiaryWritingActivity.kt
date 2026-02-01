@@ -10,6 +10,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
@@ -28,7 +29,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
      ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
-
 
     /***************************************************************************************************
      *   override functions
@@ -52,7 +52,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         setDateTime()
         bindEvent()
         setupKeypad()
-        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(DIARY_SEQUENCE_TEMPORARY) }
+        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) }
         initBottomToolbar()
         toggleSimpleLayout()
     }
@@ -67,16 +67,15 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     override fun onPause() {
         super.onPause()
         if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
         } else {
-            saveTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
+            saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
-
 
     /***************************************************************************************************
      *   etc functions
@@ -90,45 +89,55 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         centerParams.setMargins(0, 0, 0, margin)
 
-        val showcaseViewOnClickListener = View.OnClickListener {
-            when (mShowcaseIndex) {
-                2 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryTitle), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_2))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_2))
-                }
-                3 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryContents), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
-                }
-                4 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(R.id.datePicker, this), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
-                }
-                5 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(R.id.timePicker, this), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
-                }
-                6 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(R.id.saveContents, this), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
-                    mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
-                }
-                7 -> mShowcaseView.hide()
-            }
-            mShowcaseIndex++
-        }
+        val showcaseViewOnClickListener =
+            View.OnClickListener {
+                when (mShowcaseIndex) {
+                    2 -> {
+                        mShowcaseView.setButtonPosition(centerParams)
+                        mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryTitle), true)
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_2))
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_2))
+                    }
 
-        mShowcaseView = ShowcaseView.Builder(this)
+                    3 -> {
+                        mShowcaseView.setButtonPosition(centerParams)
+                        mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryContents), true)
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
+                    }
+
+                    4 -> {
+                        mShowcaseView.setButtonPosition(centerParams)
+                        mShowcaseView.setShowcase(ViewTarget(R.id.datePicker, this), true)
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
+                    }
+
+                    5 -> {
+                        mShowcaseView.setButtonPosition(centerParams)
+                        mShowcaseView.setShowcase(ViewTarget(R.id.timePicker, this), true)
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
+                    }
+
+                    6 -> {
+                        mShowcaseView.setButtonPosition(centerParams)
+                        mShowcaseView.setShowcase(ViewTarget(R.id.saveContents, this), true)
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
+                        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
+                    }
+
+                    7 -> {
+                        mShowcaseView.hide()
+                    }
+                }
+                mShowcaseIndex++
+            }
+
+        mShowcaseView =
+            ShowcaseView
+                .Builder(this)
                 .withMaterialShowcase()
                 .setTarget(ViewTarget(mBinding.partialEditContents.feelingSymbolButton))
                 .setContentTitle(getString(R.string.create_diary_showcase_title_1))
@@ -157,14 +166,17 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                 mBinding.partialEditContents.diaryContents.requestFocus()
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
-                val diaryDto = Diary(
-                    DIARY_SEQUENCE_INIT,
-                    mCurrentTimeMillis,
-                    mBinding.partialEditContents.diaryTitle.text.toString(),
-                    mBinding.partialEditContents.diaryContents.text.toString(),
-                    mSelectedItemPosition,
-                    mBinding.partialEditContents.allDay.isChecked
-                )
+                val diaryDto =
+                    Diary(
+                        DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                        mCurrentTimeMillis,
+                        mBinding.partialEditContents.diaryTitle.text
+                            .toString(),
+                        mBinding.partialEditContents.diaryContents.text
+                            .toString(),
+                        mSelectedItemPosition,
+                        mBinding.partialEditContents.allDay.isChecked,
+                    )
                 if (mLocation != null) diaryDto.location = mLocation
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
@@ -181,8 +193,10 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     }
 
     private fun bindEvent() {
-        mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
-        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView
+            .setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera
+            .setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
@@ -201,14 +215,10 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
             mBinding.partialEditContents.diaryContents.clearFocus()
             openFeelingSymbolDialog(
                 getString(R.string.diary_symbol_guide_message),
-                mSelectedItemPosition
+                mSelectedItemPosition,
             ) { symbolSequence ->
                 selectFeelingSymbol(symbolSequence)
             }
         }
-    }
-
-    companion object {
-        const val INITIALIZE_TIME_MILLIS = "initialize_time_millis"
     }
 }

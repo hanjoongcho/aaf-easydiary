@@ -31,6 +31,7 @@ import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
@@ -123,7 +124,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
 
         // determine title parameter
         arguments?.let { bundle ->
-            val title = bundle.getString(CHART_TITLE)
+            val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
@@ -225,10 +226,6 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             in 19..21 -> 7
             else -> 8
         }
-
-    companion object {
-        const val CHART_TITLE = "chartTitle"
-    }
 
     class DayAxisValueFormatter(
         private var context: Context?,

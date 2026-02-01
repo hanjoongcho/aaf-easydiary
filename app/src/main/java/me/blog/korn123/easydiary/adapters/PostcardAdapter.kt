@@ -18,21 +18,26 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemPostCardBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
+import me.blog.korn123.easydiary.helper.PostcardConstants
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PostcardAdapter(
-        val activity: Activity,
-        private val listPostcard: List<PostCard>,
-        private val onItemClickListener: AdapterView.OnItemClickListener
-) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>(), SectionedAdapter {
+    val activity: Activity,
+    private val listPostcard: List<PostCard>,
+    private val onItemClickListener: AdapterView.OnItemClickListener,
+) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>(),
+    SectionedAdapter {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): PostcardViewHolder = PostcardViewHolder(activity, ItemPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
-        return PostcardViewHolder(activity, ItemPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
-    }
-
-    override fun onBindViewHolder(holder: PostcardViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: PostcardViewHolder,
+        position: Int,
+    ) {
         holder.bindTo(listPostcard[position])
     }
 
@@ -40,21 +45,26 @@ class PostcardAdapter(
 
     @SuppressLint("DefaultLocale")
     @NonNull
-    override fun getSectionName(position: Int): String {
-        return String.format("%d. %s", position + 1, listPostcard[position].file.name)
-    }
+    override fun getSectionName(position: Int): String = String.format("%d. %s", position + 1, listPostcard[position].file.name)
 
     fun onItemHolderClick(itemHolder: PostcardViewHolder) {
         onItemClickListener.onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
     }
 
-    fun onItemCheckedChange(position: Int, isChecked: Boolean) {
+    fun onItemCheckedChange(
+        position: Int,
+        isChecked: Boolean,
+    ) {
         listPostcard[position].isItemChecked = isChecked
     }
 
     class PostcardViewHolder(
-            val activity: Activity, private val itemPostCardBinding: ItemPostCardBinding, val adapter: PostcardAdapter
-    ) : RecyclerView.ViewHolder(itemPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+        val activity: Activity,
+        private val itemPostCardBinding: ItemPostCardBinding,
+        val adapter: PostcardAdapter,
+    ) : RecyclerView.ViewHolder(itemPostCardBinding.root),
+        View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
         init {
             itemPostCardBinding.run {
                 activity.updateAppViews(root)
@@ -69,23 +79,24 @@ class PostcardAdapter(
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, activity.dpToPixelFloatValue(10F))
             itemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
             try {
-                val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
+                val format = SimpleDateFormat(PostcardConstants.POSTCARD_DATE_FORMAT, Locale.getDefault())
                 timeStampView.text = DateUtils.getDateStringFromTimeMillis(format.parse(postCard.file.name.split("_")[0]).time)
             } catch (e: Exception) {
-                timeStampView.text = GUIDE_MESSAGE
+                timeStampView.text = PostcardConstants.GUIDE_MESSAGE
             }
 
             activity.run {
-                val point =  getDefaultDisplay()
+                val point = getDefaultDisplay()
                 val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
                 val targetX = point.x / spanCount
                 itemPostCardBinding.imageContainer.layoutParams.height = targetX
                 itemPostCardBinding.imageview.layoutParams.height = targetX
                 itemPostCardBinding.imageview.scaleType = ImageView.ScaleType.CENTER
-                Glide.with(itemPostCardBinding.imageview.context)
-                        .load(postCard.file)
-                        .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL))
-                        .into(itemPostCardBinding.imageview)
+                Glide
+                    .with(itemPostCardBinding.imageview.context)
+                    .load(postCard.file)
+                    .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL))
+                    .into(itemPostCardBinding.imageview)
             }
         }
 
@@ -93,15 +104,16 @@ class PostcardAdapter(
             adapter.onItemHolderClick(this)
         }
 
-        override fun onCheckedChanged(p0: CompoundButton, p1: Boolean) {
+        override fun onCheckedChanged(
+            p0: CompoundButton,
+            p1: Boolean,
+        ) {
             adapter.onItemCheckedChange(this.adapterPosition, p1)
         }
     }
 
-    data class PostCard(val file: File, var isItemChecked: Boolean)
-
-    companion object {
-        const val GUIDE_MESSAGE = "No information"
-        const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
-    }
+    data class PostCard(
+        val file: File,
+        var isItemChecked: Boolean,
+    )
 }

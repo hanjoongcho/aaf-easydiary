@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.SettingConstants
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -18,7 +19,6 @@ import me.blog.korn123.easydiary.extensions.*
  */
 
 open class BaseSimpleActivity : AppCompatActivity() {
-
     /***************************************************************************************************
      *   global properties
      *
@@ -26,7 +26,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
     var actionOnPermission: ((granted: Boolean) -> Unit)? = null
     var isAskingPermissions = false
     var useDynamicTheme = true
-
 
     /***************************************************************************************************
      *   override functions
@@ -49,7 +48,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
         }
         updateActionbarColor()
     }
-    
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -59,14 +58,17 @@ open class BaseSimpleActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         isAskingPermissions = false
-        if (requestCode == GENERIC_PERM_HANDLER && grantResults.isNotEmpty()) {
+        if (requestCode == SettingConstants.GENERIC_PERM_HANDLER && grantResults.isNotEmpty()) {
             actionOnPermission?.invoke(grantResults[0] == 0)
         }
     }
-
 
     /***************************************************************************************************
      *   etc functions
@@ -93,18 +95,17 @@ open class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    fun handlePermission(permissionId: Int, callback: (granted: Boolean) -> Unit) {
+    fun handlePermission(
+        permissionId: Int,
+        callback: (granted: Boolean) -> Unit,
+    ) {
         actionOnPermission = null
         if (hasPermission(permissionId)) {
             callback(true)
         } else {
             isAskingPermissions = true
             actionOnPermission = callback
-            ActivityCompat.requestPermissions(this, arrayOf(getPermissionString(permissionId)), GENERIC_PERM_HANDLER)
+            ActivityCompat.requestPermissions(this, arrayOf(getPermissionString(permissionId)), SettingConstants.GENERIC_PERM_HANDLER)
         }
-    }
-
-    companion object {
-        private const val GENERIC_PERM_HANDLER = 100
     }
 }

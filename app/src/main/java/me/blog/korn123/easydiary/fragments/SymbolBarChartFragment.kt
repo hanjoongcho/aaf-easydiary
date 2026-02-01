@@ -31,6 +31,8 @@ import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.ChartConstants
+import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 
@@ -126,7 +128,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
 
         // determine title parameter
         arguments?.let { bundle ->
-            val title = bundle.getString(WritingBarChartFragment.CHART_TITLE)
+            val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
@@ -141,7 +143,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
                                 Intent(
                                     requireActivity(),
                                     StatisticsActivity::class.java,
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_BAR_CHART_SYMBOL),
+                                ).putExtra(StatisticsConstants.CHART_MODE, StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL),
                             )
                         }, 300)
                     }

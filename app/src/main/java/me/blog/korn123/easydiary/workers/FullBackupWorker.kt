@@ -13,16 +13,17 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
 
-class FullBackupWorker(private val context: Context, workerParams: WorkerParameters)
-    : Worker(context, workerParams) {
-
+class FullBackupWorker(
+    private val context: Context,
+    workerParams: WorkerParameters,
+) : Worker(context, workerParams) {
     private val mZipHelper = ZipHelper(context)
 
     override fun doWork(): Result {
-        val uri = Uri.parse(inputData.getString(BackupOperations.URI_STRING))
+        val uri = Uri.parse(inputData.getString(WorkerConstants.URI_STRING))
         val os = context.contentResolver.openOutputStream(uri)
 
-        val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
+        val workingPath = EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
 //        val destFileName = DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip"
 //        val destFile = File(EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + destFileName)
         val compressFile = File(workingPath, "bak.zip")

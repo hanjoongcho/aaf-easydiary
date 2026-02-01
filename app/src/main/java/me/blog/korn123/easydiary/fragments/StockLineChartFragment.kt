@@ -311,7 +311,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun setupTitle() {
         arguments?.let { bundle ->
-            val title = bundle.getString(CHART_TITLE)
+            val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
                 mBinding.run {
                     chartTitle.text = title
@@ -331,8 +331,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                                         requireActivity(),
                                         StatisticsActivity::class.java,
                                     ).putExtra(
-                                        StatisticsActivity.CHART_MODE,
-                                        StatisticsActivity.MODE_SINGLE_LINE_CHART_STOCK,
+                                        StatisticsConstants.CHART_MODE,
+                                        StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK,
                                     ),
                                 )
                             }, 300)
@@ -871,9 +871,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      *   inner class
      *
      ***************************************************************************************************/
-    companion object {
-        const val CHART_TITLE = "chartTitle"
-    }
 
     inner class StockXAxisValueFormatter(
         private var context: Context?,

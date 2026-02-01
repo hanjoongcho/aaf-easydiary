@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
+import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -43,8 +44,8 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         mBinding = ActivityMarkdownViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
-        val pageTitle = intent.getStringExtra(OPEN_URL_DESCRIPTION)
-        mForceAppendCodeBlock = intent.getBooleanExtra(FORCE_APPEND_CODE_BLOCK, true)
+        val pageTitle = intent.getStringExtra(MarkdownConstants.OPEN_URL_DESCRIPTION)
+        mForceAppendCodeBlock = intent.getBooleanExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, true)
 
         supportActionBar?.run {
             title = pageTitle
@@ -53,7 +54,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         }
 
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
-        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)!!
+        markdownUrl = intent.getStringExtra(MarkdownConstants.OPEN_URL_INFO)!!
 //        markdownView.run {
 //            webViewClient =  object : WebViewClient() {
 //                override fun onPageFinished(view: WebView, url: String) {
@@ -75,6 +76,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
                 runOnUiThread { mBinding.progressBar.visibility = View.GONE }
                 initMarkdown()
             }
+
             false -> {
                 Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
             }
@@ -82,22 +84,28 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     }
 
     private fun initMarkdown() {
-        Markwon.builder(this)
-                .usePlugin(TablePlugin.create { builder: TableTheme.Builder ->
+        Markwon
+            .builder(this)
+            .usePlugin(
+                TablePlugin.create { builder: TableTheme.Builder ->
                     val dip: Dip = Dip.create(this)
                     builder
-                            .tableBorderWidth(dip.toPx(2))
-                            .tableBorderColor(Color.BLACK)
-                            .tableCellPadding(dip.toPx(4))
-                            .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+                        .tableBorderWidth(dip.toPx(2))
+                        .tableBorderColor(Color.BLACK)
+                        .tableCellPadding(dip.toPx(4))
+                        .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
 //                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
 //                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
-                })
-                .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-                .build().apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
+                },
+            ).usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+            .build()
+            .apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
     }
 
-    private fun openMarkdownFileAfterDownload(fileURL: String, saveFilePath: String) {
+    private fun openMarkdownFileAfterDownload(
+        fileURL: String,
+        saveFilePath: String,
+    ) {
         if (isConnectedOrConnecting()) {
             val url = URL(fileURL)
             val httpConn = url.openConnection() as HttpURLConnection
@@ -136,7 +144,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.update -> {
-                Thread.sleep(200) /*wait ripple animation*/
+                Thread.sleep(200) // wait ripple animation
                 mBinding.progressBar.visibility = View.VISIBLE
 
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -147,18 +155,27 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
                 }
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         pauseLock()
         when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                openMarkdownFile()
-            } else {
-                makeSnackBar("Permission denied")
+            REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN -> {
+                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    openMarkdownFile()
+                } else {
+                    makeSnackBar("Permission denied")
+                }
             }
         }
     }
@@ -176,11 +193,5 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             sb.append(e.message)
         }
         return sb.toString()
-    }
-
-    companion object {
-        const val OPEN_URL_INFO = "open_url_info"
-        const val OPEN_URL_DESCRIPTION = "open_url_description"
-        const val FORCE_APPEND_CODE_BLOCK = "force_append_code_block"
     }
 }

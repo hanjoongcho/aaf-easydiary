@@ -11,37 +11,35 @@ import java.util.*
  */
 
 class DateUtilsTest {
-    companion object {
-        const val TIME_MILLIS: Long = 1520149040913    
-    }
-    
+    val timeMillis: Long = 1520149040913
+
     @Test
     fun timeMillisToDateTime() {
-        Assert.assertEquals("2018-03-04", DateUtils.timeMillisToDateTime(TIME_MILLIS, DateUtils.DATE_PATTERN_DASH))
+        Assert.assertEquals("2018-03-04", DateUtils.timeMillisToDateTime(timeMillis, DateUtils.DATE_PATTERN_DASH))
     }
 
     @Test
     fun timeMillisToHour() {
-        Assert.assertEquals("16", DateUtils.timeMillisToDateTime(TIME_MILLIS, "HH"))
+        Assert.assertEquals("16", DateUtils.timeMillisToDateTime(timeMillis, "HH"))
     }
 
 //    @Test
 //    fun getCurrentDateTime() {
 //        Assert.assertEquals("20180304_170749", DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
 //    }
-    
+
     @Test
     fun getFullPatternDateWithTimeAndSeconds01() {
-        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(TIME_MILLIS))
+        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(timeMillis))
     }
 
     @Test
     fun getFullPatternDateWithTimeAndSeconds02() {
-        Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(TIME_MILLIS, SimpleDateFormat.FULL, SimpleDateFormat.FULL, null, Locale.FRANCE))
+        Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(timeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL, null, Locale.FRANCE))
     }
 
     @Test
     fun getDateStringFromTimeMillis01() {
-        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateStringFromTimeMillis(TIME_MILLIS, SimpleDateFormat.FULL))
+        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.FULL))
     }
 }

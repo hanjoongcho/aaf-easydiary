@@ -54,7 +54,6 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.compose.TreeTimelineActivity
@@ -90,6 +89,8 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_WELCOME_DASHBOARD
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -98,6 +99,7 @@ import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
+import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_NOTIFICATION
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
@@ -496,7 +498,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             R.id.saveAsHtml -> {
 //                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
                 EasyDiaryUtils.writeFileWithSAF(
-                    "${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
+                    "${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
                     MIME_TYPE_HTML,
                     mRequestSAFForHtmlBookLauncher,
                 )
@@ -623,10 +625,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 PhotoHighlightFragment().apply {
                     arguments =
                         Bundle().apply {
-                            putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
-                            putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
-                            putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
-                            putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
+                            putInt(PhotoHighlightConstants.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                            putFloat(PhotoHighlightConstants.REVEAL_WIDTH, 20F)
+                            putFloat(PhotoHighlightConstants.PAGE_MARGIN, 5F)
+                            putBoolean(PhotoHighlightConstants.AUTO_PLAY, true)
                         }
                     togglePhotoHighlightCallback =
                         { isVisible: Boolean -> togglePhotoHighlight(isVisible) }
@@ -1027,7 +1029,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun initSampleData() {
         EasyDiaryDbHelper.insertDiary(
             Diary(
-                DIARY_SEQUENCE_INIT,
+                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 395000000L,
                 getString(R.string.sample_diary_title_1),
                 getString(R.string.sample_diary_1),
@@ -1036,7 +1038,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         )
         EasyDiaryDbHelper.insertDiary(
             Diary(
-                DIARY_SEQUENCE_INIT,
+                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 263000000L,
                 getString(R.string.sample_diary_title_2),
                 getString(R.string.sample_diary_2),
@@ -1045,7 +1047,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         )
         EasyDiaryDbHelper.insertDiary(
             Diary(
-                DIARY_SEQUENCE_INIT,
+                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 132000000L,
                 getString(R.string.sample_diary_title_3),
                 getString(R.string.sample_diary_3),
@@ -1054,7 +1056,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         )
         EasyDiaryDbHelper.insertDiary(
             Diary(
-                DIARY_SEQUENCE_INIT,
+                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 4000000L,
                 getString(R.string.sample_diary_title_4),
                 getString(R.string.sample_diary_4),

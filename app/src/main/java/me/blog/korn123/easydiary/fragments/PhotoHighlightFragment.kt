@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.History
 import me.blog.korn123.easydiary.views.FigureIndicatorView
@@ -38,17 +39,23 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBannerHistory: BannerViewPager<History>
     var togglePhotoHighlightCallback: ((isVisible: Boolean) -> Unit)? = null
 
-
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentPhotoHighlightBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupHistory()
     }
@@ -58,29 +65,29 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         Handler(Looper.getMainLooper()).post { updateHistory() }
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
     private fun setupHistory() {
-        mBannerHistory = (mBinding.bannerHistory as BannerViewPager<History>).apply {
-            setLifecycleRegistry(lifecycle)
-            adapter = HistoryAdapter()
-            setAutoPlay(arguments?.getBoolean(AUTO_PLAY) ?: false)
-            setInterval(3000)
-            setScrollDuration(1000)
-            setPageMargin(requireContext().dpToPixel(arguments?.getFloat(PAGE_MARGIN) ?: 10F))
-            setPageStyle(arguments?.getInt(PAGE_STYLE) ?: PageStyle.MULTI_PAGE_SCALE)
-            setRevealWidth(requireContext().dpToPixel(arguments?.getFloat(REVEAL_WIDTH) ?: 10F))
-            FigureIndicatorView(requireContext()).apply {
-                setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
-                setBackgroundColor(config.primaryColor)
-                setIndicatorGravity(IndicatorGravity.END)
-                setIndicatorView(this)
+        mBannerHistory =
+            (mBinding.bannerHistory as BannerViewPager<History>).apply {
+                setLifecycleRegistry(lifecycle)
+                adapter = HistoryAdapter()
+                setAutoPlay(arguments?.getBoolean(PhotoHighlightConstants.AUTO_PLAY) ?: false)
+                setInterval(3000)
+                setScrollDuration(1000)
+                setPageMargin(requireContext().dpToPixel(arguments?.getFloat(PhotoHighlightConstants.PAGE_MARGIN) ?: 10F))
+                setPageStyle(arguments?.getInt(PhotoHighlightConstants.PAGE_STYLE) ?: PageStyle.MULTI_PAGE_SCALE)
+                setRevealWidth(requireContext().dpToPixel(arguments?.getFloat(PhotoHighlightConstants.REVEAL_WIDTH) ?: 10F))
+                FigureIndicatorView(requireContext()).apply {
+                    setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+                    setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
+                    setBackgroundColor(config.primaryColor)
+                    setIndicatorGravity(IndicatorGravity.END)
+                    setIndicatorView(this)
+                }
             }
-        }
     }
 
     private fun updateHistory() {
@@ -93,10 +100,14 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         val oneYearDays = 365
                         val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
                         val betweenDays = betweenMillis / oneDayMillis
-                        fun makeHistory(pastMillis: Long, historyTag: String) {
+
+                        fun makeHistory(
+                            pastMillis: Long,
+                            historyTag: String,
+                        ) {
                             val defaultDayBuffer = 1
                             val noDataDayBufferMaxLoop = 3
-                            val pastMillisBuffer  = pastMillis.plus(defaultDayBuffer * oneDayMillis)
+                            val pastMillisBuffer = pastMillis.plus(defaultDayBuffer * oneDayMillis)
                             var diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer)
                             if (diaryItems.isEmpty()) {
                                 for (i in 1..noDataDayBufferMaxLoop) {
@@ -111,8 +122,8 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                             historyTag,
                                             DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
                                             if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
-                                            it.sequence
-                                        )
+                                            it.sequence,
+                                        ),
                                     )
                                 }
                             }
@@ -122,8 +133,10 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         for (i in 1..11) {
                             val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
                             if (oldestDiary.currentTimeMillis < pastMills) {
-                                makeHistory(pastMills,
-                                    MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
+                                makeHistory(
+                                    pastMills,
+                                    MessageFormat.format(getString(R.string.monthly_highlight_tag), i),
+                                )
                             }
                         }
 
@@ -144,22 +157,25 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                         requireActivity(),
                                         Intent(requireContext(), DiaryReadingActivity::class.java).apply {
                                             putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
-                                        }
+                                        },
                                     )
                                 }
-                                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                                    override fun onPageSelected(position: Int) {
-                                        super.onPageSelected(position)
+                                registerOnPageChangeCallback(
+                                    object : ViewPager2.OnPageChangeCallback() {
+                                        override fun onPageSelected(position: Int) {
+                                            super.onPageSelected(position)
 //                            toast(historyItems[position].title)
-                                        mBinding.textDescription.text = historyItems[position].historyTag
-                                    }
-                                })
+                                            mBinding.textDescription.text = historyItems[position].historyTag
+                                        }
+                                    },
+                                )
                                 create(historyItems)
                             }
                             mBinding.textDescription.text = historyItems[0].historyTag
                         }
                     }
                 }
+
                 false -> {}
             }
         } else {
@@ -170,12 +186,5 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                 mBannerHistory.refreshData(mutableListOf())
             }
         }
-    }
-
-    companion object {
-        const val PAGE_STYLE = "page_style"
-        const val PAGE_MARGIN = "page_margin"
-        const val REVEAL_WIDTH = "reveal_width"
-        const val AUTO_PLAY = "auto_play"
     }
 }

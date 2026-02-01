@@ -47,6 +47,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
+import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
@@ -239,7 +240,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         val alarm =
                             Alarm().apply {
                                 sequence = Int.MAX_VALUE
-                                workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                                workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                                 label = "Quick Settings"
                             }
                         AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }

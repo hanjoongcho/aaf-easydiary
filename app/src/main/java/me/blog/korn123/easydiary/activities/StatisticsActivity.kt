@@ -8,6 +8,7 @@ import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.fragments.*
+import me.blog.korn123.easydiary.helper.StatisticsConstants
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -15,6 +16,7 @@ import me.blog.korn123.easydiary.fragments.*
 
 class StatisticsActivity : ChartBase() {
     private lateinit var mBinding: ActivityStatisticsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityStatisticsBinding.inflate(layoutInflater)
@@ -23,22 +25,24 @@ class StatisticsActivity : ChartBase() {
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
-            title = when (intent.getStringExtra(CHART_MODE)) {
-                MODE_SINGLE_LINE_CHART_WEIGHT -> "Weight"
-                MODE_SINGLE_LINE_CHART_STOCK -> "Stock"
-                MODE_SINGLE_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_all)
-                MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
-                else -> getString(R.string.statistics_creation_time)
-            }
+            title =
+                when (intent.getStringExtra(StatisticsConstants.CHART_MODE)) {
+                    StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT -> "Weight"
+                    StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> "Stock"
+                    StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_all)
+                    StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
+                    else -> getString(R.string.statistics_creation_time)
+                }
         }
 
-        val defaultChart = when (intent.getStringExtra(CHART_MODE)) {
-            MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
-            MODE_SINGLE_LINE_CHART_STOCK -> StockLineChartFragment()
-            MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
-            MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
-            else -> WritingBarChartFragment()
-        }
+        val defaultChart =
+            when (intent.getStringExtra(StatisticsConstants.CHART_MODE)) {
+                StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
+                StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> StockLineChartFragment()
+                StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
+                StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
+                else -> WritingBarChartFragment()
+            }
         supportFragmentManager.run {
             beginTransaction().run {
                 replace(R.id.chartView, defaultChart)
@@ -64,7 +68,10 @@ class StatisticsActivity : ChartBase() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> {
+                finish()
+            }
+
             R.id.barChart -> {
                 supportActionBar?.title = getString(R.string.statistics_creation_time)
                 supportFragmentManager.beginTransaction().run {
@@ -72,6 +79,7 @@ class StatisticsActivity : ChartBase() {
                     commit()
                 }
             }
+
             R.id.barChart2 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_all)
                 supportFragmentManager.beginTransaction().run {
@@ -79,6 +87,7 @@ class StatisticsActivity : ChartBase() {
                     commit()
                 }
             }
+
             R.id.barChart3 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_top_ten)
                 supportFragmentManager.beginTransaction().run {
@@ -90,14 +99,5 @@ class StatisticsActivity : ChartBase() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun isSingleChart(): Boolean = intent.getStringExtra(CHART_MODE) != null
-
-    companion object {
-        const val CHART_MODE = "chart_mode"
-        const val MODE_SINGLE_LINE_CHART_WEIGHT = "mode_single_line_chart_weight"
-        const val MODE_SINGLE_LINE_CHART_STOCK = "mode_single_line_chart_stock"
-        const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
-        const val MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL = "mode_single_horizontal_bar_chart_symbol"
-        const val MODE_SINGLE_BAR_CHART_WRITING = "mode_single_bar_chart_writing"
-    }
+    private fun isSingleChart(): Boolean = intent.getStringExtra(StatisticsConstants.CHART_MODE) != null
 }

@@ -7,7 +7,11 @@ import org.junit.Test
  * https://play.kotlinlang.org/koans/Introduction/Default%20arguments/Task.kt
  */
 class DefaultArguments {
-    private fun foo(name: String, number: Int = 42, toUpperCase: Boolean = false) = (if (toUpperCase) name.toUpperCase() else name) + number
+    private fun foo(
+        name: String,
+        number: Int = 42,
+        toUpperCase: Boolean = false,
+    ) = (if (toUpperCase) name.uppercase() else name) + number
 
     @Test
     fun foo_test1() {

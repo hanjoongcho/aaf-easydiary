@@ -17,22 +17,27 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemGalleryBinding
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.GalleryConstants
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.models.Diary
 import java.io.File
 import java.util.*
 
 class GalleryAdapter(
-        val activity: Activity,
-        private val listPostcard: List<AttachedPhoto>,
-        private val onItemClickListener: AdapterView.OnItemClickListener
-) : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(), SectionedAdapter {
+    val activity: Activity,
+    private val listPostcard: List<AttachedPhoto>,
+    private val onItemClickListener: AdapterView.OnItemClickListener,
+) : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(),
+    SectionedAdapter {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): GalleryViewHolder = GalleryViewHolder(activity, ItemGalleryBinding.inflate(activity.layoutInflater, parent, false), this)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        return GalleryViewHolder(activity, ItemGalleryBinding.inflate(activity.layoutInflater, parent, false), this)
-    }
-
-    override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: GalleryViewHolder,
+        position: Int,
+    ) {
         holder.bindTo(position)
     }
 
@@ -47,20 +52,27 @@ class GalleryAdapter(
         val attachedPhoto = listPostcard[position]
         return attachedPhoto.diary?.let {
             DateUtils.getDateTimeStringForceFormatting(it.currentTimeMillis, activity)
-        } ?: run { GUIDE_MESSAGE }
+        } ?: run { GalleryConstants.GUIDE_MESSAGE }
     }
 
     fun onItemHolderClick(itemHolder: GalleryViewHolder) {
         onItemClickListener.onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
     }
 
-    fun onItemCheckedChange(position: Int, isChecked: Boolean) {
+    fun onItemCheckedChange(
+        position: Int,
+        isChecked: Boolean,
+    ) {
         listPostcard[position].isItemChecked = isChecked
     }
 
     inner class GalleryViewHolder(
-            val activity: Activity, private val itemGalleryBinding: ItemGalleryBinding, val adapter: GalleryAdapter
-    ) : RecyclerView.ViewHolder(itemGalleryBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+        val activity: Activity,
+        private val itemGalleryBinding: ItemGalleryBinding,
+        val adapter: GalleryAdapter,
+    ) : RecyclerView.ViewHolder(itemGalleryBinding.root),
+        View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
         init {
             itemGalleryBinding.run {
                 activity.updateAppViews(root)
@@ -78,20 +90,21 @@ class GalleryAdapter(
             itemGalleryBinding.checkItem.isChecked = attachedPhoto.isItemChecked
             timeStampView.text = attachedPhoto.diary?.let {
                 DateUtils.getDateTimeStringForceFormatting(it.currentTimeMillis, activity)
-            } ?: run { GUIDE_MESSAGE }
+            } ?: run { GalleryConstants.GUIDE_MESSAGE }
 
             activity.run {
-                val point =  getDefaultDisplay()
+                val point = getDefaultDisplay()
                 val spanCount = if (activity.isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
                 val targetX = point.x / spanCount
                 itemGalleryBinding.imageContainer.layoutParams.height = targetX
                 itemGalleryBinding.imageview.layoutParams.height = targetX
                 itemGalleryBinding.imageview.layoutParams.width = targetX
                 itemGalleryBinding.imageview.scaleType = ImageView.ScaleType.CENTER
-                Glide.with(itemGalleryBinding.imageview.context)
-                        .load(if (attachedPhoto.diary?.isEncrypt == true)  null else attachedPhoto.file)
-                        .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL, attachedPhoto.diary?.isEncrypt ?: false))
-                        .into(itemGalleryBinding.imageview)
+                Glide
+                    .with(itemGalleryBinding.imageview.context)
+                    .load(if (attachedPhoto.diary?.isEncrypt == true) null else attachedPhoto.file)
+                    .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL, attachedPhoto.diary?.isEncrypt ?: false))
+                    .into(itemGalleryBinding.imageview)
             }
         }
 
@@ -103,14 +116,17 @@ class GalleryAdapter(
             adapter.onItemHolderClick(this)
         }
 
-        override fun onCheckedChanged(p0: CompoundButton, p1: Boolean) {
+        override fun onCheckedChanged(
+            p0: CompoundButton,
+            p1: Boolean,
+        ) {
             adapter.onItemCheckedChange(this.adapterPosition, p1)
         }
     }
 
-    data class AttachedPhoto(val file: File, var isItemChecked: Boolean, val diary: Diary?)
-
-    companion object {
-        const val GUIDE_MESSAGE = "No information"
-    }
+    data class AttachedPhoto(
+        val file: File,
+        var isItemChecked: Boolean,
+        val diary: Diary?,
+    )
 }

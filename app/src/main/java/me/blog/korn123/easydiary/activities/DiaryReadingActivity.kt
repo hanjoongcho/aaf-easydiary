@@ -85,11 +85,14 @@ import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.DiaryComponentConstants
+import me.blog.korn123.easydiary.helper.DiaryReadingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
+import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -174,12 +177,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-    companion object {
-        const val ENCRYPTION = "encryption"
-        const val DECRYPTION = "decryption"
-        const val EDITING = "editing"
-    }
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityDiaryReadingBinding.inflate(layoutInflater)
@@ -195,9 +192,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
         val diaryList: List<Diary> =
-            when (intent.getStringExtra(DiaryFragment.MODE_FLAG) == null) {
+            when (intent.getStringExtra(DiaryComponentConstants.MODE_FLAG) == null) {
                 true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
-                false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryFragment.MODE_FLAG))
+                false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryComponentConstants.MODE_FLAG))
             }
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
@@ -256,7 +253,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                 R.id.edit -> {
                     if (fragment.isEncryptContents()) {
-                        showEncryptPagePopup(fragment, EDITING) { inputPass ->
+                        showEncryptPagePopup(fragment, DiaryReadingConstants.EDITING) { inputPass ->
                             startEditing(fragment, inputPass)
                         }
                     } else {
@@ -438,19 +435,19 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
 
             when (workMode) {
-                ENCRYPTION -> {
+                DiaryReadingConstants.ENCRYPTION -> {
                     description.text = getString(R.string.diary_encryption_title)
                     guideMessage.text = getString(R.string.diary_encryption_guide)
                     decMode.visibility = View.GONE
                 }
 
-                DECRYPTION -> {
+                DiaryReadingConstants.DECRYPTION -> {
                     description.text = getString(R.string.diary_decryption_title)
                     guideMessage.text = getString(R.string.diary_decryption_guide)
                     decMode.visibility = View.VISIBLE
                 }
 
-                EDITING -> {
+                DiaryReadingConstants.EDITING -> {
                     description.text = getString(R.string.diary_decryption_title)
                     guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
                     decMode.visibility = View.GONE
@@ -532,7 +529,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 confirmPass = ""
                             }
 
-                            workMode == DECRYPTION -> {
+                            workMode == DiaryReadingConstants.DECRYPTION -> {
                                 when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
                                     true -> {
                                         if (decMode1.isChecked) {
@@ -551,7 +548,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
                             }
 
-                            workMode == EDITING -> {
+                            workMode == DiaryReadingConstants.EDITING -> {
                                 when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
                                     true -> {
                                         callback?.invoke(inputPass)
@@ -776,11 +773,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
 
                                 R.id.encryptData -> {
-                                    showEncryptPagePopup(fragment, ENCRYPTION)
+                                    showEncryptPagePopup(fragment, DiaryReadingConstants.ENCRYPTION)
                                 }
 
                                 R.id.decryptData -> {
-                                    showEncryptPagePopup(fragment, DECRYPTION)
+                                    showEncryptPagePopup(fragment, DiaryReadingConstants.DECRYPTION)
                                 }
 
                                 R.id.push -> {
@@ -1223,7 +1220,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
                 photoViewPager.putExtra(DIARY_ATTACH_PHOTO_INDEX, index)
-                TransitionHelper.startActivityWithTransition(activity, photoViewPager, TransitionHelper.BOTTOM_TO_TOP)
+                TransitionHelper.startActivityWithTransition(activity, photoViewPager, TransitionConstants.BOTTOM_TO_TOP)
             }
         }
     }

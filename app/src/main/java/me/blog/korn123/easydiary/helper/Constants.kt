@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.helper
 
 import android.Manifest
+import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 
 /**
  * Created by CHO HANJOONG on 2018-02-09.
@@ -695,4 +696,185 @@ object ComposeConstants {
     const val VERTICAL_PADDING = 5F
     const val HORIZONTAL_PADDING = 5F
     const val ROUNDED_CORNER_SHAPE_SIZE = 8F
+}
+
+object SettingConstants {
+    const val ALARM_ID = "alarm_id"
+    const val GENERIC_PERM_HANDLER = 100
+    const val INITIALIZE_TIME_MILLIS = "initialize_time_millis"
+}
+
+object SettingLocalConstants {
+    const val SEQ = 0
+    const val WRITE_DATE = 1
+    const val TITLE = 2
+    const val CONTENTS = 3
+    const val ATTACH_PHOTO_NAME = 4
+    const val ATTACH_PHOTO_SIZE = 5
+    const val WEATHER = 6 // no longer used since version 1.4.79
+    const val SYMBOL = 6
+    const val IS_ALL_DAY = 7
+    const val WRITE_TIME_MILLIS = 8
+    const val MODE_BACKUP = 0
+    const val MODE_RECOVERY = 1
+}
+
+object NotificationConstants {
+    // BaseDevActivity
+    const val ACTION_DEV_DISMISS = "me.blog.korn123.easydiary.services.ACTION_DEV_DISMISS"
+    const val ACTION_DEV_TOAST = "me.blog.korn123.easydiary.services.ACTION_DEV_TOAST"
+
+    // ZipHelper
+    const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
+    const val ACTION_DISMISS_DECOMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DECOMPRESS"
+    const val ACTION_FULL_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_CANCEL"
+    const val ACTION_FULL_RECOVERY_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_RECOVERY_CANCEL"
+
+    // FullBackupService
+    const val ACTION_FULL_BACKUP_GMS_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_GMS_CANCEL"
+    const val ACTION_FULL_BACKUP_GMS_DISMISS = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_GMS_DISMISS"
+
+    // BackupPhotoService
+    const val ACTION_PHOTO_BACKUP_GMS_CANCEL = "me.blog.korn123.easydiary.services.ACTION_PHOTO_BACKUP_GMS_CANCEL"
+    const val ACTION_PHOTO_BACKUP_GMS_DISMISS = "me.blog.korn123.easydiary.services.ACTION_PHOTO_BACKUP_GMS_DISMISS"
+
+    // RecoverPhotoService
+    const val ACTION_PHOTO_RECOVER_GMS_CANCEL = "me.blog.korn123.easydiary.services.ACTION_PHOTO_RECOVER_GMS_CANCEL"
+    const val ACTION_PHOTO_RECOVER_GMS_DISMISS = "me.blog.korn123.easydiary.services.ACTION_PHOTO_RECOVER_GMS_DISMISS"
+}
+
+object GDriveConstants {
+    const val MIME_TYPE_GOOGLE_APPS_FOLDER = "application/vnd.google-apps.folder"
+    const val MIME_TYPE_AAF_EASY_DIARY_PHOTO = "aaf/easy.diary.photo"
+
+    const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
+    const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
+    const val AAF_EASY_DIARY_REALM_FOLDER_NAME = "aaf-easydiary_realm"
+
+    const val WORKING_FOLDER_ID = "working-folder-id"
+}
+
+object AlarmConstants {
+    const val WORK_MODE_DIARY_WRITING = 0
+    const val WORK_MODE_DIARY_BACKUP_GMS = 1
+    const val WORK_MODE_DIARY_BACKUP_LOCAL = 2
+    const val WORK_MODE_CALENDAR_SCHEDULE_SYNC = 3
+}
+
+object TransitionConstants {
+    const val DEFAULT = 0
+    const val BOTTOM_TO_TOP = 1
+    const val TOP_TO_BOTTOM = 2
+}
+
+object WidgetConstants {
+    const val OPEN_WRITE_PAGE = "open_write_page"
+    const val OPEN_READ_PAGE = "open_read_page"
+    const val UPDATE_WIDGET = "update_widget"
+}
+
+object WorkerConstants {
+    const val URI_STRING = "uri_string"
+    const val WORK_MODE_BACKUP = "work_mode_backup"
+    const val WORK_MODE_RECOVERY = "work_mode_recovery"
+}
+
+object DateUtilConstants {
+    const val DATE_PATTERN_DASH = "yyyy-MM-dd"
+    const val DATE_TIME_PATTERN_WITHOUT_DASH = "yyyyMMddHHmmss"
+}
+
+object DiaryComponentConstants {
+    const val MODE_FLAG = "mode_flag"
+    const val MODE_TASK_TODO = "mode_task_todo"
+    const val MODE_TASK_DOING = "mode_task_doing"
+    const val MODE_TASK_DONE = "mode_task_done"
+    const val MODE_TASK_CANCEL = "mode_task_cancel"
+    const val MODE_PREVIOUS_100 = "mode_previous_100"
+    const val MODE_FUTURE = "mode_future"
+}
+
+object ChartConstants {
+    const val CHART_TITLE = "chartTitle"
+}
+
+object StatisticsConstants {
+    const val CHART_MODE = "chart_mode"
+    const val MODE_SINGLE_LINE_CHART_WEIGHT = "mode_single_line_chart_weight"
+    const val MODE_SINGLE_LINE_CHART_STOCK = "mode_single_line_chart_stock"
+    const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
+    const val MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL = "mode_single_horizontal_bar_chart_symbol"
+    const val MODE_SINGLE_BAR_CHART_WRITING = "mode_single_bar_chart_writing"
+}
+
+object DiaryEditingConstants {
+    const val FOCUS_TITLE = 0
+    const val FOCUS_CONTENTS = 1
+    const val DIARY_SEQUENCE_TEMPORARY = -1
+    const val DIARY_SEQUENCE_INIT = 0
+    const val DIARY_ORIGIN_SEQUENCE_INIT = 0
+}
+
+object PhotoFlexItemOptionConstants {
+    const val ITEM_INDEX = "item_index"
+    const val VIEW_MODE = "view_index"
+    const val FILTER_MODE = "filter_index"
+    const val PHOTO_URI = "photo_uri"
+    const val FORCE_SINGLE_PHOTO_POSITION = "force_single_photo_position"
+}
+
+object FingerprintLockConstants {
+    const val TAG = "FingerprintLockActivity"
+    const val KEY_NAME = "me.blog.korn123"
+    const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
+    const val LAUNCHING_MODE = "launching_mode"
+    const val ACTIVITY_SETTING = "activity_setting"
+    const val ACTIVITY_UNLOCK = "activity_unlock"
+}
+
+object DiaryReadingConstants {
+    const val ENCRYPTION = "encryption"
+    const val DECRYPTION = "decryption"
+    const val EDITING = "editing"
+}
+
+object DashboardConstants {
+    const val MODE_FLAG = "mode"
+    const val MODE_LIFETIME = "lifetime"
+    const val MODE_LAST_MONTH = "lastMonth"
+    const val MODE_LAST_WEEK = "lastWeek"
+}
+
+object PhotoHighlightConstants {
+    const val PAGE_STYLE = "page_style"
+    const val PAGE_MARGIN = "page_margin"
+    const val REVEAL_WIDTH = "reveal_width"
+    const val AUTO_PLAY = "auto_play"
+}
+
+object PrepareReleaseConstants {
+    const val SYNC_RELEASE_STRING = "sync_release_string"
+    const val SYNC_NEW_STRING = "sync_new_string"
+    const val SYNC_RELEASE_NOTE = "sync_release_note"
+}
+
+object MarkdownConstants {
+    const val OPEN_URL_INFO = "open_url_info"
+    const val OPEN_URL_DESCRIPTION = "open_url_description"
+    const val FORCE_APPEND_CODE_BLOCK = "force_append_code_block"
+}
+
+object PinLockConstants {
+    const val LAUNCHING_MODE = "launching_mode"
+    const val ACTIVITY_SETTING = "activity_setting"
+    const val ACTIVITY_UNLOCK = "activity_unlock"
+}
+
+object PostcardConstants {
+    const val GUIDE_MESSAGE = "No information"
+    const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
+}
+
+object GalleryConstants {
+    const val GUIDE_MESSAGE = "No information"
 }

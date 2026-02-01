@@ -28,11 +28,13 @@ import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_RECOVERY_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
+import me.blog.korn123.easydiary.helper.NotificationConstants
 import java.io.File
 import java.util.Collections
 
@@ -131,7 +133,7 @@ class RecoverPhotoService(
                     this,
                     NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID,
                     Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_PHOTO_RECOVER_GMS_CANCEL
+                        action = NotificationConstants.ACTION_PHOTO_RECOVER_GMS_CANCEL
                     },
                     pendingIntentFlag(),
                 ),
@@ -171,7 +173,7 @@ class RecoverPhotoService(
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper
             .queryFiles(
-                "mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
+                "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,
             ).run {
@@ -210,7 +212,7 @@ class RecoverPhotoService(
     private fun recoverPhoto() {
         mDriveServiceHelper
             .queryFiles(
-                "'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false",
+                "'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false",
                 1,
                 null,
             ).run {
@@ -218,7 +220,7 @@ class RecoverPhotoService(
                     when (fileList.files.size) {
                         0 -> {
                             mDriveServiceHelper
-                                .createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME)
+                                .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
                                 .addOnSuccessListener { fileId ->
                                     Log.i(
                                         "GSuite",
@@ -362,7 +364,7 @@ class RecoverPhotoService(
                     this,
                     NOTIFICATION_GMS_RECOVERY_COMPLETE_ID,
                     Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_PHOTO_RECOVER_GMS_DISMISS
+                        action = NotificationConstants.ACTION_PHOTO_RECOVER_GMS_DISMISS
                     },
                     pendingIntentFlag(),
                 ),

@@ -70,28 +70,17 @@ class DriveServiceHelper(
 
     private val mExecutor = Executors.newSingleThreadExecutor()
 
-    companion object {
-        const val MIME_TYPE_GOOGLE_APPS_FOLDER = "application/vnd.google-apps.folder"
-        const val MIME_TYPE_AAF_EASY_DIARY_PHOTO = "aaf/easy.diary.photo"
-
-        const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
-        const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
-        const val AAF_EASY_DIARY_REALM_FOLDER_NAME = "aaf-easydiary_realm"
-
-        const val WORKING_FOLDER_ID = "working-folder-id"
-    }
-
     fun initDriveWorkingDirectory(
         workingFolderName: String,
         callback: (workingFolderId: String?) -> Unit,
     ) {
         // 01. AAF 폴더 검색
-        queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
+        queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
                 when (result.files.size) {
                     // 02. AAF 폴더 없으면 생성
                     0 -> {
-                        createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
+                        createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
                             // 02-01. workingFolder 생성
                             createFolder(
                                 workingFolderName,
@@ -141,7 +130,7 @@ class DriveServiceHelper(
                 val metadata =
                     File()
                         .setParents(listOf(parentId))
-                        .setMimeType(MIME_TYPE_GOOGLE_APPS_FOLDER)
+                        .setMimeType(GDriveConstants.MIME_TYPE_GOOGLE_APPS_FOLDER)
                         .setName(folderName)
 
                 val googleFile =
