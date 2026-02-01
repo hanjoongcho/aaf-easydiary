@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.*
@@ -504,7 +505,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob =
-            CoroutineScope(Dispatchers.IO).launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 initDataSet()
                 clearChart()
                 setData()

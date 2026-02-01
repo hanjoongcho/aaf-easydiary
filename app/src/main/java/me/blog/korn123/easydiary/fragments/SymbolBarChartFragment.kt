@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
@@ -43,11 +44,16 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
         get() = FontUtils.getCommonTypeface(requireContext())!!
     private var mCoroutineJob: Job? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_writing_barchart, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? = inflater.inflate(R.layout.fragment_writing_barchart, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         mBarChart = view.findViewById(R.id.barChart)
         mChartTitle = view.findViewById(R.id.chartTitle)
@@ -67,7 +73,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
 
 //        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
-        //barChart.zoom(3.5F, 0F, 0F, 0F)
+        // barChart.zoom(3.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = AxisValueFormatter()
         mBarChart.xAxis.run {
@@ -129,13 +135,13 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
                     it.visibility = View.VISIBLE
                     requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
                     it.setOnClickListener { view ->
-                        view.postDelayed( {
+                        view.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
                                     requireActivity(),
-                                    StatisticsActivity::class.java
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_BAR_CHART_SYMBOL)
+                                    StatisticsActivity::class.java,
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_BAR_CHART_SYMBOL),
                             )
                         }, 300)
                     }
@@ -143,50 +149,52 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
-            withContext(Dispatchers.Main) {
-                val barEntries = ArrayList<BarEntry>()
-                var index = 1.0F
-                sortedMap.forEach { (key, value) ->
-                    val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
-                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), requireContext().dpToPixel(20F) , requireContext().dpToPixel(20F))
-                        false -> null
+        mCoroutineJob =
+            lifecycleScope.launch(Dispatchers.IO) {
+                val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
+                withContext(Dispatchers.Main) {
+                    val barEntries = ArrayList<BarEntry>()
+                    var index = 1.0F
+                    sortedMap.forEach { (key, value) ->
+                        val drawable: Drawable? =
+                            when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
+                                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), requireContext().dpToPixel(20F), requireContext().dpToPixel(20F))
+                                false -> null
+                            }
+                        mSequences.add(key)
+                        barEntries.add(BarEntry(index++, value.toFloat(), drawable))
                     }
-                    mSequences.add(key)
-                    barEntries.add(BarEntry(index++, value.toFloat(), drawable))
-                }
-                if (barEntries.isNotEmpty()) {
-                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_all))
-                    val iValueFormatter = IValueFormatterExt(context)
-                    barDataSet.valueFormatter = iValueFormatter
+                    if (barEntries.isNotEmpty()) {
+                        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_all))
+                        val iValueFormatter = IValueFormatterExt(context)
+                        barDataSet.valueFormatter = iValueFormatter
 //                    val colors = intArrayOf(
 //                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
 //                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-                    val colorItems = arrayListOf<Int>()
-                    val defaultColor = Color.rgb(209, 232, 255)
-                    for (i in 0..4) {
-                        colorItems.add(defaultColor.darkenColor(i * 2))
+                        val colorItems = arrayListOf<Int>()
+                        val defaultColor = Color.rgb(209, 232, 255)
+                        for (i in 0..4) {
+                            colorItems.add(defaultColor.darkenColor(i * 2))
+                        }
+                        barDataSet.setColors(*colorItems.reversed().toIntArray())
+                        barDataSet.setDrawIcons(true)
+                        barDataSet.setDrawValues(false)
+                        val dataSets = ArrayList<IBarDataSet>()
+                        dataSets.add(barDataSet)
+
+                        val barData = BarData(dataSets)
+                        barData.setValueTextSize(10f)
+                        barData.setValueTypeface(mTypeface)
+                        barData.setValueTextColor(requireContext().config.textColor)
+                        barData.barWidth = 0.9f
+                        mBarChart.zoom((sortedMap.size / 8.5F), 0F, 0F, 0F)
+                        mBarChart.data = barData
+
+                        mBarChart.animateY(2000)
                     }
-                    barDataSet.setColors(*colorItems.reversed().toIntArray())
-                    barDataSet.setDrawIcons(true)
-                    barDataSet.setDrawValues(false)
-                    val dataSets = ArrayList<IBarDataSet>()
-                    dataSets.add(barDataSet)
-
-                    val barData = BarData(dataSets)
-                    barData.setValueTextSize(10f)
-                    barData.setValueTypeface(mTypeface)
-                    barData.setValueTextColor(requireContext().config.textColor)
-                    barData.barWidth = 0.9f
-                    mBarChart.zoom((sortedMap.size / 8.5F), 0F, 0F, 0F)
-                    mBarChart.data = barData
-
-                    mBarChart.animateY(2000)
+                    mBarChartProgressBar.visibility = View.GONE
                 }
-                mBarChartProgressBar.visibility = View.GONE
             }
-        }
     }
 
     override fun onDestroy() {
@@ -195,11 +203,13 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
     }
 
     inner class AxisValueFormatter : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-            return when  {
+        override fun getFormattedValue(
+            value: Float,
+            axis: AxisBase?,
+        ): String =
+            when {
                 value > 0 && value <= mSequences.size -> mSymbolMap[mSequences[value.toInt() - 1]] ?: "None"
                 else -> "None"
             }
-        }
     }
 }

@@ -172,7 +172,7 @@ fun FastScroll(
     if (showDebugCard) {
         Card(
             modifier = Modifier.zIndex(3f),
-            shape = RoundedCornerShape(roundedCornerShapeSize.dp),
+            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
             colors =
                 CardDefaults.cardColors(
                     Color(LocalContext.current.config.backgroundColor).copy(

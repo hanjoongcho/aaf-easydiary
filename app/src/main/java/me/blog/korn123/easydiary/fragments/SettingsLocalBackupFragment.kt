@@ -29,13 +29,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import me.blog.korn123.commons.utils.DateUtils
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -66,8 +66,6 @@ import java.util.*
 import kotlin.getValue
 
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
-
-
     /***************************************************************************************************
      *   global properties
      *
@@ -81,58 +79,82 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mRequestReadFileWithSAF = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            requireActivity().run {
-                pauseLock()
-                if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                    when (mTaskFlag) {
-                        REQUEST_CODE_SAF_READ_ZIP -> importFullBackupFile(it.data!!.data)
-                        REQUEST_CODE_SAF_READ_REALM -> importRealmFileWithSAF(it.data!!.data)
-                    }
-                }
-            }
-        }
-
-        mRequestWriteFileWithSAF = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            requireActivity().run {
-                pauseLock()
-                if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    when (mTaskFlag) {
-                        REQUEST_CODE_SAF_WRITE_ZIP -> exportFullBackupFile(it.data!!.data)
-                        REQUEST_CODE_SAF_WRITE_XLS -> exportExcel(it.data!!.data)
-                        REQUEST_CODE_SAF_WRITE_REALM -> exportRealmFileWithSAF(it.data!!.data)
-                    }
-                }
-            }
-        }
-
-        mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            requireActivity().run {
-                pauseLock()
-                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    when (mTaskFlag) {
-                        REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> createExportExcelUri()
-                        REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
-                        REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
-                        REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> deleteRealmFile()
-                        REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+        mRequestReadFileWithSAF =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                requireActivity().run {
+                    pauseLock()
+                    if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                        when (mTaskFlag) {
+                            REQUEST_CODE_SAF_READ_ZIP -> importFullBackupFile(it.data!!.data)
+                            REQUEST_CODE_SAF_READ_REALM -> importRealmFileWithSAF(it.data!!.data)
                         }
                     }
-                } else {
-                    makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
                 }
             }
-        }
+
+        mRequestWriteFileWithSAF =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                requireActivity().run {
+                    pauseLock()
+                    if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        when (mTaskFlag) {
+                            REQUEST_CODE_SAF_WRITE_ZIP -> exportFullBackupFile(it.data!!.data)
+                            REQUEST_CODE_SAF_WRITE_XLS -> exportExcel(it.data!!.data)
+                            REQUEST_CODE_SAF_WRITE_REALM -> exportRealmFileWithSAF(it.data!!.data)
+                        }
+                    }
+                }
+            }
+
+        mRequestExternalStoragePermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                requireActivity().run {
+                    pauseLock()
+                    if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        when (mTaskFlag) {
+                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> {
+                                createExportExcelUri()
+                            }
+
+                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> {
+                                showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                            }
+
+                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> {
+                                showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                            }
+
+                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> {
+                                deleteRealmFile()
+                            }
+
+                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> {
+                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
+                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                                }
+                            }
+                        }
+                    } else {
+                        makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                    }
+                }
+            }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentSettingsBackupLocalBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
     @OptIn(ExperimentalLayoutApi::class)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         updateFragmentUI(mBinding.root)
         initPreference()
@@ -142,31 +164,32 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 val configuration = LocalConfiguration.current
                 FlowRow(
                     maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
-                    val settingCardModifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                    val settingCardModifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
 
                     val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        true
+                        true,
                     )
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
-                        config.lineSpacingScaleFactor
+                        config.lineSpacingScaleFactor,
                     )
                     val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
-                        FontUtils.getComposeFontFamily(requireContext())
+                        FontUtils.getComposeFontFamily(requireContext()),
                     )
 
                     val informationTitle: String by mSettingsViewModel.informationTitle.observeAsState(
-                        getString(R.string.google_drive_account_sign_in_title)
+                        getString(R.string.google_drive_account_sign_in_title),
                     )
                     val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.observeAsState(
-                        null
+                        null,
                     )
                     val accountInfo: String by mSettingsViewModel.accountInfo.observeAsState(
-                        getString(R.string.google_drive_account_sign_in_description)
+                        getString(R.string.google_drive_account_sign_in_description),
                     )
 
                     SimpleCard(
@@ -175,9 +198,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
-                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM) {
-                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            true -> {
+                                showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                            }
+
+                            false -> {
+                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM) {
+                                    requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                                }
                             }
                         }
                     }
@@ -188,9 +216,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
-                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM) {
-                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            true -> {
+                                showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                            }
+
+                            false -> {
+                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM) {
+                                    requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                                }
                             }
                         }
                     }
@@ -201,9 +234,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> deleteRealmFile()
-                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM) {
-                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            true -> {
+                                deleteRealmFile()
+                            }
+
+                            false -> {
+                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM) {
+                                    requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                                }
                             }
                         }
                     }
@@ -214,9 +252,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> createExportExcelUri()
-                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL) {
-                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                            true -> {
+                                createExportExcelUri()
+                            }
+
+                            false -> {
+                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL) {
+                                    requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                                }
                             }
                         }
                     }
@@ -235,11 +278,16 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                            true -> {
+                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
+                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                                }
                             }
-                            false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
-                                requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+
+                            false -> {
+                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
+                                    requireActivity().confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                                }
                             }
                         }
                     }
@@ -265,7 +313,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         updateFragmentUI(mBinding.root)
         initPreference()
     }
-
 
     /***************************************************************************************************
      *   backup and recovery
@@ -309,20 +356,23 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     val listView = rootView.findViewById<ListView>(R.id.files)
                     val adapter = RealmFileItemAdapter(requireActivity(), R.layout.item_realm_file, realmFiles)
                     listView.adapter = adapter
-                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                        val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + itemInfo["name"])
-                        val destFile = File(EasyDiaryDbHelper.getRealmPath())
-                        EasyDiaryDbHelper.closeInstance()
-                        FileUtils.copyFile(srcFile, destFile)
-                        requireActivity().refreshApp()
-                        alertDialog?.cancel()
-                    }
+                    listView.onItemClickListener =
+                        AdapterView.OnItemClickListener { parent, view, position, id ->
+                            val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                            val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                            val destFile = File(EasyDiaryDbHelper.getRealmPath())
+                            EasyDiaryDbHelper.closeInstance()
+                            FileUtils.copyFile(srcFile, destFile)
+                            requireActivity().refreshApp()
+                            alertDialog?.cancel()
+                        }
 
-                    alertDialog = builder.create().apply {
-                        requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, rootView, "${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
-                    }
+                    alertDialog =
+                        builder.create().apply {
+                            requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, rootView, "${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
+                        }
                 }
+
                 false -> {}
             }
         }
@@ -382,8 +432,8 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                     checkedList.map { filename ->
                                         File(
                                             EasyDiaryUtils.getApplicationDataDirectory(
-                                                requireActivity()
-                                            ) + BACKUP_DB_DIRECTORY + filename
+                                                requireActivity(),
+                                            ) + BACKUP_DB_DIRECTORY + filename,
                                         ).delete()
                                     }
                                     this.dismiss()
@@ -392,16 +442,17 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 DialogMode.WARNING,
                                 true,
                                 getString(R.string.delete),
-                                getString(R.string.delete)
+                                getString(R.string.delete),
                             )
                         }
                     }
                 }
+
                 false -> {}
             }
         }
     }
-    
+
     private fun sendEmailWithExcel() {
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}"
         val builder = AlertDialog.Builder(requireActivity())
@@ -416,7 +467,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         alert.setView(containerView)
         alert.show()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val workBook = createWorkBook(progressInfo, "Create excel file...")
             val outputStream = FileOutputStream("${EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             workBook.write(outputStream)
@@ -458,7 +509,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         alert.setView(containerView)
         alert.show()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val workBook = createWorkBook(progressInfo, "$exportFileName.xls")
 //            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             val outputStream = requireActivity().contentResolver.openOutputStream(uri!!)
@@ -471,27 +522,33 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun createWorkBook(infoView: TextView? = null, guideMessage: String? = ""): Workbook {
+    private fun createWorkBook(
+        infoView: TextView? = null,
+        guideMessage: String? = "",
+    ): Workbook {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val diaryList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
         val wb: Workbook = HSSFWorkbook()
         val sheet = wb.createSheet("new sheet")
 
-        val headerFont = wb.createFont().apply {
-            color = IndexedColors.WHITE.index
-        }
-        val headerStyle = wb.createCellStyle().apply {
-            wrapText = true
-            fillForegroundColor = IndexedColors.BLUE.index
-            fillPattern = CellStyle.SOLID_FOREGROUND
-            alignment = CellStyle.ALIGN_CENTER
-            verticalAlignment = CellStyle.VERTICAL_CENTER
-            setFont(headerFont)
-        }
-        val bodyStyle = wb.createCellStyle().apply {
-            wrapText = true
-            verticalAlignment = CellStyle.VERTICAL_TOP
-        }
+        val headerFont =
+            wb.createFont().apply {
+                color = IndexedColors.WHITE.index
+            }
+        val headerStyle =
+            wb.createCellStyle().apply {
+                wrapText = true
+                fillForegroundColor = IndexedColors.BLUE.index
+                fillPattern = CellStyle.SOLID_FOREGROUND
+                alignment = CellStyle.ALIGN_CENTER
+                verticalAlignment = CellStyle.VERTICAL_CENTER
+                setFont(headerFont)
+            }
+        val bodyStyle =
+            wb.createCellStyle().apply {
+                wrapText = true
+                verticalAlignment = CellStyle.VERTICAL_TOP
+            }
 
         val headerRow = sheet.createRow(0)
         headerRow.height = (256 * 3).toShort()
@@ -537,15 +594,15 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
             }
 
-            val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
-            val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
-            val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
-            val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
-            val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
-            val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
-            val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
-            val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
-            val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
+            val sequence = row.createCell(SEQ).apply { cellStyle = bodyStyle }
+            val writeDate = row.createCell(WRITE_DATE).apply { cellStyle = bodyStyle }
+            val title = row.createCell(TITLE).apply { cellStyle = bodyStyle }
+            val contents = row.createCell(CONTENTS).apply { cellStyle = bodyStyle }
+            val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply { cellStyle = bodyStyle }
+            val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply { cellStyle = bodyStyle }
+            val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply { cellStyle = bodyStyle }
+            val weather = row.createCell(SYMBOL).apply { cellStyle = bodyStyle }
+            val isAllDay = row.createCell(IS_ALL_DAY).apply { cellStyle = bodyStyle }
 
             sequence.setCellValue(diaryDto.sequence.toDouble())
             writeDate.setCellValue(DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis))
@@ -601,7 +658,10 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun setupLauncher(taskFlag: Int, callback: () -> Unit) {
+    private fun setupLauncher(
+        taskFlag: Int,
+        callback: () -> Unit,
+    ) {
         mTaskFlag = taskFlag
         callback()
     }
@@ -613,39 +673,52 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private fun initPreference() {}
 
-    private fun showLocationSelectionPopup(popupMode: Int, internalTitle: String, internalDescription: String, externalTitle: String, externalDescription: String) {
+    private fun showLocationSelectionPopup(
+        popupMode: Int,
+        internalTitle: String,
+        internalDescription: String,
+        externalTitle: String,
+        externalDescription: String,
+    ) {
         var dialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(requireActivity()).apply {
-            setNegativeButton(getString(android.R.string.cancel), null)
-        }
+        val builder =
+            AlertDialog.Builder(requireActivity()).apply {
+                setNegativeButton(getString(android.R.string.cancel), null)
+            }
 
-        val popupView = PopupLocationSelectorBinding.inflate(layoutInflater).apply {
-            modeInternalTitle.text = internalTitle
-            modeInternalDescription.text = internalDescription
-            modeExternalTitle.text = externalTitle
-            modeExternalDescription.text = externalDescription
+        val popupView =
+            PopupLocationSelectorBinding.inflate(layoutInflater).apply {
+                modeInternalTitle.text = internalTitle
+                modeInternalDescription.text = internalDescription
+                modeExternalTitle.text = externalTitle
+                modeExternalDescription.text = externalDescription
 
-            root.setBackgroundColor(requireActivity().config.backgroundColor)
+                root.setBackgroundColor(requireActivity().config.backgroundColor)
 //            closePopup.setOnClickListener { dialog?.dismiss() }
-            modeInternal.setOnClickListener {
-                when (popupMode) {
-                    MODE_BACKUP -> exportRealmFile()
-                    MODE_RECOVERY -> importRealmFile()
-                }
-                dialog?.dismiss()
-            }
-            modeExternal.setOnClickListener {
-                when (popupMode) {
-                    MODE_BACKUP -> setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
-                        EasyDiaryUtils.writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+                modeInternal.setOnClickListener {
+                    when (popupMode) {
+                        MODE_BACKUP -> exportRealmFile()
+                        MODE_RECOVERY -> importRealmFile()
                     }
-                    MODE_RECOVERY -> setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
-                        EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
-                    }
+                    dialog?.dismiss()
                 }
-                dialog?.dismiss()
+                modeExternal.setOnClickListener {
+                    when (popupMode) {
+                        MODE_BACKUP -> {
+                            setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
+                                EasyDiaryUtils.writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+                            }
+                        }
+
+                        MODE_RECOVERY -> {
+                            setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
+                                EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
+                            }
+                        }
+                    }
+                    dialog?.dismiss()
+                }
             }
-        }
         requireActivity().run {
             updateDrawableColorInnerCardView(R.drawable.ic_delete)
             updateTextColors(popupView.root)
@@ -654,10 +727,11 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
         FontUtils.setFontsTypeface(requireActivity(), null, popupView.root, true)
         builder.setView(popupView.root)
-        dialog = builder.create().apply {
+        dialog =
+            builder.create().apply {
 //            requireActivity().updateAlertDialog(this, null, popupView.root)
-            requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, popupView.root)
-        }
+                requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, popupView.root)
+            }
     }
 
     companion object {
@@ -667,7 +741,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         const val CONTENTS = 3
         const val ATTACH_PHOTO_NAME = 4
         const val ATTACH_PHOTO_SIZE = 5
-        const val WEATHER = 6  /* no longer used since version 1.4.79 */
+        const val WEATHER = 6 // no longer used since version 1.4.79
         const val SYMBOL = 6
         const val IS_ALL_DAY = 7
         const val WRITE_TIME_MILLIS = 8

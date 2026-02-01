@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.ui.components
 
 import android.content.Intent
 import android.widget.ImageView
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -326,7 +327,7 @@ fun TreeContent(
                         if (!node.isFile) {
 //                                        makeToast(node.fullPath)
                             isLoading = true
-                            activity?.syncMarkDown(null, node.fullPath) {
+                            (activity as ComponentActivity).syncMarkDown(null, node.fullPath) {
                                 isLoading = false
                                 fetchDiary()
                             }

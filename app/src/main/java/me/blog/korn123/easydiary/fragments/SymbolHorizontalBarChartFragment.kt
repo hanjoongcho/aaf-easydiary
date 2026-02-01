@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
@@ -43,11 +44,16 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         get() = FontUtils.getCommonTypeface(requireContext())!!
     val mSequences = arrayListOf<Int>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_symbol_horizontal_barchart, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? = inflater.inflate(R.layout.fragment_symbol_horizontal_barchart, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         mBarChart = view.findViewById(R.id.barChart)
         mChartTitle = view.findViewById(R.id.chartTitle)
@@ -121,13 +127,13 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
                     it.visibility = View.VISIBLE
                     requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
                     it.setOnClickListener { view ->
-                        view.postDelayed( {
+                        view.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
                                     requireActivity(),
-                                    StatisticsActivity::class.java
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL)
+                                    StatisticsActivity::class.java,
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL),
                             )
                         }, 300)
                     }
@@ -135,57 +141,59 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
-            val barEntries = ArrayList<BarEntry>()
-            var index = 1F
-            val itemArray = arrayListOf<HashMap<String, Int>>()
-            sortedMap.forEach { (key, value) ->
-                if (index > 10) return@forEach
-                itemArray.add( hashMapOf("key" to key, "value" to value) )
-                mSequences.add(key)
-                index++
-            }
-            itemArray.reverse()
-            mSequences.reverse()
+        mCoroutineJob =
+            lifecycleScope.launch(Dispatchers.IO) {
+                val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
+                val barEntries = ArrayList<BarEntry>()
+                var index = 1F
+                val itemArray = arrayListOf<HashMap<String, Int>>()
+                sortedMap.forEach { (key, value) ->
+                    if (index > 10) return@forEach
+                    itemArray.add(hashMapOf("key" to key, "value" to value))
+                    mSequences.add(key)
+                    index++
+                }
+                itemArray.reverse()
+                mSequences.reverse()
 
-            withContext(Dispatchers.Main) {
-                if (itemArray.isNotEmpty()) {
-                    val colorItems = arrayListOf<Int>()
-                    val defaultColor = Color.rgb(209, 232, 255)
-                    itemArray.forEachIndexed { index, item ->
-                        colorItems.add(defaultColor.darkenColor(index * 2))
-                        val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                            true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), requireContext().dpToPixel(24F) , requireContext().dpToPixel(24F))
-                            false -> null
+                withContext(Dispatchers.Main) {
+                    if (itemArray.isNotEmpty()) {
+                        val colorItems = arrayListOf<Int>()
+                        val defaultColor = Color.rgb(209, 232, 255)
+                        itemArray.forEachIndexed { index, item ->
+                            colorItems.add(defaultColor.darkenColor(index * 2))
+                            val drawable: Drawable? =
+                                when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                                    true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), requireContext().dpToPixel(24F), requireContext().dpToPixel(24F))
+                                    false -> null
+                                }
+                            barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
                         }
-                        barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
-                    }
-                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
-                    val iValueFormatter = IValueFormatterExt(context)
-                    barDataSet.valueFormatter = iValueFormatter
+                        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
+                        val iValueFormatter = IValueFormatterExt(context)
+                        barDataSet.valueFormatter = iValueFormatter
 //                    val colors = intArrayOf(
 //                        Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
 //                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
 //                    )
-                    barDataSet.setColors(*colorItems.toIntArray())
-                    barDataSet.setDrawIcons(true)
-                    barDataSet.setDrawValues(false)
-                    val dataSets = ArrayList<IBarDataSet>()
-                    dataSets.add(barDataSet)
+                        barDataSet.setColors(*colorItems.toIntArray())
+                        barDataSet.setDrawIcons(true)
+                        barDataSet.setDrawValues(false)
+                        val dataSets = ArrayList<IBarDataSet>()
+                        dataSets.add(barDataSet)
 
-                    val barData = BarData(dataSets)
-                    barData.setValueTextSize(10f)
+                        val barData = BarData(dataSets)
+                        barData.setValueTextSize(10f)
 //        barData.setValueTypeface(mTfLight)
-                    barData.barWidth = 0.9f
+                        barData.barWidth = 0.9f
 //        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
-                    mBarChart.data = barData
+                        mBarChart.data = barData
 
-                    mBarChart.animateY(2000)
+                        mBarChart.animateY(2000)
+                    }
+                    mBarChartProgressBar.visibility = View.GONE
                 }
-                mBarChartProgressBar.visibility = View.GONE
             }
-        }
     }
 
     override fun onDestroy() {
@@ -194,11 +202,13 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     }
 
     inner class AxisValueFormatter : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-            return when  {
+        override fun getFormattedValue(
+            value: Float,
+            axis: AxisBase?,
+        ): String =
+            when {
                 value > 0 && value <= mSequences.size -> mSymbolMap[mSequences[value.toInt() - 1]] ?: "None"
                 else -> "None"
             }
-        }
     }
 }

@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.constants.PageStyle
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -143,11 +143,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private val mRequestSAFForHtmlBookLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
+
                 result.data?.let {
                     mDiaryMainItemAdapter?.getSelectedItems()?.run {
                         EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
                             mBinding.progressCoroutine.visibility = View.VISIBLE
-                            CoroutineScope(Dispatchers.IO).launch {
+                            lifecycleScope.launch(Dispatchers.IO) {
                                 exportHtmlBook(it.data, cloneItems)
                                 withContext(Dispatchers.Main) {
                                     mBinding.progressCoroutine.visibility = View.GONE

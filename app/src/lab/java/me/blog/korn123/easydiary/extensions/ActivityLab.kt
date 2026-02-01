@@ -1,9 +1,9 @@
 package me.blog.korn123.easydiary.extensions
 
-import android.app.Activity
 import android.view.View
 import android.widget.Toast
-import kotlinx.coroutines.CoroutineScope
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,15 +30,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-fun Activity.pushMarkDown(path: String, contents: String) {
+fun ComponentActivity.pushMarkDown(
+    path: String,
+    contents: String,
+) {
     val token = EasyDiaryDbHelper.getToken()
 
-    CoroutineScope(Dispatchers.IO).launch {
+    lifecycleScope.launch(Dispatchers.IO) {
         val baseUrl = "https://api.github.com"
-        val retrofitApi: Retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofitApi: Retrofit =
+            Retrofit
+                .Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
         val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
 
         // 1. 파일의 sha 값 조회
@@ -54,19 +59,21 @@ fun Activity.pushMarkDown(path: String, contents: String) {
         }
 
         // 2. CommitRequest 생성 및 푸시
-        val commitRequest = CommitRequest(
-            "AUTOMATIC COMMIT: Easy Diary",
-            Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
-            "main",
-            sha
-        )
-        val call = retrofitApiService.pushFile(
-            token,
-            "hanjoongcho",
-            "self-development",
-            path,
-            commitRequest
-        )
+        val commitRequest =
+            CommitRequest(
+                "AUTOMATIC COMMIT: Easy Diary",
+                Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
+                "main",
+                sha,
+            )
+        val call =
+            retrofitApiService.pushFile(
+                token,
+                "hanjoongcho",
+                "self-development",
+                path,
+                commitRequest,
+            )
         val response = call.execute()
 
         runOnUiThread {
@@ -75,21 +82,25 @@ fun Activity.pushMarkDown(path: String, contents: String) {
                 if (commitResponse != null) {
                     makeToast(
                         "Commit successful: ${commitResponse.commit?.message}",
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     )
                 } else {
                     makeToast("Commit response is null", Toast.LENGTH_LONG)
                 }
             } else {
-                showAlertDialog("Commit failed[${sha}]: ${response.errorBody()?.string()}")
+                showAlertDialog("Commit failed[$sha]: ${response.errorBody()?.string()}")
             }
         }
     }
 }
 
-fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: String = DEV_SYNC_MARKDOWN_ALL, onComplete: () -> Unit = {}) {
+fun ComponentActivity.syncMarkDown(
+    mBinding: ActivityBaseDevBinding? = null,
+    syncMode: String = DEV_SYNC_MARKDOWN_ALL,
+    onComplete: () -> Unit = {},
+) {
     mBinding?.partialSettingsProgress?.progressContainer?.visibility = View.VISIBLE
-    CoroutineScope(Dispatchers.IO).launch {
+    lifecycleScope.launch(Dispatchers.IO) {
         val baseUrl = "https://api.github.com"
         var token: String? = null
         var tokenInfo: List<Diary>?
@@ -106,17 +117,26 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
         if (size != 1) {
             runOnUiThread { makeToast("No Data") }
         } else {
-            val retrofitApi: Retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val downloadApi: Retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build()
+            val retrofitApi: Retrofit =
+                Retrofit
+                    .Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            val downloadApi: Retrofit =
+                Retrofit
+                    .Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build()
             val retrofitApiService = retrofitApi.create(GitHubRepos::class.java)
             val downloadApiService = downloadApi.create(GitHubRepos::class.java)
-            fun fetchContents(path: String, usingPathTitle: Boolean, symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS) {
+
+            fun fetchContents(
+                path: String,
+                usingPathTitle: Boolean,
+                symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
+            ) {
                 val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
                 val response = call.execute()
                 val contentsItems: List<Contents>? = response.body()
@@ -125,12 +145,14 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                         fetchContents(content.path, usingPathTitle, symbolSequence)
                     } else {
                         EasyDiaryDbHelper.getTemporaryInstance().run {
-                            val title = when (usingPathTitle) {
-                                true -> content.path
-                                false -> if (usingPathTitle) content.name else content.name.split(".")[0]
-                            }
+                            val title =
+                                when (usingPathTitle) {
+                                    true -> content.path
+                                    false -> if (usingPathTitle) content.name else content.name.split(".")[0]
+                                }
 
                             val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
+
                             fun getUpdateDate(body: String): String {
                                 val regex = Regex("""UPDATE:\s(\d{4}-\d{2}-\d{2})""")
                                 val matchResult = regex.find(body)
@@ -138,19 +160,20 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                                     val dateString = matchResult.groupValues[1]
                                     return dateString
                                 } else {
-                                    return "";
+                                    return ""
                                 }
                             }
 
-                            val checkedSymbolSequence = when {
-                                title.startsWith("stock/FICS") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
-                                title.startsWith("stock/ETF") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
-                                else -> symbolSequence
-                            }
+                            val checkedSymbolSequence =
+                                when {
+                                    title.startsWith("stock/FICS") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
+                                    title.startsWith("stock/ETF") -> DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
+                                    else -> symbolSequence
+                                }
 
                             if (items.size == 1) {
                                 runOnUiThread {
-                                    mBinding?.partialSettingsProgress?.message?.text = "Sync ${title}…"
+                                    mBinding?.partialSettingsProgress?.message?.text = "Sync $title…"
                                 }
                                 val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                 val diary = items[0]
@@ -165,17 +188,20 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                                 this.commitTransaction()
                             } else if (items.isEmpty()) {
                                 runOnUiThread {
-                                    mBinding?.partialSettingsProgress?.message?.text = "Download ${title}…"
+                                    mBinding?.partialSettingsProgress?.message?.text = "Download $title…"
                                 }
                                 val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
-                                EasyDiaryDbHelper.insertDiary(Diary(
-                                    BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
-                                    System.currentTimeMillis()
-                                    , title
-                                    , re.body()!!
-                                    , checkedSymbolSequence
-                                    ,true
-                                ), this)
+                                EasyDiaryDbHelper.insertDiary(
+                                    Diary(
+                                        BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                                        System.currentTimeMillis(),
+                                        title,
+                                        re.body()!!,
+                                        checkedSymbolSequence,
+                                        true,
+                                    ),
+                                    this,
+                                )
                             }
                             this.close()
                         }
@@ -198,7 +224,7 @@ fun Activity.syncMarkDown(mBinding: ActivityBaseDevBinding? = null, syncMode: St
                     DEV_SYNC_MARKDOWN_LIFE,
                     DEV_SYNC_MARKDOWN_STOCK_FICS,
                     DEV_SYNC_MARKDOWN_STOCK_ETF,
-                    DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
+                    DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE,
                 ).contains(syncMode)
             ) {
                 fetchContents(syncMode, true)

@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -38,7 +39,6 @@ import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.io.File
 
-
 /**
  * Created by CHO HANJOONG on 2018-05-18.
  */
@@ -48,6 +48,7 @@ class GalleryActivity : EasyDiaryActivity() {
     private lateinit var mGalleryAdapter: GalleryAdapter
     private lateinit var mGridLayoutManager: GridLayoutManager
     private var mAttachedPhotos: ArrayList<GalleryAdapter.AttachedPhoto> = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityGalleryBinding.inflate(layoutInflater)
@@ -62,25 +63,27 @@ class GalleryActivity : EasyDiaryActivity() {
 //        val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
 //            flexWrap = FlexWrap.WRAP
 //            flexDirection = FlexDirection.ROW
-////            alignItems = AlignItems.FLEX_START
-//            justifyContent = JustifyContent.FLEX_START 
+// //            alignItems = AlignItems.FLEX_START
+//            justifyContent = JustifyContent.FLEX_START
 //        }
-        
-        val spacesItemDecoration = GridItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)) {
-            if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
-        }
+
+        val spacesItemDecoration =
+            GridItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)) {
+                if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
+            }
         mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@GalleryActivity)
-        mGalleryAdapter = GalleryAdapter(
+        mGalleryAdapter =
+            GalleryAdapter(
                 this@GalleryActivity,
                 mAttachedPhotos,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     val intent = Intent(this@GalleryActivity, GalleryViewPagerActivity::class.java)
                     intent.putExtra(POSTCARD_SEQUENCE, position)
                     TransitionHelper.startActivityWithTransition(this@GalleryActivity, intent)
-                }
-        )
+                },
+            )
 
         mBinding.contentPostCardViewer.root.apply {
             layoutManager = mGridLayoutManager
@@ -95,67 +98,70 @@ class GalleryActivity : EasyDiaryActivity() {
         mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
         mBinding.imgOpenGalleryOptions.setOnClickListener {
             var dialog: Dialog? = null
-            val dialogSettingGalleryBinding = DialogSettingGalleryBinding.inflate(layoutInflater).apply {
-                closeBottomSheet.setOnClickListener { view -> view.postDelayed({ dialog?.dismiss() }, 200L) }
-                updateAppViews(root)
-                changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
-                FontUtils.setFontsTypeface(applicationContext, null, root, true)
+            val dialogSettingGalleryBinding =
+                DialogSettingGalleryBinding.inflate(layoutInflater).apply {
+                    closeBottomSheet.setOnClickListener { view -> view.postDelayed({ dialog?.dismiss() }, 200L) }
+                    updateAppViews(root)
+                    changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
+                    FontUtils.setFontsTypeface(applicationContext, null, root, true)
 
-                val unlinkedPhotos = arrayListOf<File>()
-                fun updateInfo() {
-                    val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
-                    totalPhotos?.let {
-                        unlinkedPhotos.clear()
-                        unlinkedPhotos.addAll(totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null })
-                        textLinkedPhotoCount.text = (totalPhotos.size - unlinkedPhotos.size).toString()
-                        textUnlinkedPhotoCount.text = "${unlinkedPhotos.size}"
-                        textTotalPhotoCount.text = totalPhotos.size.toString()
+                    val unlinkedPhotos = arrayListOf<File>()
+
+                    fun updateInfo() {
+                        val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
+                        totalPhotos?.let {
+                            unlinkedPhotos.clear()
+                            unlinkedPhotos.addAll(totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null })
+                            textLinkedPhotoCount.text = (totalPhotos.size - unlinkedPhotos.size).toString()
+                            textUnlinkedPhotoCount.text = "${unlinkedPhotos.size}"
+                            textTotalPhotoCount.text = totalPhotos.size.toString()
+                        }
                     }
-                }
-                fun reloadPhotos() {
-                    val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
-                    mAttachedPhotos.clear()
-                    attachedPhotos?.let { mAttachedPhotos.addAll(it) }
-                    mGalleryAdapter.notifyDataSetChanged()
-                }
 
-                switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
-                switchShowUnlinkedPhoto.setOnCheckedChangeListener { _, isChecked ->
-                    config.visibleUnlinkedPhotos = isChecked
-                    reloadPhotos()
-                }
+                    fun reloadPhotos() {
+                        val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
+                        mAttachedPhotos.clear()
+                        attachedPhotos?.let { mAttachedPhotos.addAll(it) }
+                        mGalleryAdapter.notifyDataSetChanged()
+                    }
 
-                imgDeleteUnlinkedPhoto.setOnClickListener {
-                    showAlertDialog(
-                        getString(R.string.delete_unlinked_photo_confirm_message),
-                        { _, _ ->
-                            mBinding.progressLoadingContainer.progressLoading.visibility =
-                                View.VISIBLE
-                            CoroutineScope(Dispatchers.IO).launch {
-                                unlinkedPhotos.forEach { item -> item.delete() }
-                                withContext(Dispatchers.Main) {
-                                    updateInfo()
-                                    reloadPhotos()
-                                    mBinding.progressLoadingContainer.progressLoading.visibility =
-                                        View.GONE
+                    switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
+                    switchShowUnlinkedPhoto.setOnCheckedChangeListener { _, isChecked ->
+                        config.visibleUnlinkedPhotos = isChecked
+                        reloadPhotos()
+                    }
+
+                    imgDeleteUnlinkedPhoto.setOnClickListener {
+                        showAlertDialog(
+                            getString(R.string.delete_unlinked_photo_confirm_message),
+                            { _, _ ->
+                                mBinding.progressLoadingContainer.progressLoading.visibility =
+                                    View.VISIBLE
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    unlinkedPhotos.forEach { item -> item.delete() }
+                                    withContext(Dispatchers.Main) {
+                                        updateInfo()
+                                        reloadPhotos()
+                                        mBinding.progressLoadingContainer.progressLoading.visibility =
+                                            View.GONE
+                                    }
                                 }
-                            }
-
-                        },
-                        { _, _ -> },
-                        DialogMode.WARNING,
-                        false
-                    )
+                            },
+                            { _, _ -> },
+                            DialogMode.WARNING,
+                            false,
+                        )
+                    }
+                    updateInfo()
                 }
-                updateInfo()
-            }
-            dialog = BottomSheetDialog(this).apply {
-                setContentView(dialogSettingGalleryBinding.root)
-                setCancelable(true)
-                setCanceledOnTouchOutside(true)
-                show()
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
+            dialog =
+                BottomSheetDialog(this).apply {
+                    setContentView(dialogSettingGalleryBinding.root)
+                    setCancelable(true)
+                    setCanceledOnTouchOutside(true)
+                    show()
+                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
         }
     }
 
@@ -171,9 +177,11 @@ class GalleryActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.layout -> openGridSettingDialog(mBinding.root, GridSpanMode.GALLERY) {
-                mGridLayoutManager.spanCount = it
-                mGalleryAdapter.notifyDataSetChanged()
+            R.id.layout -> {
+                openGridSettingDialog(mBinding.root, GridSpanMode.GALLERY) {
+                    mGridLayoutManager.spanCount = it
+                    mGalleryAdapter.notifyDataSetChanged()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -181,7 +189,7 @@ class GalleryActivity : EasyDiaryActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initPostCard() {
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
 
             withContext(Dispatchers.Main) {
@@ -201,12 +209,14 @@ class GalleryActivity : EasyDiaryActivity() {
     companion object {
         fun getAttachedPhotos(context: Context): List<GalleryAdapter.AttachedPhoto>? {
             val realm = EasyDiaryDbHelper.getTemporaryInstance()
-            val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
+            val listPostcard =
+                File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
                     .listFiles()
                     ?.map { file ->
                         val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
                         GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
-                    }?.filter { attachedPhoto -> attachedPhoto.diary != null || context.config.visibleUnlinkedPhotos}?.sortedByDescending { item ->
+                    }?.filter { attachedPhoto -> attachedPhoto.diary != null || context.config.visibleUnlinkedPhotos }
+                    ?.sortedByDescending { item ->
                         item.diary?.currentTimeMillis ?: 0
                     }
             realm.close()

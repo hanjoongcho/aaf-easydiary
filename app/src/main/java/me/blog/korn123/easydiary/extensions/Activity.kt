@@ -51,13 +51,13 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
 import io.realm.Realm
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.BitmapUtils
@@ -1060,7 +1060,7 @@ fun EasyDiaryActivity.acquireGPSPermissions(
 // }
 
 fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
-    CoroutineScope(Dispatchers.IO).launch {
+    lifecycleScope.launch(Dispatchers.IO) {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)
         var isFontDirMigrate = false
