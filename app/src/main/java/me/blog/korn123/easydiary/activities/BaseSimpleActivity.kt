@@ -8,8 +8,15 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getPermissionString
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.hasPermission
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 import me.blog.korn123.easydiary.helper.SettingConstants
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import androidx.core.graphics.drawable.toDrawable
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -52,7 +59,8 @@ open class BaseSimpleActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                this@BaseSimpleActivity.onBackPressed()
+                pauseLock()
+                TransitionHelper.finishActivityWithTransition(this)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -86,13 +94,11 @@ open class BaseSimpleActivity : AppCompatActivity() {
     //    open fun getBackgroundAlpha(): Int = 255
 
     fun updateActionbarColor(color: Int = config.primaryColor) {
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+        supportActionBar?.setBackgroundDrawable(color.toDrawable())
 //        supportActionBar?.title = Html.fromHtml("<font color='${color.getContrastColor().toHex()}'>${supportActionBar?.title}</font>")
         updateStatusBarColor(color)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(ActivityManager.TaskDescription(null, null, color))
-        }
+        setTaskDescription(ActivityManager.TaskDescription(null, null, color))
     }
 
     fun handlePermission(
@@ -105,7 +111,11 @@ open class BaseSimpleActivity : AppCompatActivity() {
         } else {
             isAskingPermissions = true
             actionOnPermission = callback
-            ActivityCompat.requestPermissions(this, arrayOf(getPermissionString(permissionId)), SettingConstants.GENERIC_PERM_HANDLER)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(getPermissionString(permissionId)),
+                SettingConstants.GENERIC_PERM_HANDLER,
+            )
         }
     }
 }
