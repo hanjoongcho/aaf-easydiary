@@ -5,8 +5,8 @@ import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
+import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 
 /**
@@ -15,8 +15,8 @@ import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 
 open class Diary : RealmObject {
     @PrimaryKey
-    var sequence: Int = DIARY_SEQUENCE_INIT
-    var originSequence: Int = DIARY_ORIGIN_SEQUENCE_INIT
+    var sequence: Int = DiaryEditingConstants.DIARY_SEQUENCE_INIT
+    var originSequence: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
 
     @Ignore
     private val sessionId: Int = 0
@@ -60,7 +60,7 @@ open class Diary : RealmObject {
         this.currentTimeMillis = currentTimeMillis
         this.title = title
         this.contents = contents
-        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }
 
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, weather: Int, isAllDay: Boolean = false) {
@@ -68,13 +68,13 @@ open class Diary : RealmObject {
         this.currentTimeMillis = currentTimeMillis
         this.title = title
         this.contents = contents
-        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
         this.weather = weather
         this.isAllDay = isAllDay
     }
 
     fun updateDateString() {
-        this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }
 
     fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =

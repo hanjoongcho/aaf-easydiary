@@ -1,12 +1,18 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import io.realm.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmModel
+import io.realm.RealmResults
+import io.realm.Sort
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.models.*
+import me.blog.korn123.easydiary.models.ActionLog
+import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.models.DDay
+import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -15,7 +21,8 @@ import org.apache.commons.lang3.StringUtils
 
 object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
-        RealmConfiguration.Builder()
+        RealmConfiguration
+            .Builder()
             .name("diary.realm")
             .schemaVersion(24)
             .migration(EasyDiaryMigration())
@@ -39,9 +46,7 @@ object EasyDiaryDbHelper {
         mRealmInstance?.close()
     }
 
-    fun getRealmPath(): String {
-        return getInstance().path
-    }
+    fun getRealmPath(): String = getInstance().path
 
     fun beginTransaction() {
         getInstance().beginTransaction()
@@ -61,7 +66,6 @@ object EasyDiaryDbHelper {
 
     fun <E : RealmModel?> copyFromRealm(realmObjects: Iterable<E>?): MutableList<E> = getInstance().copyFromRealm(realmObjects)
 
-
     /***************************************************************************************************
      *   Manage DiaryDto model
      *   Create: Insert
@@ -70,11 +74,12 @@ object EasyDiaryDbHelper {
      *   Delete: Delete
      *
      ***************************************************************************************************/
-    fun getMaxDiarySequence(realmInstance: Realm = getInstance()): Int {
-        return realmInstance.where(Diary::class.java).max("sequence")?.toInt() ?: 1
-    }
+    fun getMaxDiarySequence(realmInstance: Realm = getInstance()): Int = realmInstance.where(Diary::class.java).max("sequence")?.toInt() ?: 1
 
-    fun insertDiary(diary: Diary, realmInstance: Realm = getInstance()) {
+    fun insertDiary(
+        diary: Diary,
+        realmInstance: Realm = getInstance(),
+    ) {
         realmInstance.executeTransaction { realm ->
             var sequence = 1
             if (realm.where(Diary::class.java).count() > 0L) {
@@ -91,7 +96,7 @@ object EasyDiaryDbHelper {
     fun insertTemporaryDiary(diaryTemp: Diary) {
         deleteTemporaryDiaryBy(diaryTemp.originSequence)
         getInstance().executeTransaction { realm ->
-            if (diaryTemp.sequence == BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT) {
+            if (diaryTemp.sequence == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
                 realm.where(Diary::class.java).max("sequence")?.let {
                     diaryTemp.sequence = it.toInt().plus(1)
                 }
@@ -104,26 +109,32 @@ object EasyDiaryDbHelper {
         getInstance().copyFromRealm(diary).run {
             currentTimeMillis = System.currentTimeMillis()
             updateDateString()
-            originSequence = DIARY_ORIGIN_SEQUENCE_INIT
+            originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
             insertDiary(this)
         }
     }
 
-    fun findTemporaryDiaryBy(originSequence: Int, realmInstance: Realm = getInstance()): Diary? {
-        return realmInstance.where(Diary::class.java).equalTo("originSequence", originSequence).findFirst()
-    }
+    fun findTemporaryDiaryBy(
+        originSequence: Int,
+        realmInstance: Realm = getInstance(),
+    ): Diary? = realmInstance.where(Diary::class.java).equalTo("originSequence", originSequence).findFirst()
 
     fun findFirstDiary(): Diary? {
         val realm = getInstance()
-        val firstItemTimeMillis = (realm.where(Diary::class.java)
-                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
-                .min("currentTimeMillis") ?: 0L).toLong()
+        val firstItemTimeMillis =
+            (
+                realm
+                    .where(Diary::class.java)
+                    .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+                    .min("currentTimeMillis") ?: 0L
+            ).toLong()
         return realm.where(Diary::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
-    fun findMarkdownSyncTargetDiary(query: String?, realmInstance: Realm = getInstance()): List<Diary> {
-        return realmInstance.where(Diary::class.java).equalTo("title", query).findAll()
-    }
+    fun findMarkdownSyncTargetDiary(
+        query: String?,
+        realmInstance: Realm = getInstance(),
+    ): List<Diary> = realmInstance.where(Diary::class.java).equalTo("title", query).findAll()
 
     fun findDiary(
         query: String?,
@@ -131,49 +142,102 @@ object EasyDiaryDbHelper {
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
-        realmInstance: Realm = getInstance()
-    ): List<Diary> {
-        return findDiary(
+        realmInstance: Realm = getInstance(),
+    ): List<Diary> =
+        findDiary(
             query,
             isSensitive,
             startTimeMillis,
             endTimeMillis,
             symbolSequence,
             false,
-            realmInstance
+            realmInstance,
         )
-    }
 
     /**
      * Makes an unmanaged in-memory copy of already persisted RealmObjects
      *
      * @return an in-memory detached copy of managed RealmObjects.
      */
-    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, checkFutureDiaryOption: Boolean = false, realmInstance: Realm = getInstance()): List<Diary> {
-        var results: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
-            true -> {
-                realmInstance.where(Diary::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+    fun findDiary(
+        query: String?,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+        checkFutureDiaryOption: Boolean = false,
+        realmInstance: Realm = getInstance(),
+    ): List<Diary> {
+        var results: RealmResults<Diary> =
+            when (StringUtils.isEmpty(query)) {
+                true -> {
+                    realmInstance.where(Diary::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                }
 
-            }
-            false -> {
-                if (isSensitive) {
-                    realmInstance.where(Diary::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
-                } else {
-                    realmInstance.where(Diary::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                false -> {
+                    if (isSensitive) {
+                        realmInstance
+                            .where(Diary::class.java)
+                            .beginGroup()
+                            .contains("contents", query)
+                            .or()
+                            .contains("title", query)
+                            .endGroup()
+                            .findAll()
+                            .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    } else {
+                        realmInstance
+                            .where(Diary::class.java)
+                            .beginGroup()
+                            .contains("contents", query, Case.INSENSITIVE)
+                            .or()
+                            .contains("title", query, Case.INSENSITIVE)
+                            .endGroup()
+                            .findAll()
+                            .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    }
                 }
             }
-        }
 
         // apply date filter
-        results = when {
-            startTimeMillis > 0 && endTimeMillis > 0 -> results.where().between("currentTimeMillis", startTimeMillis, endTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
-            startTimeMillis > 0 -> results.where().greaterThanOrEqualTo("currentTimeMillis", startTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
-            endTimeMillis > 0 -> results.where().lessThanOrEqualTo("currentTimeMillis", endTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
-            else -> results
-        }
+        results =
+            when {
+                startTimeMillis > 0 && endTimeMillis > 0 -> {
+                    results
+                        .where()
+                        .between("currentTimeMillis", startTimeMillis, endTimeMillis)
+                        .findAll()
+                        .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                }
+
+                startTimeMillis > 0 -> {
+                    results
+                        .where()
+                        .greaterThanOrEqualTo("currentTimeMillis", startTimeMillis)
+                        .findAll()
+                        .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                }
+
+                endTimeMillis > 0 -> {
+                    results
+                        .where()
+                        .lessThanOrEqualTo("currentTimeMillis", endTimeMillis)
+                        .findAll()
+                        .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                }
+
+                else -> {
+                    results
+                }
+            }
 
         if (checkFutureDiaryOption && EasyDiaryApplication.context?.config?.disableFutureDiary == true) {
-            results = results.where().lessThanOrEqualTo("currentTimeMillis", System.currentTimeMillis()).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+            results =
+                results
+                    .where()
+                    .lessThanOrEqualTo("currentTimeMillis", System.currentTimeMillis())
+                    .findAll()
+                    .sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
         }
 
         // apply feeling symbol
@@ -184,7 +248,7 @@ object EasyDiaryDbHelper {
 
         // Exclude -1 or greater than 0
         if (EasyDiaryApplication.context?.config?.enableDebugOptionVisibleTemporaryDiary == false) {
-            results = results.where().equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).findAll()
+            results = results.where().equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT).findAll()
         }
 
         return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
@@ -192,10 +256,16 @@ object EasyDiaryDbHelper {
                 val mergedList = arrayListOf<Diary>()
                 val valueArray = arrayOf(80L, 81L)
                 mergedList.addAll(results.where().`in`("weather", valueArray).findAll())
-                mergedList.addAll(results.where().not().`in`("weather", valueArray).findAll())
+                mergedList.addAll(
+                    results
+                        .where()
+                        .not()
+                        .`in`("weather", valueArray)
+                        .findAll(),
+                )
 //                val sortedList = realmInstance.copyFromRealm(results)
 //                sortedList.sortWith(kotlin.Comparator { item1, item2 ->
-////                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
+// //                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
 //                    when {
 //                        item1.weather in 80..81 && item2.weather in 80..81 -> 0
 //                        item1.weather in 80..81 -> -1
@@ -206,6 +276,7 @@ object EasyDiaryDbHelper {
 //                sortedList
                 mergedList
             }
+
             else -> {
 //                realmInstance.copyFromRealm(results)
                 results
@@ -220,41 +291,80 @@ object EasyDiaryDbHelper {
         getInstance().refresh()
     }
 
-    fun findDiary(query: String?, isSensitive: Boolean = false, symbolSequences: List<Int>): List<Diary> {
+    fun findDiary(
+        query: String?,
+        isSensitive: Boolean = false,
+        symbolSequences: List<Int>,
+    ): List<Diary> {
         val realm = getInstance()
-        val result: RealmResults<Diary> = when (StringUtils.isEmpty(query)) {
-            true -> {
-                realm.where(Diary::class.java).findAll()
+        val result: RealmResults<Diary> =
+            when (StringUtils.isEmpty(query)) {
+                true -> {
+                    realm.where(Diary::class.java).findAll()
+                }
 
-            }
-            false -> {
-                if (isSensitive) {
-                    realm.where(Diary::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAll()
-                } else {
-                    realm.where(Diary::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAll()
+                false -> {
+                    if (isSensitive) {
+                        realm
+                            .where(Diary::class.java)
+                            .beginGroup()
+                            .contains("contents", query)
+                            .or()
+                            .contains("title", query)
+                            .endGroup()
+                            .findAll()
+                    } else {
+                        realm
+                            .where(Diary::class.java)
+                            .beginGroup()
+                            .contains("contents", query, Case.INSENSITIVE)
+                            .or()
+                            .contains("title", query, Case.INSENSITIVE)
+                            .endGroup()
+                            .findAll()
+                    }
                 }
             }
-        }
-        return result.where().`in`("weather", symbolSequences.toTypedArray())
-                .findAll()
-                .toList()
+        return result
+            .where()
+            .`in`("weather", symbolSequences.toTypedArray())
+            .findAll()
+            .toList()
     }
 
-    fun findParentDiariesOf(sequence: Int, realmInstance: Realm = getInstance()): List<Diary> {
-        return realmInstance.where(Diary::class.java)
-            .equalTo("linkedDiaries", sequence).findAll().sort("currentTimeMillis", Sort.ASCENDING).toList()
-    }
-
+    fun findParentDiariesOf(
+        sequence: Int,
+        realmInstance: Realm = getInstance(),
+    ): List<Diary> =
+        realmInstance
+            .where(Diary::class.java)
+            .equalTo("linkedDiaries", sequence)
+            .findAll()
+            .sort("currentTimeMillis", Sort.ASCENDING)
+            .toList()
 
     fun findOldestDiary(): Diary? = getInstance().where(Diary::class.java).sort("currentTimeMillis", Sort.ASCENDING).findFirst()
 
-    fun findDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): Diary? {
-        return realmInstance.where(Diary::class.java)
-                .equalTo("sequence", sequence).findFirst()
-    }
+    fun findDiaryBy(
+        sequence: Int,
+        realmInstance: Realm = getInstance(),
+    ): Diary? =
+        realmInstance
+            .where(Diary::class.java)
+            .equalTo("sequence", sequence)
+            .findFirst()
 
-    fun findDiaryBy(photoUri: String, realmInstance: Realm = getInstance()): Diary? {
-        val result = realmInstance.where(PhotoUri::class.java).contains("photoUri", photoUri).isNotEmpty("diary").findFirst()?.diary
+    fun findDiaryBy(
+        photoUri: String,
+        realmInstance: Realm = getInstance(),
+    ): Diary? {
+        val result =
+            realmInstance
+                .where(PhotoUri::class.java)
+                .contains("photoUri", photoUri)
+                .isNotEmpty("diary")
+                .findFirst()
+                ?.diary
         var diary: Diary? = null
         result?.let {
             if (it.isValid && it.isNotEmpty()) {
@@ -265,23 +375,33 @@ object EasyDiaryDbHelper {
         return diary
     }
 
-    fun findDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<Diary> {
-        return getInstance().where(Diary::class.java)
-                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
-                .equalTo("dateString", dateString)
-                .findAll()
-                .sort("currentTimeMillis", sort).toList()
-    }
+    fun findDiaryByDateString(
+        dateString: String?,
+        sort: Sort = Sort.DESCENDING,
+    ): List<Diary> =
+        getInstance()
+            .where(Diary::class.java)
+            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+            .equalTo("dateString", dateString)
+            .findAll()
+            .sort("currentTimeMillis", sort)
+            .toList()
 
-    fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUri> {
-        return realmInstance.where(PhotoUri::class.java).findAll().sort("photoUri", Sort.ASCENDING).toList()
-    }
+    fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUri> =
+        realmInstance
+            .where(PhotoUri::class.java)
+            .findAll()
+            .sort("photoUri", Sort.ASCENDING)
+            .toList()
 
     fun updateDiaryBy(diary: Diary) {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(diary) }
     }
 
-    fun deleteDiaryBy(sequence: Int, realmInstance: Realm = getInstance()) {
+    fun deleteDiaryBy(
+        sequence: Int,
+        realmInstance: Realm = getInstance(),
+    ) {
         realmInstance.run {
             where(Diary::class.java).equalTo("sequence", sequence).findFirst()?.let {
                 beginTransaction()
@@ -291,7 +411,10 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun deleteTemporaryDiaryBy(originSequence: Int, realmInstance: Realm = getInstance()) {
+    fun deleteTemporaryDiaryBy(
+        originSequence: Int,
+        realmInstance: Realm = getInstance(),
+    ) {
         realmInstance.run {
             where(Diary::class.java).equalTo("originSequence", originSequence).findFirst()?.let {
                 beginTransaction()
@@ -301,33 +424,41 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun countDiaryAll(): Long {
-        return getInstance().where(Diary::class.java)
-                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
-                .count()
-    }
+    fun countDiaryAll(): Long =
+        getInstance()
+            .where(Diary::class.java)
+            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+            .count()
 
-    fun countDiaryBy(dateString: String): Int = getInstance().where(Diary::class.java)
-            .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+    fun countDiaryBy(dateString: String): Int =
+        getInstance()
+            .where(Diary::class.java)
+            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
             .equalTo("dateString", dateString)
-            .count().toInt()
+            .count()
+            .toInt()
 
-    fun countPhotoUriBy(uriString: String): Int = getInstance().where(PhotoUri::class.java)
+    fun countPhotoUriBy(uriString: String): Int =
+        getInstance()
+            .where(PhotoUri::class.java)
             .equalTo("photoUri", uriString)
-            .count().toInt()
-
+            .count()
+            .toInt()
 
     /***************************************************************************************************
      *   Manage Alarm model
      *
      ***************************************************************************************************/
-    fun makeTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
+    fun makeTemporaryAlarm(workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING): Alarm {
         val alarm = Alarm().apply { this.workMode = workMode }
         val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
         when (sequence.toInt() == countAlarmAll().toInt()) {
-            true ->  alarm.sequence = sequence.toInt().plus(1)
+            true -> {
+                alarm.sequence = sequence.toInt().plus(1)
+            }
+
             false -> {
-                run loop@ {
+                run loop@{
                     findAlarmAll().forEachIndexed { index, item ->
                         val validSequence = index.plus(1)
                         if (item.sequence != validSequence) {
@@ -341,21 +472,26 @@ object EasyDiaryDbHelper {
         return alarm
     }
 
-    fun duplicateAlarmBy(alarm: Alarm, realmInstance: Realm = getInstance()): Alarm {
-        return realmInstance.copyFromRealm(alarm)
-    }
+    fun duplicateAlarmBy(
+        alarm: Alarm,
+        realmInstance: Realm = getInstance(),
+    ): Alarm = realmInstance.copyFromRealm(alarm)
 
-    private fun findAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
-        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
-    }
+    private fun findAlarmBy(
+        realmInstance: Realm,
+        sequence: Int,
+    ): Alarm? = realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
 
-    fun findAlarmBy(sequence: Int): Alarm? {
-        return findAlarmBy(getInstance(), sequence)
-    }
+    fun findAlarmBy(sequence: Int): Alarm? = findAlarmBy(getInstance(), sequence)
 
     fun findAlarmAll(): List<Alarm> = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
 
-    fun findSnoozeAlarms(): List<Alarm> = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll().toList()
+    fun findSnoozeAlarms(): List<Alarm> =
+        getInstance()
+            .where(Alarm::class.java)
+            .greaterThan("retryCount", 0)
+            .findAll()
+            .toList()
 
     fun updateAlarmBy(alarm: Alarm) {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm) }
@@ -371,16 +507,16 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun countAlarmAll(): Long {
-        return getInstance().where(Alarm::class.java).count()
-    }
-
+    fun countAlarmAll(): Long = getInstance().where(Alarm::class.java).count()
 
     /***************************************************************************************************
      *   Manage ActionLog model
      *
      ***************************************************************************************************/
-    private fun insertActionLog(actionLog: ActionLog, realmInstance: Realm = getInstance()) {
+    private fun insertActionLog(
+        actionLog: ActionLog,
+        realmInstance: Realm = getInstance(),
+    ) {
         realmInstance.executeTransaction { realm ->
             val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
             actionLog.sequence = sequence.toInt().plus(1)
@@ -398,12 +534,19 @@ object EasyDiaryDbHelper {
      * Activity(Background Thread), AppWidgetProvider등은 별도의 Thread ID에서 동작함
      * ```
      */
-    fun insertCurrentThreadInfo(className: String, signature: String, realmInstance: Realm = getInstance()) {
+    fun insertCurrentThreadInfo(
+        className: String,
+        signature: String,
+        realmInstance: Realm = getInstance(),
+    ) {
         val actionLog = ActionLog(className, signature, "INFO", Thread.currentThread().id.toString())
         insertActionLog(actionLog, realmInstance)
     }
 
-    fun insertActionLog(actionLog: ActionLog, context: Context) {
+    fun insertActionLog(
+        actionLog: ActionLog,
+        context: Context,
+    ) {
         if (context.config.enableDebugMode) {
             insertActionLog(actionLog)
         }
@@ -417,27 +560,25 @@ object EasyDiaryDbHelper {
         }
     }
 
-
     /***************************************************************************************************
      *   Manage DDay model
      *
      ***************************************************************************************************/
-    fun duplicateDDayBy(dDay: DDay, realmInstance: Realm = getInstance()): DDay {
-        return realmInstance.copyFromRealm(dDay)
-    }
+    fun duplicateDDayBy(
+        dDay: DDay,
+        realmInstance: Realm = getInstance(),
+    ): DDay = realmInstance.copyFromRealm(dDay)
 
-    private fun findDDayBy(realmInstance: Realm, sequence: Int): DDay? {
-        return realmInstance.where(DDay::class.java).equalTo("sequence", sequence).findFirst()
-    }
+    private fun findDDayBy(
+        realmInstance: Realm,
+        sequence: Int,
+    ): DDay? = realmInstance.where(DDay::class.java).equalTo("sequence", sequence).findFirst()
 
-    fun findDDayBy(sequence: Int): DDay? {
-        return findDDayBy(getInstance(), sequence)
-    }
+    fun findDDayBy(sequence: Int): DDay? = findDDayBy(getInstance(), sequence)
 
     fun findDDayAll(sortOrder: Sort = Sort.ASCENDING): List<DDay> = getInstance().where(DDay::class.java).findAll().sort("targetTimeStamp", sortOrder)
 
     fun updateDDayBy(dDay: DDay) {
-
         if (dDay.sequence == -1) {
             val sequence = getInstance().where(DDay::class.java).max("sequence") ?: 0
             dDay.sequence = sequence.toInt().plus(1)
@@ -455,9 +596,7 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun countDDayAll(): Long {
-        return getInstance().where(DDay::class.java).count()
-    }
+    fun countDDayAll(): Long = getInstance().where(DDay::class.java).count()
 
     /***************************************************************************************************
      *   Manage ETC.
@@ -472,4 +611,3 @@ object EasyDiaryDbHelper {
         return token
     }
 }
-

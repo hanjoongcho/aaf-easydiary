@@ -112,6 +112,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
+import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
@@ -119,7 +120,6 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -1344,7 +1344,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                 this@BaseDevActivity,
                                                 NotificationService::class.java,
                                             ).apply {
-                                                action = BaseNotificationService.ACTION_DEV_TOAST
+                                                action = NotificationConstants.ACTION_DEV_TOAST
                                                 putExtra(
                                                     NOTIFICATION_ID,
                                                     notification.id, // An identifier for this notification unique within your application.
@@ -1562,7 +1562,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     this,
                     notificationInfo.id, // Private request code for the sender
                     Intent(this, NotificationService::class.java).apply {
-                        action = BaseNotificationService.ACTION_DEV_DISMISS
+                        action = NotificationConstants.ACTION_DEV_DISMISS
                         putExtra(
                             NOTIFICATION_ID,
                             notificationInfo.id, // An identifier for this notification unique within your application.

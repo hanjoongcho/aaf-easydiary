@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
+import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.AlarmCard
@@ -77,10 +78,10 @@ class AlarmAdapter(
 
                             val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.sequence}] " else ""
                             val alarmTag = when (alarm.workMode) {
-                                Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
-                                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
-                                Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
-                                Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
+                                AlarmConstants.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+                                AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                                AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+                                AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
                                 else -> "${prefix}unclassified"
                             }
 

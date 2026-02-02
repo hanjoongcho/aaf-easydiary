@@ -1,19 +1,22 @@
 package me.blog.korn123.easydiary.helper
 
-import me.blog.korn123.commons.utils.DateUtils
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmList
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
+import me.blog.korn123.commons.utils.DateUtils
 
 /**
  * Created by hanjoong on 2017-03-25.
  */
 
 class EasyDiaryMigration : RealmMigration {
-    
-    override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
+    override fun migrate(
+        realm: DynamicRealm,
+        oldVersion: Long,
+        newVersion: Long,
+    ) {
         var currentVersion = oldVersion
         val schema = realm.schema
 
@@ -21,7 +24,7 @@ class EasyDiaryMigration : RealmMigration {
         val diarySchema: RealmObjectSchema? = schema.get("DiaryDto")
         diarySchema?.let {
             if (currentVersion == 1L) {
-                /* Date 필드는 추후 필요 시 마이그레이션 예정임 */
+                // Date 필드는 추후 필요 시 마이그레이션 예정임
                 //            diarySchema
                 //                    .addField("date", Date.class)
                 //                    .transform(new RealmObjectSchema.Function() {
@@ -32,28 +35,31 @@ class EasyDiaryMigration : RealmMigration {
                 //                        }
                 //                    });
 
-                it.addField("dateString", String::class.java)
-                .transform { obj ->
-                    val dateString = DateUtils.timeMillisToDateTime(obj.getLong("currentTimeMillis"), DateUtils.DATE_PATTERN_DASH)
-                    obj.set("dateString", dateString)
-                }
+                it
+                    .addField("dateString", String::class.java)
+                    .transform { obj ->
+                        val dateString = DateUtils.timeMillisToDateTime(obj.getLong("currentTimeMillis"), DateUtilConstants.DATE_PATTERN_DASH)
+                        obj.set("dateString", dateString)
+                    }
 
                 currentVersion++
             }
 
             if (currentVersion == 2L) {
-                it.addField("weather", Int::class.java)
-                .transform { obj -> obj.set("weather", 0) }
+                it
+                    .addField("weather", Int::class.java)
+                    .transform { obj -> obj.set("weather", 0) }
                 currentVersion++
             }
 
             if (currentVersion == 3L) {
                 val photoUriSchema = schema.create("PhotoUriDto").addField("photoUri", String::class.java)
 
-                it.addRealmListField("photoUris", photoUriSchema)
-                .transform {
-                    // obj.set("photoUris", null);
-                }
+                it
+                    .addRealmListField("photoUris", photoUriSchema)
+                    .transform {
+                        // obj.set("photoUris", null);
+                    }
                 currentVersion++
             }
 
@@ -66,23 +72,24 @@ class EasyDiaryMigration : RealmMigration {
                 it.addField("fontSize", Float::class.java)
                 currentVersion++
             }
-            
+
             if (currentVersion == 6L) {
                 it.addField("isAllDay", Boolean::class.java)
                 currentVersion++
             }
 
             if (currentVersion == 7L) {
-                schema.create("Alarm")
-                        .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
-                        .addField("id", Int::class.java)
-                        .addField("timeInMinutes", Int::class.java)
-                        .addField("days", Int::class.java)
-                        .addField("isEnabled", Boolean::class.java)
-                        .addField("vibrate", Boolean::class.java)
-                        .addField("soundTitle", String::class.java)
-                        .addField("soundUri", String::class.java)
-                        .addField("label", String::class.java)
+                schema
+                    .create("Alarm")
+                    .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
+                    .addField("id", Int::class.java)
+                    .addField("timeInMinutes", Int::class.java)
+                    .addField("days", Int::class.java)
+                    .addField("isEnabled", Boolean::class.java)
+                    .addField("vibrate", Boolean::class.java)
+                    .addField("soundTitle", String::class.java)
+                    .addField("soundUri", String::class.java)
+                    .addField("label", String::class.java)
                 currentVersion++
             }
 
@@ -104,8 +111,8 @@ class EasyDiaryMigration : RealmMigration {
             if (currentVersion == 11L) {
                 schema.get("PhotoUriDto")?.let { photoUriDto ->
                     photoUriDto
-                            .addField("mimeType", String::class.java)
-                            .transform { obj -> obj.set("mimeType", MIME_TYPE_JPEG) }
+                        .addField("mimeType", String::class.java)
+                        .transform { obj -> obj.set("mimeType", MIME_TYPE_JPEG) }
                 }
                 currentVersion++
             }
@@ -127,12 +134,13 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 15L) {
-                schema.create("ActionLog")
-                        .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
-                        .addField("className", String::class.java)
-                        .addField("signature", String::class.java)
-                        .addField("key", String::class.java)
-                        .addField("value", String::class.java)
+                schema
+                    .create("ActionLog")
+                    .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
+                    .addField("className", String::class.java)
+                    .addField("signature", String::class.java)
+                    .addField("key", String::class.java)
+                    .addField("value", String::class.java)
                 currentVersion++
             }
 
@@ -146,7 +154,9 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 18L) {
-                val location = schema.create("Location")
+                val location =
+                    schema
+                        .create("Location")
                         .addField("address", String::class.java)
                         .addField("latitude", Double::class.java)
                         .addField("longitude", Double::class.java)
@@ -284,7 +294,8 @@ class EasyDiaryMigration : RealmMigration {
 
         // Migration from version 21 to 22
         if (currentVersion == 21L) {
-            schema.create("DDay")
+            schema
+                .create("DDay")
                 .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
                 .addField("targetTimeStamp", Long::class.java)
                 .addField("title", String::class.java)
@@ -302,7 +313,8 @@ class EasyDiaryMigration : RealmMigration {
         // Migration from version 23 to 24
         if (currentVersion == 23L) {
             schema.get("Diary")?.let {
-                it.addRealmListField("linkedDiaries", Int::class.java)
+                it
+                    .addRealmListField("linkedDiaries", Int::class.java)
                     // 강제로 required 속성 제거
                     // 마이그 시 Int를 optional로 생성 하는거 같음
                     // RealmList로 관리되는 Int값에 null이 들어갈 수 없는 구조임

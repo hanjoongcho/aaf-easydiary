@@ -2,6 +2,7 @@
 package me.blog.korn123.commons.utils
 
 import android.annotation.SuppressLint
+import me.blog.korn123.easydiary.helper.PrepareReleaseConstants
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -9,12 +10,6 @@ import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 
 class PrepareRelease {
-    companion object {
-        const val SYNC_RELEASE_STRING = "sync_release_string"
-        const val SYNC_NEW_STRING = "sync_new_string"
-        const val SYNC_RELEASE_NOTE = "sync_release_note"
-    }
-
     data class Release(
         var currentVersion: Int = -1,
         var currentVersionName: String = "",
@@ -77,7 +72,7 @@ class PrepareRelease {
         var defaultRelease: Release? = null
         var defaultReleaseCurrentVersion = -1
         when (syncMode) {
-            SYNC_RELEASE_STRING, SYNC_NEW_STRING -> {
+            PrepareReleaseConstants.SYNC_RELEASE_STRING, PrepareReleaseConstants.SYNC_NEW_STRING -> {
                 File("./app/src/main/res/").listFiles()?.map { localeFolder ->
                     if (localeFolder.name.startsWith("values")) {
                         if (localeFolder.name == "values") {
@@ -106,7 +101,7 @@ class PrepareRelease {
                                     otherRelease.endIndex = determineLastReleaseEndLine(valuesOther, otherRelease)
 
                                     when {
-                                        syncMode == SYNC_NEW_STRING -> {
+                                        syncMode == PrepareReleaseConstants.SYNC_NEW_STRING -> {
                                             for (i in valuesOther.size until valuesDefaultTotal) {
                                                 valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
                                             }
@@ -138,7 +133,7 @@ class PrepareRelease {
                 }
             }
 
-            SYNC_RELEASE_NOTE -> {
+            PrepareReleaseConstants.SYNC_RELEASE_NOTE -> {
                 println("======================================> Start: sync release note")
                 File("./app/src/main/assets/").listFiles()?.map { file ->
                     println(file.absolutePath)
@@ -190,5 +185,5 @@ fun main() {
     val prepareRelease = PrepareRelease()
 //    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_STRING)
 //    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_NEW_STRING)
-    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_NOTE)
+    prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_NOTE)
 }

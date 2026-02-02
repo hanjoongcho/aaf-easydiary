@@ -31,6 +31,7 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -133,9 +134,9 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
                         TransitionHelper.startActivityWithTransition(
                             requireActivity(),
                             Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
-                                putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.faq_url))
-                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
-                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                                putExtra(MarkdownConstants.OPEN_URL_INFO, getString(R.string.faq_url))
+                                putExtra(MarkdownConstants.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
+                                putExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, false)
                             },
                         )
                     }
@@ -150,9 +151,9 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
                         TransitionHelper.startActivityWithTransition(
                             requireActivity(),
                             Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
-                                putExtra(MarkDownViewerActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
-                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
-                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                                putExtra(MarkdownConstants.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                                putExtra(MarkdownConstants.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
+                                putExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, false)
                             },
                         )
                     }
@@ -197,11 +198,11 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
                             requireActivity(),
                             Intent(requireActivity(), MarkDownViewerActivity::class.java).apply {
                                 putExtra(
-                                    MarkDownViewerActivity.OPEN_URL_INFO,
+                                    MarkdownConstants.OPEN_URL_INFO,
                                     "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md",
                                 )
-                                putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
-                                putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, false)
+                                putExtra(MarkdownConstants.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
+                                putExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, false)
                             },
                         )
                     }

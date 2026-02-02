@@ -27,11 +27,13 @@ import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_BACKUP_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
+import me.blog.korn123.easydiary.helper.NotificationConstants
 import java.io.File
 import java.util.Collections
 
@@ -95,7 +97,7 @@ class BackupPhotoService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
+        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: ""
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)
     }
@@ -134,7 +136,7 @@ class BackupPhotoService : Service() {
                     this,
                     NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID,
                     Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_PHOTO_BACKUP_GMS_CANCEL
+                        action = NotificationConstants.ACTION_PHOTO_BACKUP_GMS_CANCEL
                     },
                     pendingIntentFlag(),
                 ),
@@ -147,7 +149,7 @@ class BackupPhotoService : Service() {
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
         mDriveServiceHelper
             .queryFiles(
-                "mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
+                "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,
             ).run {
@@ -189,7 +191,7 @@ class BackupPhotoService : Service() {
                 mWorkingFolderId,
                 mPhotoPath + fileName,
                 fileName,
-                DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
+                GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
             ).run {
                 addOnSuccessListener { _ ->
                     targetFilenamesCursor++
@@ -308,7 +310,7 @@ class BackupPhotoService : Service() {
                     this,
                     NOTIFICATION_GMS_BACKUP_COMPLETE_ID,
                     Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
+                        action = NotificationConstants.ACTION_PHOTO_BACKUP_GMS_DISMISS
                     },
                     pendingIntentFlag(),
                 ),

@@ -201,7 +201,7 @@ class GoogleOAuthHelper {
             ) {
                 EasyDiaryDbHelper.insertDiary(
                     Diary(
-                        BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                        DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                         timeMillis,
                         if (item.description != null) item.summary else "",
                         item.description ?: item.summary,

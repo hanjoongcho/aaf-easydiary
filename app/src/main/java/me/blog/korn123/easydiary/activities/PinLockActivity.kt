@@ -17,7 +17,8 @@ import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-
+import me.blog.korn123.easydiary.helper.FingerprintLockConstants
+import me.blog.korn123.easydiary.helper.PinLockConstants
 
 class PinLockActivity : BaseSimpleActivity() {
     private lateinit var mBinding: ActivityPinLockBinding
@@ -30,7 +31,7 @@ class PinLockActivity : BaseSimpleActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityPinLockBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        activityMode = intent.getStringExtra(LAUNCHING_MODE)
+        activityMode = intent.getStringExtra(PinLockConstants.LAUNCHING_MODE)
 
         mBinding.run {
             mPasswordView[0] = pass1
@@ -51,9 +52,11 @@ class PinLockActivity : BaseSimpleActivity() {
             if (config.fingerprintLockEnable) {
                 fingerprint.visibility = View.VISIBLE
                 changeFingerprintLock.setOnClickListener {
-                    startActivity(Intent(this@PinLockActivity, FingerprintLockActivity::class.java).apply {
-                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
-                    })
+                    startActivity(
+                        Intent(this@PinLockActivity, FingerprintLockActivity::class.java).apply {
+                            putExtra(FingerprintLockConstants.LAUNCHING_MODE, FingerprintLockConstants.ACTIVITY_UNLOCK)
+                        },
+                    )
                     finish()
                 }
             }
@@ -66,90 +69,93 @@ class PinLockActivity : BaseSimpleActivity() {
     override fun onResume() {
         super.onResume()
         FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
-        mBinding.infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
+        mBinding.infoMessage.text = if (activityMode == PinLockConstants.ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         ActivityCompat.finishAffinity(this)
     }
-    
-    private val keyPadClickListener: View.OnClickListener = View.OnClickListener { view ->
-        val inputPass = when (view?.id) {
-            R.id.num0 -> "0"
-            R.id.num1 -> "1"
-            R.id.num2 -> "2"
-            R.id.num3 -> "3"
-            R.id.num4 -> "4"
-            R.id.num5 -> "5"
-            R.id.num6 -> "6"
-            R.id.num7 -> "7"
-            R.id.num8 -> "8"
-            R.id.num9 -> "9"
-            R.id.delete -> "delete"
-            else -> ""
-        }
 
-        when (inputPass) {
-            "delete" -> {
-                if (mCursorIndex > 0) mCursorIndex--
-                mPasswordView[mCursorIndex]?.text = ""
-                return@OnClickListener
-            }
-            else -> {
-                mPassword[mCursorIndex] = inputPass
-                val displayPass = if (activityMode == ACTIVITY_SETTING) inputPass else "-"
-                mPasswordView[mCursorIndex]?.text = displayPass
+    private val keyPadClickListener: View.OnClickListener =
+        View.OnClickListener { view ->
+            val inputPass =
+                when (view?.id) {
+                    R.id.num0 -> "0"
+                    R.id.num1 -> "1"
+                    R.id.num2 -> "2"
+                    R.id.num3 -> "3"
+                    R.id.num4 -> "4"
+                    R.id.num5 -> "5"
+                    R.id.num6 -> "6"
+                    R.id.num7 -> "7"
+                    R.id.num8 -> "8"
+                    R.id.num9 -> "9"
+                    R.id.delete -> "delete"
+                    else -> ""
+                }
 
-                if (mCursorIndex == 3) {
-                    var fullPassword = ""
-                    mPassword.map {
-                        fullPassword += it
-                    }
+            when (inputPass) {
+                "delete" -> {
+                    if (mCursorIndex > 0) mCursorIndex--
+                    mPasswordView[mCursorIndex]?.text = ""
+                    return@OnClickListener
+                }
 
-                    when (activityMode) {
-                        ACTIVITY_SETTING -> {
-                            holdCurrentOrientation()
-                            showAlertDialog(
-                                getString(R.string.pin_setting_complete, fullPassword),
-                                { _, _ ->
-                                    config.aafPinLockEnable = true
-                                    config.aafPinLockSavedPassword = fullPassword
-                                    pauseLock()
-                                    finish()
-                                },
-                                { _, _ ->
-                                    finish()
-                                },
-                                DialogMode.INFO,
-                                false
-                            )
+                else -> {
+                    mPassword[mCursorIndex] = inputPass
+                    val displayPass = if (activityMode == PinLockConstants.ACTIVITY_SETTING) inputPass else "-"
+                    mPasswordView[mCursorIndex]?.text = displayPass
+
+                    if (mCursorIndex == 3) {
+                        var fullPassword = ""
+                        mPassword.map {
+                            fullPassword += it
                         }
-                        ACTIVITY_UNLOCK -> {
-                            when (config.aafPinLockSavedPassword == fullPassword) {
-                                true -> {
-                                    pauseLock()
-                                    finish()
-                                }
-                                false -> {
-                                    holdCurrentOrientation()
-                                    showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
-                                        onBackPressed()
-                                    }, false)
+
+                        when (activityMode) {
+                            PinLockConstants.ACTIVITY_SETTING -> {
+                                holdCurrentOrientation()
+                                showAlertDialog(
+                                    getString(R.string.pin_setting_complete, fullPassword),
+                                    { _, _ ->
+                                        config.aafPinLockEnable = true
+                                        config.aafPinLockSavedPassword = fullPassword
+                                        pauseLock()
+                                        finish()
+                                    },
+                                    { _, _ ->
+                                        finish()
+                                    },
+                                    DialogMode.INFO,
+                                    false,
+                                )
+                            }
+
+                            PinLockConstants.ACTIVITY_UNLOCK -> {
+                                when (config.aafPinLockSavedPassword == fullPassword) {
+                                    true -> {
+                                        pauseLock()
+                                        finish()
+                                    }
+
+                                    false -> {
+                                        holdCurrentOrientation()
+                                        showAlertDialog(
+                                            getString(R.string.pin_verification_fail),
+                                            DialogInterface.OnClickListener { _, _ ->
+                                                onBackPressed()
+                                            },
+                                            false,
+                                        )
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        mCursorIndex++
                     }
-                } else {
-                    mCursorIndex++
                 }
             }
         }
-    }
-
-    companion object {
-        const val LAUNCHING_MODE = "launching_mode"
-        const val ACTIVITY_SETTING = "activity_setting"
-        const val ACTIVITY_UNLOCK = "activity_unlock"
-    }
 }

@@ -16,13 +16,14 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 
-class FullRecoveryWorker(private val context: Context, workerParams: WorkerParameters)
-    : Worker(context, workerParams) {
-
+class FullRecoveryWorker(
+    private val context: Context,
+    workerParams: WorkerParameters,
+) : Worker(context, workerParams) {
     private val mZipHelper = ZipHelper(context)
 
     override fun doWork(): Result {
-        val uri = Uri.parse(inputData.getString(BackupOperations.URI_STRING))
+        val uri = Uri.parse(inputData.getString(WorkerConstants.URI_STRING))
         mZipHelper.decompress(uri)
         if (mZipHelper.isOnProgress) {
             val jsonFilename = EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY + "preference.json"
@@ -36,7 +37,7 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
                     textColor = (map[TEXT_COLOR] as Double).toInt()
                     settingThumbnailSize = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
                     enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
-                    summaryMaxLines =(map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
+                    summaryMaxLines = (map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
                     enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
 //                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
                     diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean

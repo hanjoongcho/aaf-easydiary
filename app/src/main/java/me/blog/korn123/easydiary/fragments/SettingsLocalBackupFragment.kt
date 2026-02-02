@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -31,7 +30,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,10 +43,44 @@ import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
+import me.blog.korn123.easydiary.extensions.exportRealmFile
+import me.blog.korn123.easydiary.extensions.getUriForFile
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.refreshApp
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
+import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.MIME_TYPE_REALM
+import me.blog.korn123.easydiary.helper.MIME_TYPE_XLS
+import me.blog.korn123.easydiary.helper.MIME_TYPE_ZIP
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ZIP
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_XLS
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
+import me.blog.korn123.easydiary.helper.SettingLocalConstants
+import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
@@ -62,8 +94,7 @@ import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.util.*
-import kotlin.getValue
+import java.util.Date
 
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
@@ -117,11 +148,11 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             }
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> {
-                                showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                                showLocationSelectionPopup(SettingLocalConstants.MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                             }
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> {
-                                showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                                showLocationSelectionPopup(SettingLocalConstants.MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
                             }
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> {
@@ -130,7 +161,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> {
                                 setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                                 }
                             }
                         }
@@ -199,7 +230,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             true -> {
-                                showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                                showLocationSelectionPopup(SettingLocalConstants.MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                             }
 
                             false -> {
@@ -217,7 +248,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             true -> {
-                                showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                                showLocationSelectionPopup(SettingLocalConstants.MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
                             }
 
                             false -> {
@@ -280,7 +311,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             true -> {
                                 setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                                    EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                                 }
                             }
 
@@ -454,7 +485,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun sendEmailWithExcel() {
-        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}"
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}"
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
@@ -488,13 +519,13 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private fun createExportExcelUri() {
         setupLauncher(REQUEST_CODE_SAF_WRITE_XLS) {
-            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
+            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
         }
     }
 
     private fun exportExcel(uri: Uri?) {
 //        EasyDiaryUtils.initLegacyWorkingDirectory(mActivity)
-        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}"
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}"
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
@@ -552,37 +583,37 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
         val headerRow = sheet.createRow(0)
         headerRow.height = (256 * 3).toShort()
-        headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
-        headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
-        headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
-        headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
-        headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
-        headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
-        headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
-        headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
-        headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
+        headerRow.createCell(SettingLocalConstants.SEQ).setCellValue(getString(R.string.export_excel_header_seq))
+        headerRow.createCell(SettingLocalConstants.WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
+        headerRow.createCell(SettingLocalConstants.TITLE).setCellValue(getString(R.string.export_excel_header_title))
+        headerRow.createCell(SettingLocalConstants.CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
+        headerRow.createCell(SettingLocalConstants.ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
+        headerRow.createCell(SettingLocalConstants.ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
+        headerRow.createCell(SettingLocalConstants.WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
+        headerRow.createCell(SettingLocalConstants.SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
+        headerRow.createCell(SettingLocalConstants.IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
 
-        headerRow.getCell(SEQ).cellStyle = headerStyle
-        headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
-        headerRow.getCell(TITLE).cellStyle = headerStyle
-        headerRow.getCell(CONTENTS).cellStyle = headerStyle
-        headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
-        headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
-        headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
-        headerRow.getCell(SYMBOL).cellStyle = headerStyle
-        headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.SEQ).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.WRITE_DATE).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.TITLE).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.CONTENTS).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.ATTACH_PHOTO_NAME).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.ATTACH_PHOTO_SIZE).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.WRITE_TIME_MILLIS).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.SYMBOL).cellStyle = headerStyle
+        headerRow.getCell(SettingLocalConstants.IS_ALL_DAY).cellStyle = headerStyle
 
         // FIXME:
         // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-        sheet.setColumnWidth(SEQ, 256 * 10)
-        sheet.setColumnWidth(WRITE_DATE, 256 * 30)
-        sheet.setColumnWidth(TITLE, 256 * 30)
-        sheet.setColumnWidth(CONTENTS, 256 * 50)
-        sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
-        sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
-        sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
-        sheet.setColumnWidth(SYMBOL, 256 * 10)
-        sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
+        sheet.setColumnWidth(SettingLocalConstants.SEQ, 256 * 10)
+        sheet.setColumnWidth(SettingLocalConstants.WRITE_DATE, 256 * 30)
+        sheet.setColumnWidth(SettingLocalConstants.TITLE, 256 * 30)
+        sheet.setColumnWidth(SettingLocalConstants.CONTENTS, 256 * 50)
+        sheet.setColumnWidth(SettingLocalConstants.ATTACH_PHOTO_NAME, 256 * 80)
+        sheet.setColumnWidth(SettingLocalConstants.ATTACH_PHOTO_SIZE, 256 * 15)
+        sheet.setColumnWidth(SettingLocalConstants.WRITE_TIME_MILLIS, 256 * 60)
+        sheet.setColumnWidth(SettingLocalConstants.SYMBOL, 256 * 10)
+        sheet.setColumnWidth(SettingLocalConstants.IS_ALL_DAY, 256 * 30)
         val diarySymbolMap = FlavorUtils.getDiarySymbolMap(requireActivity())
         val size = diaryList.size
         diaryList.forEachIndexed { index, diaryDto ->
@@ -594,15 +625,15 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
             }
 
-            val sequence = row.createCell(SEQ).apply { cellStyle = bodyStyle }
-            val writeDate = row.createCell(WRITE_DATE).apply { cellStyle = bodyStyle }
-            val title = row.createCell(TITLE).apply { cellStyle = bodyStyle }
-            val contents = row.createCell(CONTENTS).apply { cellStyle = bodyStyle }
-            val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply { cellStyle = bodyStyle }
-            val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply { cellStyle = bodyStyle }
-            val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply { cellStyle = bodyStyle }
-            val weather = row.createCell(SYMBOL).apply { cellStyle = bodyStyle }
-            val isAllDay = row.createCell(IS_ALL_DAY).apply { cellStyle = bodyStyle }
+            val sequence = row.createCell(SettingLocalConstants.SEQ).apply { cellStyle = bodyStyle }
+            val writeDate = row.createCell(SettingLocalConstants.WRITE_DATE).apply { cellStyle = bodyStyle }
+            val title = row.createCell(SettingLocalConstants.TITLE).apply { cellStyle = bodyStyle }
+            val contents = row.createCell(SettingLocalConstants.CONTENTS).apply { cellStyle = bodyStyle }
+            val attachPhotoNames = row.createCell(SettingLocalConstants.ATTACH_PHOTO_NAME).apply { cellStyle = bodyStyle }
+            val attachPhotoSizes = row.createCell(SettingLocalConstants.ATTACH_PHOTO_SIZE).apply { cellStyle = bodyStyle }
+            val writeTimeMillis = row.createCell(SettingLocalConstants.WRITE_TIME_MILLIS).apply { cellStyle = bodyStyle }
+            val weather = row.createCell(SettingLocalConstants.SYMBOL).apply { cellStyle = bodyStyle }
+            val isAllDay = row.createCell(SettingLocalConstants.IS_ALL_DAY).apply { cellStyle = bodyStyle }
 
             sequence.setCellValue(diaryDto.sequence.toDouble())
             writeDate.setCellValue(DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis))
@@ -647,13 +678,13 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private fun exportFullBackupFile(uri: Uri?) {
         exportRealmFile(false)
-        BackupOperations.Builder(requireActivity(), uri.toString(), BackupOperations.WORK_MODE_BACKUP).build().apply {
+        BackupOperations.Builder(requireActivity(), uri.toString(), WorkerConstants.WORK_MODE_BACKUP).build().apply {
             continuation.enqueue()
         }
     }
 
     private fun importFullBackupFile(uri: Uri?) {
-        BackupOperations.Builder(requireActivity(), uri.toString(), BackupOperations.WORK_MODE_RECOVERY).build().apply {
+        BackupOperations.Builder(requireActivity(), uri.toString(), WorkerConstants.WORK_MODE_RECOVERY).build().apply {
             continuation.enqueue()
         }
     }
@@ -697,20 +728,20 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 //            closePopup.setOnClickListener { dialog?.dismiss() }
                 modeInternal.setOnClickListener {
                     when (popupMode) {
-                        MODE_BACKUP -> exportRealmFile()
-                        MODE_RECOVERY -> importRealmFile()
+                        SettingLocalConstants.MODE_BACKUP -> exportRealmFile()
+                        SettingLocalConstants.MODE_RECOVERY -> importRealmFile()
                     }
                     dialog?.dismiss()
                 }
                 modeExternal.setOnClickListener {
                     when (popupMode) {
-                        MODE_BACKUP -> {
+                        SettingLocalConstants.MODE_BACKUP -> {
                             setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
                                 EasyDiaryUtils.writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
                             }
                         }
 
-                        MODE_RECOVERY -> {
+                        SettingLocalConstants.MODE_RECOVERY -> {
                             setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
                                 EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
                             }
@@ -732,20 +763,5 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 //            requireActivity().updateAlertDialog(this, null, popupView.root)
                 requireActivity().updateAlertDialogWithIcon(DialogMode.SETTING, this, null, popupView.root)
             }
-    }
-
-    companion object {
-        const val SEQ = 0
-        const val WRITE_DATE = 1
-        const val TITLE = 2
-        const val CONTENTS = 3
-        const val ATTACH_PHOTO_NAME = 4
-        const val ATTACH_PHOTO_SIZE = 5
-        const val WEATHER = 6 // no longer used since version 1.4.79
-        const val SYMBOL = 6
-        const val IS_ALL_DAY = 7
-        const val WRITE_TIME_MILLIS = 8
-        const val MODE_BACKUP = 0
-        const val MODE_RECOVERY = 1
     }
 }

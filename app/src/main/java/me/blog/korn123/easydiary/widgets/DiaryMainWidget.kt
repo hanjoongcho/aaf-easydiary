@@ -18,36 +18,41 @@ import me.blog.korn123.easydiary.extensions.pendingIntentFlagMutable
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
+import me.blog.korn123.easydiary.helper.WidgetConstants
 import me.blog.korn123.easydiary.services.DiaryMainWidgetService
 
-
 class DiaryMainWidget : AppWidgetProvider() {
-
-    companion object {
-        const val OPEN_WRITE_PAGE = "open_write_page"
-        const val OPEN_READ_PAGE = "open_read_page"
-        const val UPDATE_WIDGET = "update_widget"
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         when (intent.action) {
-            OPEN_WRITE_PAGE -> {
-                context.startActivity(Intent(context, DiaryWritingActivity::class.java).apply {
-                    putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                })
+            WidgetConstants.OPEN_WRITE_PAGE -> {
+                context.startActivity(
+                    Intent(context, DiaryWritingActivity::class.java).apply {
+                        putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    },
+                )
             }
-            OPEN_READ_PAGE -> {
-                context.startActivity(Intent(context, DiaryReadingActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
-                    putExtra(DIARY_SEQUENCE, intent.getIntExtra(DIARY_SEQUENCE, -1))
-                })
+
+            WidgetConstants.OPEN_READ_PAGE -> {
+                context.startActivity(
+                    Intent(context, DiaryReadingActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+                        putExtra(DIARY_SEQUENCE, intent.getIntExtra(DIARY_SEQUENCE, -1))
+                    },
+                )
             }
-            UPDATE_WIDGET -> {
+
+            WidgetConstants.UPDATE_WIDGET -> {
                 performUpdate(context)
             }
-            else -> super.onReceive(context, intent)
+
+            else -> {
+                super.onReceive(context, intent)
+            }
         }
     }
 
@@ -67,7 +72,11 @@ class DiaryMainWidget : AppWidgetProvider() {
      *  </appwidget-provider>
      * ```
      */
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+    ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         performUpdate(context)
     }
@@ -82,6 +91,7 @@ class DiaryMainWidget : AppWidgetProvider() {
                 toolbarColor = Color.parseColor("#ff121212")
                 iconColor = Color.parseColor("#ffffffff")
             }
+
             else -> {
                 toolbarColor = Color.parseColor("#ffd6d6d6")
                 iconColor = Color.parseColor("#ffffffff")
@@ -94,23 +104,23 @@ class DiaryMainWidget : AppWidgetProvider() {
                 setImageViewBitmap(R.id.openWritePage, context.changeBitmapColor(R.drawable.ic_edit, iconColor))
                 setImageViewBitmap(R.id.updateWidget, context.changeBitmapColor(R.drawable.ic_update, iconColor))
 
-                setupIntent(context, this, OPEN_WRITE_PAGE, R.id.openWritePage)
-                setupIntent(context, this, UPDATE_WIDGET, R.id.updateWidget)
+                setupIntent(context, this, WidgetConstants.OPEN_WRITE_PAGE, R.id.openWritePage)
+                setupIntent(context, this, WidgetConstants.UPDATE_WIDGET, R.id.updateWidget)
 
                 Intent(context, DiaryMainWidgetService::class.java).apply {
                     setRemoteAdapter(R.id.diaryListView, this)
                 }
                 setEmptyView(R.id.diaryListView, R.id.widget_event_list_empty)
 
-
-                val pendingIntent: PendingIntent = Intent(
+                val pendingIntent: PendingIntent =
+                    Intent(
                         context,
-                        DiaryMainWidget::class.java
-                ).run {
-                    action = OPEN_READ_PAGE
+                        DiaryMainWidget::class.java,
+                    ).run {
+                        action = WidgetConstants.OPEN_READ_PAGE
 
-                    PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlagMutable())
-                }
+                        PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlagMutable())
+                    }
                 setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
                 appWidgetManager.updateAppWidget(it, this)
                 appWidgetManager.notifyAppWidgetViewDataChanged(it, R.id.diaryListView)
@@ -118,7 +128,12 @@ class DiaryMainWidget : AppWidgetProvider() {
         }
     }
 
-    private fun setupIntent(context: Context, views: RemoteViews, action: String, id: Int) {
+    private fun setupIntent(
+        context: Context,
+        views: RemoteViews,
+        action: String,
+        id: Int,
+    ) {
         Intent(context, DiaryMainWidget::class.java).apply {
             this.action = action
             val pendingIntent = PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlagMutable())
@@ -126,9 +141,10 @@ class DiaryMainWidget : AppWidgetProvider() {
         }
     }
 
-    private fun getProperLayout(context: Context) = if (isOreoPlus()) {
-        R.layout.widget_diary_main
-    } else {
-        R.layout.widget_diary_main
-    }
+    private fun getProperLayout(context: Context) =
+        if (isOreoPlus()) {
+            R.layout.widget_diary_main
+        } else {
+            R.layout.widget_diary_main
+        }
 }

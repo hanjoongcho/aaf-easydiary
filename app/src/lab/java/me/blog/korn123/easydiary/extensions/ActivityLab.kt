@@ -23,6 +23,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
@@ -193,7 +194,7 @@ fun ComponentActivity.syncMarkDown(
                                 val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
                                 EasyDiaryDbHelper.insertDiary(
                                     Diary(
-                                        BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT,
+                                        DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                                         System.currentTimeMillis(),
                                         title,
                                         re.body()!!,

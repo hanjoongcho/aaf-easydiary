@@ -33,12 +33,15 @@ import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
+import me.blog.korn123.easydiary.helper.NotificationConstants
+import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import java.io.File
@@ -136,10 +139,10 @@ class FullBackupService : Service() {
             ),
             this,
         )
-        mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
+        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: ""
 
         // test alarm sequence is 5
-        val alarmId = intent?.getIntExtra(SettingsScheduleFragment.ALARM_ID, 5) ?: 5
+        val alarmId = intent?.getIntExtra(SettingConstants.ALARM_ID, 5) ?: 5
         EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
             val workStatus = WorkStatus()
             workStatusList.add(workStatus)
@@ -205,7 +208,7 @@ class FullBackupService : Service() {
                     this,
                     alarm.id,
                     Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
+                        action = NotificationConstants.ACTION_FULL_BACKUP_GMS_CANCEL
                     },
                     pendingIntentFlag(),
                 ),
@@ -240,7 +243,7 @@ class FullBackupService : Service() {
         )
         mDriveServiceHelper
             .queryFiles(
-                "mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
+                "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,
             ).run {
@@ -337,7 +340,7 @@ class FullBackupService : Service() {
                 mWorkingFolderId,
                 mPhotoPath + fileName,
                 fileName,
-                DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
+                GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
             ).run {
                 addOnSuccessListener { _ ->
                     workStatus.targetFilenamesCursor++
@@ -420,7 +423,7 @@ class FullBackupService : Service() {
     ) {
         GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
             DriveServiceHelper(applicationContext, account).run {
-                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
+                initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
                     val dbFileName =
                         DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
                     if (realmFolderId != null) {
@@ -515,8 +518,8 @@ class FullBackupService : Service() {
                         this,
                         alarm.id,
                         Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_FULL_BACKUP_GMS_DISMISS
-                            putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+                            action = NotificationConstants.ACTION_FULL_BACKUP_GMS_DISMISS
+                            putExtra(SettingConstants.ALARM_ID, alarm.id)
                         },
                         pendingIntentFlag(),
                     ),

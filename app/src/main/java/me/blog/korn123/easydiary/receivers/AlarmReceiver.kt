@@ -9,10 +9,13 @@ import me.blog.korn123.easydiary.extensions.executeScheduledTask
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.SettingConstants
 
 class AlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         when (intent.getBooleanExtra(DOZE_SCHEDULE, false)) {
             true -> {
                 context.run {
@@ -25,8 +28,9 @@ class AlarmReceiver : BroadcastReceiver() {
                     toast(getString(R.string.schedule_pending_guide_message))
                 }
             }
+
             false -> {
-                val alarmId = intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1)
+                val alarmId = intent.getIntExtra(SettingConstants.ALARM_ID, -1)
                 EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
                     context.executeScheduledTask(it)
                 }

@@ -105,7 +105,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 true -> {
                     mBinding.partialEditContents.run {
                         activityResult.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                            if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                            if (mCurrentCursor == DiaryEditingConstants.FOCUS_TITLE) { // edit title
                                 val title = diaryTitle.text.toString()
                                 val sb = StringBuilder(title)
                                 sb.insert(diaryTitle.selectionStart, it[0])
@@ -238,7 +238,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 MotionEvent.ACTION_UP -> view.performClick()
             }
 
-            mCurrentCursor = if (view.id == R.id.diaryTitle) FOCUS_TITLE else FOCUS_CONTENTS
+            mCurrentCursor = if (view.id == R.id.diaryTitle) DiaryEditingConstants.FOCUS_TITLE else DiaryEditingConstants.FOCUS_CONTENTS
             false
         }
 
@@ -440,7 +440,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun saveTemporaryDiary(originSequence: Int) {
         val diaryTemp =
             Diary(
-                DIARY_SEQUENCE_INIT,
+                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                 mCurrentTimeMillis,
                 mBinding.partialEditContents.diaryTitle.text
                     .toString(),
@@ -468,9 +468,9 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 { _, _ ->
                     initData(it)
                     initBottomToolbar()
-                    EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
+                    EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
                 },
-                { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DIARY_SEQUENCE_TEMPORARY) },
+                { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) },
                 DialogMode.INFO,
                 false,
                 getString(R.string.load_auto_save_diary_title),
@@ -770,8 +770,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected fun initDateTime() {
         intent?.run {
-            if (hasExtra(DiaryWritingActivity.INITIALIZE_TIME_MILLIS)) {
-                mCurrentTimeMillis = getLongExtra(DiaryWritingActivity.INITIALIZE_TIME_MILLIS, 0)
+            if (hasExtra(SettingConstants.INITIALIZE_TIME_MILLIS)) {
+                mCurrentTimeMillis = getLongExtra(SettingConstants.INITIALIZE_TIME_MILLIS, 0)
             }
         }
 
@@ -913,7 +913,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 0,
                 0,
                 SYMBOL_EASTER_EGG,
-            ).filter { diary -> diary.originSequence == DIARY_ORIGIN_SEQUENCE_INIT }
+            ).filter { diary -> diary.originSequence == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
             .size > allowStoredCnt
 
     protected fun duplicatedEasterEggWarning() {
@@ -955,13 +955,5 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 )
             }
         }
-    }
-
-    companion object {
-        const val FOCUS_TITLE = 0
-        const val FOCUS_CONTENTS = 1
-        const val DIARY_SEQUENCE_TEMPORARY = -1
-        const val DIARY_SEQUENCE_INIT = 0
-        const val DIARY_ORIGIN_SEQUENCE_INIT = 0
     }
 }

@@ -49,15 +49,21 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 
         mBinding.run {
             viewPager.adapter = PhotoPagerAdapter(diaryDto)
-            viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            viewPager.addOnPageChangeListener(
+                object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int,
+                    ) {}
 
-                override fun onPageSelected(position: Int) {
-                    toolbar.title = "${position + 1} / $mPhotoCount"
-                }
+                    override fun onPageSelected(position: Int) {
+                        toolbar.title = "${position + 1} / $mPhotoCount"
+                    }
 
-                override fun onPageScrollStateChanged(state: Int) {}
-            })
+                    override fun onPageScrollStateChanged(state: Int) {}
+                },
+            )
 
 //        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
 //        closeIcon?.let {
@@ -65,25 +71,30 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 //            close.setImageDrawable(closeIcon)
 //        }
 
-            if (photoIndex > 0) Handler().post{ viewPager.setCurrentItem(photoIndex, false) }
+            if (photoIndex > 0) Handler().post { viewPager.setCurrentItem(photoIndex, false) }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         mBinding.run {
             when (item.itemId) {
-                android.R.id.home -> TransitionHelper.finishActivityWithTransition(this@PhotoViewPagerActivity, TransitionHelper.TOP_TO_BOTTOM)
+                android.R.id.home -> {
+                    TransitionHelper.finishActivityWithTransition(this@PhotoViewPagerActivity, TransitionConstants.TOP_TO_BOTTOM)
+                }
+
                 R.id.planner -> {
                     (viewPager.findViewWithTag<LinearLayout>("view_${viewPager.currentItem}")).getChildAt(0).run {
                         if (this is PhotoView) setRotationBy(90F)
                     }
                 }
+
                 R.id.share -> {
                     val diary = (viewPager.adapter as PhotoPagerAdapter).diary
                     diary.photoUris?.let {
                         it[viewPager.currentItem]?.let { photoUri ->
                             when (diary.isEncrypt) {
                                 true -> {}
+
                                 false -> {
                                     val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
                                     shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
@@ -92,6 +103,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                         }
                     }
                 }
+
                 else -> {}
             }
         }
@@ -103,12 +115,15 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-    internal class PhotoPagerAdapter(var diary: Diary) : androidx.viewpager.widget.PagerAdapter() {
-        override fun getCount(): Int {
-            return diary.photoUris?.size ?: 0
-        }
+    internal class PhotoPagerAdapter(
+        var diary: Diary,
+    ) : androidx.viewpager.widget.PagerAdapter() {
+        override fun getCount(): Int = diary.photoUris?.size ?: 0
 
-        override fun instantiateItem(container: ViewGroup, position: Int): View {
+        override fun instantiateItem(
+            container: ViewGroup,
+            position: Int,
+        ): View {
             val viewHolder = LinearLayout(container.context).apply { tag = "view_$position" }
             val photoView = PhotoView(container.context)
             val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diary.photoUrisWithEncryptionPolicy()!![position].getFilePath()
@@ -116,11 +131,13 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                 File(imageFilePath).isFile -> {
                     // Now just add PhotoView to ViewPager and return it
 //                    photoView.setImageBitmap(bitmap)
-                    val options = RequestOptions()
-                        .error(R.drawable.ic_error_7)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .priority(Priority.HIGH)
-                    Glide.with(container.context)
+                    val options =
+                        RequestOptions()
+                            .error(R.drawable.ic_error_7)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .priority(Priority.HIGH)
+                    Glide
+                        .with(container.context)
                         .load(imageFilePath)
                         .apply(options)
                         .into(photoView)
@@ -128,6 +145,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     return viewHolder
                 }
+
                 else -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
@@ -143,12 +161,17 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             }
         }
 
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        override fun destroyItem(
+            container: ViewGroup,
+            position: Int,
+            `object`: Any,
+        ) {
             container.removeView(`object` as View)
         }
 
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object`
-        }
+        override fun isViewFromObject(
+            view: View,
+            `object`: Any,
+        ): Boolean = view === `object`
     }
 }

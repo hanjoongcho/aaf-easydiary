@@ -11,12 +11,12 @@ open class BaseAlarmWorkExecutor(
     open fun executeWork(alarm: Alarm) {
         context.run {
             when (alarm.workMode) {
-                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+                AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> {
                     exportRealmFile()
                     openNotification(alarm)
                 }
 
-                Alarm.WORK_MODE_DIARY_WRITING -> {
+                AlarmConstants.WORK_MODE_DIARY_WRITING -> {
                     openNotification(alarm)
                 }
             }

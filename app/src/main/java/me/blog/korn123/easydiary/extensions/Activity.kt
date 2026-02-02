@@ -85,8 +85,10 @@ import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
+import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -435,7 +437,7 @@ fun Activity.resumeLock() {
             config.fingerprintLockEnable -> {
                 startActivity(
                     Intent(this, FingerprintLockActivity::class.java).apply {
-                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
+                        putExtra(FingerprintLockConstants.LAUNCHING_MODE, FingerprintLockConstants.ACTIVITY_UNLOCK)
                     },
                 )
             }
@@ -443,7 +445,7 @@ fun Activity.resumeLock() {
             config.aafPinLockEnable -> {
                 startActivity(
                     Intent(this, PinLockActivity::class.java).apply {
-                        putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
+                        putExtra(PinLockConstants.LAUNCHING_MODE, PinLockConstants.ACTIVITY_UNLOCK)
                     },
                 )
             }

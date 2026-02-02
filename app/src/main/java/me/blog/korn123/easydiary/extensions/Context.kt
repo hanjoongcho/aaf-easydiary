@@ -20,7 +20,6 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -37,11 +36,8 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.TextPaint
-import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.text.style.TypefaceSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.MenuItem
@@ -58,7 +54,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -72,7 +67,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.toColorInt
 import androidx.core.location.LocationManagerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
@@ -104,7 +98,6 @@ import com.simplemobiletools.commons.views.MyTextView
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
-import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.core.MarkwonTheme
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
@@ -115,9 +108,6 @@ import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
 import io.realm.Realm
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
@@ -134,10 +124,10 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
 import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
+import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.CAPTURE_CAMERA_FILE_NAME
@@ -160,6 +150,7 @@ import me.blog.korn123.easydiary.helper.MIME_TYPE_BINARY
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
 import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
@@ -174,27 +165,22 @@ import me.blog.korn123.easydiary.helper.SETTING_SELECTED_SYMBOLS
 import me.blog.korn123.easydiary.helper.SETTING_SUMMARY_MAX_LINES
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
 import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
-import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import org.commonmark.node.Code
-import org.commonmark.node.FencedCodeBlock
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -314,13 +300,13 @@ fun Context.openSnoozeNotification(alarm: Alarm) {
 fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
     val intent: Intent? =
         when (alarm.workMode) {
-            Alarm.WORK_MODE_DIARY_WRITING -> {
+            AlarmConstants.WORK_MODE_DIARY_WRITING -> {
                 Intent(this, DiaryWritingActivity::class.java).apply {
                     putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
                 }
             }
 
-            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS, Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
+            AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL, AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS, AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
                 Intent(this, DiaryMainActivity::class.java)
             }
 
@@ -333,7 +319,7 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
 
 fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
-    intent.putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+    intent.putExtra(SettingConstants.ALARM_ID, alarm.id)
     return PendingIntent.getBroadcast(this, alarm.id, intent, pendingIntentFlag())
 }
 
@@ -413,22 +399,22 @@ fun Context.getAlarmNotification(
     var largeIcon: Bitmap? = null
     var description: String? = null
     when (alarm.workMode) {
-        Alarm.WORK_MODE_DIARY_WRITING -> {
+        AlarmConstants.WORK_MODE_DIARY_WRITING -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
             description = getString(R.string.schedule_diary_writing_complete)
         }
 
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+        AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
             description = getString(R.string.schedule_backup_local_complete)
         }
 
-        Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
+        AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
             description = getString(R.string.schedule_backup_gms_complete)
         }
 
-        Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
+        AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo_google_calendar)
             description = "Calendar schedule has been created as a diary."
         }
@@ -508,7 +494,7 @@ fun Context.openOverDueNotification() {
                     this,
                     notificationInfo.id /*Private request code for the sender*/,
                     Intent(this, NotificationService::class.java).apply {
-                        action = BaseNotificationService.ACTION_DEV_DISMISS
+                        action = NotificationConstants.ACTION_DEV_DISMISS
                         putExtra(
                             NOTIFICATION_ID,
                             notificationInfo.id, // An identifier for this notification unique within your application.
@@ -1449,8 +1435,7 @@ fun Context.isLocationEnabled(): Boolean {
     return LocationManagerCompat.isLocationEnabled(locationManager)
 }
 
-fun Context.hasGPSPermissions() =
-    checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
+fun Context.hasGPSPermissions() = checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
 
 fun Context.getLastKnownLocation(): Location? {
     val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -1607,8 +1592,7 @@ fun Context.dpToPixel(
     }
 }
 
-fun Context.hasPermission(permId: Int) =
-    ContextCompat.checkSelfPermission(this, getPermissionString(permId)) == PackageManager.PERMISSION_GRANTED
+fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(this, getPermissionString(permId)) == PackageManager.PERMISSION_GRANTED
 
 fun Context.getPermissionString(id: Int) =
     when (id) {

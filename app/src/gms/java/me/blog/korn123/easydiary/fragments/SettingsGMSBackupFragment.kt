@@ -82,6 +82,7 @@ import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.calendarEventToDiary
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
@@ -418,7 +419,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         googleDriveService
                             .files()
                             .list()
-                            .setQ("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false")
+                            .setQ("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
                             .setSpaces("drive")
                             .execute()
                     mPermissionCallback.invoke()
@@ -438,7 +439,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 DriveServiceHelper(mContext, account).run {
-                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
+                    initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                         createFile(
                             it!!,
                             realmPath,
@@ -574,7 +575,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 DriveServiceHelper(mContext, account).run {
-                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                    initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                         progressContainer.visibility = View.GONE
                         requireActivity().run {
                             showAlertDialog(
@@ -583,7 +584,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                     val backupPhotoService =
                                         Intent(this, BackupPhotoService::class.java)
                                     backupPhotoService.putExtra(
-                                        DriveServiceHelper.WORKING_FOLDER_ID,
+                                        GDriveConstants.WORKING_FOLDER_ID,
                                         photoFolderId,
                                     )
                                     ContextCompat.startForegroundService(

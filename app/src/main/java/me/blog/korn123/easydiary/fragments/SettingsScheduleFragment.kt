@@ -52,13 +52,13 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.models.Alarm
 import kotlin.math.pow
 
-
-class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
+class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
      *
@@ -68,32 +68,40 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     private var mAlarmList: ArrayList<Alarm> = arrayListOf()
     private val mActivity: Activity
         get() = requireActivity()
-    private val mRequestPermissionScheduleExactAlarmLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            openAlarmDialog(mTemporaryAlarm)
+    private val mRequestPermissionScheduleExactAlarmLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                openAlarmDialog(mTemporaryAlarm)
+            }
         }
-    }
-
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         mBinding = FragmentSettingsScheduleBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         updateFragmentUI(mBinding.root)
-        mAlarmAdapter = AlarmAdapter(
+        mAlarmAdapter =
+            AlarmAdapter(
                 mActivity,
                 mAlarmList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     openAlarmDialog(EasyDiaryDbHelper.duplicateAlarmBy(mAlarmList[position]), mAlarmList[position])
-                }
-        )
+                },
+            )
 
         mBinding.alarmRecyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, if (requireActivity().isLandScape()) 2 else 1)
@@ -115,44 +123,51 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         requireActivity().run {
             when (requestCode) {
-                REQUEST_CODE_SCHEDULE_EXACT_ALARM -> if (checkPermission(arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM))) {
-                    openAlarmDialog(mTemporaryAlarm)
-                } else {
-                    makeSnackBar(
-                        findViewById(android.R.id.content),
-                        getString(R.string.guide_message_3)
-                    )
+                REQUEST_CODE_SCHEDULE_EXACT_ALARM -> {
+                    if (checkPermission(arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM))) {
+                        openAlarmDialog(mTemporaryAlarm)
+                    } else {
+                        makeSnackBar(
+                            findViewById(android.R.id.content),
+                            getString(R.string.guide_message_3),
+                        )
+                    }
                 }
+
                 else -> {}
             }
         }
     }
-
 
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
     private lateinit var mTemporaryAlarm: Alarm
-    fun openAlarmDialog(temporaryAlarm: Alarm, storedAlarm: Alarm? = null) {
+
+    fun openAlarmDialog(
+        temporaryAlarm: Alarm,
+        storedAlarm: Alarm? = null,
+    ) {
         mTemporaryAlarm = temporaryAlarm
 
-        mActivity.run activity@ {
+        mActivity.run activity@{
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
                 startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
             } else {
                 val dialogAlarmBinding = DialogAlarmBinding.inflate(layoutInflater)
                 var alertDialog: AlertDialog? = null
-                val builder = AlertDialog.Builder(this).apply {
-                    setCancelable(false)
-                    setPositiveButton(getString(android.R.string.ok), null)
-                    setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
-                }
+                val builder =
+                    AlertDialog.Builder(this).apply {
+                        setCancelable(false)
+                        setPositiveButton(getString(android.R.string.ok), null)
+                        setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
+                    }
                 dialogAlarmBinding.run {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
                     val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
@@ -172,11 +187,12 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                         day.setOnClickListener {
                             EasyDiaryDbHelper.beginTransaction()
                             val selectDay = temporaryAlarm.days and pow == 0
-                            temporaryAlarm.days = if (selectDay) {
-                                temporaryAlarm.days.addBit(pow)
-                            } else {
-                                temporaryAlarm.days.removeBit(pow)
-                            }
+                            temporaryAlarm.days =
+                                if (selectDay) {
+                                    temporaryAlarm.days.addBit(pow)
+                                } else {
+                                    temporaryAlarm.days.removeBit(pow)
+                                }
                             day.background = getProperDayDrawable(selectDay)
                             day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
                             textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
@@ -190,16 +206,25 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     editAlarmDescription.setText(temporaryAlarm.label)
                     textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
                     textAlarmTime.setOnClickListener {
-                        TimePickerDialog(this@activity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                            temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
-                            textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
-                        }, temporaryAlarm.timeInMinutes / 60, temporaryAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@activity)).show()
+                        TimePickerDialog(
+                            this@activity,
+                            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                                temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
+                                textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                            },
+                            temporaryAlarm.timeInMinutes / 60,
+                            temporaryAlarm.timeInMinutes % 60,
+                            DateFormat.is24HourFormat(this@activity),
+                        ).show()
                     }
                     switchAlarm.setOnCheckedChangeListener { _, isChecked ->
                         temporaryAlarm.isEnabled = isChecked
                     }
                     when (storedAlarm == null) {
-                        true -> { imageDeleteAlarm.visibility = View.GONE }
+                        true -> {
+                            imageDeleteAlarm.visibility = View.GONE
+                        }
+
                         false -> {
                             imageDeleteAlarm.setOnClickListener {
                                 showAlertDialog(
@@ -213,23 +238,23 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                                         updateAlarmList()
                                     },
                                     { _, _ -> },
-                                    DialogMode.WARNING
+                                    DialogMode.WARNING,
                                 )
                             }
                         }
                     }
                     when (temporaryAlarm.workMode) {
-                        Alarm.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
-                        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
-                        Alarm.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
-                        Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> radioCalendarScheduleSync.isChecked = true
+                        AlarmConstants.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
+                        AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
+                        AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
+                        AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> radioCalendarScheduleSync.isChecked = true
                     }
                     radioGroupWorkMode.setOnCheckedChangeListener { _, i ->
                         when (i) {
-                            R.id.radio_diary_writing -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
-                            R.id.radio_diary_backup_local -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
-                            R.id.radio_diary_backup_gms -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_GMS
-                            R.id.radio_calendar_schedule_sync -> temporaryAlarm.workMode = Alarm.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            R.id.radio_diary_writing -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_WRITING
+                            R.id.radio_diary_backup_local -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL
+                            R.id.radio_diary_backup_gms -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS
+                            R.id.radio_calendar_schedule_sync -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                         }
                     }
 
@@ -242,40 +267,43 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     if (BuildConfig.FLAVOR == "foss") radioDiaryBackupGms.visibility = View.GONE
                 }
 
-                alertDialog = builder.create().apply {
-                    updateAlertDialog(this, null, dialogAlarmBinding.root, getString(R.string.preferences_category_schedule))
-                    getButton(AlertDialog.BUTTON_POSITIVE).run {
-                        setOnClickListener {
-                            when {
-                                dialogAlarmBinding.textAlarmDays.text.isEmpty() -> {
-                                    toast("Please select days.")
-                                }
-                                dialogAlarmBinding.editAlarmDescription.text.isEmpty() -> {
-                                    dialogAlarmBinding.editAlarmDescription.run {
-                                        requestFocus()
-                                        toast("Please input schedule description.")
-                                        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-                                    }
-                                }
-                                else -> {
-                                    // update alarm schedule
-                                    if (temporaryAlarm.isEnabled) {
-                                        scheduleNextAlarm(temporaryAlarm, true)
-                                    } else {
-                                        cancelAlarmClock(temporaryAlarm)
+                alertDialog =
+                    builder.create().apply {
+                        updateAlertDialog(this, null, dialogAlarmBinding.root, getString(R.string.preferences_category_schedule))
+                        getButton(AlertDialog.BUTTON_POSITIVE).run {
+                            setOnClickListener {
+                                when {
+                                    dialogAlarmBinding.textAlarmDays.text.isEmpty() -> {
+                                        toast("Please select days.")
                                     }
 
-                                    // save alarm
-                                    temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
-                                    EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
-                                    alertDialog?.dismiss()
-                                    updateAlarmList()
-                                    alertDialog?.dismiss()
+                                    dialogAlarmBinding.editAlarmDescription.text.isEmpty() -> {
+                                        dialogAlarmBinding.editAlarmDescription.run {
+                                            requestFocus()
+                                            toast("Please input schedule description.")
+                                            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                                        }
+                                    }
+
+                                    else -> {
+                                        // update alarm schedule
+                                        if (temporaryAlarm.isEnabled) {
+                                            scheduleNextAlarm(temporaryAlarm, true)
+                                        } else {
+                                            cancelAlarmClock(temporaryAlarm)
+                                        }
+
+                                        // save alarm
+                                        temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
+                                        EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
+                                        alertDialog?.dismiss()
+                                        updateAlarmList()
+                                        alertDialog?.dismiss()
+                                    }
                                 }
                             }
                         }
                     }
-                }
             }
         }
     }
@@ -300,12 +328,15 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
         mActivity.config.use24HourFormat = false
     }
 
-    companion object {
-        const val ALARM_ID = "alarm_id"
-    }
-
-    class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+    class SpacesItemDecoration(
+        private val space: Int,
+    ) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: androidx.recyclerview.widget.RecyclerView,
+            state: androidx.recyclerview.widget.RecyclerView.State,
+        ) {
             val position = parent.getChildAdapterPosition(view)
             when (position == 0) {
                 true -> outRect.top = 0

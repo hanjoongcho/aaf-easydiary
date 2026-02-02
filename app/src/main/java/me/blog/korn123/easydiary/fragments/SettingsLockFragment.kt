@@ -34,13 +34,13 @@ import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.helper.FingerprintLockConstants
+import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 class SettingsLockFragment : androidx.fragment.app.Fragment() {
-
-
     /***************************************************************************************************
      *   global properties
      *
@@ -50,18 +50,24 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
         get() = requireActivity()
     private val mSettingsViewModel: SettingsViewModel by activityViewModels()
 
-
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentSettingsLockBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
     @OptIn(ExperimentalLayoutApi::class)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.composeView.setContent {
@@ -69,11 +75,12 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                 val configuration = LocalConfiguration.current
                 FlowRow(
                     maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
-                    val settingCardModifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                    val settingCardModifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
 
                     val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
                     val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
@@ -85,7 +92,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         fontSize = fontSize,
                         modifier = settingCardModifier,
                         isOn = aafPinLockEnable,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
                         mActivity.run {
                             when (config.aafPinLockEnable) {
@@ -103,12 +110,14 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                 false -> {
                                     aafPinLockEnable = true
                                     config.aafPinLockEnable = aafPinLockEnable
-                                    startActivity(Intent(this, PinLockActivity::class.java).apply {
-                                        putExtra(
-                                            FingerprintLockActivity.LAUNCHING_MODE,
-                                            PinLockActivity.ACTIVITY_SETTING
-                                        )
-                                    })
+                                    startActivity(
+                                        Intent(this, PinLockActivity::class.java).apply {
+                                            putExtra(
+                                                FingerprintLockConstants.LAUNCHING_MODE,
+                                                PinLockConstants.ACTIVITY_SETTING,
+                                            )
+                                        },
+                                    )
                                 }
                             }
                         }
@@ -121,7 +130,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         fontSize = fontSize,
                         modifier = settingCardModifier,
                         isOn = fingerprintLockEnable,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
                         mActivity.run {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -141,13 +150,14 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                                 startActivity(
                                                     Intent(
                                                         this,
-                                                        FingerprintLockActivity::class.java
+                                                        FingerprintLockActivity::class.java,
                                                     ).apply {
                                                         putExtra(
-                                                            FingerprintLockActivity.LAUNCHING_MODE,
-                                                            FingerprintLockActivity.ACTIVITY_SETTING
+                                                            FingerprintLockConstants.LAUNCHING_MODE,
+                                                            FingerprintLockConstants.ACTIVITY_SETTING,
                                                         )
-                                                    })
+                                                    },
+                                                )
                                             }
 
                                             false -> {
@@ -167,7 +177,6 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
             }
         }
     }
-
 
     /***************************************************************************************************
      *   etc functions

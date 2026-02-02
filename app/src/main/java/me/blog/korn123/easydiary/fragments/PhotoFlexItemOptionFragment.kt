@@ -12,6 +12,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.adapters.PhotoAdapter.PhotoViewHolder.Companion.applyOption
 import me.blog.korn123.easydiary.databinding.DialogPostcardPhotoOptionBinding
+import me.blog.korn123.easydiary.helper.PhotoFlexItemOptionConstants
 
 class PhotoFlexItemOptionFragment : DialogFragment() {
     private lateinit var mBinding: DialogPostcardPhotoOptionBinding
@@ -30,11 +31,11 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
             setStyle(STYLE_NORMAL, android.R.style.Theme_Dialog)
         }
         arguments?.let {
-            itemIndex = it.getInt(ITEM_INDEX)
-            viewMode = it.getInt(VIEW_MODE)
-            filterMode = it.getInt(FILTER_MODE)
-            forceSinglePhotoPosition = it.getBoolean(FORCE_SINGLE_PHOTO_POSITION)
-            photoUri = it.getString(PHOTO_URI)
+            itemIndex = it.getInt(PhotoFlexItemOptionConstants.ITEM_INDEX)
+            viewMode = it.getInt(PhotoFlexItemOptionConstants.VIEW_MODE)
+            filterMode = it.getInt(PhotoFlexItemOptionConstants.FILTER_MODE)
+            forceSinglePhotoPosition = it.getBoolean(PhotoFlexItemOptionConstants.FORCE_SINGLE_PHOTO_POSITION)
+            photoUri = it.getString(PhotoFlexItemOptionConstants.PHOTO_URI)
         }
     }
 
@@ -123,21 +124,15 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
     }
 
     companion object {
-        private const val ITEM_INDEX = "item_index"
-        private const val VIEW_MODE = "view_index"
-        private const val FILTER_MODE = "filter_index"
-        private const val PHOTO_URI = "photo_uri"
-        private const val FORCE_SINGLE_PHOTO_POSITION = "force_single_photo_position"
-
         fun newInstance(postCardPhotoItem: PhotoAdapter.PostCardPhotoItem) =
             PhotoFlexItemOptionFragment().apply {
                 arguments =
                     Bundle().apply {
-                        putInt(ITEM_INDEX, postCardPhotoItem.position)
-                        putInt(VIEW_MODE, postCardPhotoItem.viewMode)
-                        putInt(FILTER_MODE, postCardPhotoItem.filterMode)
-                        putBoolean(FORCE_SINGLE_PHOTO_POSITION, postCardPhotoItem.forceSinglePhotoPosition)
-                        putString(PHOTO_URI, postCardPhotoItem.photoUri)
+                        putInt(PhotoFlexItemOptionConstants.ITEM_INDEX, postCardPhotoItem.position)
+                        putInt(PhotoFlexItemOptionConstants.VIEW_MODE, postCardPhotoItem.viewMode)
+                        putInt(PhotoFlexItemOptionConstants.FILTER_MODE, postCardPhotoItem.filterMode)
+                        putBoolean(PhotoFlexItemOptionConstants.FORCE_SINGLE_PHOTO_POSITION, postCardPhotoItem.forceSinglePhotoPosition)
+                        putString(PhotoFlexItemOptionConstants.PHOTO_URI, postCardPhotoItem.photoUri)
                     }
             }
     }
