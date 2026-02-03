@@ -1,13 +1,13 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.ActivityManager
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toDrawable
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getPermissionString
 import me.blog.korn123.easydiary.extensions.getThemeId
@@ -16,7 +16,6 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import androidx.core.graphics.drawable.toDrawable
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -99,6 +98,17 @@ open class BaseSimpleActivity : AppCompatActivity() {
         updateStatusBarColor(color)
 
         setTaskDescription(ActivityManager.TaskDescription(null, null, color))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val taskDescription =
+                ActivityManager.TaskDescription
+                    .Builder()
+                    .setPrimaryColor(color)
+                    .build()
+            setTaskDescription(taskDescription)
+        } else {
+            setTaskDescription(ActivityManager.TaskDescription(null, null, color))
+        }
     }
 
     fun handlePermission(
