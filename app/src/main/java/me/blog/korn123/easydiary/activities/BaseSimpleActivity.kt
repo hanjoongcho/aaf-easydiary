@@ -58,8 +58,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                pauseLock()
-                TransitionHelper.finishActivityWithTransition(this)
+                finishActivityWithPauseLock()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -127,5 +126,10 @@ open class BaseSimpleActivity : AppCompatActivity() {
                 SettingConstants.GENERIC_PERM_HANDLER,
             )
         }
+    }
+
+    protected fun finishActivityWithPauseLock() {
+        pauseLock()
+        TransitionHelper.finishActivityWithTransition(this@BaseSimpleActivity)
     }
 }

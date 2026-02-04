@@ -6,15 +6,25 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
-import androidx.core.view.isGone
 import com.simplemobiletools.commons.models.Release
 import com.squareup.seismic.ShakeDetector
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.applyHorizontalInsets
+import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
+import me.blog.korn123.easydiary.extensions.checkWhatsNew
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.hideSystemBarsVanillaIceCreamPlusIsLandScape
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isNightMode
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
 /**
@@ -40,8 +50,7 @@ open class EasyDiaryActivity :
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    pauseLock()
-                    TransitionHelper.finishActivityWithTransition(this@EasyDiaryActivity)
+                    finishActivityWithPauseLock()
                 }
             },
         )

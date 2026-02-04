@@ -243,26 +243,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             false
         }
 
-    private val backPressedCallback =
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                showAlertDialog(
-                    getString(R.string.back_pressed_confirm),
-                    { _, _ ->
-                        if (isAccessFromOutside()) {
-                            startMainActivityWithClearTask()
-                        } else {
-                            this.isEnabled = false
-                            onBackPressedDispatcher.onBackPressed()
-                            this.isEnabled = true
-                        }
-                    },
-                    { _, _ -> },
-                    DialogMode.INFO,
-                )
-            }
-        }
-
     /***************************************************************************************************
      *   override functions
      *
@@ -300,7 +280,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
         onBackPressedDispatcher.addCallback(
             this,
-            backPressedCallback,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    confirmFinish()
+                }
+            },
         )
     }
 
@@ -335,20 +319,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                showAlertDialog(
-                    getString(R.string.back_pressed_confirm),
-                    { _, _ ->
-                        if (isAccessFromOutside()) {
-                            startMainActivityWithClearTask()
-                        } else {
-                            backPressedCallback.isEnabled = false
-                            onBackPressedDispatcher.onBackPressed()
-                            backPressedCallback.isEnabled = true
-                        }
-                    },
-                    { _, _ -> },
-                    DialogMode.INFO,
-                )
+                confirmFinish()
             }
 
             R.id.saveContents -> {
@@ -454,6 +425,21 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         } else {
             mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+    }
+
+    private fun confirmFinish() {
+        showAlertDialog(
+            getString(R.string.back_pressed_confirm),
+            { _, _ ->
+                if (isAccessFromOutside()) {
+                    startMainActivityWithClearTask()
+                } else {
+                    finishActivityWithPauseLock()
+                }
+            },
+            { _, _ -> },
+            DialogMode.INFO,
+        )
     }
 
     protected fun saveTemporaryDiary(originSequence: Int) {

@@ -15,6 +15,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
@@ -90,6 +91,15 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             applyBottomNavigationInsets(this)
             if (isLandScape()) hideSystemBars()
         }
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    ActivityCompat.finishAffinity(this@FingerprintLockActivity)
+                }
+            },
+        )
     }
 
     @SuppressLint("RestrictedApi")
@@ -177,11 +187,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     override fun onPause() {
         super.onPause()
         mCancellationSignal?.cancel()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        ActivityCompat.finishAffinity(this)
     }
 
     /***************************************************************************************************

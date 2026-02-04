@@ -104,7 +104,7 @@ class DevActivity : BaseDevActivity() {
                             title = "Easy-Diary Dev Mode",
                             subTitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                         ) {
-                            onBackPressed()
+                            finishActivityWithPauseLock()
                         }
                     },
                     containerColor = Color(config.screenBackgroundColor),

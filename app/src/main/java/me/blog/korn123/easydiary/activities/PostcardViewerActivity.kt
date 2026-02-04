@@ -26,7 +26,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
 
-
 /**
  * Created by CHO HANJOONG on 2018-05-18.
  */
@@ -36,11 +35,11 @@ class PostcardViewerActivity : EasyDiaryActivity() {
     private lateinit var mPostcardAdapter: PostcardAdapter
     private lateinit var mGridLayoutManager: GridLayoutManager
     private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityPostcardViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
         setSupportActionBar(mBinding.toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
             mBinding.toolbarLayout.setCollapsedTitleTypeface(it)
@@ -50,23 +49,24 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 //        val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
 //            flexWrap = FlexWrap.WRAP
 //            flexDirection = FlexDirection.ROW
-////            alignItems = AlignItems.FLEX_START
-//            justifyContent = JustifyContent.FLEX_START 
+// //            alignItems = AlignItems.FLEX_START
+//            justifyContent = JustifyContent.FLEX_START
 //        }
-        
+
         val spacesItemDecoration = GridItemDecorationPostcardViewer(resources.getDimensionPixelSize(R.dimen.component_margin_small), this)
         mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
-        mPostcardAdapter = PostcardAdapter(
+        mPostcardAdapter =
+            PostcardAdapter(
                 this@PostcardViewerActivity,
                 mListPostcard,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     val intent = Intent(this@PostcardViewerActivity, PostcardViewPagerActivity::class.java)
                     intent.putExtra(POSTCARD_SEQUENCE, position)
                     TransitionHelper.startActivityWithTransition(this@PostcardViewerActivity, intent)
-                }
-        )
+                },
+            )
 
         mBinding.contentPostCardViewer.root.apply {
             layoutManager = mGridLayoutManager
@@ -84,17 +84,21 @@ class PostcardViewerActivity : EasyDiaryActivity() {
             mListPostcard.forEachIndexed { _, item ->
                 if (item.isItemChecked) selectedItems.add(item)
             }
-            
+
             when (selectedItems.size) {
-                0 -> showAlertDialog("No post card selected.", null)
+                0 -> {
+                    showAlertDialog("No post card selected.", null)
+                }
+
                 else -> {
-                    showAlertDialog(getString(R.string.delete_confirm),
-                            DialogInterface.OnClickListener { _, _ ->
-                                selectedItems.forEachIndexed { _, item ->
-                                    FileUtils.forceDelete(item.file)
-                                }
-                                initPostCard()
+                    showAlertDialog(
+                        getString(R.string.delete_confirm),
+                        DialogInterface.OnClickListener { _, _ ->
+                            selectedItems.forEachIndexed { _, item ->
+                                FileUtils.forceDelete(item.file)
                             }
+                            initPostCard()
+                        },
                     )
                 }
             }
@@ -113,18 +117,21 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.layout -> openGridSettingDialog(mBinding.root, GridSpanMode.POSTCARD) {
-                mGridLayoutManager.spanCount = it.toInt()
-                mPostcardAdapter.notifyDataSetChanged()
+            R.id.layout -> {
+                openGridSettingDialog(mBinding.root, GridSpanMode.POSTCARD) {
+                    mGridLayoutManager.spanCount = it.toInt()
+                    mPostcardAdapter.notifyDataSetChanged()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun initPostCard() {
-        val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
+        val listPostcard =
+            File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
-                .filter { it.extension.equals("jpg", true)}
+                .filter { it.extension.equals("jpg", true) }
                 .sortedDescending()
                 .map { file -> PostcardAdapter.PostCard(file, false) }
 
