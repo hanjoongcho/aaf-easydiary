@@ -264,10 +264,6 @@ class DashboardActivity : EasyDiaryActivity() {
 
         supportFragmentManager.executePendingTransactions()
 
-//        mBinding.close.setOnClickListener {
-//            onBackPressed()
-//        }
-
 //        EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
 //        object: Handler(this.mainLooper) {
 //            override fun handleMessage(msg: Message) {

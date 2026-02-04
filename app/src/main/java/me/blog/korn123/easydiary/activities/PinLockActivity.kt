@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -64,17 +65,21 @@ class PinLockActivity : BaseSimpleActivity() {
 
         applyBottomNavigationInsets(mBinding.rightContainer)
         if (isLandScape()) hideSystemBars()
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    ActivityCompat.finishAffinity(this@PinLockActivity)
+                }
+            },
+        )
     }
 
     override fun onResume() {
         super.onResume()
         FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
         mBinding.infoMessage.text = if (activityMode == PinLockConstants.ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        ActivityCompat.finishAffinity(this)
     }
 
     private val keyPadClickListener: View.OnClickListener =
@@ -144,7 +149,7 @@ class PinLockActivity : BaseSimpleActivity() {
                                         showAlertDialog(
                                             getString(R.string.pin_verification_fail),
                                             DialogInterface.OnClickListener { _, _ ->
-                                                onBackPressed()
+                                                finishActivityWithPauseLock()
                                             },
                                             false,
                                         )

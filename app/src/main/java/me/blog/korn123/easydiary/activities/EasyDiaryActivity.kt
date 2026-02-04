@@ -5,22 +5,36 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import com.simplemobiletools.commons.models.Release
 import com.squareup.seismic.ShakeDetector
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.applyHorizontalInsets
+import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
+import me.blog.korn123.easydiary.extensions.checkWhatsNew
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.hideSystemBarsVanillaIceCreamPlusIsLandScape
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isNightMode
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
 /**
  * Created by hanjoong on 2017-05-03.
  */
 
-open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
+open class EasyDiaryActivity :
+    BaseSimpleActivity(),
+    ShakeDetector.Listener {
     var mCustomLineSpacing = true
-
 
     /***************************************************************************************************
      *   override functions
@@ -31,6 +45,15 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         super.onCreate(savedInstanceState)
 
         if (config.enableDebugMode) setupMotionSensor()
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finishActivityWithPauseLock()
+                }
+            },
+        )
     }
 
     /**
@@ -73,7 +96,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
                 applicationContext,
                 null,
                 findViewById(android.R.id.content),
-                mCustomLineSpacing
+                mCustomLineSpacing,
             )
         }
         applyPolicyForRecentApps()
@@ -86,21 +109,14 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
         pauseLock()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        pauseLock()
-        TransitionHelper.finishActivityWithTransition(this)
-    }
-
     override fun getMainViewGroup(): ViewGroup? = if (findViewById<View>(R.id.main_holder) != null) findViewById(R.id.main_holder) else findViewById(R.id.compose_view)
 
     override fun hearShake() {
         TransitionHelper.startActivityWithTransition(
             this,
-            Intent(this, QuickSettingsActivity::class.java)
+            Intent(this, QuickSettingsActivity::class.java),
         )
     }
-
 
     /***************************************************************************************************
      *   etc functions
@@ -272,6 +288,7 @@ open class EasyDiaryActivity : BaseSimpleActivity(), ShakeDetector.Listener {
 
     private var mSensorManager: SensorManager? = null
     private var mShakeDetector: ShakeDetector? = null
+
     private fun setupMotionSensor() {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mShakeDetector =

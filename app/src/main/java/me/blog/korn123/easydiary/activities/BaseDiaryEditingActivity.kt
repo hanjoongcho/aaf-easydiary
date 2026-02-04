@@ -27,6 +27,7 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -276,6 +277,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         applyBottomImeInsets(mBinding.partialEditContents.root)
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    confirmFinish()
+                }
+            },
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -309,12 +319,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                showAlertDialog(
-                    getString(R.string.back_pressed_confirm),
-                    { _, _ -> super.onBackPressed() },
-                    { _, _ -> },
-                    DialogMode.INFO,
-                )
+                confirmFinish()
             }
 
             R.id.saveContents -> {
@@ -347,21 +352,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
         }
         return true
-    }
-
-    override fun onBackPressed() {
-        showAlertDialog(
-            getString(R.string.back_pressed_confirm),
-            { _, _ ->
-                if (isAccessFromOutside()) {
-                    startMainActivityWithClearTask()
-                } else {
-                    super.onBackPressed()
-                }
-            },
-            { _, _ -> },
-            DialogMode.INFO,
-        )
     }
 
     override fun onRequestPermissionsResult(
@@ -435,6 +425,21 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         } else {
             mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+    }
+
+    private fun confirmFinish() {
+        showAlertDialog(
+            getString(R.string.back_pressed_confirm),
+            { _, _ ->
+                if (isAccessFromOutside()) {
+                    startMainActivityWithClearTask()
+                } else {
+                    finishActivityWithPauseLock()
+                }
+            },
+            { _, _ -> },
+            DialogMode.INFO,
+        )
     }
 
     protected fun saveTemporaryDiary(originSequence: Int) {

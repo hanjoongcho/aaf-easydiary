@@ -1,15 +1,21 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.ActivityManager
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import me.blog.korn123.easydiary.extensions.*
+import androidx.core.graphics.drawable.toDrawable
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getPermissionString
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.hasPermission
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 import me.blog.korn123.easydiary.helper.SettingConstants
+import me.blog.korn123.easydiary.helper.TransitionHelper
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -52,7 +58,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                this@BaseSimpleActivity.onBackPressed()
+                finishActivityWithPauseLock()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -86,11 +92,20 @@ open class BaseSimpleActivity : AppCompatActivity() {
     //    open fun getBackgroundAlpha(): Int = 255
 
     fun updateActionbarColor(color: Int = config.primaryColor) {
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+        supportActionBar?.setBackgroundDrawable(color.toDrawable())
 //        supportActionBar?.title = Html.fromHtml("<font color='${color.getContrastColor().toHex()}'>${supportActionBar?.title}</font>")
         updateStatusBarColor(color)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        setTaskDescription(ActivityManager.TaskDescription(null, null, color))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val taskDescription =
+                ActivityManager.TaskDescription
+                    .Builder()
+                    .setPrimaryColor(color)
+                    .build()
+            setTaskDescription(taskDescription)
+        } else {
             setTaskDescription(ActivityManager.TaskDescription(null, null, color))
         }
     }
@@ -105,7 +120,16 @@ open class BaseSimpleActivity : AppCompatActivity() {
         } else {
             isAskingPermissions = true
             actionOnPermission = callback
-            ActivityCompat.requestPermissions(this, arrayOf(getPermissionString(permissionId)), SettingConstants.GENERIC_PERM_HANDLER)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(getPermissionString(permissionId)),
+                SettingConstants.GENERIC_PERM_HANDLER,
+            )
         }
+    }
+
+    protected fun finishActivityWithPauseLock() {
+        pauseLock()
+        TransitionHelper.finishActivityWithTransition(this@BaseSimpleActivity)
     }
 }

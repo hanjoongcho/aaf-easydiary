@@ -247,7 +247,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
                     } else {
-                        this.onBackPressed()
+                        finishActivityWithPauseLock()
                     }
                 }
 

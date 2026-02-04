@@ -53,7 +53,6 @@ class GalleryActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
         setSupportActionBar(mBinding.toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
             mBinding.toolbarLayout.setCollapsedTitleTypeface(it)

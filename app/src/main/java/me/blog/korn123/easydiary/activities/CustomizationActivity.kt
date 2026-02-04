@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -101,6 +102,14 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         }
 
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!hasUnsavedChanges) finishActivityWithPauseLock()
+                }
+            },
+        )
     }
 
     override fun onPause() {
@@ -132,17 +141,10 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> saveChanges()
-            android.R.id.home -> super.onBackPressed()
+            android.R.id.home -> finishActivityWithPauseLock()
 //            else -> return super.onOptionsItemSelected(item)
         }
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         return true
-    }
-
-    override fun onBackPressed() {
-        if (!hasUnsavedChanges) super.onBackPressed()
-
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
@@ -183,7 +185,10 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
     }
 
-    private fun hasColorChanged(old: Int, new: Int) = Math.abs(old - new) > 1
+    private fun hasColorChanged(
+        old: Int,
+        new: Int,
+    ) = Math.abs(old - new) > 1
 
     private fun colorChanged() {
         hasUnsavedChanges = true
@@ -242,26 +247,26 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun pickPrimaryColor() {
         isLineColorPickerVisible = true
-        curPrimaryLineColorPicker = LineColorPickerDialog(this, curPrimaryColor) { wasPositivePressed, color ->
-            curPrimaryLineColorPicker = null
-            isLineColorPickerVisible = false
-            if (wasPositivePressed) {
-                if (hasColorChanged(curPrimaryColor, color)) {
-                    setCurrentPrimaryColor(color)
-                    colorChanged()
-                    setTheme(getThemeId(color))
+        curPrimaryLineColorPicker =
+            LineColorPickerDialog(this, curPrimaryColor) { wasPositivePressed, color ->
+                curPrimaryLineColorPicker = null
+                isLineColorPickerVisible = false
+                if (wasPositivePressed) {
+                    if (hasColorChanged(curPrimaryColor, color)) {
+                        setCurrentPrimaryColor(color)
+                        colorChanged()
+                        setTheme(getThemeId(color))
+                    }
+                } else {
+                    updateActionbarColor(curPrimaryColor)
+                    setTheme(getThemeId(curPrimaryColor))
+                    updateBackgroundColor(curScreenBackgroundColor)
                 }
-            } else {
-                updateActionbarColor(curPrimaryColor)
-                setTheme(getThemeId(curPrimaryColor))
-                updateBackgroundColor(curScreenBackgroundColor)
+            }.apply {
+                setDarkenColorOptionChangeListener(config.enableStatusBarDarkenColor) { enableStatusBarDarkenColor, color ->
+                    config.enableStatusBarDarkenColor = enableStatusBarDarkenColor
+                    updateStatusBarColor(color)
+                }
             }
-        }.apply {
-            setDarkenColorOptionChangeListener(config.enableStatusBarDarkenColor) { enableStatusBarDarkenColor, color ->
-                config.enableStatusBarDarkenColor = enableStatusBarDarkenColor
-                updateStatusBarColor(color)
-            }
-        }
     }
 }
-
