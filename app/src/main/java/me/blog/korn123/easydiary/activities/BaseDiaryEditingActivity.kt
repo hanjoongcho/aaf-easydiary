@@ -27,6 +27,7 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -242,6 +243,26 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             false
         }
 
+    private val backPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showAlertDialog(
+                    getString(R.string.back_pressed_confirm),
+                    { _, _ ->
+                        if (isAccessFromOutside()) {
+                            startMainActivityWithClearTask()
+                        } else {
+                            this.isEnabled = false
+                            onBackPressedDispatcher.onBackPressed()
+                            this.isEnabled = true
+                        }
+                    },
+                    { _, _ -> },
+                    DialogMode.INFO,
+                )
+            }
+        }
+
     /***************************************************************************************************
      *   override functions
      *
@@ -276,6 +297,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         applyBottomImeInsets(mBinding.partialEditContents.root)
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            backPressedCallback,
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -311,7 +337,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             android.R.id.home -> {
                 showAlertDialog(
                     getString(R.string.back_pressed_confirm),
-                    { _, _ -> super.onBackPressed() },
+                    { _, _ ->
+                        if (isAccessFromOutside()) {
+                            startMainActivityWithClearTask()
+                        } else {
+                            backPressedCallback.isEnabled = false
+                            onBackPressedDispatcher.onBackPressed()
+                            backPressedCallback.isEnabled = true
+                        }
+                    },
                     { _, _ -> },
                     DialogMode.INFO,
                 )
@@ -347,21 +381,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
         }
         return true
-    }
-
-    override fun onBackPressed() {
-        showAlertDialog(
-            getString(R.string.back_pressed_confirm),
-            { _, _ ->
-                if (isAccessFromOutside()) {
-                    startMainActivityWithClearTask()
-                } else {
-                    super.onBackPressed()
-                }
-            },
-            { _, _ -> },
-            DialogMode.INFO,
-        )
     }
 
     override fun onRequestPermissionsResult(

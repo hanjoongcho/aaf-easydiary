@@ -40,6 +40,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         supportActionBar?.run {
 //            title = getString(R.string.create_diary_title)
             setDisplayShowTitleEnabled(false)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
             setDisplayHomeAsUpEnabled(true)
         }
 
