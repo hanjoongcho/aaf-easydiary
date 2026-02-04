@@ -840,6 +840,10 @@
         v1.4.340.202512250 / 2025.12.25\n
         Add linking between diary entries
     </string>
+    <string name="release_341">
+        v1.4.341.202602050 / 2026.02.05\n
+        Improve UI/UX for Android 16
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

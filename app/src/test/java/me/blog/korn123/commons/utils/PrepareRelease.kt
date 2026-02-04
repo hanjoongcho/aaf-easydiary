@@ -1,10 +1,10 @@
-
 package me.blog.korn123.commons.utils
 
 import android.annotation.SuppressLint
 import me.blog.korn123.easydiary.helper.PrepareReleaseConstants
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import org.junit.Test
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
@@ -73,7 +73,7 @@ class PrepareRelease {
         var defaultReleaseCurrentVersion = -1
         when (syncMode) {
             PrepareReleaseConstants.SYNC_RELEASE_STRING, PrepareReleaseConstants.SYNC_NEW_STRING -> {
-                File("./app/src/main/res/").listFiles()?.map { localeFolder ->
+                File("./src/main/res/").listFiles()?.map { localeFolder ->
                     if (localeFolder.name.startsWith("values")) {
                         if (localeFolder.name == "values") {
                             valuesDefault = FileUtils.readLines(File(localeFolder.absolutePath + "/strings.xml"), StandardCharsets.UTF_8)
@@ -135,7 +135,7 @@ class PrepareRelease {
 
             PrepareReleaseConstants.SYNC_RELEASE_NOTE -> {
                 println("======================================> Start: sync release note")
-                File("./app/src/main/assets/").listFiles()?.map { file ->
+                File("./src/main/assets/").listFiles()?.map { file ->
                     println(file.absolutePath)
                     if (file.name.startsWith("RELEASE")) {
                         val locale =
@@ -148,7 +148,7 @@ class PrepareRelease {
                         releaseNotes?.let {
                             val infoLine = it[6]
                             val releaseNoteVersionName = infoLine.split("# Changes in ")[1].split(" ")[0]
-                            val valuesFilePath = "./app/src/main/res/values-$locale/strings.xml"
+                            val valuesFilePath = "./src/main/res/values-$locale/strings.xml"
                             val strings = FileUtils.readLines(File(valuesFilePath), StandardCharsets.UTF_8)
                             val release = determineLastReleaseStartLine(strings)
                             determineLastReleaseEndLine(strings, release, true)
@@ -179,11 +179,12 @@ class PrepareRelease {
             }
         }
     }
-}
 
-fun main() {
-    val prepareRelease = PrepareRelease()
-//    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_STRING)
-//    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_NEW_STRING)
-    prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_NOTE)
+    @Test
+    fun main() {
+        val prepareRelease = PrepareRelease()
+//        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_STRING)
+//    prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_NEW_STRING)
+        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_NOTE)
+    }
 }

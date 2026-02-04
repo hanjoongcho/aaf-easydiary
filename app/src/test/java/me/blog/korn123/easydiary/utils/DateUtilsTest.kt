@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.utils
 
 import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.easydiary.helper.DateUtilConstants
 import org.junit.Assert
 import org.junit.Test
 import java.text.SimpleDateFormat
@@ -15,7 +16,13 @@ class DateUtilsTest {
 
     @Test
     fun timeMillisToDateTime() {
-        Assert.assertEquals("2018-03-04", DateUtils.timeMillisToDateTime(timeMillis, DateUtils.DATE_PATTERN_DASH))
+        Assert.assertEquals(
+            "2018-03-04",
+            DateUtils.timeMillisToDateTime(
+                timeMillis,
+                DateUtilConstants.DATE_PATTERN_DASH,
+            ),
+        )
     }
 
     @Test
@@ -30,16 +37,31 @@ class DateUtilsTest {
 
     @Test
     fun getFullPatternDateWithTimeAndSeconds01() {
-        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(timeMillis))
+        Assert.assertEquals(
+            "2018년 3월 4일 일요일 16:37 20",
+            DateUtils.getDateTimeStringFromTimeMillis(timeMillis),
+        )
     }
 
     @Test
     fun getFullPatternDateWithTimeAndSeconds02() {
-        Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getDateTimeStringFromTimeMillis(timeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL, null, Locale.FRANCE))
+        Assert.assertEquals(
+            "dimanche 4 mars 2018 16:37 20",
+            DateUtils.getDateTimeStringFromTimeMillis(
+                timeMillis,
+                SimpleDateFormat.FULL,
+                SimpleDateFormat.FULL,
+                null,
+                Locale.FRANCE,
+            ),
+        )
     }
 
     @Test
     fun getDateStringFromTimeMillis01() {
-        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.FULL))
+        Assert.assertEquals(
+            "2018년 3월 4일 일요일 16:37 20",
+            DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.FULL),
+        )
     }
 }
