@@ -277,7 +277,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                                         toast("Please select days.")
                                     }
 
-                                    dialogAlarmBinding.editAlarmDescription.text.isEmpty() -> {
+                                    dialogAlarmBinding.editAlarmDescription.text?.isEmpty() ?: true -> {
                                         dialogAlarmBinding.editAlarmDescription.run {
                                             requestFocus()
                                             toast("Please input schedule description.")

@@ -706,7 +706,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun LocationManager(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel,
     ) {
@@ -726,7 +726,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SwitchCard(
                 "Toast Message",
                 "Location Toast",
-                settingCardModifier,
+                modifier,
                 enableDebugOptionToastLocation,
             ) {
                 enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
@@ -735,19 +735,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Location Manager",
                 "Last-Location",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { updateLocation(viewModel) }
             SimpleCard(
                 "Location Manager",
                 "Update-GPS",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) {
                 updateGPSProvider()
             }
             SimpleCard(
                 "Location Manager",
                 "Update-Network",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) {
                 updateNetWorkProvider()
             }
@@ -757,7 +757,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun AlertDialog(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Alert Dialog")
@@ -768,32 +768,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SimpleCard(
                 "Dialog",
                 "알림(DEFAULT)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
             SimpleCard(
                 "Dialog",
                 "알림(INFO)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
             SimpleCard(
                 "Dialog",
                 "알림(WARNING)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
             SimpleCard(
                 "Dialog",
                 "알림(ERROR)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
             SimpleCard(
                 "Dialog",
                 "알림(SETTING)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
             SimpleCard(
                 "Dialog",
                 "확인(INFO)",
-                modifier = settingCardModifier,
+                modifier = modifier,
             ) { showAlertDialog("message", null, { _, _ -> }, DialogMode.INFO) }
         }
     }
@@ -801,7 +801,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun DebugToast(
-        settingCardModifier: Modifier,
+        modifier: Modifier,
         maxItemsInEachRow: Int,
     ) {
         val currentContext = LocalContext.current
@@ -817,7 +817,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SwitchCard(
                 "Attached Photo Toast",
                 null,
-                settingCardModifier,
+                modifier,
                 enableDebugOptionToastAttachedPhoto,
             ) {
                 enableDebugOptionToastAttachedPhoto = enableDebugOptionToastAttachedPhoto.not()
@@ -831,7 +831,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SwitchCard(
                 "Notification Info",
                 null,
-                settingCardModifier,
+                modifier,
                 enableDebugOptionToastNotificationInfo,
             ) {
                 enableDebugOptionToastNotificationInfo =
@@ -847,7 +847,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SwitchCard(
                 "ReviewFlow Info",
                 null,
-                settingCardModifier,
+                modifier,
                 enableDebugOptionToastReviewFlowInfo,
             ) {
                 enableDebugOptionToastReviewFlowInfo = enableDebugOptionToastReviewFlowInfo.not()
@@ -861,7 +861,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             SwitchCard(
                 "Photo-Highlight Update Time",
                 null,
-                settingCardModifier,
+                modifier,
                 enableDebugOptionToastPhotoHighlightUpdateTime,
             ) {
                 enableDebugOptionToastPhotoHighlightUpdateTime =

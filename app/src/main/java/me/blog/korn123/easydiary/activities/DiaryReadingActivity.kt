@@ -1150,15 +1150,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun encryptData(inputPass: String) {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)!!
-                realmInstance.beginTransaction()
-                diaryDto.isEncrypt = true
-                diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
-                diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
-                diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
-                realmInstance.commitTransaction()
-                realmInstance.close()
-                initContents()
+                EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)?.let { diaryDto ->
+                    realmInstance.beginTransaction()
+                    diaryDto.isEncrypt = true
+                    diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
+                    diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
+                    diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
+                    realmInstance.commitTransaction()
+                    realmInstance.close()
+                    initContents()
+                }
             }
         }
 

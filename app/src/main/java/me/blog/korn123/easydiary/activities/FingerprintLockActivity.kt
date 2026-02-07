@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hideSystemBars
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
@@ -239,7 +240,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private fun tryEncrypt(cipher: Cipher?) {
         try {
             cipher?.let {
-                val encrypted = it.doFinal(FingerprintLockConstants.DUMMY_ENCRYPT_DATA.toByteArray())
+                val encrypted = it.doFinal(FingerprintLockConstants.DUMMY_ENCRYPT_DATA.toByteArray(Charsets.UTF_8))
                 val ivParams = it.parameters.getParameterSpec(IvParameterSpec::class.java)
                 config.fingerprintEncryptData = Base64.encodeToString(encrypted, Base64.DEFAULT)
                 config.fingerprintEncryptDataIV = Base64.encodeToString(ivParams.iv, Base64.DEFAULT)
@@ -253,7 +254,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         try {
             cipher?.let {
                 val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
-                it.doFinal(encodedData)
+                val data = it.doFinal(encodedData)
+//                makeToast(String(data, Charsets.UTF_8))
                 true
             } ?: false
         } catch (e: Exception) {

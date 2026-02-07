@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">डायरी पोस्टकार्ड</string>
     <string name="postcard_viewer_no_cards_saved">कोई सहेजी गई डायरी पोस्ट कार्ड नहीं।</string>
     <string name="google_drive_connect_message">सिंक में Google ड्राइव ...</string>
-    <string name="diary_count">चाभी</string>
     <string name="menu_calendar">पंचांग</string>
     <string name="menu_chart">आंकड़े</string>
     <string name="menu_timeline">समय</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

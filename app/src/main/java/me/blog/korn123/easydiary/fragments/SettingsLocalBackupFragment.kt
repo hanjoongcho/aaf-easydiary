@@ -188,7 +188,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         updateFragmentUI(mBinding.root)
-        initPreference()
 
         mBinding.composeView.setContent {
             AppTheme {
@@ -342,7 +341,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     override fun onResume() {
         super.onResume()
         updateFragmentUI(mBinding.root)
-        initPreference()
     }
 
     /***************************************************************************************************
@@ -701,9 +699,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-
-    private fun initPreference() {}
-
     private fun showLocationSelectionPopup(
         popupMode: Int,
         internalTitle: String,

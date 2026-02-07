@@ -124,7 +124,6 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
 import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import me.blog.korn123.easydiary.helper.AlarmConstants

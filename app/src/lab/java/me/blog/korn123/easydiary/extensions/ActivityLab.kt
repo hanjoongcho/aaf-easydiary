@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
 import me.blog.korn123.easydiary.api.models.CommitRequest
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
@@ -107,7 +106,8 @@ fun ComponentActivity.syncMarkDown(
         var tokenInfo: List<Diary>?
         var size = 0
         EasyDiaryDbHelper.getTemporaryInstance().run {
-            tokenInfo = EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
+            tokenInfo =
+                EasyDiaryDbHelper.findDiary("GitHub Personal Access Token", false, 0, 0, 0, this)
             tokenInfo?.let {
                 size = it.size
                 if (size > 0) token = it[0].contents
@@ -138,7 +138,13 @@ fun ComponentActivity.syncMarkDown(
                 usingPathTitle: Boolean,
                 symbolSequence: Int = DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS,
             ) {
-                val call = retrofitApiService.findContents(token!!, "hanjoongcho", "self-development", path)
+                val call =
+                    retrofitApiService.findContents(
+                        token!!,
+                        "hanjoongcho",
+                        "self-development",
+                        path,
+                    )
                 val response = call.execute()
                 val contentsItems: List<Contents>? = response.body()
                 contentsItems?.forEach { content ->
@@ -148,8 +154,19 @@ fun ComponentActivity.syncMarkDown(
                         EasyDiaryDbHelper.getTemporaryInstance().run {
                             val title =
                                 when (usingPathTitle) {
-                                    true -> content.path
-                                    false -> if (usingPathTitle) content.name else content.name.split(".")[0]
+                                    true -> {
+                                        content.path
+                                    }
+
+                                    false -> {
+                                        if (usingPathTitle) {
+                                            content.name
+                                        } else {
+                                            content.name.split(
+                                                ".",
+                                            )[0]
+                                        }
+                                    }
                                 }
 
                             val items = EasyDiaryDbHelper.findMarkdownSyncTargetDiary(title, this)
@@ -174,24 +191,37 @@ fun ComponentActivity.syncMarkDown(
 
                             if (items.size == 1) {
                                 runOnUiThread {
-                                    mBinding?.partialSettingsProgress?.message?.text = "Sync $title…"
+                                    mBinding?.partialSettingsProgress?.message?.text =
+                                        "Sync $title…"
                                 }
-                                val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                val re =
+                                    downloadApiService
+                                        .downloadContents(
+                                            token!!,
+                                            content.download_url,
+                                        ).execute()
                                 val diary = items[0]
                                 this.beginTransaction()
                                 diary.contents = re.body()
                                 diary.weather = checkedSymbolSequence
                                 val updateDateString = getUpdateDate(diary.contents!!)
                                 if (updateDateString.isNotEmpty()) {
-                                    diary.currentTimeMillis = DateUtils.dateStringToTimeStamp(updateDateString)
+                                    diary.currentTimeMillis =
+                                        DateUtils.dateStringToTimeStamp(updateDateString)
                                     diary.updateDateString()
                                 }
                                 this.commitTransaction()
                             } else if (items.isEmpty()) {
                                 runOnUiThread {
-                                    mBinding?.partialSettingsProgress?.message?.text = "Download $title…"
+                                    mBinding?.partialSettingsProgress?.message?.text =
+                                        "Download $title…"
                                 }
-                                val re = downloadApiService.downloadContents(token!!, content.download_url).execute()
+                                val re =
+                                    downloadApiService
+                                        .downloadContents(
+                                            token!!,
+                                            content.download_url,
+                                        ).execute()
                                 EasyDiaryDbHelper.insertDiary(
                                     Diary(
                                         DiaryEditingConstants.DIARY_SEQUENCE_INIT,
@@ -209,14 +239,46 @@ fun ComponentActivity.syncMarkDown(
                     }
                 }
             }
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_DEV) fetchContents("dev", true)
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_ETC) fetchContents("etc", true)
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_LIFE) fetchContents("life", true)
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_DEV) {
+                fetchContents(
+                    "dev",
+                    true,
+                )
+            }
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_ETC) {
+                fetchContents(
+                    "etc",
+                    true,
+                )
+            }
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_LIFE) {
+                fetchContents(
+                    "life",
+                    true,
+                )
+            }
 //                fetchContents("stock/KOSPI", true, 10031)
 //                fetchContents("stock/KOSDAQ", true, 10032)
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_FICS) fetchContents("stock/FICS", true, 10030)
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_ETF) fetchContents("stock/ETF", true, 10033)
-            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) fetchContents("stock/knowledge", true)
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_FICS) {
+                fetchContents(
+                    "stock/FICS",
+                    true,
+                    10030,
+                )
+            }
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_ETF) {
+                fetchContents(
+                    "stock/ETF",
+                    true,
+                    10033,
+                )
+            }
+            if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) {
+                fetchContents(
+                    "stock/knowledge",
+                    true,
+                )
+            }
 
             if (!listOf(
                     DEV_SYNC_MARKDOWN_ALL,
