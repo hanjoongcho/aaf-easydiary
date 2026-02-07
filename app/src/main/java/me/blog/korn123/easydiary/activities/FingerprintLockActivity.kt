@@ -208,7 +208,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         mFingerprintManager
             .authenticate(
                 cryptoObject,
-                0 /* flags */,
+                0,
                 mCancellationSignal,
                 object : FingerprintManagerCompat.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {

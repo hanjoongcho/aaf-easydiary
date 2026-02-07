@@ -65,7 +65,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             val topAppBarState = rememberTopAppBarState()
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
             val bottomPadding =
@@ -255,8 +254,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 //    @Preview(name = "Landscape Pixel 4 XL", device = "spec:width=1280dp,height=720dp")
     @Composable
     private fun QuickSettingsPreview() {
-        mSettingsViewModel = initSettingsViewModel()
-
         AppTheme {
             Scaffold(
                 topBar = {

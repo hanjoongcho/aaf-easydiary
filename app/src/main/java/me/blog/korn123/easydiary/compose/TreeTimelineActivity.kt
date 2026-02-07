@@ -47,7 +47,6 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
         val isResultAPI = !intent.getBooleanExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, true)
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             TreeTimeline(isResultAPI = isResultAPI)
         }
         showBetaFeatureMessage()
@@ -65,7 +64,6 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun TreeTimeline(isResultAPI: Boolean = false) {
         val context = LocalContext.current
-        mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(

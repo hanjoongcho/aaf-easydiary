@@ -73,7 +73,6 @@
                                     android:gravity="center_vertical"
                                     android:hint="@string/guide_message"
                                     android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
-                                />
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
                             <androidx.appcompat.widget.LinearLayoutCompat
