@@ -133,7 +133,6 @@ import me.blog.korn123.easydiary.helper.CAPTURE_CAMERA_FILE_NAME
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DAILY_TODO
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
-import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
@@ -152,6 +151,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
+import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
 import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_SORTING
@@ -429,7 +429,7 @@ fun Context.getAlarmNotification(
             .setAutoCancel(true)
             .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${alarm.label}" else alarm.label)
             .setContentText(description)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(description))
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
@@ -1307,7 +1307,7 @@ fun Context.shareFile(
 
 fun Context.exportRealmFile() {
     val srcFile = File(EasyDiaryDbHelper.getRealmPath())
-    val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+    val destFilePath = BACKUP_DB_DIRECTORY + RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
     val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
     FileUtils.copyFile(srcFile, destFile, false)
     config.diaryBackupLocal = System.currentTimeMillis()

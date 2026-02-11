@@ -23,24 +23,25 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration
             .Builder()
-            .name("diary.realm")
-            .schemaVersion(24)
-            .migration(EasyDiaryMigration())
-            .modules(Realm.getDefaultModule()!!)
+            .name(RealmConstants.DIARY_DB_NAME)
+            .schemaVersion(RealmConstants.SCHEMA_VERSION)
             .allowWritesOnUiThread(true)
+            .migration(EasyDiaryMigration())
             .build()
     }
 
     private var mRealmInstance: Realm? = null
 
     private fun getInstance(): Realm {
-        if (mRealmInstance == null || mRealmInstance?.isClosed == true) {
-            mRealmInstance = Realm.getInstance(mDiaryConfig)
+        val currentInstance: Realm? = mRealmInstance
+        return if (currentInstance == null || currentInstance.isClosed) {
+            Realm.getInstance(mDiaryConfig).also { mRealmInstance = it }
+        } else {
+            currentInstance
         }
-        return mRealmInstance!!
     }
 
-    fun getTemporaryInstance() = Realm.getInstance(mDiaryConfig)!!
+    fun getTemporaryInstance(): Realm = Realm.getInstance(mDiaryConfig)
 
     fun closeInstance() {
         mRealmInstance?.close()
