@@ -88,7 +88,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
         val mode = intent.getIntExtra("mode", 1)
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             when (mode) {
                 1 -> {
                     NestedScrollConnection()
@@ -128,7 +127,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun NestedScrollConnection() {
-        mSettingsViewModel = initSettingsViewModel()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val bottomPadding =
@@ -222,7 +220,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun NestedScrollConnectionWithAutoInsets() {
-        mSettingsViewModel = initSettingsViewModel()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 
@@ -304,7 +301,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false) // 시스템 창(상태바, 내비게이션바) 위로 그리기
         LocalActivity.current?.updateSystemStatusBarColor()
 
-        mSettingsViewModel = initSettingsViewModel()
         val bottomPadding =
             if (isVanillaIceCreamPlus()) {
                 WindowInsets.navigationBars

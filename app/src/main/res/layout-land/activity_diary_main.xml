@@ -131,7 +131,7 @@
             android:alpha="0.3"
             android:background="?attr/colorPrimary"
             android:gravity="center"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical"/>
 
         <LinearLayout
             android:id="@+id/progressDialog"

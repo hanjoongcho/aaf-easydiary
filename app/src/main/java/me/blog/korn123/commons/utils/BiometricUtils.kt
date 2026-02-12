@@ -58,7 +58,7 @@ class BiometricUtils {
                 .from(activity)
                 .authenticate(
                     null,
-                    0 /* flags */,
+                    0,
                     cancellationSignal,
                     object : FingerprintManagerCompat.AuthenticationCallback() {
                         override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
@@ -134,8 +134,7 @@ class BiometricUtils {
          * */
         @RequiresApi(Build.VERSION_CODES.M)
         @Suppress("DEPRECATION")
-        fun isPermissionGranted(context: Context): Boolean =
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
+        fun isPermissionGranted(context: Context): Boolean = ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
 
         /**
          * Indicate whether this device can authenticate the user with biometrics

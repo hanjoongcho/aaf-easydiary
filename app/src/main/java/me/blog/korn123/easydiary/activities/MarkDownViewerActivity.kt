@@ -186,7 +186,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
             lines.map {
                 sb.append(it)
-                sb.append(System.getProperty("line.separator"))
+                sb.append(System.lineSeparator())
             }
             Log.i("aaf-t", sb.toString())
         } catch (e: FileNotFoundException) {

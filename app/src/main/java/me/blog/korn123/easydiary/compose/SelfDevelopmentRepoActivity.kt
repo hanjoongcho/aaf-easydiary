@@ -44,7 +44,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             SelfDevelopmentRepo()
         }
     }
@@ -62,7 +61,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun SelfDevelopmentRepo() {
         val context = LocalContext.current
-        mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(

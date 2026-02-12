@@ -420,7 +420,6 @@ const val USER_CUSTOM_FONTS_DIRECTORY = "${WORKING_DIRECTORY}Fonts/"
 const val MARKDOWN_DIRECTORY = "${WORKING_DIRECTORY}Markdown/"
 const val BACKUP_EXCEL_DIRECTORY = "${WORKING_DIRECTORY}Backup/Excel/"
 const val BACKUP_DB_DIRECTORY = "${WORKING_DIRECTORY}Backup/Database/"
-const val DIARY_DB_NAME = "diary.realm"
 
 /***************************************************************************************************
  *   Request code constants
@@ -877,4 +876,9 @@ object PostcardConstants {
 
 object GalleryConstants {
     const val GUIDE_MESSAGE = "No information"
+}
+
+object RealmConstants {
+    const val DIARY_DB_NAME = "diary.realm"
+    const val SCHEMA_VERSION = 24L
 }

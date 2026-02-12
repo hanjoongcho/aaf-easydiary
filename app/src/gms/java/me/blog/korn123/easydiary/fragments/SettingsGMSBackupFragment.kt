@@ -78,7 +78,6 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -89,6 +88,7 @@ import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountC
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarCredential
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarService
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
+import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_IMPORT_GOOGLE_DRIVE
@@ -443,7 +443,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         createFile(
                             it!!,
                             realmPath,
-                            DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                            RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
                             EasyDiaryUtils.easyDiaryMimeType,
                         ).addOnSuccessListener {
                             progressContainer.visibility = View.GONE

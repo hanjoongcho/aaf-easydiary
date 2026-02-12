@@ -184,7 +184,7 @@ class PrepareRelease {
     fun main() {
         val prepareRelease = PrepareRelease()
 //        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_STRING)
-//    prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_NEW_STRING)
-        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_NOTE)
+        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_NEW_STRING)
+//        prepareRelease.syncReleaseInformation(PrepareReleaseConstants.SYNC_RELEASE_NOTE)
     }
 }

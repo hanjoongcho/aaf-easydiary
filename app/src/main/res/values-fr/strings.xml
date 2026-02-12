@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">Carte postale du journal</string>
     <string name="postcard_viewer_no_cards_saved">Aucune carte postale de journal enregistré.</string>
     <string name="google_drive_connect_message">Synchronisation Google Drive en cours…</string>
-    <string name="diary_count"></string>
     <string name="menu_calendar">Calendrier</string>
     <string name="menu_chart">Statistiques</string>
     <string name="menu_timeline">Historique</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

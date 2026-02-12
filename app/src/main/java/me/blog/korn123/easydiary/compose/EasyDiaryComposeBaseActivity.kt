@@ -3,9 +3,7 @@ package me.blog.korn123.easydiary.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.viewModels
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getStatusBarColor
@@ -16,16 +14,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 open class EasyDiaryComposeBaseActivity : ComponentActivity() {
-    //    val mSettingsViewModel: SettingsViewModel by viewModels()
-    lateinit var mSettingsViewModel: SettingsViewModel
-
-    @Composable
-    fun initSettingsViewModel(): SettingsViewModel =
-        if (LocalInspectionMode.current) {
-            SettingsViewModel()
-        } else {
-            viewModel()
-        }
+    val mSettingsViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

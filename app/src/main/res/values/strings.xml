@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">Diary Postcard</string>
     <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
     <string name="google_drive_connect_message">Google Drive in sync…</string>
-    <string name="diary_count"></string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_chart">Statistics</string>
     <string name="menu_timeline">Timeline</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

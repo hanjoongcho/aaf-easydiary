@@ -74,10 +74,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     /***************************************************************************************************
      *   etc functions
      *
