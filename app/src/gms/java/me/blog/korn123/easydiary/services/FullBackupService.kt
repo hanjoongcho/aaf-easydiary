@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.services
 
+import GoogleAuthManager
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -32,7 +33,6 @@ import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID
@@ -54,6 +54,7 @@ class FullBackupService : Service() {
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private var mInProcessJob = true
     private var workStatusList = arrayListOf<WorkStatus>()
+    private val authManager by lazy { GoogleAuthManager(this) }
 
     data class WorkStatus(
         var localDeviceFileCount: Int = 0,
@@ -420,7 +421,7 @@ class FullBackupService : Service() {
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
+        authManager.getLastSignedInAccount()?.let { account ->
             DriveServiceHelper(applicationContext, account).run {
                 initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
                     val dbFileName =

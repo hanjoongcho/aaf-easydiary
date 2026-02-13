@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import GoogleAuthManager
 import android.accounts.Account
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -31,13 +32,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -47,7 +45,6 @@ import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -82,12 +79,6 @@ import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.calendarEventToDiary
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarCredential
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.getCalendarService
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
 import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
@@ -100,8 +91,6 @@ import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import java.util.Locale
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 
 class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
@@ -112,11 +101,11 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mContext: Context
     private lateinit var mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
     private lateinit var mRequestGoogleDrivePermissions: ActivityResultLauncher<Intent>
     private lateinit var mRequestGoogleCalendarPermissions: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
     private val mSettingsViewModel: SettingsViewModel by activityViewModels()
+    private val authManager by lazy { GoogleAuthManager(requireContext()) }
 
     /***************************************************************************************************
      *   override functions
@@ -141,30 +130,6 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             requireActivity().findViewById(android.R.id.content),
                             getString(R.string.guide_message_3),
                         )
-                    }
-                }
-            }
-
-        mRequestGoogleSignInLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                requireActivity().run {
-                    pauseLock()
-                    when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                        true -> {
-                            // The Task returned from this call is always completed, no need to attach
-                            // a listener.
-                            val task: Task<GoogleSignInAccount> =
-                                GoogleSignIn.getSignedInAccountFromIntent(it.data)
-                            val googleSignAccount = task.getResult(ApiException::class.java)
-                            googleSignAccount?.account?.let {
-                                callAccountCallback(it)
-                            }
-                        }
-
-                        false -> {
-                            makeSnackBar("Google account verification failed.")
-                            progressContainer.visibility = View.GONE
-                        }
                     }
                 }
             }
@@ -224,15 +189,6 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
-
-        // Clear google OAuth token generated prior to version 1.4.80
-        if (!requireActivity().config.clearLegacyToken) {
-            GoogleOAuthHelper.signOutGoogleOAuth(
-                requireActivity(),
-                false,
-            )
-        }
-
         updateFragmentUI(mBinding.root)
         initPreference()
 
@@ -277,13 +233,10 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         imageResourceId = R.drawable.logo_google_oauth2,
                         imageUrl = profileImageUrl,
                     ) {
-                        when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
+                        when (authManager.isLoggedInLocal()) {
                             false -> {
-                                initGoogleSignAccount(
-                                    requireActivity(),
-                                    mRequestGoogleSignInLauncher,
-                                ) { account ->
-                                    requestDrivePermissions(account) {
+                                authManager.initGoogleAccount(lifecycleScope) { account ->
+                                    requestDrivePermissions(lifecycleScope) {
                                         determineAccountInfo()
                                     }
                                 }
@@ -297,8 +250,12 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         description = getString(R.string.google_drive_account_sign_out_description),
                         modifier = settingCardModifier,
                     ) {
-                        GoogleOAuthHelper.signOutGoogleOAuth(requireActivity())
-                        determineAccountInfo()
+                        lifecycleScope.launch {
+                            progressContainer.visibility = View.VISIBLE
+                            authManager.signOut()
+                            determineAccountInfo()
+                            progressContainer.visibility = View.GONE
+                        }
                     }
                     SimpleCardWithImage(
                         title = getString(R.string.backup_diary),
@@ -397,47 +354,45 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mPermissionCallback: () -> Unit
 
     private fun requestDrivePermissions(
-        account: Account,
+        lifecycleScope: LifecycleCoroutineScope,
         permissionCallback: () -> Unit,
     ) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential =
-            GoogleAccountCredential.usingOAuth2(mContext, arrayListOf(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = account
-        val googleDriveService: Drive =
-            Drive
-                .Builder(NetHttpTransport(), GsonFactory(), credential)
-                .setApplicationName(getString(R.string.app_name))
-                .build()
-
-        val executor = Executors.newSingleThreadExecutor()
-        Tasks.call(
-            executor,
-            Callable<FileList> {
+        authManager.getEmail()?.let {
+            val credential =
+                authManager.createGoogleAccountCredential(it, arrayListOf(DriveScopes.DRIVE_FILE))
+            val googleDriveService: Drive =
+                Drive
+                    .Builder(NetHttpTransport(), GsonFactory(), credential)
+                    .setApplicationName(getString(R.string.app_name))
+                    .build()
+            lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    var r =
-                        googleDriveService
-                            .files()
-                            .list()
-                            .setQ("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
-                            .setSpaces("drive")
-                            .execute()
-                    mPermissionCallback.invoke()
-                    r
+                    // call test code for checking permissions
+                    googleDriveService
+                        .files()
+                        .list()
+                        .setQ("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
+                        .setSpaces("drive")
+                        .execute()
+                    withContext(Dispatchers.Main) {
+                        mPermissionCallback.invoke()
+                    }
                 } catch (e: UserRecoverableAuthIOException) {
-                    mRequestGoogleDrivePermissions.launch(e.intent)
-                    null
+                    withContext(Dispatchers.Main) {
+                        mRequestGoogleDrivePermissions.launch(e.intent)
+                    }
                 }
-            },
-        )
+            }
+        } ?: run { authManager.notifyFailedGetGoogleAccount() }
     }
 
     private fun backupDiaryRealm() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
-        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-            requestDrivePermissions(account) {
+        authManager.initGoogleAccount(lifecycleScope) { account ->
+            requestDrivePermissions(lifecycleScope) {
                 DriveServiceHelper(mContext, account).run {
                     initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                         createFile(
@@ -468,8 +423,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun openRealmFilePickerDialog() {
-        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-            requestDrivePermissions(account) {
+        authManager.initGoogleAccount(lifecycleScope) { account ->
+            requestDrivePermissions(lifecycleScope) {
                 val driveServiceHelper = DriveServiceHelper(mContext, account)
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
                 driveServiceHelper
@@ -546,24 +501,22 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private fun recoverDiaryPhoto() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-            requestDrivePermissions(account) {
-                requireActivity().runOnUiThread {
-                    progressContainer.visibility = View.GONE
-                    requireActivity().run {
-                        showAlertDialog(
-                            getString(R.string.recover_confirm_attached_photo),
-                            { _, _ ->
-                                val recoverPhotoService =
-                                    Intent(this, RecoverPhotoService::class.java)
-                                startService(recoverPhotoService)
-                                finish()
-                            },
-                            { _, _ -> clearHoldOrientation() },
-                            DialogMode.INFO,
-                            false,
-                        )
-                    }
+        authManager.initGoogleAccount(lifecycleScope) { account ->
+            requestDrivePermissions(lifecycleScope) {
+                progressContainer.visibility = View.GONE
+                requireActivity().run {
+                    showAlertDialog(
+                        getString(R.string.recover_confirm_attached_photo),
+                        { _, _ ->
+                            val recoverPhotoService =
+                                Intent(this, RecoverPhotoService::class.java)
+                            startService(recoverPhotoService)
+                            finish()
+                        },
+                        { _, _ -> clearHoldOrientation() },
+                        DialogMode.INFO,
+                        false,
+                    )
                 }
             }
         }
@@ -572,32 +525,31 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private fun backupDiaryPhoto() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
-            requestDrivePermissions(account) {
-                DriveServiceHelper(mContext, account).run {
-                    initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                        progressContainer.visibility = View.GONE
-                        requireActivity().run {
-                            showAlertDialog(
-                                getString(R.string.backup_confirm_message),
-                                { _, _ ->
-                                    val backupPhotoService =
-                                        Intent(this, BackupPhotoService::class.java)
-                                    backupPhotoService.putExtra(
-                                        GDriveConstants.WORKING_FOLDER_ID,
-                                        photoFolderId,
-                                    )
-                                    ContextCompat.startForegroundService(
-                                        context,
-                                        backupPhotoService,
-                                    )
-                                    finish()
-                                },
-                                { _, _ -> clearHoldOrientation() },
-                                DialogMode.INFO,
-                                false,
-                            )
-                        }
+        authManager.initGoogleAccount(lifecycleScope) { account ->
+            requestDrivePermissions(lifecycleScope) {
+                val driveServiceHelper = DriveServiceHelper(mContext, account)
+                driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                    progressContainer.visibility = View.GONE
+                    requireActivity().run {
+                        showAlertDialog(
+                            getString(R.string.backup_confirm_message),
+                            { _, _ ->
+                                val backupPhotoService =
+                                    Intent(this, BackupPhotoService::class.java)
+                                backupPhotoService.putExtra(
+                                    GDriveConstants.WORKING_FOLDER_ID,
+                                    photoFolderId,
+                                )
+                                ContextCompat.startForegroundService(
+                                    mContext,
+                                    backupPhotoService,
+                                )
+                                finish()
+                            },
+                            { _, _ -> clearHoldOrientation() },
+                            DialogMode.INFO,
+                            false,
+                        )
                     }
                 }
             }
@@ -696,212 +648,213 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private fun syncGoogleCalendar() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
+        authManager.initGoogleAccount(lifecycleScope) { account ->
             requestCalendarPermissionEventReadOnly(account) {
                 requestCalendarPermissionCalendarReadOnly(account) {
-                    val credential = getCalendarCredential(requireContext())
-                    val calendarService = getCalendarService(requireContext(), credential)
+                    authManager.getCalendarCredential()?.let {
+                        val calendarService = authManager.getCalendarService(requireContext(), it)
 
-                    fun fetchData(
-                        calendarId: String,
-                        nextPageToken: String?,
-                        total: Int = 0,
-                    ) {
-                        var insertCount = 0
-                        progressContainer.visibility = View.VISIBLE
-                        mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
-                        mBinding.syncGoogleCalendar.visibility = View.VISIBLE
+                        fun fetchData(
+                            calendarId: String,
+                            nextPageToken: String?,
+                            total: Int = 0,
+                        ) {
+                            var insertCount = 0
+                            progressContainer.visibility = View.VISIBLE
+                            mBinding.syncGoogleCalendarProgress.setProgressCompat(0, false)
+                            mBinding.syncGoogleCalendar.visibility = View.VISIBLE
 
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val result =
-                                if (nextPageToken == null) {
-                                    calendarService
-                                        .events()
-                                        .list(calendarId)
-                                        .setMaxResults(2000)
-                                        .setTimeMin(mTimeMin)
-                                        .setTimeMax(mTimeMax)
-                                        .setSingleEvents(true)
-                                        .execute()
-                                } else {
-                                    calendarService
-                                        .events()
-                                        .list(calendarId)
-                                        .setPageToken(nextPageToken)
-                                        .setMaxResults(2000)
-                                        .setTimeMin(mTimeMin)
-                                        .setTimeMax(mTimeMax)
-                                        .setSingleEvents(true)
-                                        .execute()
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                val result =
+                                    if (nextPageToken == null) {
+                                        calendarService
+                                            .events()
+                                            .list(calendarId)
+                                            .setMaxResults(2000)
+                                            .setTimeMin(mTimeMin)
+                                            .setTimeMax(mTimeMax)
+                                            .setSingleEvents(true)
+                                            .execute()
+                                    } else {
+                                        calendarService
+                                            .events()
+                                            .list(calendarId)
+                                            .setPageToken(nextPageToken)
+                                            .setMaxResults(2000)
+                                            .setTimeMin(mTimeMin)
+                                            .setTimeMax(mTimeMax)
+                                            .setSingleEvents(true)
+                                            .execute()
+                                    }
+                                withContext(Dispatchers.Main) {
+                                    progressContainer.visibility = View.GONE
                                 }
-                            withContext(Dispatchers.Main) {
-                                progressContainer.visibility = View.GONE
-                            }
 //                        val descriptions = arrayListOf<String>()
-                            result.items.forEachIndexed { index, item ->
-                                Log.i(
-                                    AAF_TEST,
-                                    "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}",
-                                )
+                                result.items.forEachIndexed { index, item ->
+                                    Log.i(
+                                        AAF_TEST,
+                                        "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}",
+                                    )
 //                                descriptions.add(item.summary)
-                                withContext(Dispatchers.Main) {
-                                    insertCount += calendarEventToDiary(item, calendarId)
-                                    mBinding.syncGoogleCalendarProgress.setProgressCompat(
-                                        index
-                                            .div(
-                                                result.items.size.toFloat(),
-                                            ).times(100)
-                                            .toInt(),
-                                        true,
-                                    )
+                                    withContext(Dispatchers.Main) {
+                                        insertCount += authManager.calendarEventToDiary(item, calendarId)
+                                        mBinding.syncGoogleCalendarProgress.setProgressCompat(
+                                            index
+                                                .div(
+                                                    result.items.size.toFloat(),
+                                                ).times(100)
+                                                .toInt(),
+                                            true,
+                                        )
+                                    }
                                 }
-                            }
-                            if (result.nextPageToken != null) {
-                                fetchData(calendarId, result.nextPageToken, total.plus(insertCount))
-                            } else {
-                                withContext(Dispatchers.Main) {
-                                    mBinding.syncGoogleCalendar.visibility = View.GONE
-                                    requireActivity().showAlertDialog(
-                                        "${
-                                            DateUtils.getDateTimeStringFromTimeMillis(
-                                                mTimeMin.value,
-                                            )
-                                        } ~ ${DateUtils.getDateTimeStringFromTimeMillis(mTimeMax.value)} 기간에 등록된 ${
-                                            total.plus(
-                                                insertCount,
-                                            )
-                                        }건의 이벤트가 등록되었습니다.",
-                                        null,
-                                        null,
-                                    )
+                                if (result.nextPageToken != null) {
+                                    fetchData(calendarId, result.nextPageToken, total.plus(insertCount))
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        mBinding.syncGoogleCalendar.visibility = View.GONE
+                                        requireActivity().showAlertDialog(
+                                            "${
+                                                DateUtils.getDateTimeStringFromTimeMillis(
+                                                    mTimeMin.value,
+                                                )
+                                            } ~ ${DateUtils.getDateTimeStringFromTimeMillis(mTimeMax.value)} 기간에 등록된 ${
+                                                total.plus(
+                                                    insertCount,
+                                                )
+                                            }건의 이벤트가 등록되었습니다.",
+                                            null,
+                                            null,
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    fun fetchCalendarList() {
-                        var alertDialog: AlertDialog? = null
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val result = calendarService.calendarList().list().execute()
-                            withContext(Dispatchers.Main) {
-                                val builder = AlertDialog.Builder(requireActivity())
-                                builder.setNegativeButton(getString(android.R.string.cancel), null)
-                                val dialogSyncGoogleCalendarBinding =
-                                    DialogSyncGoogleCalendarBinding.inflate(layoutInflater)
-                                val calendarInfo = ArrayList<Map<String, String>>()
-                                result.items.forEach { calendar ->
-                                    calendarInfo.add(
-                                        mapOf(
-                                            "optionTitle" to calendar.summary,
-                                            "optionValue" to calendar.id,
-                                        ),
-                                    )
-                                }
-                                val optionItemAdapter =
-                                    OptionItemAdapter(
-                                        requireActivity(),
-                                        R.layout.item_check_label,
-                                        calendarInfo,
-                                        null,
-                                        null,
-                                        false,
-                                    )
-                                dialogSyncGoogleCalendarBinding.run {
-                                    listView.adapter = optionItemAdapter
-                                    listView.setOnItemClickListener { parent, view, position, id ->
-                                        calendarInfo[position]["optionValue"]?.let {
-                                            fetchData(it, null)
-                                            alertDialog?.dismiss()
+                        fun fetchCalendarList() {
+                            var alertDialog: AlertDialog? = null
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                val result = calendarService.calendarList().list().execute()
+                                withContext(Dispatchers.Main) {
+                                    val builder = AlertDialog.Builder(requireActivity())
+                                    builder.setNegativeButton(getString(android.R.string.cancel), null)
+                                    val dialogSyncGoogleCalendarBinding =
+                                        DialogSyncGoogleCalendarBinding.inflate(layoutInflater)
+                                    val calendarInfo = ArrayList<Map<String, String>>()
+                                    result.items.forEach { calendar ->
+                                        calendarInfo.add(
+                                            mapOf(
+                                                "optionTitle" to calendar.summary,
+                                                "optionValue" to calendar.id,
+                                            ),
+                                        )
+                                    }
+                                    val optionItemAdapter =
+                                        OptionItemAdapter(
+                                            requireActivity(),
+                                            R.layout.item_check_label,
+                                            calendarInfo,
+                                            null,
+                                            null,
+                                            false,
+                                        )
+                                    dialogSyncGoogleCalendarBinding.run {
+                                        listView.adapter = optionItemAdapter
+                                        listView.setOnItemClickListener { parent, view, position, id ->
+                                            calendarInfo[position]["optionValue"]?.let {
+                                                fetchData(it, null)
+                                                alertDialog?.dismiss()
+                                            }
+                                        }
+
+                                        val fromCalendar =
+                                            getCalendarInstance(false, java.util.Calendar.MONTH, -1)
+                                        val toCalendar =
+                                            getCalendarInstance(true, java.util.Calendar.MONTH, 1)
+                                        mTimeMin = DateTime(fromCalendar.timeInMillis)
+                                        mTimeMax = DateTime(toCalendar.timeInMillis)
+
+                                        mSDatePickerDialog =
+                                            DatePickerDialog(
+                                                requireContext(),
+                                                { _, year, month, dayOfMonth ->
+                                                    val startMillis =
+                                                        EasyDiaryUtils.datePickerToTimeMillis(
+                                                            dayOfMonth,
+                                                            month,
+                                                            year,
+                                                        )
+                                                    mTimeMin = DateTime(startMillis)
+                                                    textSyncFromDate.text =
+                                                        DateUtils.getDateTimeStringFromTimeMillis(
+                                                            startMillis,
+                                                        )
+                                                },
+                                                fromCalendar.get(java.util.Calendar.YEAR),
+                                                fromCalendar.get(java.util.Calendar.MONTH),
+                                                fromCalendar.get(java.util.Calendar.DAY_OF_MONTH),
+                                            )
+
+                                        mEDatePickerDialog =
+                                            DatePickerDialog(
+                                                requireContext(),
+                                                { _, year, month, dayOfMonth ->
+                                                    val endMillis =
+                                                        EasyDiaryUtils.datePickerToTimeMillis(
+                                                            dayOfMonth,
+                                                            month,
+                                                            year,
+                                                            true,
+                                                        )
+                                                    mTimeMax = DateTime(endMillis)
+                                                    textSyncToDate.text =
+                                                        DateUtils.getDateTimeStringFromTimeMillis(endMillis)
+                                                },
+                                                toCalendar.get(java.util.Calendar.YEAR),
+                                                toCalendar.get(java.util.Calendar.MONTH),
+                                                toCalendar.get(java.util.Calendar.DAY_OF_MONTH),
+                                            )
+
+                                        textSyncFromDate.run {
+                                            setOnClickListener { mSDatePickerDialog.show() }
+                                            text =
+                                                DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
+                                        }
+                                        textSyncToDate.run {
+                                            setOnClickListener { mEDatePickerDialog.show() }
+                                            text =
+                                                DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
+                                        }
+
+                                        requireActivity().run {
+                                            FontUtils.setFontsTypeface(
+                                                requireContext(),
+                                                null,
+                                                cardSyncOptions,
+                                            )
+                                            initTextSize(cardSyncOptions)
+                                            updateTextColors(cardSyncOptions)
+                                            updateAppViews(dialogSyncGoogleCalendarBinding.root)
+                                            updateCardViewPolicy(dialogSyncGoogleCalendarBinding.root)
                                         }
                                     }
-
-                                    val fromCalendar =
-                                        getCalendarInstance(false, java.util.Calendar.MONTH, -1)
-                                    val toCalendar =
-                                        getCalendarInstance(true, java.util.Calendar.MONTH, 1)
-                                    mTimeMin = DateTime(fromCalendar.timeInMillis)
-                                    mTimeMax = DateTime(toCalendar.timeInMillis)
-
-                                    mSDatePickerDialog =
-                                        DatePickerDialog(
-                                            requireContext(),
-                                            { _, year, month, dayOfMonth ->
-                                                val startMillis =
-                                                    EasyDiaryUtils.datePickerToTimeMillis(
-                                                        dayOfMonth,
-                                                        month,
-                                                        year,
-                                                    )
-                                                mTimeMin = DateTime(startMillis)
-                                                textSyncFromDate.text =
-                                                    DateUtils.getDateTimeStringFromTimeMillis(
-                                                        startMillis,
-                                                    )
-                                            },
-                                            fromCalendar.get(java.util.Calendar.YEAR),
-                                            fromCalendar.get(java.util.Calendar.MONTH),
-                                            fromCalendar.get(java.util.Calendar.DAY_OF_MONTH),
-                                        )
-
-                                    mEDatePickerDialog =
-                                        DatePickerDialog(
-                                            requireContext(),
-                                            { _, year, month, dayOfMonth ->
-                                                val endMillis =
-                                                    EasyDiaryUtils.datePickerToTimeMillis(
-                                                        dayOfMonth,
-                                                        month,
-                                                        year,
-                                                        true,
-                                                    )
-                                                mTimeMax = DateTime(endMillis)
-                                                textSyncToDate.text =
-                                                    DateUtils.getDateTimeStringFromTimeMillis(endMillis)
-                                            },
-                                            toCalendar.get(java.util.Calendar.YEAR),
-                                            toCalendar.get(java.util.Calendar.MONTH),
-                                            toCalendar.get(java.util.Calendar.DAY_OF_MONTH),
-                                        )
-
-                                    textSyncFromDate.run {
-                                        setOnClickListener { mSDatePickerDialog.show() }
-                                        text =
-                                            DateUtils.getDateTimeStringFromTimeMillis(fromCalendar.timeInMillis)
-                                    }
-                                    textSyncToDate.run {
-                                        setOnClickListener { mEDatePickerDialog.show() }
-                                        text =
-                                            DateUtils.getDateTimeStringFromTimeMillis(toCalendar.timeInMillis)
-                                    }
-
-                                    requireActivity().run {
-                                        FontUtils.setFontsTypeface(
-                                            requireContext(),
-                                            null,
-                                            cardSyncOptions,
-                                        )
-                                        initTextSize(cardSyncOptions)
-                                        updateTextColors(cardSyncOptions)
-                                        updateAppViews(dialogSyncGoogleCalendarBinding.root)
-                                        updateCardViewPolicy(dialogSyncGoogleCalendarBinding.root)
-                                    }
+                                    requireActivity().clearHoldOrientation()
+                                    progressContainer.visibility = View.GONE
+                                    alertDialog =
+                                        builder.create().apply {
+                                            requireActivity().updateAlertDialogWithIcon(
+                                                DialogMode.INFO,
+                                                this,
+                                                null,
+                                                dialogSyncGoogleCalendarBinding.root,
+                                                "Sync Google Calendar",
+                                            )
+                                        }
                                 }
-                                requireActivity().clearHoldOrientation()
-                                progressContainer.visibility = View.GONE
-                                alertDialog =
-                                    builder.create().apply {
-                                        requireActivity().updateAlertDialogWithIcon(
-                                            DialogMode.INFO,
-                                            this,
-                                            null,
-                                            dialogSyncGoogleCalendarBinding.root,
-                                            "Sync Google Calendar",
-                                        )
-                                    }
                             }
                         }
+                        fetchCalendarList()
                     }
-                    fetchCalendarList()
                 }
             }
         }
@@ -917,17 +870,15 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     fun determineAccountInfo() {
-        when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
+        when (authManager.isLoggedInLocal()) {
             true -> {
                 mSettingsViewModel.run {
                     setInformationTitle(getString(R.string.google_drive_account_information_title))
-                    GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run account@{
-                        val sb = StringBuilder()
-                        sb.append(this.displayName + System.lineSeparator())
-                        sb.append(this.email)
-                        setProfileImageUrl(this@account.photoUrl!!)
-                        setAccountInfo(sb.toString())
-                    }
+                    val sb = StringBuilder()
+                    sb.append(authManager.getDisplayName() + System.lineSeparator())
+                    sb.append(authManager.getEmail())
+                    authManager.getProfileUri()?.let { setProfileImageUrl(it.toUri()) }
+                    setAccountInfo(sb.toString())
                 }
             }
 

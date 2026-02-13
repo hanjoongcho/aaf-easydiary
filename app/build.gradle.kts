@@ -145,6 +145,8 @@ configurations.matching { it.name == "fossImplementation" }.all {
     exclude(group = "com.google.apis", module = "google-api-services-drive")
     exclude(group = "com.google.apis", module = "google-api-services-calendar")
     exclude(group = "com.google.http-client", module = "google-http-client-gson")
+    exclude(group = "androidx.credentials", module = "credentials-play-services-auth")
+    exclude(group = "com.google.android.libraries.identity.googleid", module = "googleid")
 }
 
 afterEvaluate {
@@ -187,6 +189,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.10.1")
     implementation("androidx.compose.ui:ui-graphics:1.10.1")
     implementation("androidx.compose.ui:ui-tooling:1.10.1")
+    implementation("androidx.credentials:credentials:1.3.0")
 
     // gms
     implementation("com.google.android.gms:play-services-auth:21.5.0")
@@ -196,6 +199,8 @@ dependencies {
     implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0")
     implementation("com.google.apis:google-api-services-calendar:v3-rev411-1.25.0")
     implementation("com.google.http-client:google-http-client-gson:2.1.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     // google components common
     implementation("com.google.android.flexbox:flexbox:3.0.0")
