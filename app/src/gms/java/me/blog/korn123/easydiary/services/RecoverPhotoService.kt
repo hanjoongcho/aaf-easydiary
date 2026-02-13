@@ -154,7 +154,7 @@ class RecoverPhotoService(
         if (targetIndexesCursor < targetItems.size) {
             if (mInProcessJob) {
                 val item = targetItems[targetIndexesCursor++]
-                mDriveServiceHelper.downloadFile(item["id"]!!, "$mPhotoPath${item["name"]}").run {
+                mDriveServiceHelper.downloadFile(item["id"] ?: "Undefined", "$mPhotoPath${item["name"]}").run {
                     addOnSuccessListener {
                         successCount++
                         updateNotification()
