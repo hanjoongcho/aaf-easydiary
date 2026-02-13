@@ -105,23 +105,27 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             when (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
                 true -> {
                     mBinding.partialEditContents.run {
-                        activityResult.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                            if (mCurrentCursor == DiaryEditingConstants.FOCUS_TITLE) { // edit title
-                                val title = diaryTitle.text.toString()
-                                val sb = StringBuilder(title)
-                                sb.insert(diaryTitle.selectionStart, it[0])
-                                val cursorPosition = diaryTitle.selectionStart + it[0].length
-                                diaryTitle.setText(sb.toString())
-                                diaryTitle.setSelection(cursorPosition)
-                            } else { // edit contents
-                                val contents = diaryContents.text.toString()
-                                val sb = StringBuilder(contents)
-                                sb.insert(diaryContents.selectionStart, it[0])
-                                val cursorPosition = diaryContents.selectionStart + it[0].length
-                                diaryContents.setText(sb.toString())
-                                diaryContents.setSelection(cursorPosition)
+                        activityResult.data
+                            ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            ?.let {
+                                if (mCurrentCursor == DiaryEditingConstants.FOCUS_TITLE) { // edit title
+                                    val title = diaryTitle.text.toString()
+                                    val sb = StringBuilder(title)
+                                    sb.insert(diaryTitle.selectionStart, it[0])
+                                    val cursorPosition = diaryTitle.selectionStart + it[0].length
+                                    diaryTitle.setText(sb.toString())
+                                    diaryTitle.setSelection(cursorPosition)
+                                } else { // edit contents
+                                    val contents = diaryContents.text.toString()
+                                    val sb = StringBuilder(contents)
+                                    sb.insert(diaryContents.selectionStart, it[0])
+                                    val cursorPosition = diaryContents.selectionStart + it[0].length
+                                    diaryContents.setText(sb.toString())
+                                    diaryContents.setSelection(cursorPosition)
+                                }
+                            }.run {
+                                showAlertDialog(getString(R.string.recognizer_intent_not_found_message))
                             }
-                        }
                     }
                 }
 
