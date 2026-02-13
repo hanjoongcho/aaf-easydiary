@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.models.Diary
@@ -94,7 +93,7 @@ class GoogleOAuthHelper {
 
         fun getCalendarCredential(
             context: Context,
-            account: Account = getGoogleSignAccount(context)?.account!!,
+            account: Account? = getGoogleSignAccount(context)?.account,
         ): GoogleAccountCredential =
             GoogleAccountCredential
                 .usingOAuth2(
@@ -206,7 +205,7 @@ class GoogleOAuthHelper {
                         if (item.description != null) item.summary else "",
                         item.description ?: item.summary,
                         SYMBOL_GOOGLE_CALENDAR,
-                        item?.start?.dateTime == null,
+                        item.start?.dateTime == null,
                     ).apply {
                         isHoliday =
                             calendarId.matches(Regex(holidayCalendarIdPattern))
