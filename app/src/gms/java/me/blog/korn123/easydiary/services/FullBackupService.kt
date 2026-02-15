@@ -15,8 +15,6 @@ import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.text.HtmlCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -79,10 +77,9 @@ class FullBackupService : Service() {
             ),
             this,
         )
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential =
             GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = googleSignInAccount?.account
+        credential.selectedAccount = authManager.getLastSignedInAccount()
         val googleDriveService: com.google.api.services.drive.Drive =
             com.google.api.services.drive.Drive
                 .Builder(
@@ -336,7 +333,7 @@ class FullBackupService : Service() {
     ) {
         val fileName = workStatus.targetFilenames[workStatus.targetFilenamesCursor]
         mDriveServiceHelper
-            .createFile(
+            .createFileLegacy(
                 mWorkingFolderId,
                 mPhotoPath + fileName,
                 fileName,
@@ -427,7 +424,7 @@ class FullBackupService : Service() {
                     val dbFileName =
                         RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
                     if (realmFolderId != null) {
-                        createFile(
+                        createFileLegacy(
                             realmFolderId,
                             EasyDiaryDbHelper.getRealmPath(),
                             dbFileName,

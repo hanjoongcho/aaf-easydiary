@@ -243,21 +243,16 @@ class DevActivity : BaseDevActivity() {
                 description = null,
                 modifier = modifier,
             ) {
-                authManager.initGoogleAccount(lifecycleScope) { account ->
-                    DriveServiceHelper(this@DevActivity, account).run {
-                        initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                            if (photoFolderId != null) {
-                                Intent(context, FullBackupService::class.java).apply {
-                                    putExtra(
-                                        GDriveConstants.WORKING_FOLDER_ID,
-                                        photoFolderId,
-                                    )
-                                    ContextCompat.startForegroundService(context, this)
-                                }
-                            } else {
-                                makeSnackBar("Failed start a service.")
-                            }
-                        }
+                lifecycleScope.launch {
+                    val googleAccount = authManager.getGoogleAccount()
+                    val driveServiceHelper = DriveServiceHelper(this@DevActivity, googleAccount)
+                    val photoFolderId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME)
+                    Intent(this@DevActivity, FullBackupService::class.java).apply {
+                        putExtra(
+                            GDriveConstants.WORKING_FOLDER_ID,
+                            photoFolderId,
+                        )
+                        ContextCompat.startForegroundService(this@DevActivity, this)
                     }
                 }
             }

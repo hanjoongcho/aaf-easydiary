@@ -9,7 +9,6 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -141,20 +140,16 @@ class GoogleAuthManager(
         }
     }
 
-    fun initGoogleAccount(
-        lifecycleScope: LifecycleCoroutineScope,
-        callback: (account: Account) -> Unit,
-    ) {
-        lifecycleScope.launch {
-            if (!isLoggedInLocal()) {
-                signIn()
-            }
-            getEmail()?.let {
-                callback.invoke(Account(it, AuthManager.ACCOUNT_TYPE_GOOGLE))
-            } ?: run {
-                notifyFailedGetGoogleAccount()
+    suspend fun getGoogleAccount(): Account {
+        if (!isLoggedInLocal()) {
+            val result = signIn()
+            if (result.isFailure) {
+                throw result.exceptionOrNull() ?: Exception("User cancel login")
             }
         }
+
+        val email = requireNotNull(getEmail()) { "Email is null" }
+        return Account(email, AuthManager.ACCOUNT_TYPE_GOOGLE)
     }
 
     fun getLastSignedInAccount(): Account? =
