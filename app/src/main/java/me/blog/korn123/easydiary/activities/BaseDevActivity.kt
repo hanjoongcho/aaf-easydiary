@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
+import GoogleAuthManager
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
@@ -23,6 +25,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.activity.compose.LocalActivity
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -49,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
@@ -57,6 +61,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.services.calendar.CalendarScopes
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.Dispatchers
@@ -93,6 +99,7 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -145,7 +152,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected lateinit var mBinding: ActivityBaseDevBinding
     private var mNotificationCount = 9000
     private var mCoroutineJob1: Job? = null
-    private val mViewModel: BaseDevViewModel by viewModels()
+    protected val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener =
         object : LocationListener {

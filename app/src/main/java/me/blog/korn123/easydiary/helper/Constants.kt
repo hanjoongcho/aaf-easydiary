@@ -882,3 +882,12 @@ object RealmConstants {
     const val DIARY_DB_NAME = "diary.realm"
     const val SCHEMA_VERSION = 24L
 }
+
+object AuthManager {
+    const val AUTH_PREFS = "auth_prefs"
+    const val IS_LOGGED_IN = "is_logged_in"
+    const val ACCOUNT_TYPE_GOOGLE = "com.google"
+    const val GOOGLE_EMAIL = "google_email"
+    const val GOOGLE_PROFILE_PIC_URI = "google_profile_pic_uri"
+    const val GOOGLE_DISPLAY_NAME = "google_display_name"
+}

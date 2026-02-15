@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
+import GoogleAuthManager
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
@@ -10,14 +11,14 @@ import me.blog.korn123.easydiary.extensions.isScreenOn
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.fetchData
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.FullBackupService
 
 class AlarmWorkExecutor(
     context: Context,
 ) : BaseAlarmWorkExecutor(context) {
+    private val authManager by lazy { GoogleAuthManager(context) }
+
     override fun executeWork(alarm: Alarm) {
         super.executeWork(alarm)
 
@@ -26,7 +27,7 @@ class AlarmWorkExecutor(
                 AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> {
 //                    executeGmsBackup(alarm)
                     scheduleNextAlarm(alarm, isScreenOn())
-                    GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
+                    authManager.getLastSignedInAccount()?.let { account ->
                         DriveServiceHelper(this, account).run {
                             initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                                 if (photoFolderId != null) {
@@ -55,18 +56,20 @@ class AlarmWorkExecutor(
                 }
 
                 AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
-                    val calendarService =
-                        GoogleOAuthHelper.getCalendarService(
-                            context,
-                            GoogleOAuthHelper.getCalendarCredential(context),
-                        )
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val result = calendarService.calendarList().list().execute()
-                        result.items.forEach { calendar ->
-                            fetchData(context, calendarService, calendar.id, null)
+                    authManager.getCalendarCredential()?.let {
+                        val calendarService =
+                            authManager.getCalendarService(
+                                context,
+                                it,
+                            )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val result = calendarService.calendarList().list().execute()
+                            result.items.forEach { calendar ->
+                                authManager.fetchData(context, calendarService, calendar.id, null)
+                            }
                         }
+                        openNotification(alarm)
                     }
-                    openNotification(alarm)
                 }
 
                 else -> {}
