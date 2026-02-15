@@ -1,20 +1,21 @@
 package me.blog.korn123.easydiary.services
 
+import GoogleAuthManager
 import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.IBinder
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.text.HtmlCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -38,9 +39,7 @@ import me.blog.korn123.easydiary.helper.NotificationConstants
 import java.io.File
 import java.util.Collections
 
-class RecoverPhotoService(
-    name: String = "RecoverPhotoService",
-) : IntentService(name) {
+class RecoverPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
     private var remoteDriveFileCount = 0
@@ -52,14 +51,14 @@ class RecoverPhotoService(
     private val targetItems = arrayListOf<HashMap<String, String>>()
     private lateinit var mPhotoPath: String
     private lateinit var mDriveServiceHelper: DriveServiceHelper
+    private val authManager by lazy { GoogleAuthManager(this) }
+
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-//        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
-        super.onCreate()
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential =
             GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = googleSignInAccount?.account
+        credential.selectedAccount = authManager.getLastSignedInAccount()
         val googleDriveService: Drive =
             Drive
                 .Builder(NetHttpTransport(), GsonFactory(), credential)
@@ -94,60 +93,18 @@ class RecoverPhotoService(
         }
     }
 
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
+        recoverPhoto()
+        return super.onStartCommand(intent, flags, startId)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mInProcessJob = false
-    }
-
-    override fun onHandleIntent(intent: Intent?) {
-        mInProcessJob = true
-        notificationManager.cancel(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID)
-        notificationBuilder
-            .setDefaults(Notification.DEFAULT_ALL)
-            .setStyle(NotificationCompat.InboxStyle())
-            .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_easydiary)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    resources,
-                    R.drawable.ic_googledrive_download,
-                ),
-            ).setOnlyAlertOnce(true)
-            .setContentTitle(
-                if (config.enableDebugOptionVisibleAlarmSequence) {
-                    "[$NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID] ${
-                        getString(
-                            R.string.task_progress_message,
-                        )
-                    }"
-                } else {
-                    getString(R.string.task_progress_message)
-                },
-            )
-//                .setContentText(getString(R.string.task_progress_message))
-            .setProgress(0, 0, true)
-            .addAction(
-                R.drawable.ic_easydiary,
-                getString(R.string.cancel),
-                PendingIntent.getService(
-                    this,
-                    NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID,
-                    Intent(this, NotificationService::class.java).apply {
-                        action = NotificationConstants.ACTION_PHOTO_RECOVER_GMS_CANCEL
-                    },
-                    pendingIntentFlag(),
-                ),
-            )
-        startForeground(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
-
-        intent?.let {
-            recoverPhoto()
-        }
-
-        // FIXME Hold async job???
-        while (mInProcessJob) {
-            Thread.sleep(1000)
-        }
     }
 
     private fun downloadAttachPhoto() {

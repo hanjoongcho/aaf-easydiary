@@ -1,12 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
 import GoogleAuthManager
-import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -44,8 +41,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
@@ -66,8 +62,6 @@ class DevActivity : BaseDevActivity() {
      *
      ***************************************************************************************************/
     private val authManager by lazy { GoogleAuthManager(this) }
-    private lateinit var mRequestGoogleDrivePermissions: ActivityResultLauncher<Intent>
-    private lateinit var mPermissionCallback: () -> Unit
 
     /***************************************************************************************************
      *   override functions
@@ -76,21 +70,6 @@ class DevActivity : BaseDevActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mRequestGoogleDrivePermissions =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                pauseLock()
-                when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                    true -> {
-                        mPermissionCallback.invoke()
-                    }
-
-                    false -> {
-                        makeSnackBar("Google account verification failed.")
-//                        progressContainer.visibility = View.GONE
-                    }
-                }
-            }
 
         val viewModel: BaseDevViewModel by viewModels()
 
@@ -203,23 +182,20 @@ class DevActivity : BaseDevActivity() {
             }
             SimpleCard(
                 "CredentialManager",
-                "checkAPI",
+                "checkCalendarAPI",
                 modifier = modifier,
             ) {
                 fun check() {
                     lifecycleScope.launch {
                         try {
-                            authManager.checkAPI(
+                            authManager.checkCalendarAPI(
                                 listOf(
                                     CalendarScopes.CALENDAR_READONLY,
                                     CalendarScopes.CALENDAR_EVENTS_READONLY,
                                 ),
                             )
                         } catch (e: UserRecoverableAuthIOException) {
-                            mRequestGoogleDrivePermissions.launch(e.intent)
-                            mPermissionCallback = {
-                                check()
-                            }
+                            makeToast(e.message ?: "Drive API Error")
                         }
                     }
                 }
@@ -243,21 +219,16 @@ class DevActivity : BaseDevActivity() {
                 description = null,
                 modifier = modifier,
             ) {
-                authManager.initGoogleAccount(lifecycleScope) { account ->
-                    DriveServiceHelper(this@DevActivity, account).run {
-                        initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                            if (photoFolderId != null) {
-                                Intent(context, FullBackupService::class.java).apply {
-                                    putExtra(
-                                        GDriveConstants.WORKING_FOLDER_ID,
-                                        photoFolderId,
-                                    )
-                                    ContextCompat.startForegroundService(context, this)
-                                }
-                            } else {
-                                makeSnackBar("Failed start a service.")
-                            }
-                        }
+                lifecycleScope.launch {
+                    val googleAccount = authManager.getGoogleAccount()
+                    val driveServiceHelper = DriveServiceHelper(this@DevActivity, googleAccount)
+                    val photoFolderId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME)
+                    Intent(this@DevActivity, FullBackupService::class.java).apply {
+                        putExtra(
+                            GDriveConstants.WORKING_FOLDER_ID,
+                            photoFolderId,
+                        )
+                        ContextCompat.startForegroundService(this@DevActivity, this)
                     }
                 }
             }

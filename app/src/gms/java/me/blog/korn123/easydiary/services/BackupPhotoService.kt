@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.services
 
+import GoogleAuthManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,8 +14,6 @@ import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.text.HtmlCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -51,14 +50,17 @@ class BackupPhotoService : Service() {
     private val targetFilenames = mutableListOf<String>()
     private lateinit var mPhotoPath: String
     private lateinit var mWorkingFolderId: String
+    private val authManager by lazy { GoogleAuthManager(this) }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential =
-            GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = googleSignInAccount?.account
+            GoogleAccountCredential.usingOAuth2(
+                this@BackupPhotoService,
+                Collections.singleton(DriveScopes.DRIVE_FILE),
+            )
+        credential.selectedAccount = authManager.getLastSignedInAccount()
         val googleDriveService: com.google.api.services.drive.Drive =
             com.google.api.services.drive.Drive
                 .Builder(
@@ -72,7 +74,8 @@ class BackupPhotoService : Service() {
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder =
             NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
-        mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
+        mPhotoPath =
+            "${EasyDiaryUtils.getApplicationDataDirectory(this@BackupPhotoService)}$DIARY_PHOTO_DIRECTORY"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
@@ -187,7 +190,7 @@ class BackupPhotoService : Service() {
     private fun uploadDiaryPhoto() {
         val fileName = targetFilenames[targetFilenamesCursor]
         mDriveServiceHelper
-            .createFile(
+            .createFileLegacy(
                 mWorkingFolderId,
                 mPhotoPath + fileName,
                 fileName,
