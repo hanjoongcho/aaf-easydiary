@@ -68,7 +68,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
-import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -1048,11 +1047,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         FlowRow(
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
-            SimpleCard(
-                "Fingerprint",
-                null,
-                modifier = modifier,
-            ) { startListeningFingerprint(this@BaseDevActivity) }
             SimpleCard(
                 "Biometric",
                 null,
