@@ -152,10 +152,15 @@ class GoogleAuthManager(
         return Account(email, AuthManager.ACCOUNT_TYPE_GOOGLE)
     }
 
-    fun getLastSignedInAccount(): Account? =
-        getEmail()?.let {
-            Account(it, AuthManager.ACCOUNT_TYPE_GOOGLE)
-        }
+    fun getLastSignedInAccount(): Account? {
+        val email = getEmail()
+        return if (isLoggedInLocal() && email != null) {
+            Account(
+                email,
+                AuthManager.ACCOUNT_TYPE_GOOGLE,
+            )
+        } else null
+    } 
 
     // --- Internal helper functions ---
 
@@ -196,7 +201,7 @@ class GoogleAuthManager(
         throw IllegalStateException("Unexpected credential type")
     }
 
-    suspend fun checkAPI(
+    suspend fun checkCalendarAPI(
         scopes: Collection<String>,
     ) {
         if (isLoggedInLocal()) {
