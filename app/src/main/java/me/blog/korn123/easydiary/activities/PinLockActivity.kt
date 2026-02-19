@@ -149,7 +149,7 @@ class PinLockActivity : BaseSimpleActivity() {
                                         showAlertDialog(
                                             getString(R.string.pin_verification_fail),
                                             DialogInterface.OnClickListener { _, _ ->
-                                                finishActivityWithPauseLock()
+                                                ActivityCompat.finishAffinity(this@PinLockActivity)
                                             },
                                             false,
                                         )
