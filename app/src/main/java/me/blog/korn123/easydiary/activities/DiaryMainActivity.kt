@@ -198,7 +198,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             object :
                 ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean =
-                    if (viewModel.isReady.value == true) {
+                    if (viewModel.isReady.value) {
                         mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
                         true
                     } else {
@@ -332,7 +332,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.isReady.value = true
+            viewModel.markAsReady()
         }, 700)
 
         if (config.enableDebugMode) openOverDueNotification()
@@ -919,11 +919,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
-
         mBinding.feelingSymbolButton.setOnClickListener {
             openFeelingSymbolDialog(
                 getString(R.string.diary_symbol_search_message),
-                viewModel.symbol.value ?: 0,
+                viewModel.symbol.value,
             ) { symbolSequence ->
                 selectFeelingSymbol(symbolSequence)
                 refreshList()

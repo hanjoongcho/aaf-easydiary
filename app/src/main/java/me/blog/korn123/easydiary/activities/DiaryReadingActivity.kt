@@ -1098,16 +1098,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
 
                 context?.run {
-                    mViewModel.isShowAddress.value = config.enableLocationInfo
                     if (config.enableLocationInfo) {
                         diaryDto.location?.let {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
                             locationLabel.text = it.address
-                        } ?: { mViewModel.isShowAddress.value = false }()
+                        }
                     }
 
-                    mViewModel.isShowContentsCounting.value = config.enableCountCharacters
                     if (config.enableCountCharacters) {
                         contentsLength.run {
 //                        setTextColor(config.textColor)

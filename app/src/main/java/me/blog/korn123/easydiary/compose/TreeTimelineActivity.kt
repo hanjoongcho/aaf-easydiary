@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -69,16 +70,16 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,
         )
-        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
-        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
-        val total: Int by treeViewModel.total.observeAsState(0)
+        val currentQuery: String by treeViewModel.currentQuery.collectAsState()
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
+        val total: Int by treeViewModel.total.collectAsState()
 
         fun toggleWholeTree(isExpand: Boolean) {
             treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))
         }
 
-        fun toggleChildren(fileNode: FileNode) {
-            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, fileNode))
+        fun toggleChildren(selectedNode: FileNode) {
+            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, selectedNode))
         }
 
         fetchDiary()
@@ -102,20 +103,8 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
                         folderOnClick = { node ->
-                            val newFirst =
-                                node.copy(isFolderOpen = node.isFolderOpen.not())
-                            // pair 객체가 리컴포지션 되도록
-                            treeViewModel.setTreeData(
-                                treeData.map { data ->
-                                    if (data.first.fullPath == node.fullPath) {
-                                        data.copy(first = newFirst)
-                                    } else {
-                                        data
-                                    }
-                                },
-                            )
                             // 폴더인 경우, 열고 닫기 토글
-                            toggleChildren(newFirst)
+                            toggleChildren(node)
                         },
                         resultAPICallback = { sequence ->
                             val resultIntent =

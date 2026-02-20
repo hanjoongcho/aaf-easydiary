@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
@@ -66,9 +67,9 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,
         )
-        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
-        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
-        val total: Int by treeViewModel.total.observeAsState(0)
+        val currentQuery: String by treeViewModel.currentQuery.collectAsState()
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
+        val total: Int by treeViewModel.total.collectAsState()
 
         fun toggleWholeTree(isExpand: Boolean) {
             treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))

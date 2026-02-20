@@ -30,7 +30,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -44,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -73,7 +71,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
-import me.blog.korn123.easydiary.compose.TreeTimelineActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -93,18 +90,11 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.navigationBarHeight
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
-import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.toggleLauncher
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_DEV
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ETC
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_LIFE
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_ETF
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_FICS
-import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
@@ -237,7 +227,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun Etc(
         modifier: Modifier,
@@ -247,14 +236,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         val currentContext = LocalContext.current
         val currentActivity = LocalActivity.current
         CategoryTitleCard(title = "Etc.")
-        AlarmCard(
-            alarmTime = 7 * 60,
-            alarmDays = "Mon, Tue, Wed, Thu, Fri",
-            alarmDescription = "Google Calendar sync",
-            modifier = Modifier,
-            isOn = true,
-            checkedChangeCallback = {},
-        ) {}
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
@@ -270,161 +251,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
-                "Tree Timeline",
-                "Show timeline in a tree structure",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, TreeTimelineActivity::class.java),
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "NestedScrollConnection",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 1)
-                    },
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "FullScreen",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 2)
-                    },
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "NestedScrollConnection With Auto Insets",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 3)
-                    },
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "FastScrollLazyColumnSample1",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 4)
-                    },
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "FastScrollLazyColumnSample2",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 5)
-                    },
-                )
-            }
-
-            SwitchCardWithImage(
-                title = stringResource(R.string.task_symbol_top_order_title),
-                description = stringResource(R.string.task_symbol_top_order_description),
-                modifier = modifier,
-                isOn = true,
-                imageResourceId = R.drawable.ic_select_symbol,
-            ) {}
-            SimpleCardWithImage(
-                title = stringResource(R.string.google_drive_account_information_title),
-                description = stringResource(R.string.google_drive_account_sign_in_description),
-                modifier = modifier,
-                imageResourceId = R.drawable.ic_select_symbol,
-            ) {}
-            SwitchCardWithImage(
-                title = stringResource(R.string.task_symbol_top_order_title),
-                description = stringResource(R.string.task_symbol_top_order_description),
-                modifier = modifier,
-                isOn = true,
-                imageResourceId = R.drawable.ic_select_symbol,
-            ) {}
-            var enableDebugOptionVisibleDiarySequence by remember {
-                mutableStateOf(
-                    currentContext.config.enableDebugOptionVisibleDiarySequence,
-                )
-            }
-            SwitchCard(
-                "Display Diary Sequence",
-                null,
-                modifier,
-                enableDebugOptionVisibleDiarySequence,
-            ) {
-                enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence.not()
-                config.enableDebugOptionVisibleDiarySequence = enableDebugOptionVisibleDiarySequence
-            }
-            var enableDebugOptionVisibleAlarmSequence by remember {
-                mutableStateOf(
-                    currentContext.config.enableDebugOptionVisibleAlarmSequence,
-                )
-            }
-            SwitchCard(
-                "Display Alarm Sequence",
-                null,
-                modifier,
-                enableDebugOptionVisibleAlarmSequence,
-            ) {
-                enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence.not()
-                config.enableDebugOptionVisibleAlarmSequence = enableDebugOptionVisibleAlarmSequence
-            }
-            var enableDebugOptionVisibleTreeStatus by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleTreeStatus) }
-            SwitchCard(
-                "Display Tree Status",
-                null,
-                modifier,
-                enableDebugOptionVisibleTreeStatus,
-            ) {
-                enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus.not()
-                config.enableDebugOptionVisibleTreeStatus = enableDebugOptionVisibleTreeStatus
-            }
-            var enableDebugOptionVisibleChartStock by remember { mutableStateOf(currentContext.config.enableDebugOptionVisibleChartStock) }
-            SwitchCard(
-                "Stock",
-                null,
-                modifier,
-                enableDebugOptionVisibleChartStock,
-            ) {
-                enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock.not()
-                config.enableDebugOptionVisibleChartStock = enableDebugOptionVisibleChartStock
-            }
-            var enableDebugOptionVisibleChartWeight by remember {
-                mutableStateOf(
-                    currentContext.config.enableDebugOptionVisibleChartWeight,
-                )
-            }
-            SwitchCard(
-                "Weight",
-                null,
-                modifier,
-                enableDebugOptionVisibleChartWeight,
-            ) {
-                enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight.not()
-                config.enableDebugOptionVisibleChartWeight = enableDebugOptionVisibleChartWeight
-            }
-            SimpleCard(
                 "Action Log",
-                "Open Action Log",
+                "Open dialog about action log",
                 modifier = modifier,
             ) {
                 val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
@@ -439,48 +267,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) { syncMarkDown(mBinding) }
             SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC dev",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_DEV) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC life",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_LIFE) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC etc",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_ETC) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC stock/FICS",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_FICS) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC stock/ETF",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_ETF) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC stock/knowledge",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding, DEV_SYNC_MARKDOWN_STOCK_KNOWLEDGE) }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "Push",
-                modifier = modifier,
-            ) { pushMarkDown("test.md", "Hello World!!!") }
-            SimpleCard(
                 "ReviewFlow",
-                null,
+                "Starts the review flow using com.google.android.play.core.review.ReviewManagerFactory.",
                 modifier = modifier,
             ) { startReviewFlow() }
             SimpleCard(
                 "Reset Showcase",
-                null,
+                "Resets the showcase execution history.",
                 modifier = modifier,
             ) {
                 getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
@@ -527,7 +320,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "Check Force Release URL",
-                null,
+                "https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json",
                 modifier = modifier,
             ) {
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -594,24 +387,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
-                "Font Preview Emoji",
-                null,
-                modifier = modifier,
-            ) {
-                config.enableDebugOptionVisibleFontPreviewEmoji =
-                    !config.enableDebugOptionVisibleFontPreviewEmoji
-                makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
-            }
-            SimpleCard(
-                "Display Temporary Diary",
-                null,
-                modifier = modifier,
-            ) {
-                config.enableDebugOptionVisibleTemporaryDiary =
-                    !config.enableDebugOptionVisibleTemporaryDiary
-                makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
-            }
-            SimpleCard(
                 "PickMultipleVisualMedia",
                 null,
                 modifier = modifier,
@@ -653,7 +428,183 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    protected fun DevModeSettings(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel,
+    ) {
+        val currentContext = LocalContext.current
+        val currentActivity = LocalActivity.current
+        CategoryTitleCard(title = "DevMode Settings")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow,
+        ) {
+            SwitchCard(
+                "Display Diary Sequence",
+                "Turning this option on will display the diary's sequence information.",
+                modifier = modifier,
+                viewModel.enableDebugOptionVisibleDiarySequence,
+            ) {
+                viewModel.toggleDebugOptionVisibleDiarySequence()
+            }
+
+            SwitchCard(
+                "Display Alarm Sequence",
+                "Turning this option on will display the alarm sequence information.",
+                modifier = modifier,
+                viewModel.enableDebugOptionVisibleAlarmSequence,
+            ) {
+                viewModel.toggleDebugOptionVisibleAlarmSequence()
+            }
+
+            SwitchCard(
+                "Display Tree Status",
+                "Turning this option on allows you to see the status information of the tree component.",
+                modifier = modifier,
+                viewModel.enableDebugOptionVisibleTreeStatus,
+            ) {
+                viewModel.toggleDebugOptionVisibleTreeStatus()
+            }
+
+            SwitchCard(
+                "Stock",
+                "Turning this option on activates the unofficial Stock Chart on the dashboard.",
+                modifier = modifier,
+                viewModel.enableDebugOptionVisibleChartStock,
+            ) {
+                viewModel.toggleDebugOptionVisibleChartStock()
+            }
+
+            SwitchCard(
+                "Weight",
+                "Turning this option on activates the unofficial Weight Chart on the dashboard.",
+                modifier = modifier,
+                viewModel.enableDebugOptionVisibleChartWeight,
+            ) {
+                viewModel.toggleDebugOptionVisibleChartWeight()
+            }
+
+            SimpleCard(
+                "Display Temporary Diary",
+                "Turning this option on includes temporary diaries in the list for lookup.",
+                modifier = modifier,
+            ) {
+                config.enableDebugOptionVisibleTemporaryDiary =
+                    !config.enableDebugOptionVisibleTemporaryDiary
+                makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+            }
+
+            SimpleCard(
+                "Font Preview Emoji",
+                "Turning this option on displays emojis together in the Font Preview Dialog.",
+                modifier = modifier,
+            ) {
+                config.enableDebugOptionVisibleFontPreviewEmoji =
+                    !config.enableDebugOptionVisibleFontPreviewEmoji
+                makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
+            }
+        }
+    }
+
+    @Composable
+    protected fun ComposeDemo(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel,
+    ) {
+        val currentContext = LocalContext.current
+        val currentActivity = LocalActivity.current
+        CategoryTitleCard(title = "ComposeDemo")
+        AlarmCard(
+            alarmTime = 7 * 60,
+            alarmDays = "Mon, Tue, Wed, Thu, Fri",
+            alarmDescription = "Google Calendar sync",
+            modifier = Modifier,
+            isOn = true,
+            checkedChangeCallback = {},
+        ) {}
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow,
+        ) {
+            SwitchCardWithImage(
+                title = "SwitchCardWithImage",
+                description = "Description...",
+                modifier = modifier,
+                isOn = true,
+                imageResourceId = R.drawable.ic_select_symbol,
+            ) {}
+            SimpleCardWithImage(
+                title = "SimpleCardWithImage",
+                description = "Description...",
+                modifier = modifier,
+                imageResourceId = R.drawable.ic_select_symbol,
+            ) {}
+            SimpleCard(
+                "Compose Demo",
+                "NestedScrollConnection",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 1)
+                    },
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "FullScreen",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 2)
+                    },
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "NestedScrollConnection With Auto Insets",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 3)
+                    },
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "FastScrollLazyColumnSample1",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 4)
+                    },
+                )
+            }
+            SimpleCard(
+                "Compose Demo",
+                "FastScrollLazyColumnSample2",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 5)
+                    },
+                )
+            }
+        }
+    }
+
     @Composable
     protected fun Notification(
         modifier: Modifier,
@@ -702,34 +653,29 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun LocationManager(
         modifier: Modifier,
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel,
     ) {
-        val currentContext = LocalContext.current
         CategoryTitleCard(title = "Location Manager")
-        val locationInfo by viewModel.locationInfo.observeAsState("")
         SimpleCard(
             "Location Info",
-            locationInfo,
+            viewModel.locationInfo,
             modifier = Modifier.fillMaxWidth(),
         ) {}
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
-            var enableDebugOptionToastLocation by remember { mutableStateOf(currentContext.config.enableDebugOptionToastLocation) }
             SwitchCard(
                 "Toast Message",
                 "Location Toast",
                 modifier,
-                enableDebugOptionToastLocation,
+                viewModel.enableDebugOptionToastLocation,
             ) {
-                enableDebugOptionToastLocation = enableDebugOptionToastLocation.not()
-                config.enableDebugOptionToastLocation = enableDebugOptionToastLocation
+                viewModel.toggleDebugOptionToastLocation()
             }
             SimpleCard(
                 "Location Manager",
@@ -753,7 +699,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun AlertDialog(
         modifier: Modifier,
@@ -766,38 +711,37 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 "Dialog",
-                "알림(DEFAULT)",
+                "Notification (DEFAULT)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.DEFAULT, false) }
             SimpleCard(
                 "Dialog",
-                "알림(INFO)",
+                "Notification (INFO)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.INFO, false) }
             SimpleCard(
                 "Dialog",
-                "알림(WARNING)",
+                "Notification (WARNING)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.WARNING, false) }
             SimpleCard(
                 "Dialog",
-                "알림(ERROR)",
+                "Notification (ERROR)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.ERROR, false) }
             SimpleCard(
                 "Dialog",
-                "알림(SETTING)",
+                "Notification (SETTING)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, null, DialogMode.SETTING, false) }
             SimpleCard(
                 "Dialog",
-                "확인(INFO)",
+                "Confirmation (INFO)",
                 modifier = modifier,
             ) { showAlertDialog("message", null, { _, _ -> }, DialogMode.INFO) }
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun DebugToast(
         modifier: Modifier,
@@ -871,7 +815,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun CustomLauncher(
         modifier: Modifier,
@@ -905,7 +848,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun Coroutine(
         modifier: Modifier,
@@ -913,7 +855,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         viewModel: BaseDevViewModel,
     ) {
         CategoryTitleCard(title = "Coroutine")
-        val coroutine1Console by viewModel.coroutine1Console.observeAsState("")
         val state = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
 
@@ -921,14 +862,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             message: String,
             tag: String = Thread.currentThread().name,
         ) {
-            mViewModel.coroutine1Console.value = coroutine1Console.plus("$tag: $message\n")
+            mViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
             coroutineScope.launch {
                 state.animateScrollBy(Float.MAX_VALUE)
             }
         }
         ScrollableCard(
             "Coroutine Info",
-            coroutine1Console,
+            mViewModel.coroutine1Console,
             Modifier
                 .fillMaxWidth(),
 //                        .height(100.dp)
@@ -1037,7 +978,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     protected fun FingerPrint(
         modifier: Modifier,
@@ -1054,47 +994,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) { startListeningBiometric(this@BaseDevActivity) }
         }
     }
-
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun CustomLauncherPreview() {
-//        AppTheme {
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                CustomLauncher(settingCardModifier, 1)
-//            }
-//        }
-//    }
-
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun NotificationPreview() {
-//        AppTheme {
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                Notification(settingCardModifier, 1)
-//            }
-//        }
-//    }
-
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun AlertDialogPreview() {
-//        AppTheme {
-//            val configuration = LocalConfiguration.current
-//            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                AlertDialog(settingCardModifier, maxItemsInEachRow)
-//            }
-//        }
-//    }
 
     @Preview(heightDp = 1200)
     @Composable
@@ -1113,66 +1012,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun LocationManagerPreview() {
-//        AppTheme {
-//            val configuration = LocalConfiguration.current
-//            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                LocationManager(settingCardModifier, maxItemsInEachRow, viewModel())
-//            }
-//        }
-//    }
-
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun DebugToastPreview() {
-//        AppTheme {
-//            val configuration = LocalConfiguration.current
-//            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                DebugToast(settingCardModifier, maxItemsInEachRow)
-//            }
-//        }
-//    }
-
-//    @Preview(heightDp = 600)
-//    @Composable
-//    protected fun CoroutinePreview() {
-//        AppTheme {
-//            val configuration = LocalConfiguration.current
-//            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                Coroutine(settingCardModifier, maxItemsInEachRow, viewModel())
-//            }
-//        }
-//    }
-
-//    @Preview(heightDp = 300)
-//    @Composable
-//    protected fun FingerPrintPreview() {
-//        AppTheme {
-//            val configuration = LocalConfiguration.current
-//            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-//            Column {
-//                val settingCardModifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                FingerPrint(settingCardModifier, maxItemsInEachRow)
-//            }
-//        }
-//    }
-
     /***************************************************************************************************
      *   etc functions
      *
@@ -1180,7 +1019,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private fun updateGPSProvider() {
         when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             true -> {
-                // hasGPSPermissions 대체가능하나 lint error 때문에 직접 체크
+                // hasGPSPermissions is replaceable, but check directly due to lint error
                 if (ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -1250,7 +1089,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         .also {
                             val contentTitle = "[${notification.id}] BigTextStyle Title"
                             val contentText =
-                                "contentText 영역 입니다. 긴 메시지를 표현하려면 NotificationCompat.BigTextStyle()을 사용하면 됩니다."
+                                "This is the contentText area. To express long messages, use NotificationCompat.BigTextStyle()."
                             it.setStyle(
                                 NotificationCompat
                                     .BigTextStyle()
@@ -1386,7 +1225,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 .also {
                                     val contentTitle = "[${notification.id}] Basic Notification"
                                     val contentText =
-                                        "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                        "This is a basic notification message. If there is too much content in a basic notification message, the message may not be displayed normally."
                                     it.setContentTitle(contentTitle)
                                     it.setContentText(contentText)
                                     it.setLargeIcon(bitmap)
@@ -1417,7 +1256,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         .also {
                             val contentTitle = "[${notification.id}] Basic Notification"
                             val contentText =
-                                "기본 알림 메시지 입니다. 기본 알림용 메시지에 내용이 너무 많으면 메시지가 정상적으로 보이지 않을 수 있습니다."
+                                "This is a basic notification message. If there is too much content in a basic notification message, the message may not be displayed normally."
                             it.setContentTitle(contentTitle)
                             it.setContentText(contentText)
                             it.setLargeIcon(
@@ -1485,7 +1324,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
 //                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
 //                makeSnackBar(info)
-                viewModel.locationInfo.value = info
+                viewModel.locationInfo = info
             }
         }
         when (hasGPSPermissions()) {
@@ -1585,20 +1424,3 @@ data class NotificationInfo(
  *   extensions
  *
  ***************************************************************************************************/
-// fun fun1(param1: String, block: (responseData: String) -> String): String {
-//    println(param1)
-//    return block("")
-// }
-//
-// fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
-//    println(param1)
-//    var blockReturn = block(param1)
-//    return param1
-// }
-//
-// fun test1() {
-//    val result = fun1("banana") { responseData ->
-//        "data: $responseData"
-//    }
-//    println(result)
-// }

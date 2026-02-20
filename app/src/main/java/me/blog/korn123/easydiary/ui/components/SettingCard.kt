@@ -999,7 +999,6 @@ fun SymbolCard(
         },
     callback: () -> Unit,
 ) {
-    val symbol by viewModel.symbol.observeAsState(1)
     Card(
         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
@@ -1022,11 +1021,11 @@ fun SymbolCard(
             modifier = Modifier.padding(15.dp),
         ) {
             SimpleText(
-                text = symbol.toString(),
+                text = viewModel.symbol.toString(),
                 fontFamily = fontFamily,
             )
             Image(
-                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(symbol)),
+                painter = painterResource(id = FlavorUtils.sequenceToSymbolResourceId(viewModel.symbol)),
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 contentScale = ContentScale.Crop,
