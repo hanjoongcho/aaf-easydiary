@@ -98,11 +98,12 @@ class DevActivity : BaseDevActivity() {
                             ) {
                                 val settingCardModifier =
                                     Modifier
-                                        .fillMaxWidth()
                                         .weight(1f)
 
                                 CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                                DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
                                 Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                                ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
                                 Notification(settingCardModifier, maxItemsInEachRow)
                                 AlertDialog(settingCardModifier, maxItemsInEachRow)
                                 LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
