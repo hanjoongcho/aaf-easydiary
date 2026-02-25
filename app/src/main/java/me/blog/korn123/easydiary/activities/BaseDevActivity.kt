@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -133,7 +132,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     protected lateinit var mBinding: ActivityBaseDevBinding
     private var mNotificationCount = 9000
-    private var mCoroutineJob1: Job? = null
+    private var mCoroutineJob: Job? = null
     protected val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener =
@@ -880,15 +879,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
-                "[T1] Start",
-                null,
+                title = "[T1] Start",
+                description = "0.5초 간격으로 Dispatchers.Default Scope로 Thread.currentThread().name을 참조한 후 Dispatchers.Main Scope에서 결과를 업데이트합니다.",
                 modifier = modifier,
             ) {
-                if (mCoroutineJob1?.isActive == true) {
+                if (mCoroutineJob?.isActive == true) {
                     updateConsole("Job has already started.")
                 } else {
-                    mCoroutineJob1 =
-                        lifecycleScope.launch(Dispatchers.IO) {
+                    mCoroutineJob =
+                        lifecycleScope.launch(Dispatchers.Default) {
                             // launch a new coroutine and keep a reference to its Job
                             for (i in 1..50) {
                                 if (isActive) {
@@ -906,22 +905,23 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "[T1] Stop",
-                null,
+                title = "[T1] Stop",
+                description = "Coroutine Job을 취소합니다.",
                 modifier = modifier,
             ) {
-                if (mCoroutineJob1?.isActive == true) {
-                    runBlocking { mCoroutineJob1?.cancelAndJoin() }
+                if (mCoroutineJob?.isActive == true) {
+                    lifecycleScope.launch { mCoroutineJob?.cancelAndJoin() }
                 } else {
                     updateConsole("The job has been canceled")
                 }
             }
             SimpleCard(
-                "[T1] Job Status",
+                title = "[T1] Job Status",
+                description = "Coroutine Job의 상태를 확인합니다.",
                 null,
                 modifier = modifier,
             ) {
-                mCoroutineJob1?.let {
+                mCoroutineJob?.let {
                     when (it.isActive) {
                         true -> updateConsole("On")
                         false -> updateConsole("Off")
@@ -931,8 +931,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "[T2] Multiple",
-                null,
+                title = "[T2] Multiple",
+                description = "3개의 Coroutine을 대기없이 실행합니다.",
                 modifier = modifier,
             ) {
                 for (k in 1..3) {
@@ -947,33 +947,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "[T3] runBlocking",
-                null,
+                "[T3] CoroutineScope Sync or Async",
+                "CoroutineScope 이전, 이후로 로그를 출력합니다.",
                 modifier = modifier,
             ) {
-                updateConsole("1")
-                runBlocking {
-                    launch {
-                        updateConsole("3")
-                        delay(2000)
-                        updateConsole("4")
-                    }
-                    updateConsole("2")
-                }
-            }
-            SimpleCard(
-                "[T4] CoroutineScope",
-                null,
-                modifier = modifier,
-            ) {
-                updateConsole("1")
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val name = Thread.currentThread().name
-                    withContext(Dispatchers.Main) { updateConsole("3", name) }
+                updateConsole("scope before launch")
+                lifecycleScope.launch {
+                    updateConsole("inner scope before delay")
                     delay(2000)
-                    withContext(Dispatchers.Main) { updateConsole("4", name) }
+                    updateConsole("inner scope after delay")
                 }
-                updateConsole("2")
+                updateConsole("scope after launch")
             }
         }
     }

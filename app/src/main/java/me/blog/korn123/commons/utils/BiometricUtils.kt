@@ -2,11 +2,9 @@ package me.blog.korn123.commons.utils
 
 import android.app.Activity
 import android.content.Context
-import android.hardware.biometrics.BiometricManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import me.blog.korn123.easydiary.R
@@ -23,19 +21,9 @@ class BiometricUtils {
             }
         }
 
-        /**
-         * Indicate whether this device can authenticate the user with biometrics
-         * @return true if there are any available biometric sensors and biometrics are enrolled on the device, if not, return false
-         */
-        @RequiresApi(Build.VERSION_CODES.Q)
-        @Suppress("DEPRECATION")
         private fun canAuthenticateWithBiometrics(context: Context): Boolean {
-            val biometricManager = context.getSystemService(BiometricManager::class.java)
-            return if (biometricManager != null) {
-                biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
-            } else {
-                false
-            }
+            val biometricManager = androidx.biometric.BiometricManager.from(context)
+            return biometricManager.canAuthenticate(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
         }
 
         private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
@@ -48,7 +36,6 @@ class BiometricUtils {
             }
         }
 
-        @RequiresApi(Build.VERSION_CODES.P)
         private fun showBiometricPrompt(activity: AppCompatActivity) {
             activity.run {
                 val authenticationCallback = getAuthenticationCallback(activity)
@@ -68,7 +55,6 @@ class BiometricUtils {
             }
         }
 
-        @RequiresApi(Build.VERSION_CODES.P)
         private fun getAuthenticationCallback(activity: Activity): BiometricPrompt.AuthenticationCallback =
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(
