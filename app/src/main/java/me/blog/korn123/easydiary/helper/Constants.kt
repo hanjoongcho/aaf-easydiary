@@ -653,8 +653,6 @@ const val ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP =
 const val ATTACH_PHOTO_MARGIN_DP = 3F
 const val ATTACH_PHOTO_CARD_CONTENT_PADDING_DP = 3F
 
-const val IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT = "is_tree_timeline_launch_mode_default"
-
 /***************************************************************************************************
  *   AAFactory Legacy
  *
@@ -890,4 +888,13 @@ object AuthManager {
     const val GOOGLE_EMAIL = "google_email"
     const val GOOGLE_PROFILE_PIC_URI = "google_profile_pic_uri"
     const val GOOGLE_DISPLAY_NAME = "google_display_name"
+}
+
+object TreeConstants {
+    const val IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT = "is_tree_timeline_launch_mode_default"
+    const val ROOT_NODE = "root_node"
+    const val SORT_OPTION_ASC = "asc"
+    const val SORT_OPTION_DESC = "desc"
+    const val LEVEL_ZERO = 0
+    const val LEVEL_START = 1
 }

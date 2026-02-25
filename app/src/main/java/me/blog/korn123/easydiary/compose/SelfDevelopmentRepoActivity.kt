@@ -154,11 +154,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     if (pair.second == 1) pair.first.isShow = true
 
                     // 이전 상태 유지
-                    val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+                    val originNode = originTreeData.find { it.first.fullPath == pair.first.fullPath }
                     if (originNode != null) {
                         pair.first.isFolderOpen = originNode.first.isFolderOpen
                         pair.first.isShow = originNode.first.isShow
-                        pair.first.isRootShow = originNode.first.isRootShow
+                        pair.first.isParentFolderOpen = originNode.first.isParentFolderOpen
                     }
 
                     pair

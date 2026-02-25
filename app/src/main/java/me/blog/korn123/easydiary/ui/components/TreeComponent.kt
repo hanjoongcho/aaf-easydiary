@@ -155,7 +155,7 @@ fun TreeContent(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val filteredTreeData: List<Pair<FileNode, Int>> =
-        treeData.filter { data -> data.first.isRootShow && data.first.isShow }
+        treeData.filter { data -> data.first.isParentFolderOpen && data.first.isShow }
 
     fun moveScrollPosition() {
         if (context.config.enableDebugOptionVisibleTreeStatus) {
@@ -279,7 +279,7 @@ fun TreeContent(
                         currentTimeMillis = node.currentTimeMillis,
                         isFile = node.isFile,
                         currentQuery = currentQuery,
-                        isRootShow = node.isRootShow,
+                        isRootShow = node.isParentFolderOpen,
                         isShow = node.isShow,
                         isFolderOpen = node.isFolderOpen,
                         visibleSubTitle = visibleSubTitle,
