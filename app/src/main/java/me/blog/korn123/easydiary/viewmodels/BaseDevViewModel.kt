@@ -75,4 +75,22 @@ class BaseDevViewModel(
         config.enableDebugOptionToastLocation = newValue
         enableDebugOptionToastLocation = newValue
     }
+
+    var enableDebugOptionVisibleTemporaryDiary by mutableStateOf(config.enableDebugOptionVisibleTemporaryDiary)
+        private set
+
+    fun toggleDebugOptionVisibleTemporaryDiary() {
+        val newValue = enableDebugOptionVisibleTemporaryDiary.not()
+        config.enableDebugOptionVisibleTemporaryDiary = newValue
+        enableDebugOptionVisibleTemporaryDiary = newValue
+    }
+
+    var enableDebugOptionVisibleFontPreviewEmoji by mutableStateOf(config.enableDebugOptionVisibleFontPreviewEmoji)
+        private set
+
+    fun toggleDebugOptionVisibleFontPreviewEmoji() {
+        val newValue = enableDebugOptionVisibleFontPreviewEmoji.not()
+        config.enableDebugOptionVisibleFontPreviewEmoji = newValue
+        enableDebugOptionVisibleFontPreviewEmoji = newValue
+    }
 }

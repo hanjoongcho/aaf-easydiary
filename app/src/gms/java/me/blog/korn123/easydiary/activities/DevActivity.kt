@@ -101,16 +101,20 @@ class DevActivity : BaseDevActivity() {
                                         .weight(1f)
 
                                 CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
+
                                 DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
+                                DebugToast(settingCardModifier, maxItemsInEachRow)
+
                                 Etc(settingCardModifier, maxItemsInEachRow, viewModel)
                                 ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
                                 Notification(settingCardModifier, maxItemsInEachRow)
                                 AlertDialog(settingCardModifier, maxItemsInEachRow)
+
                                 LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                                DebugToast(settingCardModifier, maxItemsInEachRow)
                                 Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
                                 FingerPrint(settingCardModifier, maxItemsInEachRow)
-                                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
+
                                 Spacer(
                                     modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
                                 )

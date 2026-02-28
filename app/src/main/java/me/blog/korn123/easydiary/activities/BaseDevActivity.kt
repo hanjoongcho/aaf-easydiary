@@ -62,7 +62,6 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.DateUtils
@@ -485,24 +484,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 viewModel.toggleDebugOptionVisibleChartWeight()
             }
 
-            SimpleCard(
-                "Display Temporary Diary",
-                "Turning this option on includes temporary diaries in the list for lookup.",
+            SwitchCard(
+                title = "Display Temporary Diary",
+                description = "Turning this option on includes temporary diaries in the list for lookup.",
                 modifier = modifier,
+                isOn = viewModel.enableDebugOptionVisibleTemporaryDiary,
             ) {
-                config.enableDebugOptionVisibleTemporaryDiary =
-                    !config.enableDebugOptionVisibleTemporaryDiary
-                makeSnackBar("Status: ${config.enableDebugOptionVisibleTemporaryDiary}")
+                viewModel.toggleDebugOptionVisibleTemporaryDiary()
             }
 
-            SimpleCard(
-                "Font Preview Emoji",
-                "Turning this option on displays emojis together in the Font Preview Dialog.",
+            SwitchCard(
+                title = "Font Preview Emoji",
+                description = "Turning this option on displays emojis together in the Font Preview Dialog.",
                 modifier = modifier,
+                isOn = viewModel.enableDebugOptionVisibleFontPreviewEmoji,
             ) {
-                config.enableDebugOptionVisibleFontPreviewEmoji =
-                    !config.enableDebugOptionVisibleFontPreviewEmoji
-                makeSnackBar("Status: ${config.enableDebugOptionVisibleFontPreviewEmoji}")
+                viewModel.toggleDebugOptionVisibleFontPreviewEmoji()
             }
         }
     }
