@@ -1,19 +1,19 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.Activity
+import GoogleAuthManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
@@ -30,26 +30,28 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
+import androidx.lifecycle.lifecycleScope
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.services.calendar.CalendarScopes
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.BuildConfig
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.services.FullBackupService
 import me.blog.korn123.easydiary.ui.components.CardContainer
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.components.SimpleCard
+import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import java.util.Locale
@@ -59,7 +61,7 @@ class DevActivity : BaseDevActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mRequestGoogleSignInLauncher: ActivityResultLauncher<Intent>
+    private val authManager by lazy { GoogleAuthManager(this) }
 
     /***************************************************************************************************
      *   override functions
@@ -69,25 +71,6 @@ class DevActivity : BaseDevActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRequestGoogleSignInLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
-                pauseLock()
-                when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                    true -> {
-                        // The Task returned from this call is always completed, no need to attach
-                        // a listener.
-                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-                        val googleSignAccount = task.getResult(ApiException::class.java)
-                        googleSignAccount?.account?.let { account ->
-                            GoogleOAuthHelper.callAccountCallback(account)
-                        }
-                    }
-
-                    false -> {
-                        makeSnackBar("Google account verification failed.")
-                    }
-                }
-            }
         val viewModel: BaseDevViewModel by viewModels()
 
         mBinding.composeView.setContent {
@@ -109,29 +92,43 @@ class DevActivity : BaseDevActivity() {
                     },
                     containerColor = Color(config.screenBackgroundColor),
                     content = { innerPadding ->
-                        CardContainer(
-                            modifier = Modifier.padding(innerPadding),
-                        ) {
-                            val settingCardModifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                            CustomLauncher(settingCardModifier, maxItemsInEachRow)
-                            Etc(settingCardModifier, maxItemsInEachRow, viewModel)
-                            Notification(settingCardModifier, maxItemsInEachRow)
-                            AlertDialog(settingCardModifier, maxItemsInEachRow)
-                            LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                            DebugToast(settingCardModifier, maxItemsInEachRow)
-                            Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
-                            FingerPrint(settingCardModifier, maxItemsInEachRow)
-                            GoogleMobileService(settingCardModifier, maxItemsInEachRow)
-                            Spacer(
-                                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
-                            )
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            CardContainer(
+                                modifier = Modifier.padding(innerPadding),
+                            ) {
+                                val settingCardModifier =
+                                    Modifier
+                                        .weight(1f)
+
+                                CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                                DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
+                                Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                                ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
+                                Notification(settingCardModifier, maxItemsInEachRow)
+                                AlertDialog(settingCardModifier, maxItemsInEachRow)
+                                LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
+                                DebugToast(settingCardModifier, maxItemsInEachRow)
+                                Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
+                                FingerPrint(settingCardModifier, maxItemsInEachRow)
+                                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
+                                Spacer(
+                                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
+                                )
+                            }
+                            if (mViewModel.isLoading) {
+                                LoadingScreen()
+                            }
                         }
                     },
                 )
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        authManager.getProfileUri()?.let {
+            mViewModel.profilePicUri = if (authManager.isLoggedInLocal()) it else null
         }
     }
 
@@ -150,17 +147,72 @@ class DevActivity : BaseDevActivity() {
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
+            SimpleCardWithImage(
+                title = "CredentialManager",
+                description = "signIn",
+                imageResourceId = R.drawable.logo_google_oauth2,
+                imageUrl = mViewModel.profilePicUri?.toUri(),
+                modifier = modifier,
+            ) {
+                lifecycleScope.launch {
+                    authManager.signIn().onSuccess { user ->
+                        mViewModel.profilePicUri = user.profilePicUri
+                    }
+                }
+            }
+            SimpleCard(
+                "CredentialManager",
+                "signOut",
+                modifier = modifier,
+            ) {
+                mViewModel.isLoading = true
+                lifecycleScope.launch {
+                    authManager.signOut()
+                    mViewModel.isLoading = false
+                    mViewModel.profilePicUri = null
+                }
+            }
+            SimpleCard(
+                "CredentialManager",
+                "tryAutoSignIn",
+                modifier = modifier,
+            ) {
+                lifecycleScope.launch {
+                    authManager.tryAutoSignIn()
+                }
+            }
+            SimpleCard(
+                "CredentialManager",
+                "checkCalendarAPI",
+                modifier = modifier,
+            ) {
+                fun check() {
+                    lifecycleScope.launch {
+                        try {
+                            authManager.checkCalendarAPI(
+                                listOf(
+                                    CalendarScopes.CALENDAR_READONLY,
+                                    CalendarScopes.CALENDAR_EVENTS_READONLY,
+                                ),
+                            )
+                        } catch (e: UserRecoverableAuthIOException) {
+                            makeToast(e.message ?: "Drive API Error")
+                        }
+                    }
+                }
+                check()
+            }
             SimpleCard(
                 title = "Check Google Sign Account",
                 description = null,
                 modifier = modifier,
             ) {
-                if (GoogleOAuthHelper.isValidGoogleSignAccount(this@DevActivity)) {
-                    GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.run {
-                        showAlertDialog(account!!.name, null, null, DialogMode.DEFAULT, false)
+                if (authManager.isLoggedInLocal()) {
+                    authManager.getEmail()?.let {
+                        showAlertDialog(it, null, null, DialogMode.DEFAULT, false)
                     }
                 } else {
-                    showAlertDialog("Sign account is invalid.")
+                    authManager.notifyFailedGetGoogleAccount()
                 }
             }
             SimpleCard(
@@ -168,21 +220,16 @@ class DevActivity : BaseDevActivity() {
                 description = null,
                 modifier = modifier,
             ) {
-                GoogleOAuthHelper.getGoogleSignAccount(this@DevActivity)?.account?.let { account ->
-                    DriveServiceHelper(this@DevActivity, account).run {
-                        initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                            if (photoFolderId != null) {
-                                Intent(context, FullBackupService::class.java).apply {
-                                    putExtra(
-                                        GDriveConstants.WORKING_FOLDER_ID,
-                                        photoFolderId,
-                                    )
-                                    ContextCompat.startForegroundService(context, this)
-                                }
-                            } else {
-                                makeSnackBar("Failed start a service.")
-                            }
-                        }
+                lifecycleScope.launch {
+                    val googleAccount = authManager.getGoogleAccount()
+                    val driveServiceHelper = DriveServiceHelper(this@DevActivity, googleAccount)
+                    val photoFolderId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME)
+                    Intent(this@DevActivity, FullBackupService::class.java).apply {
+                        putExtra(
+                            GDriveConstants.WORKING_FOLDER_ID,
+                            photoFolderId,
+                        )
+                        ContextCompat.startForegroundService(this@DevActivity, this)
                     }
                 }
             }

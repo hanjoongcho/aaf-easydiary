@@ -34,6 +34,8 @@ class ZipHelper(
     private lateinit var mBuilder: NotificationCompat.Builder
     private val mFileNames = ArrayList<String>()
     private var mRootDirectoryName: String? = null
+    private var lastUpdateTime = 0L
+    private val updateInterval = 1000L
     var isOnProgress = true
 
     @SuppressLint("NewApi")
@@ -85,7 +87,7 @@ class ZipHelper(
 
     private fun updateCompressProgress(progress: Int) {
         val currentTime = System.currentTimeMillis()
-        if (isOnProgress && progress == mFileNames.size.minus(1) || currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+        if ((isOnProgress && progress == mFileNames.size.minus(1)) || currentTime - lastUpdateTime >= updateInterval) {
             lastUpdateTime = currentTime
             val message = mFileNames[progress]
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
@@ -98,16 +100,13 @@ class ZipHelper(
         }
     }
 
-    private var lastUpdateTime = 0L
-    private val UPDATE_INTERVAL = 1000L
-
     private fun updateDecompressProgress(
         progress: Int,
         totalCount: Int,
         fileName: String,
     ) {
         val currentTime = System.currentTimeMillis()
-        if (isOnProgress && progress == totalCount - 1 || currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+        if ((isOnProgress && progress == totalCount - 1) || currentTime - lastUpdateTime >= updateInterval) {
             lastUpdateTime = currentTime
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder

@@ -182,14 +182,6 @@ class DailySymbolFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     /***************************************************************************************************
      *   etc functions
      *

@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -29,7 +29,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.helper.TreeConstants
+import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -42,12 +43,10 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
      *   override functions
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val isResultAPI = !intent.getBooleanExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, true)
+        val isResultAPI = intent.getBooleanExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, true).not()
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             TreeTimeline(isResultAPI = isResultAPI)
         }
         showBetaFeatureMessage()
@@ -65,22 +64,21 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun TreeTimeline(isResultAPI: Boolean = false) {
         val context = LocalContext.current
-        mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,
         )
-        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
-        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
-        val total: Int by treeViewModel.total.observeAsState(0)
+        val currentQuery: String by treeViewModel.currentQuery.collectAsState()
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
+        val total: Int by treeViewModel.total.collectAsState()
 
         fun toggleWholeTree(isExpand: Boolean) {
             treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))
         }
 
-        fun toggleChildren(fileNode: FileNode) {
-            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, fileNode))
+        fun toggleChildren(selectedNode: FileNode) {
+            treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, selectedNode))
         }
 
         fetchDiary()
@@ -104,20 +102,8 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
                         folderOnClick = { node ->
-                            val newFirst =
-                                node.copy(isFolderOpen = node.isFolderOpen.not())
-                            // pair 객체가 리컴포지션 되도록
-                            treeViewModel.setTreeData(
-                                treeData.map { data ->
-                                    if (data.first.fullPath == node.fullPath) {
-                                        data.copy(first = newFirst)
-                                    } else {
-                                        data
-                                    }
-                                },
-                            )
                             // 폴더인 경우, 열고 닫기 토글
-                            toggleChildren(newFirst)
+                            toggleChildren(node)
                         },
                         resultAPICallback = { sequence ->
                             val resultIntent =
@@ -165,7 +151,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                     buildFileTree(diaryItems, addOptionalTitle = true) { diary ->
                         "${diary.dateString}".split("-").toMutableList()
                     }
-                val originTreeData = flattenTree(fileNode, sortOption = "desc")
+                val originTreeData = flattenTree(fileNode, sortOption = TreeConstants.SORT_OPTION_ASC)
                 treeData =
                     originTreeData.map { pair ->
                         if (pair.second == 1) pair.first.isShow = true
@@ -209,28 +195,28 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val diaryItems = findDiary()
         val fileNode =
             buildFileTree(
-                diaryItems,
+                items = diaryItems,
                 addOptionalTitle = true,
                 addOptionalSortPrefix = true,
             ) { diary ->
                 "${diary.dateString}".split("-").toMutableList()
             }
-        val newTreeData = flattenTree(fileNode, sortOption = "asc")
+        val newTreeData = flattenTree(node = fileNode, sortOption = TreeConstants.SORT_OPTION_ASC)
         val originTreeData = treeViewModel.treeData.value
         treeViewModel.setTreeData(
             treeData =
                 newTreeData.map { pair ->
-                    if (pair.second == 1) pair.first.isShow = true
+                    pair.apply {
+                        if (second == TreeConstants.LEVEL_START) first.isShow = true
 
-                    // 이전 상태 유지
-                    val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
-                    if (originNode != null) {
-                        pair.first.isFolderOpen = originNode.first.isFolderOpen
-                        pair.first.isShow = originNode.first.isShow
-                        pair.first.isRootShow = originNode.first.isRootShow
+                        // 이전 상태 유지
+                        val originNode = originTreeData.find { it.first.fullPath == first.fullPath }
+                        if (originNode != null) {
+                            first.isFolderOpen = originNode.first.isFolderOpen
+                            first.isShow = originNode.first.isShow
+                            first.isParentFolderOpen = originNode.first.isParentFolderOpen
+                        }
                     }
-
-                    pair
                 },
         )
         treeViewModel.setTotal(diaryItems.size)

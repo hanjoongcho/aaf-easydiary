@@ -60,7 +60,6 @@ import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
-import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
@@ -78,6 +77,7 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ZIP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_XLS
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
+import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -188,7 +188,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         updateFragmentUI(mBinding.root)
-        initPreference()
 
         mBinding.composeView.setContent {
             AppTheme {
@@ -342,7 +341,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     override fun onResume() {
         super.onResume()
         updateFragmentUI(mBinding.root)
-        initPreference()
     }
 
     /***************************************************************************************************
@@ -701,9 +699,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-
-    private fun initPreference() {}
-
     private fun showLocationSelectionPopup(
         popupMode: Int,
         internalTitle: String,
@@ -737,7 +732,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     when (popupMode) {
                         SettingLocalConstants.MODE_BACKUP -> {
                             setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
-                                EasyDiaryUtils.writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+                                EasyDiaryUtils.writeFileWithSAF(RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
                             }
                         }
 

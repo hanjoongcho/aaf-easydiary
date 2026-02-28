@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">다이어리 포스트카드</string>
     <string name="postcard_viewer_no_cards_saved">저장된 다이어리 포스트카드가 없습니다.</string>
     <string name="google_drive_connect_message">Google Drive 연동중…</string>
-    <string name="diary_count">건</string>
     <string name="menu_calendar">캘린더</string>
     <string name="menu_chart">통계</string>
     <string name="menu_timeline">타임라인</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">상위항목으로</string>
     <string name="link_entry_as_child">하위항목으로</string>
     <string name="link_entry_later">다음에</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

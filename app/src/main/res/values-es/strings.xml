@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">Postal del diario</string>
     <string name="postcard_viewer_no_cards_saved">No hay postal guardada en el diario.</string>
     <string name="google_drive_connect_message">Google Drive sincronizado…</string>
-    <string name="diary_count"></string>
     <string name="menu_calendar">Calendario</string>
     <string name="menu_chart">Estadísticas</string>
     <string name="menu_timeline">Cronología</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

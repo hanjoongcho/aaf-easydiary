@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
@@ -44,7 +45,6 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            mSettingsViewModel = initSettingsViewModel()
             SelfDevelopmentRepo()
         }
     }
@@ -62,15 +62,14 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun SelfDevelopmentRepo() {
         val context = LocalContext.current
-        mSettingsViewModel = initSettingsViewModel()
         LocalActivity.current?.updateSystemStatusBarColor()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,
         )
-        val currentQuery: String by treeViewModel.currentQuery.observeAsState("")
-        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.observeAsState(emptyList())
-        val total: Int by treeViewModel.total.observeAsState(0)
+        val currentQuery: String by treeViewModel.currentQuery.collectAsState()
+        val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
+        val total: Int by treeViewModel.total.collectAsState()
 
         fun toggleWholeTree(isExpand: Boolean) {
             treeViewModel.setTreeData(TreeUtils.toggleWholeTree(treeData, isExpand))
@@ -155,11 +154,11 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                     if (pair.second == 1) pair.first.isShow = true
 
                     // 이전 상태 유지
-                    val originNode = originTreeData?.find { it.first.fullPath == pair.first.fullPath }
+                    val originNode = originTreeData.find { it.first.fullPath == pair.first.fullPath }
                     if (originNode != null) {
                         pair.first.isFolderOpen = originNode.first.isFolderOpen
                         pair.first.isShow = originNode.first.isShow
-                        pair.first.isRootShow = originNode.first.isRootShow
+                        pair.first.isParentFolderOpen = originNode.first.isParentFolderOpen
                     }
 
                     pair

@@ -140,7 +140,6 @@
     <string name="postcard_viewer_title">Tagebuch-Postkarten</string>
     <string name="postcard_viewer_no_cards_saved">Keine gespeicherten Postkarten vorhanden.</string>
     <string name="google_drive_connect_message">Synchronisiere mit Google Drive …</string>
-    <string name="diary_count"></string>
     <string name="menu_calendar">Kalender</string>
     <string name="menu_chart">Statistik</string>
     <string name="menu_timeline">Zeitleiste</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

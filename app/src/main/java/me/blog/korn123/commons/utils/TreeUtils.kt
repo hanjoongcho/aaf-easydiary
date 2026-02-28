@@ -1,23 +1,31 @@
 package me.blog.korn123.commons.utils
 
+import me.blog.korn123.easydiary.helper.TreeConstants
 import me.blog.korn123.easydiary.models.Diary
 
-
 object TreeUtils {
-
     /**
      * Flattens the file tree into a list of pairs containing the node and its level in the tree.
      * The root node is excluded from the result.
      */
-    fun flattenTree(node: FileNode, level: Int = 0, sortOption: String = "asc"): List<Pair<FileNode, Int>> {
+    fun flattenTree(
+        node: FileNode,
+        level: Int = 0,
+        sortOption: String = TreeConstants.SORT_OPTION_ASC,
+    ): List<Pair<FileNode, Int>> {
         val list = mutableListOf<Pair<FileNode, Int>>()
-        if (node.name != "root") list.add(node to level)
+        if (node.name != TreeConstants.ROOT_NODE) list.add(node to level)
         when (sortOption) {
-            "asc" -> node.children.sortedBy { it.fullPath }.forEach {
-                list.addAll(flattenTree(it, level + 1, sortOption))
+            TreeConstants.SORT_OPTION_ASC -> {
+                node.children.sortedBy { it.fullPath }.forEach {
+                    list.addAll(flattenTree(it, level + 1, sortOption))
+                }
             }
-            "desc" -> node.children.sortedByDescending { it.fullPath }.forEach {
-                list.addAll(flattenTree(it, level + 1, sortOption))
+
+            TreeConstants.SORT_OPTION_DESC -> {
+                node.children.sortedByDescending { it.fullPath }.forEach {
+                    list.addAll(flattenTree(it, level + 1, sortOption))
+                }
             }
         }
         return list
@@ -28,8 +36,13 @@ object TreeUtils {
      * Each path is expected to be in the format "dir1/dir2/file.txt".
      * If addOptionalTitle is true, the file name is added as the last part of the path.
      */
-    fun buildFileTree(items: List<Diary>, addOptionalTitle: Boolean = false, addOptionalSortPrefix: Boolean = false, partsGenerator: (diary: Diary) -> MutableList<String>): FileNode {
-        val root = FileNode("root", sequence = 0, weather = 0)
+    fun buildFileTree(
+        items: List<Diary>,
+        addOptionalTitle: Boolean = false,
+        addOptionalSortPrefix: Boolean = false,
+        partsGenerator: (diary: Diary) -> MutableList<String>,
+    ): FileNode {
+        val root = FileNode(name = TreeConstants.ROOT_NODE, sequence = 0, weather = 0)
         for (diary in items) {
             var current = root
 //            val parts = "${diary.dateString}".split("-").toMutableList()
@@ -38,19 +51,27 @@ object TreeUtils {
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 val isFile = i == parts.lastIndex
-                partPath += if (partPath.isEmpty()) part else if (isFile && addOptionalSortPrefix) "/${diary.currentTimeMillis.div(1000)}_$part" else "/$part"
+                partPath +=
+                    if (partPath.isEmpty()) {
+                        part
+                    } else if (isFile && addOptionalSortPrefix) {
+                        "/${diary.currentTimeMillis.div(1000)}_$part"
+                    } else {
+                        "/$part"
+                    }
                 val existing = current.children.find { it.name == part }
                 if (existing != null) {
                     current = existing
                 } else {
-                    val newNode = FileNode(
-                        name = part,
-                        fullPath = partPath,
-                        isFile = isFile,
-                        sequence = diary.sequence,
-                        weather = diary.weather,
-                        currentTimeMillis = diary.currentTimeMillis,
-                    )
+                    val newNode =
+                        FileNode(
+                            name = part,
+                            fullPath = partPath,
+                            isFile = isFile,
+                            sequence = diary.sequence,
+                            weather = diary.weather,
+                            currentTimeMillis = diary.currentTimeMillis,
+                        )
                     current.children.add(newNode)
                     current = newNode
                 }
@@ -59,42 +80,53 @@ object TreeUtils {
         return root
     }
 
-    fun toggleWholeTree(treeData: List<Pair<FileNode, Int>>, isExpand: Boolean): List<Pair<FileNode, Int>> {
-        return treeData.map { data ->
-            if (data.second == 1) {
-                data.copy(first = data.first.copy(isFolderOpen = isExpand))
-            } else if (data.first.isFile) {
-                data.copy(first = data.first.copy(isShow = isExpand, isRootShow = isExpand))
+    fun toggleWholeTree(
+        treeData: List<Pair<FileNode, Int>>,
+        isExpand: Boolean,
+    ): List<Pair<FileNode, Int>> =
+        treeData.map { pair ->
+            if (pair.second == TreeConstants.LEVEL_START) {
+                pair.copy(first = pair.first.copy(isFolderOpen = isExpand))
+            } else if (pair.first.isFile) {
+                pair.copy(first = pair.first.copy(isShow = isExpand, isParentFolderOpen = isExpand))
             } else {
-                data.copy(first = data.first.copy(isFolderOpen = isExpand, isShow = isExpand, isRootShow = isExpand))
+                pair.copy(first = pair.first.copy(isFolderOpen = isExpand, isShow = isExpand, isParentFolderOpen = isExpand))
             }
         }
-    }
 
-    fun toggleChildren(treeData: List<Pair<FileNode, Int>>, fileNode: FileNode): List<Pair<FileNode, Int>> {
-        return treeData.map { data ->
-            // 자식 노드인 경우
-            if (data.first.fullPath.startsWith(fileNode.fullPath) && data.first.fullPath != fileNode.fullPath) {
-                val isFirstChildNode = fileNode.children.any {child -> child.fullPath == data.first.fullPath}
+    fun toggleChildren(
+        treeData: List<Pair<FileNode, Int>>,
+        selectedNode: FileNode,
+    ): List<Pair<FileNode, Int>> =
+        treeData.map { pair ->
+            val isSelectedFolderOpen = selectedNode.isFolderOpen.not()
 
-                // 폴더인 경우, isFolderOpen 상태에 따라 isShow 결정
+            if (pair.first.fullPath == selectedNode.fullPath) {
+                // 자기자신인 경우
+                pair.copy(first = pair.first.copy(isFolderOpen = isSelectedFolderOpen))
+            } else if (pair.first.fullPath.startsWith(selectedNode.fullPath) && pair.first.fullPath != selectedNode.fullPath) {
+                // 자식 노드인 경우
+                val isFirstChildNode = selectedNode.children.any { child -> child.fullPath == pair.first.fullPath }
                 if (isFirstChildNode) {
-                    data.copy(first = data.first.copy(isShow = fileNode.isFolderOpen, isRootShow = isRootNodeVisible(treeData, data)))
+                    // 선택노드 하위 1레벨 자식인 경우 선택노드 오픈여부에 따라 isShow 처리
+                    pair.copy(first = pair.first.copy(isShow = isSelectedFolderOpen, isParentFolderOpen = isSelectedFolderOpen))
                 } else {
-                    data.copy(first = data.first.copy(isRootShow = isRootNodeVisible(treeData, data)))
+                    pair.copy(first = pair.first.copy(isParentFolderOpen = isSelectedFolderOpen))
                 }
-            // 자기 자신인 경우
             } else {
-                data
+                pair
             }
         }
-    }
 
-    fun isRootNodeVisible (treeData: List<Pair<FileNode, Int>>, data: Pair<FileNode, Int>): Boolean {
-        if (data.second == 1) return true
+    @Deprecated(message = "Deprecated")
+    fun isRootNodeVisible(
+        treeData: List<Pair<FileNode, Int>>,
+        pair: Pair<FileNode, Int>,
+    ): Boolean {
+        if (pair.second == TreeConstants.LEVEL_START) return true
 
         var isShow = false
-        val parentNode = data.first.fullPath.split("/")
+        val parentNode = pair.first.fullPath.split("/")
         var currentPath = ""
         for (i in 0 until parentNode.size.minus(1)) {
             currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
@@ -115,5 +147,5 @@ data class FileNode(
     var fullPath: String = "",
     var isShow: Boolean = true, // 현재 보이는 지 여부
     var isFolderOpen: Boolean = true, // 자기 자신이 폴더 일때 열려 있는지 여부
-    var isRootShow: Boolean = true, // 루트 폴더가 보이는 지 여부
+    var isParentFolderOpen: Boolean = true, // 상위 폴더가 열려 있는지 여부
 )

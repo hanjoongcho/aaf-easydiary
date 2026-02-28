@@ -133,41 +133,37 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         fontFamily = fontFamily,
                     ) {
                         mActivity.run {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                when (config.fingerprintLockEnable) {
-                                    true -> {
-                                        fingerprintLockEnable = false
-                                        config.fingerprintLockEnable = fingerprintLockEnable
-                                        showAlertDialog(getString(R.string.fingerprint_setting_release))
-                                        applyPolicyForRecentApps()
-                                    }
+                            when (config.fingerprintLockEnable) {
+                                true -> {
+                                    fingerprintLockEnable = false
+                                    config.fingerprintLockEnable = fingerprintLockEnable
+                                    showAlertDialog(getString(R.string.fingerprint_setting_release))
+                                    applyPolicyForRecentApps()
+                                }
 
-                                    false -> {
-                                        when (config.aafPinLockEnable) {
-                                            true -> {
-                                                fingerprintLockEnable = true
-                                                config.fingerprintLockEnable = fingerprintLockEnable
-                                                startActivity(
-                                                    Intent(
-                                                        this,
-                                                        FingerprintLockActivity::class.java,
-                                                    ).apply {
-                                                        putExtra(
-                                                            FingerprintLockConstants.LAUNCHING_MODE,
-                                                            FingerprintLockConstants.ACTIVITY_SETTING,
-                                                        )
-                                                    },
-                                                )
-                                            }
+                                false -> {
+                                    when (config.aafPinLockEnable) {
+                                        true -> {
+                                            fingerprintLockEnable = true
+                                            config.fingerprintLockEnable = fingerprintLockEnable
+                                            startActivity(
+                                                Intent(
+                                                    this,
+                                                    FingerprintLockActivity::class.java,
+                                                ).apply {
+                                                    putExtra(
+                                                        FingerprintLockConstants.LAUNCHING_MODE,
+                                                        FingerprintLockConstants.ACTIVITY_SETTING,
+                                                    )
+                                                },
+                                            )
+                                        }
 
-                                            false -> {
-                                                mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting))
-                                            }
+                                        false -> {
+                                            mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting))
                                         }
                                     }
                                 }
-                            } else {
-                                mActivity.showAlertDialog(getString(R.string.fingerprint_not_available))
                             }
                         }
                     }

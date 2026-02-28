@@ -44,7 +44,6 @@ class PostcardAdapter(
     override fun getItemCount() = listPostcard.size
 
     @SuppressLint("DefaultLocale")
-    @NonNull
     override fun getSectionName(position: Int): String = String.format("%d. %s", position + 1, listPostcard[position].file.name)
 
     fun onItemHolderClick(itemHolder: PostcardViewHolder) {

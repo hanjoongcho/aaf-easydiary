@@ -141,7 +141,6 @@
     <string name="postcard_viewer_title">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ</string>
     <string name="postcard_viewer_no_cards_saved">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ ᱵᱟᱝ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱᱟ ᱾</string>
     <string name="google_drive_connect_message">Google Drive ᱫᱚ ᱥᱭᱸᱠ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ…</string>
-    <string name="diary_count"></string>
     <string name="menu_calendar">ᱯᱟᱸᱡᱤ</string>
     <string name="menu_chart">ᱥᱴᱟᱴᱤᱥᱴᱤ ᱠᱚ</string>
     <string name="menu_timeline">ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ</string>
@@ -1137,4 +1136,5 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
+    <string name="menu_speech_to_text">Speech To Text</string>
 </resources>

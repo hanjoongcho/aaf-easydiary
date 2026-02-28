@@ -88,12 +88,12 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryReadingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
@@ -699,11 +699,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     private fun textToSpeech(text: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ttsGreater21(text)
-        } else {
-            ttsUnder20(text)
-        }
+        ttsGreater21(text)
     }
 
     @Suppress("DEPRECATION")
@@ -722,7 +718,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, map)
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun ttsGreater21(text: String) {
         val utteranceId = this.hashCode().toString() + ""
         mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
@@ -1098,16 +1093,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
 
                 context?.run {
-                    mViewModel.isShowAddress.value = config.enableLocationInfo
                     if (config.enableLocationInfo) {
                         diaryDto.location?.let {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
                             locationLabel.text = it.address
-                        } ?: { mViewModel.isShowAddress.value = false }()
+                        }
                     }
 
-                    mViewModel.isShowContentsCounting.value = config.enableCountCharacters
                     if (config.enableCountCharacters) {
                         contentsLength.run {
 //                        setTextColor(config.textColor)
@@ -1150,15 +1143,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun encryptData(inputPass: String) {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)!!
-                realmInstance.beginTransaction()
-                diaryDto.isEncrypt = true
-                diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
-                diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
-                diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
-                realmInstance.commitTransaction()
-                realmInstance.close()
-                initContents()
+                EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)?.let { diaryDto ->
+                    realmInstance.beginTransaction()
+                    diaryDto.isEncrypt = true
+                    diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
+                    diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
+                    diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
+                    realmInstance.commitTransaction()
+                    realmInstance.close()
+                    initContents()
+                }
             }
         }
 

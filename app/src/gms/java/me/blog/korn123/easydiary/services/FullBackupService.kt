@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.services
 
+import GoogleAuthManager
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -14,8 +15,6 @@ import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.text.HtmlCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -28,19 +27,17 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
+import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
@@ -55,6 +52,7 @@ class FullBackupService : Service() {
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private var mInProcessJob = true
     private var workStatusList = arrayListOf<WorkStatus>()
+    private val authManager by lazy { GoogleAuthManager(this) }
 
     data class WorkStatus(
         var localDeviceFileCount: Int = 0,
@@ -79,10 +77,9 @@ class FullBackupService : Service() {
             ),
             this,
         )
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential =
             GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = googleSignInAccount?.account
+        credential.selectedAccount = authManager.getLastSignedInAccount()
         val googleDriveService: com.google.api.services.drive.Drive =
             com.google.api.services.drive.Drive
                 .Builder(
@@ -336,7 +333,7 @@ class FullBackupService : Service() {
     ) {
         val fileName = workStatus.targetFilenames[workStatus.targetFilenamesCursor]
         mDriveServiceHelper
-            .createFile(
+            .createFileLegacy(
                 mWorkingFolderId,
                 mPhotoPath + fileName,
                 fileName,
@@ -421,13 +418,13 @@ class FullBackupService : Service() {
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
+        authManager.getLastSignedInAccount()?.let { account ->
             DriveServiceHelper(applicationContext, account).run {
                 initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
                     val dbFileName =
-                        DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+                        RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
                     if (realmFolderId != null) {
-                        createFile(
+                        createFileLegacy(
                             realmFolderId,
                             EasyDiaryDbHelper.getRealmPath(),
                             dbFileName,
