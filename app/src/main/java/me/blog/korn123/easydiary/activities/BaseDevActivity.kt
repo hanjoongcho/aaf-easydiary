@@ -974,8 +974,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
-                "Biometric",
-                null,
+                "StartListeningBiometric",
+                "Shows the biometric prompt to the user. The prompt survives lifecycle changes by default. To cancel authentication and dismiss the prompt, use cancelAuthentication().",
                 modifier = modifier,
             ) { startListeningBiometric(this@BaseDevActivity) }
         }

@@ -23,7 +23,9 @@ class BiometricUtils {
 
         private fun canAuthenticateWithBiometrics(context: Context): Boolean {
             val biometricManager = androidx.biometric.BiometricManager.from(context)
-            return biometricManager.canAuthenticate(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+            return biometricManager.canAuthenticate(
+                androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG,
+            ) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
         }
 
         private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
