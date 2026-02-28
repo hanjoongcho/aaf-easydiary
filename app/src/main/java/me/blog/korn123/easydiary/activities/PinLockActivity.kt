@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View

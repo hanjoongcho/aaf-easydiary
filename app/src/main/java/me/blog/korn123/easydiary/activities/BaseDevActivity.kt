@@ -824,25 +824,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
             modifier = Modifier,
         ) {
-            SimpleCard(
+            SimpleCardWithImage(
                 "EasyDiary Launcher",
-                null,
+                description = "Basic launcher icon",
                 modifier = modifier,
+                imageResourceId = R.drawable.ic_launcher_round,
             ) { toggleLauncher(Launcher.EASY_DIARY) }
-            SimpleCard(
+
+            SimpleCardWithImage(
                 "Dark Launcher",
-                null,
+                "Dark theme launcher icon",
                 modifier = modifier,
+                imageResourceId = R.drawable.ic_launcher_dark_round,
             ) { toggleLauncher(Launcher.DARK) }
-            SimpleCard(
+            SimpleCardWithImage(
                 "Green Launcher",
-                null,
+                "Green theme launcher icon",
                 modifier = modifier,
+                imageResourceId = R.drawable.ic_launcher_green_round,
             ) { toggleLauncher(Launcher.GREEN) }
-            SimpleCard(
+            SimpleCardWithImage(
                 "Debug Launcher",
-                null,
+                "Debug launcher icon",
                 modifier = modifier,
+                imageResourceId = R.drawable.ic_launcher_debug_round,
             ) { toggleLauncher(Launcher.DEBUG) }
         }
     }
