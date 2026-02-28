@@ -147,11 +147,14 @@ class PinLockActivity : BaseSimpleActivity() {
                                     false -> {
                                         holdCurrentOrientation()
                                         showAlertDialog(
-                                            getString(R.string.pin_verification_fail),
-                                            DialogInterface.OnClickListener { _, _ ->
-                                                ActivityCompat.finishAffinity(this@PinLockActivity)
-                                            },
-                                            false,
+                                            message = getString(R.string.pin_verification_fail),
+                                            positiveListener =
+                                                { _, _ ->
+                                                    ActivityCompat.finishAffinity(this@PinLockActivity)
+                                                },
+                                            negativeListener = null,
+                                            dialogMode = DialogMode.DEFAULT,
+                                            cancelable = false,
                                         )
                                     }
                                 }

@@ -491,7 +491,7 @@ fun Context.openOverDueNotification() {
                 getString(R.string.dismiss),
                 PendingIntent.getService(
                     this,
-                    notificationInfo.id /*Private request code for the sender*/,
+                    notificationInfo.id,
                     Intent(this, NotificationService::class.java).apply {
                         action = NotificationConstants.ACTION_DEV_DISMISS
                         putExtra(
@@ -547,7 +547,7 @@ fun Context.openOverDueNotification() {
                             it.setContentIntent(
                                 PendingIntent.getActivity(
                                     this,
-                                    notification.id /*Private request code for the sender*/,
+                                    notification.id,
                                     Intent(this, DiaryReadingActivity::class.java).apply {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         putExtra(DIARY_SEQUENCE, diary.sequence)
