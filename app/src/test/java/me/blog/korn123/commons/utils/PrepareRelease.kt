@@ -140,8 +140,8 @@ class PrepareRelease {
                     if (file.name.startsWith("RELEASE")) {
                         val locale =
                             when {
-                                file.name.startsWith("RELEASE_en") -> "en"
-                                file.name.startsWith("RELEASE_ja") -> "ja"
+                                file.name.startsWith("RELEASE_en.txt") -> "en"
+                                file.name.startsWith("RELEASE_ja.txt") -> "ja"
                                 else -> "ko"
                             }
                         val releaseNotes = FileUtils.readLines(file, StandardCharsets.UTF_8)
