@@ -843,6 +843,10 @@
         v1.4.341.202602050 / 2026.02.05\n
         Improve UI/UX for Android 16
     </string>
+    <string name="release_343">
+        v1.4.343.202603010 / 2026.03.01\n
+        Updated GMS login handling
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

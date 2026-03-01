@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.343.202603010 (date: 2026.03.01)
+  * Updated GMS login handling
+
 # Changes in 1.4.341.202602050 (date: 2026.02.05)
   * Improve UI/UX for Android 16
 
