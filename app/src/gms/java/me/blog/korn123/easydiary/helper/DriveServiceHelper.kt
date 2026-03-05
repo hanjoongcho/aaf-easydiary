@@ -16,13 +16,8 @@
 package me.blog.korn123.easydiary.helper
 
 import android.accounts.Account
-import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.OpenableColumns
 import android.util.Log
-import androidx.core.util.Pair
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -128,7 +123,8 @@ class DriveServiceHelper(
     ): String =
         withContext(Dispatchers.IO) {
             // --- STEP 1: 최상위 폴더(AAF) 찾기 ---
-            val rootQueryTask = queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
+            val rootQueryTask =
+                queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
             val rootResult = Tasks.await(rootQueryTask)
 
             // 폴더 ID 결정 (없으면 만들고, 있으면 가져옴)
@@ -143,7 +139,8 @@ class DriveServiceHelper(
                 }
 
             // --- STEP 2: 작업 폴더(EasyDiary) 찾기 ---
-            val workingQueryTask = queryFiles("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
+            val workingQueryTask =
+                queryFiles("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
             val workingResult = Tasks.await(workingQueryTask)
 
             val finalWorkingFolderId =
@@ -229,25 +226,6 @@ class DriveServiceHelper(
                 ?: throw IOException("Null result when requesting file creation.")
     }
 
-    // FIXME: Drive file creation and data creation to be done at once
-    fun uploadFile(
-        fileId: String,
-        filePath: String,
-        mimeType: String,
-    ): Task<Void> =
-        Tasks.call(
-            mExecutor,
-            Callable<Void> {
-                // Convert content to an AbstractInputStreamContent instance.
-                val contentStream =
-                    ByteArrayContent(mimeType, IOUtils.toByteArray(FileInputStream(File(filePath))))
-
-                // Update the metadata and contents.
-                mDriveService.files().update(fileId, null, contentStream).execute()
-                null
-            },
-        )
-
     fun downloadFile(
         fileId: String,
         destFilePath: String,
@@ -259,67 +237,6 @@ class DriveServiceHelper(
                     mDriveService.files().get(fileId).executeMediaAsInputStream(),
                     FileOutputStream(File(destFilePath)),
                 )
-            },
-        )
-
-    fun readFile(fileId: String): Task<List<String>> =
-        Tasks.call(
-            mExecutor,
-            Callable<List<String>> {
-                IOUtils.readLines(
-                    mDriveService.files().get(fileId).executeMediaAsInputStream(),
-                    "UTF-8",
-                )
-            },
-        )
-
-    /**
-     * Opens the file identified by `fileId` and returns a [Pair] of its name and
-     * contents.
-     */
-//    fun readFile(fileId: String): Task<Pair<String, String>> {
-//        return Tasks.call(mExecutor, Callable {
-//            // Retrieve the metadata as a File object.
-//            val metadata = mDriveService.files().get(fileId).execute()
-//            val name = metadata.name
-//
-//            // Stream the file contents to a String.
-//            mDriveService.files().get(fileId).executeMediaAsInputStream().use { `is` ->
-//                BufferedReader(InputStreamReader(`is`)).use { reader ->
-//                    val stringBuilder = StringBuilder()
-//                    var line: String
-//
-//                    while ((line = reader.readLine()) != null) {
-//                        stringBuilder.append(line)
-//                    }
-//                    val contents = stringBuilder.toString()
-//
-//                    return@Tasks.call Pair . create < String, String>(name, contents)
-//                }
-//            }
-//        })
-//    }
-
-    /**
-     * Updates the file identified by `fileId` with the given `name` and `content`.
-     */
-    fun saveFile(
-        fileId: String,
-        name: String,
-        content: String,
-    ): Task<Void> =
-        Tasks.call(
-            mExecutor,
-            Callable<Void> {
-                // Create a File containing any metadata changes.
-                val metadata = File().setName(name)
-
-                // Convert content to an AbstractInputStreamContent instance.
-                val contentStream = ByteArrayContent.fromString("text/plain", content)
-
-                // Update the metadata and contents.
-                mDriveService.files().update(fileId, metadata, contentStream).execute()
-                null
             },
         )
 
@@ -377,50 +294,4 @@ class DriveServiceHelper(
             }
         }
     }
-
-    /**
-     * Returns an [Intent] for opening the Storage Access Framework file picker.
-     */
-    fun createFilePickerIntent(): Intent {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "text/plain"
-
-        return intent
-    }
-
-    /**
-     * Opens the file at the `uri` returned by a Storage Access Framework [Intent]
-     * created by [.createFilePickerIntent] using the given `contentResolver`.
-     */
-    fun openFileUsingStorageAccessFramework(
-        contentResolver: ContentResolver,
-        uri: Uri,
-    ): Task<Pair<String, String>> =
-        Tasks.call(
-            mExecutor,
-            Callable {
-                // Retrieve the document's display name from its metadata.
-                var name: String? = null
-                contentResolver.query(uri, null, null, null, null)!!.use { cursor ->
-                    if (cursor != null && cursor.moveToFirst()) {
-                        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        name = cursor.getString(nameIndex)
-                    } else {
-                        throw IOException("Empty cursor returned for file.")
-                    }
-                }
-
-                // Read the document's contents as a String.
-                var content: String? = null
-                contentResolver.openInputStream(uri)!!.use { stream ->
-                    val sb = StringBuilder()
-                    val lines = IOUtils.readLines(stream, "UTF-8")
-                    lines.forEach { sb.append(it) }
-                    content = sb.toString()
-                }
-
-                Pair.create(name, content)
-            },
-        )
 }
