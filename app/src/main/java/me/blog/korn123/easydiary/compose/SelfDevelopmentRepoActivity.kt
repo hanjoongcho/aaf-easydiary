@@ -29,6 +29,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSDAQ
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TreeConstants
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -97,20 +98,8 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
                         updateQuery = { treeViewModel.setCurrentQuery(it) },
                         toggleWholeTree = { toggleWholeTree(it) },
                         folderOnClick = { node ->
-                            val newFirst =
-                                node.copy(isFolderOpen = node.isFolderOpen.not())
-                            // pair 객체가 리컴포지션 되도록
-                            treeViewModel.setTreeData(
-                                treeData.map { data ->
-                                    if (data.first.fullPath == node.fullPath) {
-                                        data.copy(first = newFirst)
-                                    } else {
-                                        data
-                                    }
-                                },
-                            )
                             // 폴더인 경우, 열고 닫기 토글
-                            toggleChildren(newFirst)
+                            toggleChildren(node)
                         },
                         resultAPICallback = { /* no-op */ },
                     )
@@ -143,7 +132,9 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     fun fetchDiary() {
         val diaryItems = findDiary()
         val fileNode =
-            buildFileTree(diaryItems) { diary ->
+            buildFileTree(
+                items = diaryItems,
+            ) { diary ->
                 diary.title!!.split("/").toMutableList()
             }
         val newTreeData = flattenTree(fileNode)
@@ -151,20 +142,19 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
         treeViewModel.setTreeData(
             treeData =
                 newTreeData.map { pair ->
-                    if (pair.second == 1) pair.first.isShow = true
+                    pair.apply {
+                        if (second == TreeConstants.LEVEL_START) first.isShow = true
 
-                    // 이전 상태 유지
-                    val originNode = originTreeData.find { it.first.fullPath == pair.first.fullPath }
-                    if (originNode != null) {
-                        pair.first.isFolderOpen = originNode.first.isFolderOpen
-                        pair.first.isShow = originNode.first.isShow
-                        pair.first.isParentFolderOpen = originNode.first.isParentFolderOpen
+                        // 이전 상태 유지
+                        val originNode = originTreeData.find { it.first.fullPath == first.fullPath }
+                        if (originNode != null) {
+                            first.isFolderOpen = originNode.first.isFolderOpen
+                            first.isShow = originNode.first.isShow
+                            first.isParentFolderOpen = originNode.first.isParentFolderOpen
+                        }
                     }
-
-                    pair
                 },
         )
-//                        total = diaryItems.filter { diary ->  diary.title!!.endsWith(".md") }.size
         treeViewModel.setTotal(diaryItems.size)
     }
 }

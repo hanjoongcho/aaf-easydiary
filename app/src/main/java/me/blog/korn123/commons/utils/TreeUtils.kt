@@ -104,7 +104,7 @@ object TreeUtils {
             if (pair.first.fullPath == selectedNode.fullPath) {
                 // 자기자신인 경우
                 pair.copy(first = pair.first.copy(isFolderOpen = isSelectedFolderOpen))
-            } else if (pair.first.fullPath.startsWith(selectedNode.fullPath) && pair.first.fullPath != selectedNode.fullPath) {
+            } else if (pair.first.fullPath.startsWith(selectedNode.fullPath + "/") && pair.first.fullPath != selectedNode.fullPath) {
                 // 자식 노드인 경우
                 val isFirstChildNode = selectedNode.children.any { child -> child.fullPath == pair.first.fullPath }
                 if (isFirstChildNode) {

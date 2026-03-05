@@ -17,6 +17,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.widget.Button
@@ -249,6 +250,25 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
+                "GitHub MarkDown Page",
+                "SYNC ALL",
+                modifier = modifier,
+            ) { syncMarkDown(mBinding) }
+            SimpleCard(
+                "Check Build Info",
+                "android.os.Build 패키지로 확인이 가능한 디바이스 정보",
+                modifier = modifier,
+            ) {
+                showAlertDialog(
+                    "" +
+                        "제조사: ${Build.MANUFACTURER}\n" +
+                        "모델: ${Build.MODEL}\n" +
+                        "OS: ${Build.VERSION.RELEASE}\n" +
+                        "SDK: ${Build.VERSION.SDK_INT}\n" +
+                        "",
+                )
+            }
+            SimpleCard(
                 "Action Log",
                 "Open dialog about action log",
                 modifier = modifier,
@@ -259,11 +279,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     actionLogs,
                 ) { EasyDiaryDbHelper.deleteActionLogAll() }
             }
-            SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC ALL",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding) }
             SimpleCard(
                 "ReviewFlow",
                 "Starts the review flow using com.google.android.play.core.review.ReviewManagerFactory.",
@@ -410,12 +425,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     } ?: makeToast("Next schedule does not exist.")
                 }
             }
-            SymbolCard(
-                modifier = modifier,
-                viewModel,
-            ) {
-                viewModel.plus()
-            }
             SimpleCard(
                 "NavigationBar Height",
                 null,
@@ -538,6 +547,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
                 imageResourceId = R.drawable.ic_select_symbol,
             ) {}
+            SymbolCard(
+                modifier = modifier,
+                viewModel,
+            ) {
+                viewModel.plus()
+            }
             SimpleCard(
                 "Compose Demo",
                 "NestedScrollConnection",

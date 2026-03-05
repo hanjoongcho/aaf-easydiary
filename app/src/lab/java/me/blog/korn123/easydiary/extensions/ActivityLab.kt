@@ -244,7 +244,7 @@ fun ComponentActivity.syncMarkDown(
                     }
                     if (syncMode == DEV_SYNC_MARKDOWN_ALL || syncMode == DEV_SYNC_MARKDOWN_DEV) {
                         fetchContents(
-                            "dev",
+                            "dev-vault",
                             true,
                         )
                     }
