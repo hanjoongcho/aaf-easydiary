@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.services
 
 import GoogleAuthManager
-import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -129,7 +128,7 @@ class RecoverPhotoService : Service() {
 
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper
-            .queryFiles(
+            .queryFilesLegacy(
                 "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,
@@ -168,7 +167,7 @@ class RecoverPhotoService : Service() {
 
     private fun recoverPhoto() {
         mDriveServiceHelper
-            .queryFiles(
+            .queryFilesLegacy(
                 "'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false",
                 1,
                 null,

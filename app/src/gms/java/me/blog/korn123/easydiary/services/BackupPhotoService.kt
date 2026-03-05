@@ -151,7 +151,7 @@ class BackupPhotoService : Service() {
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
         mDriveServiceHelper
-            .queryFiles(
+            .queryFilesLegacy(
                 "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,

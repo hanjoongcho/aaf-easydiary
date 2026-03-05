@@ -345,7 +345,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         }
 
     /**
-     * Executes Google API tasks; if a permission error occurs, 
+     * Executes Google API tasks; if a permission error occurs,
      * automatically displays a popup and retries upon approval.
      */
     suspend fun <T> runWithGmsAuth(
@@ -356,7 +356,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 // 1. Attempt the original task
                 block()
             } catch (e: UserRecoverableAuthIOException) {
-                // 2. Permission error occurred! 
+                // 2. Permission error occurred!
                 // Go to the UI thread, show the permission popup, and wait for the result (suspends here)
                 val isGranted =
                     withContext(Dispatchers.Main) {
@@ -442,74 +442,73 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
             val googleAccount = authManager.getGoogleAccount()
             requestDrivePermissions()
             val driveServiceHelper = DriveServiceHelper(requireContext(), googleAccount)
-//            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
-            driveServiceHelper
-                .queryFiles(
+            runCatching {
+                driveServiceHelper.queryFiles(
                     "(mimeType = '${
                         EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString(
                             "' or mimeType = '",
                         )
                     }') and trashed = false",
                     1000,
-                ).addOnSuccessListener {
-                    var alertDialog: AlertDialog? = null
-                    val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
-                    it.files.map { file ->
-                        val itemInfo =
-                            hashMapOf<String, String>(
-                                "name" to file.name,
-                                "id" to file.id,
-                                "createdTime" to file.createdTime.toString(),
-                            )
-                        realmFiles.add(itemInfo)
-                    }
-                    val builder = AlertDialog.Builder(requireActivity())
-                    builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> requireActivity().clearHoldOrientation() }
-//                        builder.setMessage(getString(R.string.open_realm_file_message))
-                    val inflater =
-                        requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
-                    val listView = fontView.findViewById<ListView>(R.id.files)
-                    val adapter =
-                        RealmFileItemAdapter(
-                            requireActivity(),
-                            R.layout.item_realm_file,
-                            realmFiles,
+                )
+            }.onSuccess { fileList ->
+                var alertDialog: AlertDialog? = null
+                val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
+                fileList.files.map { file ->
+                    val itemInfo =
+                        hashMapOf<String, String>(
+                            "name" to file.name,
+                            "id" to file.id,
+                            "createdTime" to file.createdTime.toString(),
                         )
-                    listView.adapter = adapter
-                    listView.onItemClickListener =
-                        AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val itemInfo =
-                                parent.adapter.getItem(position) as HashMap<String, String>
-                            itemInfo["id"]?.let { realmFileId ->
-                                progressContainer.visibility = View.VISIBLE
-                                val realmPath = EasyDiaryDbHelper.getRealmPath()
-                                EasyDiaryDbHelper.closeInstance()
-                                driveServiceHelper.downloadFile(realmFileId, realmPath).run {
-                                    addOnSuccessListener {
-                                        requireActivity().refreshApp()
-                                    }
-                                    addOnFailureListener { }
-                                }
-                            }
-                            alertDialog?.cancel()
-                        }
-
-                    alertDialog =
-                        builder.create().apply {
-                            requireActivity().updateAlertDialog(
-                                this,
-                                null,
-                                fontView,
-                                "${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})",
-                            )
-                        }
-                    progressContainer.visibility = View.GONE
-                }.addOnFailureListener { e ->
-                    e.printStackTrace()
-                    requireActivity().makeSnackBar(e.message ?: "Please try again later.")
-                    progressContainer.visibility = View.GONE
+                    realmFiles.add(itemInfo)
                 }
+                val builder = AlertDialog.Builder(requireActivity())
+                builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> requireActivity().clearHoldOrientation() }
+                val inflater =
+                    requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
+                val listView = fontView.findViewById<ListView>(R.id.files)
+                val adapter =
+                    RealmFileItemAdapter(
+                        requireActivity(),
+                        R.layout.item_realm_file,
+                        realmFiles,
+                    )
+                listView.adapter = adapter
+                listView.onItemClickListener =
+                    AdapterView.OnItemClickListener { parent, view, position, id ->
+                        val itemInfo =
+                            parent.adapter.getItem(position) as HashMap<String, String>
+                        itemInfo["id"]?.let { realmFileId ->
+                            progressContainer.visibility = View.VISIBLE
+                            val realmPath = EasyDiaryDbHelper.getRealmPath()
+                            EasyDiaryDbHelper.closeInstance()
+                            driveServiceHelper.downloadFile(realmFileId, realmPath).run {
+                                addOnSuccessListener {
+                                    requireActivity().refreshApp()
+                                }
+                                addOnFailureListener { }
+                            }
+                        }
+                        alertDialog?.cancel()
+                    }
+
+                alertDialog =
+                    builder.create().apply {
+                        requireActivity().updateAlertDialog(
+                            this,
+                            null,
+                            fontView,
+                            "${getString(R.string.open_realm_file_title)} (Total: ${fileList.files.size})",
+                        )
+                    }
+                progressContainer.visibility = View.GONE
+            }.onFailure { e ->
+                e.printStackTrace()
+                requireActivity().makeSnackBar(e.message ?: "Please try again later.")
+                progressContainer.visibility = View.GONE
+            }
         }
     }
 

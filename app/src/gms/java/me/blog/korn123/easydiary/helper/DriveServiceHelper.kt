@@ -73,7 +73,7 @@ class DriveServiceHelper(
         callback: (workingFolderId: String?) -> Unit,
     ) {
         // 01. AAF 폴더 검색
-        queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
+        queryFilesLegacy("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
                 when (result.files.size) {
                     // 02. AAF 폴더 없으면 생성
@@ -92,7 +92,7 @@ class DriveServiceHelper(
                     // 03. workingFolder 검색
                     1 -> {
                         val parentId = result.files[0].id
-                        queryFiles("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
+                        queryFilesLegacy("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
                             when (it.files.size) {
                                 // 03-01. workingFolder 생성
                                 0 -> {
@@ -124,7 +124,7 @@ class DriveServiceHelper(
         withContext(Dispatchers.IO) {
             // --- STEP 1: 최상위 폴더(AAF) 찾기 ---
             val rootQueryTask =
-                queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
+                queryFilesLegacy("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
             val rootResult = Tasks.await(rootQueryTask)
 
             // 폴더 ID 결정 (없으면 만들고, 있으면 가져옴)
@@ -140,7 +140,7 @@ class DriveServiceHelper(
 
             // --- STEP 2: 작업 폴더(EasyDiary) 찾기 ---
             val workingQueryTask =
-                queryFiles("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
+                queryFilesLegacy("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
             val workingResult = Tasks.await(workingQueryTask)
 
             val finalWorkingFolderId =
@@ -249,7 +249,8 @@ class DriveServiceHelper(
      * request Drive Full Scope in the [Google
      * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
-    fun queryFiles(
+    @Deprecated(message = "Use queryFiles() instead for coroutine")
+    fun queryFilesLegacy(
         q: String,
         pageSize: Int = 10,
         nextPageToken: String? = null,
@@ -291,6 +292,44 @@ class DriveServiceHelper(
                             .execute()
                     },
                 )
+            }
+        }
+    }
+
+    suspend fun queryFiles(
+        q: String,
+        pageSize: Int = 10,
+        nextPageToken: String? = null,
+    ): FileList {
+        Log.i("GSuite H", nextPageToken ?: "없어~")
+        Log.i("GSuite H", q)
+        val fields = "nextPageToken, files(id, name, mimeType, createdTime)"
+        return withContext(Dispatchers.IO) {
+            when (nextPageToken == null) {
+                true -> {
+                    mDriveService
+                        .files()
+                        .list()
+                        .setQ(q)
+                        .setFields(fields)
+                        .setSpaces("drive")
+                        .setOrderBy("createdTime desc")
+                        .setPageSize(pageSize)
+                        .execute()
+                }
+
+                false -> {
+                    mDriveService
+                        .files()
+                        .list()
+                        .setQ(q)
+                        .setFields(fields)
+                        .setSpaces("drive")
+                        .setOrderBy("createdTime desc")
+                        .setPageSize(pageSize)
+                        .setPageToken(nextPageToken)
+                        .execute()
+                }
             }
         }
     }
