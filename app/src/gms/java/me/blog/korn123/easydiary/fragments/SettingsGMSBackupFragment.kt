@@ -484,11 +484,9 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             progressContainer.visibility = View.VISIBLE
                             val realmPath = EasyDiaryDbHelper.getRealmPath()
                             EasyDiaryDbHelper.closeInstance()
-                            driveServiceHelper.downloadFile(realmFileId, realmPath).run {
-                                addOnSuccessListener {
-                                    requireActivity().refreshApp()
-                                }
-                                addOnFailureListener { }
+                            lifecycleScope.launch {
+                                driveServiceHelper.downloadFile(realmFileId, realmPath)
+                                requireActivity().refreshApp()
                             }
                         }
                         alertDialog?.cancel()

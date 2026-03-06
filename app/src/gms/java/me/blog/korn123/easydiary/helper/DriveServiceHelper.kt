@@ -79,8 +79,7 @@ class DriveServiceHelper(
             val aafFolderId =
                 if (appRootFileList.files.isEmpty()) {
                     // 없으면 생성 후 대기
-                    val createRootTask = createFolderLegacy(GDriveConstants.AAF_ROOT_FOLDER_NAME)
-                    Tasks.await(createRootTask)
+                    createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
                 } else {
                     // 있으면 ID 추출
                     appRootFileList.files[0].id
@@ -93,36 +92,14 @@ class DriveServiceHelper(
             val finalWorkingFolderId =
                 if (workingFolderFileList.files.isEmpty()) {
                     // 없으면 생성 후 대기 (부모는 aafFolderId)
-                    val createWorkingTask = createFolderLegacy(workingFolderName, aafFolderId)
-                    Tasks.await(createWorkingTask)
+                    createFolder(workingFolderName, aafFolderId)
                 } else {
                     // 있으면 ID 추출
                     workingFolderFileList.files[0].id
                 }
 
-            return@withContext finalWorkingFolderId
+            finalWorkingFolderId
         }
-
-    @Deprecated(message = "Use createFolder() instead for coroutine")
-    fun createFolderLegacy(
-        folderName: String,
-        parentId: String = "root",
-    ): Task<String> =
-        Tasks.call(
-            mExecutor,
-            Callable<String> {
-                val metadata =
-                    File()
-                        .setParents(listOf(parentId))
-                        .setMimeType(GDriveConstants.MIME_TYPE_GOOGLE_APPS_FOLDER)
-                        .setName(folderName)
-
-                val googleFile =
-                    mDriveService.files().create(metadata).execute()
-                        ?: throw IOException("Null result when requesting file creation.")
-                googleFile.id
-            },
-        )
 
     suspend fun createFolder(
         folderName: String,
@@ -192,19 +169,16 @@ class DriveServiceHelper(
                 ?: throw IOException("Null result when requesting file creation.")
     }
 
-    fun downloadFile(
+    suspend fun downloadFile(
         fileId: String,
         destFilePath: String,
-    ): Task<Int> =
-        Tasks.call(
-            mExecutor,
-            Callable<Int> {
-                IOUtils.copy(
-                    mDriveService.files().get(fileId).executeMediaAsInputStream(),
-                    FileOutputStream(File(destFilePath)),
-                )
-            },
-        )
+    ): Int =
+        withContext(Dispatchers.IO) {
+            IOUtils.copy(
+                mDriveService.files().get(fileId).executeMediaAsInputStream(),
+                FileOutputStream(File(destFilePath)),
+            )
+        }
 
     /**
      * Returns a [FileList] containing all the visible files in the user's My Drive.
@@ -215,53 +189,6 @@ class DriveServiceHelper(
      * request Drive Full Scope in the [Google
      * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
-    @Deprecated(message = "Use queryFiles() instead for coroutine")
-    fun queryFilesLegacy(
-        q: String,
-        pageSize: Int = 10,
-        nextPageToken: String? = null,
-    ): Task<FileList> {
-        Log.i("GSuite H", nextPageToken ?: "없어~")
-        Log.i("GSuite H", q)
-        val fields = "nextPageToken, files(id, name, mimeType, createdTime)"
-        return when (nextPageToken == null) {
-            true -> {
-                Tasks.call(
-                    mExecutor,
-                    Callable<FileList> {
-                        mDriveService
-                            .files()
-                            .list()
-                            .setQ(q)
-                            .setFields(fields)
-                            .setSpaces("drive")
-                            .setOrderBy("createdTime desc")
-                            .setPageSize(pageSize)
-                            .execute()
-                    },
-                )
-            }
-
-            false -> {
-                Tasks.call(
-                    mExecutor,
-                    Callable<FileList> {
-                        mDriveService
-                            .files()
-                            .list()
-                            .setQ(q)
-                            .setFields(fields)
-                            .setSpaces("drive")
-                            .setOrderBy("createdTime desc")
-                            .setPageSize(pageSize)
-                            .setPageToken(nextPageToken)
-                            .execute()
-                    },
-                )
-            }
-        }
-    }
-
     suspend fun queryFiles(
         q: String,
         pageSize: Int = 10,
