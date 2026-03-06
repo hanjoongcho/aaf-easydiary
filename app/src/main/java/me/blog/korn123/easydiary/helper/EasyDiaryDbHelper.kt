@@ -47,7 +47,10 @@ object EasyDiaryDbHelper {
         mRealmInstance?.close()
     }
 
-    fun getRealmPath(): String = getInstance().path
+    fun getRealmPath(): String =
+        getTemporaryInstance().use {
+            it.path
+        }
 
     fun beginTransaction() {
         getInstance().beginTransaction()
@@ -485,6 +488,8 @@ object EasyDiaryDbHelper {
 
     fun findAlarmBy(sequence: Int): Alarm? = findAlarmBy(getInstance(), sequence)
 
+    fun Alarm.copy(): Alarm = duplicateAlarmBy(this)
+
     fun findAlarmAll(): List<Alarm> = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
 
     fun findSnoozeAlarms(): List<Alarm> =
@@ -550,6 +555,17 @@ object EasyDiaryDbHelper {
     ) {
         if (context.config.enableDebugMode) {
             insertActionLog(actionLog)
+        }
+    }
+
+    fun insertActionLogOnBackground(
+        actionLog: ActionLog,
+        context: Context,
+    ) {
+        getTemporaryInstance().use { realm ->
+            if (context.config.enableDebugMode) {
+                insertActionLog(actionLog, realm)
+            }
         }
     }
 

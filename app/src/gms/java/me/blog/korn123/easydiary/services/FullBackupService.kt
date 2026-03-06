@@ -19,6 +19,10 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -30,6 +34,7 @@ import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper.copy
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -53,6 +58,7 @@ class FullBackupService : Service() {
     private var mInProcessJob = true
     private var workStatusList = arrayListOf<WorkStatus>()
     private val authManager by lazy { GoogleAuthManager(this) }
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     data class WorkStatus(
         var localDeviceFileCount: Int = 0,
@@ -68,7 +74,7 @@ class FullBackupService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "onCreate",
@@ -111,7 +117,7 @@ class FullBackupService : Service() {
                 getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "onCreate",
@@ -127,7 +133,7 @@ class FullBackupService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "onStartCommand",
@@ -143,9 +149,9 @@ class FullBackupService : Service() {
         EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
             val workStatus = WorkStatus()
             workStatusList.add(workStatus)
-            backupPhoto(it, workStatus)
+            backupPhoto(it.copy(), workStatus)
         }
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "onStartCommand",
@@ -167,7 +173,7 @@ class FullBackupService : Service() {
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "backupPhoto",
@@ -212,8 +218,9 @@ class FullBackupService : Service() {
             )
         startForeground(NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID, mNotificationBuilder.build())
 
-        determineRemoteDrivePhotos(null, alarm, workStatus)
-        EasyDiaryDbHelper.insertActionLog(
+        applicationScope.launch { determineRemoteDrivePhotos(null, alarm, workStatus) }
+
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "backupPhoto",
@@ -224,12 +231,12 @@ class FullBackupService : Service() {
         )
     }
 
-    private fun determineRemoteDrivePhotos(
+    private suspend fun determineRemoteDrivePhotos(
         nextPageToken: String?,
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLog(
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "determineRemoteDrivePhotos",
@@ -238,85 +245,86 @@ class FullBackupService : Service() {
             ),
             this,
         )
-        mDriveServiceHelper
-            .queryFilesLegacy(
-                "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
-                1000,
-                nextPageToken,
-            ).run {
-                addOnSuccessListener { result ->
-                    EasyDiaryDbHelper.insertActionLog(
-                        ActionLog(
-                            this::class.java.name,
-                            "determineRemoteDrivePhotos",
-                            "INFO",
-                            "progress-1",
-                        ),
-                        this@FullBackupService,
-                    )
-                    result.files.map { photoFile ->
-                        workStatus.remoteDriveFileNames.add(photoFile.name)
-                    }
-                    EasyDiaryDbHelper.insertActionLog(
-                        ActionLog(
-                            this::class.java.name,
-                            "determineRemoteDrivePhotos",
-                            "INFO",
-                            "progress-2",
-                        ),
-                        this@FullBackupService,
-                    )
-                    when (result.nextPageToken == null) {
-                        true -> {
-                            EasyDiaryDbHelper.insertActionLog(
-                                ActionLog(
-                                    this::class.java.name,
-                                    "determineRemoteDrivePhotos",
-                                    "INFO",
-                                    "progress-3",
-                                ),
-                                this@FullBackupService,
-                            )
-                            val localPhotos = File(mPhotoPath).listFiles()
-                            localPhotos.map { photo ->
-                                if (!workStatus.remoteDriveFileNames.contains(photo.name)) {
-                                    workStatus.targetFilenames.add(photo.name)
-                                }
-                            }
-                            workStatus.localDeviceFileCount = localPhotos.size
-                            workStatus.duplicateFileCount =
-                                workStatus.localDeviceFileCount - workStatus.targetFilenames.size
-                            if (workStatus.targetFilenames.size == 0) {
-                                updateNotification(alarm, workStatus)
-                            } else {
-                                uploadDiaryPhoto(alarm, workStatus)
-                            }
-                        }
 
-                        false -> {
-                            EasyDiaryDbHelper.insertActionLog(
-                                ActionLog(
-                                    this::class.java.name,
-                                    "determineRemoteDrivePhotos",
-                                    "INFO",
-                                    "progress-4",
-                                ),
-                                this@FullBackupService,
-                            )
-                            determineRemoteDrivePhotos(result.nextPageToken, alarm, workStatus)
+        runCatching {
+            mDriveServiceHelper
+                .queryFiles(
+                    "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
+                    1000,
+                    nextPageToken,
+                )
+        }.onSuccess { photoFileList ->
+            EasyDiaryDbHelper.insertActionLogOnBackground(
+                ActionLog(
+                    this::class.java.name,
+                    "determineRemoteDrivePhotos",
+                    "INFO",
+                    "progress-1",
+                ),
+                this@FullBackupService,
+            )
+            photoFileList.files.map { photoFile ->
+                workStatus.remoteDriveFileNames.add(photoFile.name)
+            }
+            EasyDiaryDbHelper.insertActionLogOnBackground(
+                ActionLog(
+                    this::class.java.name,
+                    "determineRemoteDrivePhotos",
+                    "INFO",
+                    "progress-2",
+                ),
+                this@FullBackupService,
+            )
+            when (photoFileList.nextPageToken == null) {
+                true -> {
+                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                        ActionLog(
+                            this::class.java.name,
+                            "determineRemoteDrivePhotos",
+                            "INFO",
+                            "progress-3",
+                        ),
+                        this@FullBackupService,
+                    )
+                    val localPhotos = File(mPhotoPath).listFiles()
+                    localPhotos?.map { photo ->
+                        if (!workStatus.remoteDriveFileNames.contains(photo.name)) {
+                            workStatus.targetFilenames.add(photo.name)
                         }
+                    }
+                    workStatus.localDeviceFileCount = localPhotos?.size ?: 0
+                    workStatus.duplicateFileCount =
+                        workStatus.localDeviceFileCount - workStatus.targetFilenames.size
+                    if (workStatus.targetFilenames.isEmpty()) {
+                        updateNotification(alarm, workStatus)
+                    } else {
+                        uploadDiaryPhoto(alarm, workStatus)
                     }
                 }
-                addOnFailureListener { exception ->
-                    reExecuteGmsBackup(
-                        alarm,
-                        "${exception.message ?: ""} (determineRemoteDrivePhotos)",
-                        FullBackupService::class.java.name,
+
+                false -> {
+                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                        ActionLog(
+                            this::class.java.name,
+                            "determineRemoteDrivePhotos",
+                            "INFO",
+                            "progress-4",
+                        ),
+                        this@FullBackupService,
                     )
-                    stopSelf()
+                    determineRemoteDrivePhotos(photoFileList.nextPageToken, alarm, workStatus)
                 }
             }
-        EasyDiaryDbHelper.insertActionLog(
+        }.onFailure { exception ->
+            reExecuteGmsBackup(
+                alarm,
+                "${exception.message ?: ""} (determineRemoteDrivePhotos)",
+                FullBackupService::class.java.name,
+            )
+            stopSelf()
+        }
+
+        EasyDiaryDbHelper.insertActionLogOnBackground(
             ActionLog(
                 this::class.java.name,
                 "determineRemoteDrivePhotos",
@@ -363,8 +371,8 @@ class FullBackupService : Service() {
         workStatus: WorkStatus,
     ) {
         if (mInProcessJob) {
-            if (workStatus.targetFilenames.size == 0) {
-                backupDiaryRealm(alarm, workStatus)
+            if (workStatus.targetFilenames.isEmpty()) {
+                applicationScope.launch { backupDiaryRealm(alarm, workStatus) }
             } else {
                 val stringBuilder =
                     createBackupContentText(
@@ -408,50 +416,41 @@ class FullBackupService : Service() {
                     if (mInProcessJob) uploadDiaryPhoto(alarm, workStatus)
                 } else {
                     config.photoBackupGoogle = System.currentTimeMillis()
-                    backupDiaryRealm(alarm, workStatus)
+                    applicationScope.launch { backupDiaryRealm(alarm, workStatus) }
                 }
             }
         }
     }
 
-    private fun backupDiaryRealm(
+    private suspend fun backupDiaryRealm(
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
         authManager.getLastSignedInAccount()?.let { account ->
-            DriveServiceHelper(applicationContext, account).run {
-                initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
-                    val dbFileName =
-                        RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-                    if (realmFolderId != null) {
-                        createFileLegacy(
-                            realmFolderId,
-                            EasyDiaryDbHelper.getRealmPath(),
-                            dbFileName,
-                            EasyDiaryUtils.easyDiaryMimeType,
-                        ).addOnSuccessListener {
-                            config.diaryBackupGoogle = System.currentTimeMillis()
-                            launchCompleteNotification(alarm, dbFileName, workStatus)
-                        }.addOnFailureListener { exception ->
-                            reExecuteGmsBackup(
-                                alarm,
-                                "${exception.message ?: ""} (backupDiaryRealm)",
-                                FullBackupService::class.java.name,
-                            )
-                            stopSelf()
-                        }
-                    } else {
-                        EasyDiaryDbHelper.insertActionLog(
-                            ActionLog(
-                                "FullBackupService",
-                                "backupDiaryRealm",
-                                "ERROR",
-                                "realmFolderId is null",
-                            ),
-                            applicationContext,
-                        )
-                    }
-                }
+
+            val dbFileName =
+                RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+            val driveServiceHelper = DriveServiceHelper(applicationContext, account)
+            runCatching {
+                val realmFolderId =
+                    driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME)
+                driveServiceHelper
+                    .createFile(
+                        realmFolderId,
+                        EasyDiaryDbHelper.getRealmPath(),
+                        dbFileName,
+                        EasyDiaryUtils.easyDiaryMimeType,
+                    )
+            }.onSuccess {
+                config.diaryBackupGoogle = System.currentTimeMillis()
+                launchCompleteNotification(alarm, dbFileName, workStatus)
+            }.onFailure { exception ->
+                reExecuteGmsBackup(
+                    alarm,
+                    "${exception.message ?: ""} (backupDiaryRealm)",
+                    FullBackupService::class.java.name,
+                )
+                stopSelf()
             }
         }
     }

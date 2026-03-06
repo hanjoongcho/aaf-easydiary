@@ -8,7 +8,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.extensions.isScreenOn
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup

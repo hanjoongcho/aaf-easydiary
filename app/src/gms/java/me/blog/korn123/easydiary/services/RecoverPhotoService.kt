@@ -176,7 +176,7 @@ class RecoverPhotoService : Service() {
                     when (fileList.files.size) {
                         0 -> {
                             mDriveServiceHelper
-                                .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
+                                .createFolderLegacy(GDriveConstants.AAF_ROOT_FOLDER_NAME)
                                 .addOnSuccessListener { fileId ->
                                     Log.i(
                                         "GSuite",

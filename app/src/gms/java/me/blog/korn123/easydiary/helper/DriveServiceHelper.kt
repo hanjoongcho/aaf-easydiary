@@ -67,96 +67,44 @@ class DriveServiceHelper(
 
     private val mExecutor = Executors.newSingleThreadExecutor()
 
-    @Deprecated(message = "Use initDriveWorkingDirectory() instead for coroutine")
-    fun initDriveWorkingDirectory(
-        workingFolderName: String,
-        callback: (workingFolderId: String?) -> Unit,
-    ) {
-        // 01. AAF 폴더 검색
-        queryFilesLegacy("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
-            addOnSuccessListener { result ->
-                when (result.files.size) {
-                    // 02. AAF 폴더 없으면 생성
-                    0 -> {
-                        createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
-                            // 02-01. workingFolder 생성
-                            createFolder(
-                                workingFolderName,
-                                aafFolderId,
-                            ).addOnSuccessListener { workingFolderId ->
-                                callback(workingFolderId)
-                            }
-                        }
-                    }
-
-                    // 03. workingFolder 검색
-                    1 -> {
-                        val parentId = result.files[0].id
-                        queryFilesLegacy("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
-                            when (it.files.size) {
-                                // 03-01. workingFolder 생성
-                                0 -> {
-                                    createFolder(
-                                        workingFolderName,
-                                        parentId,
-                                    ).addOnSuccessListener { workingFolderId ->
-                                        callback(workingFolderId)
-                                    }
-                                }
-
-                                1 -> {
-                                    callback(it.files[0].id)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            addOnFailureListener { e ->
-                callback(null)
-            }
-        }
-    }
-
     suspend fun initDriveWorkingDirectory(
         workingFolderName: String,
     ): String =
         withContext(Dispatchers.IO) {
             // --- STEP 1: 최상위 폴더(AAF) 찾기 ---
-            val rootQueryTask =
-                queryFilesLegacy("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
-            val rootResult = Tasks.await(rootQueryTask)
+            val appRootFileList =
+                queryFiles("'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false")
 
             // 폴더 ID 결정 (없으면 만들고, 있으면 가져옴)
             val aafFolderId =
-                if (rootResult.files.isEmpty()) {
+                if (appRootFileList.files.isEmpty()) {
                     // 없으면 생성 후 대기
-                    val createRootTask = createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
+                    val createRootTask = createFolderLegacy(GDriveConstants.AAF_ROOT_FOLDER_NAME)
                     Tasks.await(createRootTask)
                 } else {
                     // 있으면 ID 추출
-                    rootResult.files[0].id
+                    appRootFileList.files[0].id
                 }
 
             // --- STEP 2: 작업 폴더(EasyDiary) 찾기 ---
-            val workingQueryTask =
-                queryFilesLegacy("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
-            val workingResult = Tasks.await(workingQueryTask)
+            val workingFolderFileList =
+                queryFiles("'$aafFolderId' in parents and name = '$workingFolderName' and trashed = false")
 
             val finalWorkingFolderId =
-                if (workingResult.files.isEmpty()) {
+                if (workingFolderFileList.files.isEmpty()) {
                     // 없으면 생성 후 대기 (부모는 aafFolderId)
-                    val createWorkingTask = createFolder(workingFolderName, aafFolderId)
+                    val createWorkingTask = createFolderLegacy(workingFolderName, aafFolderId)
                     Tasks.await(createWorkingTask)
                 } else {
                     // 있으면 ID 추출
-                    workingResult.files[0].id
+                    workingFolderFileList.files[0].id
                 }
 
             return@withContext finalWorkingFolderId
         }
 
-    fun createFolder(
+    @Deprecated(message = "Use createFolder() instead for coroutine")
+    fun createFolderLegacy(
         folderName: String,
         parentId: String = "root",
     ): Task<String> =
@@ -175,6 +123,24 @@ class DriveServiceHelper(
                 googleFile.id
             },
         )
+
+    suspend fun createFolder(
+        folderName: String,
+        parentId: String = "root",
+    ): String =
+        withContext(Dispatchers.IO) {
+            val metadata =
+                File()
+                    .setParents(listOf(parentId))
+                    .setMimeType(GDriveConstants.MIME_TYPE_GOOGLE_APPS_FOLDER)
+                    .setName(folderName)
+
+            val googleFile =
+                mDriveService.files().create(metadata).execute()
+                    ?: throw IOException("Null result when requesting file creation.")
+
+            googleFile.id
+        }
 
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
