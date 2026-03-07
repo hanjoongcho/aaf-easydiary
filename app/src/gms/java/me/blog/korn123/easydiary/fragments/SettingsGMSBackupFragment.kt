@@ -479,13 +479,13 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                 listView.onItemClickListener =
                     AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo =
-                            parent.adapter.getItem(position) as HashMap<String, String>
+                            parent.adapter.getItem(position) as HashMap<*, *>
                         itemInfo["id"]?.let { realmFileId ->
                             progressContainer.visibility = View.VISIBLE
                             val realmPath = EasyDiaryDbHelper.getRealmPath()
                             EasyDiaryDbHelper.closeInstance()
                             lifecycleScope.launch {
-                                driveServiceHelper.downloadFile(realmFileId, realmPath)
+                                driveServiceHelper.downloadFile(realmFileId as String, realmPath)
                                 requireActivity().refreshApp()
                             }
                         }
