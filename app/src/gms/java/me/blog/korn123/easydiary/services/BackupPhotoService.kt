@@ -208,28 +208,29 @@ class BackupPhotoService : Service() {
 
     private fun uploadDiaryPhoto() {
         val fileName = targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper
-            .createFileLegacy(
-                mWorkingFolderId,
-                mPhotoPath + fileName,
-                fileName,
-                GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
-            ).run {
-                addOnSuccessListener { _ ->
-                    targetFilenamesCursor++
-                    successCount++
-                    updateNotification()
-                }
-                addOnFailureListener {
-                    targetFilenamesCursor++
-                    failCount++
-                    updateNotification()
-                }
+        applicationScope.launch {
+            runCatching {
+                mDriveServiceHelper
+                    .createFile(
+                        mWorkingFolderId,
+                        mPhotoPath + fileName,
+                        fileName,
+                        GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
+                    )
+            }.onSuccess {
+                targetFilenamesCursor++
+                successCount++
+                updateNotification()
+            }.onFailure {
+                targetFilenamesCursor++
+                failCount++
+                updateNotification()
             }
+        }
     }
 
     private fun updateNotification() {
-        if (targetFilenames.size == 0) {
+        if (targetFilenames.isEmpty()) {
             launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
         } else {
             val stringBuilder =

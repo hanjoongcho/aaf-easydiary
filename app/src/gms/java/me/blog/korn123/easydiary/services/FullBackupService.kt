@@ -340,30 +340,31 @@ class FullBackupService : Service() {
         workStatus: WorkStatus,
     ) {
         val fileName = workStatus.targetFilenames[workStatus.targetFilenamesCursor]
-        mDriveServiceHelper
-            .createFileLegacy(
-                mWorkingFolderId,
-                mPhotoPath + fileName,
-                fileName,
-                GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
-            ).run {
-                addOnSuccessListener { _ ->
-                    workStatus.targetFilenamesCursor++
-                    workStatus.successCount++
-                    updateNotification(alarm, workStatus)
-                }
-                addOnFailureListener { exception ->
-                    workStatus.targetFilenamesCursor++
-                    workStatus.failCount++
-                    updateNotification(alarm, workStatus)
-                    reExecuteGmsBackup(
-                        alarm,
-                        "${exception.message ?: ""} (uploadDiaryPhoto)",
-                        FullBackupService::class.java.name,
+        applicationScope.launch {
+            runCatching {
+                mDriveServiceHelper
+                    .createFile(
+                        mWorkingFolderId,
+                        mPhotoPath + fileName,
+                        fileName,
+                        GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
                     )
-                    stopSelf()
-                }
+            }.onSuccess {
+                workStatus.targetFilenamesCursor++
+                workStatus.successCount++
+                updateNotification(alarm, workStatus)
+            }.onFailure { exception ->
+                workStatus.targetFilenamesCursor++
+                workStatus.failCount++
+                updateNotification(alarm, workStatus)
+                reExecuteGmsBackup(
+                    alarm,
+                    "${exception.message ?: ""} (uploadDiaryPhoto)",
+                    FullBackupService::class.java.name,
+                )
+                stopSelf()
             }
+        }
     }
 
     private fun updateNotification(

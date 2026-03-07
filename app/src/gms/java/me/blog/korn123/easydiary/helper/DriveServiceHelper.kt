@@ -18,8 +18,6 @@ package me.blog.korn123.easydiary.helper
 import android.accounts.Account
 import android.content.Context
 import android.util.Log
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -34,8 +32,6 @@ import me.blog.korn123.easydiary.R
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.Collections
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API and opening a
@@ -64,8 +60,6 @@ class DriveServiceHelper(
     constructor(context: Context, driveService: Drive) : this(context) {
         this.mDriveService = driveService
     }
-
-    private val mExecutor = Executors.newSingleThreadExecutor()
 
     suspend fun initDriveWorkingDirectory(
         workingFolderName: String,
@@ -118,35 +112,6 @@ class DriveServiceHelper(
 
             googleFile.id
         }
-
-    /**
-     * Creates a text file in the user's My Drive folder and returns its file ID.
-     */
-    fun createFileLegacy(
-        parentId: String,
-        filePath: String,
-        name: String,
-        mimeType: String,
-    ): Task<String> =
-        Tasks.call(
-            mExecutor,
-            Callable<String> {
-                val metadata =
-                    File()
-                        .setParents(listOf(parentId))
-                        .setMimeType(mimeType)
-                        .setName(name)
-
-                // Convert content to an AbstractInputStreamContent instance.
-                val contentStream =
-                    ByteArrayContent(mimeType, IOUtils.toByteArray(FileInputStream(File(filePath))))
-
-                val googleFile =
-                    mDriveService.files().create(metadata, contentStream).execute()
-                        ?: throw IOException("Null result when requesting file creation.")
-                googleFile.id
-            },
-        )
 
     suspend fun createFile(
         parentId: String,
