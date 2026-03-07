@@ -220,10 +220,12 @@ fun Context.reExecuteGmsBackup(
     errorMessage: String,
     className: String,
 ) {
-    EasyDiaryDbHelper.insertActionLog(ActionLog(className, "reExecuteGmsBackup", "ERROR", errorMessage), this)
-    EasyDiaryDbHelper.beginTransaction()
-    alarm.retryCount = alarm.retryCount.plus(1)
-    EasyDiaryDbHelper.commitTransaction()
+    EasyDiaryDbHelper.insertActionLogOnBackground(ActionLog(className, "reExecuteGmsBackup", "ERROR", errorMessage), this)
+    EasyDiaryDbHelper.getTemporaryInstance().use {
+        it.beginTransaction()
+        alarm.retryCount = alarm.retryCount.plus(1)
+        it.commitTransaction()
+    }
     openSnoozeNotification(alarm)
 }
 

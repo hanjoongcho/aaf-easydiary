@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.extensions.isScreenOn
 import me.blog.korn123.easydiary.extensions.openNotification
@@ -18,6 +19,7 @@ class AlarmWorkExecutor(
     context: Context,
 ) : BaseAlarmWorkExecutor(context) {
     private val authManager by lazy { GoogleAuthManager(context) }
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun executeWork(alarm: Alarm) {
         super.executeWork(alarm)
@@ -25,34 +27,32 @@ class AlarmWorkExecutor(
         context.run {
             when (alarm.workMode) {
                 AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> {
-//                    executeGmsBackup(alarm)
                     scheduleNextAlarm(alarm, isScreenOn())
                     authManager.getLastSignedInAccount()?.let { account ->
-                        DriveServiceHelper(this, account).run {
-                            initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                                if (photoFolderId != null) {
-                                    Intent(context, FullBackupService::class.java).apply {
-                                        putExtra(
-                                            GDriveConstants.WORKING_FOLDER_ID,
-                                            photoFolderId,
-                                        )
-                                        putExtra(SettingConstants.ALARM_ID, alarm.id)
-                                        ContextCompat.startForegroundService(context, this)
-                                    }
-                                } else {
-                                    reExecuteGmsBackup(
-                                        alarm,
-                                        "The photo folder ID not valid.",
-                                        AlarmWorkExecutor::class.java.name,
+                        val alarmId = alarm.id
+                        applicationScope.launch {
+                            runCatching {
+                                DriveServiceHelper(context, account).initDriveWorkingDirectory(
+                                    GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME,
+                                )
+                            }.onSuccess { photoFolderId ->
+                                Intent(context, FullBackupService::class.java).apply {
+                                    putExtra(
+                                        GDriveConstants.WORKING_FOLDER_ID,
+                                        photoFolderId,
                                     )
+                                    putExtra(SettingConstants.ALARM_ID, alarmId)
+                                    ContextCompat.startForegroundService(context, this)
                                 }
+                            }.onFailure {
+                                reExecuteGmsBackup(
+                                    alarm,
+                                    "The photo folder ID not valid.",
+                                    AlarmWorkExecutor::class.java.name,
+                                )
                             }
                         }
-                    } ?: reExecuteGmsBackup(
-                        alarm,
-                        "Authentication token is not valid.",
-                        AlarmWorkExecutor::class.java.name,
-                    )
+                    }
                 }
 
                 AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {

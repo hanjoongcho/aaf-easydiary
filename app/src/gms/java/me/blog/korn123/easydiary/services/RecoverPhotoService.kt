@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.services
 
 import GoogleAuthManager
-import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -21,6 +20,10 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -29,6 +32,7 @@ import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -36,6 +40,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_G
 import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_RECOVERY_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
+import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
 import java.util.Collections
 
@@ -52,6 +57,7 @@ class RecoverPhotoService : Service() {
     private lateinit var mPhotoPath: String
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private val authManager by lazy { GoogleAuthManager(this) }
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -98,7 +104,7 @@ class RecoverPhotoService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        recoverPhoto()
+        applicationScope.launch { recoverPhoto() }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -111,13 +117,14 @@ class RecoverPhotoService : Service() {
         if (targetIndexesCursor < targetItems.size) {
             if (mInProcessJob) {
                 val item = targetItems[targetIndexesCursor++]
-                mDriveServiceHelper.downloadFile(item["id"] ?: "Undefined", "$mPhotoPath${item["name"]}").run {
-                    addOnSuccessListener {
+                applicationScope.launch {
+                    runCatching {
+                        mDriveServiceHelper.downloadFile(item["id"] ?: "Undefined", "$mPhotoPath${item["name"]}")
+                    }.onSuccess {
                         successCount++
                         updateNotification()
                         downloadAttachPhoto()
-                    }
-                    addOnFailureListener {
+                    }.onFailure {
                         failCount++
                         updateNotification()
                         downloadAttachPhoto()
@@ -127,89 +134,118 @@ class RecoverPhotoService : Service() {
         }
     }
 
-    private fun determineAttachPhoto(nextPageToken: String?) {
-        mDriveServiceHelper
-            .queryFiles(
+    private suspend fun determineAttachPhoto(nextPageToken: String?) {
+        runCatching {
+            mDriveServiceHelper.queryFiles(
                 "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
                 1000,
                 nextPageToken,
-            ).run {
-                addOnSuccessListener { result ->
-                    result.files.map { photoFile ->
-                        remoteDriveFileCount++
-                        if (!File("$mPhotoPath${photoFile.name}").exists()) {
-                            val item =
-                                hashMapOf<String, String>(
-                                    Pair("id", photoFile.id),
-                                    Pair("name", photoFile.name),
-                                )
-                            targetItems.add(item)
-                        }
-                    }
+            )
+        }.onSuccess { photoFileList ->
+            photoFileList.files.map { photoFile ->
+                remoteDriveFileCount++
+                if (!File("$mPhotoPath${photoFile.name}").exists()) {
+                    val item =
+                        hashMapOf<String, String>(
+                            Pair("id", photoFile.id),
+                            Pair("name", photoFile.name),
+                        )
+                    targetItems.add(item)
+                }
+            }
 
-                    when (result.nextPageToken == null) {
-                        true -> {
-                            duplicateFileCount = remoteDriveFileCount - targetItems.size
-                            if (targetItems.size == 0) {
-                                updateNotification()
-                            } else {
-                                downloadAttachPhoto()
-                            }
-                        }
-
-                        false -> {
-                            determineAttachPhoto(result.nextPageToken)
-                        }
+            when (photoFileList.nextPageToken == null) {
+                true -> {
+                    duplicateFileCount = remoteDriveFileCount - targetItems.size
+                    if (targetItems.size == 0) {
+                        updateNotification()
+                    } else {
+                        downloadAttachPhoto()
                     }
                 }
-                addOnFailureListener { exception -> exception.printStackTrace() }
+
+                false -> {
+                    determineAttachPhoto(photoFileList.nextPageToken)
+                }
             }
+        }.onFailure { e ->
+            EasyDiaryDbHelper.insertActionLogOnBackground(
+                ActionLog(
+                    this::class.java.name,
+                    "determineAttachPhoto",
+                    "ERROR",
+                    e.message,
+                ),
+                this,
+            )
+        }
     }
 
-    private fun recoverPhoto() {
-        mDriveServiceHelper
-            .queryFiles(
-                "'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false",
-                1,
-                null,
-            ).run {
-                addOnSuccessListener { fileList ->
-                    when (fileList.files.size) {
-                        0 -> {
-                            mDriveServiceHelper
-                                .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
-                                .addOnSuccessListener { fileId ->
-                                    Log.i(
-                                        "GSuite",
-                                        "Created application folder that app id is $fileId",
-                                    )
-                                }
-                        }
+    private suspend fun recoverPhoto() {
+        runCatching {
+            val rootFileList =
+                mDriveServiceHelper.queryFiles(
+                    "'root' in parents and name = '${GDriveConstants.AAF_ROOT_FOLDER_NAME}' and trashed = false",
+                    1,
+                    null,
+                )
 
-                        1 -> {
-                            val appFolder = fileList.files[0]
-                            Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
-                            // step04. upload attach photo sample
+            when (rootFileList.files.size) {
+                0 -> {
+                    val driveFileId =
+                        mDriveServiceHelper
+                            .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
+                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                        ActionLog(
+                            this::class.java.name,
+                            "recoverPhoto",
+                            "INFO",
+                            "driveFileId: $driveFileId",
+                        ),
+                        this,
+                    )
+                }
+
+                1 -> {
+                    val appFolder = rootFileList.files[0]
+                    Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
+                    // step04. upload attach photo sample
 //                        driveServiceHelper.createFile(appFolder.id, "attach-photo-01", AAF_EASY_DIARY_PHOTO).run {
 //                            val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
 //                            addOnSuccessListener { fileId -> driveServiceHelper.uploadFile(fileId, "$photoPath/0ce9591f-ba7b-48f3-b724-1253d590b433", AAF_EASY_DIARY_PHOTO) }
 //                        }
 
-                            // step05. determine upload photo sample and download it
-                            determineAttachPhoto(null)
-                        }
+                    // step05. determine upload photo sample and download it
+                    determineAttachPhoto(null)
+                }
 
-                        else -> {}
-                    }
-                }
-                addOnFailureListener {
-                    Log.i("GSuite", "not exist application folder")
-                }
+                else -> {}
             }
+        }.onSuccess {
+            EasyDiaryDbHelper.insertActionLogOnBackground(
+                ActionLog(
+                    this::class.java.name,
+                    "recoverPhoto",
+                    "INFO",
+                    "Done",
+                ),
+                this,
+            )
+        }.onFailure { e ->
+            EasyDiaryDbHelper.insertActionLogOnBackground(
+                ActionLog(
+                    this::class.java.name,
+                    "recoverPhoto",
+                    "ERROR",
+                    e.message,
+                ),
+                this,
+            )
+        }
     }
 
     private fun updateNotification() {
-        if (targetItems.size == 0) {
+        if (targetItems.isEmpty()) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
             val stringBuilder =

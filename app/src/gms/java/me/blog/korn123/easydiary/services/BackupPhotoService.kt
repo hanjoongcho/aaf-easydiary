@@ -18,6 +18,10 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -26,6 +30,7 @@ import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -33,6 +38,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS
 import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_BACKUP_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
+import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
 import java.util.Collections
 
@@ -51,6 +57,7 @@ class BackupPhotoService : Service() {
     private lateinit var mPhotoPath: String
     private lateinit var mWorkingFolderId: String
     private val authManager by lazy { GoogleAuthManager(this) }
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -150,67 +157,80 @@ class BackupPhotoService : Service() {
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
-        mDriveServiceHelper
-            .queryFiles(
-                "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
-                1000,
-                nextPageToken,
-            ).run {
-                addOnSuccessListener { result ->
-                    result.files.map { photoFile ->
-                        remoteDriveFileNames.add(photoFile.name)
+        applicationScope.launch {
+            runCatching {
+                mDriveServiceHelper
+                    .queryFiles(
+                        "mimeType = '${GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",
+                        1000,
+                        nextPageToken,
+                    )
+            }.onSuccess { photoFileList ->
+
+                photoFileList.files.map { photoFile ->
+                    remoteDriveFileNames.add(photoFile.name)
+                }
+
+                when (photoFileList.nextPageToken == null) {
+                    true -> {
+                        val localPhotos = File(mPhotoPath).listFiles()
+                        localPhotos.map { photo ->
+                            if (!remoteDriveFileNames.contains(photo.name)) {
+                                targetFilenames.add(photo.name)
+                            }
+                        }
+                        localDeviceFileCount = localPhotos.size
+                        duplicateFileCount = localDeviceFileCount - targetFilenames.size
+                        if (targetFilenames.size == 0) {
+                            updateNotification()
+                        } else {
+                            uploadDiaryPhoto()
+                        }
                     }
 
-                    when (result.nextPageToken == null) {
-                        true -> {
-                            val localPhotos = File(mPhotoPath).listFiles()
-                            localPhotos.map { photo ->
-                                if (!remoteDriveFileNames.contains(photo.name)) {
-                                    targetFilenames.add(photo.name)
-                                }
-                            }
-                            localDeviceFileCount = localPhotos.size
-                            duplicateFileCount = localDeviceFileCount - targetFilenames.size
-                            if (targetFilenames.size == 0) {
-                                updateNotification()
-                            } else {
-                                uploadDiaryPhoto()
-                            }
-                        }
-
-                        false -> {
-                            determineRemoteDrivePhotos(result.nextPageToken)
-                        }
+                    false -> {
+                        determineRemoteDrivePhotos(photoFileList.nextPageToken)
                     }
                 }
-                addOnFailureListener { exception -> exception.printStackTrace() }
+            }.onFailure { e ->
+                EasyDiaryDbHelper.insertActionLogOnBackground(
+                    ActionLog(
+                        this::class.java.name,
+                        "determineRemoteDrivePhotos",
+                        "ERROR",
+                        e.message,
+                    ),
+                    applicationContext,
+                )
             }
+        }
     }
 
     private fun uploadDiaryPhoto() {
         val fileName = targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper
-            .createFileLegacy(
-                mWorkingFolderId,
-                mPhotoPath + fileName,
-                fileName,
-                GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
-            ).run {
-                addOnSuccessListener { _ ->
-                    targetFilenamesCursor++
-                    successCount++
-                    updateNotification()
-                }
-                addOnFailureListener {
-                    targetFilenamesCursor++
-                    failCount++
-                    updateNotification()
-                }
+        applicationScope.launch {
+            runCatching {
+                mDriveServiceHelper
+                    .createFile(
+                        mWorkingFolderId,
+                        mPhotoPath + fileName,
+                        fileName,
+                        GDriveConstants.MIME_TYPE_AAF_EASY_DIARY_PHOTO,
+                    )
+            }.onSuccess {
+                targetFilenamesCursor++
+                successCount++
+                updateNotification()
+            }.onFailure {
+                targetFilenamesCursor++
+                failCount++
+                updateNotification()
             }
+        }
     }
 
     private fun updateNotification() {
-        if (targetFilenames.size == 0) {
+        if (targetFilenames.isEmpty()) {
             launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
         } else {
             val stringBuilder =
