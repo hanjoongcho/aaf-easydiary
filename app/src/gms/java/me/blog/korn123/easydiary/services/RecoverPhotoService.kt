@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -169,11 +170,11 @@ class RecoverPhotoService : Service() {
                 }
             }
         }.onFailure { e ->
-            EasyDiaryDbHelper.insertActionLogOnBackground(
+            EasyDiaryDbHelper.insertActionLog(
                 ActionLog(
                     this::class.java.name,
                     "determineAttachPhoto",
-                    "ERROR",
+                    ActionLogKey.ERROR,
                     e.message,
                 ),
                 this,
@@ -195,11 +196,11 @@ class RecoverPhotoService : Service() {
                     val driveFileId =
                         mDriveServiceHelper
                             .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
-                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                    EasyDiaryDbHelper.insertActionLog(
                         ActionLog(
                             this::class.java.name,
                             "recoverPhoto",
-                            "INFO",
+                            ActionLogKey.INFO,
                             "driveFileId: $driveFileId",
                         ),
                         this,
@@ -222,21 +223,21 @@ class RecoverPhotoService : Service() {
                 else -> {}
             }
         }.onSuccess {
-            EasyDiaryDbHelper.insertActionLogOnBackground(
+            EasyDiaryDbHelper.insertActionLog(
                 ActionLog(
                     this::class.java.name,
                     "recoverPhoto",
-                    "INFO",
+                    ActionLogKey.INFO,
                     "Done",
                 ),
                 this,
             )
         }.onFailure { e ->
-            EasyDiaryDbHelper.insertActionLogOnBackground(
+            EasyDiaryDbHelper.insertActionLog(
                 ActionLog(
                     this::class.java.name,
                     "recoverPhoto",
-                    "ERROR",
+                    ActionLogKey.ERROR,
                     e.message,
                 ),
                 this,

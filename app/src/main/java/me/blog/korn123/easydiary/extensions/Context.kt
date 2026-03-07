@@ -120,6 +120,7 @@ import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -220,7 +221,15 @@ fun Context.reExecuteGmsBackup(
     errorMessage: String,
     className: String,
 ) {
-    EasyDiaryDbHelper.insertActionLogOnBackground(ActionLog(className, "reExecuteGmsBackup", "ERROR", errorMessage), this)
+    EasyDiaryDbHelper.insertActionLog(
+        ActionLog(
+            className,
+            "reExecuteGmsBackup",
+            ActionLogKey.WARN,
+            errorMessage,
+        ),
+        this,
+    )
     EasyDiaryDbHelper.getTemporaryInstance().use {
         it.beginTransaction()
         alarm.retryCount = alarm.retryCount.plus(1)

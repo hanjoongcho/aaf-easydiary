@@ -30,6 +30,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
@@ -424,6 +425,15 @@ fun Activity.updateSystemStatusBarColor(checkColor: Int = config.screenBackgroun
         window.navigationBarColor =
             androidx.compose.ui.graphics.Color.Transparent
                 .toArgb()
+    }
+}
+
+fun Window.setNavigationBarAppearance(isDark: Boolean) {
+    val color = if (isDark) androidx.compose.ui.graphics.Color.Black else androidx.compose.ui.graphics.Color.Transparent
+    this.navigationBarColor = color.toArgb()
+
+    WindowCompat.getInsetsController(this, decorView).apply {
+        isAppearanceLightNavigationBars = !isDark
     }
 }
 

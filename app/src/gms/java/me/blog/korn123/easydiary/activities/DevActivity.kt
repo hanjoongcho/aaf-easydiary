@@ -4,6 +4,7 @@ import GoogleAuthManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.setNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
@@ -70,12 +72,17 @@ class DevActivity : BaseDevActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val viewModel: BaseDevViewModel by viewModels()
+
+        // This handles the status bar and nav bar automatically
+        // Android 15 now enforces edge-to-edge by default.
+        // Manually setting Color.Black or Color.
+        // Transparent can lead to inconsistent behavior across different OS versions (like the "scrim" appearing on older versions).
+        enableEdgeToEdge()
 
         mBinding.composeView.setContent {
             AppTheme {
-                window.navigationBarColor = if (isSystemInDarkTheme()) Color.Black.toArgb() else Color.Transparent.toArgb()
+                window.setNavigationBarAppearance(isSystemInDarkTheme())
                 WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = isSystemInDarkTheme().not()
                 val configuration = LocalConfiguration.current
                 val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3

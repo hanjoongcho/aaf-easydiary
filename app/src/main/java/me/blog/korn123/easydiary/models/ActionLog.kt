@@ -3,10 +3,10 @@ package me.blog.korn123.easydiary.models
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import java.text.SimpleDateFormat
 
 open class ActionLog : RealmObject {
-
     @PrimaryKey
     var sequence: Int = 0
     var className: String? = null
@@ -16,11 +16,10 @@ open class ActionLog : RealmObject {
 
     constructor()
 
-    constructor(className: String?, signature: String?, key: String?, value: String?) : super() {
-        this.sequence = sequence
+    constructor(className: String?, signature: String?, key: ActionLogKey = ActionLogKey.INFO, value: String?) : super() {
         this.className = "[${DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.FULL, SimpleDateFormat.MEDIUM)}] $className"
         this.signature = signature
-        this.key = key
+        this.key = key.name
         this.value = value
     }
 }

@@ -130,7 +130,7 @@ object TreeUtils {
         var currentPath = ""
         for (i in 0 until parentNode.size.minus(1)) {
             currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
-            isShow = treeData.find { it -> it.first.fullPath == currentPath }?.first?.isFolderOpen ?: false
+            isShow = treeData.find { it.first.fullPath == currentPath }?.first?.isFolderOpen ?: false
             if (!isShow) break
         }
         return isShow

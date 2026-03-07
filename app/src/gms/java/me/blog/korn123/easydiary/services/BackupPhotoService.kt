@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -193,11 +194,11 @@ class BackupPhotoService : Service() {
                     }
                 }
             }.onFailure { e ->
-                EasyDiaryDbHelper.insertActionLogOnBackground(
+                EasyDiaryDbHelper.insertActionLog(
                     ActionLog(
                         this::class.java.name,
                         "determineRemoteDrivePhotos",
-                        "ERROR",
+                        ActionLogKey.ERROR,
                         e.message,
                     ),
                     applicationContext,
