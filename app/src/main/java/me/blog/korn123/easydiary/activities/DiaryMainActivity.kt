@@ -211,26 +211,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             Column(
                 modifier = Modifier,
             ) {
-                val density = LocalDensity.current
-                var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
-                val bottomPadding =
-                    if (isVanillaIceCreamPlus()) {
-                        androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding().plus(
-                            androidx.compose.foundation.layout.WindowInsets.ime
-                                .asPaddingValues()
-                                .calculateBottomPadding(),
-                        )
-                    } else {
-                        0.dp
-                    }
-                BottomToolBarContainer(
-                    modifier =
-                        Modifier
-//                        .align(Alignment.BottomCenter)
-                            .onGloballyPositioned {
-                                bottomToolbarHeight = with(density) { it.size.height.toDp() }
-                            },
-                ) {
+                BottomToolBarContainer {
                     CustomElevatedButton(
                         text = getString(R.string.button_new_entry),
                         iconResourceId = R.drawable.ic_edit,
@@ -283,8 +264,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
                     }
                 }
-
-//                Spacer(modifier = Modifier.height(bottomToolbarHeight.plus(5.dp)))
             }
         }
 

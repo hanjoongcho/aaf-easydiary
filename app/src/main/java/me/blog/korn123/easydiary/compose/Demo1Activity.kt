@@ -60,11 +60,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
-import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
@@ -299,7 +299,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
         // Control directly without using enableEdgeToEdge function
         WindowCompat.setDecorFitsSystemWindows(window, false) // 시스템 창(상태바, 내비게이션바) 위로 그리기
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.applyFullScreenStatusBarTheme()
 
         val bottomPadding =
             if (isVanillaIceCreamPlus()) {
@@ -387,7 +387,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
         items: List<String>,
         modifier: Modifier = Modifier,
     ) {
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.applyFullScreenStatusBarTheme()
         AppTheme {
             Scaffold(
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Vertical),
@@ -488,7 +488,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
         items: List<Diary>,
         modifier: Modifier = Modifier,
     ) {
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.applyFullScreenStatusBarTheme()
         AppTheme {
             Scaffold(
                 contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Vertical),

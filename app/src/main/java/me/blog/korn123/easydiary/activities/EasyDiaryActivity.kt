@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
@@ -99,6 +100,7 @@ open class EasyDiaryActivity :
                 mCustomLineSpacing,
             )
         }
+        updateNavigationBarAppearance()
         applyPolicyForRecentApps()
     }
 
