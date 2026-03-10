@@ -1,19 +1,15 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.zhpan.bannerview.constants.PageStyle
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -318,7 +314,7 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }, 300)
 
-        if (!isLandScape()) updateSystemStatusBarColor()
+        if (!isLandScape()) applyFullScreenStatusBarTheme()
 
         if (isVanillaIceCreamPlus()) {
             if (!isLandScape()) {

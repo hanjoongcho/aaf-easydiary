@@ -14,8 +14,11 @@ import com.simplemobiletools.commons.interfaces.LineColorPickerListener
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.databinding.DialogLineColorPickerBinding
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.isColorLight
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLOR
 
 /**
@@ -25,7 +28,11 @@ import me.blog.korn123.easydiary.helper.AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLO
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, val callback: (wasPositivePressed: Boolean, color: Int) -> Unit) {
+class LineColorPickerDialog(
+    val activity: BaseSimpleActivity,
+    val color: Int,
+    val callback: (wasPositivePressed: Boolean, color: Int) -> Unit,
+) {
     private var mDialogLineColorPickerBinding: DialogLineColorPickerBinding = DialogLineColorPickerBinding.inflate(activity.layoutInflater)
     private val PRIMARY_COLORS_COUNT = 19
     private val DEFAULT_PRIMARY_COLOR_INDEX = 7
@@ -36,33 +43,50 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
     init {
         mDialogLineColorPickerBinding.run {
             hexCode.text = color.toHex()
-            hexCode.setOnLongClickListener { activity.copyToClipboard(hexCode.value.substring(1)); true }
+            hexCode.setOnLongClickListener {
+                activity.copyToClipboard(hexCode.value.substring(1))
+                true
+            }
             val indexes = getColorIndexes(color)
 
             primaryLineColorPicker.updateColors(getColors(R.array.md_primary_colors), indexes.first)
-            primaryLineColorPicker.listener = object : LineColorPickerListener {
-                override fun colorChanged(index: Int, color: Int) {
-                    val secondaryColors = getColorsForIndex(index)
-                    secondaryLineColorPicker.updateColors(secondaryColors)
-                    colorUpdated(secondaryLineColorPicker.getCurrentColor())
+            primaryLineColorPicker.listener =
+                object : LineColorPickerListener {
+                    override fun colorChanged(
+                        index: Int,
+                        color: Int,
+                    ) {
+                        val secondaryColors = getColorsForIndex(index)
+                        secondaryLineColorPicker.updateColors(secondaryColors)
+                        colorUpdated(secondaryLineColorPicker.getCurrentColor())
+                    }
                 }
-            }
 
             secondaryLineColorPicker.updateColors(getColorsForIndex(indexes.first), indexes.second)
-            secondaryLineColorPicker.listener = object : LineColorPickerListener {
-                override fun colorChanged(index: Int, color: Int) {
-                    colorUpdated(color)
+            secondaryLineColorPicker.listener =
+                object : LineColorPickerListener {
+                    override fun colorChanged(
+                        index: Int,
+                        color: Int,
+                    ) {
+                        colorUpdated(color)
+                        if (activity.config.enableDebugMode) {
+                            activity.makeToast("${activity.isColorLight(color)}")
+                        }
+                    }
                 }
-            }
         }
 
-        dialog = AlertDialog.Builder(activity)
+        dialog =
+            AlertDialog
+                .Builder(activity)
                 .setPositiveButton(R.string.ok, { dialog, which -> dialogConfirmed() })
                 .setNegativeButton(R.string.cancel, { dialog, which -> dialogDismissed() })
                 .setOnCancelListener { dialogDismissed() }
-                .create().apply {
-            activity.setupDialogStuff(mDialogLineColorPickerBinding.root, this)
-        }
+                .create()
+                .apply {
+                    activity.setupDialogStuff(mDialogLineColorPickerBinding.root, this)
+                }
     }
 
     fun getSpecificColor() = mDialogLineColorPickerBinding.secondaryLineColorPicker.getCurrentColor()
@@ -76,14 +100,22 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
             hexCode.text = color.toHex()
             switchStatusBarDarkenColor.run {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    trackTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                        Color.parseColor("#AEAEAE"),
-                        ColorUtils.setAlphaComponent(color, 100),
-                    ))
-                    thumbTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                        Color.parseColor("#EAE4E4"),
-                        color
-                    ))
+                    trackTintList =
+                        ColorStateList(
+                            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                            intArrayOf(
+                                Color.parseColor("#AEAEAE"),
+                                ColorUtils.setAlphaComponent(color, 100),
+                            ),
+                        )
+                    thumbTintList =
+                        ColorStateList(
+                            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                            intArrayOf(
+                                Color.parseColor("#EAE4E4"),
+                                color,
+                            ),
+                        )
                 }
             }
         }
@@ -97,8 +129,9 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
         for (i in 0 until PRIMARY_COLORS_COUNT) {
             val colors = getColorsForIndex(i)
             val size = colors.size
-            (0 until size).filter { color == colors[it] }
-                    .forEach { return Pair(i, it) }
+            (0 until size)
+                .filter { color == colors[it] }
+                .forEach { return Pair(i, it) }
         }
 
         return getDefaultColorPair()
@@ -115,33 +148,38 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
         callback(true, color)
     }
 
-    private fun getColorsForIndex(index: Int) = when (index) {
-        0 -> getColors(R.array.md_reds)
-        1 -> getColors(R.array.md_pinks)
-        2 -> getColors(R.array.md_purples)
-        3 -> getColors(R.array.md_deep_purples)
-        4 -> getColors(R.array.md_indigos)
-        5 -> getColors(R.array.md_blues)
-        6 -> getColors(R.array.md_light_blues)
-        7 -> getColors(R.array.md_cyans)
-        8 -> getColors(R.array.md_teals)
-        9 -> getColors(R.array.md_greens)
-        10 -> getColors(R.array.md_light_greens)
-        11 -> getColors(R.array.md_limes)
-        12 -> getColors(R.array.md_yellows)
-        13 -> getColors(R.array.md_ambers)
-        14 -> getColors(R.array.md_oranges)
-        15 -> getColors(R.array.md_deep_oranges)
-        16 -> getColors(R.array.md_browns)
-        17 -> getColors(R.array.md_greys)
-        18 -> getColors(R.array.md_blue_greys)
-        else -> throw RuntimeException("Invalid color id $index")
-    }
+    private fun getColorsForIndex(index: Int) =
+        when (index) {
+            0 -> getColors(R.array.md_reds)
+            1 -> getColors(R.array.md_pinks)
+            2 -> getColors(R.array.md_purples)
+            3 -> getColors(R.array.md_deep_purples)
+            4 -> getColors(R.array.md_indigos)
+            5 -> getColors(R.array.md_blues)
+            6 -> getColors(R.array.md_light_blues)
+            7 -> getColors(R.array.md_cyans)
+            8 -> getColors(R.array.md_teals)
+            9 -> getColors(R.array.md_greens)
+            10 -> getColors(R.array.md_light_greens)
+            11 -> getColors(R.array.md_limes)
+            12 -> getColors(R.array.md_yellows)
+            13 -> getColors(R.array.md_ambers)
+            14 -> getColors(R.array.md_oranges)
+            15 -> getColors(R.array.md_deep_oranges)
+            16 -> getColors(R.array.md_browns)
+            17 -> getColors(R.array.md_greys)
+            18 -> getColors(R.array.md_blue_greys)
+            else -> throw RuntimeException("Invalid color id $index")
+        }
 
     private fun getColors(id: Int) = activity.resources.getIntArray(id).toCollection(ArrayList())
 
     private var mDarkenColorOptionChangeCallback: ((enableStatusBarDarkenColor: Boolean, color: Int) -> Unit)? = null
-    fun setDarkenColorOptionChangeListener(currentOption: Boolean, callback: (enableStatusBarDarkenColor: Boolean, color: Int) -> Unit): Unit {
+
+    fun setDarkenColorOptionChangeListener(
+        currentOption: Boolean,
+        callback: (enableStatusBarDarkenColor: Boolean, color: Int) -> Unit,
+    ) {
         mDarkenColorOptionChangeCallback = callback
         mDialogLineColorPickerBinding.switchStatusBarDarkenColor.run {
             isChecked = currentOption

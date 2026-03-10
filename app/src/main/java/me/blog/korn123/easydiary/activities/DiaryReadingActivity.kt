@@ -30,8 +30,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.collectAsState
@@ -856,20 +858,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             setFontsSize()
             initContents()
 
-            if (requireContext().isVanillaIceCreamPlus()) {
-                ViewCompat.setOnApplyWindowInsetsListener(mBinding.composeView) { view, insets ->
-                    val navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-                    val lp = view.layoutParams as ViewGroup.MarginLayoutParams
-                    lp.bottomMargin = navBarInsets.bottom
-                    view.layoutParams = lp
-                    insets
-                }
-            }
-
             mBinding.composeView.setContent {
-//                val diary = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
                 AppTheme {
-                    Column {
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .navigationBarsPadding(),
+                    ) {
                         val parentDiaries by diaryViewModel.parentDiaries.collectAsState()
                         // diary parents items
                         if (parentDiaries.isNotEmpty()) {
@@ -971,11 +967,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
             }
         }
-
-//        override fun onResume() {
-//            super.onResume()
-//            initContents()
-//        }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
 

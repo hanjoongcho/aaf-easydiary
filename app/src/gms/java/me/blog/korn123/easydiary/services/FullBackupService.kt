@@ -27,6 +27,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -74,11 +75,11 @@ class FullBackupService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "onCreate",
-                "INFO",
+                ActionLogKey.INFO,
                 "start",
             ),
             this,
@@ -117,11 +118,11 @@ class FullBackupService : Service() {
                 getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "onCreate",
-                "INFO",
+                ActionLogKey.INFO,
                 "end",
             ),
             this,
@@ -133,11 +134,11 @@ class FullBackupService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "onStartCommand",
-                "INFO",
+                ActionLogKey.INFO,
                 "start",
             ),
             this,
@@ -151,11 +152,11 @@ class FullBackupService : Service() {
             workStatusList.add(workStatus)
             backupPhoto(it.copy(), workStatus)
         }
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "onStartCommand",
-                "INFO",
+                ActionLogKey.INFO,
                 "end",
             ),
             this,
@@ -173,11 +174,11 @@ class FullBackupService : Service() {
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "backupPhoto",
-                "INFO",
+                ActionLogKey.INFO,
                 "start",
             ),
             this,
@@ -220,11 +221,11 @@ class FullBackupService : Service() {
 
         applicationScope.launch { determineRemoteDrivePhotos(null, alarm, workStatus) }
 
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "backupPhoto",
-                "INFO",
+                ActionLogKey.INFO,
                 "end",
             ),
             this,
@@ -236,11 +237,11 @@ class FullBackupService : Service() {
         alarm: Alarm,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "determineRemoteDrivePhotos",
-                "INFO",
+                ActionLogKey.INFO,
                 "start",
             ),
             this,
@@ -254,11 +255,11 @@ class FullBackupService : Service() {
                     nextPageToken,
                 )
         }.onSuccess { photoFileList ->
-            EasyDiaryDbHelper.insertActionLogOnBackground(
+            EasyDiaryDbHelper.insertActionLog(
                 ActionLog(
                     this::class.java.name,
                     "determineRemoteDrivePhotos",
-                    "INFO",
+                    ActionLogKey.INFO,
                     "progress-1",
                 ),
                 this@FullBackupService,
@@ -266,22 +267,22 @@ class FullBackupService : Service() {
             photoFileList.files.map { photoFile ->
                 workStatus.remoteDriveFileNames.add(photoFile.name)
             }
-            EasyDiaryDbHelper.insertActionLogOnBackground(
+            EasyDiaryDbHelper.insertActionLog(
                 ActionLog(
                     this::class.java.name,
                     "determineRemoteDrivePhotos",
-                    "INFO",
+                    ActionLogKey.INFO,
                     "progress-2",
                 ),
                 this@FullBackupService,
             )
             when (photoFileList.nextPageToken == null) {
                 true -> {
-                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                    EasyDiaryDbHelper.insertActionLog(
                         ActionLog(
                             this::class.java.name,
                             "determineRemoteDrivePhotos",
-                            "INFO",
+                            ActionLogKey.INFO,
                             "progress-3",
                         ),
                         this@FullBackupService,
@@ -303,11 +304,11 @@ class FullBackupService : Service() {
                 }
 
                 false -> {
-                    EasyDiaryDbHelper.insertActionLogOnBackground(
+                    EasyDiaryDbHelper.insertActionLog(
                         ActionLog(
                             this::class.java.name,
                             "determineRemoteDrivePhotos",
-                            "INFO",
+                            ActionLogKey.INFO,
                             "progress-4",
                         ),
                         this@FullBackupService,
@@ -324,11 +325,11 @@ class FullBackupService : Service() {
             stopSelf()
         }
 
-        EasyDiaryDbHelper.insertActionLogOnBackground(
+        EasyDiaryDbHelper.insertActionLog(
             ActionLog(
                 this::class.java.name,
                 "determineRemoteDrivePhotos",
-                "INFO",
+                ActionLogKey.INFO,
                 "end",
             ),
             this,

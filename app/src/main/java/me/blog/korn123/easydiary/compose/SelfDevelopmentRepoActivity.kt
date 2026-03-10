@@ -21,8 +21,8 @@ import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
+import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
@@ -63,7 +63,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun SelfDevelopmentRepo() {
         val context = LocalContext.current
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.applyFullScreenStatusBarTheme()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,

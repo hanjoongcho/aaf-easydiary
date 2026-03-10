@@ -25,9 +25,9 @@ import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.commons.utils.TreeUtils.buildFileTree
 import me.blog.korn123.commons.utils.TreeUtils.flattenTree
+import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
-import me.blog.korn123.easydiary.extensions.updateSystemStatusBarColor
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TreeConstants
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
@@ -64,7 +64,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
     @Composable
     fun TreeTimeline(isResultAPI: Boolean = false) {
         val context = LocalContext.current
-        LocalActivity.current?.updateSystemStatusBarColor()
+        LocalActivity.current?.applyFullScreenStatusBarTheme()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
             context.config.enableCardViewPolicy,

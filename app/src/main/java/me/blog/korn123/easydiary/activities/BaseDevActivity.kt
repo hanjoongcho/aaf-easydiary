@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
@@ -364,15 +365,20 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "InApp Browser",
-                null,
+                "CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build().run {\n" +
+                    "                        launchUrl(\n" +
+                    "                            this@BaseDevActivity,\n" +
+                    "                            Uri.parse(\"https://aafactory.github.io/\"),\n" +
+                    "                        )           \n" +
+                    "                    }",
                 modifier = modifier,
             ) {
-                val customTabsIntent =
-                    CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                customTabsIntent.launchUrl(
-                    this@BaseDevActivity,
-                    Uri.parse("https://github.com/AAFactory/aafactory-commons"),
-                )
+                CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build().run {
+                    launchUrl(
+                        this@BaseDevActivity,
+                        "https://aafactory.github.io/".toUri(),
+                    )
+                }
             }
             SimpleCard(
                 "Clear-Unused-Photo",
@@ -554,8 +560,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 viewModel.plus()
             }
             SimpleCard(
-                "Compose Demo",
-                "NestedScrollConnection",
+                "scrollBehavior & contentPadding & contentWindowInsets",
+                "contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
@@ -566,8 +572,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
-                "Compose Demo",
-                "FullScreen",
+                "enableEdgeToEdge",
+                "contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
@@ -578,20 +584,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
-                "Compose Demo",
-                "NestedScrollConnection With Auto Insets",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, Demo1Activity::class.java).apply {
-                        putExtra("mode", 3)
-                    },
-                )
-            }
-            SimpleCard(
-                "Compose Demo",
-                "FastScrollLazyColumnSample1",
+                "FastScroll + LazyColumn + SimpleCard",
+                "contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Vertical)",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
@@ -602,14 +596,26 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             }
             SimpleCard(
-                "Compose Demo",
-                "FastScrollLazyColumnSample2",
+                "FastScroll + LazyColumn + LegacyDiaryItemCard",
+                "contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Vertical)",
                 modifier = modifier,
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 5)
+                    },
+                )
+            }
+            SimpleCard(
+                "Full Size FastScroll + LazyColumn + LegacyDiaryItemCard",
+                "contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 6)
                     },
                 )
             }

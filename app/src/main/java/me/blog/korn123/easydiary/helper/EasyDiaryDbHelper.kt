@@ -538,27 +538,11 @@ object EasyDiaryDbHelper {
      * 명시적으로 close하지 않는경우 realm db파일 변경 시 app crash 사유가 됨
      * Activity(UI Thread), Service, Receiver등은 동일한 Thread ID에서 동작함
      * Activity(Background Thread), AppWidgetProvider등은 별도의 Thread ID에서 동작함
+     *
+     * 임시 인스턴스 생성 후 use block안에서 realm 데이터를 저장하면 thread 제약없이 컨트롤이 가능함
      * ```
      */
-    fun insertCurrentThreadInfo(
-        className: String,
-        signature: String,
-        realmInstance: Realm = getInstance(),
-    ) {
-        val actionLog = ActionLog(className, signature, "INFO", Thread.currentThread().id.toString())
-        insertActionLog(actionLog, realmInstance)
-    }
-
     fun insertActionLog(
-        actionLog: ActionLog,
-        context: Context,
-    ) {
-        if (context.config.enableDebugMode) {
-            insertActionLog(actionLog)
-        }
-    }
-
-    fun insertActionLogOnBackground(
         actionLog: ActionLog,
         context: Context,
     ) {

@@ -20,25 +20,25 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomToolBarContainer(
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Box(
-//        modifier = modifier.padding(bottom = bottomPadding.plus(5.dp))
-        modifier = modifier
-            .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
-            .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
-            .padding(bottom = 5.dp) // 최소 5dp 패딩 유지
+        modifier =
+            modifier
+                .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
+                .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+                .padding(bottom = 5.dp), // 최소 5dp 패딩 유지
     ) {
         val scrollState = rememberScrollState()
-        Row (
-            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End),  // 우측정렬 + 간격
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.End), // 우측정렬 + 간격
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
-                .horizontalScroll(scrollState) // 가로 스크롤 적용
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomEnd) // Box 내부에서 우측 하단 배치
+                    .horizontalScroll(scrollState), // 가로 스크롤 적용
         ) {
-
             Spacer(modifier = Modifier.width(5.dp))
 
             content()
@@ -47,4 +47,3 @@ fun BottomToolBarContainer(
         }
     }
 }
-
