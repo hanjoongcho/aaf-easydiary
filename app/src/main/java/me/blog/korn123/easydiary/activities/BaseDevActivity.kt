@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
@@ -364,15 +365,20 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "InApp Browser",
-                null,
+                "CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build().run {\n" +
+                    "                        launchUrl(\n" +
+                    "                            this@BaseDevActivity,\n" +
+                    "                            Uri.parse(\"https://aafactory.github.io/\"),\n" +
+                    "                        )           \n" +
+                    "                    }",
                 modifier = modifier,
             ) {
-                val customTabsIntent =
-                    CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
-                customTabsIntent.launchUrl(
-                    this@BaseDevActivity,
-                    Uri.parse("https://aafactory.github.io/"),
-                )
+                CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build().run {
+                    launchUrl(
+                        this@BaseDevActivity,
+                        "https://aafactory.github.io/".toUri(),
+                    )
+                }
             }
             SimpleCard(
                 "Clear-Unused-Photo",
