@@ -938,8 +938,10 @@ fun Context.updateTextColors(
         }
 }
 
+fun Context.innerCardDarkenFactor(): Int = if (isColorLight(config.backgroundColor)) 2 else 2.unaryMinus()
+
 fun Context.updateDashboardInnerCard(cardView: CardView) {
-    if (config.backgroundColor != -1) cardView.setCardBackgroundColor(config.backgroundColor.darkenColor(-2))
+    cardView.setCardBackgroundColor(config.backgroundColor.darkenColor(innerCardDarkenFactor()))
 }
 
 fun Context.updateAppViews(

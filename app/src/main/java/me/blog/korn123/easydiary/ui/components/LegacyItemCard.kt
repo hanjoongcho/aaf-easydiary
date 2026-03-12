@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.extensions.isColorLight
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -287,11 +288,10 @@ fun LegacyDiarySubItemCard(
     itemLongClickCallback: () -> Unit,
 ) {
     val context = LocalContext.current
-    val darkFactor = if (context.isColorLight(context.config.backgroundColor)) 8 else 8.unaryMinus()
 
     Card(
         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-        colors = CardDefaults.cardColors(Color(context.config.backgroundColor.darkenColor(darkFactor))),
+        colors = CardDefaults.cardColors(Color(context.config.backgroundColor.darkenColor(context.innerCardDarkenFactor()))),
         modifier =
             Modifier
                 .padding(HORIZONTAL_PADDING.dp, VERTICAL_PADDING.dp)

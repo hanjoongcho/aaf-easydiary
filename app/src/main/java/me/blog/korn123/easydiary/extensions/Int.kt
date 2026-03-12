@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.graphics.Color
+import androidx.core.graphics.toColorInt
 import me.blog.korn123.easydiary.helper.ColorConstants.DARK_GREY
 import java.util.Locale
 import java.util.Random
@@ -46,11 +47,8 @@ fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
 
 // taken from https://stackoverflow.com/a/40964456/1967672
 fun Int.darkenColor(darkFactor: Int = 8): Int {
-    if (this == Color.WHITE) {
-        return -2105377
-    } else if (this == Color.BLACK) {
-        return Color.BLACK
-    }
+    if (this == Color.WHITE) return "#FEFEFE".toColorInt()
+    if (this == Color.BLACK) return Color.BLACK
 
     var hsv = FloatArray(3)
     Color.colorToHSV(this, hsv)
