@@ -20,7 +20,6 @@ import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
@@ -33,12 +32,15 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.statusBarHeight
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
-abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
+abstract class ToolbarControlBaseActivity<S : Scrollable> :
+    EasyDiaryActivity(),
+    ObservableScrollViewCallbacks {
     protected lateinit var mBinding: ActivityDiaryMainBinding
     protected val viewModel: DiaryMainViewModel by viewModels()
+
+    protected var navigationBarHeight = 0
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +56,11 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
 
     protected abstract fun createScrollable(): S
 
-    override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {}
+    override fun onScrollChanged(
+        scrollY: Int,
+        firstScroll: Boolean,
+        dragging: Boolean,
+    ) {}
 
     override fun onDownMotionEvent() {}
 
@@ -79,13 +85,9 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         }
     }
 
-    private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
-    }
+    private fun toolbarIsShown(): Boolean = ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
 
-    private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
-    }
+    private fun toolbarIsHidden(): Boolean = ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
 
     private fun showToolbar() {
         moveToolbar(0F)
@@ -104,20 +106,25 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         mBinding.run {
             composeView.run {
 //                visibility = View.GONE
-                animate().alpha(0F).setDuration(300).setListener(object : Animator.AnimatorListener {
-                    //                    override fun onAnimationStart(animation: android.animation.Animator?) {}
+                animate().alpha(0F).setDuration(300).setListener(
+                    object : Animator.AnimatorListener {
+                        //                    override fun onAnimationStart(animation: android.animation.Animator?) {}
 //                    override fun onAnimationEnd(animation: android.animation.Animator?) {
 //                        visibility = View.GONE
 //                    }
 //                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
 //                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
-                    override fun onAnimationStart(p0: Animator) {}
-                    override fun onAnimationEnd(p0: Animator) {
-                        visibility = View.GONE
-                    }
-                    override fun onAnimationCancel(p0: Animator) {}
-                    override fun onAnimationRepeat(p0: Animator) {}
-                })
+                        override fun onAnimationStart(p0: Animator) {}
+
+                        override fun onAnimationEnd(p0: Animator) {
+                            visibility = View.GONE
+                        }
+
+                        override fun onAnimationCancel(p0: Animator) {}
+
+                        override fun onAnimationRepeat(p0: Animator) {}
+                    },
+                )
             }
         }
     }
@@ -138,9 +145,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         animator.start()
     }
 
-    private fun getScreenHeight(): Int {
-        return findViewById<View>(android.R.id.content).height
-    }
+    private fun getScreenHeight(): Int = (findViewById<View>(android.R.id.content).height).minus(navigationBarHeight)
 
     private fun keypadIsShown(): Boolean {
         var isShow = false

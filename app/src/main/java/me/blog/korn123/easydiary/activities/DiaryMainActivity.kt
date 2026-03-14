@@ -26,19 +26,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -350,6 +343,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
 
         mBinding.composeView.visibility = View.VISIBLE
+
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.mainHolder) { v, insets ->
+            val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            navigationBarHeight = navigationBars.bottom
+            val layoutParams = v.layoutParams
+            if (layoutParams is ViewGroup.MarginLayoutParams) {
+                layoutParams.bottomMargin = navigationBarHeight
+                v.layoutParams = layoutParams
+            }
+            insets
+        }
     }
 
     override fun onRequestPermissionsResult(
