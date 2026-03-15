@@ -1,0 +1,246 @@
+package me.blog.korn123.easydiary.compose
+
+import android.os.Bundle
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import com.simplemobiletools.commons.extensions.toast
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
+import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
+import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
+import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.FastScroll
+import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+
+class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(getThemeId())
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            val topAppBarState = rememberTopAppBarState()
+            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+            val bottomPadding =
+                if (isVanillaIceCreamPlus()) {
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding()
+                } else {
+                    0.dp
+                }
+
+            val items: List<Diary> = EasyDiaryDbHelper.findDiary(null)
+            val modifier: Modifier = Modifier
+            AppTheme {
+                applyFullScreenStatusBarTheme()
+                updateNavigationBarAppearance()
+                Scaffold(
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
+                    containerColor = Color(config.screenBackgroundColor),
+                    content = { innerPadding ->
+                        val context = LocalContext.current
+                        val activity = LocalActivity.current
+                        val coroutineScope = rememberCoroutineScope()
+                        val settingCardModifier = Modifier.fillMaxWidth()
+                        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
+                            context.config.enableCardViewPolicy,
+                        )
+                        val listState = rememberLazyListState()
+                        var thumbVisible by remember { mutableStateOf(false) }
+                        var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
+                        var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
+                        var hideJob: Job? by remember { mutableStateOf(null) }
+                        val delayTimeMillis = 1500L
+
+                        // 스크롤 이벤트 감지
+                        LaunchedEffect(listState) {
+                            snapshotFlow { listState.isScrollInProgress }
+                                .collect { isScrolling ->
+                                    if (isScrolling) {
+                                        hideJob?.cancel()
+                                        thumbVisible = true
+                                    } else {
+                                        hideJob?.cancel()
+                                        hideJob =
+                                            launch {
+                                                delay(delayTimeMillis)
+                                                if (!isDraggingThumb) thumbVisible = false
+                                            }
+                                    }
+                                }
+                        }
+
+                        fun itemClickCallback(diary: Diary) {
+                            activity?.toast("itemClickCallback: ${diary.title}")
+                        }
+
+                        fun itemLongClickCallback() {
+                            activity?.toast("itemLongClickCallback")
+                        }
+
+                        Box(
+                            modifier =
+                                modifier
+                                    .padding(innerPadding)
+                                    .fillMaxSize(),
+                        ) {
+                            LazyColumn(
+                                state = listState,
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .onSizeChanged { containerSize = it },
+                                contentPadding =
+                                    PaddingValues(
+                                        top =
+                                            WindowInsets.statusBars
+                                                .asPaddingValues()
+                                                .calculateTopPadding(),
+                                        bottom =
+                                            WindowInsets.navigationBars
+                                                .asPaddingValues()
+                                                .calculateBottomPadding(),
+                                    ),
+                            ) {
+                                itemsIndexed(items) { index, diary ->
+                                    Card(
+                                        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                                        modifier = (
+                                            if (enableCardViewPolicy) {
+                                                modifier.padding(
+                                                    HORIZONTAL_PADDING.dp,
+                                                    VERTICAL_PADDING.dp,
+                                                )
+                                            } else {
+                                                modifier
+                                                    .padding(1.dp, 1.dp)
+                                            }
+                                        ),
+                                        elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                    ) {
+                                        LegacyDiaryItemCard(
+                                            diary = diary,
+                                            itemClickCallback = { itemClickCallback(it) },
+                                            itemLongClickCallback = { itemLongClickCallback() },
+                                        )
+                                    }
+                                }
+                            }
+
+                            FastScroll(
+                                items = items,
+                                listState = listState,
+                                containerHeightPx =
+                                    containerSize.height.toFloat().minus(
+                                        with(
+                                            LocalDensity.current,
+                                        ) {
+                                            WindowInsets.navigationBars
+                                                .asPaddingValues()
+                                                .calculateBottomPadding()
+                                                .toPx()
+                                                .plus(
+                                                    WindowInsets.statusBars
+                                                        .asPaddingValues()
+                                                        .calculateTopPadding()
+                                                        .toPx(),
+                                                )
+                                        },
+                                    ),
+                                isDraggingThumb = isDraggingThumb,
+                                thumbVisible = thumbVisible,
+                                containerSize = containerSize,
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(
+                                            top =
+                                                WindowInsets.statusBars
+                                                    .asPaddingValues()
+                                                    .calculateTopPadding(),
+                                            bottom =
+                                                WindowInsets.navigationBars
+                                                    .asPaddingValues()
+                                                    .calculateBottomPadding(),
+                                        ),
+                                showDebugCard = false,
+                                updateThumbVisible = { thumbVisible = it },
+                                updateDraggingThumb = { isDraggingThumb = it },
+                                dragEndCallback = {
+                                    hideJob?.cancel()
+                                    coroutineScope.launch {
+                                        hideJob =
+                                            launch {
+                                                delay(delayTimeMillis)
+                                                if (!isDraggingThumb) thumbVisible = false
+                                            }
+                                    }
+                                },
+                            )
+                        }
+                    },
+                )
+            }
+        }
+        showBetaFeatureMessage()
+    }
+
+    /***************************************************************************************************
+     *   Define Compose
+     *
+     ***************************************************************************************************/
+}

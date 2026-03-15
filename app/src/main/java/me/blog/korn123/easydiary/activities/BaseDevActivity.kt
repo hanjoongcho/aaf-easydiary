@@ -16,7 +16,6 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.ContextThemeWrapper
@@ -228,6 +227,42 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     @Composable
+    protected fun RefactoringBacklog(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+    ) {
+        val currentContext = LocalContext.current
+        val currentActivity = LocalActivity.current
+
+        CategoryTitleCard(title = "Custom Launcher", marginTop = 0)
+        FlowRow(
+            maxItemsInEachRow = maxItemsInEachRow,
+            modifier = Modifier,
+        ) {
+            SimpleCard(
+                "Self Development",
+                "Self Development Repository",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, SelfDevelopmentRepoActivity::class.java),
+                )
+            }
+            SimpleCard(
+                "Mig DiaryMain",
+                "Migrated DiaryMain screen to Jetpack Compose",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java),
+                )
+            }
+        }
+    }
+
+    @Composable
     protected fun Etc(
         modifier: Modifier,
         maxItemsInEachRow: Int,
@@ -240,16 +275,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
-            SimpleCard(
-                "Self Development",
-                "Self Development Repository",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, SelfDevelopmentRepoActivity::class.java),
-                )
-            }
             SimpleCard(
                 "GitHub MarkDown Page",
                 "SYNC ALL",

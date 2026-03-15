@@ -119,11 +119,6 @@
             android:label=""
             android:theme="@style/SplashScreenTheme" />
         <activity
-            android:name=".compose.QuickSettingsActivity"
-            android:label=""
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.MaterialComponents" />
-        <activity
             android:name=".activities.CustomizationActivity"
             android:label="@string/customize_colors"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -173,8 +168,11 @@
         <activity
             android:name=".activities.GalleryViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <!-- Start Jetpack Compose Activity -->
         <activity
-            android:name=".compose.Demo1Activity"
+            android:name=".compose.QuickSettingsActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
@@ -187,6 +185,18 @@
             android:name=".compose.TreeTimelineActivity"
             android:label=""
             android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".compose.DiaryMainActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".compose.Demo1Activity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <!-- End Jetpack Compose Activity -->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
