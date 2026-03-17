@@ -1,9 +1,9 @@
 package me.blog.korn123.easydiary.compose
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import me.blog.korn123.easydiary.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getStatusBarColor
@@ -13,7 +13,7 @@ import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
-open class EasyDiaryComposeBaseActivity : ComponentActivity() {
+open class EasyDiaryComposeBaseActivity : BaseSimpleActivity() {
     val mSettingsViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -56,8 +57,10 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
@@ -88,7 +91,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                 applyFullScreenStatusBarTheme()
                 updateNavigationBarAppearance()
                 Scaffold(
-                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                     containerColor = Color(config.screenBackgroundColor),
                     content = { innerPadding ->
                         val context = LocalContext.current
@@ -131,112 +134,112 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             activity?.toast("itemLongClickCallback")
                         }
 
-                        Box(
+                        Column(
                             modifier =
                                 modifier
                                     .padding(innerPadding)
                                     .fillMaxSize(),
                         ) {
-                            LazyColumn(
-                                state = listState,
-                                modifier =
-                                    Modifier
-                                        .fillMaxSize()
-                                        .onSizeChanged { containerSize = it },
-                                contentPadding =
-                                    PaddingValues(
-                                        top =
-                                            WindowInsets.statusBars
-                                                .asPaddingValues()
-                                                .calculateTopPadding(),
-                                        bottom =
-                                            WindowInsets.navigationBars
-                                                .asPaddingValues()
-                                                .calculateBottomPadding(),
-                                    ),
+                            PhotoHighlightCard()
+                            Box(
+                                modifier = Modifier.weight(1f),
                             ) {
-                                itemsIndexed(items) { index, diary ->
-                                    Card(
-                                        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-                                        colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                                        modifier = (
-                                            if (enableCardViewPolicy) {
-                                                modifier.padding(
-                                                    HORIZONTAL_PADDING.dp,
-                                                    VERTICAL_PADDING.dp,
-                                                )
-                                            } else {
-                                                modifier
-                                                    .padding(1.dp, 1.dp)
-                                            }
-                                        ),
-                                        elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
-                                    ) {
-                                        LegacyDiaryItemCard(
-                                            diary = diary,
-                                            itemClickCallback = { itemClickCallback(it) },
-                                            itemLongClickCallback = { itemLongClickCallback() },
-                                        )
-                                    }
-                                }
-                            }
-
-                            FastScroll(
-                                items = items,
-                                listState = listState,
-                                containerHeightPx =
-                                    containerSize.height.toFloat().minus(
-                                        with(
-                                            LocalDensity.current,
-                                        ) {
-                                            WindowInsets.navigationBars
-                                                .asPaddingValues()
-                                                .calculateBottomPadding()
-                                                .toPx()
-                                                .plus(
-                                                    WindowInsets.statusBars
-                                                        .asPaddingValues()
-                                                        .calculateTopPadding()
-                                                        .toPx(),
-                                                )
-                                        },
-                                    ),
-                                isDraggingThumb = isDraggingThumb,
-                                thumbVisible = thumbVisible,
-                                containerSize = containerSize,
-                                modifier =
-                                    Modifier
-                                        .align(Alignment.TopEnd)
-                                        .padding(
-                                            top =
-                                                WindowInsets.statusBars
-                                                    .asPaddingValues()
-                                                    .calculateTopPadding(),
+                                LazyColumn(
+                                    state = listState,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                            .onSizeChanged { containerSize = it },
+                                    contentPadding =
+                                        PaddingValues(
                                             bottom =
                                                 WindowInsets.navigationBars
                                                     .asPaddingValues()
                                                     .calculateBottomPadding(),
                                         ),
-                                showDebugCard = false,
-                                updateThumbVisible = { thumbVisible = it },
-                                updateDraggingThumb = { isDraggingThumb = it },
-                                dragEndCallback = {
-                                    hideJob?.cancel()
-                                    coroutineScope.launch {
-                                        hideJob =
-                                            launch {
-                                                delay(delayTimeMillis)
-                                                if (!isDraggingThumb) thumbVisible = false
-                                            }
+                                ) {
+                                    itemsIndexed(items) { index, diary ->
+                                        Card(
+                                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                                            modifier = (
+                                                if (enableCardViewPolicy) {
+                                                    modifier.padding(
+                                                        HORIZONTAL_PADDING.dp,
+                                                        VERTICAL_PADDING.dp,
+                                                    )
+                                                } else {
+                                                    modifier
+                                                        .padding(1.dp, 1.dp)
+                                                }
+                                            ),
+                                            elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                        ) {
+                                            LegacyDiaryItemCard(
+                                                diary = diary,
+                                                itemClickCallback = { itemClickCallback(it) },
+                                                itemLongClickCallback = { itemLongClickCallback() },
+                                            )
+                                        }
                                     }
-                                },
-                            )
+                                }
+
+                                FastScroll(
+                                    items = items,
+                                    listState = listState,
+                                    containerHeightPx =
+                                        containerSize.height.toFloat().minus(
+                                            with(
+                                                LocalDensity.current,
+                                            ) {
+                                                WindowInsets.navigationBars
+                                                    .asPaddingValues()
+                                                    .calculateBottomPadding()
+                                                    .toPx()
+//                                                    .plus(
+//                                                        WindowInsets.statusBars
+//                                                            .asPaddingValues()
+//                                                            .calculateTopPadding()
+//                                                            .toPx(),
+//                                                    )
+                                            },
+                                        ),
+                                    isDraggingThumb = isDraggingThumb,
+                                    thumbVisible = thumbVisible,
+                                    containerSize = containerSize,
+                                    modifier =
+                                        Modifier
+                                            .align(Alignment.TopEnd)
+                                            .padding(
+//                                                top =
+//                                                    WindowInsets.statusBars
+//                                                        .asPaddingValues()
+//                                                        .calculateTopPadding(),
+                                                bottom =
+                                                    WindowInsets.navigationBars
+                                                        .asPaddingValues()
+                                                        .calculateBottomPadding(),
+                                            ),
+                                    showDebugCard = false,
+                                    updateThumbVisible = { thumbVisible = it },
+                                    updateDraggingThumb = { isDraggingThumb = it },
+                                    dragEndCallback = {
+                                        hideJob?.cancel()
+                                        coroutineScope.launch {
+                                            hideJob =
+                                                launch {
+                                                    delay(delayTimeMillis)
+                                                    if (!isDraggingThumb) thumbVisible = false
+                                                }
+                                        }
+                                    },
+                                )
+                            }
                         }
                     },
                 )
             }
         }
-        showBetaFeatureMessage()
     }
 
     /***************************************************************************************************

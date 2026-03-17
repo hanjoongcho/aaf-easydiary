@@ -1,9 +1,9 @@
 package me.blog.korn123.easydiary.ui.components
 
 import android.animation.ArgbEvaluator
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -21,11 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.compose.AndroidFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
@@ -46,16 +49,17 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.lang3.StringUtils
 
-@SuppressLint("SetTextI18n")
 @Composable
 fun LegacyDiaryItemCard(
     diary: Diary,
@@ -278,7 +282,6 @@ fun LegacyDiaryItemCard(
     )
 }
 
-@SuppressLint("SetTextI18n")
 @Composable
 fun LegacyDiarySubItemCard(
     diary: DiaryUiModel,
@@ -377,4 +380,33 @@ fun LegacyDiarySubItemCard(
             },
         )
     }
+}
+
+@Composable
+fun PhotoHighlightCard(
+    modifier: Modifier = Modifier,
+) {
+    AndroidFragment<PhotoHighlightFragment>(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(150.dp),
+        // 초기 데이터 주입 (Bundle)
+        // 화면이 처음 그려질 때 1회만 주입되며, 이후 OS가 알아서 복원 및 유지
+        arguments =
+            Bundle().apply {
+                putInt(PhotoHighlightConstants.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                putFloat(PhotoHighlightConstants.REVEAL_WIDTH, 20f)
+                putFloat(PhotoHighlightConstants.PAGE_MARGIN, 5f)
+                putBoolean(PhotoHighlightConstants.AUTO_PLAY, true)
+            },
+        // ⭐️ 프래그먼트가 화면에 처음 붙었을 때, 그리고 Compose의 상태가 바뀔 때마다 호출
+        onUpdate = { fragment ->
+            // 여기에 콜백을 달아주면, 화면이 회전하거나 메모리가 복원되어도
+            // 람다(Callback)가 증발하지 않고 항상 최신 상태로 튼튼하게 유지 가능
+            fragment.togglePhotoHighlightCallback = { isVisible ->
+//                onVisibilityChanged(isVisible)
+            }
+        },
+    )
 }

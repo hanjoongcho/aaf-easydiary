@@ -190,6 +190,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics:1.10.1")
     implementation("androidx.compose.ui:ui-tooling:1.10.1")
     implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.fragment:fragment-compose:1.8.9")
 
     // gms
     implementation("com.google.android.gms:play-services-auth:21.5.0")
