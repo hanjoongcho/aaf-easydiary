@@ -1006,8 +1006,8 @@ fun SymbolCard(
             (
                 if (LocalContext.current.config.enableCardViewPolicy) {
                     modifier.padding(
-                        3.dp,
-                        3.dp,
+                        HORIZONTAL_PADDING.dp,
+                        HORIZONTAL_PADDING.dp,
                     )
                 } else {
                     modifier.padding(1.dp, 1.dp)

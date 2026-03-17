@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.compose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
@@ -46,17 +47,24 @@ import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DevActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
@@ -234,6 +242,64 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         }
                                     },
                                 )
+
+                                BottomToolBarContainer(
+                                    modifier = Modifier.align(Alignment.BottomCenter),
+                                ) {
+                                    CustomElevatedButton(
+                                        text = getString(R.string.button_new_entry),
+                                        iconResourceId = R.drawable.ic_edit,
+                                        iconSize = 16.dp,
+                                    ) {
+                                        val createDiary =
+                                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                                        TransitionHelper.startActivityWithTransition(
+                                            this@DiaryMainActivity,
+                                            createDiary,
+                                        )
+                                    }
+                                    CustomElevatedButton(
+                                        text = getString(R.string.button_tree_view),
+                                        iconResourceId = R.drawable.ic_tree_structure,
+                                        iconSize = 16.dp,
+                                    ) {
+                                        TransitionHelper.startActivityWithTransition(
+                                            this@DiaryMainActivity,
+                                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                                        )
+                                    }
+                                    CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+//                                        moveToday()
+                                        makeSnackBar("moveToday()")
+                                    }
+
+                                    if (config.enableDebugMode) {
+                                        CustomElevatedButton(
+                                            text = getString(R.string.button_quick_settings),
+                                            iconResourceId = R.drawable.ic_running,
+                                            iconSize = 16.dp,
+                                        ) {
+                                            TransitionHelper.startActivityWithTransition(
+                                                this@DiaryMainActivity,
+                                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                                            )
+                                        }
+                                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
+                                            TransitionHelper.startActivityWithTransition(
+                                                this@DiaryMainActivity,
+                                                Intent(this@DiaryMainActivity, DevActivity::class.java),
+                                            )
+                                        }
+                                        CustomElevatedButton(
+                                            text = "MENU",
+                                            iconResourceId = R.drawable.ic_options_three_dots,
+                                            iconSize = 16.dp,
+                                        ) {
+//                                            openCustomOptionMenu()
+                                            makeSnackBar("openCustomOptionMenu()")
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
