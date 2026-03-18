@@ -20,14 +20,20 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomToolBarContainer(
     modifier: Modifier = Modifier,
+    isAutoPadding: Boolean = true,
     content: @Composable RowScope.() -> Unit,
 ) {
     Box(
         modifier =
-            modifier
-                .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
-                .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
-                .padding(bottom = 5.dp), // 최소 5dp 패딩 유지
+            if (isAutoPadding) {
+                modifier
+                    .navigationBarsPadding() // 내부적으로 Modifier.windowInsetsPadding(WindowInsets.navigationBars) 호출
+                    .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+                    // 최소 5dp 패딩 유지
+                    .padding(bottom = 5.dp)
+            } else {
+                modifier
+            },
     ) {
         val scrollState = rememberScrollState()
         Row(
