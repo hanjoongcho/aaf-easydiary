@@ -283,12 +283,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         Modifier
                                             .align(Alignment.BottomCenter),
                                 ) {
-                                    Column(
-                                        modifier =
-                                            Modifier
-                                                .align(Alignment.BottomCenter),
-//                                            .fillMaxSize(),
-                                    ) {
+                                    Column {
                                         BottomToolBarContainer(
                                             isAutoPadding = false,
                                         ) {
@@ -349,19 +344,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         MainToolbar(
                                             title = "category or title",
                                             currentQuery = "",
-                                            modifier =
-                                                settingCardModifier
-//                                                    .padding(
-//                                                        0.dp,
-//                                                        0.dp,
-//                                                        0.dp,
-//                                                        0.dp,
-//                                                    )
-                                                    .zIndex(1f)
-//                                        .align(Alignment.TopCenter)
-                                                    .onGloballyPositioned {
-                                                        topToolbarHeight = with(density) { it.size.height.toDp() }
-                                                    },
                                             enableCardViewPolicy = enableCardViewPolicy,
                                         ) { query ->
                                         }
@@ -383,7 +365,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     fun MainToolbar(
         title: String,
         currentQuery: String = "",
-        modifier: Modifier,
         enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
         fontSize: Float = LocalContext.current.config.settingFontSize,
         fontColor: Color = Color(LocalContext.current.config.textColor),
@@ -406,7 +387,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
 //        shape = RoundedCornerShape(15.dp),
 //        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
             modifier =
-                modifier
+                Modifier
                     .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
 //                    .padding(0.dp, 10.dp)
                     .shadow(
