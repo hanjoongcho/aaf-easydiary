@@ -44,6 +44,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -86,6 +89,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
@@ -107,7 +111,11 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
      *   override functions
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+    @OptIn(
+        ExperimentalMaterial3Api::class,
+        ExperimentalLayoutApi::class,
+        ExperimentalMaterial3WindowSizeClassApi::class,
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeId())
         super.onCreate(savedInstanceState)
@@ -130,6 +138,25 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
 
             val focusManager = LocalFocusManager.current
             val isKeyboardVisible = WindowInsets.isImeVisible
+
+            val windowSizeClass = calculateWindowSizeClass(this)
+            when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> {
+                    // 폰: 리스트 하나만 꽉 채워서 보여줌
+                    makeToast("MyPhoneLayout()")
+                }
+
+                WindowWidthSizeClass.Medium -> {
+                    // 폴더블: 리스트를 보여주고 옆에 작은 툴바를 띄움
+                    makeToast("MyFoldableLayout()")
+                }
+
+                WindowWidthSizeClass.Expanded -> {
+                    // 태블릿: 좌측엔 리스트, 우측엔 상세화면 (2단 분리)
+                    makeToast("MyTabletSplitLayout()")
+                }
+            }
+
             LaunchedEffect(isKeyboardVisible) {
                 if (!isKeyboardVisible) {
                     focusManager.clearFocus()
