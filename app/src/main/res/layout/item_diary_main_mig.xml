@@ -75,8 +75,10 @@
 
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/text_date_time"
+                                android:layout_width="wrap_content"
                                 style="@style/text_diary_main_item_inner_contents"
-                                android:gravity="end" />
+                                android:layout_gravity="end"
+                                 />
                         </LinearLayout>
                     </LinearLayout>
 
