@@ -45,7 +45,7 @@ open class EasyDiaryActivity :
         useDynamicTheme = !isNightMode()
         super.onCreate(savedInstanceState)
 
-        if (config.enableDebugMode) setupMotionSensor()
+        if (config.enableShakeDetector) setupMotionSensor()
 
         onBackPressedDispatcher.addCallback(
             this,

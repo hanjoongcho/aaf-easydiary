@@ -222,6 +222,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     thumbVisibleCallback = { value -> thumbVisible = value },
                                     isDraggingThumbCallback = { value -> isDraggingThumb = value },
                                     hideJobCallback = { value -> hideJob = value },
+                                    containerSizeCallback = { value -> containerSize = value },
                                 )
                             }
 
@@ -246,6 +247,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     thumbVisibleCallback = { value -> thumbVisible = value },
                                     isDraggingThumbCallback = { value -> isDraggingThumb = value },
                                     hideJobCallback = { value -> hideJob = value },
+                                    containerSizeCallback = { value -> containerSize = value },
                                 )
                             }
 
@@ -281,6 +283,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
         isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
         hideJobCallback: (job: Job) -> Unit,
+        containerSizeCallback: (containerSize: IntSize) -> Unit,
         itemClickCallback: (diary: Diary) -> Unit = {},
         itemLongClickCallback: () -> Unit = {},
     ) {
@@ -300,7 +303,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         Modifier
                             .fillMaxSize()
                             .onSizeChanged {
-                                // containerSize = it
+                                containerSizeCallback(it)
                             },
                     contentPadding =
                         PaddingValues(
@@ -486,6 +489,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
         isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
         hideJobCallback: (job: Job) -> Unit,
+        containerSizeCallback: (containerSize: IntSize) -> Unit,
         itemClickCallback: (diary: Diary) -> Unit = {},
         itemLongClickCallback: () -> Unit = {},
     ) {
@@ -513,7 +517,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             Modifier
                                 .fillMaxSize()
                                 .onSizeChanged {
-                                    // containerSize = it
+                                    containerSizeCallback(it)
                                 },
                         contentPadding =
                             PaddingValues(
