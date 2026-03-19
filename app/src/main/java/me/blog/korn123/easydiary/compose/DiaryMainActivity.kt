@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -11,6 +12,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,11 +21,11 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -44,6 +46,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -58,10 +61,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -70,7 +73,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -84,33 +86,34 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
+    private val viewModel: DiaryMainViewModel by viewModels()
+
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeId())
         super.onCreate(savedInstanceState)
 
         setContent {
+            val currentQuery: String by viewModel.currentQuery.collectAsState()
             val topAppBarState = rememberTopAppBarState()
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
             val bottomPadding =
@@ -122,8 +125,17 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     0.dp
                 }
 
-            val items: List<Diary> = EasyDiaryDbHelper.findDiary(null)
+            val items: List<Diary> by viewModel.diaryItems.collectAsState()
             val modifier: Modifier = Modifier
+
+            val focusManager = LocalFocusManager.current
+            val isKeyboardVisible = WindowInsets.isImeVisible
+            LaunchedEffect(isKeyboardVisible) {
+                if (!isKeyboardVisible) {
+                    focusManager.clearFocus()
+                }
+            }
+
             AppTheme {
                 applyFullScreenStatusBarTheme()
                 updateNavigationBarAppearance()
@@ -342,10 +354,11 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                             }
                                         }
                                         MainToolbar(
-                                            title = "category or title",
-                                            currentQuery = "",
+                                            title = "[Total: ${items.size}] category or title",
+                                            currentQuery = currentQuery,
                                             enableCardViewPolicy = enableCardViewPolicy,
                                         ) { query ->
+                                            viewModel.findDiary(query)
                                         }
                                     }
                                 }
@@ -396,7 +409,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         clip = false, // 기본값
                     ).background(
                         color =
-                            if (isFocused) {
+                            if (isFocused || currentQuery.isNotEmpty()) {
                                 Color(LocalContext.current.config.primaryColor)
                             } else {
                                 Color(
@@ -451,7 +464,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                                        color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
+                                        color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
                                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                                     ),
                             )
@@ -470,7 +483,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                 fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                                color = if (isFocused) Color.White else Color(LocalContext.current.config.textColor),
+                                color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
                                 fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                             ),
                         singleLine = true,

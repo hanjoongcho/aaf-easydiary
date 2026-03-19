@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import me.blog.korn123.commons.utils.FileNode
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.models.Diary
 
 class DiaryMainViewModel : ViewModel() {
     private val _symbol: MutableStateFlow<Int> = MutableStateFlow(SYMBOL_SELECT_ALL)
@@ -19,5 +22,26 @@ class DiaryMainViewModel : ViewModel() {
 
     fun markAsReady() {
         _isReady.value = true
+    }
+
+    private val _currentQuery = MutableStateFlow("")
+    val currentQuery: StateFlow<String> = _currentQuery.asStateFlow()
+
+    fun setCurrentQuery(currentQuery: String) {
+        _currentQuery.value = currentQuery
+    }
+
+    private val _diaryItems = MutableStateFlow<List<Diary>>(EasyDiaryDbHelper.findDiary(null))
+    val diaryItems: StateFlow<List<Diary>> = _diaryItems.asStateFlow()
+
+    fun setDiaryItems(items: List<Diary>) {
+        _diaryItems.value = items
+    }
+
+    fun findDiary(query: String? = null) {
+        setCurrentQuery(query ?: "")
+        setDiaryItems(
+            EasyDiaryDbHelper.findDiary(query),
+        )
     }
 }
