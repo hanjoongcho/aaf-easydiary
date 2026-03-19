@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.compose.AndroidFragment
@@ -385,12 +387,15 @@ fun LegacyDiarySubItemCard(
 @Composable
 fun PhotoHighlightCard(
     modifier: Modifier = Modifier,
+    height: Dp? = null,
 ) {
     AndroidFragment<PhotoHighlightFragment>(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp),
+            height?.let {
+                modifier
+                    .height(it)
+                    .fillMaxWidth()
+            } ?: run { modifier.fillMaxSize() },
         // 초기 데이터 주입 (Bundle)
         // 화면이 처음 그려질 때 1회만 주입되며, 이후 OS가 알아서 복원 및 유지
         arguments =

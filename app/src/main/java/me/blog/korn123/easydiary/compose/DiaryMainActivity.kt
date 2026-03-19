@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,8 +77,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
@@ -140,22 +143,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
             val isKeyboardVisible = WindowInsets.isImeVisible
 
             val windowSizeClass = calculateWindowSizeClass(this)
-            when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> {
-                    // 폰: 리스트 하나만 꽉 채워서 보여줌
-                    makeToast("MyPhoneLayout()")
-                }
-
-                WindowWidthSizeClass.Medium -> {
-                    // 폴더블: 리스트를 보여주고 옆에 작은 툴바를 띄움
-                    makeToast("MyFoldableLayout()")
-                }
-
-                WindowWidthSizeClass.Expanded -> {
-                    // 태블릿: 좌측엔 리스트, 우측엔 상세화면 (2단 분리)
-                    makeToast("MyTabletSplitLayout()")
-                }
-            }
 
             LaunchedEffect(isKeyboardVisible) {
                 if (!isKeyboardVisible) {
@@ -213,182 +200,58 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             activity?.toast("itemLongClickCallback")
                         }
 
-                        Column(
-                            modifier =
-                                modifier
-                                    .padding(innerPadding)
-                                    .fillMaxSize(),
-                        ) {
-                            PhotoHighlightCard()
-                            Box(
-                                modifier = Modifier.weight(1f),
-                            ) {
-                                LazyColumn(
-                                    state = listState,
-                                    modifier =
-                                        Modifier
-                                            .fillMaxSize()
-                                            .onSizeChanged { containerSize = it },
-                                    contentPadding =
-                                        PaddingValues(
-                                            bottom =
-                                                WindowInsets.navigationBars
-                                                    .asPaddingValues()
-                                                    .calculateBottomPadding(),
-                                        ),
-                                ) {
-                                    itemsIndexed(items) { index, diary ->
-                                        Card(
-                                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-                                            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                                            modifier = (
-                                                if (enableCardViewPolicy) {
-                                                    modifier.padding(
-                                                        HORIZONTAL_PADDING.dp,
-                                                        VERTICAL_PADDING.dp,
-                                                    )
-                                                } else {
-                                                    modifier
-                                                        .padding(1.dp, 1.dp)
-                                                }
-                                            ),
-                                            elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
-                                        ) {
-                                            LegacyDiaryItemCard(
-                                                diary = diary,
-                                                itemClickCallback = { itemClickCallback(it) },
-                                                itemLongClickCallback = { itemLongClickCallback() },
-                                            )
-                                        }
-                                    }
-                                }
-
-                                FastScroll(
-                                    items = items,
+                        when (windowSizeClass.widthSizeClass) {
+                            WindowWidthSizeClass.Compact -> {
+                                // 폰: 리스트 하나만 꽉 채워서 보여줌
+//                                makeToast("MyPhoneLayout()")
+                                CompactLayout(
+                                    innerPadding = innerPadding,
+                                    modifier = modifier,
                                     listState = listState,
-                                    containerHeightPx =
-                                        containerSize.height.toFloat().minus(
-                                            with(
-                                                LocalDensity.current,
-                                            ) {
-                                                WindowInsets.navigationBars
-                                                    .asPaddingValues()
-                                                    .calculateBottomPadding()
-                                                    .toPx()
-//                                                    .plus(
-//                                                        WindowInsets.statusBars
-//                                                            .asPaddingValues()
-//                                                            .calculateTopPadding()
-//                                                            .toPx(),
-//                                                    )
-                                            },
-                                        ),
+                                    containerSize = containerSize,
                                     isDraggingThumb = isDraggingThumb,
                                     thumbVisible = thumbVisible,
-                                    containerSize = containerSize,
-                                    modifier =
-                                        Modifier
-                                            .align(Alignment.TopEnd)
-                                            .padding(
-//                                                top =
-//                                                    WindowInsets.statusBars
-//                                                        .asPaddingValues()
-//                                                        .calculateTopPadding(),
-                                                bottom =
-                                                    WindowInsets.navigationBars
-                                                        .asPaddingValues()
-                                                        .calculateBottomPadding(),
-                                            ),
-                                    showDebugCard = false,
-                                    updateThumbVisible = { thumbVisible = it },
-                                    updateDraggingThumb = { isDraggingThumb = it },
-                                    dragEndCallback = {
-                                        hideJob?.cancel()
-                                        coroutineScope.launch {
-                                            hideJob =
-                                                launch {
-                                                    delay(delayTimeMillis)
-                                                    if (!isDraggingThumb) thumbVisible = false
-                                                }
-                                        }
-                                    },
+                                    hideJob = hideJob,
+                                    currentQuery = currentQuery,
+                                    delayTimeMillis = delayTimeMillis,
+                                    durationMillis = durationMillis,
+                                    enableCardViewPolicy = enableCardViewPolicy,
+                                    items = items,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                    thumbVisibleCallback = { value -> thumbVisible = value },
+                                    isDraggingThumbCallback = { value -> isDraggingThumb = value },
+                                    hideJobCallback = { value -> hideJob = value },
                                 )
+                            }
 
-                                this@Column.AnimatedVisibility(
-                                    visible = !thumbVisible,
-                                    enter = fadeIn(animationSpec = tween(durationMillis)),
-                                    exit = fadeOut(animationSpec = tween(durationMillis)),
-                                    modifier =
-                                        Modifier
-                                            .align(Alignment.BottomCenter),
-                                ) {
-                                    Column {
-                                        BottomToolBarContainer(
-                                            isAutoPadding = false,
-                                        ) {
-                                            CustomElevatedButton(
-                                                text = getString(R.string.button_new_entry),
-                                                iconResourceId = R.drawable.ic_edit,
-                                                iconSize = 16.dp,
-                                            ) {
-                                                val createDiary =
-                                                    Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                                                TransitionHelper.startActivityWithTransition(
-                                                    this@DiaryMainActivity,
-                                                    createDiary,
-                                                )
-                                            }
-                                            CustomElevatedButton(
-                                                text = getString(R.string.button_tree_view),
-                                                iconResourceId = R.drawable.ic_tree_structure,
-                                                iconSize = 16.dp,
-                                            ) {
-                                                TransitionHelper.startActivityWithTransition(
-                                                    this@DiaryMainActivity,
-                                                    Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                                                )
-                                            }
-                                            CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
-                                                //                                        moveToday()
-                                                makeSnackBar("moveToday()")
-                                            }
+                            WindowWidthSizeClass.Medium -> {
+                                // 폴더블: 리스트를 보여주고 옆에 작은 툴바를 띄움
+//                                makeToast("MyFoldableLayout()")
+                                MediumLayout(
+                                    innerPadding = innerPadding,
+                                    modifier = modifier,
+                                    listState = listState,
+                                    containerSize = containerSize,
+                                    isDraggingThumb = isDraggingThumb,
+                                    thumbVisible = thumbVisible,
+                                    hideJob = hideJob,
+                                    currentQuery = currentQuery,
+                                    delayTimeMillis = delayTimeMillis,
+                                    durationMillis = durationMillis,
+                                    enableCardViewPolicy = enableCardViewPolicy,
+                                    items = items,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                    thumbVisibleCallback = { value -> thumbVisible = value },
+                                    isDraggingThumbCallback = { value -> isDraggingThumb = value },
+                                    hideJobCallback = { value -> hideJob = value },
+                                )
+                            }
 
-                                            if (config.enableDebugMode) {
-                                                CustomElevatedButton(
-                                                    text = getString(R.string.button_quick_settings),
-                                                    iconResourceId = R.drawable.ic_running,
-                                                    iconSize = 16.dp,
-                                                ) {
-                                                    TransitionHelper.startActivityWithTransition(
-                                                        this@DiaryMainActivity,
-                                                        Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                                                    )
-                                                }
-                                                CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
-                                                    TransitionHelper.startActivityWithTransition(
-                                                        this@DiaryMainActivity,
-                                                        Intent(this@DiaryMainActivity, DevActivity::class.java),
-                                                    )
-                                                }
-                                                CustomElevatedButton(
-                                                    text = "MENU",
-                                                    iconResourceId = R.drawable.ic_options_three_dots,
-                                                    iconSize = 16.dp,
-                                                ) {
-                                                    //                                            openCustomOptionMenu()
-                                                    makeSnackBar("openCustomOptionMenu()")
-                                                }
-                                            }
-                                        }
-                                        MainToolbar(
-                                            title = "[Total: ${items.size}] category or title",
-                                            currentQuery = currentQuery,
-                                            enableCardViewPolicy = enableCardViewPolicy,
-                                        ) { query ->
-                                            viewModel.findDiary(query)
-                                        }
-                                    }
-                                }
+                            WindowWidthSizeClass.Expanded -> {
+                                // 태블릿: 좌측엔 리스트, 우측엔 상세화면 (2단 분리)
+//                                makeToast("MyTabletSplitLayout()")
                             }
                         }
                     },
@@ -401,6 +264,425 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
+    @Composable
+    fun CompactLayout(
+        innerPadding: PaddingValues,
+        modifier: Modifier,
+        listState: LazyListState,
+        containerSize: IntSize,
+        isDraggingThumb: Boolean,
+        thumbVisible: Boolean,
+        hideJob: Job?,
+        currentQuery: String,
+        delayTimeMillis: Long,
+        durationMillis: Int,
+        enableCardViewPolicy: Boolean,
+        items: List<Diary>,
+        thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
+        isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
+        hideJobCallback: (job: Job) -> Unit,
+        itemClickCallback: (diary: Diary) -> Unit = {},
+        itemLongClickCallback: () -> Unit = {},
+    ) {
+        Column(
+            modifier =
+                modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+        ) {
+            PhotoHighlightCard(height = 180.dp)
+            Box(
+                modifier = Modifier.weight(1f),
+            ) {
+                LazyColumn(
+                    state = listState,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .onSizeChanged {
+                                // containerSize = it
+                            },
+                    contentPadding =
+                        PaddingValues(
+                            bottom =
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding(),
+                        ),
+                ) {
+                    itemsIndexed(items) { index, diary ->
+                        Card(
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                            modifier = (
+                                if (enableCardViewPolicy) {
+                                    modifier.padding(
+                                        HORIZONTAL_PADDING.dp,
+                                        VERTICAL_PADDING.dp,
+                                    )
+                                } else {
+                                    modifier
+                                        .padding(1.dp, 1.dp)
+                                }
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                        ) {
+                            LegacyDiaryItemCard(
+                                diary = diary,
+                                itemClickCallback = { itemClickCallback(it) },
+                                itemLongClickCallback = { itemLongClickCallback() },
+                            )
+                        }
+                    }
+                }
+
+                FastScroll(
+                    items = items,
+                    listState = listState,
+                    containerHeightPx =
+                        containerSize.height.toFloat().minus(
+                            with(
+                                LocalDensity.current,
+                            ) {
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding()
+                                    .toPx()
+//                                                    .plus(
+//                                                        WindowInsets.statusBars
+//                                                            .asPaddingValues()
+//                                                            .calculateTopPadding()
+//                                                            .toPx(),
+//                                                    )
+                            },
+                        ),
+                    isDraggingThumb = isDraggingThumb,
+                    thumbVisible = thumbVisible,
+                    containerSize = containerSize,
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(
+//                                                top =
+//                                                    WindowInsets.statusBars
+//                                                        .asPaddingValues()
+//                                                        .calculateTopPadding(),
+                                bottom =
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding(),
+                            ),
+                    showDebugCard = false,
+                    updateThumbVisible = { thumbVisibleCallback(it) },
+                    updateDraggingThumb = { isDraggingThumbCallback(it) },
+                    dragEndCallback = {
+                        hideJob?.cancel()
+                        lifecycleScope.launch {
+                            val hideJob =
+                                launch {
+                                    delay(delayTimeMillis)
+                                    if (!isDraggingThumb) {
+                                        thumbVisibleCallback(false)
+                                    }
+                                }
+                            hideJobCallback(hideJob)
+                        }
+                    },
+                )
+
+                this@Column.AnimatedVisibility(
+                    visible = !thumbVisible,
+                    enter = fadeIn(animationSpec = tween(durationMillis)),
+                    exit = fadeOut(animationSpec = tween(durationMillis)),
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter),
+                ) {
+                    Column {
+                        BottomToolBarContainer(
+                            isAutoPadding = false,
+                        ) {
+                            CustomElevatedButton(
+                                text = getString(R.string.button_new_entry),
+                                iconResourceId = R.drawable.ic_edit,
+                                iconSize = 16.dp,
+                            ) {
+                                val createDiary =
+                                    Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    createDiary,
+                                )
+                            }
+                            CustomElevatedButton(
+                                text = getString(R.string.button_tree_view),
+                                iconResourceId = R.drawable.ic_tree_structure,
+                                iconSize = 16.dp,
+                            ) {
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                                )
+                            }
+                            CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+                                //                                        moveToday()
+                                makeSnackBar("moveToday()")
+                            }
+
+                            if (config.enableDebugMode) {
+                                CustomElevatedButton(
+                                    text = getString(R.string.button_quick_settings),
+                                    iconResourceId = R.drawable.ic_running,
+                                    iconSize = 16.dp,
+                                ) {
+                                    TransitionHelper.startActivityWithTransition(
+                                        this@DiaryMainActivity,
+                                        Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                                    )
+                                }
+                                CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
+                                    TransitionHelper.startActivityWithTransition(
+                                        this@DiaryMainActivity,
+                                        Intent(this@DiaryMainActivity, DevActivity::class.java),
+                                    )
+                                }
+                                CustomElevatedButton(
+                                    text = "MENU",
+                                    iconResourceId = R.drawable.ic_options_three_dots,
+                                    iconSize = 16.dp,
+                                ) {
+                                    //                                            openCustomOptionMenu()
+                                    makeSnackBar("openCustomOptionMenu()")
+                                }
+                            }
+                        }
+                        MainToolbar(
+                            title = "[Total: ${items.size}] category or title",
+                            currentQuery = currentQuery,
+                            enableCardViewPolicy = enableCardViewPolicy,
+                        ) { query ->
+                            viewModel.findDiary(query)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun MediumLayout(
+        innerPadding: PaddingValues,
+        modifier: Modifier,
+        listState: LazyListState,
+        containerSize: IntSize,
+        isDraggingThumb: Boolean,
+        thumbVisible: Boolean,
+        hideJob: Job?,
+        currentQuery: String,
+        delayTimeMillis: Long,
+        durationMillis: Int,
+        enableCardViewPolicy: Boolean,
+        items: List<Diary>,
+        thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
+        isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
+        hideJobCallback: (job: Job) -> Unit,
+        itemClickCallback: (diary: Diary) -> Unit = {},
+        itemLongClickCallback: () -> Unit = {},
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth(), // 가로 전체를 꽉 채웁니다.
+        ) {
+            Column(
+                modifier =
+                    modifier
+                        .weight(0.4f)
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+            ) {
+                PhotoHighlightCard()
+            }
+            Column(modifier = Modifier.weight(0.6f)) {
+                Box(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    LazyColumn(
+                        state = listState,
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .onSizeChanged {
+                                    // containerSize = it
+                                },
+                        contentPadding =
+                            PaddingValues(
+                                bottom =
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding(),
+                            ),
+                    ) {
+                        itemsIndexed(items) { index, diary ->
+                            Card(
+                                shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                                modifier = (
+                                    if (enableCardViewPolicy) {
+                                        modifier.padding(
+                                            HORIZONTAL_PADDING.dp,
+                                            VERTICAL_PADDING.dp,
+                                        )
+                                    } else {
+                                        modifier
+                                            .padding(1.dp, 1.dp)
+                                    }
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                            ) {
+                                LegacyDiaryItemCard(
+                                    diary = diary,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                )
+                            }
+                        }
+                    }
+
+                    FastScroll(
+                        items = items,
+                        listState = listState,
+                        containerHeightPx =
+                            containerSize.height.toFloat().minus(
+                                with(
+                                    LocalDensity.current,
+                                ) {
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding()
+                                        .toPx()
+//                                                    .plus(
+//                                                        WindowInsets.statusBars
+//                                                            .asPaddingValues()
+//                                                            .calculateTopPadding()
+//                                                            .toPx(),
+//                                                    )
+                                },
+                            ),
+                        isDraggingThumb = isDraggingThumb,
+                        thumbVisible = thumbVisible,
+                        containerSize = containerSize,
+                        modifier =
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(
+//                                                top =
+//                                                    WindowInsets.statusBars
+//                                                        .asPaddingValues()
+//                                                        .calculateTopPadding(),
+                                    bottom =
+                                        WindowInsets.navigationBars
+                                            .asPaddingValues()
+                                            .calculateBottomPadding(),
+                                ),
+                        showDebugCard = false,
+                        updateThumbVisible = { thumbVisibleCallback(it) },
+                        updateDraggingThumb = { isDraggingThumbCallback(it) },
+                        dragEndCallback = {
+                            hideJob?.cancel()
+                            lifecycleScope.launch {
+                                val hideJob =
+                                    launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) {
+                                            thumbVisibleCallback(false)
+                                        }
+                                    }
+                                hideJobCallback(hideJob)
+                            }
+                        },
+                    )
+
+                    this@Column.AnimatedVisibility(
+                        visible = !thumbVisible,
+                        enter = fadeIn(animationSpec = tween(durationMillis)),
+                        exit = fadeOut(animationSpec = tween(durationMillis)),
+                        modifier =
+                            Modifier
+                                .align(Alignment.BottomCenter),
+                    ) {
+                        Column {
+                            BottomToolBarContainer(
+                                isAutoPadding = false,
+                            ) {
+                                CustomElevatedButton(
+                                    text = getString(R.string.button_new_entry),
+                                    iconResourceId = R.drawable.ic_edit,
+                                    iconSize = 16.dp,
+                                ) {
+                                    val createDiary =
+                                        Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                                    TransitionHelper.startActivityWithTransition(
+                                        this@DiaryMainActivity,
+                                        createDiary,
+                                    )
+                                }
+                                CustomElevatedButton(
+                                    text = getString(R.string.button_tree_view),
+                                    iconResourceId = R.drawable.ic_tree_structure,
+                                    iconSize = 16.dp,
+                                ) {
+                                    TransitionHelper.startActivityWithTransition(
+                                        this@DiaryMainActivity,
+                                        Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                                    )
+                                }
+                                CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+                                    //                                        moveToday()
+                                    makeSnackBar("moveToday()")
+                                }
+
+                                if (config.enableDebugMode) {
+                                    CustomElevatedButton(
+                                        text = getString(R.string.button_quick_settings),
+                                        iconResourceId = R.drawable.ic_running,
+                                        iconSize = 16.dp,
+                                    ) {
+                                        TransitionHelper.startActivityWithTransition(
+                                            this@DiaryMainActivity,
+                                            Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                                        )
+                                    }
+                                    CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
+                                        TransitionHelper.startActivityWithTransition(
+                                            this@DiaryMainActivity,
+                                            Intent(this@DiaryMainActivity, DevActivity::class.java),
+                                        )
+                                    }
+                                    CustomElevatedButton(
+                                        text = "MENU",
+                                        iconResourceId = R.drawable.ic_options_three_dots,
+                                        iconSize = 16.dp,
+                                    ) {
+                                        //                                            openCustomOptionMenu()
+                                        makeSnackBar("openCustomOptionMenu()")
+                                    }
+                                }
+                            }
+                            MainToolbar(
+                                title = "[Total: ${items.size}] category or title",
+                                currentQuery = currentQuery,
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) { query ->
+                                viewModel.findDiary(query)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Composable
     fun MainToolbar(
         title: String,
