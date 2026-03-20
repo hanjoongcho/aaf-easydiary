@@ -29,8 +29,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -139,9 +139,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         val settingCardModifier = Modifier.fillMaxWidth()
-        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy,
-        )
+        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
         val maxItemsInEachRow =
             when {
                 LocalInspectionMode.current -> 1

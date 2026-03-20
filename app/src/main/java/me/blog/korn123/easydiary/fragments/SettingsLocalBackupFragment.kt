@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -201,26 +202,13 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             .fillMaxWidth()
                             .weight(1f)
 
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        true,
-                    )
-                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
-                        config.lineSpacingScaleFactor,
-                    )
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
-                        FontUtils.getComposeFontFamily(requireContext()),
-                    )
-
-                    val informationTitle: String by mSettingsViewModel.informationTitle.observeAsState(
-                        getString(R.string.google_drive_account_sign_in_title),
-                    )
-                    val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.observeAsState(
-                        null,
-                    )
-                    val accountInfo: String by mSettingsViewModel.accountInfo.observeAsState(
-                        getString(R.string.google_drive_account_sign_in_description),
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.collectAsState()
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
+                    val informationTitle: String by mSettingsViewModel.informationTitle.collectAsState()
+                    val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.collectAsState()
+                    val accountInfo: String by mSettingsViewModel.accountInfo.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.export_realm_title),

@@ -161,9 +161,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         val activity = LocalActivity.current
                         val coroutineScope = rememberCoroutineScope()
                         val settingCardModifier = Modifier.fillMaxWidth()
-                        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                            context.config.enableCardViewPolicy,
-                        )
+                        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                         var topToolbarHeight by remember { mutableStateOf(0.dp) }
                         val density = LocalDensity.current
                         val listState = rememberLazyListState()

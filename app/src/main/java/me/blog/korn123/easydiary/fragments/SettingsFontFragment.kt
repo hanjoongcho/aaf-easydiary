@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -65,8 +66,6 @@ import org.apache.commons.io.FilenameUtils
 import java.io.File
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {
-
-
     /***************************************************************************************************
      *   global properties
      *
@@ -84,56 +83,67 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-            requireActivity().run {
-                pauseLock()
-                if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
-                    activityResult.data!!.data?.let { uri ->
-                        val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
-                        if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
-                            Thread(Runnable {
-                                val inputStream = contentResolver.openInputStream(uri)
-                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
-                                FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
-                                runOnUiThread{
-                                    progressContainer.visibility = View.GONE
-                                    showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
-                                }
-                            }).start()
-                            progressContainer.visibility = View.VISIBLE
-                        } else {
-                            showAlertDialog(
-                                "$fileName is not ttf file.",
-                                null,
-                                null,
-                                DialogMode.INFO,
-                                false,
-                                getString(R.string.add_ttf_fonts_title),
-                            )
+        mRequestFontPick =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                requireActivity().run {
+                    pauseLock()
+                    if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
+                        activityResult.data!!.data?.let { uri ->
+                            val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
+                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                                Thread(
+                                    Runnable {
+                                        val inputStream = contentResolver.openInputStream(uri)
+                                        val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                                        FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                                        runOnUiThread {
+                                            progressContainer.visibility = View.GONE
+                                            showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
+                                        }
+                                    },
+                                ).start()
+                                progressContainer.visibility = View.VISIBLE
+                            } else {
+                                showAlertDialog(
+                                    "$fileName is not ttf file.",
+                                    null,
+                                    null,
+                                    DialogMode.INFO,
+                                    false,
+                                    getString(R.string.add_ttf_fonts_title),
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            requireActivity().run {
-                pauseLock()
-                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> openFontSettingDialog()
-                    false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
+        mRequestExternalStoragePermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                requireActivity().run {
+                    pauseLock()
+                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> openFontSettingDialog()
+                        false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
+                    }
                 }
             }
-        }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         mBinding = FragmentSettingsFontBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
     @OptIn(ExperimentalLayoutApi::class)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
         updateFragmentUI(mBinding.root)
@@ -144,25 +154,25 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                 val configuration = LocalConfiguration.current
                 FlowRow(
                     maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
-                    val settingCardModifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                    val settingCardModifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
 
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
-                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(config.lineSpacingScaleFactor)
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
-
-                    val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.observeAsState(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.collectAsState()
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
+                    val fontSettingDescription: String by mSettingsViewModel.fontSettingDescription.collectAsState()
                     SimpleCard(
                         title = getString(R.string.font_setting),
                         description = fontSettingDescription,
                         fontSize = fontSize,
                         modifier = settingCardModifier,
                         enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily
+                        fontFamily = fontFamily,
                     ) {
                         requireActivity().run {
                             if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -200,7 +210,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                                 mSettingsViewModel.setFontSize(config.settingFontSize)
 //                                initTextSize(mBinding.root)
                             }
-
                         },
                         callbackPlus = {
                             requireActivity().run {
@@ -208,17 +217,22 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                                 mSettingsViewModel.setFontSize(config.settingFontSize)
 //                                initTextSize(mBinding.root)
                             }
-                        }
+                        },
                     )
 
-                    val calendarFontScaleDescription: String by mSettingsViewModel.calendarFontScaleDescription.observeAsState(
+                    val calendarFontScaleDescription: String by mSettingsViewModel.calendarFontScaleDescription.collectAsState(
                         when (requireActivity().config.settingCalendarFontScale) {
-                            DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
-                            else -> getString(
-                                R.string.calendar_font_scale_factor,
-                                requireActivity().config.settingCalendarFontScale
-                            )
-                        }
+                            DEFAULT_CALENDAR_FONT_SCALE -> {
+                                getString(R.string.calendar_font_scale_disable)
+                            }
+
+                            else -> {
+                                getString(
+                                    R.string.calendar_font_scale_factor,
+                                    requireActivity().config.settingCalendarFontScale,
+                                )
+                            }
+                        },
                     )
                     SimpleCard(
                         title = getString(R.string.calendar_font_scale_title),
@@ -274,63 +288,53 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         initPreference()
     }
 
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
-    private val mOnClickListener = View.OnClickListener { view ->
-        requireActivity().run {
-            when (view.id) {
-                R.id.decreaseFont -> {
-                    config.settingFontSize = config.settingFontSize - 5
-                    initTextSize(mBinding.root)
-                }
-                R.id.increaseFont -> {
-                    config.settingFontSize = config.settingFontSize + 5
-                    initTextSize(mBinding.root)
+    private val mOnClickListener =
+        View.OnClickListener { view ->
+            requireActivity().run {
+                when (view.id) {
+                    R.id.decreaseFont -> {
+                        config.settingFontSize = config.settingFontSize - 5
+                        initTextSize(mBinding.root)
+                    }
+
+                    R.id.increaseFont -> {
+                        config.settingFontSize = config.settingFontSize + 5
+                        initTextSize(mBinding.root)
+                    }
                 }
             }
         }
-    }
 
     /**
      * Fires an intent to spin up the "file chooser" UI and select an image.
      */
     private fun performFileSearch() {
-
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
         // browser.
         // ACTION_OPEN_DOCUMENT
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            // Filter to only show results that can be "opened", such as a
-            // file (as opposed to a list of contacts or timezones)
+        val intent =
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                // Filter to only show results that can be "opened", such as a
+                // file (as opposed to a list of contacts or timezones)
 //             addCategory(Intent.CATEGORY_OPENABLE)
 
-            // Filter to show only images, using the image MIME data type.
-            // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-            // To search for all documents available via installed storage providers,
-            // it would be "*/*".
-            type = "*/*"
-        }
+                // Filter to show only images, using the image MIME data type.
+                // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+                // To search for all documents available via installed storage providers,
+                // it would be "*/*".
+                type = "*/*"
+            }
 
         mRequestFontPick.launch(intent)
     }
 
     private fun initPreference() {
         mBinding.run {
-            mSettingsViewModel.setFontSettingDescription(FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName))
             mSettingsViewModel.setLineSpacingScaleFactor(requireActivity().config.lineSpacingScaleFactor)
-            mSettingsViewModel.setCalendarFontScaleDescription(
-                when (requireActivity().config.settingCalendarFontScale) {
-                    DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
-                    else -> getString(
-                        R.string.calendar_font_scale_factor,
-                        requireActivity().config.settingCalendarFontScale
-                    )
-                }
-            )
-
             mSettingsViewModel.setFontFamily(FontUtils.getComposeFontFamily(requireContext()))
         }
     }
@@ -361,14 +365,15 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
         val arrayAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, listFontScale, requireActivity().config.settingCalendarFontScale)
         listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            fontInfo["optionValue"]?.let {
-                requireActivity().config.settingCalendarFontScale = it.toFloat()
+        listView.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                fontInfo["optionValue"]?.let {
+                    requireActivity().config.settingCalendarFontScale = it.toFloat()
+                }
+                alertDialog?.cancel()
+                initPreference()
             }
-            alertDialog?.cancel()
-            initPreference()
-        }
 
         alertDialog = builder.create().apply { requireActivity().updateAlertDialog(this, null, containerView, getString(R.string.calendar_font_scale_title)) }
         listView.setSelection(selectedIndex)
@@ -413,21 +418,22 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
         val arrayAdapter = FontItemAdapter(requireActivity(), R.layout.item_check_label, listFont)
         listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            fontInfo["fontName"]?.let {
-                requireActivity().config.settingFontName = it
-                FontUtils.setCommonTypeface(requireActivity())
-                initPreference()
-                setFontsStyle()
+        listView.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                fontInfo["fontName"]?.let {
+                    requireActivity().config.settingFontName = it
+                    FontUtils.setCommonTypeface(requireActivity())
+                    initPreference()
+                    setFontsStyle()
 
-                (requireActivity() as SettingsActivity).run {
-                    pauseLock()
-                    updateUI()
+                    (requireActivity() as SettingsActivity).run {
+                        pauseLock()
+                        updateUI()
+                    }
                 }
+                alertDialog?.cancel()
             }
-            alertDialog?.cancel()
-        }
 
         alertDialog = builder.create().apply { requireActivity().updateAlertDialog(this, null, fontView, getString(R.string.font_setting)) }
         listView.setSelection(selectedIndex)

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -78,18 +79,12 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
                         Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        true,
-                    )
-                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.observeAsState(
-                        config.lineSpacingScaleFactor,
-                    )
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(
-                        FontUtils.getComposeFontFamily(requireContext()),
-                    )
-                    val rateAppSettingSummary: String by mSettingsViewModel.rateAppSettingSummary.observeAsState("")
-                    val inviteSummary: String by mSettingsViewModel.inviteSummary.observeAsState("")
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
+                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.collectAsState()
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
+                    val rateAppSettingSummary: String by mSettingsViewModel.rateAppSettingSummary.collectAsState()
+                    val inviteSummary: String by mSettingsViewModel.inviteSummary.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.rate_app),
@@ -227,11 +222,7 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
         setupInvite()
     }
 
-    private fun initPreference() {
-        mSettingsViewModel.setRateAppSettingSummary(
-            String.format("v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
-        )
-    }
+    private fun initPreference() {}
 
     @SuppressLint("StringFormatInvalid")
     private fun setupInvite() {

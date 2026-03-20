@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -82,9 +83,8 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                             .fillMaxWidth()
                             .weight(1f)
 
-                    val fontSize: Float by mSettingsViewModel.fontSize.observeAsState(config.settingFontSize)
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
-
+                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
                     var aafPinLockEnable by remember { mutableStateOf(requireContext().config.aafPinLockEnable) }
                     SwitchCard(
                         title = getString(R.string.pin_lock_title),

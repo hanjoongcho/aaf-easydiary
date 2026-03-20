@@ -1,50 +1,51 @@
 package me.blog.korn123.easydiary.viewmodels
 
+import android.app.Application
 import android.net.Uri
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontFamily
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.BuildConfig
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
+    val config = application.config
+
     /***************************************************************************************************
      *   Switch
      *
      ***************************************************************************************************/
-    private val _enableReviewFlowVisible: MutableLiveData<Boolean> = MutableLiveData(true)
-    val enableReviewFlowVisible: LiveData<Boolean> get() = _enableReviewFlowVisible
-
-    fun enableReviewFlowVisibleIsOn() = _enableReviewFlowVisible.value == true
+    private val _enableReviewFlowVisible: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val enableReviewFlowVisible: StateFlow<Boolean> = _enableReviewFlowVisible.asStateFlow()
 
     fun setEnableReviewFlowVisible(isOn: Boolean) {
         _enableReviewFlowVisible.value = isOn
     }
 
-    private val _enableCardViewPolicy: MutableLiveData<Boolean> = MutableLiveData()
-    val enableCardViewPolicy: LiveData<Boolean> get() = _enableCardViewPolicy
-
-    fun enableCardViewPolicyIsOn() = _enableCardViewPolicy.value == true
+    private val _enableCardViewPolicy: MutableStateFlow<Boolean> = MutableStateFlow(config.enableCardViewPolicy)
+    val enableCardViewPolicy: StateFlow<Boolean> = _enableCardViewPolicy.asStateFlow()
 
     fun setEnableCardViewPolicy(isOn: Boolean) {
         _enableCardViewPolicy.value = isOn
     }
 
-    private val _enableLocationInfo: MutableLiveData<Boolean> = MutableLiveData()
-    val enableLocationInfo: LiveData<Boolean> get() = _enableLocationInfo
-
-    fun enableLocationInfoIsOn() = _enableLocationInfo.value == true
+    private val _enableLocationInfo: MutableStateFlow<Boolean> = MutableStateFlow(config.enableLocationInfo)
+    val enableLocationInfo: StateFlow<Boolean> get() = _enableLocationInfo.asStateFlow()
 
     fun setEnableLocationInfo(isOn: Boolean) {
         _enableLocationInfo.value = isOn
     }
 
-    private val _enableShakeDetector: MutableLiveData<Boolean> = MutableLiveData()
-    val enableShakeDetector: LiveData<Boolean> get() = _enableShakeDetector
-
-    fun enableShakeDetectorIsOn() = _enableShakeDetector.value == true
+    private val _enableShakeDetector: MutableStateFlow<Boolean> = MutableStateFlow(config.enableShakeDetector)
+    val enableShakeDetector: StateFlow<Boolean> get() = _enableShakeDetector.asStateFlow()
 
     fun setEnableShakeDetector(isOn: Boolean) {
         _enableShakeDetector.value = isOn
@@ -54,88 +55,86 @@ class SettingsViewModel : ViewModel() {
      *   SubDescription
      *
      ***************************************************************************************************/
-    private val _settingThumbnailSizeSubDescription: MutableLiveData<String> = MutableLiveData()
-    val thumbnailSizeSubDescription: LiveData<String> get() = _settingThumbnailSizeSubDescription
+    private val _thumbnailSizeSubDescription: MutableStateFlow<String> = MutableStateFlow("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
+    val thumbnailSizeSubDescription: StateFlow<String> = _thumbnailSizeSubDescription.asStateFlow()
 
-    fun setThumbnailSizeSubDescription(description: String) {
-        _settingThumbnailSizeSubDescription.value = description
-    }
+    private val _datetimeFormatSubDescription: MutableStateFlow<String> =
+        MutableStateFlow(
+            DateUtils.getDateTimeStringForceFormatting(
+                System.currentTimeMillis(),
+                application,
+            ),
+        )
+    val datetimeFormatSubDescription: StateFlow<String> = _datetimeFormatSubDescription.asStateFlow()
 
-    private val _settingDatetimeFormat: MutableLiveData<String> = MutableLiveData()
-    val datetimeFormatSubDescription: LiveData<String> get() = _settingDatetimeFormat
+    private val _summaryMaxLinesSubDescription: MutableStateFlow<String> = MutableStateFlow(application.getString(R.string.max_lines_value, config.summaryMaxLines))
+    val summaryMaxLinesSubDescription: StateFlow<String> get() = _summaryMaxLinesSubDescription.asStateFlow()
 
-    fun setDatetimeFormatSubDescription(description: String) {
-        _settingDatetimeFormat.value = description
-    }
+    private val _fontSettingDescription: MutableStateFlow<String> = MutableStateFlow(FontUtils.fontFileNameToDisplayName(application, config.settingFontName))
+    val fontSettingDescription: StateFlow<String> get() = _fontSettingDescription.asStateFlow()
 
-    private val _summaryMaxLines: MutableLiveData<String> = MutableLiveData()
-    val summaryMaxLinesSubDescription: LiveData<String> get() = _summaryMaxLines
+    private val _calendarFontScaleDescription: MutableStateFlow<String> =
+        MutableStateFlow(
+            when (config.settingCalendarFontScale) {
+                DEFAULT_CALENDAR_FONT_SCALE -> {
+                    application.getString(R.string.calendar_font_scale_disable)
+                }
 
-    fun setSummaryMaxLinesSubDescription(description: String) {
-        _summaryMaxLines.value = description
-    }
-
-    private val _fontSetting: MutableLiveData<String> = MutableLiveData()
-    val fontSettingDescription: LiveData<String> get() = _fontSetting
-
-    fun setFontSettingDescription(description: String) {
-        _fontSetting.value = description
-    }
-
-    private val _settingCalendarFontScale: MutableLiveData<String> = MutableLiveData()
-    val calendarFontScaleDescription: LiveData<String> get() = _settingCalendarFontScale
-
-    fun setCalendarFontScaleDescription(description: String) {
-        _settingCalendarFontScale.value = description
-    }
+                else -> {
+                    application.getString(
+                        R.string.calendar_font_scale_factor,
+                        config.settingCalendarFontScale,
+                    )
+                }
+            },
+        )
+    val calendarFontScaleDescription: StateFlow<String> get() = _calendarFontScaleDescription.asStateFlow()
 
     /***************************************************************************************************
      *   Setting Value
      *
      ***************************************************************************************************/
-    private val _lineSpacingScaleFactor: MutableLiveData<Float> = MutableLiveData()
-    val lineSpacingScaleFactor: LiveData<Float> get() = _lineSpacingScaleFactor
+    private val _lineSpacingScaleFactor: MutableStateFlow<Float> = MutableStateFlow(config.lineSpacingScaleFactor)
+    val lineSpacingScaleFactor: StateFlow<Float> = _lineSpacingScaleFactor.asStateFlow()
 
     fun setLineSpacingScaleFactor(value: Float) {
         _lineSpacingScaleFactor.value = value
     }
 
-    private val _fontSize: MutableLiveData<Float> = MutableLiveData()
-    val fontSize: LiveData<Float> get() = _fontSize
+    private val _fontSize: MutableStateFlow<Float> = MutableStateFlow(config.settingFontSize)
+    val fontSize: StateFlow<Float> = _fontSize.asStateFlow()
 
     fun setFontSize(value: Float) {
         _fontSize.value = value
     }
 
-    private val _fontFamily: MutableLiveData<FontFamily?> = MutableLiveData<FontFamily?>()
-    val fontFamily: LiveData<FontFamily?> get() = _fontFamily
+    private val _fontFamily: MutableStateFlow<FontFamily?> = MutableStateFlow(FontUtils.getComposeFontFamily(application))
+    val fontFamily: StateFlow<FontFamily?> = _fontFamily.asStateFlow()
 
     fun setFontFamily(value: FontFamily?) {
         _fontFamily.value = value
     }
 
-    var profilePicUri by mutableStateOf<String?>(null)
-
     /***************************************************************************************************
      *   GMS Backup
      *
      ***************************************************************************************************/
-    private val _informationTitle: MutableLiveData<String> = MutableLiveData()
-    val informationTitle: LiveData<String> get() = _informationTitle
+    private val _informationTitle: MutableStateFlow<String> = MutableStateFlow(application.getString(R.string.google_drive_account_sign_in_title))
+    val informationTitle: StateFlow<String> get() = _informationTitle.asStateFlow()
 
     fun setInformationTitle(informationTitle: String) {
         _informationTitle.value = informationTitle
     }
 
-    private val _accountInfo: MutableLiveData<String> = MutableLiveData()
-    val accountInfo: LiveData<String> get() = _accountInfo
+    private val _accountInfo: MutableStateFlow<String> = MutableStateFlow(application.getString(R.string.google_drive_account_sign_in_description))
+    val accountInfo: StateFlow<String> get() = _accountInfo.asStateFlow()
 
     fun setAccountInfo(accountInfo: String) {
         _accountInfo.value = accountInfo
     }
 
-    private val _profileImageUrl: MutableLiveData<Uri?> = MutableLiveData()
-    val profileImageUrl: LiveData<Uri?> get() = _profileImageUrl
+    private val _profileImageUrl: MutableStateFlow<Uri?> = MutableStateFlow(null)
+    val profileImageUrl: StateFlow<Uri?> get() = _profileImageUrl.asStateFlow()
 
     fun setProfileImageUrl(profileImageUrl: Uri?) {
         _profileImageUrl.value = profileImageUrl
@@ -145,15 +144,12 @@ class SettingsViewModel : ViewModel() {
      *   App Info
      *
      ***************************************************************************************************/
-    private val _rateAppSettingSummary: MutableLiveData<String> = MutableLiveData()
-    val rateAppSettingSummary: LiveData<String> get() = _rateAppSettingSummary
+    private val _rateAppSettingSummary: MutableStateFlow<String> =
+        MutableStateFlow(String.format("v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE))
+    val rateAppSettingSummary: StateFlow<String> = _rateAppSettingSummary.asStateFlow()
 
-    fun setRateAppSettingSummary(rateAppSettingSummary: String) {
-        _rateAppSettingSummary.value = rateAppSettingSummary
-    }
-
-    private val _inviteSummary: MutableLiveData<String> = MutableLiveData()
-    val inviteSummary: LiveData<String> get() = _inviteSummary
+    private val _inviteSummary: MutableStateFlow<String> = MutableStateFlow("")
+    val inviteSummary: StateFlow<String> get() = _inviteSummary.asStateFlow()
 
     fun setInviteSummary(inviteSummary: String) {
         _inviteSummary.value = inviteSummary

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -116,7 +117,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.setEnableReviewFlowVisible(false)
-        mSettingsViewModel.setEnableCardViewPolicy(requireActivity().config.enableCardViewPolicy)
 
         updateFragmentUI(mBinding.root)
         initPreference()
@@ -133,8 +133,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             .fillMaxWidth()
                             .weight(1f)
 
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(true)
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.observeAsState(FontUtils.getComposeFontFamily(requireContext()))
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+                    val enableReviewFlowVisible: Boolean by mSettingsViewModel.enableReviewFlowVisible.collectAsState()
+                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.setting_primary_color_title),
@@ -164,7 +165,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val enableShakeDetector: Boolean by mSettingsViewModel.enableShakeDetector.observeAsState(requireActivity().config.enableShakeDetector)
+                    val enableShakeDetector: Boolean by mSettingsViewModel.enableShakeDetector.collectAsState()
                     SwitchCard(
                         title = getString(R.string.quick_setting_title),
                         description = getString(R.string.quick_setting_summary),
@@ -222,7 +223,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
                     }
 
-                    val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.observeAsState(requireActivity().config.enableLocationInfo)
+                    val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.collectAsState()
                     SwitchCard(
                         title = getString(R.string.location_info_title),
                         description = getString(R.string.location_info_description),
@@ -233,7 +234,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
                             mSettingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
-                            when (mSettingsViewModel.enableLocationInfoIsOn()) {
+                            when (mSettingsViewModel.enableLocationInfo.value) {
                                 true -> {
                                     when (hasGPSPermissions()) {
                                         true -> {
@@ -267,7 +268,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val settingThumbnailSize: String by mSettingsViewModel.thumbnailSizeSubDescription.observeAsState("")
+                    val settingThumbnailSize: String by mSettingsViewModel.thumbnailSizeSubDescription.collectAsState()
                     SimpleCard(
                         title = getString(R.string.thumbnail_setting_title),
                         description = getString(R.string.thumbnail_setting_summary),
@@ -279,7 +280,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         openThumbnailSettingDialog()
                     }
 
-                    val settingDatetimeFormat: String by mSettingsViewModel.datetimeFormatSubDescription.observeAsState("")
+                    val settingDatetimeFormat: String by mSettingsViewModel.datetimeFormatSubDescription.collectAsState()
                     SimpleCard(
                         title = getString(R.string.datetime_setting_title),
                         description = getString(R.string.datetime_setting_summary),
@@ -308,7 +309,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     }
 
                     if (enableContentsSummary) {
-                        val summaryMaxLines: String by mSettingsViewModel.summaryMaxLinesSubDescription.observeAsState("")
+                        val summaryMaxLines: String by mSettingsViewModel.summaryMaxLinesSubDescription.collectAsState()
                         SimpleCard(
                             title = getString(R.string.max_lines_title),
                             description = getString(R.string.max_lines_summary),
@@ -430,7 +431,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    if (mSettingsViewModel.enableReviewFlowVisibleIsOn()) {
+                    if (enableReviewFlowVisible) {
                         var enableReviewFlow by remember { mutableStateOf(requireContext().config.enableReviewFlow) }
                         SwitchCard(
                             title = getString(R.string.enable_review_flow_title),
@@ -473,15 +474,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     private fun initPreference() {
         requireActivity().run {
             mBinding.run {
-                mSettingsViewModel.setThumbnailSizeSubDescription("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
-                mSettingsViewModel.setDatetimeFormatSubDescription(
-                    DateUtils.getDateTimeStringForceFormatting(
-                        System.currentTimeMillis(),
-                        requireContext(),
-                    ),
-                )
-                mSettingsViewModel.setSummaryMaxLinesSubDescription(getString(R.string.max_lines_value, config.summaryMaxLines))
-
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false
                     mSettingsViewModel.setEnableLocationInfo(false)

@@ -38,8 +38,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -161,9 +161,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 content = { innerPadding ->
                     val context = LocalContext.current
                     val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy,
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                     val maxItemsInEachRow =
                         when {
                             LocalInspectionMode.current -> 1
@@ -235,9 +233,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 content = { innerPadding ->
                     val context = LocalContext.current
                     val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy,
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                     val maxItemsInEachRow =
                         when {
                             LocalInspectionMode.current -> 1
@@ -315,9 +311,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
                     val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy,
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
@@ -418,9 +412,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val activity = LocalActivity.current
                     val coroutineScope = rememberCoroutineScope()
                     val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy,
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
@@ -539,9 +531,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val activity = LocalActivity.current
                     val coroutineScope = rememberCoroutineScope()
                     val settingCardModifier = Modifier.fillMaxWidth()
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-                        context.config.enableCardViewPolicy,
-                    )
+                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
                     var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)

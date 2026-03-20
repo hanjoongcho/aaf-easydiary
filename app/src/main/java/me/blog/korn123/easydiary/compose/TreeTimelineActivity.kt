@@ -66,9 +66,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val context = LocalContext.current
         LocalActivity.current?.applyFullScreenStatusBarTheme()
 
-        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.observeAsState(
-            context.config.enableCardViewPolicy,
-        )
+        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
         val currentQuery: String by treeViewModel.currentQuery.collectAsState()
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
         val total: Int by treeViewModel.total.collectAsState()
