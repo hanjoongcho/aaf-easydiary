@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -44,6 +46,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -52,7 +55,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,6 +67,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -80,7 +83,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
@@ -92,8 +94,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
+import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
@@ -101,6 +103,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
+import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
@@ -151,6 +154,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
             }
 
             AppTheme {
+                enableEdgeToEdge()
                 applyFullScreenStatusBarTheme()
                 updateNavigationBarAppearance()
                 Scaffold(
@@ -264,6 +268,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
      *   Define Compose
      *
      ***************************************************************************************************/
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun CompactLayout(
         innerPadding: PaddingValues,
@@ -291,7 +296,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     .padding(innerPadding)
                     .fillMaxSize(),
         ) {
-            PhotoHighlightCard(height = 180.dp)
+            PhotoHighlightCard(height = 160.dp)
             Box(
                 modifier = Modifier.weight(1f),
             ) {
@@ -391,81 +396,24 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     },
                 )
 
-                this@Column.AnimatedVisibility(
-                    visible = !thumbVisible,
-                    enter = fadeIn(animationSpec = tween(durationMillis)),
-                    exit = fadeOut(animationSpec = tween(durationMillis)),
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomCenter),
-                ) {
-                    Column {
-                        BottomToolBarContainer(
-                            isAutoPadding = false,
-                        ) {
-                            CustomElevatedButton(
-                                text = getString(R.string.button_new_entry),
-                                iconResourceId = R.drawable.ic_edit,
-                                iconSize = 16.dp,
-                            ) {
-                                val createDiary =
-                                    Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                                TransitionHelper.startActivityWithTransition(
-                                    this@DiaryMainActivity,
-                                    createDiary,
-                                )
-                            }
-                            CustomElevatedButton(
-                                text = getString(R.string.button_tree_view),
-                                iconResourceId = R.drawable.ic_tree_structure,
-                                iconSize = 16.dp,
-                            ) {
-                                TransitionHelper.startActivityWithTransition(
-                                    this@DiaryMainActivity,
-                                    Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                                )
-                            }
-                            CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
-                                //                                        moveToday()
-                                makeSnackBar("moveToday()")
-                            }
-
-                            if (config.enableDebugMode) {
-                                CustomElevatedButton(
-                                    text = getString(R.string.button_quick_settings),
-                                    iconResourceId = R.drawable.ic_running,
-                                    iconSize = 16.dp,
-                                ) {
-                                    TransitionHelper.startActivityWithTransition(
-                                        this@DiaryMainActivity,
-                                        Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                                    )
-                                }
-                                CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
-                                    TransitionHelper.startActivityWithTransition(
-                                        this@DiaryMainActivity,
-                                        Intent(this@DiaryMainActivity, DevActivity::class.java),
-                                    )
-                                }
-                                CustomElevatedButton(
-                                    text = "MENU",
-                                    iconResourceId = R.drawable.ic_options_three_dots,
-                                    iconSize = 16.dp,
-                                ) {
-                                    //                                            openCustomOptionMenu()
-                                    makeSnackBar("openCustomOptionMenu()")
-                                }
-                            }
-                        }
-                        MainToolbar(
-                            title = "[Total: ${items.size}] category or title",
-                            currentQuery = currentQuery,
-                            enableCardViewPolicy = enableCardViewPolicy,
-                        ) { query ->
-                            viewModel.findDiary(query)
-                        }
+//                this@Column.AnimatedVisibility(
+//                    visible = !thumbVisible,
+//                    enter = fadeIn(animationSpec = tween(durationMillis)),
+//                    exit = fadeOut(animationSpec = tween(durationMillis)),
+//                    modifier =
+//                        Modifier
+//                            .align(Alignment.BottomCenter),
+//                ) {
+                Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    BottomSheet(
+                        title = "[Total: ${items.size}] category or title",
+                        currentQuery = currentQuery,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                    ) { query ->
+                        viewModel.findDiary(query)
                     }
                 }
+//                }
             }
         }
     }
@@ -613,71 +561,12 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             Modifier
                                 .align(Alignment.BottomCenter),
                     ) {
-                        Column {
-                            BottomToolBarContainer(
-                                isAutoPadding = false,
-                            ) {
-                                CustomElevatedButton(
-                                    text = getString(R.string.button_new_entry),
-                                    iconResourceId = R.drawable.ic_edit,
-                                    iconSize = 16.dp,
-                                ) {
-                                    val createDiary =
-                                        Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                                    TransitionHelper.startActivityWithTransition(
-                                        this@DiaryMainActivity,
-                                        createDiary,
-                                    )
-                                }
-                                CustomElevatedButton(
-                                    text = getString(R.string.button_tree_view),
-                                    iconResourceId = R.drawable.ic_tree_structure,
-                                    iconSize = 16.dp,
-                                ) {
-                                    TransitionHelper.startActivityWithTransition(
-                                        this@DiaryMainActivity,
-                                        Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                                    )
-                                }
-                                CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
-                                    //                                        moveToday()
-                                    makeSnackBar("moveToday()")
-                                }
-
-                                if (config.enableDebugMode) {
-                                    CustomElevatedButton(
-                                        text = getString(R.string.button_quick_settings),
-                                        iconResourceId = R.drawable.ic_running,
-                                        iconSize = 16.dp,
-                                    ) {
-                                        TransitionHelper.startActivityWithTransition(
-                                            this@DiaryMainActivity,
-                                            Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                                        )
-                                    }
-                                    CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
-                                        TransitionHelper.startActivityWithTransition(
-                                            this@DiaryMainActivity,
-                                            Intent(this@DiaryMainActivity, DevActivity::class.java),
-                                        )
-                                    }
-                                    CustomElevatedButton(
-                                        text = "MENU",
-                                        iconResourceId = R.drawable.ic_options_three_dots,
-                                        iconSize = 16.dp,
-                                    ) {
-                                        //                                            openCustomOptionMenu()
-                                        makeSnackBar("openCustomOptionMenu()")
-                                    }
-                                }
-                            }
-                            MainToolbar(
-                                title = "[Total: ${items.size}] category or title",
-                                currentQuery = currentQuery,
-                                enableCardViewPolicy = enableCardViewPolicy,
-                            ) { query ->
-                                viewModel.findDiary(query)
-                            }
+                        BottomSheet(
+                            title = "[Total: ${items.size}] category or title",
+                            currentQuery = currentQuery,
+                            enableCardViewPolicy = enableCardViewPolicy,
+                        ) { query ->
+                            viewModel.findDiary(query)
                         }
                     }
                 }
@@ -686,9 +575,9 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     }
 
     @Composable
-    fun MainToolbar(
+    fun BottomSheet(
         title: String,
-        currentQuery: String = "",
+        currentQuery: String,
         enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
         fontSize: Float = LocalContext.current.config.settingFontSize,
         fontColor: Color = Color(LocalContext.current.config.textColor),
@@ -703,124 +592,204 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                 )
             },
         lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-        callback: (query: String) -> Unit = {},
+        callbackQuery: (query: String) -> Unit = {},
     ) {
-        var isFocused by remember { mutableStateOf(false) }
-        Box(
+        Column {
+//            SearchToolbar(
+//                title = title,
+//                currentQuery = currentQuery,
+//                enableCardViewPolicy = enableCardViewPolicy,
+//            ) { query ->
+//                viewModel.findDiary(query)
+//            }
+
+            var isFocused by remember { mutableStateOf(false) }
+            Box(
 //        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
 //        shape = RoundedCornerShape(15.dp),
 //        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
-            modifier =
-                Modifier
-                    .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
-//                    .padding(0.dp, 10.dp)
-                    .shadow(
-                        elevation = 15.dp,
-                        shape = RoundedCornerShape(15.dp),
-                        clip = false, // 기본값
-                    ).background(
-                        color =
-                            if (isFocused || currentQuery.isNotEmpty()) {
-                                Color(LocalContext.current.config.primaryColor)
-                            } else {
-                                Color(
-                                    LocalContext.current.config.backgroundColor,
-                                )
-                            },
-                        shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp),
-                    ),
-            //            .alpha(0.8f)
+                modifier =
+                    Modifier
+                        .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+                        .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                        .shadow(
+                            elevation = 15.dp,
+                            shape = RoundedCornerShape(15.dp),
+                            clip = false, // 기본값
+                        ).background(
+                            color =
+                                if (isFocused || currentQuery.isNotEmpty()) {
+                                    Color(LocalContext.current.config.primaryColor).copy(alpha = 0.9f)
+                                } else {
+                                    Color(
+                                        LocalContext.current.config.backgroundColor,
+                                    ).copy(alpha = 0.9f)
+                                },
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp, ROUNDED_CORNER_SHAPE_SIZE.dp, 0.dp, 0.dp),
+                        ).border(
+                            1.dp,
+                            Color(
+                                LocalContext.current.config.primaryColor,
+                            ),
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                        ),
+                //            .alpha(0.8f)
 //        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
 //            .padding(5.dp, 5.dp)),
 //        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
-        ) {
-            Column(
-                modifier =
-                    Modifier
-                        .padding(5.dp)
-                        .navigationBarsPadding(),
             ) {
-                Row(
-                    modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    modifier =
+                        Modifier
+                            .padding(5.dp)
+                            .navigationBarsPadding(),
                 ) {
-                    var text by remember { mutableStateOf(currentQuery) }
-                    val density = LocalDensity.current
-                    val textUnit =
-                        with(density) {
-                            val temp = fontSize.toDp()
-                            temp.toSp()
-                        }
+                    Row(
+                        modifier = Modifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        var text by remember { mutableStateOf(currentQuery) }
+                        val density = LocalDensity.current
+                        val textUnit =
+                            with(density) {
+                                val temp = fontSize.toDp()
+                                temp.toSp()
+                            }
 
-                    val focusRequester = remember { FocusRequester() }
+                        val focusRequester = remember { FocusRequester() }
 
-                    // 화면이 그려진 직후 포커스 요청
+                        // 화면이 그려진 직후 포커스 요청
 //                LaunchedEffect(Unit) {
 //                    // 약간의 delay를 주면 레이아웃이 안정된 후 포커스됨
 //                    delay(100)
 //                    focusRequester.requestFocus()
 //                }
-                    TextField(
-                        value = text,
-                        onValueChange = {
-                            text = it
-                            callback.invoke(text)
-                        },
-                        label = {
-                            Text(
-                                text = title,
-                                style =
-                                    TextStyle(
-                                        fontFamily = fontFamily,
-                                        fontWeight = fontWeight,
+                        TextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                                callbackQuery.invoke(text)
+                            },
+                            label = {
+                                Text(
+                                    text = title,
+                                    style =
+                                        TextStyle(
+                                            fontFamily = fontFamily,
+                                            fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                                        color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
-                                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                                    ),
-                            )
-                        },
-                        colors =
-                            TextFieldDefaults.colors(
-                                cursorColor = Color.White,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedContainerColor = Color.Transparent, // 포커스 시 배경
-                                unfocusedContainerColor = Color.Transparent, // 포커스 없을 때 배경
-                            ),
-                        textStyle =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                fontWeight = fontWeight,
+                                            color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
+                                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                                        ),
+                                )
+                            },
+                            colors =
+                                TextFieldDefaults.colors(
+                                    cursorColor = Color.White,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent, // 포커스 시 배경
+                                    unfocusedContainerColor = Color.Transparent, // 포커스 없을 때 배경
+                                ),
+                            textStyle =
+                                TextStyle(
+                                    fontFamily = fontFamily,
+                                    fontWeight = fontWeight,
 //                        fontStyle = FontStyle.Italic,
 //                        color = fontColor.copy(alpha),
-                                color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
-                                fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                            ),
-                        singleLine = true,
-                        trailingIcon = {
-                            if (text.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    text = ""
-                                    callback.invoke(text)
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = "Clear text",
-                                        tint = Color.White,
-                                    )
+                                    color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
+                                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                                ),
+                            singleLine = true,
+                            trailingIcon = {
+                                if (text.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        text = ""
+                                        callbackQuery.invoke(text)
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Clear text",
+                                            tint = Color.White,
+                                        )
+                                    }
                                 }
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp)
+                                    .focusRequester(focusRequester)
+                                    .onFocusChanged { focusState ->
+                                        isFocused = focusState.isFocused
+                                    },
+                        )
+                    }
+                    BottomToolBarContainer(
+                        isAutoPadding = false,
+                    ) {
+                        CustomElevatedButton(
+                            text = getString(R.string.button_new_entry),
+                            iconResourceId = R.drawable.ic_edit,
+                            iconSize = 16.dp,
+                        ) {
+                            val createDiary =
+                                Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                createDiary,
+                            )
+                        }
+                        CustomElevatedButton(
+                            text = getString(R.string.button_tree_view),
+                            iconResourceId = R.drawable.ic_tree_structure,
+                            iconSize = 16.dp,
+                        ) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                            )
+                        }
+                        CustomElevatedButton(
+                            text = "TODAY",
+                            iconResourceId = R.drawable.ic_time_8_w,
+                            iconSize = 16.dp,
+                        ) {
+                            //                                        moveToday()
+                            makeSnackBar("moveToday()")
+                        }
+
+                        if (config.enableDebugMode) {
+                            CustomElevatedButton(
+                                text = getString(R.string.button_quick_settings),
+                                iconResourceId = R.drawable.ic_running,
+                                iconSize = 16.dp,
+                            ) {
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                                )
                             }
-                        },
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(0.dp)
-                                .focusRequester(focusRequester)
-                                .onFocusChanged { focusState ->
-                                    isFocused = focusState.isFocused
-                                },
-                    )
+                            CustomElevatedButton(
+                                iconResourceId = R.drawable.ic_bug_2,
+                                iconSize = 16.dp,
+                            ) {
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    Intent(this@DiaryMainActivity, DevActivity::class.java),
+                                )
+                            }
+                            CustomElevatedButton(
+                                text = "MENU",
+                                iconResourceId = R.drawable.ic_options_three_dots,
+                                iconSize = 16.dp,
+                            ) {
+                                //                                            openCustomOptionMenu()
+                                makeSnackBar("openCustomOptionMenu()")
+                            }
+                        }
+                    }
                 }
             }
         }

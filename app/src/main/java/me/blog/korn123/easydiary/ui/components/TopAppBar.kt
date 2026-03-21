@@ -134,11 +134,12 @@ fun EasyDiaryActionBar(
             TopAppBarColors(
 //            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
 //            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
-                Color(LocalContext.current.config.primaryColor),
-                Color(LocalContext.current.config.primaryColor),
-                Color.White,
-                Color.White,
-                Color.White,
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                scrolledContainerColor = Color(LocalContext.current.config.primaryColor),
+                navigationIconContentColor = Color.White,
+                titleContentColor = Color.White,
+                actionIconContentColor = Color.White,
+                subtitleContentColor = Color.White,
             ),
     )
 }
