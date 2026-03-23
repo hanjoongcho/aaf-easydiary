@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper

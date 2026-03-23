@@ -171,7 +171,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -183,7 +183,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -195,7 +195,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -207,7 +207,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -219,7 +219,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -231,7 +231,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -243,7 +243,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -255,7 +255,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
@@ -267,7 +267,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:startOffset="700"
-                android:duration="1"
+                android:duration="100"
                 android:valueFrom="#07abb3"
                 android:valueTo="#00F8F8F8"
                 android:valueType="colorType"

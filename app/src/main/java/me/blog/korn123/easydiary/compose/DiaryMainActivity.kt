@@ -46,7 +46,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -67,7 +66,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -80,6 +78,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.toast
 import kotlinx.coroutines.Job
@@ -95,7 +95,6 @@ import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
-import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
@@ -103,15 +102,16 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
+import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     private val viewModel: DiaryMainViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -290,13 +290,25 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         itemClickCallback: (diary: Diary) -> Unit = {},
         itemLongClickCallback: () -> Unit = {},
     ) {
+        val context = LocalContext.current
+        var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+        LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+            enablePhotoHighlight = context.config.enablePhotoHighlight
+        }
+
         Column(
             modifier =
                 modifier
                     .padding(innerPadding)
                     .fillMaxSize(),
         ) {
-            PhotoHighlightCard(height = 160.dp)
+            PhotoHighlightCard(
+                height = 160.dp,
+                isVisible = enablePhotoHighlight,
+                onVisibilityChanged = { isVisible ->
+                    enablePhotoHighlight = isVisible
+                },
+            )
             Box(
                 modifier = Modifier.weight(1f),
             ) {
@@ -451,7 +463,8 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         .padding(innerPadding)
                         .fillMaxSize(),
             ) {
-                PhotoHighlightCard()
+                PhotoHighlightCard(onVisibilityChanged = { isVisible ->
+                })
             }
             Column(modifier = Modifier.weight(0.6f)) {
                 Box(

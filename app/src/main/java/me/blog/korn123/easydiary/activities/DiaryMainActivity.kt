@@ -260,7 +260,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setOnExitAnimationListener()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            setOnExitAnimationListener()
+        }
 
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
@@ -305,7 +307,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.markAsReady()
-        }, 700)
+        }, 900)
 
         if (config.enableDebugMode) openOverDueNotification()
 

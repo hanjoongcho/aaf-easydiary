@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -388,14 +390,22 @@ fun LegacyDiarySubItemCard(
 fun PhotoHighlightCard(
     modifier: Modifier = Modifier,
     height: Dp? = null,
+    isVisible: Boolean = false,
+    onVisibilityChanged: (isVisible: Boolean) -> Unit,
 ) {
     AndroidFragment<PhotoHighlightFragment>(
         modifier =
-            height?.let {
+            if (isVisible) {
+                height?.let {
+                    modifier
+                        .height(it)
+                        .fillMaxWidth()
+                } ?: run { modifier.fillMaxSize() }
+            } else {
                 modifier
-                    .height(it)
-                    .fillMaxWidth()
-            } ?: run { modifier.fillMaxSize() },
+                    .size(0.dp)
+                    .graphicsLayer(alpha = 0f)
+            },
         // 초기 데이터 주입 (Bundle)
         // 화면이 처음 그려질 때 1회만 주입되며, 이후 OS가 알아서 복원 및 유지
         arguments =
@@ -410,7 +420,7 @@ fun PhotoHighlightCard(
             // 여기에 콜백을 달아주면, 화면이 회전하거나 메모리가 복원되어도
             // 람다(Callback)가 증발하지 않고 항상 최신 상태로 튼튼하게 유지 가능
             fragment.togglePhotoHighlightCallback = { isVisible ->
-//                onVisibilityChanged(isVisible)
+                onVisibilityChanged(isVisible)
             }
         },
     )
