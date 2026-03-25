@@ -62,7 +62,7 @@
             <objectAnimator
                 android:propertyName="fillColor"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -74,7 +74,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="50"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -86,7 +86,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="100"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -98,7 +98,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="150"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -110,7 +110,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="200"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -122,7 +122,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="250"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -134,7 +134,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="300"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -146,7 +146,7 @@
                 android:propertyName="fillColor"
                 android:startOffset="350"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
@@ -158,118 +158,8 @@
                 android:propertyName="fillColor"
                 android:startOffset="400"
                 android:duration="50"
-                android:valueFrom="#00F8F8F8"
+                android:valueFrom="#F8F8F8"
                 android:valueTo="#07abb3"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-
-
-    <target android:name="path_e">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_a">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_s">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_y">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_d">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_i">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_a2">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_r">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
-                android:valueType="colorType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
-        </aapt:attr>
-    </target>
-    <target android:name="path_y2">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillColor"
-                android:startOffset="700"
-                android:duration="100"
-                android:valueFrom="#07abb3"
-                android:valueTo="#00F8F8F8"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>

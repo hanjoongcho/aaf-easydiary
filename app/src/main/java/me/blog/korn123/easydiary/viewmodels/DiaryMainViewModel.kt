@@ -1,14 +1,24 @@
 package me.blog.korn123.easydiary.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.models.Diary
 
 class DiaryMainViewModel : ViewModel() {
+    init {
+        viewModelScope.launch {
+            delay(800L)
+            markAsReady()
+        }
+    }
+
     private val _symbol: MutableStateFlow<Int> = MutableStateFlow(SYMBOL_SELECT_ALL)
     val symbol: StateFlow<Int> = _symbol.asStateFlow()
 

@@ -260,9 +260,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            setOnExitAnimationListener()
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            setOnExitAnimationListener()
+//        }
 
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
@@ -304,10 +304,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             )
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.markAsReady()
-        }, 900)
 
         if (config.enableDebugMode) openOverDueNotification()
 
