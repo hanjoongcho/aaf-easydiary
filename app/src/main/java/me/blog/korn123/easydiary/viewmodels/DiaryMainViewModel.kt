@@ -14,7 +14,7 @@ import me.blog.korn123.easydiary.models.Diary
 class DiaryMainViewModel : ViewModel() {
     init {
         viewModelScope.launch {
-            delay(800L)
+            delay(600L)
             markAsReady()
         }
     }

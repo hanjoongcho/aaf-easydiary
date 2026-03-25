@@ -1,8 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.Manifest
-import android.animation.ObjectAnimator
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
@@ -19,16 +18,13 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.view.animation.AccelerateInterpolator
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -127,7 +123,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private var mLastHistoryCheckMillis = System.currentTimeMillis()
     private val mRequestSpeechInputLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
                     mBinding.query.setText(it[0])
                     mBinding.query.setSelection(it[0].length)
@@ -135,11 +131,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             pauseLock()
         }
+
+    @SuppressLint("NotifyDataSetChanged")
     private val mRequestSAFForHtmlBookLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
 
-                result.data?.let {
+                result.data?.let { it ->
                     mDiaryMainItemAdapter?.getSelectedItems()?.run {
                         EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
                             mBinding.progressCoroutine.visibility = View.VISIBLE
@@ -167,22 +165,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *
      ***************************************************************************************************/
     override fun createScrollable(): FastScrollObservableRecyclerView = mBinding.diaryListView
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun setOnExitAnimationListener() {
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            // Create your custom animation.
-            val fadeOut = ObjectAnimator.ofFloat(splashScreenView, "alpha", 1f, 0f)
-            fadeOut.interpolator = AccelerateInterpolator()
-            fadeOut.duration = 500L
-
-            // Call SplashScreenView.remove at the end of your custom animation.
-            fadeOut.doOnEnd { splashScreenView.remove() }
-
-            // Run your animation.
-            fadeOut.start()
-        }
-    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -393,6 +375,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -433,7 +416,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
 
                         false -> {
-                            showAlertDialog(getString(R.string.no_items_warning), null)
+                            showAlertDialog(getString(R.string.no_items_warning))
                         }
                     }
                 }
@@ -470,7 +453,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
 
                         false -> {
-                            showAlertDialog(getString(R.string.no_items_warning), null)
+                            showAlertDialog(getString(R.string.no_items_warning))
                         }
                     }
                 }
@@ -586,7 +569,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             false -> {
-                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+                mDiaryMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    // API 33 이상: Class를 직접 넘겨서 타입 안전하게 꺼냄
+                    savedInstanceState.getSerializable(DIARY_MODE, DiaryMode::class.java)
+                } else {
+                    // API 32 이하: 예전 방식대로 꺼내되, 'as?'를 써서 null이어도 안 죽게 방어
+                    @Suppress("DEPRECATION")
+                    savedInstanceState.getSerializable(DIARY_MODE) as? DiaryMode
+                } ?: DiaryMode.READ
             }
         }
     }
@@ -912,7 +902,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun moveToday() {
-        var position = -1
+        var position: Int
         val tomorrowTimeMillis =
             EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
         val filteredDiary =
@@ -955,8 +945,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     )
                     putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 }.run { mRequestSpeechInputLauncher.launch(this) }
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
+        } catch (_: ActivityNotFoundException) {
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message))
         }
     }
 
@@ -969,6 +959,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         refreshList(queryString)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun refreshList(query: String) {
         mDiaryList.clear()
         mDiaryList.addAll(
@@ -977,8 +968,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 config.diarySearchQueryCaseSensitive,
                 0,
                 0,
-                viewModel.symbol.value
-                    ?: 0,
+                viewModel.symbol.value,
                 true,
             ),
         )
@@ -1058,7 +1048,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
                 detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
                 detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-                detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
+                detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
                 EasyDiaryDbHelper.clearSelectedStatus()
