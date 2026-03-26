@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.views
 
 import android.content.Context
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
@@ -9,6 +10,8 @@ import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.size
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
@@ -17,8 +20,9 @@ import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import me.blog.korn123.easydiary.helper.AAF_TEST
 
-class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
-
+class FastScrollObservableRecyclerView :
+    FastScrollRecyclerView,
+    Scrollable {
     constructor(context: Context) : super(context) {
         init()
     }
@@ -46,8 +50,6 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
     private var mPrevMoveEvent: MotionEvent? = null
     private var mTouchInterceptionViewGroup: ViewGroup? = null
 
-
-
     override fun onRestoreInstanceState(state: Parcelable) {
         val ss = state as SavedState
         mPrevFirstVisiblePosition = ss.prevFirstVisiblePosition
@@ -59,7 +61,7 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
         super.onRestoreInstanceState(ss.superState)
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val ss = SavedState(superState)
         ss.prevFirstVisiblePosition = mPrevFirstVisiblePosition
@@ -71,16 +73,21 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
         return ss
     }
 
-    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
+    override fun onScrollChanged(
+        l: Int,
+        t: Int,
+        oldl: Int,
+        oldt: Int,
+    ) {
         super.onScrollChanged(l, t, oldl, oldt)
         if (mCallbacks != null) {
-            if (childCount > 0) {
-                val firstVisiblePosition = getChildPosition(getChildAt(0))
-                val lastVisiblePosition = getChildPosition(getChildAt(childCount - 1))
+            if (isNotEmpty()) {
+                val firstVisiblePosition = getChildAdapterPosition(getChildAt(0))
+                val lastVisiblePosition = getChildAdapterPosition(getChildAt(childCount - 1))
                 var i = firstVisiblePosition
                 var j = 0
                 while (i <= lastVisiblePosition) {
-                    if (mChildrenHeights!!.indexOfKey(i) < 0 || getChildAt(j).height !== mChildrenHeights!![i]) {
+                    if (mChildrenHeights!!.indexOfKey(i) < 0 || getChildAt(j).height != mChildrenHeights!![i]) {
                         mChildrenHeights!!.put(i, getChildAt(j).height)
                     }
                     i++
@@ -93,14 +100,15 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                         var skippedChildrenHeight = 0
                         if (firstVisiblePosition - mPrevFirstVisiblePosition != 1) {
                             for (i in firstVisiblePosition - 1 downTo mPrevFirstVisiblePosition + 1) {
-                                skippedChildrenHeight += if (0 < mChildrenHeights!!.indexOfKey(i)) {
-                                    mChildrenHeights!![i]
-                                } else {
-                                    // Approximate each item's height to the first visible child.
-                                    // It may be incorrect, but without this, scrollY will be broken
-                                    // when scrolling from the bottom.
-                                    firstVisibleChild.height
-                                }
+                                skippedChildrenHeight +=
+                                    if (0 < mChildrenHeights!!.indexOfKey(i)) {
+                                        mChildrenHeights!![i]
+                                    } else {
+                                        // Approximate each item's height to the first visible child.
+                                        // It may be incorrect, but without this, scrollY will be broken
+                                        // when scrolling from the bottom.
+                                        firstVisibleChild.height
+                                    }
                             }
                         }
                         mPrevScrolledChildrenHeight += mPrevFirstVisibleChildHeight + skippedChildrenHeight
@@ -110,14 +118,15 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                         var skippedChildrenHeight = 0
                         if (mPrevFirstVisiblePosition - firstVisiblePosition != 1) {
                             for (i in mPrevFirstVisiblePosition - 1 downTo firstVisiblePosition + 1) {
-                                skippedChildrenHeight += if (0 < mChildrenHeights!!.indexOfKey(i)) {
-                                    mChildrenHeights!![i]
-                                } else {
-                                    // Approximate each item's height to the first visible child.
-                                    // It may be incorrect, but without this, scrollY will be broken
-                                    // when scrolling from the bottom.
-                                    firstVisibleChild.height
-                                }
+                                skippedChildrenHeight +=
+                                    if (0 < mChildrenHeights!!.indexOfKey(i)) {
+                                        mChildrenHeights!![i]
+                                    } else {
+                                        // Approximate each item's height to the first visible child.
+                                        // It may be incorrect, but without this, scrollY will be broken
+                                        // when scrolling from the bottom.
+                                        firstVisibleChild.height
+                                    }
                             }
                         }
                         mPrevScrolledChildrenHeight -= firstVisibleChild.height + skippedChildrenHeight
@@ -135,15 +144,16 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                     if (mFirstScroll) {
                         mFirstScroll = false
                     }
-                    mScrollState = if (mPrevScrollY < mScrollY) {
-                        //down
-                        ScrollState.UP
-                    } else if (mScrollY < mPrevScrollY) {
-                        //up
-                        ScrollState.DOWN
-                    } else {
-                        ScrollState.STOP
-                    }
+                    mScrollState =
+                        if (mPrevScrollY < mScrollY) {
+                            // down
+                            ScrollState.UP
+                        } else if (mScrollY < mPrevScrollY) {
+                            // up
+                            ScrollState.DOWN
+                        } else {
+                            ScrollState.STOP
+                        }
                     mPrevScrollY = mScrollY
                 }
             }
@@ -151,6 +161,7 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
     }
 
     var mDownPositionY = 0F
+
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         if (mCallbacks != null) {
             when (ev.actionMasked) {
@@ -158,7 +169,7 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                     mDownPositionY = ev.y
                     run {
                         mDragging = true
-                        mFirstScroll = mDragging
+                        mFirstScroll = true
                     }
                     mCallbacks!!.onDownMotionEvent()
                 }
@@ -177,6 +188,7 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                     if (ev.y.minus(mDownPositionY) > 100) mScrollState = ScrollState.DOWN
                     mCallbacks!!.onUpOrCancelMotionEvent(mScrollState)
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     if (mPrevMoveEvent == null) {
                         mPrevMoveEvent = ev
@@ -191,15 +203,14 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                         }
 
                         // Apps can set the interception target other than the direct parent.
-                        val parent: ViewGroup
-                        parent = mTouchInterceptionViewGroup ?: getParent() as ViewGroup
+                        val parent: ViewGroup = mTouchInterceptionViewGroup ?: parent as ViewGroup
 
                         // Get offset to parents. If the parent is not the direct parent,
                         // we should aggregate offsets from all of the parents.
                         var offsetX = 0f
                         var offsetY = 0f
                         var v: View = this
-                        while (v != null && v !== parent) {
+                        while (v !== parent) {
                             offsetX += (v.left - v.scrollX).toFloat()
                             offsetY += (v.top - v.scrollY).toFloat()
                             v = v.parent as View
@@ -226,8 +237,25 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                     }
                 }
             }
+
+            when (ev.action) {
+                MotionEvent.ACTION_UP -> {
+                    performClick()
+                }
+            }
         }
         return super.onTouchEvent(ev)
+    }
+
+    override fun performClick(): Boolean {
+        // 반드시 super.performClick()을 호출해야 합니다.
+        // 그래야 View에 등록된 OnClickListener가 정상적으로 작동합니다.
+        super.performClick()
+
+        // (만약 터치가 아니라 TalkBack 더블 탭으로만 실행되어야 할
+        // 특수한 로직이 있다면 여기에 작성합니다. 보통은 비워둡니다.)
+
+        return true
     }
 
     override fun setScrollViewCallbacks(listener: ObservableScrollViewCallbacks?) {
@@ -267,15 +295,13 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
     fun scrollVerticallyToPosition(position: Int) {
         val lm = layoutManager
         if (lm != null && lm is LinearLayoutManager) {
-            (lm as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
+            lm.scrollToPositionWithOffset(position, 0)
         } else {
             scrollToPosition(position)
         }
     }
 
-    override fun getCurrentScrollY(): Int {
-        return mScrollY
-    }
+    override fun getCurrentScrollY(): Int = mScrollY
 
     private fun init() {
         mChildrenHeights = SparseIntArray()
@@ -326,7 +352,15 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
         private constructor(`in`: Parcel) {
             // Parcel 'in' has its parent(RecyclerView)'s saved state.
             // To restore it, class loader that loaded RecyclerView is required.
-            val superState = `in`.readParcelable<Parcelable>(RecyclerView::class.java.getClassLoader())
+            val superState: Parcelable? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    // API 33 이상: 뒤에 Parcelable::class.java 를 덧붙여서 "이 타입으로 꺼낼게!" 라고 명시합니다.
+                    `in`.readParcelable(RecyclerView::class.java.classLoader, Parcelable::class.java)
+                } else {
+                    // API 32 이하: 예전 방식대로 꺼냅니다. (노란줄 억제)
+                    @Suppress("DEPRECATION")
+                    `in`.readParcelable(RecyclerView::class.java.classLoader)
+                }
             this.superState = superState ?: EMPTY_STATE
             prevFirstVisiblePosition = `in`.readInt()
             prevFirstVisibleChildHeight = `in`.readInt()
@@ -335,27 +369,24 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
             scrollY = `in`.readInt()
             childrenHeights = SparseIntArray()
             val numOfChildren = `in`.readInt()
-            if (0 < numOfChildren) {
-                for (i in 0 until numOfChildren) {
-                    val key = `in`.readInt()
-                    val value = `in`.readInt()
-                    childrenHeights!!.put(key, value)
-                }
+            repeat(numOfChildren) {
+                childrenHeights?.put(`in`.readInt(), `in`.readInt())
             }
         }
 
-        override fun describeContents(): Int {
-            return 0
-        }
+        override fun describeContents(): Int = 0
 
-        override fun writeToParcel(out: Parcel, flags: Int) {
+        override fun writeToParcel(
+            out: Parcel,
+            flags: Int,
+        ) {
             out.writeParcelable(superState, flags)
             out.writeInt(prevFirstVisiblePosition)
             out.writeInt(prevFirstVisibleChildHeight)
             out.writeInt(prevScrolledChildrenHeight)
             out.writeInt(prevScrollY)
             out.writeInt(scrollY)
-            val numOfChildren = if (childrenHeights == null) 0 else childrenHeights!!.size()
+            val numOfChildren = if (childrenHeights == null) 0 else childrenHeights!!.size
             out.writeInt(numOfChildren)
             if (0 < numOfChildren) {
                 for (i in 0 until numOfChildren) {
@@ -369,15 +400,12 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
             val EMPTY_STATE: SavedState = SavedState()
 
             @JvmField
-            val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
-                override fun createFromParcel(`in`: Parcel): SavedState? {
-                    return SavedState(`in`)
-                }
+            val CREATOR: Parcelable.Creator<SavedState?> =
+                object : Parcelable.Creator<SavedState?> {
+                    override fun createFromParcel(`in`: Parcel): SavedState = SavedState(`in`)
 
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls(size)
+                    override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
                 }
-            }
         }
     }
 }
