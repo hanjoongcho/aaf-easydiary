@@ -171,6 +171,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.run {
+            setDisplayShowTitleEnabled(config.enableDebugMode)
+        }
+
         mBinding.root.viewTreeObserver.addOnPreDrawListener(
             object :
                 ViewTreeObserver.OnPreDrawListener {
@@ -184,80 +188,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             },
         )
 
-        mBinding.composeView.setContent {
-            Column(
-                modifier = Modifier,
-            ) {
-                BottomToolBarContainer {
-                    CustomElevatedButton(
-                        text = getString(R.string.button_new_entry),
-                        iconResourceId = R.drawable.ic_edit,
-                        iconSize = 16.dp,
-                    ) {
-                        val createDiary =
-                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            createDiary,
-                        )
-                    }
-                    CustomElevatedButton(
-                        text = getString(R.string.button_tree_view),
-                        iconResourceId = R.drawable.ic_tree_structure,
-                        iconSize = 16.dp,
-                    ) {
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                        )
-                    }
-                    CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
-                        moveToday()
-                    }
-
-                    if (config.enableDebugMode) {
-                        CustomElevatedButton(
-                            text = getString(R.string.button_quick_settings),
-                            iconResourceId = R.drawable.ic_running,
-                            iconSize = 16.dp,
-                        ) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                            )
-                        }
-                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, DevActivity::class.java),
-                            )
-                        }
-                        CustomElevatedButton(
-                            text = "MENU",
-                            iconResourceId = R.drawable.ic_options_three_dots,
-                            iconSize = 16.dp,
-                        ) {
-                            openCustomOptionMenu()
-                        }
-                    }
-                }
-            }
-        }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            setOnExitAnimationListener()
-//        }
-
+        setupComposeView()
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
         rescheduleEnabledAlarms()
 //        FontUtils.checkFontSetting(this)
-
-        supportActionBar?.run {
-            setDisplayShowTitleEnabled(config.enableDebugMode)
-//            title = getString(R.string.read_diary_title)
-            subtitle = "👀"
-        }
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         FontUtils.checkFontSetting(this@DiaryMainActivity)
         initDiaryGrid()
@@ -265,7 +200,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)
         bindEvent()
         confirmPrePermissions()
-
         setupShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData(mBinding)
@@ -275,19 +209,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupPhotoHighlight()
         checkIntent()
 //        clearLockSettingsTemporary()
-
-        // test code
-        if (config.enableDebugOptionToastNotificationInfo) {
-            makeToast(
-                "Notification id is ${
-                    intent.getIntExtra(
-                        NOTIFICATION_ID,
-                        -1,
-                    )
-                }",
-            )
-            intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
-        }
+        showDebugNotificationInfo()
 
         if (config.enableDebugMode) openOverDueNotification()
 
@@ -326,15 +248,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mBinding.composeView.visibility = View.VISIBLE
 
-        ViewCompat.setOnApplyWindowInsetsListener(mBinding.mainHolder) { v, insets ->
-            val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            navigationBarHeight = navigationBars.bottom
-            val layoutParams = v.layoutParams
-            if (layoutParams is ViewGroup.MarginLayoutParams) {
-                layoutParams.bottomMargin = navigationBarHeight
-                v.layoutParams = layoutParams
+        if (isVanillaIceCreamPlus()) {
+            ViewCompat.setOnApplyWindowInsetsListener(mBinding.mainHolder) { v, insets ->
+                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                navigationBarHeight = navigationBars.bottom
+                val layoutParams = v.layoutParams
+                if (layoutParams is ViewGroup.MarginLayoutParams) {
+                    layoutParams.bottomMargin = navigationBarHeight
+                    v.layoutParams = layoutParams
+                }
+                insets
             }
-            insets
         }
     }
 
@@ -1072,6 +996,82 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 ),
             )
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
+        }
+    }
+
+    private fun setupComposeView() {
+        mBinding.composeView.setContent {
+            Column(
+                modifier = Modifier,
+            ) {
+                BottomToolBarContainer {
+                    CustomElevatedButton(
+                        text = getString(R.string.button_new_entry),
+                        iconResourceId = R.drawable.ic_edit,
+                        iconSize = 16.dp,
+                    ) {
+                        val createDiary =
+                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            createDiary,
+                        )
+                    }
+                    CustomElevatedButton(
+                        text = getString(R.string.button_tree_view),
+                        iconResourceId = R.drawable.ic_tree_structure,
+                        iconSize = 16.dp,
+                    ) {
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                        )
+                    }
+                    CustomElevatedButton(text = "TODAY", iconResourceId = R.drawable.ic_time_8_w, iconSize = 16.dp) {
+                        moveToday()
+                    }
+
+                    if (config.enableDebugMode) {
+                        CustomElevatedButton(
+                            text = getString(R.string.button_quick_settings),
+                            iconResourceId = R.drawable.ic_running,
+                            iconSize = 16.dp,
+                        ) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                            )
+                        }
+                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, DevActivity::class.java),
+                            )
+                        }
+                        CustomElevatedButton(
+                            text = "MENU",
+                            iconResourceId = R.drawable.ic_options_three_dots,
+                            iconSize = 16.dp,
+                        ) {
+                            openCustomOptionMenu()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDebugNotificationInfo() {
+        if (config.enableDebugOptionToastNotificationInfo) {
+            makeToast(
+                "Notification id is ${
+                    intent.getIntExtra(
+                        NOTIFICATION_ID,
+                        -1,
+                    )
+                }",
+            )
+            intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
     }
 }

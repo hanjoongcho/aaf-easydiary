@@ -400,9 +400,9 @@ class FastScrollObservableRecyclerView :
             val EMPTY_STATE: SavedState = SavedState()
 
             @JvmField
-            val CREATOR: Parcelable.Creator<SavedState?> =
-                object : Parcelable.Creator<SavedState?> {
-                    override fun createFromParcel(`in`: Parcel): SavedState = SavedState(`in`)
+            val CREATOR: Parcelable.Creator<SavedState> =
+                object : Parcelable.Creator<SavedState> {
+                    override fun createFromParcel(parcel: Parcel): SavedState = SavedState(parcel)
 
                     override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
                 }
