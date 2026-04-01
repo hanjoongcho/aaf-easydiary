@@ -30,6 +30,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
+import androidx.core.view.marginBottom
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +62,9 @@ import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
 import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.getSystemBarColor
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isColorLight
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -249,14 +253,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mBinding.composeView.visibility = View.VISIBLE
 
         if (isVanillaIceCreamPlus()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mBinding.mainHolder) { v, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { v, insets ->
                 val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-                navigationBarHeight = navigationBars.bottom
-                val layoutParams = v.layoutParams
-                if (layoutParams is ViewGroup.MarginLayoutParams) {
-                    layoutParams.bottomMargin = navigationBarHeight
-                    v.layoutParams = layoutParams
-                }
+                v.updatePadding(bottom = navigationBars.bottom)
                 insets
             }
         }

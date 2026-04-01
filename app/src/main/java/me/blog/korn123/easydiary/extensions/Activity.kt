@@ -447,6 +447,8 @@ fun Activity.updateNavigationBarAppearance(checkColor: Int = config.primaryColor
     }
 }
 
+fun Activity.getSystemBarColor(): Int = if (isColorLight(config.primaryColor)) Color.WHITE else Color.BLACK
+
 /***************************************************************************************************
  *   etc functions
  *
