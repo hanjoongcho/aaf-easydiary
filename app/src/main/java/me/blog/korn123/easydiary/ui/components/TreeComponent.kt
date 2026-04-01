@@ -134,7 +134,7 @@ fun TreeContent(
     val activity = LocalActivity.current
     val density = LocalDensity.current
     val bottomPadding =
-        if (context.isVanillaIceCreamPlus()) {
+        if (isVanillaIceCreamPlus()) {
             WindowInsets.navigationBars
                 .asPaddingValues()
                 .calculateBottomPadding()

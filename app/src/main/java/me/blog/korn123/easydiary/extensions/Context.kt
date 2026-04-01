@@ -833,11 +833,13 @@ fun Context.updateAlertDialog(
  ***************************************************************************************************/
 val Context.config: Config get() = Config.newInstance(this)
 
-fun Context.isBelowVanillaIceCream() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+fun isBelowVanillaIceCream() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
 
-fun Context.isVanillaIceCreamPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
+fun isVanillaIceCreamPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
 
-fun Context.isRedVelvetCakePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+fun isQPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+fun isRedVelvetCakePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
 fun Context.pendingIntentFlag() =
     if (Build.VERSION.SDK_INT >=

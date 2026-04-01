@@ -439,6 +439,7 @@ fun Activity.updateStatusBarAppearance(checkColor: Int = config.primaryColor) {
 fun Activity.updateNavigationBarAppearance(checkColor: Int = config.primaryColor) {
     val color =
         if (isColorLight(checkColor)) androidx.compose.ui.graphics.Color.White else androidx.compose.ui.graphics.Color.Black
+
     window.navigationBarColor = color.toArgb()
 
     WindowCompat.getInsetsController(window, window.decorView).apply {
