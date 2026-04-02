@@ -11,6 +11,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -78,6 +79,7 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
@@ -97,6 +99,7 @@ import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
@@ -1072,13 +1075,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     newState: Int,
                 ) {
                     super.onScrollStateChanged(recyclerView, newState)
+                    Log.d(AAF_TEST, "onScrollStateChanged: newState-$newState")
                     when (newState) {
                         RecyclerView.SCROLL_STATE_IDLE -> {
                             showBottomToolbar()
                         }
 
                         else -> {
-                            hideBottomToolbar()
+                            if (recyclerView.canScrollVertically(
+                                    ScrollDirection.UP,
+                                )
+                            ) {
+                                hideBottomToolbar()
+                            }
                         }
                     }
                 }

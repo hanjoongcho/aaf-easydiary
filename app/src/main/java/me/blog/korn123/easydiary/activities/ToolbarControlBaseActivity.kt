@@ -32,6 +32,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> :
@@ -60,13 +61,15 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         scrollY: Int,
         firstScroll: Boolean,
         dragging: Boolean,
-    ) {}
+    ) {
+        Log.d(AAF_TEST, "onScrollChanged scrollY: $scrollY, firstScroll: $firstScroll, dragging: $dragging")
+    }
 
     override fun onDownMotionEvent() {}
 
     override fun onUpOrCancelMotionEvent(scrollState: ScrollState?) {
         scrollState?.let {
-            Log.e("DEBUG", "onUpOrCancelMotionEvent: $scrollState ${toolbarIsHidden()}")
+            Log.d(AAF_TEST, "onUpOrCancelMotionEvent: $scrollState ${toolbarIsHidden()}")
             if (!keypadIsShown()) {
                 if (scrollState == ScrollState.UP) {
                     if (toolbarIsShown()) {
@@ -93,7 +96,19 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         mBinding.run {
             composeView.run {
                 visibility = View.VISIBLE
-                animate().alpha(1F).setDuration(300).setListener(null)
+                animate().alpha(1F).setDuration(300).setListener(
+                    object : Animator.AnimatorListener {
+                        override fun onAnimationStart(p0: Animator) {}
+
+                        override fun onAnimationEnd(p0: Animator) {
+                            visibility = View.VISIBLE
+                        }
+
+                        override fun onAnimationCancel(p0: Animator) {}
+
+                        override fun onAnimationRepeat(p0: Animator) {}
+                    },
+                )
             }
         }
     }

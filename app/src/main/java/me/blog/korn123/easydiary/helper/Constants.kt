@@ -898,3 +898,8 @@ object TreeConstants {
     const val LEVEL_ZERO = 0
     const val LEVEL_START = 1
 }
+
+object ScrollDirection {
+    const val UP = -1
+    const val DOWN = 1
+}
