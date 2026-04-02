@@ -111,6 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/component_margin_small"
+                    android:clipToPadding="false"
                     tools:visibility="gone" />
 
                 <com.simplemobiletools.commons.views.MyTextView

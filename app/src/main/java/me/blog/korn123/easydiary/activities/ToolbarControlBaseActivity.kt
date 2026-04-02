@@ -89,9 +89,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
     private fun toolbarIsHidden(): Boolean = ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
 
-    private fun showToolbar() {
-        moveToolbar(0F)
-        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
+    protected fun showBottomToolbar() {
         mBinding.run {
             composeView.run {
                 visibility = View.VISIBLE
@@ -100,9 +98,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         }
     }
 
-    private fun hideToolbar() {
-        moveToolbar(-mBinding.appBar.height.toFloat())
-        mBinding.searchCard.useCompatPadding = false
+    protected fun hideBottomToolbar() {
         mBinding.run {
             composeView.run {
 //                visibility = View.GONE
@@ -127,6 +123,16 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
                 )
             }
         }
+    }
+
+    private fun showToolbar() {
+        moveToolbar(0F)
+        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
+    }
+
+    private fun hideToolbar() {
+        moveToolbar(-mBinding.appBar.height.toFloat())
+        mBinding.searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {

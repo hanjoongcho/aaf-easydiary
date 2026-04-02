@@ -30,7 +30,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
-import androidx.core.view.marginBottom
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,9 +61,7 @@ import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
 import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
-import me.blog.korn123.easydiary.extensions.getSystemBarColor
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.isColorLight
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -214,17 +211,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         checkIntent()
 //        clearLockSettingsTemporary()
         showDebugNotificationInfo()
+        setupDiaryListScrollListener()
+        setupOnBackPressDispatcher()
 
         if (config.enableDebugMode) openOverDueNotification()
-
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (mBinding.progressDialog.isGone) ActivityCompat.finishAffinity(this@DiaryMainActivity)
-                }
-            },
-        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -1072,5 +1062,38 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             )
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
+    }
+
+    private fun setupDiaryListScrollListener() {
+        mBinding.diaryListView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(
+                    recyclerView: RecyclerView,
+                    newState: Int,
+                ) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_IDLE -> {
+                            showBottomToolbar()
+                        }
+
+                        else -> {
+                            hideBottomToolbar()
+                        }
+                    }
+                }
+            },
+        )
+    }
+
+    private fun setupOnBackPressDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (mBinding.progressDialog.isGone) ActivityCompat.finishAffinity(this@DiaryMainActivity)
+                }
+            },
+        )
     }
 }
