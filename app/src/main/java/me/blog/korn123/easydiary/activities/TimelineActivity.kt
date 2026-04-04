@@ -1,8 +1,8 @@
 package me.blog.korn123.easydiary.activities
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -76,35 +76,87 @@ class TimelineActivity : EasyDiaryActivity() {
 
         when (savedInstanceState) {
             null -> {
-                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
-                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
+                mSDatePickerDialog = DatePickerDialog(
+                    this,
+                    mStartDateListener,
+                    mCalendar.get(Calendar.YEAR),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH)
+                )
+                mEDatePickerDialog = DatePickerDialog(
+                    this,
+                    mEndDateListener,
+                    mCalendar.get(Calendar.YEAR),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH)
+                )
                 refreshList()
                 moveListViewScrollToBottom()
             }
 
             else -> {
-                val filterSYear = savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
-                val filterSMonth = savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
-                val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
+                val filterSYear =
+                    savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
+                val filterSMonth =
+                    savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
+                val filterSDate = savedInstanceState.getInt(
+                    FILTER_START_DATE,
+                    mCalendar.get(Calendar.DAY_OF_MONTH)
+                )
                 if (savedInstanceState.getBoolean(FILTER_START_ENABLE, false)) {
                     Log.i("aaf-t", "get date $filterSYear $filterSMonth $filterSDate")
-                    mBinding.partialTimelineFilter.startDate.text = DateUtils.getDateStringFromTimeMillis(EasyDiaryUtils.datePickerToTimeMillis(filterSDate, filterSMonth, filterSYear))
+                    mBinding.partialTimelineFilter.startDate.text =
+                        DateUtils.getDateStringFromTimeMillis(
+                            EasyDiaryUtils.datePickerToTimeMillis(
+                                filterSDate,
+                                filterSMonth,
+                                filterSYear
+                            )
+                        )
                 }
 
-                val filterEYear = savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
-                val filterEMonth = savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
-                val filterEDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
+                val filterEYear =
+                    savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
+                val filterEMonth =
+                    savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
+                val filterEDate = savedInstanceState.getInt(
+                    FILTER_START_DATE,
+                    mCalendar.get(Calendar.DAY_OF_MONTH)
+                )
                 if (savedInstanceState.getBoolean(FILTER_END_ENABLE, false)) {
-                    mBinding.partialTimelineFilter.endDate.text = DateUtils.getDateStringFromTimeMillis(EasyDiaryUtils.datePickerToTimeMillis(filterEDate, filterEMonth, filterEYear))
+                    mBinding.partialTimelineFilter.endDate.text =
+                        DateUtils.getDateStringFromTimeMillis(
+                            EasyDiaryUtils.datePickerToTimeMillis(
+                                filterEDate,
+                                filterEMonth,
+                                filterEYear
+                            )
+                        )
                 }
 
-                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, filterSYear, filterSMonth, filterSDate)
-                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, filterEYear, filterEMonth, filterEDate)
+                mSDatePickerDialog = DatePickerDialog(
+                    this,
+                    mStartDateListener,
+                    filterSYear,
+                    filterSMonth,
+                    filterSDate
+                )
+                mEDatePickerDialog =
+                    DatePickerDialog(this, mEndDateListener, filterEYear, filterEMonth, filterEDate)
 
-                if (savedInstanceState.getBoolean(FILTER_VIEW_VISIBLE, false)) toggleFilterView(true)
+                if (savedInstanceState.getBoolean(
+                        FILTER_VIEW_VISIBLE,
+                        false
+                    )
+                ) toggleFilterView(true)
 
                 // refreshList call from onTextChanged listener
-                mBinding.partialTimelineFilter.query.setText(savedInstanceState.getString(FILTER_QUERY, ""))
+                mBinding.partialTimelineFilter.query.setText(
+                    savedInstanceState.getString(
+                        FILTER_QUERY,
+                        ""
+                    )
+                )
 
 //                val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, savedInstanceState.getInt(DIARY_SEQUENCE, -1))
 //                if (itemIndex > 0) {
@@ -120,7 +172,10 @@ class TimelineActivity : EasyDiaryActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (mDiaryList.isNotEmpty()) {
-            outState.putInt(DIARY_SEQUENCE, mDiaryList[mBinding.timelineList.firstVisiblePosition].sequence)
+            outState.putInt(
+                DIARY_SEQUENCE,
+                mDiaryList[mBinding.timelineList.firstVisiblePosition].sequence
+            )
             Log.i("aaf-t", "firstVisiblePosition ${mBinding.timelineList.firstVisiblePosition}")
         }
 
@@ -131,7 +186,10 @@ class TimelineActivity : EasyDiaryActivity() {
             outState.putInt(FILTER_START_YEAR, mSDatePickerDialog.datePicker.year)
             outState.putInt(FILTER_START_MONTH, mSDatePickerDialog.datePicker.month)
             outState.putInt(FILTER_START_DATE, mSDatePickerDialog.datePicker.dayOfMonth)
-            Log.i("aaf-t", "set date ${mSDatePickerDialog.datePicker.year} ${mSDatePickerDialog.datePicker.month} ${mSDatePickerDialog.datePicker.dayOfMonth}")
+            Log.i(
+                "aaf-t",
+                "set date ${mSDatePickerDialog.datePicker.year} ${mSDatePickerDialog.datePicker.month} ${mSDatePickerDialog.datePicker.dayOfMonth}"
+            )
         }
 
         if (mBinding.partialTimelineFilter.endDate.text
@@ -143,7 +201,10 @@ class TimelineActivity : EasyDiaryActivity() {
             outState.putInt(FILTER_END_DATE, mEDatePickerDialog.datePicker.dayOfMonth)
         }
 
-        if (mBinding.partialTimelineFilter.filterView.translationY == 0F) outState.putBoolean(FILTER_VIEW_VISIBLE, true)
+        if (mBinding.partialTimelineFilter.filterView.translationY == 0F) outState.putBoolean(
+            FILTER_VIEW_VISIBLE,
+            true
+        )
 
         outState.putString(
             FILTER_QUERY,
@@ -190,6 +251,7 @@ class TimelineActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    @SuppressLint("ClickableViewAccessibility")
     private fun bindEvent() {
         mBinding.partialTimelineFilter.run {
             mBinding.insertDiaryButton.setOnClickListener { _ ->
@@ -201,12 +263,16 @@ class TimelineActivity : EasyDiaryActivity() {
                 toggleFilterView(false)
             }
 
-            filterView.setOnTouchListener { _, motionEvent ->
+            filterView.setOnTouchListener { v, motionEvent ->
                 if (mFirstTouch == 0F || mFirstTouch < motionEvent.y) mFirstTouch = motionEvent.y
 
                 Log.i("aaf-t", "${motionEvent.action} ${motionEvent.actionIndex} ${motionEvent.y}")
-                if (motionEvent.action == MotionEvent.ACTION_UP && (mFirstTouch - motionEvent.y > 100)) {
-                    toggleFilterView(false)
+                if (motionEvent.action == MotionEvent.ACTION_UP) {
+                    if (mFirstTouch - motionEvent.y > 100) {
+                        toggleFilterView(false)
+                    } else {
+                        v.performClick()
+                    }
                 }
                 true
             }
@@ -218,7 +284,8 @@ class TimelineActivity : EasyDiaryActivity() {
                         i: Int,
                         i1: Int,
                         i2: Int,
-                    ) {}
+                    ) {
+                    }
 
                     override fun onTextChanged(
                         charSequence: CharSequence,
@@ -258,13 +325,19 @@ class TimelineActivity : EasyDiaryActivity() {
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
         mSymbolSequence = if (index == 0) SYMBOL_SELECT_ALL else index
-        FlavorUtils.initWeatherView(this, mBinding.partialTimelineFilter.symbol, mSymbolSequence, false)
+        FlavorUtils.initWeatherView(
+            this,
+            mBinding.partialTimelineFilter.symbol,
+            mSymbolSequence,
+            false
+        )
     }
 
     private var mStartDateListener: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-            mBinding.partialTimelineFilter.startDate.text = DateUtils.getDateStringFromTimeMillis(startMillis)
+            mBinding.partialTimelineFilter.startDate.text =
+                DateUtils.getDateStringFromTimeMillis(startMillis)
             refreshList()
             Log.i("aaf-t", "mStartDateListener")
         }
@@ -272,7 +345,8 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mEndDateListener: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-            mBinding.partialTimelineFilter.endDate.text = DateUtils.getDateStringFromTimeMillis(endMillis)
+            mBinding.partialTimelineFilter.endDate.text =
+                DateUtils.getDateStringFromTimeMillis(endMillis)
             refreshList()
             Log.i("aaf-t", "mEndDateListener")
         }
@@ -289,19 +363,20 @@ class TimelineActivity : EasyDiaryActivity() {
             }
         if (!isVisible) {
             this.currentFocus?.let { focusView ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(focusView.windowToken, 0)
             }
         }
-        ObjectAnimator.ofFloat(mBinding.partialTimelineFilter.filterView, "translationY", height).apply {
-            duration = 700
-            start()
-        }
+        ObjectAnimator.ofFloat(mBinding.partialTimelineFilter.filterView, "translationY", height)
+            .apply {
+                duration = 700
+                start()
+            }
     }
 
     private fun setupTimelineSearch() {
         mBinding.timelineList.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            AdapterView.OnItemClickListener { adapterView, _, i, _ ->
                 val diaryDto = adapterView.adapter.getItem(i) as Diary
                 val detailIntent = Intent(this@TimelineActivity, DiaryReadingActivity::class.java)
                 detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -322,15 +397,32 @@ class TimelineActivity : EasyDiaryActivity() {
         if (mBinding.partialTimelineFilter.startDate.text
                 .isNotEmpty()
         ) {
-            startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDatePickerDialog.datePicker.dayOfMonth, mSDatePickerDialog.datePicker.month, mSDatePickerDialog.datePicker.year)
+            startMillis = EasyDiaryUtils.datePickerToTimeMillis(
+                mSDatePickerDialog.datePicker.dayOfMonth,
+                mSDatePickerDialog.datePicker.month,
+                mSDatePickerDialog.datePicker.year
+            )
         }
         if (mBinding.partialTimelineFilter.endDate.text
                 .isNotEmpty()
         ) {
-            endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDatePickerDialog.datePicker.dayOfMonth, mEDatePickerDialog.datePicker.month, mEDatePickerDialog.datePicker.year, true)
+            endMillis = EasyDiaryUtils.datePickerToTimeMillis(
+                mEDatePickerDialog.datePicker.dayOfMonth,
+                mEDatePickerDialog.datePicker.month,
+                mEDatePickerDialog.datePicker.year,
+                true
+            )
         }
 
-        Log.i("aaf-t", "input date ${DateUtils.timeMillisToDateTime(startMillis, DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}")
+        Log.i(
+            "aaf-t",
+            "input date ${
+                DateUtils.timeMillisToDateTime(
+                    startMillis,
+                    DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH
+                )
+            }"
+        )
         Log.i("aaf-t", "query ${mBinding.partialTimelineFilter.query.text}")
 
         mDiaryList.run {
