@@ -95,20 +95,12 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
     protected fun showBottomToolbar() {
         mBinding.run {
             composeView.run {
-                visibility = View.VISIBLE
-                animate().alpha(1F).setDuration(300).setListener(
-                    object : Animator.AnimatorListener {
-                        override fun onAnimationStart(p0: Animator) {}
-
-                        override fun onAnimationEnd(p0: Animator) {
-                            visibility = View.VISIBLE
-                        }
-
-                        override fun onAnimationCancel(p0: Animator) {}
-
-                        override fun onAnimationRepeat(p0: Animator) {}
-                    },
-                )
+                animate()
+                    .alpha(1F)
+                    .setDuration(300)
+                    .withStartAction {
+                        visibility = View.VISIBLE
+                    }
             }
         }
     }
@@ -116,26 +108,12 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
     protected fun hideBottomToolbar() {
         mBinding.run {
             composeView.run {
-//                visibility = View.GONE
-                animate().alpha(0F).setDuration(300).setListener(
-                    object : Animator.AnimatorListener {
-                        //                    override fun onAnimationStart(animation: android.animation.Animator?) {}
-//                    override fun onAnimationEnd(animation: android.animation.Animator?) {
-//                        visibility = View.GONE
-//                    }
-//                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
-//                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
-                        override fun onAnimationStart(p0: Animator) {}
-
-                        override fun onAnimationEnd(p0: Animator) {
-                            visibility = View.GONE
-                        }
-
-                        override fun onAnimationCancel(p0: Animator) {}
-
-                        override fun onAnimationRepeat(p0: Animator) {}
-                    },
-                )
+                animate()
+                    .alpha(0F)
+                    .setDuration(300)
+                    .withEndAction {
+                        visibility = View.GONE
+                    }
             }
         }
     }
