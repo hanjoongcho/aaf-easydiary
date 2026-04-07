@@ -998,7 +998,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             ) {
                 BottomToolBarContainer {
                     CustomElevatedButton(
-                        // text = getString(R.string.button_new_entry),
+                        text = getString(R.string.button_new_entry),
                         iconResourceId = R.drawable.ic_edit,
                         iconSize = 16.dp,
                     ) {
@@ -1010,7 +1010,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
                     CustomElevatedButton(
-                        // text = getString(R.string.button_tree_view),
+                        text = getString(R.string.button_tree_view),
                         iconResourceId = R.drawable.ic_tree_structure,
                         iconSize = 16.dp,
                     ) {
@@ -1020,7 +1020,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
                     CustomElevatedButton(
-                        // text = "TODAY",
+                        text = "TODAY",
                         iconResourceId = R.drawable.ic_time_8_w,
                         iconSize = 16.dp,
                     ) {
