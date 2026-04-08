@@ -104,6 +104,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
+import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
@@ -997,10 +998,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 modifier = Modifier,
             ) {
                 BottomToolBarContainer {
-                    CustomElevatedButton(
+                    CustomElevatedSquareButton(
                         text = getString(R.string.button_new_entry),
                         iconResourceId = R.drawable.ic_edit,
-                        iconSize = 16.dp,
                     ) {
                         val createDiary =
                             Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
@@ -1009,45 +1009,42 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             createDiary,
                         )
                     }
-                    CustomElevatedButton(
+                    CustomElevatedSquareButton(
                         text = getString(R.string.button_tree_view),
                         iconResourceId = R.drawable.ic_tree_structure,
-                        iconSize = 16.dp,
                     ) {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
                             Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
                         )
                     }
-                    CustomElevatedButton(
-                        text = "TODAY",
+                    CustomElevatedSquareButton(
+                        text = "Move Today",
                         iconResourceId = R.drawable.ic_time_8_w,
-                        iconSize = 16.dp,
                     ) {
                         moveToday()
                     }
 
                     if (config.enableDebugMode) {
-                        CustomElevatedButton(
-                            // text = getString(R.string.button_quick_settings),
+                        CustomElevatedSquareButton(
+                            text = getString(R.string.button_quick_settings),
                             iconResourceId = R.drawable.ic_running,
-                            iconSize = 16.dp,
                         ) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
                             )
                         }
-                        CustomElevatedButton(iconResourceId = R.drawable.ic_bug_2, iconSize = 16.dp) {
+                        CustomElevatedSquareButton(text = "Debug", iconResourceId = R.drawable.ic_bug_2) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java),
                             )
                         }
-                        CustomElevatedButton(
-                            text = "MENU",
-                            iconResourceId = R.drawable.ic_options_three_dots,
-                            iconSize = 16.dp,
+                        CustomElevatedSquareButton(
+                            text = "Menu",
+                            iconPadding = 2.dp,
+                            iconResourceId = R.drawable.ic_menu,
                         ) {
                             openCustomOptionMenu()
                         }
