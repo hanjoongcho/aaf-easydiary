@@ -359,8 +359,7 @@ fun TreeContent(
                                 0.dp,
                                 0.dp,
                                 0.dp,
-                            )
-                            .zIndex(1f)
+                            ).zIndex(1f)
                             .align(Alignment.TopCenter)
                             .onGloballyPositioned {
                                 topToolbarHeight = with(density) { it.size.height.toDp() }
@@ -494,8 +493,7 @@ fun TreeToolbar(
                     elevation = 15.dp,
                     shape = RoundedCornerShape(15.dp),
                     clip = false, // 기본값
-                )
-                .background(
+                ).background(
                     color =
                         if (isFocused) {
                             Color(LocalContext.current.config.primaryColor)
@@ -960,9 +958,9 @@ fun BottomToolBar(
                 text = "Collapse All",
                 iconResourceId = R.drawable.ic_collapse,
             ) { collapseTreeCallback() }
-            CustomElevatedSquareButton(text = "↑ Top", iconResourceId = R.drawable.ic_cross) { scrollTop() }
-            CustomElevatedSquareButton(text = "↓  Bottom", iconResourceId = R.drawable.ic_cross) { scrollEnd() }
-            CustomElevatedSquareButton(text = "Clear Focus", iconResourceId = R.drawable.ic_cross) {
+            CustomElevatedSquareButton(text = "Top", iconResourceId = R.drawable.ic_arrow_top) { scrollTop() }
+            CustomElevatedSquareButton(text = "Bottom", iconResourceId = R.drawable.ic_arrow_bottom) { scrollEnd() }
+            CustomElevatedSquareButton(text = "Clear Focus", iconResourceId = R.drawable.ic_update) {
                 focusManager.clearFocus()
             }
             CustomElevatedSquareButton(
