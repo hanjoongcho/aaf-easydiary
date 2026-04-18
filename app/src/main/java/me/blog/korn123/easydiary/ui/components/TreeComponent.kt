@@ -359,7 +359,8 @@ fun TreeContent(
                                 0.dp,
                                 0.dp,
                                 0.dp,
-                            ).zIndex(1f)
+                            )
+                            .zIndex(1f)
                             .align(Alignment.TopCenter)
                             .onGloballyPositioned {
                                 topToolbarHeight = with(density) { it.size.height.toDp() }
@@ -493,7 +494,8 @@ fun TreeToolbar(
                     elevation = 15.dp,
                     shape = RoundedCornerShape(15.dp),
                     clip = false, // 기본값
-                ).background(
+                )
+                .background(
                     color =
                         if (isFocused) {
                             Color(LocalContext.current.config.primaryColor)
@@ -933,62 +935,42 @@ fun BottomToolBar(
                     .horizontalScroll(scrollState), // 가로 스크롤 적용
         ) {
             Spacer(modifier = Modifier.width(5.dp))
-            FloatingActionButton(
-                onClick = { closeCallback() },
-                containerColor = Color(LocalContext.current.config.primaryColor),
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp),
+            CustomElevatedSquareButton(
+                text = "Close",
+                iconResourceId = R.drawable.ic_cross,
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "Close",
-                )
+                closeCallback()
             }
-            CustomElevatedButton(
+            CustomElevatedSquareButton(
                 text = "New Entry",
                 iconResourceId = R.drawable.ic_edit,
-                iconSize = 16.dp,
             ) { writeDiaryCallback() }
-            CustomElevatedButton(
+            CustomElevatedSquareButton(
                 text = "TODAY",
                 iconResourceId = R.drawable.ic_time_8_w,
-                iconSize = 16.dp,
             ) {
                 // move to today entry
                 moveToTodayEntry()
             }
-            CustomElevatedButton(
+            CustomElevatedSquareButton(
                 text = "Expand All",
                 iconResourceId = R.drawable.ic_expand,
-                iconSize = 16.dp,
             ) { expandTreeCallback() }
-            CustomElevatedButton(
+            CustomElevatedSquareButton(
                 text = "Collapse All",
                 iconResourceId = R.drawable.ic_collapse,
-                iconSize = 16.dp,
             ) { collapseTreeCallback() }
-            CustomElevatedButton(text = "↑ Top") { scrollTop() }
-            CustomElevatedButton(text = "↓  Bottom") { scrollEnd() }
-            CustomElevatedButton(text = "Clear Focus") {
+            CustomElevatedSquareButton(text = "↑ Top", iconResourceId = R.drawable.ic_cross) { scrollTop() }
+            CustomElevatedSquareButton(text = "↓  Bottom", iconResourceId = R.drawable.ic_cross) { scrollEnd() }
+            CustomElevatedSquareButton(text = "Clear Focus", iconResourceId = R.drawable.ic_cross) {
                 focusManager.clearFocus()
             }
-
-            FloatingActionButton(
-                onClick = { showOptionDialog(true) },
-                containerColor = Color(LocalContext.current.config.primaryColor),
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                modifier = Modifier.size(40.dp),
+            CustomElevatedSquareButton(
+                text = "Settings",
+                iconResourceId = R.drawable.ic_settings_7,
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_settings_7),
-                    contentDescription = "옵션 설정",
-                )
+                showOptionDialog(true)
             }
-
             Spacer(modifier = Modifier.width(5.dp))
         }
     }
