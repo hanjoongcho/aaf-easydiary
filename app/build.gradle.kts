@@ -5,7 +5,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("realm-android")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.3.21"
 }
 
 val appCompileSdk = 36
@@ -169,55 +169,57 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
-    implementation("androidx.activity:activity-ktx:1.12.3")
+    implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.work:work-runtime-ktx:2.11.0")
+    implementation("androidx.work:work-runtime-ktx:2.11.2")
     implementation("androidx.work:work-runtime-ktx:2.10.0") {
         exclude(group = "com.google.guava", module = "listenablefuture")
     }
-    implementation("androidx.browser:browser:1.9.0")
+    implementation("androidx.browser:browser:1.10.0")
     implementation("androidx.core:core-splashscreen:1.2.0")
 
     // compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
-    implementation("androidx.activity:activity-compose:1.12.2")
+    implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("androidx.compose.runtime:runtime-livedata:1.10.1")
-    implementation("androidx.compose.foundation:foundation-layout:1.10.3")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.10.1")
-    implementation("androidx.compose.ui:ui-graphics:1.10.1")
-    implementation("androidx.compose.ui:ui-tooling:1.10.1")
-    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.11.0")
+    implementation("androidx.compose.foundation:foundation-layout:1.11.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.11.0")
+    implementation("androidx.compose.ui:ui-graphics:1.11.0")
+    implementation("androidx.compose.ui:ui-tooling:1.11.0")
+    implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.fragment:fragment-compose:1.8.9")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
 
     // gms
-    implementation("com.google.android.gms:play-services-auth:21.5.0")
+    implementation("com.google.android.gms:play-services-auth:21.5.1")
     implementation("com.google.android.play:review:2.0.2")
     implementation("com.google.android.play:review-ktx:2.0.2")
-    implementation("com.google.api-client:google-api-client-android:2.8.1")
+    implementation("com.google.api-client:google-api-client-android:2.9.0")
     implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0")
     implementation("com.google.apis:google-api-services-calendar:v3-rev411-1.25.0")
     implementation("com.google.http-client:google-http-client-gson:2.1.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
 
     // google components common
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.google.android.material:material:1.13.0")
-    implementation("com.google.code.gson:gson:2.13.2")
+    implementation("com.google.code.gson:gson:2.14.0")
+    //noinspection NewerVersionAvailable
     implementation("com.google.guava:guava:33.5.0-android")
 
-    // apache commons
+    // Apache Commons
     // From version 2.7, it calls the java.nio.file API internally.
     // NIO is available from Android 8.0 (API Level 26)
     // Therefore, we must use version 2.6 before the minimum supported Android version becomes API Level 26 or higher.
-    implementation("commons-io:commons-io:2.21.0")
+    implementation("commons-io:commons-io:2.22.0")
     implementation("org.apache.commons:commons-lang3:3.20.0")
-    implementation("org.apache.poi:poi:3.13")
+    //noinspection NewerVersionAvailable
+    implementation("org.apache.poi:poi:3.13") // Version Change Prohibited
 
     // AAFactory
     implementation("io.github.aafactory:commons:1.2.0") {
@@ -230,15 +232,16 @@ dependencies {
     // etc.
     implementation("com.github.woxingxiao:BubbleSeekBar:3.20")
     implementation("com.tbuonomo:dotsindicator:5.1.0")
-    implementation("id.zelory:compressor:2.1.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20")
+    //noinspection NewerVersionAvailable
+    implementation("id.zelory:compressor:2.1.1") // Version Change Prohibited
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.github.chrisbanes:PhotoView:2.1.3")
     implementation("com.github.QuadFlask:colorpicker:0.0.13") // Version Change Prohibited: This is the last version available for download from JitPack.
     implementation("com.github.amlcurran.showcaseview:library:5.4.3")
     implementation("com.github.zhpanvip:bannerviewpager:3.5.5")
 //    implementation ("com.github.bumptech.glide:glide:4.16.0") //  Landscapist-Glide includes version 4.16.0
-    implementation("com.github.skydoves:landscapist-glide:2.8.3")
+    implementation("com.github.skydoves:landscapist-glide:2.9.7")
     implementation("jp.wasabeef:glide-transformations:4.3.0") {
         exclude(group = "com.github.bumptech.glide", module = "glide")
     }
@@ -265,21 +268,21 @@ dependencies {
 //    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.7")
 
     // android test
-    androidTestImplementation("androidx.test:core:1.6.1")
-    androidTestImplementation("androidx.test:core-ktx:1.6.1")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.2.1")
-    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test:core:1.7.0")
+    androidTestImplementation("androidx.test:core-ktx:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.3.0")
+    androidTestImplementation("androidx.test:runner:1.7.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0-alpha02") {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
     // test
-    testImplementation("androidx.test:core:1.6.1")
-    testImplementation("androidx.test.ext:junit:1.2.1")
-    testImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    testImplementation("androidx.test.espresso:espresso-intents:3.6.1")
-    testImplementation("androidx.test.ext:truth:1.6.0")
+    testImplementation("androidx.test:core:1.7.0")
+    testImplementation("androidx.test.ext:junit:1.3.0")
+    testImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    testImplementation("androidx.test.espresso:espresso-intents:3.7.0")
+    testImplementation("androidx.test.ext:truth:1.7.0")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("org.robolectric:robolectric:4.16.1")
 }
