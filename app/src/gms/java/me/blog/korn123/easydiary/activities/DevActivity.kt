@@ -54,6 +54,7 @@ import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************
@@ -90,7 +91,7 @@ class DevActivity : BaseDevActivity() {
                     topBar = {
                         EasyDiaryActionBar(
                             title = "Easy-Diary Dev Mode",
-                            subTitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
+                            subTitle = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                         ) {
                             finishActivityWithPauseLock()
                         }
@@ -112,7 +113,7 @@ class DevActivity : BaseDevActivity() {
                                 DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
                                 DebugToast(settingCardModifier, maxItemsInEachRow)
 
-                                Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                                Etc(settingCardModifier, maxItemsInEachRow)
                                 ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
                                 Notification(settingCardModifier, maxItemsInEachRow)
                                 AlertDialog(settingCardModifier, maxItemsInEachRow)
