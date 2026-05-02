@@ -8,20 +8,15 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.OpenableColumns
-import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
@@ -42,6 +37,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.MultiTransformation
@@ -56,13 +52,11 @@ import id.zelory.compressor.Compressor
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.enums.Calculation
-import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
-import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CARD_CONTENT_PADDING_DP
 import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP
 import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_MARGIN_DP
@@ -72,7 +66,6 @@ import me.blog.korn123.easydiary.helper.ColorConstants
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
-import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
@@ -85,7 +78,6 @@ import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.FileReader
 import java.util.Calendar
@@ -130,8 +122,7 @@ object EasyDiaryUtils {
     }
 
     fun summaryDiaryLabel(diary: DiaryUiModel): String {
-//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
-        return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
+        return diary.title.ifEmpty { diary.contents.lines()[0] }
     }
 
     fun searchWordIndexes(
@@ -153,8 +144,6 @@ object EasyDiaryUtils {
      *   Number Utils
      *
      ***************************************************************************************************/
-    fun isNumberString(string: String?): Boolean = string?.toFloatOrNull() != null
-
     fun isContainNumber(string: String?): Boolean = string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
 
     fun isStockNumber(string: String?): Boolean = "$string,".matches("^(\\d+,)+$".toRegex())
@@ -210,23 +199,6 @@ object EasyDiaryUtils {
         }
         return calendar.timeInMillis
     }
-
-    fun convDateToTimeMillis(
-        isFullHour: Boolean = false,
-        addYears: Int = 0,
-    ): Long {
-        val cal = Calendar.getInstance(Locale.getDefault())
-        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
-        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
-        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
-        if (addYears != 0) cal.add(Calendar.YEAR, addYears)
-        return cal.timeInMillis
-    }
-
-    fun getCalendarInstance(
-        isFullHour: Boolean = false,
-        addYears: Int = 0,
-    ): Calendar = getCalendarInstance(isFullHour, Calendar.YEAR, addYears)
 
     fun getCalendarInstance(
         isFullHour: Boolean = false,
@@ -326,7 +298,7 @@ object EasyDiaryUtils {
 //        val padding = (activity.dpToPixel(1F, Calculation.FLOOR))
 //        imageView.setPadding(padding, padding, padding, padding)
         Glide
-            .with(activity)
+            .with(imageView)
             .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
             .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
@@ -429,12 +401,6 @@ object EasyDiaryUtils {
     }
 
     fun getExternalStorageDirectory(): File = Environment.getExternalStorageDirectory()
-
-    fun initLegacyWorkingDirectory(context: Context) {
-        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY)
-        }
-    }
 
     fun getApplicationDataDirectory(context: Context): String {
 //        return Environment.getExternalStorageDirectory().absolutePath
@@ -657,8 +623,8 @@ object EasyDiaryUtils {
         val listSecond = ArrayList<Map<String, String>>()
         for (i in 0..59) {
             val map = hashMapOf<String, String>()
-            map.put("label", i.toString() + "s")
-            map.put("value", i.toString())
+            map["label"] = i.toString() + "s"
+            map["value"] = i.toString()
             listSecond.add(map)
         }
         val adapter = SecondItemAdapter(context, R.layout.item_second, listSecond, second)
@@ -677,10 +643,10 @@ object EasyDiaryUtils {
         val popup: PopupWindow =
             PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
-                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
                 showAtLocation(
                     parent,
-                    Gravity.TOP or Gravity.RIGHT,
+                    Gravity.TOP or Gravity.END,
                     0,
                     parent.context.dpToPixel(24F),
                 )
@@ -732,11 +698,6 @@ object EasyDiaryUtils {
         return name ?: UUID.randomUUID().toString()
     }
 
-    fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
-        val type = object : TypeToken<HashMap<String, Any>>() {}.type
-        return GsonBuilder().create().fromJson(jsonString, type)
-    }
-
     fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
         val reader = JsonReader(FileReader(filename))
         val type = object : TypeToken<HashMap<String, Any>>() {}.type
@@ -748,13 +709,6 @@ object EasyDiaryUtils {
     fun hashMapToJsonString(map: HashMap<String, Any>): String {
         val gson = GsonBuilder().setPrettyPrinting().create()
         return gson.toJson(map)
-    }
-
-    fun fromHtml(target: String): Spanned {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            return Html.fromHtml(target)
-        }
-        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY)
     }
 
     /***************************************************************************************************
@@ -777,7 +731,7 @@ object EasyDiaryUtils {
                 )
 
             val map = hashMapOf<Int, Int>()
-            listDiary.map { diaryDto ->
+            listDiary.forEach { diaryDto ->
                 val targetColumn = diaryDto.weather
                 if (targetColumn != 0) {
                     if (map[targetColumn] == null) {
@@ -799,81 +753,7 @@ object EasyDiaryUtils {
      *   Legacy Utils
      *
      ***************************************************************************************************/
-    fun photoUriToDownSamplingBitmap(
-        context: Context,
-        photoUri: PhotoUri,
-        requiredSize: Int = 50,
-        fixedWidth: Int = 45,
-        fixedHeight: Int = 45,
-    ): Bitmap =
-        try {
-            when (photoUri.isContentUri()) {
-                true -> {
-                    BitmapUtils.decodeFile(
-                        context,
-                        Uri.parse(photoUri.photoUri),
-                        context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
-                        context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR),
-                    )
-                }
 
-                false -> {
-                    when (fixedWidth == fixedHeight) {
-                        true -> {
-                            BitmapUtils.decodeFileCropCenter(
-                                getApplicationDataDirectory(context) + photoUri.getFilePath(),
-                                context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
-                            )
-                        }
-
-                        false -> {
-                            BitmapUtils.decodeFile(
-                                getApplicationDataDirectory(context) + photoUri.getFilePath(),
-                                context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR),
-                                context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR),
-                            )
-                        }
-                    }
-                }
-            }
-        } catch (fe: FileNotFoundException) {
-            fe.printStackTrace()
-            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-        } catch (se: SecurityException) {
-            se.printStackTrace()
-            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
-        }
-
-    fun photoUriToBitmap(
-        context: Context,
-        photoUri: PhotoUri,
-    ): Bitmap? {
-        val bitmap: Bitmap? =
-            try {
-                when (photoUri.isContentUri()) {
-                    true -> {
-                        BitmapFactory.decodeStream(
-                            context.contentResolver.openInputStream(
-                                Uri.parse(
-                                    photoUri.photoUri,
-                                ),
-                            ),
-                        )
-                    }
-
-                    false -> {
-                        BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath())
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        return bitmap
-    }
 
     /***************************************************************************************************
      *   ETC.
@@ -933,14 +813,14 @@ object EasyDiaryUtils {
                             0,
                             0,
                             0,
-                        ).filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis > System.currentTimeMillis() }
+                        ).filter { item -> (item.weather !in 80..83) && item.currentTimeMillis > System.currentTimeMillis() }
                         .reversed()
                 }
 
                 else -> {
                     EasyDiaryDbHelper
                         .findDiary(null, false, 0, 0, 0)
-                        .filter { item -> (item.weather < 80 || item.weather > 83) && item.currentTimeMillis <= System.currentTimeMillis() }
+                        .filter { item -> (item.weather !in 80..83) && item.currentTimeMillis <= System.currentTimeMillis() }
                         .run { if (this.size > 100) this.subList(0, 100) else this }
                 }
             }

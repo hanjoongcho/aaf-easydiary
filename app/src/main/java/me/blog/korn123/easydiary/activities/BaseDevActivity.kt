@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,23 +11,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.view.ContextThemeWrapper
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.activity.compose.LocalActivity
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.cardview.widget.CardView
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -47,17 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import com.simplemobiletools.commons.views.MyTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -135,7 +125,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private var mNotificationCount = 9000
     private var mCoroutineJob: Job? = null
     protected val mViewModel: BaseDevViewModel by viewModels()
-    private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private val mLocationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener =
         object : LocationListener {
             override fun onLocationChanged(p0: Location) {
@@ -143,6 +133,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mLocationManager.removeUpdates(this)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onStatusChanged(
                 p0: String?,
                 p1: Int,
@@ -161,6 +152,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mLocationManager.removeUpdates(this)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onStatusChanged(
                 p0: String?,
                 p1: Int,
@@ -178,11 +170,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.",
             )
         }
-    protected val mFlexboxLayoutParams =
-        FlexboxLayout.LayoutParams(
-            FlexboxLayout.LayoutParams.WRAP_CONTENT,
-            FlexboxLayout.LayoutParams.WRAP_CONTENT,
-        )
 
     private val mPickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
@@ -267,10 +254,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun Etc(
         modifier: Modifier,
         maxItemsInEachRow: Int,
-        viewModel: BaseDevViewModel,
     ) {
-        val currentContext = LocalContext.current
-        val currentActivity = LocalActivity.current
         CategoryTitleCard(title = "Etc.")
         FlowRow(
             modifier = Modifier,
@@ -316,27 +300,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Resets the showcase execution history.",
                 modifier = modifier,
             ) {
-                getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
-                    edit()
-                        .putBoolean(
-                            "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER",
-                            false,
-                        ).apply()
-                    edit()
-                        .putBoolean(
-                            "hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER",
-                            false,
-                        ).apply()
-                    edit()
-                        .putBoolean(
-                            "hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER",
-                            false,
-                        ).apply()
-                    edit()
-                        .putBoolean(
-                            "hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER",
-                            false,
-                        ).apply()
+                getSharedPreferences("showcase_internal", MODE_PRIVATE).edit {
+                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false)
+                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false)
+                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false)
+                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false)
                 }
             }
             SimpleCard(
@@ -415,11 +383,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 val unUsedPhotos = arrayListOf<String>()
                 val targetFiles =
                     File(EasyDiaryUtils.getApplicationDataDirectory(this@BaseDevActivity) + DIARY_PHOTO_DIRECTORY)
-                targetFiles.listFiles()?.map {
+                targetFiles.listFiles()?.forEach {
                     localPhotoBaseNames.add(it.name)
                 }
 
-                EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
+                EasyDiaryDbHelper.findPhotoUriAll().forEach { photoUriDto ->
                     if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
                         unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
                     }
@@ -473,8 +441,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         maxItemsInEachRow: Int,
         viewModel: BaseDevViewModel,
     ) {
-        val currentContext = LocalContext.current
-        val currentActivity = LocalActivity.current
         CategoryTitleCard(title = "DevMode Settings")
         FlowRow(
             modifier = Modifier,
@@ -984,12 +950,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 description = "3개의 Coroutine을 대기없이 실행합니다.",
                 modifier = modifier,
             ) {
-                for (k in 1..3) {
+                repeat(3) {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        // launch a new coroutine and keep a reference to its Job
                         for (i in 1..10) {
                             val currentThreadName = Thread.currentThread().name
-                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
+                            // runOnUiThread 대신 Main thread로 컨텍스트 스위칭
+                            withContext(Dispatchers.Main) {
+                                updateConsole(i.toString(), currentThreadName)
+                            }
                             delay(100)
                         }
                     }
@@ -1040,7 +1008,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                Etc(settingCardModifier, maxItemsInEachRow.minus(1), viewModel())
+                Etc(settingCardModifier, maxItemsInEachRow.minus(1))
             }
         }
     }
@@ -1168,7 +1136,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         .from(this@BaseDevActivity)
                         .notify(
                             notification.id,
-                            createNotification(notification, bitmap)
+                            createNotification(notification)
                                 .apply {
                                     setStyle(NotificationCompat.DecoratedCustomViewStyle())
                                     setCustomContentView(
@@ -1309,43 +1277,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun createBaseCardView(
-        cardTitle: String,
-        descriptionTag: String? = null,
-        vararg buttons: Button,
-    ): CardView {
-        val titleContextTheme = ContextThemeWrapper(this, R.style.SettingsTitle)
-        val descriptionContextTheme = ContextThemeWrapper(this, R.style.SettingsSummary)
-        val cardContextTheme = ContextThemeWrapper(this@BaseDevActivity, R.style.AppCard_Settings)
-        val linearContextTheme =
-            ContextThemeWrapper(this@BaseDevActivity, R.style.LinearLayoutVertical)
-        return CardView(cardContextTheme).apply {
-            addView(
-                LinearLayout(linearContextTheme).apply {
-                    addView(
-                        MyTextView(titleContextTheme).apply {
-                            text = cardTitle
-                        },
-                    )
-                    addView(
-                        FlexboxLayout(this@BaseDevActivity).apply {
-                            flexDirection = FlexDirection.ROW
-                            flexWrap = FlexWrap.WRAP
-                            buttons.forEach { addView(it) }
-                        },
-                    )
-                    descriptionTag?.let {
-                        addView(
-                            MyTextView(descriptionContextTheme).apply {
-                                tag = descriptionTag
-                            },
-                        )
-                    }
-                },
-            )
-        }
-    }
-
     private fun updateLocation(viewModel: BaseDevViewModel) {
         fun setLocationInfo() {
             getLastKnownLocation()?.let {
@@ -1376,7 +1307,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @SuppressLint("NewApi")
     private fun createNotification(
         notificationInfo: NotificationInfo,
-        bitmap: Bitmap? = null,
     ): NotificationCompat.Builder {
         if (isOreoPlus()) {
             // Create the NotificationChannel
