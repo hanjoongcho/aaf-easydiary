@@ -17,15 +17,25 @@ object TreeUtils {
         if (node.name != TreeConstants.ROOT_NODE) list.add(node to level)
         when (sortOption) {
             TreeConstants.SORT_OPTION_ASC -> {
-                node.children.sortedBy { it.fullPath }.forEach {
-                    list.addAll(flattenTree(it, level + 1, sortOption))
-                }
+                node.children
+                    .sortedWith(
+                        compareBy<FileNode> {
+                            it.isFile // the priority is higher when the condition is false
+                        }.thenBy { it.fullPath },
+                    ).forEach {
+                        list.addAll(flattenTree(it, level + 1, sortOption))
+                    }
             }
 
             TreeConstants.SORT_OPTION_DESC -> {
-                node.children.sortedByDescending { it.fullPath }.forEach {
-                    list.addAll(flattenTree(it, level + 1, sortOption))
-                }
+                node.children
+                    .sortedWith(
+                        compareBy<FileNode> {
+                            it.isFile // the priority is higher when the condition is false
+                        }.thenByDescending { it.fullPath },
+                    ).forEach {
+                        list.addAll(flattenTree(it, level + 1, sortOption))
+                    }
             }
         }
         return list
