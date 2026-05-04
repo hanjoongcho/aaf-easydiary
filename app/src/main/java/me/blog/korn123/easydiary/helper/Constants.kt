@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
 import android.Manifest
-import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 
 /**
  * Created by CHO HANJOONG on 2018-02-09.
@@ -464,10 +463,6 @@ const val REQUEST_CODE_SAF_READ_REALM = 44
  *   Diary execution mode (Intent)
  *
  ***************************************************************************************************/
-// IntroActivity Delay Message ID
-const val START_MAIN_ACTIVITY = 0
-const val START_DASHBOARD_ACTIVITY = 1
-
 // Diary Mode
 const val DIARY_EXECUTION_MODE = "diary_execution_mode"
 
@@ -564,8 +559,6 @@ const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 // const val OPEN_URL_INFO = "open_url_info"
 const val THUMBNAIL_BACKGROUND_ALPHA = 170
-const val THUMBNAIL_BACKGROUND_ALPHA_HIGH = 220
-const val THUMBNAIL_BACKGROUND_ALPHA_LOW = 70
 
 const val SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 20
 const val UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 15
@@ -586,7 +579,6 @@ const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
 const val SETTING_FONT_NAME = "font_setting"
 const val SETTING_THUMBNAIL_SIZE = "thumbnail_size"
 const val SETTING_BOLD_STYLE = "setting_bold_style"
-const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker"
 const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
 const val SETTING_CONTENTS_SUMMARY = "setting_contents_summary"
 const val SETTING_CLEAR_LEGACY_TOKEN = "setting_clear_legacy_token"
@@ -670,7 +662,6 @@ const val AAF_THEME_CHANGE = "aaf_theme_change"
 const val DEV_STOCK_CHART_OPTIONS_FROM_MILLIS = "devStockChartOptionsFromMillis"
 const val DEV_STOCK_ENABLE_EVALUATE_PRICE = "devStockEnableEvaluatePrice"
 const val DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT = "devStockEnablePrincipalHighlight"
-const val DEV_TAG_LOCATION_MANAGER = "dev_tag_location_manager"
 const val DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS = 10025
 const val DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS = 10030
 const val DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_KOSPI = 10031
@@ -708,7 +699,6 @@ object SettingLocalConstants {
     const val CONTENTS = 3
     const val ATTACH_PHOTO_NAME = 4
     const val ATTACH_PHOTO_SIZE = 5
-    const val WEATHER = 6 // no longer used since version 1.4.79
     const val SYMBOL = 6
     const val IS_ALL_DAY = 7
     const val WRITE_TIME_MILLIS = 8
@@ -801,7 +791,6 @@ object StatisticsConstants {
     const val MODE_SINGLE_LINE_CHART_STOCK = "mode_single_line_chart_stock"
     const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
     const val MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL = "mode_single_horizontal_bar_chart_symbol"
-    const val MODE_SINGLE_BAR_CHART_WRITING = "mode_single_bar_chart_writing"
 }
 
 object DiaryEditingConstants {
@@ -821,7 +810,6 @@ object PhotoFlexItemOptionConstants {
 }
 
 object FingerprintLockConstants {
-    const val TAG = "FingerprintLockActivity"
     const val KEY_NAME = "me.blog.korn123"
     const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
     const val LAUNCHING_MODE = "launching_mode"
@@ -895,11 +883,9 @@ object TreeConstants {
     const val ROOT_NODE = "root_node"
     const val SORT_OPTION_ASC = "asc"
     const val SORT_OPTION_DESC = "desc"
-    const val LEVEL_ZERO = 0
     const val LEVEL_START = 1
 }
 
 object ScrollDirection {
     const val UP = -1
-    const val DOWN = 1
 }
