@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,6 +86,7 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.toggleLauncher
+import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
@@ -265,6 +267,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "SYNC ALL",
                 modifier = modifier,
             ) { syncMarkDown(mBinding) }
+            SimpleCard(
+                "StatusBar",
+                "Dark Icons",
+                modifier = modifier,
+            ) { updateStatusBarAppearance(android.graphics.Color.WHITE) }
+            SimpleCard(
+                "StatusBar",
+                "Light Icons" ,
+                modifier = modifier,
+            ) { updateStatusBarAppearance(android.graphics.Color.BLACK) }
             SimpleCard(
                 "Check Build Info",
                 "android.os.Build 패키지로 확인이 가능한 디바이스 정보",
