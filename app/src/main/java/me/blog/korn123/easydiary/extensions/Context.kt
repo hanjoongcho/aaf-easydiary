@@ -72,11 +72,16 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
+import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.extensions.moveLastItemToFront
+import com.simplemobiletools.commons.extensions.substringTo
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.DAY_MINUTES
+import com.simplemobiletools.commons.helpers.FRIDAY_BIT
+import com.simplemobiletools.commons.helpers.MONDAY_BIT
 import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
 import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
@@ -87,8 +92,13 @@ import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
+import com.simplemobiletools.commons.helpers.SATURDAY_BIT
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.SUNDAY_BIT
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
+import com.simplemobiletools.commons.helpers.THURSDAY_BIT
+import com.simplemobiletools.commons.helpers.TUESDAY_BIT
+import com.simplemobiletools.commons.helpers.WEDNESDAY_BIT
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyAppCompatSpinner
 import com.simplemobiletools.commons.views.MyButton
@@ -449,6 +459,27 @@ fun Context.getAlarmNotification(
     val notification = builder.build()
 //    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
+}
+
+fun Context.getSelectedDaysString(bitMask: Int): String {
+    val dayBits = arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT)
+    val weekDays = resources.getStringArray(R.array.week_days).toMutableList()
+
+    // 일요일 시작 설정에 따른 데이터 재배치
+    if (baseConfig.isSundayFirst) {
+        val lastBit = dayBits.removeAt(dayBits.size - 1)
+        dayBits.add(0, lastBit)
+
+        val lastDay = weekDays.removeAt(weekDays.size - 1)
+        weekDays.add(0, lastDay)
+    }
+
+    // 필터링 및 문자열 결합 (Sequence와 joinToString 활용)
+    return dayBits.indices
+        .filter { index -> (bitMask and dayBits[index]) != 0 }
+        .joinToString(", ") { index ->
+            weekDays[index].take(3) // substringTo 대신 take(3) 사용
+        }
 }
 
 /***************************************************************************************************
