@@ -242,7 +242,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             config.previousActivity = -1
         }
 
-        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+//        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
 
         mBinding.composeView.visibility = View.VISIBLE
 
@@ -250,6 +250,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { v, insets ->
                 val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                 v.updatePadding(bottom = navigationBars.bottom)
+                insets
+            }
+
+            ViewCompat.setOnApplyWindowInsetsListener(mBinding.appBar) { v, insets ->
+                val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+                v.updatePadding(top = statusBars.top)
                 insets
             }
         }
