@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.constants.PageStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,7 +102,6 @@ import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
@@ -357,7 +355,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     size,
                                 ),
                                 { _, _ ->
-                                    reversed().map {
+                                    reversed().forEach {
                                         EasyDiaryDbHelper.beginTransaction()
                                         it.isSelected = false
                                         EasyDiaryDbHelper.commitTransaction()
