@@ -9,6 +9,7 @@
         android:paddingBottom="10dp"
         android:divider="@null"
         android:layout_width="match_parent"
+        android:overScrollMode="never"
         android:layout_height="match_parent">
     </GridView>
 </LinearLayout>

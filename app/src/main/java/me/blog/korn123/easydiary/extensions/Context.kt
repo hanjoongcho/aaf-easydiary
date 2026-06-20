@@ -70,6 +70,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
+import androidx.core.view.marginEnd
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -1088,11 +1090,17 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                 is FixedCardView -> {
                     if (it.fixedAppcompatPadding) {
                         it.useCompatPadding = true
-                        it.cardElevation = dpToPixelFloatValue(2F)
+                        it.cardElevation = dpToPixelFloatValue(3F)
+                        it.updateLayoutParams<MarginLayoutParams> {
+                            val margin = dpToPixel(3F)
+                            setMargins(margin, margin, margin, margin)
+                        }
                     } else {
                         it.useCompatPadding = false
                         it.cardElevation = 0F
                     }
+
+                    updateCardViewPolicy(it)
                 }
 
                 is CardView -> {
