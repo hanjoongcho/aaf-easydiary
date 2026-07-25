@@ -9,6 +9,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
+import androidx.fragment.app.add
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -18,6 +19,7 @@ import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.calendar.model.Event
+import com.google.api.services.calendar.model.EventDateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +32,13 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AuthManager
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.GCalendarConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
 import me.blog.korn123.easydiary.models.Diary
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.UUID
 
 /**
@@ -159,8 +166,10 @@ class GoogleAuthManager(
                 email,
                 AuthManager.ACCOUNT_TYPE_GOOGLE,
             )
-        } else null
-    } 
+        } else {
+            null
+        }
+    }
 
     // --- Internal helper functions ---
 
@@ -336,43 +345,136 @@ class GoogleAuthManager(
         item: Event,
         calendarId: String,
     ): Int {
-        var count = 0
-        val timeMillis =
-            if (item.start?.dateTime != null) {
-                item.start.dateTime.value
-            } else {
-                item.start?.date?.value
-                    ?: 0
-            }
-        val holidayCalendarIdPattern =
-            "ko.south_korea#holiday@group.v.calendar.google.com|en.south_korea#holiday@group.v.calendar.google.com"
-        if (EasyDiaryDbHelper
-                .findDiary(item.summary)
-                .none { diary -> diary.currentTimeMillis == timeMillis } &&
-            !(item.description == null && item.summary == null) &&
-            !(
-                calendarId.matches(Regex(holidayCalendarIdPattern)) && item.description.isNotEmpty() &&
-                    item.description.contains(
-                        "Observance",
-                    )
-            )
-        ) {
-            EasyDiaryDbHelper.insertDiary(
-                Diary(
-                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                    timeMillis,
-                    if (item.description != null) item.summary else "",
-                    item.description ?: item.summary,
-                    SYMBOL_GOOGLE_CALENDAR,
-                    item.start?.dateTime == null,
-                ).apply {
-                    isHoliday =
-                        calendarId.matches(Regex(holidayCalendarIdPattern))
-                },
-            )
-            count = 1
+        val summary = item.summary
+        val description = item.description
+
+        // 1. 유효성 및 필터링 검사
+        if (summary.isNullOrEmpty() && description.isNullOrEmpty()) return 0
+
+        val isHolidayCalendar = GCalendarConstants.HOLIDAY_CALENDAR_IDS.contains(calendarId)
+        if (isHolidayCalendar && description?.contains("Observance") == true) return 0
+
+        // 2. 종일 일정 여부 확인 (start.date가 있으면 종일 일정)
+        val isAllDay = item.start?.date != null
+        val systemZone = ZoneId.systemDefault()
+
+        // 3. 시작/종료 날짜 및 밀리초 추출
+        val (startDate, startMillis) = parseEventDateTime(item.start, isAllDay, systemZone)
+        val (rawEndDate, rawEndMillis) = parseEventDateTime(item.end, isAllDay, systemZone)
+
+        // 4. 종일 일정인 경우 Exclusive 규격에 따라 종료일 -1일 보정
+        val endDate = if (isAllDay) rawEndDate.minusDays(1) else rawEndDate
+        val endMillis = if (isAllDay) {
+            endDate.atStartOfDay(systemZone).toInstant().toEpochMilli()
+        } else {
+            rawEndMillis
         }
-        return count
+
+        // 종료일이 시작일보다 앞서는 예외 상황 방지
+        val effectiveEndDate = if (endDate.isBefore(startDate)) startDate else endDate
+
+        var insertedCount = 0
+
+        // --- CASE A: 시작일과 종료일이 같은 경우 ---
+        if (startDate == effectiveEndDate) {
+            if (insertDiaryIfNotExists(summary, startMillis, isAllDay, isHolidayCalendar, description)) {
+                insertedCount++
+            }
+            return insertedCount
+        }
+
+        // --- CASE B: 시작일과 종료일이 다른 경우 (다일 이벤트) ---
+        var currentDate = startDate
+
+        while (!currentDate.isAfter(effectiveEndDate)) {
+            val currentMillis: Long
+            val currentIsAllDay: Boolean
+
+            when (currentDate) {
+                startDate -> {
+                    currentMillis = startMillis
+                    currentIsAllDay = isAllDay
+                }
+
+                effectiveEndDate -> {
+                    currentMillis = endMillis
+                    currentIsAllDay = isAllDay
+                }
+
+                else -> {
+                    // 중간 일자: 00:00:00 기준 & 무조건 isAllDay = true
+                    currentMillis = currentDate.atStartOfDay(systemZone).toInstant().toEpochMilli()
+                    currentIsAllDay = true
+                }
+            }
+
+            if (insertDiaryIfNotExists(summary, currentMillis, currentIsAllDay, isHolidayCalendar, description)) {
+                insertedCount++
+            }
+
+            currentDate = currentDate.plusDays(1)
+        }
+
+        return insertedCount
+    }
+
+    /**
+     * EventDateTime(start/end) 객체에서 LocalDate 및 Epoch Millis 추출 헬퍼 함수
+     */
+    private fun parseEventDateTime(
+        eventDateTime: EventDateTime?,
+        isAllDay: Boolean,
+        zoneId: ZoneId,
+    ): Pair<LocalDate, Long> {
+        val dateTimeValue = eventDateTime?.dateTime?.value
+        val dateValue = eventDateTime?.date?.value
+
+        return when {
+            // 1) 종일 일정인 경우: date (YYYY-MM-DD) 값을 UTC LocalDate로 직접 파싱
+            isAllDay && dateValue != null -> {
+                val localDate = LocalDate.parse(eventDateTime.date.toStringRfc3339())
+                val millis = localDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
+                Pair(localDate, millis)
+            }
+            // 2) 일반 일정인 경우: dateTime epoch milli 사용
+            dateTimeValue != null -> {
+                val instant = Instant.ofEpochMilli(dateTimeValue)
+                Pair(instant.atZone(zoneId).toLocalDate(), dateTimeValue)
+            }
+            // 3) 예외 케이스 처리
+            else -> Pair(LocalDate.now(zoneId), 0L)
+        }
+    }
+
+    // DB 중복 체크 및 Insert 헬퍼 함수
+    private fun insertDiaryIfNotExists(
+        summary: String?,
+        millis: Long,
+        isAllDay: Boolean,
+        isHolidayCalendar: Boolean,
+        description: String?,
+    ): Boolean {
+        val isAlreadyExists =
+            EasyDiaryDbHelper
+                .findDiary(summary)
+                .any { diary -> diary.currentTimeMillis == millis }
+
+        if (isAlreadyExists) return false
+
+        val diary =
+            Diary(
+                sequence = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                currentTimeMillis = millis,
+                title = if (description != null) summary.orEmpty() else "",
+                contents = description ?: summary.orEmpty(),
+                weather = SYMBOL_GOOGLE_CALENDAR,
+                isAllDay = isAllDay,
+            ).apply {
+                isHoliday = isHolidayCalendar
+            }
+
+        EasyDiaryDbHelper.insertDiary(diary)
+        return true
     }
 }
 

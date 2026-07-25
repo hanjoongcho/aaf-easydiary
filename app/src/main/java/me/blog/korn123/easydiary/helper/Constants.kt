@@ -741,6 +741,14 @@ object GDriveConstants {
     const val WORKING_FOLDER_ID = "working-folder-id"
 }
 
+object GCalendarConstants {
+    val HOLIDAY_CALENDAR_IDS =
+        setOf(
+            "ko.south_korea#holiday@group.v.calendar.google.com",
+            "en.south_korea#holiday@group.v.calendar.google.com",
+        )
+}
+
 object AlarmConstants {
     const val WORK_MODE_DIARY_WRITING = 0
     const val WORK_MODE_DIARY_BACKUP_GMS = 1
