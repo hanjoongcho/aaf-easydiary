@@ -854,7 +854,7 @@
     <string name="release_345">
         v1.4.346.202604090 / 2026.04.09\n
         Android 16 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
-    </string>
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1148,5 +1148,5 @@
     <string name="link_entry_as_parent">ᱟᱭᱳ-ᱵᱟᱵᱟ ᱞᱮᱠᱟᱛᱮ</string>
     <string name="link_entry_as_child">ᱜᱤᱫᱽᱨᱟᱹ ᱞᱮᱠᱷᱟ</string>
     <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ</string>
-    <string name="menu_speech_to_text">ᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱚᱱᱚᱞ</string>
+    <string name="menu_speech_to_text">ᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱚᱱᱚᱞ</string>
 </resources>
