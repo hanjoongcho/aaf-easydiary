@@ -1,11 +1,12 @@
 import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("realm-android")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.3.21"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.10"
+    id("com.google.dagger.hilt.android")
 }
 
 val appCompileSdk = 36
@@ -79,6 +80,9 @@ android {
             java.srcDirs("src/main/java", "src/gmsProd/java", "src/gms/java", "src/lab/java")
             res.srcDirs("src/gmsProd/res")
         }
+        getByName("androidTest") {
+            assets.srcDirs(files("$projectDir/schemas"))
+        }
     }
 
     buildFeatures {
@@ -135,6 +139,10 @@ android {
         abortOnError = false
         checkReleaseBuilds = false
     }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 configurations.matching { it.name == "fossImplementation" }.all {
@@ -194,11 +202,24 @@ dependencies {
     implementation("androidx.fragment:fragment-compose:1.8.9")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
 
+    // room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // hilt
+    val hiltVersion = "2.55"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    ksp("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+
     // gms
     implementation("com.google.android.gms:play-services-auth:21.5.1")
     implementation("com.google.android.play:review:2.0.2")
     implementation("com.google.android.play:review-ktx:2.0.2")
     implementation("com.google.api-client:google-api-client-android:2.9.0")
+    implementation("com.google.android.gms:play-services-drive:17.0.0")
     implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0")
     implementation("com.google.apis:google-api-services-calendar:v3-rev411-1.25.0")
     implementation("com.google.http-client:google-http-client-gson:2.1.0")
@@ -241,7 +262,7 @@ dependencies {
     implementation("com.github.amlcurran.showcaseview:library:5.4.3")
     implementation("com.github.zhpanvip:bannerviewpager:3.5.5")
 //    implementation ("com.github.bumptech.glide:glide:4.16.0") //  Landscapist-Glide includes version 4.16.0
-    implementation("com.github.skydoves:landscapist-glide:2.9.7")
+    implementation("com.github.skydoves:landscapist-glide:2.5.1")
     implementation("jp.wasabeef:glide-transformations:4.3.0") {
         exclude(group = "com.github.bumptech.glide", module = "glide")
     }
@@ -251,6 +272,7 @@ dependencies {
     implementation("com.simplecityapps:recyclerview-fastscroll:2.0.1")
     implementation("org.jasypt:jasypt:1.9.3")
 
+    // io.noties
     implementation("io.noties.markwon:core:4.6.2")
     implementation("io.noties.markwon:syntax-highlight:4.6.2")
     implementation("io.noties.markwon:ext-tables:4.6.2")
@@ -278,11 +300,5 @@ dependencies {
     }
 
     // test
-    testImplementation("androidx.test:core:1.7.0")
-    testImplementation("androidx.test.ext:junit:1.3.0")
-    testImplementation("androidx.test.espresso:espresso-core:3.7.0")
-    testImplementation("androidx.test.espresso:espresso-intents:3.7.0")
-    testImplementation("androidx.test.ext:truth:1.7.0")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.16.1")
 }

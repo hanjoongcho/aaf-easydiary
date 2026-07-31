@@ -8,6 +8,7 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.Sort
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.EasyDiaryApplication
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DDay
