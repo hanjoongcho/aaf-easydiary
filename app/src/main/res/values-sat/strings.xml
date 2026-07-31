@@ -739,122 +739,122 @@
     </string>
     <string name="release_305">
         v1.4.305.202402230 / 2024.02.23\n
-        Added scheduler option to create diaries with Google Calendar events
+        ᱜᱩᱜᱚᱞ ᱠᱮᱞᱮᱱᱰᱟᱨ ᱤᱵᱷᱮᱱᱴ ᱠᱚ ᱥᱟᱶ ᱰᱟᱭᱨᱤ ᱵᱮᱱᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱥᱮᱰᱭᱩᱞᱟᱨ ᱣᱤᱠᱟᱞᱯ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
     <string name="release_306">
         v1.4.306.202402250 / 2024.02.25\n
-        Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+        Android 14 SCHEDULE_EXACT_ALARM ᱟᱹᱭᱫᱟᱹᱨ ᱟᱨᱡᱟᱣ
     </string>
     <string name="release_307">
         v1.4.307.202406020 / 2024.06.02\n
-        Discontinuation of support for devices prior to Android Version 5.0 (Android Lollipop)\n
-        Apply Jetpack Compose to some screens to improve functionality\n
-        Add option to use quick settings
+        Android ᱦᱟᱹᱞᱤᱭᱟᱠ 5.0 (Android Lollipop)\n ᱢᱟᱲᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱵᱚᱸᱫᱚ 
+        ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱠᱤᱪᱷᱩ ᱥᱠᱨᱤᱱ ᱨᱮ ᱡᱮᱴᱯᱮᱠ ᱠᱚᱢᱯᱚᱡᱽ ᱞᱟᱜᱟᱣ ᱢᱮ\n 
+        ᱩᱥᱟᱹᱨᱟ ᱥᱮᱴᱤᱝ ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱵᱤᱠᱚᱞᱯ ᱥᱮᱞᱮᱫ ᱢᱮ
     </string>
     <string name="release_308">
         v1.4.308.202406030 / 2024.06.03\n
-        Applying the detailed consent guide policy for OAuth
+        OAuth ᱞᱟᱹᱜᱤᱫ ᱯᱩᱥᱴᱟᱹᱣ ᱥᱚᱦᱢᱚᱛᱤ ᱜᱚᱲᱚ ᱱᱤᱛᱤ ᱞᱟᱹᱜᱩᱜ ᱠᱟᱱᱟ
     </string>
     <string name="release_309">
         v1.4.309.202406100 / 2024.06.10\n
-        Fixed Android 14 Foreground Service permission issue
+        Android 14 ᱯᱷᱚᱨᱜᱽᱨᱟᱣᱩᱱᱰ ᱥᱮᱵᱟ ᱟᱹᱭᱫᱟᱹᱨ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_312">
         v1.4.312.202406200 / 2024.06.20\n
-        Applied Android 12 Splash API
+        Android 12 ᱥᱯᱞᱟᱥ ᱮᱯᱤᱟᱭ ᱞᱟᱹᱜᱩ ᱟᱠᱟᱱᱟ
     </string>
     <string name="release_313">
         v1.4.313.202410010 / 2024.10.01\n
-        User Experience (UX) Optimization
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱟᱹᱱᱟᱹᱭᱠᱟᱹᱣ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_317">
         v1.4.317.202410240 / 2024.10.24\n
-        Changed multi-picker support policy
+        ᱵᱚᱫᱚᱞ ᱟᱠᱟᱱ ᱢᱟᱞᱴᱤ-ᱯᱤᱠᱟᱨ ᱥᱚᱦᱚᱫ ᱯᱚᱞᱤᱥᱤ
     </string>
     <string name="release_318">
         v1.4.318.202412220 / 2024.12.22\n
-        Fixed an error where custom fonts were not applied on some screens
+        ᱢᱤᱫ ᱦᱩᱰᱟᱹᱜ ᱴᱷᱤᱠ ᱦᱩᱭᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱠᱟᱥᱴᱚᱢ ᱯᱷᱚᱱᱴ ᱠᱚ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱟᱝ ᱞᱟᱹᱜᱩ ᱞᱮᱱᱟ
     </string>
     <string name="release_319">
         v1.4.319.202501050 / 2025.01.05\n
-        Fixed app bar area overlapping issue in Android 15
+        Android 15 ᱨᱮ ᱮᱯ ᱵᱟᱨ ᱮᱨᱤᱭᱟ ᱚᱵᱷᱟᱨᱞᱮᱯᱤᱝ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_324">
         v1.4.324.202501190 / 2025.01.19\n
-        User Experience (UX) Optimization
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_325">
         v1.4.325.202501250 / 2025.01.25\n
-        Change the layout of attached photos in viewing mode
+        ᱧᱮᱞ ᱢᱳᱰ ᱨᱮ ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱨᱮᱭᱟᱜ ᱞᱮᱭᱟᱣᱩᱴ ᱵᱚᱫᱚᱞ ᱢᱮ
     </string>
     <string name="release_326">
         v1.4.326.202502030 / 2025.02.03\n
-        Fixed an issue where the main search bar was hidden in Android version 15
+        ᱢᱤᱫ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱴᱷᱤᱠ ᱦᱩᱭᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ Android ᱵᱷᱟᱨᱥᱚᱱ 15 ᱨᱮ ᱢᱩᱬ ᱥᱮᱸᱫᱽᱨᱟ ᱵᱟᱨ ᱩᱠᱩ ᱞᱮᱱᱟ
     </string>
     <string name="release_327">
         v1.4.327.202502140 / 2025.02.14\n
-        User Experience (UX) Optimization
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
     </string>
     <string name="release_328">
         v1.4.328.202502160 / 2025.02.16\n
-        System Bar Area and Toolbar UI/UX Improvements
+        ᱥᱤᱥᱴᱚᱢ ᱵᱟᱨ ᱴᱚᱴᱷᱟ ᱟᱨ ᱴᱩᱞᱵᱟᱨ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ
     </string>
     <string name="release_329">
         v1.4.329.202503170 / 2025.03.17\n
-        Applied Jetpack Compose components to some settings screens
+        ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱥᱠᱨᱤᱱ ᱥᱟᱡᱟᱣ ᱨᱮ Jetpack Compose ᱠᱚᱢᱯᱚᱱᱮᱱᱴ ᱞᱟᱜᱟᱣ ᱦᱩᱭᱮᱱᱟ
     </string>
     <string name="release_330">
         v1.4.330.202504120 / 2025.04.12\n
-        Improve UI/UX for Android 15
+        Android 15 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_331">
         v1.4.331.202505030 / 2025.05.03\n
-        Improve UI/UX for Android 15
+        Android 15 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_332">
         v1.4.332.202505290 / 2025.05.29\n
-        Improve UI/UX for Android 15
+        Android 15 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_333">
         v1.4.333.202507260 / 2025.07.26\n
-        Improve UI/UX for Android 15
+        Android 15 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_334">
         v1.4.334.202509110 / 2025.09.11\n
-        Improve UI/UX for Android 15
+        Android 15 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_337">
         v1.4.337.202510090 / 2025.10.09\n
-        Migrate layout from XML to Jetpack Compose
+        XML ᱠᱷᱚᱱ Jetpack ᱠᱚᱢᱯᱚᱡᱽ ᱨᱮ ᱞᱮᱭᱟᱣᱩᱴ ᱩᱪᱟᱹᱲ ᱢᱮ
     </string>
     <string name="release_338">
         v1.4.338.202510250 / 2025.10.25\n
-        Migrate layout from XML to Jetpack Compose
+        XML ᱠᱷᱚᱱ Jetpack ᱠᱚᱢᱯᱚᱡᱽ ᱨᱮ ᱞᱮᱭᱟᱣᱩᱴ ᱩᱪᱟᱹᱲ ᱢᱮ
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
-        Fixed GlideImage cache conflict
+        Fixed GlideImage cache conflict ᱴᱷᱟᱹᱣᱠᱟᱹ GlideImage ᱠᱮᱪ ᱮᱯᱮᱨ ᱦᱮᱸᱰᱮᱡ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
-        Add linking between diary entries
+        ᱰᱟᱭᱨᱤ ᱮᱱᱴᱨᱤ ᱠᱚ ᱛᱟᱞᱟ ᱨᱮ ᱞᱤᱝᱠᱤᱝ ᱥᱮᱞᱮᱫ ᱢᱮ
     </string>
     <string name="release_341">
         v1.4.341.202602050 / 2026.02.05\n
-        Improve UI/UX for Android 16
+        Android 16 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_343">
         v1.4.343.202603010 / 2026.03.01\n
-        Updated GMS login handling
+        GMS ᱵᱚᱞᱚᱱᱦᱚᱨ ᱥᱚᱢᱵᱷᱲᱟᱣ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱟᱠᱟᱱ
     </string>
     <string name="release_344">
         v1.4.344.202604070 / 2026.04.07\n
-        Improve UI/UX for Android 16
+        Android 16 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
     </string>
     <string name="release_345">
         v1.4.346.202604090 / 2026.04.09\n
-        Improve UI/UX for Android 16
-    </string>
+        Android 16 ᱞᱟᱹᱜᱤᱫ UI/UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱢᱮ
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1137,16 +1137,17 @@
     <string name="sync_google_calendar_event_title">[BETA] Google Calendar ᱟᱹᱭᱩᱨᱢᱤᱫ ᱢᱮ</string>
     <string name="sync_google_calendar_event_summary">ᱢᱤᱫᱴᱟᱹᱝ ᱰᱟᱭᱨᱤ ᱫᱚ Google Calendar ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱟᱡ ᱛᱮ ᱛᱮᱭᱟᱨᱚᱜᱼᱟ ᱾ ᱡᱟᱦᱟᱸ ᱥᱮᱰᱭᱩᱞ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱛᱮᱭᱟᱨ ᱠᱟᱱᱟ ᱚᱱᱟ ᱫᱚ ᱵᱟᱭ ᱛᱮᱭᱟᱨᱚᱜᱼᱟ ᱾</string>
     <string name="quick_setting_title">[BETA] Quick Settings</string>
-    <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
-    <string name="button_new_entry">New Entry</string>
-    <string name="button_tree_view">Tree View</string>
-    <string name="button_quick_settings">Quick Settings</string>
-    <string name="link_entry">Link Entry</string>
-    <string name="link_entry_category_parent">🌳 Parent Entries</string>
-    <string name="link_entry_category_child">🍃 Child Entries</string>
-    <string name="link_entry_confirm">Do you want to link the selected item?</string>
-    <string name="link_entry_as_parent">As Parent</string>
-    <string name="link_entry_as_child">As Child</string>
-    <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
+    <string name="quick_setting_summary">ᱡᱩᱫᱤ ᱟᱢ ᱱᱚᱣᱟ ᱚᱯᱥᱚᱱ ᱮᱢ ᱪᱟᱹᱞᱩ ᱮᱫᱟ, ᱟᱢ ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱩᱥᱟᱹᱨᱟ ᱥᱠᱨᱤᱱ ᱥᱟᱡᱟᱣ ᱡᱷᱤᱡᱽ ᱞᱟᱹᱜᱤᱫ ᱦᱤᱞᱟᱹᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ </string>
+    <string name="button_new_entry">ᱱᱚᱶᱟ ᱚᱞ ᱫᱟᱠᱷᱚᱞ</string>
+    <string name="button_tree_view">ᱫᱟᱨᱮ ᱧᱮᱞ</string>
+    <string name="button_quick_settings">ᱴᱟᱴᱠᱟ ᱥᱟᱡᱟᱣ</string>
+    <string name="link_entry">ᱟᱫᱮᱨ ᱡᱟᱲᱟᱣ ᱢᱮ</string>
+    <string name="link_entry_category_parent">🌳 ᱟᱭᱳ-ᱵᱟᱵᱟ ᱟᱫᱮᱨ</string>
+    <string name="link_entry_category_child">🍃 ᱜᱤᱫᱽᱨᱟᱹ ᱟᱫᱮᱨ</string>
+    <string name="link_entry_confirm">ᱪᱮᱫ ᱟᱢ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱ ᱡᱤᱱᱤᱥ ᱞᱤᱝᱠ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?</string>
+    <string name="link_entry_as_parent">ᱟᱭᱳ-ᱵᱟᱵᱟ ᱞᱮᱠᱟᱛᱮ</string>
+    <string name="link_entry_as_child">ᱜᱤᱫᱽᱨᱟᱹ ᱞᱮᱠᱷᱟ</string>
+    <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ
+    </string>
+    <string name="menu_speech_to_text">ᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱚᱱᱚᱞ</string>
 </resources>

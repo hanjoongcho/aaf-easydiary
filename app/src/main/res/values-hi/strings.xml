@@ -739,121 +739,121 @@
     </string>
     <string name="release_305">
         v1.4.305.202402230 / 2024.02.23\n
-        Added scheduler option to create diaries with Google Calendar events
+        Google Calendar इवेंट्स के साथ डायरी बनाने के लिए शेड्यूलर विकल्प जोड़ा गया।
     </string>
     <string name="release_306">
         v1.4.306.202402250 / 2024.02.25\n
-        Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+        Android 14 में SCHEDULE_EXACT_ALARM परमिशन हासिल करना
     </string>
     <string name="release_307">
         v1.4.307.202406020 / 2024.06.02\n
-        Discontinuation of support for devices prior to Android Version 5.0 (Android Lollipop)\n
-        Apply Jetpack Compose to some screens to improve functionality\n
-        Add option to use quick settings
+        Android वर्शन 5.0 (Android Lollipop) से पुराने डिवाइस के लिए सपोर्ट बंद करना\n
+                    फ़ंक्शनैलिटी बेहतर बनाने के लिए कुछ स्क्रीन पर Jetpack Compose का इस्तेमाल करना\n
+                    क्विक सेटिंग्स इस्तेमाल करने का विकल्प जोड़ना
     </string>
     <string name="release_308">
         v1.4.308.202406030 / 2024.06.03\n
-        Applying the detailed consent guide policy for OAuth
+        OAuth के लिए विस्तृत सहमति गाइड नीति लागू करना
     </string>
     <string name="release_309">
         v1.4.309.202406100 / 2024.06.10\n
-        Fixed Android 14 Foreground Service permission issue
+        Android 14 में फ़ोरग्राउंड सर्विस परमिशन की समस्या ठीक की गई।
     </string>
     <string name="release_312">
         v1.4.312.202406200 / 2024.06.20\n
-        Applied Android 12 Splash API
+        Android 12 स्प्लैश API लागू किया गया
     </string>
     <string name="release_313">
         v1.4.313.202410010 / 2024.10.01\n
-        User Experience (UX) Optimization
+                    यूज़र एक्सपीरियंस (UX) ऑप्टिमाइज़ेशन
     </string>
     <string name="release_317">
         v1.4.317.202410240 / 2024.10.24\n
-        Changed multi-picker support policy
+                    मल्टी-पिकर सपोर्ट पॉलिसी बदली गई
     </string>
     <string name="release_318">
         v1.4.318.202412220 / 2024.12.22\n
-        Fixed an error where custom fonts were not applied on some screens
+                    एक गड़बड़ी ठीक की गई है, जिसमें कुछ स्क्रीन पर कस्टम फ़ॉन्ट लागू नहीं हो रहे थे।
     </string>
     <string name="release_319">
         v1.4.319.202501050 / 2025.01.05\n
-        Fixed app bar area overlapping issue in Android 15
+        Android 15 में ऐप बार एरिया के ओवरलैप होने की समस्या को ठीक किया गया।
     </string>
     <string name="release_324">
         v1.4.324.202501190 / 2025.01.19\n
-        User Experience (UX) Optimization
+                    यूज़र एक्सपीरियंस (UX) ऑप्टिमाइज़ेशन
     </string>
     <string name="release_325">
         v1.4.325.202501250 / 2025.01.25\n
-        Change the layout of attached photos in viewing mode
+                    व्यूइंग मोड में अटैच की गई फ़ोटो का लेआउट बदलें
     </string>
     <string name="release_326">
         v1.4.326.202502030 / 2025.02.03\n
-        Fixed an issue where the main search bar was hidden in Android version 15
+        Android वर्शन 15 में मुख्य सर्च बार के छिपे होने की समस्या को ठीक किया गया।
     </string>
     <string name="release_327">
         v1.4.327.202502140 / 2025.02.14\n
-        User Experience (UX) Optimization
+                    यूज़र एक्सपीरियंस (UX) ऑप्टिमाइज़ेशन
     </string>
     <string name="release_328">
         v1.4.328.202502160 / 2025.02.16\n
-        System Bar Area and Toolbar UI/UX Improvements
+                    सिस्टम बार एरिया और टूलबार UI/UX में सुधार
     </string>
     <string name="release_329">
         v1.4.329.202503170 / 2025.03.17\n
-        Applied Jetpack Compose components to some settings screens
+                    कुछ सेटिंग्स स्क्रीन पर Jetpack Compose कंपोनेंट्स लागू किए।
     </string>
     <string name="release_330">
         v1.4.330.202504120 / 2025.04.12\n
-        Improve UI/UX for Android 15
+        Android 15 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_331">
         v1.4.331.202505030 / 2025.05.03\n
-        Improve UI/UX for Android 15
+        Android 15 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_332">
         v1.4.332.202505290 / 2025.05.29\n
-        Improve UI/UX for Android 15
+        Android 15 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_333">
         v1.4.333.202507260 / 2025.07.26\n
-        Improve UI/UX for Android 15
+        Android 15 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_334">
         v1.4.334.202509110 / 2025.09.11\n
-        Improve UI/UX for Android 15
+        Android 15 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_337">
         v1.4.337.202510090 / 2025.10.09\n
-        Migrate layout from XML to Jetpack Compose
+                    लेआउट को XML से Jetpack Compose में माइग्रेट करें
     </string>
     <string name="release_338">
         v1.4.338.202510250 / 2025.10.25\n
-        Migrate layout from XML to Jetpack Compose
+                    लेआउट को XML से Jetpack Compose में माइग्रेट करें
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
-        Fixed GlideImage cache conflict
+        GlideImage कैश कॉन्फ़्लिक्ट ठीक किया गया
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
-        Add linking between diary entries
+                    डायरी एंट्रीज़ के बीच लिंकिंग जोड़ें
     </string>
     <string name="release_341">
         v1.4.341.202602050 / 2026.02.05\n
-        Improve UI/UX for Android 16
+        Android 16 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_343">
         v1.4.343.202603010 / 2026.03.01\n
-        Updated GMS login handling
+        GMS लॉगिन हैंडलिंग को अपडेट किया गया
     </string>
     <string name="release_344">
         v1.4.344.202604070 / 2026.04.07\n
-        Improve UI/UX for Android 16
+        Android 16 के लिए UI/UX को बेहतर बनाएं
     </string>
     <string name="release_345">
         v1.4.346.202604090 / 2026.04.09\n
-        Improve UI/UX for Android 16
+        Android 16 के लिए UI/UX को बेहतर बनाएं
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -1091,7 +1091,7 @@
     <string name="load_auto_save_diary_title">लोड ऑटो-सेव डायरी</string>
     <string name="load_auto_save_diary_description">अस्थायी रूप से संग्रहीत एक डायरी है। क्या आप अस्थायी रूप से सहेजी गई डायरी को लोड करना चाहते हैं?</string>
     <string name="enable_review_flow_title">Google Play इन-ऐप समीक्षा</string>
-    <string name="enable_review_flow_summary">यदि आप किसी विशिष्ट अवधि के लिए आसान डायरी का उपयोग करते हैं, तो Google Play समीक्षा पंजीकरण संवाद सक्रिय हो जाएगा। यदि आप समीक्षा पंजीकरण फ़ंक्शन का उपयोग नहीं करना चाहते हैं या यदि Google Play संवाद समीक्षा पंजीकरण के बाद खुलता है, तो आप संवाद को खोलने से रोकने के लिए इस विकल्प को अक्षम कर सकते हैं।</string>
+    <string name="enable_review_flow_summary">यदि आप किसी विशिष्ट अवधि के लिए आसान डायरी का उपयोग करते हैं, तो Google Play समीक्षा पंजीकरण संवाद सक्रिय हो जाएगा। यदि आप समीक्षा पंजीकरण फ़ंक्शन का उपयोग नहीं करना चाहते हैं या यदि Google Play संवाद समीक्षा पंजीकरण के बाद खुलता है, तो आप संवाद को खोलने से रोकने के लिए इस विकल्प को अक्षम कर सकते हैं।</string>
     <string name="postcard_grid_option_title">ग्रिड विकल्प</string>
     <string name="postcard_grid_option_column_number">%d कॉलम प्रति पंक्ति</string>
     <string name="encrypt_diary">एन्क्रिप्ट डायरी</string>
@@ -1136,17 +1136,17 @@
     <string name="delete_unlinked_photo_confirm_message">क्या आप डिवाइस स्टोरेज से लिंक जानकारी के बिना फ़ोटो हटाना चाहते हैं?\nभले ही इसे डिवाइस स्टोरेज से हटा दिया गया हो, फिर भी इसे Google ड्राइव से हटाया नहीं जाता है या डिवाइस पर अलग से फ़ाइलों का बैकअप नहीं लिया जाता है।</string>
     <string name="sync_google_calendar_event_title">[बीटा] Google कैलेंडर सिंक करें</string>
     <string name="sync_google_calendar_event_summary">Google कैलेंडर में पंजीकृत शेड्यूल का उपयोग करके एक डायरी स्वचालित रूप से बनाई जाती है। पहले से सिंक्रनाइज़ किए गए शेड्यूल अतिरिक्त रूप से नहीं बनाए जाएंगे।</string>
-    <string name="quick_setting_title">[BETA] Quick Settings</string>
-    <string name="quick_setting_summary">If you enable this option, you can shake your device to open the quick settings screen.</string>
-    <string name="button_new_entry">New Entry</string>
-    <string name="button_tree_view">Tree View</string>
-    <string name="button_quick_settings">Quick Settings</string>
-    <string name="link_entry">Link Entry</string>
-    <string name="link_entry_category_parent">🌳 Parent Entries</string>
-    <string name="link_entry_category_child">🍃 Child Entries</string>
-    <string name="link_entry_confirm">Do you want to link the selected item?</string>
-    <string name="link_entry_as_parent">As Parent</string>
-    <string name="link_entry_as_child">As Child</string>
-    <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
+    <string name="quick_setting_title">[बीटा] क्विक सेटिंग्स</string>
+    <string name="quick_setting_summary">अगर आप इस विकल्प को चालू करते हैं, तो आप क्विक सेटिंग्स स्क्रीन खोलने के लिए अपने डिवाइस को हिला सकते हैं।.</string>
+    <string name="button_new_entry">नई एंट्री</string>
+    <string name="button_tree_view">ट्री व्यू</string>
+    <string name="button_quick_settings">त्वरित सेटिंग</string>
+    <string name="link_entry">लिंक एंट्री करें</string>
+    <string name="link_entry_category_parent">🌳 मूल प्रविष्टियाँ</string>
+    <string name="link_entry_category_child">🍃 चाइल्ड एंट्रीज़</string>
+    <string name="link_entry_confirm">क्या आप चुने हुए आइटम को लिंक करना चाहते हैं?</string>
+    <string name="link_entry_as_parent">माता-पिता के तौर पर</string>
+    <string name="link_entry_as_child">बच्चों के रूप में</string>
+    <string name="link_entry_later">बाद में</string>
+    <string name="menu_speech_to_text">स्पीच टू टेक्स्ट</string>
 </resources>
