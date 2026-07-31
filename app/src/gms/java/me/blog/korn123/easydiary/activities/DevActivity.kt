@@ -105,6 +105,7 @@ class DevActivity : BaseDevActivity() {
                                         .weight(1f)
 
                                 RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
+                                Room(settingCardModifier, maxItemsInEachRow)
                                 CustomLauncher(settingCardModifier, maxItemsInEachRow)
                                 GoogleMobileService(settingCardModifier, maxItemsInEachRow)
 

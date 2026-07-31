@@ -35,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +47,9 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -62,9 +63,12 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
+import me.blog.korn123.easydiary.data.local.mapper.toDomain
+import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.enums.ExportOption
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -84,10 +88,10 @@ import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
-import me.blog.korn123.easydiary.extensions.syncMarkDown
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -118,6 +122,7 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
+@AndroidEntryPoint
 open class BaseDevActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   global properties
@@ -185,6 +190,57 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             } else {
                 makeToast("There are no photos selected.")
+            }
+        }
+
+    private var mExportJsonOption = ExportOption.DIARY
+    private val mExportJsonLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let { targetUri ->
+
+                var items: List<Any> =
+                    when (mExportJsonOption) {
+                        ExportOption.ACTION_LOG -> {
+                            val actionLogs = EasyDiaryDbHelper.findActionLogAll()
+                            EasyDiaryDbHelper.copyFromRealm(actionLogs)
+                        }
+
+                        ExportOption.ALARM -> {
+                            val alarms = EasyDiaryDbHelper.findAlarmAll()
+                            EasyDiaryDbHelper.copyFromRealm(alarms)
+                        }
+
+                        ExportOption.D_DAY -> {
+                            val dDays = EasyDiaryDbHelper.findDDayAll()
+                            EasyDiaryDbHelper.copyFromRealm(dDays)
+                        }
+
+                        ExportOption.DIARY -> {
+                            val diaries = EasyDiaryDbHelper.findDiary(query = null)
+                            EasyDiaryDbHelper.copyFromRealm(diaries)
+                        }
+
+                        ExportOption.PHOTO_URI -> {
+                            val photoUris = EasyDiaryDbHelper.findPhotoUriAll()
+                            EasyDiaryDbHelper.copyFromRealm(photoUris)
+                        }
+                    }
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(items)
+                        contentResolver.openOutputStream(targetUri)?.use { outputStream ->
+                            IOUtils.write(jsonString, outputStream, "UTF-8")
+                        }
+                        withContext(Dispatchers.Main) {
+                            makeToast("Export successful!")
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            makeToast("Export failed: ${e.message}")
+                        }
+                    }
+                }
             }
         }
 
@@ -263,18 +319,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
-                "GitHub MarkDown Page",
-                "SYNC ALL",
-                modifier = modifier,
-            ) { syncMarkDown(mBinding) }
-            SimpleCard(
                 "StatusBar",
                 "Dark Icons",
                 modifier = modifier,
             ) { updateStatusBarAppearance(android.graphics.Color.WHITE) }
             SimpleCard(
                 "StatusBar",
-                "Light Icons" ,
+                "Light Icons",
                 modifier = modifier,
             ) { updateStatusBarAppearance(android.graphics.Color.BLACK) }
             SimpleCard(
@@ -443,6 +494,110 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 makeToast("${navigationBarHeight()}")
+            }
+        }
+    }
+
+    @Composable
+    protected fun Room(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+    ) {
+        CategoryTitleCard(title = "Jetpack Room")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow,
+        ) {
+            SimpleCard(
+                "[room + hilt] insert diary",
+                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 다이어리 데이터를 생성합니다.",
+                modifier = modifier,
+            ) {
+                val latestDiary =
+                    EasyDiaryDbHelper
+                        .findDiary(query = null)
+                        .firstOrNull { diary -> diary.photoUris?.isNotEmpty() ?: false }
+                val diary = EasyDiaryDbHelper.copyFromRealm(listOf(latestDiary))
+                diary.firstOrNull()?.let {
+                    val diary = it.toDomain()
+                    mViewModel.addDiary(diary)
+                    makeToast("Diary added to Room!")
+                } ?: run {
+                    makeToast("Does not exist latest diary.")
+                }
+            }
+            SimpleCard(
+                "[room + hilt] inquiry latest diary",
+                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 제일 마지막에 저장된 다이어리 1건의 상세정보를 조회합니다.",
+                modifier = modifier,
+            ) {
+                lifecycleScope.launch {
+                    val diary = mViewModel.getLatestDiary()
+                    showAlertDialog(GsonBuilder().setPrettyPrinting().create().toJson(diary))
+                }
+            }
+            SimpleCard(
+                "[room + hilt] count diary",
+                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 저장된 다이어리 전체 건수를 카운팅합니다.",
+                modifier = modifier,
+            ) {
+                lifecycleScope.launch {
+                    val count = mViewModel.getDiaryCount()
+                    makeToast("Total diaries in Room: $count")
+                }
+            }
+            SimpleCard(
+                "[room + hilt] delete diary",
+                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 저장된 다이어리를 모두 삭제합니다.",
+                modifier = modifier,
+            ) {
+                mViewModel.deleteAllDiaries()
+                makeToast("All diaries deleted from Room!")
+            }
+            SimpleCard(
+                "export realm diary data",
+                "realm diary 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                modifier = modifier,
+            ) {
+                val fileName = "diary_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonOption = ExportOption.DIARY
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export realm alarm data",
+                "realm alarm 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                modifier = modifier,
+            ) {
+                val fileName = "alarm_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonOption = ExportOption.ALARM
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export realm action log data",
+                "realm action log 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                modifier = modifier,
+            ) {
+                val fileName = "action_log_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonOption = ExportOption.ACTION_LOG
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export realm d-day data",
+                "realm d-day 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                modifier = modifier,
+            ) {
+                val fileName = "d-day_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonOption = ExportOption.D_DAY
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export realm photo uri data",
+                "realm photo uri 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                modifier = modifier,
+            ) {
+                val fileName = "photo_uri_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonOption = ExportOption.PHOTO_URI
+                mExportJsonLauncher.launch(fileName)
             }
         }
     }

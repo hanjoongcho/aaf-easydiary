@@ -1,0 +1,196 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "d55712f47063a63c57c5ea02f8b0fea5",
+    "entities": [
+      {
+        "tableName": "diaries",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`diaryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `originSequence` INTEGER NOT NULL, `currentTimeMillis` INTEGER NOT NULL, `title` TEXT, `contents` TEXT, `dateString` TEXT, `weather` INTEGER NOT NULL, `linkedDiaries` TEXT NOT NULL, `fontName` TEXT, `fontSize` REAL NOT NULL, `isAllDay` INTEGER NOT NULL, `isEncrypt` INTEGER NOT NULL, `encryptKeyHash` TEXT, `isSelected` INTEGER NOT NULL, `isHoliday` INTEGER NOT NULL, `loc_address` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
+        "fields": [
+          {
+            "fieldPath": "diaryId",
+            "columnName": "diaryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originSequence",
+            "columnName": "originSequence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentTimeMillis",
+            "columnName": "currentTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contents",
+            "columnName": "contents",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateString",
+            "columnName": "dateString",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "weather",
+            "columnName": "weather",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "linkedDiaries",
+            "columnName": "linkedDiaries",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fontName",
+            "columnName": "fontName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fontSize",
+            "columnName": "fontSize",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAllDay",
+            "columnName": "isAllDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isEncrypt",
+            "columnName": "isEncrypt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptKeyHash",
+            "columnName": "encryptKeyHash",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isSelected",
+            "columnName": "isSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isHoliday",
+            "columnName": "isHoliday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location.address",
+            "columnName": "loc_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "loc_latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.longitude",
+            "columnName": "loc_longitude",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "diaryId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "photo_uris",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `diaryId` INTEGER NOT NULL, `photoUri` TEXT, `mimeType` TEXT, FOREIGN KEY(`diaryId`) REFERENCES `diaries`(`diaryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diaryId",
+            "columnName": "diaryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photoUri",
+            "columnName": "photoUri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_photo_uris_diaryId",
+            "unique": false,
+            "columnNames": [
+              "diaryId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_photo_uris_diaryId` ON `${TABLE_NAME}` (`diaryId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "diaries",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "diaryId"
+            ],
+            "referencedColumns": [
+              "diaryId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd55712f47063a63c57c5ea02f8b0fea5')"
+    ]
+  }
+}
