@@ -49,7 +49,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         setContent {
             TreeTimeline(isResultAPI = isResultAPI)
         }
-        showBetaFeatureMessage()
+//        showBetaFeatureMessage()
     }
 
     override fun onResume() {

@@ -19,13 +19,13 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -53,7 +53,6 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
-import java.util.Locale
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************
@@ -90,7 +89,7 @@ class DevActivity : BaseDevActivity() {
                     topBar = {
                         EasyDiaryActionBar(
                             title = "Easy-Diary Dev Mode",
-                            subTitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
+                            subTitle = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                         ) {
                             finishActivityWithPauseLock()
                         }
@@ -112,7 +111,7 @@ class DevActivity : BaseDevActivity() {
                                 DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
                                 DebugToast(settingCardModifier, maxItemsInEachRow)
 
-                                Etc(settingCardModifier, maxItemsInEachRow, viewModel)
+                                Etc(settingCardModifier, maxItemsInEachRow)
                                 ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
                                 Notification(settingCardModifier, maxItemsInEachRow)
                                 AlertDialog(settingCardModifier, maxItemsInEachRow)
@@ -252,7 +251,6 @@ class DevActivity : BaseDevActivity() {
         AppTheme {
             val configuration = LocalConfiguration.current
             val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 3
-            val scrollState = rememberScrollState()
 
             CardContainer {
                 val settingCardModifier =

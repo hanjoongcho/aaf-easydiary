@@ -32,8 +32,10 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
+import kotlin.math.abs
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> :
     EasyDiaryActivity(),
@@ -43,6 +45,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
     protected var navigationBarHeight = 0
     private var mScrollable: S? = null
+    private var mValueAnimator: ValueAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,9 +91,9 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         }
     }
 
-    private fun toolbarIsShown(): Boolean = ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
+    private fun toolbarIsShown(): Boolean = ViewHelper.getTranslationY(mBinding.appBar) >= 0f
 
-    private fun toolbarIsHidden(): Boolean = ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
+    private fun toolbarIsHidden(): Boolean = ViewHelper.getTranslationY(mBinding.appBar) < 0f
 
     protected fun showBottomToolbar() {
         mBinding.run {
@@ -120,28 +123,36 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
     private fun showToolbar() {
         moveToolbar(0F)
-        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
+//        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
+        updateStatusBarAppearance()
     }
 
     private fun hideToolbar() {
-        moveToolbar(-mBinding.appBar.height.toFloat())
-        mBinding.searchCard.useCompatPadding = false
+        val translationY = -(mBinding.appBar.height + mBinding.searchCard.height).toFloat()
+        moveToolbar(translationY)
+//        mBinding.searchCard.useCompatPadding = false
+        updateStatusBarAppearance(android.graphics.Color.WHITE)
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
+        if (abs(ViewHelper.getTranslationY(mBinding.appBar) - toTranslationY) < 0.1f) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
-        animator.addUpdateListener { animation ->
-            val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(mBinding.appBar, translationY)
-            ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
-            val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
-            lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
-            (mBinding.mainHolder as View).requestLayout()
+
+        mValueAnimator?.cancel()
+
+        mValueAnimator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).apply {
+            duration = 500
+            addUpdateListener { animation ->
+                val translationY = animation.animatedValue as Float
+                ViewHelper.setTranslationY(mBinding.appBar, translationY)
+                ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
+                val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
+                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
+                (mBinding.mainHolder as View).requestLayout()
+            }
+            start()
         }
-        animator.start()
     }
 
     private fun getScreenHeight(): Int = (findViewById<View>(android.R.id.content).height).minus(navigationBarHeight)

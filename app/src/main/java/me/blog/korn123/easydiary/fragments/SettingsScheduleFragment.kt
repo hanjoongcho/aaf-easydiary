@@ -25,7 +25,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getSelectedDaysString
 import com.simplemobiletools.commons.extensions.moveLastItemToFront
 import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.commons.utils.FontUtils
@@ -41,6 +40,7 @@ import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
+import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -169,7 +169,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                         setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
                     }
                 dialogAlarmBinding.run {
-                    val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
+                    val dayLetters = resources.getStringArray(R.array.week_day_letters).toMutableList()
                     val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
                     if (config.isSundayFirst) {
                         dayIndexes.moveLastItemToFront()

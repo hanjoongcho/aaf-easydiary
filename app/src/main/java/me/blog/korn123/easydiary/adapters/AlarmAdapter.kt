@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
-import com.simplemobiletools.commons.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper

@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Easy Diary</string>
-    <string name="common_create_seconds">Creation Seconds</string>
+    <string name="common_create_seconds">作成秒数</string>
     <string name="create_diary_title">日記を書く</string>
     <string name="write_date">作成日</string>
     <string name="request_title_message">タイトルを入力してください。</string>
     <string name="request_content_message">内容を入力してください。</string>
-    <string name="guide_message">タイトルを入力するか、と言うし。</string>
-    <string name="contents_text_hint">内容を入力するか、と言うし。</string>
+    <string name="guide_message">タイトルを入力するか、話してください。</string>
+    <string name="contents_text_hint">内容を入力するか、話してください。</string>
     <string name="delete_photo_confirm_message">この写真を削除しますか？</string>
     <string name="gallery_intent_not_found_message">ギャラリーアプリがインストールされていないか、無効になっています。</string>
     <string name="create_diary_showcase_button_1">次へ</string>
@@ -27,8 +27,8 @@
     <string name="create_diary_showcase_message_5">日記のテキストのサイズを拡大します。</string>
     <string name="create_diary_showcase_message_6">日記のテキストのサイズを縮小します。</string>
     <string name="create_diary_showcase_message_7">日記の作成日付を選択します。過去の日付の日記を作成したい場合、日付を変更することができます。</string>
-    <string name="create_diary_showcase_message_8">日記の作成時間を選択します。最後の時間の日記の作成を希望する場合は、時間を変更することができます。</string>
-    <string name="create_diary_showcase_message_9">作成が完了した日記を保存します。</string>
+    <string name="create_diary_showcase_message_8">特定の時刻で日記を作成したい場合は、時間を変更できます。</string>
+    <string name="create_diary_showcase_message_9">作成した日記を保存します。</string>
     <string name="read_diary_title">検索</string>
     <string name="input_mode_a">スピーチモード</string>
     <string name="input_mode_c">キーパッドモード</string>
@@ -155,7 +155,7 @@
     <string name="preferences_information_licenses_summary">オープンソース・ソフトウェアのお知らせ</string>
     <string name="preferences_category_aaf">AAF Easy シリーズ</string>
     <string name="invite_friends">友達を招待</string>
-    <string name="invite_friends_summary">%sアプリを友達に共有します。</string>
+    <string name="invite_friends_summary">%s アプリを友達に共有します。</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Release notes here.                                                                             -->
@@ -914,7 +914,7 @@
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
     <string name="fingerprint_lock_need_pin_setting">指紋認証を使用するには、まずPINを設定する必要があります。</string>
     <string name="fingerprint_authentication_fail_try_again">指紋認証に失敗しました。 もう一度お試しください。</string>
-    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
+    <string name="fingerprint_authentication_info_changed">デバイスの指紋認証情報が変更され、以前に設定された認証情報は使用できなくなりました。</string>
     <string name="pin_lock_title">PINロック設定</string>
     <string name="pin_lock_summary">アプリをロックするためのPINを設定します。</string>
     <string name="pin_setting_complete">ピンロック番号を「%s」に設定しますか？</string>
@@ -966,11 +966,11 @@
     <string name="backup_completed_message">日記のバックアップジョブが完了しました。</string>
     <string name="backup_confirm_message">添付写真のバックアップを開始しますか？</string>
     <string name="recover_confirm_attached_photo">添付写真の復元作業を開始しますか？</string>
-    <string name="category_symbol">Symbol</string>
+    <string name="category_symbol">シンボル</string>
     <string name="statistics_creation_time">作成時間別統計</string>
     <string name="statistics_symbol_all">シンボルごとの統計全体</string>
     <string name="statistics_symbol_top_ten">シンボルごとの統計TOP10</string>
-    <string name="category_flag">FLAG</string>
+    <string name="category_flag">フラグ</string>
     <string name="preferences_category_backup_restore_device">バックアップとリストア</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>
     <string name="export_realm_title">日記をバックアップする</string>
@@ -984,8 +984,8 @@
     <string name="calendar_start_day_sunday">日曜日</string>
     <string name="calendar_start_day_monday">月曜日</string>
     <string name="calendar_start_day_saturday">土曜日</string>
-    <string name="calendar_menu_previous">Previous</string>
-    <string name="calendar_menu_next">Next</string>
+    <string name="calendar_menu_previous">前へ</string>
+    <string name="calendar_menu_next">次へ</string>
     <string name="filter_start_date">開始日</string>
     <string name="filter_start_date_hint">開始日を入力してください。</string>
     <string name="filter_end_date">終了日</string>
@@ -996,8 +996,8 @@
     <string name="filter_close">閉じる</string>
     <string name="copy_diary_item">選択した日記をコピーしますか？</string>
     <string name="diary_contents_length">文字数: %d</string>
-    <string name="count_characters_title">本文文字数世紀</string>
-    <string name="count_characters_summary">ダイアリー本文の文字数をカウントします。</string>
+    <string name="count_characters_title">本文文字数</string>
+    <string name="count_characters_summary">日記本文の文字数をカウントします。</string>
     <string name="send_email_attach_excel_title">エクセルファイルの作成と電子メールで送信</string>
     <string name="send_email_attach_excel_description">添付写真を除くすべてのコンテンツをExcelファイルに生成し、電子メールに添付します。</string>
     <string name="storage_migration_message">Android10 Scoped Storage政策による格納場所の変更が行われます。この作業は、一度だけ実行されます。</string>
@@ -1029,8 +1029,8 @@
     <string name="calendar_sort_title">カレンダーの並べ替えを設定</string>
     <string name="calendar_sort_summary">日付別ダイアリーリストのソート方法を設定します。</string>
     <string name="preferences_category_font">フォント設定</string>
-    <string name="hold_position_title">Scroll position setting</string>
-    <string name="hold_position_summary">編集画面が起動時に閲覧モードでのスクロール位置を維持します。この設定をしない場合は、スクロールは文の最後の位置に移動されます。</string>
+    <string name="hold_position_title">スクロール位置設定</string>
+    <string name="hold_position_summary">編集画面が起動したとき、閲覧モードでのスクロール位置を保持します。無効にすると、スクロールは本文の末尾に移動します。</string>
     <string name="max_lines_title">最大線</string>
     <string name="max_lines_summary">コンテンツサマリーオプションがアクティブになったときに表示される最大行数を設定します。</string>
     <string name="max_lines_value">%d行</string>
@@ -1088,27 +1088,27 @@
     <string name="symbol_filter_picker_remove_guide_message">少なくとも1つのシンボルを選択する必要があります。</string>
     <string name="title_dialog_postcard_photo_option">写真のトリミングとフィルターの設定</string>
     <string name="msg_check_force_single_photo">はがきの写真領域に写真を1枚だけ表示するように変更します。\n複数の写真が登録されている場合は、スワイプして他の写真を表示できます。</string>
-    <string name="load_auto_save_diary_title">一時保存ダイアリー読み込み</string>
-    <string name="load_auto_save_diary_description">一時保存されたダイアリーがあります。一時保存されたダイアリーを呼んでしますか？</string>
+    <string name="load_auto_save_diary_title">一時保存日記の読み込み</string>
+    <string name="load_auto_save_diary_description">一時保存された日記があります。読み込みますか？</string>
     <string name="enable_review_flow_title">GooglePlayアプリ内レビュー</string>
     <string name="enable_review_flow_summary">EasyDiaryを特定の期間使用すると、GooglePlayレビュー登録ダイアログが有効になります。 レビュー登録機能を使用しない場合、またはレビュー登録後にGooglePlayダイアログが開く場合は、このオプションを無効にしてダイアログが開かないようにすることができます。</string>
-    <string name="postcard_grid_option_title">きグリッドオプション</string>
-    <string name="postcard_grid_option_column_number">ローごとにカラム%d個</string>
+    <string name="postcard_grid_option_title">グリッドオプション</string>
+    <string name="postcard_grid_option_column_number">1行あたり %d 列</string>
     <string name="encrypt_diary">日記を暗号化する</string>
     <string name="decrypt_diary">日記を解読する</string>
     <string name="postcard_making">はがき作り</string>
     <string name="user_custom_setting">ユーザーカスタム設定</string>
     <string name="automation_settings">テーマを使用した自動設定</string>
-    <string name="place_finger_description">指紋センサーに指を上げてください。</string>
+    <string name="place_finger_description">指を指紋センサーに当ててください。</string>
     <string name="enable_photo_highlight_title">添付写真のハイライト</string>
     <string name="enable_photo_highlight_description">今日を基準に年単位、月単位で過去に添付した写真をハイライト領域に示します。 今日に該当する年単位、月単位添付写真が存在しない場合、ハイライト領域は活性化されません。</string>
     <string name="yearly_highlight_tag">{0,number} 年前</string>
     <string name="monthly_highlight_tag">{0,number} ヶ月前</string>
-    <string name="notification_channel_name_dev">Notification Test</string>
-    <string name="notification_channel_name_alarm">Diary Schedule</string>
-    <string name="notification_channel_name_upload">Google Drive Upload</string>
-    <string name="notification_channel_name_download">Google Drive Download</string>
-    <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+    <string name="notification_channel_name_dev">通知テスト</string>
+    <string name="notification_channel_name_alarm">日記スケジュール</string>
+    <string name="notification_channel_name_upload">Googleドライブ アップロード</string>
+    <string name="notification_channel_name_download">Googleドライブ ダウンロード</string>
+    <string name="notification_channel_name_zip_helper">ZIPバックアップ管理</string>
     <string name="enable_welcome_dashboard_popup_title">ウェルカムダッシュボードポップアップ</string>
     <string name="enable_welcome_dashboard_popup_description">このオプションを有効にすると、アプリを閉じてから再起動すると、ダッシュボードがポップアップとして自動的に開きます。</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
@@ -1133,7 +1133,7 @@
     <string name="unlinked_photo_count">リンク情報のない添付写真数</string>
     <string name="total_photo_count">全体添付写真数</string>
     <string name="delete_unlinked_photo">リンク情報のない添付写真を削除</string>
-    <string name="delete_unlinked_photo_confirm_message">リンク情報のない写真をデバイス ストアから削除しますか？\nデバイス ストアから削除されても、Google ドライブまたはデバイスに個別にバックアップされたファイルからは削除されません。</string>
+    <string name="delete_unlinked_photo_confirm_message">リンク情報のない写真をデバイスストレージから削除しますか？\nデバイスストレージから削除されても、Googleドライブまたは個別にバックアップされたファイルからは削除されません。</string>
     <string name="sync_google_calendar_event_title">[BETA] Googleカレンダーの同期</string>
     <string name="sync_google_calendar_event_summary">Googleカレンダーに登録されたイベントを使用して日記を自動的に作成します。 すでに同期されている日記のイベントは追加されません。</string>
     <string name="quick_setting_title">[BETA] クイック設定</string>
@@ -1141,12 +1141,12 @@
     <string name="button_new_entry">新規作成</string>
     <string name="button_tree_view">ツリービュー</string>
     <string name="button_quick_settings">クイック設定</string>
-    <string name="link_entry">Link Entry</string>
-    <string name="link_entry_category_parent">🌳 Parent Entries</string>
-    <string name="link_entry_category_child">🍃 Child Entries</string>
-    <string name="link_entry_confirm">Do you want to link the selected item?</string>
-    <string name="link_entry_as_parent">As Parent</string>
-    <string name="link_entry_as_child">As Child</string>
-    <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
+    <string name="link_entry">エントリをリンク</string>
+    <string name="link_entry_category_parent">🌳 親エントリ</string>
+    <string name="link_entry_category_child">🍃 子エントリ</string>
+    <string name="link_entry_confirm">選択したアイテムをリンクしますか？</string>
+    <string name="link_entry_as_parent">親としてリンク</string>
+    <string name="link_entry_as_child">子としてリンク</string>
+    <string name="link_entry_later">あとで</string>
+    <string name="menu_speech_to_text">音声認識</string>
 </resources>

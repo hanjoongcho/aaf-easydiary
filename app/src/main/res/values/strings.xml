@@ -26,8 +26,8 @@
     <string name="create_diary_showcase_message_4">Attach a photo to the diary.</string>
     <string name="create_diary_showcase_message_5">Enlarge the text used in the diary.</string>
     <string name="create_diary_showcase_message_6">Reduce the font used in the diary.</string>
-    <string name="create_diary_showcase_message_7">Select the diary creation date. If you want to create a diary for the past date, you can change the date.</string>
-    <string name="create_diary_showcase_message_8">Select diary creation time. You can change the time if you want to create a diary for the last time.</string>
+    <string name="create_diary_showcase_message_7">Select the diary creation date. To create a diary for a past date, change the date.</string>
+    <string name="create_diary_showcase_message_8">Select the diary creation time. To create a diary for a different time, change the time.</string>
     <string name="create_diary_showcase_message_9">Save the completed diary.</string>
     <string name="read_diary_title">Search</string>
     <string name="input_mode_a">Speech mode</string>
@@ -52,7 +52,7 @@
     <string name="read_diary_showcase_title_6">Chart</string>
     <string name="read_diary_showcase_title_7">Advanced setting</string>
     <string name="read_diary_showcase_title_8">View diary</string>
-    <string name="read_diary_showcase_message_1">You can create various diaries such as diary, memo, summary note, etc. according to the flow of time.</string>
+    <string name="read_diary_showcase_message_1">You can create various entries such as diaries, memos, and summaries.</string>
     <string name="read_diary_showcase_message_2">You can search for diaries using keywords. When a keyword is entered, the matching diary is searched and the keyword is highlighted.</string>
     <string name="read_diary_showcase_message_3">You can use the speech recognition feature to enter search keywords without a keypad.</string>
     <string name="read_diary_showcase_message_4">The created diary can be collected by date using the calendar.</string>
@@ -71,7 +71,7 @@
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">Postcard</string>
     <string name="read_diary_detail_showcase_title_5">Delete diary</string>
-    <string name="read_diary_detail_showcase_message_0">Browse the saved diary. You can modify a saved diary or create a diary card by specifying a custom color.</string>
+    <string name="read_diary_detail_showcase_message_0">Browse saved diaries. You can edit a diary or create a diary card with a custom color.</string>
     <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
     <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
     <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>
@@ -83,16 +83,16 @@
     <string name="guide_message_3">Insufficient permission for the request feature.</string>
     <string name="restore_diary">Recover diary</string>
     <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
-    <string name="restore_photo">Recover diary photos(Manual)</string>
+    <string name="restore_photo">Recover diary photos (Manual)</string>
     <string name="restore_photo_summary">Users directly recover photos attached to the diary.</string>
     <string name="backup_diary">Backup diary</string>
     <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
     <string name="font_setting">Font setting</string>
     <string name="add_ttf_fonts_title">Add TTF font</string>
-    <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
+    <string name="add_ttf_fonts_summary">Add your own TTF fonts to Easy Diary. Once added, they can be used alongside the built-in fonts. When you select a TTF file using the file explorer, the font is automatically registered and becomes available in the font settings menu.</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
-    <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
+    <string name="diary_search_keyword_case_sensitive_summary">When enabled, search becomes case-sensitive.</string>
     <string name="setting_primary_color_title">Theme</string>
     <string name="setting_primary_color_summary">Set the primary color of the application.</string>
     <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
@@ -139,7 +139,7 @@
     <string name="timeline_title">Timeline</string>
     <string name="postcard_viewer_title">Diary Postcard</string>
     <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
-    <string name="google_drive_connect_message">Google Drive in sync…</string>
+    <string name="google_drive_connect_message">Google Drive syncing…</string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_chart">Statistics</string>
     <string name="menu_timeline">Timeline</string>
@@ -886,9 +886,9 @@
     <string name="preferences_category_backup_restore">Backup and Restore</string>
     <string name="preferences_category_backup_restore_sub">Google Drive &amp; Calendar</string>
     <string name="backup_attach_photo_title">Backup attached photos</string>
-    <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
+    <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta status.</string>
     <string name="recover_attach_photo_title">Recover attached photos</string>
-    <string name="recover_attach_photo_summary">Recover attached photos backed up to Google Drive. This feature may not work on some devices due to beta service.</string>
+    <string name="recover_attach_photo_summary">Recover attached photos backed up to Google Drive. This feature may not work on some devices due to beta status.</string>
     <string name="notification_msg_device_file_count">%s Number of backup files: %d%s</string>
     <string name="notification_msg_upload_file_count">Number of files to upload</string>
     <string name="notification_msg_upload_invalid">All backup target files already exist.</string>
@@ -913,7 +913,7 @@
     <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
     <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
     <string name="fingerprint_lock_need_pin_setting">To use fingerprint lock, you need to set PIN first.</string>
-    <string name="fingerprint_authentication_fail_try_again">Fingerprint authentication failed. please try again.</string>
+    <string name="fingerprint_authentication_fail_try_again">Fingerprint authentication failed. Please try again.</string>
     <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
     <string name="pin_lock_title">PIN lock setting</string>
     <string name="pin_lock_summary">Set the PIN to lock the application.</string>
@@ -932,7 +932,7 @@
     <string name="contents_summary_title">Diary content summary</string>
     <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
     <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
-    <string name="export_excel_title">Export excel</string>
+    <string name="export_excel_title">Export Excel</string>
     <string name="export_excel_description">Save all content except the attached photo as an Excel file.</string>
     <string name="export_excel_xls_location">Location</string>
     <string name="export_excel_header_seq">Sequence</string>
@@ -941,7 +941,7 @@
     <string name="export_excel_header_contents">Diary contents</string>
     <string name="export_excel_header_attach_photo_path">Attached photo path</string>
     <string name="export_excel_header_attach_photo_size">Attached photo size</string>
-    <string name="export_excel_header_write_time_millis">Write date\n(Since January 1st 1970 in milliseconds.)</string>
+    <string name="export_excel_header_write_time_millis">Write date\n(Since January 1, 1970 in milliseconds.)</string>
     <string name="export_excel_header_weather">Weather</string>
     <string name="export_excel_header_symbol">Symbol</string>
     <string name="export_excel_header_is_all_day">AllDay</string>
@@ -1010,7 +1010,7 @@
     <string name="dashboard_title_lifetime">Lifetime</string>
     <string name="dashboard_title_last_month">Last Month</string>
     <string name="dashboard_title_last_week">Last Week</string>
-    <string name="dashboard_guide_message">There is not enough data to generate ranking data. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
+    <string name="dashboard_guide_message">There is not enough data to generate rankings. You need at least 4 symbol-tagged diaries to enable the dashboard ranking.</string>
     <string name="delete_realm_title">Delete backup file</string>
     <string name="delete_realm_description">Delete the backup file stored in the storage.</string>
     <string name="menu_dashboard">Dashboard</string>
@@ -1099,7 +1099,7 @@
     <string name="postcard_making">Postcard Making</string>
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
-    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="place_finger_description">Please place your finger on the fingerprint sensor.</string>
     <string name="enable_photo_highlight_title">Attached photo highlights</string>
     <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
@@ -1128,12 +1128,12 @@
     <string name="user_manual_url_application_information">https://spiced-skirt-15c.notion.site/f8c4edb4597047548616b894ed613721?v=7fd16b161282461ba2ca3e7901c03b3f</string>
     <string name="attached_photo_gallery">Photo Gallery</string>
     <string name="visible_unlinked_photo">View photos without diary references</string>
-    <string name="visible_unlinked_photo_description">If you do not save the diary after attaching a photo or delete the saved diary, the attached photo is not deleted and remains in the device storage. If you activate this option, you can view the attached photo.</string>
+    <string name="visible_unlinked_photo_description">If you don\'t save the diary after attaching a photo, or if you delete a saved diary, the attached photo may remain in device storage. Enable this option to view such photos.</string>
     <string name="linked_photo_count">Number of valid photos</string>
     <string name="unlinked_photo_count">Number of invalid photos</string>
     <string name="total_photo_count">Number of total photos</string>
     <string name="delete_unlinked_photo">Delete unlinked photos</string>
-    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos without link information from device storage?\nEven if it is deleted from the device storage, it is not deleted from Google Drive or separately backed up files on the device.</string>
+    <string name="delete_unlinked_photo_confirm_message">Do you want to delete photos that have no link information from device storage?\nEven if deleted from device storage, they may still exist in Google Drive or other backup files.</string>
     <string name="sync_google_calendar_event_title">[BETA] Sync Google Calendar</string>
     <string name="sync_google_calendar_event_summary">A diary is automatically created using the schedule registered in Google Calendar. Schedules already synchronized will not be created additionally.</string>
     <string name="quick_setting_title">[BETA] Quick Settings</string>
