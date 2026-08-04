@@ -9,12 +9,12 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 data class DiaryEntity(
     @PrimaryKey(autoGenerate = true)
     var diaryId: Int = 0,
-    var originSequence: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
+    var originDiaryId: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
     var currentTimeMillis: Long = System.currentTimeMillis(),
     var title: String? = null,
     var contents: String? = null,
     var dateString: String? = null,
-    var weather: Int = 0,
+    var symbolSequence: Int = 0,
     var linkedDiaries: List<Int> = emptyList(),
     var fontName: String? = null,
     var fontSize: Float = 0f,

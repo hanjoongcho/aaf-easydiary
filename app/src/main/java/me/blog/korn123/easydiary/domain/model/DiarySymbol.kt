@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.models
+package me.blog.korn123.easydiary.domain.model
 
 data class DiarySymbol(val info: String) {
     private val infoArr = info.split("|")

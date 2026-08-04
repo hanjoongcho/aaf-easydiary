@@ -18,7 +18,7 @@ import me.blog.korn123.easydiary.databinding.ItemHistoryBinding
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.models.History
+import me.blog.korn123.easydiary.domain.model.History
 
 class HistoryAdapter : BaseBannerAdapter<History>() {
     override fun bindData(
