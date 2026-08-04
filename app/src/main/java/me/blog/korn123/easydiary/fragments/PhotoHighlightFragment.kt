@@ -25,7 +25,7 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.models.History
+import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import java.text.MessageFormat
 import java.text.SimpleDateFormat

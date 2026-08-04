@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "332c5cc3e26b357ebbd5ba2f7b5bd408",
+    "version": 3,
+    "identityHash": "1af3ab34822eb7db48172f3507f9874e",
     "entities": [
       {
         "tableName": "diaries",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`diaryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `originSequence` INTEGER NOT NULL, `currentTimeMillis` INTEGER NOT NULL, `title` TEXT, `contents` TEXT, `dateString` TEXT, `symbolSequence` INTEGER NOT NULL, `linkedDiaries` TEXT NOT NULL, `fontName` TEXT, `fontSize` REAL NOT NULL, `isAllDay` INTEGER NOT NULL, `isEncrypt` INTEGER NOT NULL, `encryptKeyHash` TEXT, `isSelected` INTEGER NOT NULL, `isHoliday` INTEGER NOT NULL, `loc_address` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`diaryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `originDiaryId` INTEGER NOT NULL, `currentTimeMillis` INTEGER NOT NULL, `title` TEXT, `contents` TEXT, `dateString` TEXT, `symbolSequence` INTEGER NOT NULL, `linkedDiaries` TEXT NOT NULL, `fontName` TEXT, `fontSize` REAL NOT NULL, `isAllDay` INTEGER NOT NULL, `isEncrypt` INTEGER NOT NULL, `encryptKeyHash` TEXT, `isSelected` INTEGER NOT NULL, `isHoliday` INTEGER NOT NULL, `loc_address` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
         "fields": [
           {
             "fieldPath": "diaryId",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "originSequence",
-            "columnName": "originSequence",
+            "fieldPath": "originDiaryId",
+            "columnName": "originDiaryId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -190,7 +190,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '332c5cc3e26b357ebbd5ba2f7b5bd408')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1af3ab34822eb7db48172f3507f9874e')"
     ]
   }
 }

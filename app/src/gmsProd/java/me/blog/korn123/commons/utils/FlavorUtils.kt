@@ -20,7 +20,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiarySymbol
+import me.blog.korn123.easydiary.domain.model.DiarySymbol
 
 object FlavorUtils {
     fun sequenceToSymbolResourceId(sequence: Int) =
