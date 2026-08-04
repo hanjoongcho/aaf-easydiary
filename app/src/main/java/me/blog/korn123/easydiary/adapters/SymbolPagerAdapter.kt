@@ -9,7 +9,7 @@ import android.widget.GridView
 import androidx.viewpager.widget.ViewPager
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.models.DiarySymbol
+import me.blog.korn123.easydiary.domain.model.DiarySymbol
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 
 /**

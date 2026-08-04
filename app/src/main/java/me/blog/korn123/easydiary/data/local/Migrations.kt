@@ -15,7 +15,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 `title` TEXT, 
                 `contents` TEXT, 
                 `dateString` TEXT, 
-                `weather` INTEGER NOT NULL, 
+                `symbolSequence` INTEGER NOT NULL, 
                 `linkedDiaries` TEXT NOT NULL, 
                 `fontName` TEXT, 
                 `fontSize` REAL NOT NULL, 
@@ -36,7 +36,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             """
             INSERT INTO `diaries_new` (
                 `diaryId`, `originSequence`, `currentTimeMillis`, `title`, `contents`, 
-                `dateString`, `weather`, `linkedDiaries`, `fontName`, 
+                `dateString`, `symbolSequence`, `linkedDiaries`, `fontName`, 
                 `fontSize`, `isAllDay`, `isEncrypt`, `encryptKeyHash`, `isSelected`, 
                 `isHoliday`, `loc_address`, `loc_latitude`, `loc_longitude`
             )
@@ -68,5 +68,55 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
         // 5. 성능 향상을 위한 diaryId 인덱스 생성
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_uris_diaryId` ON `photo_uris` (`diaryId`)")
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // SQLite 3.25.0 미만 버전 대응을 위해 테이블 재구성 방식 사용
+        db.execSQL(
+            """
+            CREATE TABLE `diaries_new` (
+                `diaryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                `originDiaryId` INTEGER NOT NULL, 
+                `currentTimeMillis` INTEGER NOT NULL, 
+                `title` TEXT, 
+                `contents` TEXT, 
+                `dateString` TEXT, 
+                `symbolSequence` INTEGER NOT NULL, 
+                `linkedDiaries` TEXT NOT NULL, 
+                `fontName` TEXT, 
+                `fontSize` REAL NOT NULL, 
+                `isAllDay` INTEGER NOT NULL, 
+                `isEncrypt` INTEGER NOT NULL, 
+                `encryptKeyHash` TEXT, 
+                `isSelected` INTEGER NOT NULL, 
+                `isHoliday` INTEGER NOT NULL, 
+                `loc_address` TEXT, 
+                `loc_latitude` REAL, 
+                `loc_longitude` REAL
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            INSERT INTO `diaries_new` (
+                `diaryId`, `originDiaryId`, `currentTimeMillis`, `title`, `contents`, 
+                `dateString`, `symbolSequence`, `linkedDiaries`, `fontName`, 
+                `fontSize`, `isAllDay`, `isEncrypt`, `encryptKeyHash`, `isSelected`, 
+                `isHoliday`, `loc_address`, `loc_latitude`, `loc_longitude`
+            )
+            SELECT 
+                `diaryId`, `originSequence`, `currentTimeMillis`, `title`, `contents`, 
+                `dateString`, `symbolSequence`, `linkedDiaries`, `fontName`, 
+                `fontSize`, `isAllDay`, `isEncrypt`, `encryptKeyHash`, `isSelected`, 
+                `isHoliday`, `loc_address`, `loc_latitude`, `loc_longitude` 
+            FROM `diaries`
+            """.trimIndent()
+        )
+
+        db.execSQL("DROP TABLE `diaries`")
+        db.execSQL("ALTER TABLE `diaries_new` RENAME TO `diaries`")
     }
 }

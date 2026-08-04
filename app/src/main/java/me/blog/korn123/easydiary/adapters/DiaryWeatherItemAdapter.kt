@@ -12,7 +12,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.models.DiarySymbol
+import me.blog.korn123.easydiary.domain.model.DiarySymbol
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.

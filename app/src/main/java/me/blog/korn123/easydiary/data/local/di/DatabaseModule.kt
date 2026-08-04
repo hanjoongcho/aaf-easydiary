@@ -12,6 +12,7 @@ import me.blog.korn123.easydiary.data.local.AppDatabase
 import me.blog.korn123.easydiary.data.local.DiaryDao
 import me.blog.korn123.easydiary.data.local.DiaryLocalDataSourceImpl
 import me.blog.korn123.easydiary.data.local.MIGRATION_1_2
+import me.blog.korn123.easydiary.data.local.MIGRATION_2_3
 import me.blog.korn123.easydiary.data.repository.DiaryDataSource
 import me.blog.korn123.easydiary.data.repository.LocalDataSource
 import javax.inject.Singleton
@@ -35,7 +36,7 @@ abstract class DatabaseModule {
                 context,
                 AppDatabase::class.java,
                 "easy_diary.db"
-            ).addMigrations(MIGRATION_1_2)
+            ).addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build()
         }
 

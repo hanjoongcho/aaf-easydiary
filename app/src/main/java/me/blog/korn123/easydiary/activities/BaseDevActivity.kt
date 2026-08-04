@@ -44,6 +44,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import androidx.room.migration.Migration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -302,7 +303,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
-                    Intent(currentContext, me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java),
+                    Intent(
+                        currentContext,
+                        me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java,
+                    ),
                 )
             }
         }
@@ -499,6 +503,38 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     @Composable
+    protected fun Migration(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+    ) {
+        CategoryTitleCard(title = "Jetpack Room")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow,
+        ) {
+            SimpleCard(
+                "realm to room",
+                "realm diary object를 room으로 이전합니다.",
+                modifier = modifier,
+            ) {
+                val realmDiaries =
+                    EasyDiaryDbHelper
+                        .findDiary(query = null)
+                val copiedRealmDiaries = EasyDiaryDbHelper.copyFromRealm(realmDiaries)
+                val domainDiaries =
+                    copiedRealmDiaries.map {
+                        it.toDomain()
+                    }
+
+                mViewModel.deleteAllDiaries()
+                lifecycleScope.launch {
+                    makeToast("Migration successful: ${mViewModel.addAllDiaries(domainDiaries)}")
+                }
+            }
+        }
+    }
+
+    @Composable
     protected fun Room(
         modifier: Modifier,
         maxItemsInEachRow: Int,
@@ -527,12 +563,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "[room + hilt] inquiry latest diary",
+                "[room + hilt] inquiry latest diary (DiaryWithPhotos)",
                 "DiaryRepository를 이용하여 local(또는 remote) 저장소에 제일 마지막에 저장된 다이어리 1건의 상세정보를 조회합니다.",
                 modifier = modifier,
             ) {
                 lifecycleScope.launch {
-                    val diary = mViewModel.getLatestDiary()
+                    val diary = mViewModel.getLatestDiaryWithPhotos()
                     showAlertDialog(GsonBuilder().setPrettyPrinting().create().toJson(diary))
                 }
             }
@@ -559,7 +595,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm diary 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
-                val fileName = "diary_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                val fileName =
+                    "diary_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.DIARY
                 mExportJsonLauncher.launch(fileName)
             }
@@ -568,7 +605,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm alarm 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
-                val fileName = "alarm_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                val fileName =
+                    "alarm_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.ALARM
                 mExportJsonLauncher.launch(fileName)
             }
@@ -577,7 +615,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm action log 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
-                val fileName = "action_log_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                val fileName =
+                    "action_log_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.ACTION_LOG
                 mExportJsonLauncher.launch(fileName)
             }
@@ -586,7 +625,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm d-day 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
-                val fileName = "d-day_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                val fileName =
+                    "d-day_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.D_DAY
                 mExportJsonLauncher.launch(fileName)
             }
@@ -595,7 +635,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm photo uri 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
-                val fileName = "photo_uri_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                val fileName =
+                    "photo_uri_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.PHOTO_URI
                 mExportJsonLauncher.launch(fileName)
             }

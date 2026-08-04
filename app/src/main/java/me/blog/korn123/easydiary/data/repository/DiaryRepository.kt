@@ -18,12 +18,17 @@ class DiaryRepository @Inject constructor(
             entities.map { it.toDomain() }
         }
 
+    suspend fun getDiariesWithPhotos(): List<Diary> = localDataSource.getDiariesWithPhotos().map {
+        it.toDomain()
+    }
+
     suspend fun getDiaryById(seq: Int): Diary? = localDataSource.getDiaryById(seq)?.toDomain()
 
     suspend fun insertDiary(diary: Diary) {
-        val entity = diary.toEntity()
-        localDataSource.insertDiary(entity)
-        remoteDataSource.insertDiary(entity)
+        val diaryEntity = diary.toEntity()
+        val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
+        localDataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+        remoteDataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
     }
 
     suspend fun updateDiary(diary: Diary) {

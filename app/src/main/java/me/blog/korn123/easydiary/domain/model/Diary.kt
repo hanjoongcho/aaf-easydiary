@@ -9,7 +9,7 @@ data class Diary(
     val title: String? = null,
     val contents: String? = null,
     val dateString: String? = null,
-    val weather: Int = 0,
+    val symbolSequence: Int = 0,
     val photoUris: List<PhotoUri> = emptyList(),
     val linkedDiaries: List<Int> = emptyList(),
     val fontName: String? = null,

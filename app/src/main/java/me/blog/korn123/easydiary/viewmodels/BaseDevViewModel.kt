@@ -8,12 +8,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.data.repository.DiaryRepository
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeToast
 import javax.inject.Inject
+import kotlin.rem
 
 @HiltViewModel
 class BaseDevViewModel
@@ -39,12 +43,53 @@ class BaseDevViewModel
             }
         }
 
+        suspend fun addAllDiaries(diaries: List<Diary>): Int {
+            var count = 0
+
+            // 1. UI 상태 변경 및 시작은 메인 스레드에서 (withContext를 쓰지 않거나 Main 지정)
+            isLoading = true
+            coroutine1Console = "Migration started..."
+
+            try {
+                // 2. 무거운 DB 작업만 IO 스레드에서 일괄 처리 또는 반복 처리
+                withContext(Dispatchers.IO) {
+                    diaries.forEachIndexed { index, diary ->
+                        diaryRepository.insertDiary(diary)
+
+                        // 주의: 루프 안에서 너무 자주 메인 스레드로 전환하면 성능이 떨어질 수 있습니다.
+                        // 10개 단위이므로 메인 스레드로 전환해 UI를 업데이트해 줍니다.
+                        if (index % 10 == 0 || index == diaries.lastIndex) {
+                            withContext(Dispatchers.Main) {
+                                coroutine1Console = "Migrating... ${index + 1} / ${diaries.size}"
+                            }
+                        }
+                        count++
+                    }
+                }
+
+                // 3. 완료 상태도 메인 스레드에서
+                coroutine1Console = "Migration completed: ${diaries.size} diaries"
+            } catch (e: Exception) {
+                coroutine1Console = "Migration failed: ${e.message}"
+            } finally {
+                // 4. 로딩 종료도 메인 스레드에서
+                isLoading = false
+            }
+
+            return count
+        }
+
         suspend fun getDiaryCount(): Int = diaryRepository.getAllDiaries().first().size
 
         suspend fun getLatestDiary(): Diary? =
             diaryRepository
                 .getAllDiaries()
                 .first()
+                .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
+
+        suspend fun getLatestDiaryWithPhotos(): Diary? =
+            diaryRepository
+                .getDiariesWithPhotos()
                 .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
 
         fun deleteAllDiaries() {
