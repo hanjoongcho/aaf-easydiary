@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import me.blog.korn123.easydiary.data.local.models.DiaryEntity
-import me.blog.korn123.easydiary.data.local.models.PhotoUriEntity
+import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
+import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 
 data class DiaryWithPhotos(
     @Embedded

@@ -342,6 +342,15 @@ class TimelineActivity : EasyDiaryActivity() {
             Log.i("aaf-t", "mStartDateListener")
         }
 
+    private var mStartDateListenerWithRealm: DatePickerDialog.OnDateSetListener =
+        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+            mBinding.partialTimelineFilter.startDate.text =
+                DateUtils.getDateStringFromTimeMillis(startMillis)
+            refreshList()
+            Log.i("aaf-t", "mStartDateListener")
+        }
+
     private var mEndDateListener: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
@@ -427,8 +436,8 @@ class TimelineActivity : EasyDiaryActivity() {
 
         mDiaryList.run {
             clear()
-            addAll(
-                EasyDiaryDbHelper.findDiary(
+            EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
+                val results = EasyDiaryDbHelper.findDiary(
                     mBinding.partialTimelineFilter.query.text
                         .toString(),
                     config.diarySearchQueryCaseSensitive,
@@ -436,8 +445,10 @@ class TimelineActivity : EasyDiaryActivity() {
                     endMillis,
                     mSymbolSequence,
                     true,
-                ),
-            )
+                    realmInstance = realm
+                )
+                addAll(realm.copyFromRealm(results))
+            }
             reverse()
         }
 
