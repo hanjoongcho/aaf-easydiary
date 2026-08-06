@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.helper
 import android.content.Context
 import android.graphics.Color
 import android.text.format.DateFormat
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
@@ -18,13 +19,15 @@ import java.util.*
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-class Config(val context: Context) {
+class Config(
+    val context: Context,
+) {
     private val legacyPrefs = PreferenceManager.getDefaultSharedPreferences(context)!!
     private val prefs = context.getSharedPrefs()
 
-    /// ------------------------------------------------------------------
-    /// Simple Mobile Tools properties
-    /// ------------------------------------------------------------------
+    // / ------------------------------------------------------------------
+    // / Simple Mobile Tools properties
+    // / ------------------------------------------------------------------
     var textColor: Int
         get() = prefs.getInt(TEXT_COLOR, context.resources.getColor(R.color.default_text_color))
         set(textColor) = prefs.edit().putInt(TEXT_COLOR, textColor).apply()
@@ -52,10 +55,9 @@ class Config(val context: Context) {
         get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
         set(screenBackgroundColor) = prefs.edit().putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor).apply()
 
-
-    /// ------------------------------------------------------------------
-    /// Awesome Application Factory legacy properties
-    /// ------------------------------------------------------------------
+    // / ------------------------------------------------------------------
+    // / Awesome Application Factory legacy properties
+    // / ------------------------------------------------------------------
     var aafPinLockPauseMillis: Long
         get() = prefs.getLong(AAF_PIN_LOCK_PAUSE_MILLIS, 0L)
         set(aafPinLockPauseMillis) = prefs.edit().putLong(AAF_PIN_LOCK_PAUSE_MILLIS, aafPinLockPauseMillis).apply()
@@ -64,12 +66,11 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(AAF_THEME_CHANGE, false)
         set(isThemeChanged) = prefs.edit().putBoolean(AAF_THEME_CHANGE, isThemeChanged).apply()
 
-
-    /// ------------------------------------------------------------------
-    /// Dev properties
-    /// ------------------------------------------------------------------
+    // / ------------------------------------------------------------------
+    // / Dev properties
+    // / ------------------------------------------------------------------
     var devStockChartOptionFromMillis: Long
-        get() = prefs.getLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS,  Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }.timeInMillis)
+        get() = prefs.getLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }.timeInMillis)
         set(stockChartOptionFromMillis) = prefs.edit().putLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, stockChartOptionFromMillis).apply()
 
     var devStockEnableEvaluatePrice: Boolean
@@ -80,10 +81,9 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, false)
         set(devStockEnablePrincipalHighlight) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, devStockEnablePrincipalHighlight).apply()
 
-
-    /// ------------------------------------------------------------------
-    /// Easy Diary properties
-    /// ------------------------------------------------------------------
+    // / ------------------------------------------------------------------
+    // / Easy Diary properties
+    // / ------------------------------------------------------------------
     var settingFontName: String
         get() = legacyPrefs.getString(SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)!!
         set(settingFontName) = legacyPrefs.edit().putString(SETTING_FONT_NAME, settingFontName).apply()
@@ -315,6 +315,16 @@ class Config(val context: Context) {
     var enableDebugOptionVisibleTemporaryDiary: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, false)
         set(enableDebugOptionVisibleTemporaryDiary) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, enableDebugOptionVisibleTemporaryDiary).apply()
+
+    var enableJetpackRoomDatabase: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_JETPACK_ROOM_DATABASE, false)
+        set(enableJetpackRoomDatabase) =
+            prefs.edit {
+                putBoolean(
+                    SETTING_ENABLE_JETPACK_ROOM_DATABASE,
+                    enableJetpackRoomDatabase,
+                )
+            }
 
     var gallerySpanCountLandscape: Int
         get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, 5)

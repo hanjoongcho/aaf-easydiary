@@ -93,7 +93,7 @@ fun ComponentActivity.pushMarkDown(
                     }
                 }
             }
-        }.run {
+        } ?: run {
             runOnUiThread { makeToast("Token is null") }
         }
 }
@@ -301,7 +301,7 @@ fun ComponentActivity.syncMarkDown(
                         onComplete()
                     }
                 }
-            }.run {
+            } ?: run {
                 runOnUiThread { makeToast("Token is null") }
             }
     }

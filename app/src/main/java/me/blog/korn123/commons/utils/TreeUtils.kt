@@ -1,7 +1,6 @@
 package me.blog.korn123.commons.utils
 
 import me.blog.korn123.easydiary.helper.TreeConstants
-import me.blog.korn123.easydiary.models.Diary
 
 object TreeUtils {
     /**
@@ -43,21 +42,22 @@ object TreeUtils {
 
     /**
      * Builds a file tree structure from a list of paths.
-     * Each path is expected to be in the format "dir1/dir2/file.txt".
-     * If addOptionalTitle is true, the file name is added as the last part of the path.
      */
-    fun buildFileTree(
-        items: List<Diary>,
+    fun <T> buildFileTree(
+        items: List<T>,
         addOptionalTitle: Boolean = false,
         addOptionalSortPrefix: Boolean = false,
-        partsGenerator: (diary: Diary) -> MutableList<String>,
+        idGetter: (T) -> Int,
+        symbolGetter: (T) -> Int,
+        timeGetter: (T) -> Long,
+        partsGenerator: (T) -> MutableList<String>,
+        summaryLabelGenerator: (T) -> String = { "" },
     ): FileNode {
         val root = FileNode(name = TreeConstants.ROOT_NODE, sequence = 0, weather = 0)
-        for (diary in items) {
+        for (item in items) {
             var current = root
-//            val parts = "${diary.dateString}".split("-").toMutableList()
-            val parts = partsGenerator(diary)
-            if (addOptionalTitle) parts.add(EasyDiaryUtils.summaryDiaryLabel(diary))
+            val parts = partsGenerator(item)
+            if (addOptionalTitle) parts.add(summaryLabelGenerator(item))
             var partPath = ""
             for ((i, part) in parts.withIndex()) {
                 val isFile = i == parts.lastIndex
@@ -65,7 +65,7 @@ object TreeUtils {
                     if (partPath.isEmpty()) {
                         part
                     } else if (isFile && addOptionalSortPrefix) {
-                        "/${diary.currentTimeMillis.div(1000)}_$part"
+                        "/${timeGetter(item).div(1000)}_$part"
                     } else {
                         "/$part"
                     }
@@ -78,9 +78,9 @@ object TreeUtils {
                             name = part,
                             fullPath = partPath,
                             isFile = isFile,
-                            sequence = diary.sequence,
-                            weather = diary.weather,
-                            currentTimeMillis = diary.currentTimeMillis,
+                            sequence = idGetter(item),
+                            weather = symbolGetter(item),
+                            currentTimeMillis = timeGetter(item),
                         )
                     current.children.add(newNode)
                     current = newNode
@@ -89,6 +89,42 @@ object TreeUtils {
         }
         return root
     }
+
+    fun buildFileTreeFromModels(
+        items: List<me.blog.korn123.easydiary.models.Diary>,
+        addOptionalTitle: Boolean = false,
+        addOptionalSortPrefix: Boolean = false,
+        partsGenerator: (me.blog.korn123.easydiary.models.Diary) -> MutableList<String>,
+    ): FileNode =
+        buildFileTree(
+            items = items,
+            addOptionalTitle = addOptionalTitle,
+            addOptionalSortPrefix = addOptionalSortPrefix,
+            idGetter = { it.sequence },
+            symbolGetter = { it.weather },
+            timeGetter = { it.currentTimeMillis },
+            partsGenerator = partsGenerator,
+            summaryLabelGenerator = { EasyDiaryUtils.summaryDiaryLabel(it) },
+        )
+
+    fun buildFileTreeFromDomain(
+        items: List<me.blog.korn123.easydiary.domain.model.Diary>,
+        addOptionalTitle: Boolean = false,
+        addOptionalSortPrefix: Boolean = false,
+        partsGenerator: (me.blog.korn123.easydiary.domain.model.Diary) -> MutableList<String>,
+    ): FileNode =
+        buildFileTree(
+            items = items,
+            addOptionalTitle = addOptionalTitle,
+            addOptionalSortPrefix = addOptionalSortPrefix,
+            idGetter = { it.diaryId },
+            symbolGetter = { it.symbolSequence },
+            timeGetter = { it.currentTimeMillis },
+            partsGenerator = partsGenerator,
+            summaryLabelGenerator = { diary ->
+                if (diary.title.isNullOrEmpty()) diary.contents?.lines()?.firstOrNull() ?: "" else diary.title!!
+            },
+        )
 
     fun toggleWholeTree(
         treeData: List<Pair<FileNode, Int>>,
@@ -127,24 +163,6 @@ object TreeUtils {
                 pair
             }
         }
-
-    @Deprecated(message = "Deprecated")
-    fun isRootNodeVisible(
-        treeData: List<Pair<FileNode, Int>>,
-        pair: Pair<FileNode, Int>,
-    ): Boolean {
-        if (pair.second == TreeConstants.LEVEL_START) return true
-
-        var isShow = false
-        val parentNode = pair.first.fullPath.split("/")
-        var currentPath = ""
-        for (i in 0 until parentNode.size.minus(1)) {
-            currentPath += if (currentPath.isEmpty()) parentNode[i] else "/${parentNode[i]}"
-            isShow = treeData.find { it.first.fullPath == currentPath }?.first?.isFolderOpen ?: false
-            if (!isShow) break
-        }
-        return isShow
-    }
 }
 
 data class FileNode(

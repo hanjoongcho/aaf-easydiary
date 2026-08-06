@@ -1,10 +1,16 @@
 package me.blog.korn123.easydiary.data.local.mapper
 
 import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.easydiary.data.local.models.DiaryEntity
-import me.blog.korn123.easydiary.data.local.models.LocationEntity
-import me.blog.korn123.easydiary.data.local.models.PhotoUriEntity
+import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
+import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
+import me.blog.korn123.easydiary.data.local.entity.DDayEntity
+import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
+import me.blog.korn123.easydiary.data.local.entity.LocationEntity
+import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
+import me.blog.korn123.easydiary.domain.model.ActionLog
+import me.blog.korn123.easydiary.domain.model.Alarm
+import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
@@ -110,35 +116,62 @@ fun PhotoUri.toEntity(diaryId: Int): PhotoUriEntity =
         mimeType = this.mimeType,
     )
 
-fun me.blog.korn123.easydiary.models.PhotoUri.toDomain(): PhotoUri =
-    PhotoUri(
-        mimeType = this.mimeType,
-        photoUri = this.photoUri,
+fun Alarm.toEntity(): AlarmEntity =
+    AlarmEntity(
+        alarmId = this.alarmId,
+        timeInMinutes = this.timeInMinutes,
+        days = this.days,
+        isEnabled = this.isEnabled,
+        vibrate = this.vibrate,
+        soundTitle = this.soundTitle,
+        soundUri = this.soundUri,
+        label = this.label,
+        workMode = this.workMode,
+        retryCount = this.retryCount,
     )
 
-fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
-    DiaryEntity(
-        currentTimeMillis = this.currentTimeMillis,
+fun AlarmEntity.toDomain(): Alarm =
+    Alarm(
+        alarmId = this.alarmId,
+        timeInMinutes = this.timeInMinutes,
+        days = this.days,
+        isEnabled = this.isEnabled,
+        vibrate = this.vibrate,
+        soundTitle = this.soundTitle,
+        soundUri = this.soundUri,
+        label = this.label,
+        workMode = this.workMode,
+        retryCount = this.retryCount,
+    )
+
+fun ActionLog.toEntity(): ActionLogEntity =
+    ActionLogEntity(
+        sequence = this.sequence,
+        className = this.className,
+        signature = this.signature,
+        key = this.key,
+        value = this.value,
+    )
+
+fun ActionLogEntity.toDomain(): ActionLog =
+    ActionLog(
+        sequence = this.sequence,
+        className = this.className,
+        signature = this.signature,
+        key = this.key,
+        value = this.value,
+    )
+
+fun DDay.toEntity(): DDayEntity =
+    DDayEntity(
+        sequence = this.sequence,
+        targetTimeStamp = this.targetTimeStamp,
         title = this.title,
-        contents = this.contents,
-        dateString = this.dateString,
-        symbolSequence = this.weather,
-        linkedDiaries = this.linkedDiaries.toList(),
-        fontName = this.fontName,
-        fontSize = this.fontSize,
-        isAllDay = this.isAllDay,
-        isEncrypt = this.isEncrypt,
-        encryptKeyHash = this.encryptKeyHash,
-        isSelected = this.isSelected,
-        location =
-            this.location?.let { location ->
-                LocationEntity(
-                    address = location.address,
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                )
-            },
-        isHoliday = this.isHoliday,
-    ).apply {
-        dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
-    }.toDomain(this.photoUris?.map { it.toDomain() } ?: emptyList())
+    )
+
+fun DDayEntity.toDomain(): DDay =
+    DDay(
+        sequence = this.sequence,
+        targetTimeStamp = this.targetTimeStamp,
+        title = this.title,
+    )

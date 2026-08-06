@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,8 +44,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import androidx.room.migration.Migration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -64,8 +65,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
-import me.blog.korn123.easydiary.data.local.mapper.toDomain
-import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -105,6 +104,7 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
@@ -117,6 +117,7 @@ import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -132,7 +133,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected lateinit var mBinding: ActivityBaseDevBinding
     private var mNotificationCount = 9000
     private var mCoroutineJob: Job? = null
-    protected val mViewModel: BaseDevViewModel by viewModels()
+    protected val mBaseDevViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener =
         object : LocationListener {
@@ -506,15 +507,69 @@ open class BaseDevActivity : EasyDiaryActivity() {
     protected fun Migration(
         modifier: Modifier,
         maxItemsInEachRow: Int,
+        viewModel: BaseDevViewModel = hiltViewModel(),
+        diaryViewModel: DiaryViewModel = hiltViewModel(),
     ) {
-        CategoryTitleCard(title = "Jetpack Room")
+        CategoryTitleCard(title = "Migration Test")
+        val state = rememberScrollState()
+        val coroutineScope = rememberCoroutineScope()
+
+        suspend fun moveScroll() {
+            state.animateScrollBy(Float.MAX_VALUE)
+        }
+
+        suspend fun updateConsole(
+            message: String,
+            tag: String = Thread.currentThread().name,
+        ) {
+            mBaseDevViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
+            moveScroll()
+        }
+
+        suspend fun updateMigInfo() {
+            updateConsole("🍟 realm info")
+            updateConsole("realm diary count: ${EasyDiaryDbHelper.findDiary(query = null).size}")
+            updateConsole("realm photo-uri count: ${EasyDiaryDbHelper.findPhotoUriAll().size}")
+            updateConsole("realm unlinked photo-uri count: ${EasyDiaryDbHelper.findPhotoUriAll().count { it.diary == null || it.diary.isEmpty() }}")
+            updateConsole("realm alarm count: ${EasyDiaryDbHelper.findAlarmAll().size}")
+            updateConsole("realm action-log count: ${EasyDiaryDbHelper.findActionLogAll().size}")
+            updateConsole("realm d-day count: ${EasyDiaryDbHelper.findDDayAll().size}")
+            updateConsole("🍕 room info")
+            updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
+            updateConsole("room photo-uri count: ${diaryViewModel.getPhotoUriCount()}")
+            updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
+            updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
+            updateConsole("room d-day count: ${viewModel.getDDayCount()}")
+        }
+
+        LaunchedEffect(Unit) {
+            updateMigInfo()
+        }
+
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
+            ScrollableCard(
+                "Migration Info",
+                mBaseDevViewModel.coroutine1Console,
+                Modifier
+                    .fillMaxWidth(),
+//                        .height(100.dp)
+//                        .verticalScroll(state)
+                state,
+            )
+            SwitchCard(
+                "Enable Jetpack Room",
+                "Turning this option on activates the Jetpack Room",
+                modifier = modifier,
+                viewModel.enableJetpackRoomDatabase,
+            ) {
+                viewModel.toggleEnableJetpackRoomDatabase()
+            }
             SimpleCard(
-                "realm to room",
-                "realm diary object를 room으로 이전합니다.",
+                "Migration realm to room",
+                "realm object를 room으로 이전합니다.",
                 modifier = modifier,
             ) {
                 val realmDiaries =
@@ -526,26 +581,49 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         it.toDomain()
                     }
 
-                mViewModel.deleteAllDiaries()
-                lifecycleScope.launch {
-                    makeToast("Migration successful: ${mViewModel.addAllDiaries(domainDiaries)}")
+                val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
+                val copiedRealmAlarms = EasyDiaryDbHelper.copyFromRealm(realmAlarms)
+                val domainAlarms = copiedRealmAlarms.map { it.toDomain() }
+
+                val realmActionLogs = EasyDiaryDbHelper.findActionLogAll()
+                val copiedRealmActionLogs = EasyDiaryDbHelper.copyFromRealm(realmActionLogs)
+                val domainActionLogs = copiedRealmActionLogs.map { it.toDomain() }
+
+                val realmDDays = EasyDiaryDbHelper.findDDayAll()
+                val copiedRealmDDays = EasyDiaryDbHelper.copyFromRealm(realmDDays)
+                val domainDDays = copiedRealmDDays.map { it.toDomain() }
+
+                // Executed in `rememberCoroutineScope` to handle `moveScroll`.
+                coroutineScope.launch {
+                    mBaseDevViewModel.isLoading = true
+                    mBaseDevViewModel.coroutine1Console = ""
+
+                    mBaseDevViewModel.loadingMessage = "Diary migration..."
+                    diaryViewModel.deleteAllDiaries()
+                    val diaryCount = diaryViewModel.addAllDiaries(domainDiaries)
+                    mBaseDevViewModel.loadingMessage = "Diary migration successful: $diaryCount"
+
+                    mBaseDevViewModel.loadingMessage = "Alarm migration..."
+                    mBaseDevViewModel.deleteAllAlarms()
+                    val count2 = mBaseDevViewModel.addAllAlarms(domainAlarms)
+                    mBaseDevViewModel.loadingMessage = "Alarm migration successful: $count2"
+
+                    mBaseDevViewModel.loadingMessage = "ActionLog migration..."
+                    mBaseDevViewModel.deleteAllActionLogs()
+                    val count3 = mBaseDevViewModel.addAllActionLogs(domainActionLogs)
+                    mBaseDevViewModel.loadingMessage = "ActionLog migration successful: $count3"
+
+                    mBaseDevViewModel.loadingMessage = "D-Day migration..."
+                    mBaseDevViewModel.deleteAllDDays()
+                    val count4 = mBaseDevViewModel.addAllDDays(domainDDays)
+                    mBaseDevViewModel.loadingMessage = "D-Day migration successful: $count4"
+
+                    updateMigInfo()
+                    mBaseDevViewModel.isLoading = false
                 }
             }
-        }
-    }
-
-    @Composable
-    protected fun Room(
-        modifier: Modifier,
-        maxItemsInEachRow: Int,
-    ) {
-        CategoryTitleCard(title = "Jetpack Room")
-        FlowRow(
-            modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow,
-        ) {
             SimpleCard(
-                "[room + hilt] insert diary",
+                "Insert diary",
                 "DiaryRepository를 이용하여 local(또는 remote) 저장소에 다이어리 데이터를 생성합니다.",
                 modifier = modifier,
             ) {
@@ -555,41 +633,44 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         .firstOrNull { diary -> diary.photoUris?.isNotEmpty() ?: false }
                 val diary = EasyDiaryDbHelper.copyFromRealm(listOf(latestDiary))
                 diary.firstOrNull()?.let {
-                    val diary = it.toDomain()
-                    mViewModel.addDiary(diary)
+                    val diaryDomain = it.toDomain()
+                    diaryViewModel.addDiary(diaryDomain)
                     makeToast("Diary added to Room!")
                 } ?: run {
                     makeToast("Does not exist latest diary.")
                 }
             }
             SimpleCard(
-                "[room + hilt] inquiry latest diary (DiaryWithPhotos)",
+                "Inquiry latest diary (DiaryWithPhotos)",
                 "DiaryRepository를 이용하여 local(또는 remote) 저장소에 제일 마지막에 저장된 다이어리 1건의 상세정보를 조회합니다.",
                 modifier = modifier,
             ) {
                 lifecycleScope.launch {
-                    val diary = mViewModel.getLatestDiaryWithPhotos()
+                    val diary = diaryViewModel.getLatestDiaryWithPhotos()
                     showAlertDialog(GsonBuilder().setPrettyPrinting().create().toJson(diary))
                 }
             }
             SimpleCard(
-                "[room + hilt] count diary",
-                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 저장된 다이어리 전체 건수를 카운팅합니다.",
-                modifier = modifier,
-            ) {
-                lifecycleScope.launch {
-                    val count = mViewModel.getDiaryCount()
-                    makeToast("Total diaries in Room: $count")
-                }
-            }
-            SimpleCard(
-                "[room + hilt] delete diary",
+                "Delete diary",
                 "DiaryRepository를 이용하여 local(또는 remote) 저장소에 저장된 다이어리를 모두 삭제합니다.",
                 modifier = modifier,
             ) {
-                mViewModel.deleteAllDiaries()
+                diaryViewModel.deleteAllDiaries()
                 makeToast("All diaries deleted from Room!")
             }
+        }
+    }
+
+    @Composable
+    protected fun ExportRealmToJson(
+        modifier: Modifier,
+        maxItemsInEachRow: Int,
+    ) {
+        CategoryTitleCard(title = "Export Realm To Json")
+        FlowRow(
+            modifier = Modifier,
+            maxItemsInEachRow = maxItemsInEachRow,
+        ) {
             SimpleCard(
                 "export realm diary data",
                 "realm diary 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
@@ -1084,14 +1165,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             message: String,
             tag: String = Thread.currentThread().name,
         ) {
-            mViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
+            mBaseDevViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
             coroutineScope.launch {
                 state.animateScrollBy(Float.MAX_VALUE)
             }
         }
         ScrollableCard(
             "Coroutine Info",
-            mViewModel.coroutine1Console,
+            mBaseDevViewModel.coroutine1Console,
             Modifier
                 .fillMaxWidth(),
 //                        .height(100.dp)

@@ -533,6 +533,7 @@ const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY =
     "setting_debug_option_visible_temporary_diary"
 const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS =
     "setting_debug_option_visible_tree_status"
+const val SETTING_ENABLE_JETPACK_ROOM_DATABASE = "setting_enable_jetpack_room_database"
 
 /***************************************************************************************************
  *   Etc constants
