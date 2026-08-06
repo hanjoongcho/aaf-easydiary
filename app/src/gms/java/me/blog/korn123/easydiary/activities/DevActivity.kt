@@ -6,6 +6,9 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -106,7 +109,7 @@ class DevActivity : BaseDevActivity() {
 
                                 RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
                                 Migration(settingCardModifier, maxItemsInEachRow)
-                                Room(settingCardModifier, maxItemsInEachRow)
+                                ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
                                 CustomLauncher(settingCardModifier, maxItemsInEachRow)
                                 GoogleMobileService(settingCardModifier, maxItemsInEachRow)
 
@@ -126,8 +129,13 @@ class DevActivity : BaseDevActivity() {
                                     modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
                                 )
                             }
-                            if (mViewModel.isLoading) {
-                                LoadingScreen()
+
+                            AnimatedVisibility(
+                                visible = mBaseDevViewModel.isLoading,
+                                enter = fadeIn(),
+                                exit = fadeOut(),
+                            ) {
+                                LoadingScreen(message = viewModel.loadingMessage)
                             }
                         }
                     },
@@ -139,7 +147,7 @@ class DevActivity : BaseDevActivity() {
     override fun onResume() {
         super.onResume()
         authManager.getProfileUri()?.let {
-            mViewModel.profilePicUri = if (authManager.isLoggedInLocal()) it else null
+            mBaseDevViewModel.profilePicUri = if (authManager.isLoggedInLocal()) it else null
         }
     }
 
@@ -162,12 +170,12 @@ class DevActivity : BaseDevActivity() {
                 title = "CredentialManager",
                 description = "signIn",
                 imageResourceId = R.drawable.logo_google_oauth2,
-                imageUrl = mViewModel.profilePicUri?.toUri(),
+                imageUrl = mBaseDevViewModel.profilePicUri?.toUri(),
                 modifier = modifier,
             ) {
                 lifecycleScope.launch {
                     authManager.signIn().onSuccess { user ->
-                        mViewModel.profilePicUri = user.profilePicUri
+                        mBaseDevViewModel.profilePicUri = user.profilePicUri
                     }
                 }
             }
@@ -176,11 +184,11 @@ class DevActivity : BaseDevActivity() {
                 "signOut",
                 modifier = modifier,
             ) {
-                mViewModel.isLoading = true
+                mBaseDevViewModel.isLoading = true
                 lifecycleScope.launch {
                     authManager.signOut()
-                    mViewModel.isLoading = false
-                    mViewModel.profilePicUri = null
+                    mBaseDevViewModel.isLoading = false
+                    mBaseDevViewModel.profilePicUri = null
                 }
             }
             SimpleCard(

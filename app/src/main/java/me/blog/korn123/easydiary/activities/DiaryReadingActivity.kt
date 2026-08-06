@@ -1,10 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
-import android.annotation.TargetApi
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,33 +20,23 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import android.widget.ScrollView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
@@ -72,7 +59,6 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
-import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -82,7 +68,6 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.fragments.DiaryFragment
 import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
@@ -99,11 +84,9 @@ import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MO
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.Locale
 
@@ -823,7 +806,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private var mPrimaryColor = 0
         private var mStoredContents: String? = null
 
-        private var diaryViewModel: DiaryViewModel = DiaryViewModel()
+        private var linkedDiaryViewModel: LinkedDiaryViewModel = LinkedDiaryViewModel()
 
         override fun onCreateView(
             inflater: LayoutInflater,
@@ -866,7 +849,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 .fillMaxSize()
                                 .navigationBarsPadding(),
                     ) {
-                        val parentDiaries by diaryViewModel.parentDiaries.collectAsState()
+                        val parentDiaries by linkedDiaryViewModel.parentDiaries.collectAsState()
                         // diary parents items
                         if (parentDiaries.isNotEmpty()) {
                             CategoryTitleCard(title = getString(R.string.link_entry_category_parent), marginTop = 0)
@@ -915,7 +898,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             Spacer(modifier = Modifier.height(20.dp))
                         }
 
-                        val childDiaries by diaryViewModel.childDiaries.collectAsState()
+                        val childDiaries by linkedDiaryViewModel.childDiaries.collectAsState()
                         // diary child items
                         if (childDiaries.isNotEmpty()) {
                             CategoryTitleCard(title = getString(R.string.link_entry_category_child), marginTop = 0)
@@ -1102,7 +1085,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
             }
 
-            diaryViewModel.updateParentDiaries(EasyDiaryDbHelper.findParentDiariesOf(diaryDto.sequence))
+            linkedDiaryViewModel.updateParentDiaries(EasyDiaryDbHelper.findParentDiariesOf(diaryDto.sequence))
 
             val linkedDiaries = mutableListOf<Diary>()
             if (diaryDto.linkedDiaries.isNotEmpty()) {
@@ -1112,7 +1095,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     }
                 }
             }
-            diaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
+            linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
         }
 
         private fun initBottomContainer() {

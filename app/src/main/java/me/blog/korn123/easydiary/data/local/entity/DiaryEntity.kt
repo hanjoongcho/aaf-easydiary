@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.data.local.models
+package me.blog.korn123.easydiary.data.local.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity

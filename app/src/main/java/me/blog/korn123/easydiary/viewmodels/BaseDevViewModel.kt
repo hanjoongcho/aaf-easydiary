@@ -12,90 +12,163 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.easydiary.data.repository.DiaryRepository
-import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.ActionLog
+import me.blog.korn123.easydiary.domain.model.Alarm
+import me.blog.korn123.easydiary.domain.model.DDay
+import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
+import me.blog.korn123.easydiary.domain.repository.AlarmRepository
+import me.blog.korn123.easydiary.domain.repository.DDayRepository
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeToast
 import javax.inject.Inject
-import kotlin.rem
 
 @HiltViewModel
 class BaseDevViewModel
     @Inject
     constructor(
         application: Application,
-        private val diaryRepository: DiaryRepository,
+        private val alarmRepository: AlarmRepository,
+        private val actionLogRepository: ActionLogRepository,
+        private val dDayRepository: DDayRepository,
     ) : AndroidViewModel(application) {
         val config = application.config
         var symbol by mutableIntStateOf(1)
         var locationInfo by mutableStateOf("N/A")
         var coroutine1Console by mutableStateOf("")
         var isLoading by mutableStateOf(false)
+        var loadingMessage by mutableStateOf<String?>(null)
         var profilePicUri by mutableStateOf<String?>(null)
 
         fun plus() {
             symbol = symbol.plus(1)
         }
 
-        fun addDiary(diary: Diary) {
+        fun addAlarm(alarm: Alarm) {
             viewModelScope.launch {
-                diaryRepository.insertDiary(diary)
+                alarmRepository.insertAlarm(alarm)
             }
         }
 
-        suspend fun addAllDiaries(diaries: List<Diary>): Int {
+        suspend fun addAllAlarms(alarms: List<Alarm>): Int {
             var count = 0
-
-            // 1. UI 상태 변경 및 시작은 메인 스레드에서 (withContext를 쓰지 않거나 Main 지정)
-            isLoading = true
-            coroutine1Console = "Migration started..."
+            loadingMessage = "Alarm migration started..."
 
             try {
-                // 2. 무거운 DB 작업만 IO 스레드에서 일괄 처리 또는 반복 처리
                 withContext(Dispatchers.IO) {
-                    diaries.forEachIndexed { index, diary ->
-                        diaryRepository.insertDiary(diary)
-
-                        // 주의: 루프 안에서 너무 자주 메인 스레드로 전환하면 성능이 떨어질 수 있습니다.
-                        // 10개 단위이므로 메인 스레드로 전환해 UI를 업데이트해 줍니다.
-                        if (index % 10 == 0 || index == diaries.lastIndex) {
+                    alarms.forEachIndexed { index, alarm ->
+                        alarmRepository.insertAlarm(alarm)
+                        if (index % 10 == 0 || index == alarms.lastIndex) {
                             withContext(Dispatchers.Main) {
-                                coroutine1Console = "Migrating... ${index + 1} / ${diaries.size}"
+                                loadingMessage = "Migrating alarms... ${index + 1} / ${alarms.size}"
                             }
                         }
                         count++
                     }
                 }
-
-                // 3. 완료 상태도 메인 스레드에서
-                coroutine1Console = "Migration completed: ${diaries.size} diaries"
+                loadingMessage = "Alarm migration completed: ${alarms.size} alarms\n"
             } catch (e: Exception) {
-                coroutine1Console = "Migration failed: ${e.message}"
+                loadingMessage = "Alarm migration failed: ${e.message}\n"
             } finally {
-                // 4. 로딩 종료도 메인 스레드에서
-                isLoading = false
+                loadingMessage = "Alarm migration completed: $count alarms\n"
             }
 
             return count
         }
 
-        suspend fun getDiaryCount(): Int = diaryRepository.getAllDiaries().first().size
-
-        suspend fun getLatestDiary(): Diary? =
-            diaryRepository
-                .getAllDiaries()
-                .first()
-                .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
-
-        suspend fun getLatestDiaryWithPhotos(): Diary? =
-            diaryRepository
-                .getDiariesWithPhotos()
-                .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
-
-        fun deleteAllDiaries() {
+        fun updateAlarm(alarm: Alarm) {
             viewModelScope.launch {
-                diaryRepository.deleteAllDiaries()
+                alarmRepository.updateAlarm(alarm)
             }
+        }
+
+        fun deleteAlarm(alarm: Alarm) {
+            viewModelScope.launch {
+                alarmRepository.deleteAlarm(alarm)
+            }
+        }
+
+        fun deleteAllAlarms() {
+            viewModelScope.launch {
+                alarmRepository.deleteAllAlarms()
+            }
+        }
+
+        suspend fun getAlarmCount(): Int = alarmRepository.getAllAlarms().first().size
+
+        suspend fun addAllActionLogs(actionLogs: List<ActionLog>): Int {
+            var count = 0
+            loadingMessage = "Action log migration started..."
+
+            try {
+                withContext(Dispatchers.IO) {
+                    actionLogs.forEachIndexed { index, log ->
+                        actionLogRepository.insertActionLog(log)
+                        if (index % 10 == 0 || index == actionLogs.lastIndex) {
+                            withContext(Dispatchers.Main) {
+                                loadingMessage = "Migrating action logs... ${index + 1} / ${actionLogs.size}"
+                            }
+                        }
+                        count++
+                    }
+                }
+                loadingMessage = "Action log migration completed: ${actionLogs.size} logs\n"
+            } catch (e: Exception) {
+                loadingMessage = "Action log migration failed: ${e.message}\n"
+            } finally {
+                loadingMessage = "Action log migration completed: $count logs\n"
+            }
+
+            return count
+        }
+
+        fun deleteAllActionLogs() {
+            viewModelScope.launch {
+                actionLogRepository.deleteAllActionLogs()
+            }
+        }
+
+        suspend fun getActionLogCount(): Int = actionLogRepository.getAllActionLogs().first().size
+
+        suspend fun addAllDDays(dDays: List<DDay>): Int {
+            var count = 0
+            loadingMessage = "D-day migration started..."
+
+            try {
+                withContext(Dispatchers.IO) {
+                    dDays.forEachIndexed { index, dDay ->
+                        dDayRepository.insertDDay(dDay)
+                        if (index % 10 == 0 || index == dDays.lastIndex) {
+                            withContext(Dispatchers.Main) {
+                                loadingMessage = "Migrating d-days... ${index + 1} / ${dDays.size}"
+                            }
+                        }
+                        count++
+                    }
+                }
+                loadingMessage = "D-day migration completed: ${dDays.size} d-days\n"
+            } catch (e: Exception) {
+                loadingMessage = "D-day migration failed: ${e.message}\n"
+            } finally {
+                loadingMessage = "D-day migration completed: $count d-days\n"
+            }
+
+            return count
+        }
+
+        fun deleteAllDDays() {
+            viewModelScope.launch {
+                dDayRepository.deleteAllDDays()
+            }
+        }
+
+        suspend fun getDDayCount(): Int = dDayRepository.getAllDDays().first().size
+
+        var enableJetpackRoomDatabase by mutableStateOf(config.enableJetpackRoomDatabase)
+            private set
+
+        fun toggleEnableJetpackRoomDatabase() {
+            val newValue = enableJetpackRoomDatabase.not()
+            config.enableJetpackRoomDatabase = newValue
+            enableJetpackRoomDatabase = newValue
         }
 
         var enableDebugOptionVisibleDiarySequence by mutableStateOf(config.enableDebugOptionVisibleDiarySequence)
