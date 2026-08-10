@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.347.202608100 (date: 2026.08.10)
+  * Improve UI/UX for Android 16
+
 # Changes in 1.4.346.202604090 (date: 2026.04.09)
   * Improve UI/UX for Android 16
 
