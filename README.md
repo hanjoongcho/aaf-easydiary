@@ -24,7 +24,7 @@ As of 2023, user manuals are available on Notion and YouTube.
 * [Guide](./docs/README.en.md)
 
 ## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=hanjoongcho/aaf-easydiary,hanjoongcho/aaf-easyphotomap,hanjoongcho/aaf-easypassword&type=Date)](https://star-history.com/#hanjoongcho/aaf-easydiary&hanjoongcho/aaf-easyphotomap&hanjoongcho/aaf-easypassword&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=hanjoongcho/aaf-easydiary,hanjoongcho/aaf-easyphotomap,hanjoongcho/aaf-easypassword&type=Date)](https://star-history.dera.page/#hanjoongcho/aaf-easydiary&hanjoongcho/aaf-easyphotomap&hanjoongcho/aaf-easypassword&Date)
 
 ## Features
 ### ✍ Diary Writing & Editing
