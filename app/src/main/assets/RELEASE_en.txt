@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.349.202608150 (date: 2026.08.15)
+  * Update image picker permission checks
+
 # Changes in 1.4.348.202608120 (date: 2026.08.12)
   * Improve UI/UX for Android 16
 

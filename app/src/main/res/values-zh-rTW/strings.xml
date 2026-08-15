@@ -863,6 +863,10 @@
         v1.4.348.202608120 / 2026.08.12\n
         Improve UI/UX for Android 16
     </string>
+    <string name="release_349">
+        v1.4.349.202608150 / 2026.08.15\n
+        Update image picker permission checks
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
