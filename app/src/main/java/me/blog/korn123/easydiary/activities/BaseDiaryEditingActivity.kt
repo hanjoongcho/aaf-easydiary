@@ -210,11 +210,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             when (view.id) {
                 R.id.photoView -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        if (checkPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES))) {
-                            callImagePicker()
-                        } else {
-                            confirmPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), REQUEST_CODE_EXTERNAL_STORAGE)
-                        }
+//                        if (checkPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES))) {
+//                            callImagePicker()
+//                        } else {
+//                            confirmPermission(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), REQUEST_CODE_EXTERNAL_STORAGE)
+//                        }
+                        callImagePicker()
                     } else {
                         if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             callImagePicker()
