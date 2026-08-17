@@ -79,6 +79,7 @@ import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class Demo1Activity : EasyDiaryComposeBaseActivity() {
     /***************************************************************************************************
@@ -398,7 +399,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
     @Composable
     fun FastScrollLazyColumnSample2(
-        items: List<Diary>,
+        items: List<DiaryDomain>,
         modifier: Modifier = Modifier,
     ) {
         AppTheme {
@@ -438,7 +439,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             }
                     }
 
-                    fun itemClickCallback(diary: Diary) {
+                    fun itemClickCallback(diary: DiaryDomain) {
                         activity?.toast("itemClickCallback: ${diary.title}")
                     }
 
@@ -517,7 +518,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
     @Composable
     fun FastScrollLazyColumnSample3(
-        items: List<Diary>,
+        items: List<DiaryDomain>,
         modifier: Modifier = Modifier,
     ) {
         AppTheme {
@@ -557,7 +558,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             }
                     }
 
-                    fun itemClickCallback(diary: Diary) {
+                    fun itemClickCallback(diary: DiaryDomain) {
                         activity?.toast("itemClickCallback: ${diary.title}")
                     }
 

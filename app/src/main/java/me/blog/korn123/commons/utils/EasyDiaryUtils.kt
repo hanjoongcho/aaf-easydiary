@@ -83,6 +83,7 @@ import java.io.FileReader
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -121,9 +122,7 @@ object EasyDiaryUtils {
         return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
     }
 
-    fun summaryDiaryLabel(diary: DiaryUiModel): String {
-        return diary.title.ifEmpty { diary.contents.lines()[0] }
-    }
+    fun summaryDiaryLabel(diary: DiaryUiModel): String = diary.title.ifEmpty { diary.contents.lines()[0] }
 
     fun searchWordIndexes(
         contents: String,
@@ -668,13 +667,13 @@ object EasyDiaryUtils {
      *
      ***************************************************************************************************/
     fun sequenceToPageIndex(
-        diaryList: List<Diary>,
+        diaryList: List<DiaryDomain>,
         sequence: Int,
     ): Int {
         var pageIndex = 0
         if (sequence > -1) {
             for (i in diaryList.indices) {
-                if (diaryList[i].sequence == sequence) {
+                if (diaryList[i].diaryId == sequence) {
                     pageIndex = i
                     break
                 }
@@ -732,7 +731,7 @@ object EasyDiaryUtils {
 
             val map = hashMapOf<Int, Int>()
             listDiary.forEach { diaryDto ->
-                val targetColumn = diaryDto.weather
+                val targetColumn = diaryDto.symbolSequence
                 if (targetColumn != 0) {
                     if (map[targetColumn] == null) {
                         map[targetColumn] = 1
@@ -754,13 +753,12 @@ object EasyDiaryUtils {
      *
      ***************************************************************************************************/
 
-
     /***************************************************************************************************
      *   ETC.
      *
      ***************************************************************************************************/
-    fun applyFilter(mode: String?): List<Diary> {
-        val diaryList: List<Diary> =
+    fun applyFilter(mode: String?): List<DiaryDomain> {
+        val diaryList: List<DiaryDomain> =
             when (mode) {
                 DiaryComponentConstants.MODE_TASK_TODO -> {
                     EasyDiaryDbHelper
@@ -770,7 +768,7 @@ object EasyDiaryUtils {
                             0,
                             0,
                             0,
-                        ).filter { item -> item.weather in 80..81 }
+                        ).filter { item -> item.symbolSequence in 80..81 }
                         .reversed()
                 }
 
@@ -792,7 +790,7 @@ object EasyDiaryUtils {
                             0,
                             0,
                             0,
-                        ).filter { item -> item.weather in 82..83 }
+                        ).filter { item -> item.symbolSequence in 82..83 }
                 }
 
                 DiaryComponentConstants.MODE_TASK_CANCEL -> {
@@ -813,14 +811,14 @@ object EasyDiaryUtils {
                             0,
                             0,
                             0,
-                        ).filter { item -> (item.weather !in 80..83) && item.currentTimeMillis > System.currentTimeMillis() }
+                        ).filter { item -> (item.symbolSequence !in 80..83) && item.currentTimeMillis > System.currentTimeMillis() }
                         .reversed()
                 }
 
                 else -> {
                     EasyDiaryDbHelper
                         .findDiary(null, false, 0, 0, 0)
-                        .filter { item -> (item.weather !in 80..83) && item.currentTimeMillis <= System.currentTimeMillis() }
+                        .filter { item -> (item.symbolSequence !in 80..83) && item.currentTimeMillis <= System.currentTimeMillis() }
                         .run { if (this.size > 100) this.subList(0, 100) else this }
                 }
             }

@@ -17,6 +17,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
+import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.makeToast
@@ -25,7 +26,6 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -123,7 +123,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                             historyTag,
                                             DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
                                             if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
-                                            it.sequence,
+                                            it.diaryId,
                                         ),
                                     )
                                 }

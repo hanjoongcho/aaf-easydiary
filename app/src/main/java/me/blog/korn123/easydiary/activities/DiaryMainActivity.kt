@@ -100,6 +100,7 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
@@ -107,6 +108,7 @@ import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -120,7 +122,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private lateinit var mGridLayoutManager: GridLayoutManager
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-    private var mDiaryList: ArrayList<Diary> = arrayListOf()
+    private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
     private var mShowcaseIndex = 1
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
@@ -143,18 +145,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                 result.data?.let { it ->
                     mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                        EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
-                            mBinding.progressCoroutine.visibility = View.VISIBLE
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                exportHtmlBook(it.data, cloneItems)
-                                withContext(Dispatchers.Main) {
-                                    mBinding.progressCoroutine.visibility = View.GONE
-                                    cloneItems.forEach {
-                                        it.isSelected = false
-                                        EasyDiaryDbHelper.updateDiaryBy(it)
+                        val diaryDomains = this
+                        mBinding.progressCoroutine.visibility = View.VISIBLE
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            exportHtmlBook(it.data, diaryDomains)
+                            withContext(Dispatchers.Main) {
+                                mBinding.progressCoroutine.visibility = View.GONE
+                                diaryDomains.forEach {
+                                    it.toRealm().also { diaryDomain ->
+                                        diaryDomain.isSelected = false
+                                        EasyDiaryDbHelper.updateDiaryBy(diaryDomain)
                                     }
-                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
                                 }
+                                mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
                         }
                     }
@@ -325,7 +328,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 { _, _ ->
                                     EasyDiaryDbHelper.beginTransaction()
                                     forEach {
-                                        it.deleteFromRealm()
+                                        EasyDiaryDbHelper.deleteDiaryBy(it.diaryId)
                                     }
                                     EasyDiaryDbHelper.commitTransaction()
                                     refreshList()
@@ -356,11 +359,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 ),
                                 { _, _ ->
                                     reversed().forEach {
-                                        EasyDiaryDbHelper.beginTransaction()
-                                        it.isSelected = false
-                                        EasyDiaryDbHelper.commitTransaction()
-                                        // EasyDiaryDbHelper.updateDiaryBy(it)
-                                        EasyDiaryDbHelper.duplicateDiaryBy(it)
+                                        it.toRealm().also { realmDiary ->
+                                            realmDiary.isSelected = false
+                                            EasyDiaryDbHelper.duplicateDiaryBy2(realmDiary)
+                                        }
                                     }
                                     refreshList()
                                     Handler(Looper.getMainLooper()).post {
@@ -832,7 +834,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
         val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
         target?.let {
-            position = getIndexBySequence(target.sequence)
+            position = getIndexBySequence(target.diaryId)
             makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
             if (position != -1) {
                 (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
@@ -846,7 +848,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun getIndexBySequence(sequence: Int): Int {
         var targetIndex = -1
         mDiaryList.forEachIndexed { index, diary ->
-            if (diary.sequence == sequence) {
+            if (diary.diaryId == sequence) {
                 targetIndex = index
                 return@forEachIndexed
             }
@@ -969,7 +971,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mDiaryMainItemAdapter =
             DiaryMainItemAdapter(this, mDiaryList, {
                 val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
-                detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
+                detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
                 detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
                 detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)

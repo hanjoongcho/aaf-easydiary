@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainViewModel : ViewModel() {
     init {
@@ -40,10 +41,10 @@ class DiaryMainViewModel : ViewModel() {
         _currentQuery.value = currentQuery
     }
 
-    private val _diaryItems = MutableStateFlow<List<Diary>>(EasyDiaryDbHelper.findDiary(null))
-    val diaryItems: StateFlow<List<Diary>> = _diaryItems.asStateFlow()
+    private val _diaryItems = MutableStateFlow<List<DiaryDomain>>(EasyDiaryDbHelper.findDiary(null))
+    val diaryItems: StateFlow<List<DiaryDomain>> = _diaryItems.asStateFlow()
 
-    fun setDiaryItems(items: List<Diary>) {
+    fun setDiaryItems(items: List<DiaryDomain>) {
         _diaryItems.value = items
     }
 

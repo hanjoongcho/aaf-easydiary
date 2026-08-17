@@ -19,5 +19,16 @@ data class Diary(
     val encryptKeyHash: String? = null,
     val isSelected: Boolean = false,
     val location: Location? = null,
-    val isHoliday: Boolean = false
-)
+    val isHoliday: Boolean = false,
+) {
+    fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
+        when (isEncrypt) {
+            true -> {
+                photoUris.map { PhotoUri("") }
+            }
+
+            false -> {
+                photoUris
+            }
+        }
+}

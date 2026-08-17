@@ -16,20 +16,17 @@ import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
-import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -37,28 +34,33 @@ import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.helper.toRealm
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainItemAdapter(
     val activity: Activity,
-    private val diaryItems: List<Diary>,
-    val itemClickCallback: (diary: Diary) -> Unit,
-    val itemLongClickCallback: () -> Unit
+    private val diaryItems: List<DiaryDomain>,
+    val itemClickCallback: (diary: DiaryDomain) -> Unit,
+    val itemLongClickCallback: () -> Unit,
 ) : RecyclerView.Adapter<DiaryMainItemAdapter.ViewHolder>(),
     FastScrollRecyclerView.SectionedAdapter {
     var currentQuery: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder =
+        ViewHolder(
             activity,
             ItemDiaryMainBinding.inflate(activity.layoutInflater, parent, false),
-            this
+            this,
         )
-    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         holder.bindTo(diaryItems[position])
     }
 
@@ -67,24 +69,26 @@ class DiaryMainItemAdapter(
     override fun getSectionName(position: Int): String {
         fun ellipsis(str: String?): String {
             val maxLength = 15
-            val ellipsisString = str?.let {
-                when (str.length > maxLength) {
-                    true -> str.take(maxLength).plus("…")
-                    false -> str
-                }
-            } ?: ""
+            val ellipsisString =
+                str?.let {
+                    when (str.length > maxLength) {
+                        true -> str.take(maxLength).plus("…")
+                        false -> str
+                    }
+                } ?: ""
             return ellipsisString
         }
 
-        val label = when (diaryItems[position].title?.isNotEmpty() ?: false) {
-            true -> String.format("%s", ellipsis(diaryItems[position].title))
-            false -> String.format("%s", ellipsis(diaryItems[position].contents))
-        }
+        val label =
+            when (diaryItems[position].title?.isNotEmpty() ?: false) {
+                true -> String.format("%s", ellipsis(diaryItems[position].title))
+                false -> String.format("%s", ellipsis(diaryItems[position].contents))
+            }
         return label
     }
 
-    fun getSelectedItems(): List<Diary> {
-        val selectedItems = arrayListOf<Diary>()
+    fun getSelectedItems(): List<DiaryDomain> {
+        val selectedItems = arrayListOf<DiaryDomain>()
         diaryItems.map {
             if (it.isSelected) selectedItems.add(it)
         }
@@ -92,19 +96,20 @@ class DiaryMainItemAdapter(
     }
 
     fun toggleCheckBoxALl() {
-        EasyDiaryDbHelper.beginTransaction()
         diaryItems.forEach { diary ->
-            diary.isSelected = !diary.isSelected
+            diary.toRealm().also {
+                it.isSelected = !it.isSelected
+                EasyDiaryDbHelper.updateDiaryBy(it)
+            }
         }
-        EasyDiaryDbHelper.commitTransaction()
     }
 
     inner class ViewHolder(
         val activity: Activity,
         private val itemDiaryMainBinding: ItemDiaryMainBinding,
-        val adapter: DiaryMainItemAdapter
+        val adapter: DiaryMainItemAdapter,
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
-        fun bindTo(diary: Diary) {
+        fun bindTo(diary: DiaryDomain) {
             itemDiaryMainBinding.run {
                 if (diary.currentTimeMillis > System.currentTimeMillis()) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
@@ -149,10 +154,11 @@ class DiaryMainItemAdapter(
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
 
-                            text = context.getString(
-                                R.string.diary_contents_length,
-                                diary.contents?.length ?: 0
-                            )
+                            text =
+                                context.getString(
+                                    R.string.diary_contents_length,
+                                    diary.contents?.length ?: 0,
+                                )
                         }
                         contentsLengthContainer.visibility = View.VISIBLE
                     } else {
@@ -161,14 +167,16 @@ class DiaryMainItemAdapter(
                 }
 
                 selection.setOnCheckedChangeListener { _, isChecked ->
-                    EasyDiaryDbHelper.beginTransaction()
-                    diary.isSelected = isChecked
-                    EasyDiaryDbHelper.commitTransaction()
-                    // EasyDiaryDbHelper.updateDiaryBy(diary)
+                    val realmDiary = diary.toRealm()
+                    realmDiary.isSelected = isChecked
+                    EasyDiaryDbHelper.updateDiaryBy(realmDiary)
                 }
 
                 when ((activity as DiaryMainActivity).mDiaryMode) {
-                    DiaryMode.READ -> selection.visibility = View.GONE
+                    DiaryMode.READ -> {
+                        selection.visibility = View.GONE
+                    }
+
                     DiaryMode.DELETE -> {
                         selection.visibility = View.VISIBLE
                         selection.isChecked = diary.isSelected
@@ -183,8 +191,8 @@ class DiaryMainItemAdapter(
                 textTitle.text = diary.title
                 activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                 if (activity.config.enableMarkdown) {
-                    textContents.tag = diary.sequence
-                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence, 500)
+                    textContents.tag = diary.diaryId
+                    EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.diaryId, 500)
                 }
 
                 // highlight current query
@@ -197,26 +205,36 @@ class DiaryMainItemAdapter(
                         EasyDiaryUtils.highlightStringIgnoreCase(textTitle, currentQuery)
                         EasyDiaryUtils.highlightStringIgnoreCase(textContents, currentQuery)
                     }
-
                 }
                 EasyDiaryUtils.boldString(activity, textTitle)
 
-                textDateTime.text = when (diary.isAllDay) {
-                    true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringForceFormatting(
-                        diary.currentTimeMillis, activity
-                    )
+                textDateTime.text =
+                    when (diary.isAllDay) {
+                        true -> {
+                            DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                        }
+
+                        false -> {
+                            DateUtils.getDateTimeStringForceFormatting(
+                                diary.currentTimeMillis,
+                                activity,
+                            )
+                        }
+                    }
+                if (activity.config.enableDebugOptionVisibleDiarySequence) {
+                    textDateTime.text =
+                        "[${diary.diaryId}, ${diary.originDiaryId}] ${textDateTime.text}"
                 }
-                if (activity.config.enableDebugOptionVisibleDiarySequence) textDateTime.text =
-                    "[${diary.sequence}, ${diary.originSequence}] ${textDateTime.text}"
-                FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
+                FlavorUtils.initWeatherView(activity, imageSymbol, diary.symbolSequence)
 
                 when ((diary.photoUris?.size ?: 0) > 0) {
                     true -> {
                         photoViews.visibility = View.VISIBLE
                     }
 
-                    false -> photoViews.visibility = View.GONE
+                    false -> {
+                        photoViews.visibility = View.GONE
+                    }
                 }
 
                 photoViews.removeAllViews()
@@ -241,58 +259,64 @@ class DiaryMainItemAdapter(
 //                        activity.dpToPixel(1.5F, Calculation.FLOOR).apply {
 //                            imageView.setPadding(this, this, this, this)
 //                        }
-                        val listener = object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable?>,
-                                isFirstResource: Boolean
-                            ): Boolean { return false }
+                        val listener =
+                            object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable?>,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
 
-                            override fun onResourceReady(
-                                resource: Drawable,
-                                model: Any,
-                                target: Target<Drawable?>?,
-                                dataSource: DataSource,
-                                isFirstResource: Boolean
-                            ): Boolean { return false }
-                        }
-                        Glide.with(activity)
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
+                            }
+                        Glide
+                            .with(activity)
                             .load(EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath())
                             .listener(listener)
                             .apply(
                                 createThumbnailGlideOptions(
                                     imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
-                                    it.isEncrypt()
-                                )
-                            )
-                            .into(imageView)
+                                    it.isEncrypt(),
+                                ),
+                            ).into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
 
                         val margin = activity.dpToPixel(3F)
                         val contentPadding = activity.dpToPixel(1F)
-                        val cardView = me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
-                            activity.updateDashboardInnerCard(this)
-                            setLayoutParams(ViewGroup.MarginLayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                            ).apply {
+                        val cardView =
+                            me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
+                                activity.updateDashboardInnerCard(this)
+                                setLayoutParams(
+                                    ViewGroup
+                                        .MarginLayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ).apply {
 //                                setMargins(margin, margin, margin, margin)
-                            })
+                                        },
+                                )
 
-                            radius = imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-                            fixedAppcompatPadding = true
-                            setContentPadding(contentPadding, contentPadding, contentPadding, contentPadding)
-                            addView(imageView)
-                        }
+                                radius = imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+                                fixedAppcompatPadding = true
+                                setContentPadding(contentPadding, contentPadding, contentPadding, contentPadding)
+                                addView(imageView)
+                            }
                         photoViews.addView(cardView)
                     }
                 }
 
-                textContents.maxLines = when (activity.config.enableContentsSummary) {
-                    true -> activity.config.summaryMaxLines
-                    false -> Integer.MAX_VALUE
-                }
+                textContents.maxLines =
+                    when (activity.config.enableContentsSummary) {
+                        true -> activity.config.summaryMaxLines
+                        false -> Integer.MAX_VALUE
+                    }
             }
         }
     }

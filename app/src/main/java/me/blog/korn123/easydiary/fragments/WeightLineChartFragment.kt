@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
 import kotlin.random.Random
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentWeightLineChartBinding
@@ -245,7 +246,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                             )
 
                         var sumWeight = 0F
-                        val filteredItems = arrayListOf<Diary>()
+                        val filteredItems = arrayListOf<DiaryDomain>()
                         listDiary.reversed().forEach { diary ->
                             diary.title?.let {
                                 if (EasyDiaryUtils.isContainNumber(it)) {

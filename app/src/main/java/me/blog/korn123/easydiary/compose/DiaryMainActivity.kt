@@ -108,6 +108,7 @@ import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     private val viewModel: DiaryMainViewModel by viewModels()
@@ -139,7 +140,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     0.dp
                 }
 
-            val items: List<Diary> by viewModel.diaryItems.collectAsState()
+            val items: List<DiaryDomain> by viewModel.diaryItems.collectAsState()
             val modifier: Modifier = Modifier
 
             val focusManager = LocalFocusManager.current
@@ -194,7 +195,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                 }
                         }
 
-                        fun itemClickCallback(diary: Diary) {
+                        fun itemClickCallback(diary: DiaryDomain) {
                             activity?.toast("itemClickCallback: ${diary.title}")
                         }
 
@@ -282,12 +283,12 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         delayTimeMillis: Long,
         durationMillis: Int,
         enableCardViewPolicy: Boolean,
-        items: List<Diary>,
+        items: List<DiaryDomain>,
         thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
         isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
         hideJobCallback: (job: Job) -> Unit,
         containerSizeCallback: (containerSize: IntSize) -> Unit,
-        itemClickCallback: (diary: Diary) -> Unit = {},
+        itemClickCallback: (diary: DiaryDomain) -> Unit = {},
         itemLongClickCallback: () -> Unit = {},
     ) {
         val context = LocalContext.current
@@ -443,12 +444,12 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         delayTimeMillis: Long,
         durationMillis: Int,
         enableCardViewPolicy: Boolean,
-        items: List<Diary>,
+        items: List<DiaryDomain>,
         thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
         isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
         hideJobCallback: (job: Job) -> Unit,
         containerSizeCallback: (containerSize: IntSize) -> Unit,
-        itemClickCallback: (diary: Diary) -> Unit = {},
+        itemClickCallback: (diary: DiaryDomain) -> Unit = {},
         itemLongClickCallback: () -> Unit = {},
     ) {
         Row(

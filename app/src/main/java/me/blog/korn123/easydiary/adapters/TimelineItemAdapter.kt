@@ -18,7 +18,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
-
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by hanjoong on 2017-07-16.
@@ -27,22 +27,30 @@ import java.text.SimpleDateFormat
  */
 
 class TimelineItemAdapter(
-        private val activity: Activity,
-        layoutResourceId: Int,
-        private val list: List<Diary>
-) : ArrayAdapter<Diary>(activity, layoutResourceId, list) {
+    private val activity: Activity,
+    layoutResourceId: Int,
+    private val list: List<DiaryDomain>,
+) : ArrayAdapter<DiaryDomain>(activity, layoutResourceId, list) {
     private lateinit var itemTimelineBinding: ItemTimelineBinding
     private var mPrimaryColor = 0
     var currentQuery: String? = null
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val itemView: View = convertView ?: run {
-            itemTimelineBinding = ItemTimelineBinding.inflate(activity.layoutInflater)
-            itemTimelineBinding.root
-        }
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View {
+        val itemView: View =
+            convertView ?: run {
+                itemTimelineBinding = ItemTimelineBinding.inflate(activity.layoutInflater)
+                itemTimelineBinding.root
+            }
 
         when (itemView.tag is ItemTimelineBinding) {
-            true -> itemView.tag as ItemTimelineBinding
+            true -> {
+                itemView.tag as ItemTimelineBinding
+            }
+
             false -> {
                 val holder = itemTimelineBinding
                 itemView.tag = holder
@@ -64,11 +72,11 @@ class TimelineItemAdapter(
                 topLine.visibility = View.VISIBLE
             }
 
-            FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
+            FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.symbolSequence, false)
             val lineBreakStrings = arrayListOf<String>()
             when (diaryDto.isAllDay) {
-                true -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originSequence}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
-                false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originSequence}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
+                true -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
+                false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
             }
             if (StringUtils.isNotEmpty(diaryDto.title)) lineBreakStrings.add(diaryDto.title!!)
             activity.applyMarkDownPolicy(text1, diaryDto.contents!!, true, lineBreakStrings, true)
@@ -92,6 +100,7 @@ class TimelineItemAdapter(
                     text1.maxLines = context.config.summaryMaxLines.plus(1)
                     text1.ellipsize = TextUtils.TruncateAt.valueOf("END")
                 }
+
                 false -> {
                     text1.maxLines = Integer.MAX_VALUE
                     text1.ellipsize = null

@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FigureIndicatorView
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryFragment : Fragment() {
     /***************************************************************************************************
@@ -31,8 +32,8 @@ class DiaryFragment : Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentDiaryBinding
-    private lateinit var mBannerDiary: BannerViewPager<Diary>
-    private var mDiaryList: ArrayList<Diary> = arrayListOf()
+    private lateinit var mBannerDiary: BannerViewPager<DiaryDomain>
+    private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
 
     /***************************************************************************************************
      *   override functions
@@ -95,7 +96,7 @@ class DiaryFragment : Fragment() {
      ***************************************************************************************************/
     private fun setupDiary() {
         mBannerDiary =
-            (mBinding.bannerViewPagerDiary as BannerViewPager<Diary>).apply {
+            (mBinding.bannerViewPagerDiary as BannerViewPager<DiaryDomain>).apply {
                 setLifecycleRegistry(lifecycle)
                 adapter = DiaryDashboardItemAdapter(requireActivity())
                 setAutoPlay(false)
@@ -134,7 +135,7 @@ class DiaryFragment : Fragment() {
                     TransitionHelper.startActivityWithTransition(
                         requireActivity(),
                         Intent(requireContext(), DiaryReadingActivity::class.java).apply {
-                            putExtra(DIARY_SEQUENCE, mDiaryList[position].sequence)
+                            putExtra(DIARY_SEQUENCE, mDiaryList[position].diaryId)
                             putExtra(DiaryComponentConstants.MODE_FLAG, arguments?.getString(DiaryComponentConstants.MODE_FLAG, DiaryComponentConstants.MODE_PREVIOUS_100))
                         },
                     )
