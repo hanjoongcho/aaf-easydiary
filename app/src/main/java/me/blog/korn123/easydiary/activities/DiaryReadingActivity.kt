@@ -89,6 +89,7 @@ import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.Locale
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -176,7 +177,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        val diaryList: List<Diary> =
+        val diaryList: List<DiaryDomain> =
             when (intent.getStringExtra(DiaryComponentConstants.MODE_FLAG) == null) {
                 true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
                 false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryComponentConstants.MODE_FLAG))
@@ -1199,13 +1200,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
      */
     inner class SectionsPagerAdapter(
         fm: androidx.fragment.app.FragmentManager,
-        private val diaryList: List<Diary>,
+        private val diaryList: List<DiaryDomain>,
         private val query: String?,
     ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getItem(position: Int): androidx.fragment.app.Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(diaryList[position].sequence, query)
+            return PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
         }
 
         fun sequenceToPageIndex(sequence: Int): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)

@@ -8,13 +8,13 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.Sort
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.EasyDiaryApplication
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DDay
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -119,6 +119,15 @@ object EasyDiaryDbHelper {
         }
     }
 
+    fun duplicateDiaryBy2(diary: Diary) {
+        diary.run {
+            currentTimeMillis = System.currentTimeMillis()
+            updateDateString()
+            originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
+            insertDiary(this)
+        }
+    }
+
     fun findTemporaryDiaryBy(
         originSequence: Int,
         realmInstance: Realm = getInstance(),
@@ -148,7 +157,7 @@ object EasyDiaryDbHelper {
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
         realmInstance: Realm = getInstance(),
-    ): List<Diary> =
+    ): List<DiaryDomain> =
         findDiary(
             query,
             isSensitive,
@@ -172,7 +181,7 @@ object EasyDiaryDbHelper {
         symbolSequence: Int = 0,
         checkFutureDiaryOption: Boolean = false,
         realmInstance: Realm = getInstance(),
-    ): List<Diary> {
+    ): List<DiaryDomain> {
         var results: RealmResults<Diary> =
             when (StringUtils.isEmpty(query)) {
                 true -> {
@@ -256,37 +265,27 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT).findAll()
         }
 
-        return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
-            true -> {
-                val mergedList = arrayListOf<Diary>()
-                val valueArray = arrayOf(80L, 81L)
-                mergedList.addAll(results.where().`in`("weather", valueArray).findAll())
-                mergedList.addAll(
-                    results
-                        .where()
-                        .not()
-                        .`in`("weather", valueArray)
-                        .findAll(),
-                )
-//                val sortedList = realmInstance.copyFromRealm(results)
-//                sortedList.sortWith(kotlin.Comparator { item1, item2 ->
-// //                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
-//                    when {
-//                        item1.weather in 80..81 && item2.weather in 80..81 -> 0
-//                        item1.weather in 80..81 -> -1
-//                        item2.weather in 80..81 -> 1
-//                        else -> 0
-//                    }
-//                })
-//                sortedList
-                mergedList
-            }
+        val resultsList: List<Diary> =
+            when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
+                true -> {
+                    val mergedList = arrayListOf<Diary>()
+                    val valueArray = arrayOf(80L, 81L)
+                    mergedList.addAll(results.where().`in`("weather", valueArray).findAll())
+                    mergedList.addAll(
+                        results
+                            .where()
+                            .not()
+                            .`in`("weather", valueArray)
+                            .findAll(),
+                    )
+                    mergedList
+                }
 
-            else -> {
-//                realmInstance.copyFromRealm(results)
-                results
+                else -> {
+                    results
+                }
             }
-        }
+        return resultsList.map { it.toDomain() }
     }
 
     /**
@@ -300,7 +299,7 @@ object EasyDiaryDbHelper {
         query: String?,
         isSensitive: Boolean = false,
         symbolSequences: List<Int>,
-    ): List<Diary> {
+    ): List<DiaryDomain> {
         val realm = getInstance()
         val result: RealmResults<Diary> =
             when (StringUtils.isEmpty(query)) {
@@ -334,7 +333,7 @@ object EasyDiaryDbHelper {
             .where()
             .`in`("weather", symbolSequences.toTypedArray())
             .findAll()
-            .toList()
+            .map { it.toDomain() }
     }
 
     fun findParentDiariesOf(

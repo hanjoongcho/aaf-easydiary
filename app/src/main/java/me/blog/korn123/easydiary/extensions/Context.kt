@@ -197,6 +197,7 @@ import java.util.Locale
 import kotlin.math.ceil
 import kotlin.math.pow
 import kotlin.math.roundToInt
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -500,7 +501,7 @@ fun Context.openOverDueNotification() {
                 0,
                 0,
                 0,
-            ).filter { item -> item.weather in 80..81 }
+            ).filter { item -> item.symbolSequence in 80..81 }
 
     val notificationStartId = 9000
 
@@ -553,12 +554,12 @@ fun Context.openOverDueNotification() {
         return notificationBuilder
     }
 
-    fun sendNotification(diary: Diary) {
+    fun sendNotification(diary: DiaryDomain) {
         val notification =
             NotificationInfo(
-                if (diary.weather == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
+                if (diary.symbolSequence == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
                 useActionButton = true,
-                notificationStartId + diary.sequence,
+                notificationStartId + diary.diaryId,
             )
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -596,7 +597,7 @@ fun Context.openOverDueNotification() {
                                     notification.id,
                                     Intent(this, DiaryReadingActivity::class.java).apply {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        putExtra(DIARY_SEQUENCE, diary.sequence)
+                                        putExtra(DIARY_SEQUENCE, diary.diaryId)
                                     },
                                     pendingIntentFlag(),
                                 ),

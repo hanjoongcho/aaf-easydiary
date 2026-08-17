@@ -60,14 +60,16 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
+import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
 fun LegacyDiaryItemCard(
-    diary: Diary,
-    itemClickCallback: (diary: Diary) -> Unit,
+    diary: DiaryDomain,
+    itemClickCallback: (diary: DiaryDomain) -> Unit,
     itemLongClickCallback: () -> Unit,
 ) {
     AndroidView(
@@ -132,10 +134,10 @@ fun LegacyDiaryItemCard(
                         }
 
                         selection.setOnCheckedChangeListener { _, isChecked ->
-                            EasyDiaryDbHelper.beginTransaction()
-                            diary.isSelected = isChecked
-                            EasyDiaryDbHelper.commitTransaction()
-                            // EasyDiaryDbHelper.updateDiaryBy(diary)
+                            diary.toRealm().also {
+                                it.isSelected = isChecked
+                                EasyDiaryDbHelper.updateDiaryBy(it)
+                            }
                         }
 
 //                                            when ((activity as DiaryMainActivity).mDiaryMode) {
@@ -162,8 +164,8 @@ fun LegacyDiaryItemCard(
                             true,
                         )
                         if (config.enableMarkdown) {
-                            textContents.tag = diary.sequence
-                            EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence, 500)
+                            textContents.tag = diary.diaryId
+                            EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.diaryId, 500)
                         }
 
                         // highlight current query
@@ -194,9 +196,9 @@ fun LegacyDiaryItemCard(
                             }
                         if (config.enableDebugOptionVisibleDiarySequence) {
                             textDateTime.text =
-                                "[${diary.sequence}, ${diary.originSequence}] ${textDateTime.text}"
+                                "[${diary.diaryId}, ${diary.originDiaryId}] ${textDateTime.text}"
                         }
-                        FlavorUtils.initWeatherView(ctx.applicationContext, imageSymbol, diary.weather)
+                        FlavorUtils.initWeatherView(ctx.applicationContext, imageSymbol, diary.symbolSequence)
 
                         when ((diary.photoUris?.size ?: 0) > 0) {
                             true -> {

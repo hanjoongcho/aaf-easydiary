@@ -31,14 +31,16 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
-class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diary>() {
-
+class DiaryDashboardItemAdapter(
+    val activity: Activity,
+) : BaseBannerAdapter<DiaryDomain>() {
     override fun bindData(
-        holder: BaseViewHolder<Diary>,
-        diary: Diary,
+        holder: BaseViewHolder<DiaryDomain>,
+        diary: DiaryDomain,
         position: Int,
-        pageSize: Int
+        pageSize: Int,
     ) {
         val context = holder.itemView.context
         val binding = ItemDiaryDashboardBinding.bind(holder.itemView)
@@ -65,28 +67,30 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                     cardFutureDiaryBadge.visibility = View.GONE
                 }
 
-                textContents.maxLines = when (context.config.enableContentsSummary) {
-                    true -> {
-                        textContents.ellipsize = TextUtils.TruncateAt.END
-                        context.config.summaryMaxLines
-                    }
+                textContents.maxLines =
+                    when (context.config.enableContentsSummary) {
+                        true -> {
+                            textContents.ellipsize = TextUtils.TruncateAt.END
+                            context.config.summaryMaxLines
+                        }
 
-                    false -> {
-                        Integer.MAX_VALUE
+                        false -> {
+                            Integer.MAX_VALUE
+                        }
                     }
-                }
                 if (textContents.getTag(R.id.diary_dashboard_item) != diary.contents!!) {
                     textContents.setTag(R.id.diary_dashboard_item, diary.contents!!)
                     activity.applyMarkDownPolicy(textContents, diary.contents!!, false, arrayListOf(), true)
                     if (activity.config.enableMarkdown) {
-                        textContents.tag = diary.sequence
-                        EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.sequence)
+                        textContents.tag = diary.diaryId
+                        EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.diaryId)
                     }
                 }
-                textDateTime.text = when (diary.isAllDay) {
-                    true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringForceFormatting(diary.currentTimeMillis, activity)
-                }
+                textDateTime.text =
+                    when (diary.isAllDay) {
+                        true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                        false -> DateUtils.getDateTimeStringForceFormatting(diary.currentTimeMillis, activity)
+                    }
 
                 context.run {
                     if (config.enableLocationInfo) {
@@ -108,14 +112,16 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                         contentsLengthContainer.visibility = View.GONE
                     }
 
-                    FlavorUtils.initWeatherView(this, imageSymbol, diary.weather)
+                    FlavorUtils.initWeatherView(this, imageSymbol, diary.symbolSequence)
 
                     when ((diary.photoUris?.size ?: 0) > 0) {
                         true -> {
                             photoViews.visibility = View.VISIBLE
                         }
 
-                        false -> photoViews.visibility = View.GONE
+                        false -> {
+                            photoViews.visibility = View.GONE
+                        }
                     }
 
                     photoViews.removeAllViews()
@@ -131,23 +137,26 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
                             dpToPixel(1.5F, Calculation.FLOOR).apply {
                                 imageView.setPadding(this, this, this, this)
                             }
-                            val listener = object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: Target<Drawable?>,
-                                    isFirstResource: Boolean
-                                ): Boolean { return false }
+                            val listener =
+                                object : RequestListener<Drawable> {
+                                    override fun onLoadFailed(
+                                        e: GlideException?,
+                                        model: Any?,
+                                        target: Target<Drawable?>,
+                                        isFirstResource: Boolean,
+                                    ): Boolean = false
 
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    model: Any,
-                                    target: Target<Drawable?>?,
-                                    dataSource: DataSource,
-                                    isFirstResource: Boolean
-                                ): Boolean { return false }
-                            }
-                            Glide.with(this).load(EasyDiaryUtils.getApplicationDataDirectory(this) + it.getFilePath())
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        model: Any,
+                                        target: Target<Drawable?>?,
+                                        dataSource: DataSource,
+                                        isFirstResource: Boolean,
+                                    ): Boolean = false
+                                }
+                            Glide
+                                .with(this)
+                                .load(EasyDiaryUtils.getApplicationDataDirectory(this) + it.getFilePath())
                                 .listener(listener)
                                 .apply(createThumbnailGlideOptions(imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL, it.isEncrypt()))
                                 .into(imageView)
@@ -164,8 +173,5 @@ class DiaryDashboardItemAdapter(val activity: Activity) : BaseBannerAdapter<Diar
         }
     }
 
-    override fun getLayoutId(viewType: Int): Int {
-        return R.layout.item_diary_dashboard
-    }
-
+    override fun getLayoutId(viewType: Int): Int = R.layout.item_diary_dashboard
 }

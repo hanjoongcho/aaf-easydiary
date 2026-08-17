@@ -923,7 +923,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 0,
                 0,
                 SYMBOL_EASTER_EGG,
-            ).filter { diary -> diary.originSequence == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
+            ).filter { diary -> diary.symbolSequence == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
             .size > allowStoredCnt
 
     protected fun duplicatedEasterEggWarning() {

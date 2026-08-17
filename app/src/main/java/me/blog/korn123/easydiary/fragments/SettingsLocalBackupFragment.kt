@@ -621,7 +621,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             val weather = row.createCell(SettingLocalConstants.SYMBOL).apply { cellStyle = bodyStyle }
             val isAllDay = row.createCell(SettingLocalConstants.IS_ALL_DAY).apply { cellStyle = bodyStyle }
 
-            sequence.setCellValue(diaryDto.sequence.toDouble())
+            sequence.setCellValue(diaryDto.diaryId.toDouble())
             writeDate.setCellValue(DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis))
             title.setCellValue(diaryDto.title)
             contents.setCellValue(diaryDto.contents)
@@ -629,7 +629,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             attachPhotoSizes.setCellValue(photoSizes.toString())
             writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
             isAllDay.setCellValue(diaryDto.isAllDay)
-            weather.setCellValue(diarySymbolMap[diaryDto.weather])
+            weather.setCellValue(diarySymbolMap[diaryDto.symbolSequence])
 
             requireActivity().runOnUiThread {
                 infoView?.run {

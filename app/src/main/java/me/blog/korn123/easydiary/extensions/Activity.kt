@@ -96,6 +96,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
+import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.SlidingTabLayout
@@ -109,6 +110,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /***************************************************************************************************
  *   Confirm Permissions
@@ -585,7 +587,7 @@ fun getCustomSymbolPaths(
             EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
         }
     val diary = if (items.isNotEmpty()) items[0] else null
-    return diary?.photoUris ?: listOf()
+    return diary?.photoUris?.map { it.toRealm() } ?: listOf()
 }
 
 fun Activity.openFeelingSymbolDialog(
@@ -762,7 +764,7 @@ fun Activity.scaledDrawable(
 
 fun Activity.exportHtmlBook(
     uri: Uri?,
-    diaryList: List<Diary>,
+    diaryList: List<DiaryDomain>,
 ) {
     uri?.let {
         val os = contentResolver.openOutputStream(it)
@@ -771,11 +773,11 @@ fun Activity.exportHtmlBook(
     }
 }
 
-fun Activity.createHtmlString(diaryList: List<Diary>): String {
+fun Activity.createHtmlString(diaryList: List<DiaryDomain>): String {
     val diaryDivision = StringBuilder()
     diaryList.forEach {
         val html = StringBuilder()
-        val resourceId = FlavorUtils.sequenceToSymbolResourceId(it.weather)
+        val resourceId = FlavorUtils.sequenceToSymbolResourceId(it.symbolSequence)
         when (resourceId > 0) {
             true -> {
                 html.append(

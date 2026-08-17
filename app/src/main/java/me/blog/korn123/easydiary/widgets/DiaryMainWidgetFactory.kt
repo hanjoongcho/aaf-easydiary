@@ -36,36 +36,39 @@ import me.blog.korn123.easydiary.models.Diary
 import org.commonmark.node.Emphasis
 import org.commonmark.node.ListItem
 import org.commonmark.node.StrongEmphasis
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
-
-class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
-    private val diaryItems: ArrayList<Diary> = arrayListOf()
+class DiaryMainWidgetFactory(
+    private val context: Context,
+) : RemoteViewsService.RemoteViewsFactory {
+    private val diaryItems: ArrayList<DiaryDomain> = arrayListOf()
     private val bulletGapWidth = (8 * context.resources.displayMetrics.density + 0.5f).toInt()
-    private val mMarkwon = Markwon.builder(context)
-        .usePlugin(StrikethroughPlugin.create())
-        .usePlugin(object : AbstractMarkwonPlugin() {
-            override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                builder
-                    .setFactory<StrongEmphasis>(
-                        StrongEmphasis::class.java
-                    ) { _: MarkwonConfiguration?, _: RenderProps? ->
-                        StyleSpan(
-                            Typeface.BOLD
-                        )
+    private val mMarkwon =
+        Markwon
+            .builder(context)
+            .usePlugin(StrikethroughPlugin.create())
+            .usePlugin(
+                object : AbstractMarkwonPlugin() {
+                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                        builder
+                            .setFactory<StrongEmphasis>(
+                                StrongEmphasis::class.java,
+                            ) { _: MarkwonConfiguration?, _: RenderProps? ->
+                                StyleSpan(
+                                    Typeface.BOLD,
+                                )
+                            }.setFactory<Emphasis>(
+                                Emphasis::class.java,
+                            ) { _: MarkwonConfiguration?, _: RenderProps? ->
+                                StyleSpan(
+                                    Typeface.ITALIC,
+                                )
+                            }.setFactory(ListItem::class.java) { _, _ ->
+                                BulletSpan(bulletGapWidth)
+                            }
                     }
-                    .setFactory<Emphasis>(
-                        Emphasis::class.java
-                    ) { _: MarkwonConfiguration?, _: RenderProps? ->
-                        StyleSpan(
-                            Typeface.ITALIC
-                        )
-                    }
-                    .setFactory(ListItem::class.java) { _, _ ->
-                        BulletSpan(bulletGapWidth)
-                    }
-            }
-        })
-        .build()
+                },
+            ).build()
 
     override fun onCreate() {
         setData()
@@ -88,29 +91,40 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
         widgetItem.run {
             setTextViewText(R.id.text1, diaryDto.title)
             setTextViewText(R.id.text2, mMarkwon.toMarkdown(diaryDto.contents!!))
-            setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
-                true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                false -> DateUtils.getDateTimeStringForceFormatting(
-                    diaryDto.currentTimeMillis, context
-                )
-            })
+            setTextViewText(
+                R.id.text3,
+                when (diaryDto.isAllDay) {
+                    true -> {
+                        DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                    }
+
+                    false -> {
+                        DateUtils.getDateTimeStringForceFormatting(
+                            diaryDto.currentTimeMillis,
+                            context,
+                        )
+                    }
+                },
+            )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (diaryDto.weather < SYMBOL_USER_CUSTOM_START) {
-                    setImageViewResource(R.id.diarySymbol, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
+                if (diaryDto.symbolSequence < SYMBOL_USER_CUSTOM_START) {
+                    setImageViewResource(R.id.diarySymbol, FlavorUtils.sequenceToSymbolResourceId(diaryDto.symbolSequence))
                 } else {
                     // FIXME: WIP START
                     if (context.config.enableDebugMode) {
                         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-                            val targetIndex = diaryDto.weather.minus(SYMBOL_USER_CUSTOM_START)
+                            val targetIndex = diaryDto.symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
                             val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
                             val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
 //                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
-                            val futureBitmap = Glide
-                                .with(context).asBitmap()
-                                .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
-                                .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                                .submit(300, 300)
+                            val futureBitmap =
+                                Glide
+                                    .with(context)
+                                    .asBitmap()
+                                    .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                                    .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                                    .submit(300, 300)
                             setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
                             realmInstance.close()
                         }
@@ -118,10 +132,13 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                     // FIXME: WIP END
                 }
             } else {
-                val drawable = AppCompatResources.getDrawable(context, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
-                val b = Bitmap.createBitmap(drawable!!.intrinsicWidth,
+                val drawable = AppCompatResources.getDrawable(context, FlavorUtils.sequenceToSymbolResourceId(diaryDto.symbolSequence))
+                val b =
+                    Bitmap.createBitmap(
+                        drawable!!.intrinsicWidth,
                         drawable.intrinsicHeight,
-                        Bitmap.Config.ARGB_8888)
+                        Bitmap.Config.ARGB_8888,
+                    )
                 val c = Canvas(b)
                 drawable.setBounds(0, 0, c.width, c.height)
                 drawable.draw(c)
@@ -129,11 +146,11 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             }
 
             setVisibleIf(R.id.text1, diaryDto.title.isNullOrEmpty().not())
-            setVisibleIf(R.id.diarySymbol, diaryDto.weather > 0)
+            setVisibleIf(R.id.diarySymbol, diaryDto.symbolSequence > 0)
         }
 
         Intent().apply {
-            putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+            putExtra(DIARY_SEQUENCE, diaryDto.diaryId)
             widgetItem.setOnClickFillInIntent(R.id.widgetItem, this)
         }
 
@@ -152,7 +169,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
                 val realmList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
                 val limit = if (realmList.size > 100) 100 else realmList.size
-                diaryItems.addAll(realmInstance.copyFromRealm(realmList.subList(0, limit)))
+                diaryItems.addAll(realmList.subList(0, limit))
                 realmInstance.close()
             }
         }

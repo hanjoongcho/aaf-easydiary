@@ -218,8 +218,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         }
 
                         ExportOption.DIARY -> {
-                            val diaries = EasyDiaryDbHelper.findDiary(query = null)
-                            EasyDiaryDbHelper.copyFromRealm(diaries)
+                            EasyDiaryDbHelper.findDiary(query = null)
                         }
 
                         ExportOption.PHOTO_URI -> {
@@ -575,11 +574,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 val realmDiaries =
                     EasyDiaryDbHelper
                         .findDiary(query = null)
-                val copiedRealmDiaries = EasyDiaryDbHelper.copyFromRealm(realmDiaries)
-                val domainDiaries =
-                    copiedRealmDiaries.map {
-                        it.toDomain()
-                    }
 
                 val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
                 val copiedRealmAlarms = EasyDiaryDbHelper.copyFromRealm(realmAlarms)
@@ -600,7 +594,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                     mBaseDevViewModel.loadingMessage = "Diary migration..."
                     diaryViewModel.deleteAllDiaries()
-                    val diaryCount = diaryViewModel.addAllDiaries(domainDiaries)
+                    val diaryCount = diaryViewModel.addAllDiaries(realmDiaries)
                     mBaseDevViewModel.loadingMessage = "Diary migration successful: $diaryCount"
 
                     mBaseDevViewModel.loadingMessage = "Alarm migration..."
@@ -631,10 +625,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     EasyDiaryDbHelper
                         .findDiary(query = null)
                         .firstOrNull { diary -> diary.photoUris?.isNotEmpty() ?: false }
-                val diary = EasyDiaryDbHelper.copyFromRealm(listOf(latestDiary))
-                diary.firstOrNull()?.let {
-                    val diaryDomain = it.toDomain()
-                    diaryViewModel.addDiary(diaryDomain)
+
+                latestDiary?.let {
+                    diaryViewModel.addDiary(it)
                     makeToast("Diary added to Room!")
                 } ?: run {
                     makeToast("Does not exist latest diary.")
