@@ -30,7 +30,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
@@ -39,6 +38,7 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -58,9 +58,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import id.zelory.compressor.Compressor
-import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.BitmapUtils
 import me.blog.korn123.commons.utils.DateUtils
@@ -77,6 +81,7 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
@@ -97,8 +102,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.helper.toRealm
-import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
@@ -111,6 +114,31 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+
+/***************************************************************************************************
+ *   Hilt EntryPoint for Repository access in extensions
+ ***************************************************************************************************/
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface DiaryRepositoryEntryPoint {
+    fun diaryRepository(): DiaryRepository
+}
+
+val Activity.diaryRepository: DiaryRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                DiaryRepositoryEntryPoint::class.java,
+            ).diaryRepository()
+
+val ComponentActivity.diaryRepository: DiaryRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                DiaryRepositoryEntryPoint::class.java,
+            ).diaryRepository()
 
 /***************************************************************************************************
  *   Confirm Permissions
@@ -569,30 +597,30 @@ fun Activity.startMainActivityWithClearTask() {
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 // FIXME: WIP START
-fun getCustomSymbolPaths(
-    symbolSequence: Int,
-    realmInstance: Realm? = null,
-): List<PhotoUri> {
-    // EasyDiaryUtils.getApplicationDataDirectory(this)
+suspend fun Activity.syncCustomSymbolPaths() {
     val items =
-        if (realmInstance == null) {
-            EasyDiaryDbHelper.findDiary(
-                null,
-                false,
-                0,
-                0,
-                symbolSequence,
-            )
+        if (config.enableJetpackRoomDatabase) {
+            this.diaryRepository
+                .getDiariesWithPhotos(
+                    query = null,
+                    symbolSequence = SYMBOL_EASTER_EGG,
+                ).firstOrNull()
         } else {
-            EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
+            EasyDiaryDbHelper.findDiary(
+                query = null,
+                symbolSequence = SYMBOL_EASTER_EGG,
+            )
         }
-    val diary = if (items.isNotEmpty()) items[0] else null
-    return diary?.photoUris?.map { it.toRealm() } ?: listOf()
+
+    val diary = if (items != null && items.isNotEmpty()) items[0] else null
+    val result = diary?.photoUris?.map { it.toRealm() } ?: listOf()
+    config.customSymbolPaths = result
 }
 
 fun Activity.openFeelingSymbolDialog(
     guideMessage: String,
     selectedSymbolSequence: Int = 0,
+    symbolUsedCountMap: Map<Int, Int>,
     callback: (Int) -> Unit,
 ) {
     var dialog: Dialog? = null
@@ -604,7 +632,6 @@ fun Activity.openFeelingSymbolDialog(
     var tabIndex = 0
 
     // Append recently used symbols
-    val symbolUsedCountMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
         categoryList.add(getString(R.string.recently_used_symbol))
@@ -697,7 +724,7 @@ fun Activity.addUserCustomSymbols(
     if (config.enableDebugMode) {
         val customSymbols = arrayListOf<String>()
         categoryList.add("Custom")
-        getCustomSymbolPaths(SYMBOL_EASTER_EGG).forEach { item ->
+        config.customSymbolPaths.forEach { item ->
 //            item.getFilePath()
             customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
         }

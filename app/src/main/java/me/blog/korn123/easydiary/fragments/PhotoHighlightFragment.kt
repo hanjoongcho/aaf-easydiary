@@ -7,10 +7,14 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -20,17 +24,17 @@ import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
 import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
@@ -39,6 +43,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentPhotoHighlightBinding
     private lateinit var mBannerHistory: BannerViewPager<History>
     var togglePhotoHighlightCallback: ((isVisible: Boolean) -> Unit)? = null
+    private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -92,99 +97,101 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun updateHistory() {
-        if (config.enablePhotoHighlight) {
-            when (mBannerHistory.adapter.itemCount == 0) {
-                true -> {
-                    EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
-                        val historyItems = mutableListOf<History>()
-                        val oneDayMillis: Long = 1000 * 60 * 60 * 24
-                        val oneYearDays = 365
-                        val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
-                        val betweenDays = betweenMillis / oneDayMillis
+        lifecycleScope.launch {
+            if (config.enablePhotoHighlight) {
+                when (mBannerHistory.adapter.itemCount == 0) {
+                    true -> {
+                        diaryViewModel.findOldestDiary()?.let { oldestDiary ->
+                            val historyItems = mutableListOf<History>()
+                            val oneDayMillis: Long = 1000 * 60 * 60 * 24
+                            val oneYearDays = 365
+                            val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
+                            val betweenDays = betweenMillis / oneDayMillis
 
-                        fun makeHistory(
-                            pastMillis: Long,
-                            historyTag: String,
-                        ) {
-                            val defaultDayBuffer = 1
-                            val noDataDayBufferMaxLoop = 3
-                            val pastMillisBuffer = pastMillis.plus(defaultDayBuffer * oneDayMillis)
-                            var diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer)
-                            if (diaryItems.isEmpty()) {
-                                for (i in 1..noDataDayBufferMaxLoop) {
-                                    diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer.plus(i * oneDayMillis))
-                                    if (diaryItems.isNotEmpty()) break
+                            suspend fun makeHistory(
+                                pastMillis: Long,
+                                historyTag: String,
+                            ) {
+                                val defaultDayBuffer = 1
+                                val noDataDayBufferMaxLoop = 3
+                                val pastMillisBuffer = pastMillis.plus(defaultDayBuffer * oneDayMillis)
+                                var diaryItems = diaryViewModel.findDiary(null, false, pastMillis, pastMillisBuffer)
+                                if (diaryItems.isEmpty()) {
+                                    for (i in 1..noDataDayBufferMaxLoop) {
+                                        diaryItems = diaryViewModel.findDiary(null, false, pastMillis, pastMillisBuffer.plus(i * oneDayMillis))
+                                        if (diaryItems.isNotEmpty()) break
+                                    }
+                                }
+                                diaryItems.forEach {
+                                    it.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
+                                        historyItems.add(
+                                            History(
+                                                historyTag,
+                                                DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
+                                                if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
+                                                it.diaryId,
+                                            ),
+                                        )
+                                    }
                                 }
                             }
-                            diaryItems.forEach {
-                                it.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
-                                    historyItems.add(
-                                        History(
-                                            historyTag,
-                                            DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
-                                            if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
-                                            it.diaryId,
-                                        ),
+
+                            // 1 month history of less than 1 year
+                            for (i in 1..11) {
+                                val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
+                                if (oldestDiary.currentTimeMillis < pastMills) {
+                                    makeHistory(
+                                        pastMills,
+                                        MessageFormat.format(getString(R.string.monthly_highlight_tag), i),
                                     )
                                 }
                             }
-                        }
 
-                        // 1 month history of less than 1 year
-                        for (i in 1..11) {
-                            val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
-                            if (oldestDiary.currentTimeMillis < pastMills) {
-                                makeHistory(
-                                    pastMills,
-                                    MessageFormat.format(getString(R.string.monthly_highlight_tag), i),
-                                )
+                            // 1 year history of more than 1 year
+                            if (betweenDays > oneYearDays) {
+                                for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                                    makeHistory(EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus()), MessageFormat.format(getString(R.string.yearly_highlight_tag), i))
+                                }
                             }
-                        }
+                            historyItems.reverse()
 
-                        // 1 year history of more than 1 year
-                        if (betweenDays > oneYearDays) {
-                            for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                                makeHistory(EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus()), MessageFormat.format(getString(R.string.yearly_highlight_tag), i))
-                            }
-                        }
-                        historyItems.reverse()
-
-                        if (historyItems.isNotEmpty()) {
-                            togglePhotoHighlightCallback?.invoke(true)
-                            mBinding.layoutBannerContainer.visibility = View.VISIBLE
-                            mBannerHistory.run {
-                                setOnPageClickListener { _, position ->
-                                    TransitionHelper.startActivityWithTransition(
-                                        requireActivity(),
-                                        Intent(requireContext(), DiaryReadingActivity::class.java).apply {
-                                            putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
+                            if (historyItems.isNotEmpty()) {
+                                togglePhotoHighlightCallback?.invoke(true)
+                                mBinding.layoutBannerContainer.visibility = View.VISIBLE
+                                mBannerHistory.run {
+                                    setOnPageClickListener { _, position ->
+                                        TransitionHelper.startActivityWithTransition(
+                                            requireActivity(),
+                                            Intent(requireContext(), DiaryReadingActivity::class.java).apply {
+                                                putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
+                                            },
+                                        )
+                                    }
+                                    registerOnPageChangeCallback(
+                                        object : ViewPager2.OnPageChangeCallback() {
+                                            override fun onPageSelected(position: Int) {
+                                                super.onPageSelected(position)
+//                            toast(historyItems[position].title)
+                                                mBinding.textDescription.text = historyItems[position].historyTag
+                                            }
                                         },
                                     )
+                                    create(historyItems)
                                 }
-                                registerOnPageChangeCallback(
-                                    object : ViewPager2.OnPageChangeCallback() {
-                                        override fun onPageSelected(position: Int) {
-                                            super.onPageSelected(position)
-//                            toast(historyItems[position].title)
-                                            mBinding.textDescription.text = historyItems[position].historyTag
-                                        }
-                                    },
-                                )
-                                create(historyItems)
+                                mBinding.textDescription.text = historyItems[0].historyTag
                             }
-                            mBinding.textDescription.text = historyItems[0].historyTag
                         }
                     }
-                }
 
-                false -> {}
-            }
-        } else {
-            // init default settings
-            togglePhotoHighlightCallback?.invoke(false)
-            mBinding.run {
-                layoutBannerContainer.visibility = View.GONE
-                mBannerHistory.refreshData(mutableListOf())
+                    false -> {}
+                }
+            } else {
+                // init default settings
+                togglePhotoHighlightCallback?.invoke(false)
+                mBinding.run {
+                    layoutBannerContainer.visibility = View.GONE
+                    mBannerHistory.refreshData(mutableListOf())
+                }
             }
         }
     }

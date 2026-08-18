@@ -34,6 +34,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Formatter
 import java.util.Locale
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by Hanjoong.Cho on 2017-03-28
@@ -50,8 +51,8 @@ class CalendarActivity : EasyDiaryActivity() {
     private lateinit var mCalendarFragment: CaldroidFragmentEx
     private lateinit var mDatePickerDialog: DatePickerDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mDiaryList: MutableList<Diary> = mutableListOf()
-    private var mArrayAdapterDiary: ArrayAdapter<Diary>? = null
+    private var mDiaryList: MutableList<DiaryDomain> = mutableListOf()
+    private var mArrayAdapterDiary: ArrayAdapter<DiaryDomain>? = null
 
     /***************************************************************************************************
      *   override functions

@@ -490,18 +490,8 @@ fun Context.getSelectedDaysString(bitMask: Int): String {
  *
  ***************************************************************************************************/
 
-fun Context.openOverDueNotification() {
+fun Context.openOverDueNotification(diaryList: List<DiaryDomain>) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-
-    val diaryList =
-        EasyDiaryDbHelper
-            .findDiary(
-                null,
-                false,
-                0,
-                0,
-                0,
-            ).filter { item -> item.symbolSequence in 80..81 }
 
     val notificationStartId = 9000
 

@@ -7,9 +7,23 @@ import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 import javax.inject.Qualifier
 
 interface DiaryDataSource {
-    fun getAllDiaries(): Flow<List<DiaryEntity>>
+    fun getAllDiaries(
+        query: String? = null,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+    ): Flow<List<DiaryEntity>>
 
-    suspend fun getDiariesWithPhotos(): List<DiaryWithPhotos>
+    fun getDiariesWithPhotos(
+        query: String? = null,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+    ): Flow<List<DiaryWithPhotos>>
+
+    fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?>
 
     suspend fun getDiaryById(seq: Int): DiaryEntity?
 
@@ -25,6 +39,11 @@ interface DiaryDataSource {
     )
 
     suspend fun updateDiary(diary: DiaryEntity)
+
+    suspend fun updateDiaryWithPhotos(
+        diary: DiaryEntity,
+        photoUris: List<PhotoUriEntity>,
+    )
 
     suspend fun deleteDiary(diary: DiaryEntity)
 

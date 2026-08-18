@@ -628,6 +628,7 @@ const val CAPTURE_CAMERA_FILE_NAME = "capture.jpg"
 const val UPDATE_SHARED_PREFERENCE = "update_shared_preference"
 const val APP_EXECUTION_COUNT = "count_app_execution"
 const val APP_EXECUTION_COUNT_DEFAULT = 0
+const val SETTING_CUSTOM_SYMBOL_PATHS = "setting_custom_symbol_paths"
 
 const val SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1
 const val SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2

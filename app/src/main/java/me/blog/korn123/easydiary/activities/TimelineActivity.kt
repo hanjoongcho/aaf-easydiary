@@ -16,6 +16,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -28,13 +32,15 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.util.*
+import kotlin.getValue
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by hanjoong on 2017-07-16.
  */
-
+@AndroidEntryPoint
 class TimelineActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   global properties
@@ -325,9 +331,11 @@ class TimelineActivity : EasyDiaryActivity() {
             endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
 
             feelingSymbolButton.setOnClickListener {
-                openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
-                    selectFeelingSymbol(symbolSequence)
-                    refreshList()
+                lifecycleScope.launch {
+                    openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message), selectedSymbolSequence = 0, diaryViewModel.getSymbolUsedCountMap(true)) { symbolSequence ->
+                        selectFeelingSymbol(symbolSequence)
+                        refreshList()
+                    }
                 }
             }
         }
@@ -447,11 +455,11 @@ class TimelineActivity : EasyDiaryActivity() {
         )
         Log.i("aaf-t", "query ${mBinding.partialTimelineFilter.query.text}")
 
-        mDiaryList.run {
-            clear()
-            EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
+        lifecycleScope.launch {
+            mDiaryList.run {
+                clear()
                 val results =
-                    EasyDiaryDbHelper.findDiary(
+                    diaryViewModel.findDiary(
                         mBinding.partialTimelineFilter.query.text
                             .toString(),
                         config.diarySearchQueryCaseSensitive,
@@ -459,32 +467,31 @@ class TimelineActivity : EasyDiaryActivity() {
                         endMillis,
                         mSymbolSequence,
                         true,
-                        realmInstance = realm,
                     )
                 addAll(results)
+                reverse()
             }
-            reverse()
-        }
 
-        Log.i("aaf-t", "query ${mDiaryList.size}")
+            Log.i("aaf-t", "query ${mDiaryList.size}")
 
-        mTimelineItemAdapter?.run {
-            currentQuery =
-                mBinding.partialTimelineFilter.query.text
-                    .toString()
-            notifyDataSetChanged()
-        }
+            mTimelineItemAdapter?.run {
+                currentQuery =
+                    mBinding.partialTimelineFilter.query.text
+                        .toString()
+                notifyDataSetChanged()
+            }
 
-        mBinding.run {
-            when (mDiaryList.isEmpty()) {
-                true -> {
-                    timelineList.visibility = View.GONE
-                    textNoDiary.visibility = View.VISIBLE
-                }
+            mBinding.run {
+                when (mDiaryList.isEmpty()) {
+                    true -> {
+                        timelineList.visibility = View.GONE
+                        textNoDiary.visibility = View.VISIBLE
+                    }
 
-                false -> {
-                    timelineList.visibility = View.VISIBLE
-                    textNoDiary.visibility = View.GONE
+                    false -> {
+                        timelineList.visibility = View.VISIBLE
+                        textNoDiary.visibility = View.GONE
+                    }
                 }
             }
         }

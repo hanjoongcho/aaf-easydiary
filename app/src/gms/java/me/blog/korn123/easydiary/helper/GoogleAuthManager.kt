@@ -20,12 +20,16 @@ import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.EventDateTime
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -341,7 +345,7 @@ class GoogleAuthManager(
         }
     }
 
-    fun calendarEventToDiary(
+    suspend fun calendarEventToDiary(
         item: Event,
         calendarId: String,
     ): Int {
@@ -364,11 +368,12 @@ class GoogleAuthManager(
 
         // 4. 종일 일정인 경우 Exclusive 규격에 따라 종료일 -1일 보정
         val endDate = if (isAllDay) rawEndDate.minusDays(1) else rawEndDate
-        val endMillis = if (isAllDay) {
-            endDate.atStartOfDay(systemZone).toInstant().toEpochMilli()
-        } else {
-            rawEndMillis
-        }
+        val endMillis =
+            if (isAllDay) {
+                endDate.atStartOfDay(systemZone).toInstant().toEpochMilli()
+            } else {
+                rawEndMillis
+            }
 
         // 종료일이 시작일보다 앞서는 예외 상황 방지
         val effectiveEndDate = if (endDate.isBefore(startDate)) startDate else endDate
@@ -436,18 +441,22 @@ class GoogleAuthManager(
                 val millis = localDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
                 Pair(localDate, millis)
             }
+
             // 2) 일반 일정인 경우: dateTime epoch milli 사용
             dateTimeValue != null -> {
                 val instant = Instant.ofEpochMilli(dateTimeValue)
                 Pair(instant.atZone(zoneId).toLocalDate(), dateTimeValue)
             }
+
             // 3) 예외 케이스 처리
-            else -> Pair(LocalDate.now(zoneId), 0L)
+            else -> {
+                Pair(LocalDate.now(zoneId), 0L)
+            }
         }
     }
 
     // DB 중복 체크 및 Insert 헬퍼 함수
-    private fun insertDiaryIfNotExists(
+    private suspend fun insertDiaryIfNotExists(
         summary: String?,
         millis: Long,
         isAllDay: Boolean,
@@ -455,8 +464,13 @@ class GoogleAuthManager(
         description: String?,
     ): Boolean {
         val isAlreadyExists =
-            EasyDiaryDbHelper
-                .findDiary(summary)
+            EntryPointAccessors
+                .fromApplication(
+                    context,
+                    DiaryRepositoryEntryPoint::class.java,
+                ).diaryRepository()
+                .getDiariesWithPhotos(summary)
+                .first()
                 .any { diary -> diary.currentTimeMillis == millis }
 
         if (isAlreadyExists) return false

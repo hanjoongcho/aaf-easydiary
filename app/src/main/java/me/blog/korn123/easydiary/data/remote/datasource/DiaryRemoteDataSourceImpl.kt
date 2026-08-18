@@ -11,9 +11,23 @@ import javax.inject.Inject
 class DiaryRemoteDataSourceImpl
     @Inject
     constructor() : DiaryDataSource {
-        override fun getAllDiaries(): Flow<List<DiaryEntity>> = flowOf(emptyList())
+        override fun getAllDiaries(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): Flow<List<DiaryEntity>> = flowOf(emptyList())
 
-        override suspend fun getDiariesWithPhotos(): List<DiaryWithPhotos> = emptyList()
+        override fun getDiariesWithPhotos(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): Flow<List<DiaryWithPhotos>> = flowOf(emptyList())
+
+        override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = flowOf(null)
 
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = null
 
@@ -35,6 +49,13 @@ class DiaryRemoteDataSourceImpl
         }
 
         override suspend fun updateDiary(diary: DiaryEntity) {
+            // Mock implementation
+        }
+
+        override suspend fun updateDiaryWithPhotos(
+            diary: DiaryEntity,
+            photoUris: List<PhotoUriEntity>,
+        ) {
             // Mock implementation
         }
 

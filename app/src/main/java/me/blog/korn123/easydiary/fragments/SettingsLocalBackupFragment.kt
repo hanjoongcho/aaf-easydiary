@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
@@ -31,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -83,6 +83,7 @@ import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
 import org.apache.commons.io.FileUtils
@@ -97,6 +98,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.Date
 
+@AndroidEntryPoint
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
@@ -108,6 +110,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestReadFileWithSAF: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
     private val mSettingsViewModel: SettingsViewModel by activityViewModels()
+    private val diaryViewModel: DiaryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -539,12 +542,11 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun createWorkBook(
+    private suspend fun createWorkBook(
         infoView: TextView? = null,
         guideMessage: String? = "",
     ): Workbook {
-        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-        val diaryList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
+        val diaryList = diaryViewModel.findDiary(null, false, 0, 0, 0, false)
         val wb: Workbook = HSSFWorkbook()
         val sheet = wb.createSheet("new sheet")
 
@@ -606,7 +608,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             val row = sheet.createRow(index + 1)
             val photoNames = StringBuffer()
             val photoSizes = StringBuffer()
-            diaryDto.photoUris?.map {
+            diaryDto.photoUris.map {
                 photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
                 photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
             }
@@ -637,7 +639,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-        realmInstance.close()
         return wb
     }
 

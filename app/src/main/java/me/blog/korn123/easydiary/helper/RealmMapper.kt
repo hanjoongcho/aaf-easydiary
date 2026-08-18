@@ -51,6 +51,7 @@ fun me.blog.korn123.easydiary.models.Alarm.toDomain(): Alarm =
 fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
     DiaryEntity(
         diaryId = this.sequence,
+        originDiaryId = this.originSequence,
         currentTimeMillis = this.currentTimeMillis,
         title = this.title,
         contents = this.contents,
@@ -79,14 +80,14 @@ fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
 fun PhotoUri.toRealm(): me.blog.korn123.easydiary.models.PhotoUri =
     me.blog.korn123.easydiary.models.PhotoUri(
         photoUri = this.photoUri ?: "",
-        mimeType = this.mimeType ?: ""
+        mimeType = this.mimeType ?: "",
     )
 
 fun Location.toRealm(): me.blog.korn123.easydiary.models.Location =
     me.blog.korn123.easydiary.models.Location(
         address = this.address,
         latitude = this.latitude,
-        longitude = this.longitude
+        longitude = this.longitude,
     )
 
 fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
@@ -99,12 +100,14 @@ fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
         contents = domainDiary.contents
         dateString = domainDiary.dateString
         weather = domainDiary.symbolSequence
-        photoUris = RealmList<me.blog.korn123.easydiary.models.PhotoUri>().apply {
-            addAll(domainDiary.photoUris.map { it.toRealm() })
-        }
-        linkedDiaries = RealmList<Int>().apply {
-            addAll(domainDiary.linkedDiaries)
-        }
+        photoUris =
+            RealmList<me.blog.korn123.easydiary.models.PhotoUri>().apply {
+                addAll(domainDiary.photoUris.map { it.toRealm() })
+            }
+        linkedDiaries =
+            RealmList<Int>().apply {
+                addAll(domainDiary.linkedDiaries)
+            }
         fontName = domainDiary.fontName
         fontSize = domainDiary.fontSize
         isAllDay = domainDiary.isAllDay

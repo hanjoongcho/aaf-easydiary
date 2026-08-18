@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -33,10 +35,12 @@ import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
@@ -90,6 +94,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private var mTotalDataSetCnt = 0
     private val mColorPlus = Color.rgb(204, 31, 8)
     private val mColorMinus = Color.rgb(6, 57, 112)
+    private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
      *   chart options
@@ -433,7 +438,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             mCombineChart.invalidate()
                         }
                         checkPrincipalHighlight.setOnCheckedChangeListener { _, isChecked ->
-                            requireContext().config.devStockEnablePrincipalHighlight = isChecked
+                            requireContext().config.devStockEnableEvaluatePrice = isChecked
                             mKrPrincipalDataSet.isHighlightEnabled = isChecked
                             mUsPrincipalDataSet.isHighlightEnabled = isChecked
                             mTotalPrincipalDataSet.isHighlightEnabled = isChecked
@@ -546,7 +551,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mKospiDataSets.clear()
     }
 
-    private fun setData() {
+    private suspend fun setData() {
         val krPrincipalEntries = arrayListOf<BarEntry>()
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
         val krTradingProfitEntries = arrayListOf<Entry>()
@@ -570,198 +575,194 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         val kospiEntries = arrayListOf<Entry>()
 
-        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-            val listDiary =
-                EasyDiaryDbHelper.findDiary(
-                    null,
-                    false,
-                    requireContext().config.devStockChartOptionFromMillis,
-                    mEndMillis,
-                    DAILY_STOCK,
-                    realmInstance = realmInstance,
-                )
-            var index = 0
-            var totalSum = 0F
-            listDiary.reversed().forEach { diaryDto ->
-                diaryDto.title?.let {
-                    if (EasyDiaryUtils.isStockNumber(it)) {
-                        try {
-                            val amountArray = it.split(",")
-                            if (amountArray.size != 5) return@forEach
-                            val krEvaluatedPrice = amountArray[0].toFloat()
-                            val usEvaluatedPrice = amountArray[1].toFloat()
-                            val krPrincipal = amountArray[2].toFloat()
-                            val usPrincipal = amountArray[3].toFloat()
-                            val sum = krEvaluatedPrice.plus(usEvaluatedPrice)
-                            totalSum += sum
-                            var diff = krEvaluatedPrice.minus(krPrincipal)
-                            krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
-                            krEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), krEvaluatedPrice, StockDataType.KR_EVALUATE_PRICE))
-                            krTradingProfitEntries.add(Entry(index.toFloat(), diff))
+        val listDiary =
+            diaryViewModel.findDiary(
+                null,
+                false,
+                requireContext().config.devStockChartOptionFromMillis,
+                mEndMillis,
+                DAILY_STOCK
+            )
+        var index = 0
+        var totalSum = 0F
+        listDiary.reversed().forEach { diaryDto ->
+            diaryDto.title?.let {
+                if (EasyDiaryUtils.isStockNumber(it)) {
+                    try {
+                        val amountArray = it.split(",")
+                        if (amountArray.size != 5) return@forEach
+                        val krEvaluatedPrice = amountArray[0].toFloat()
+                        val usEvaluatedPrice = amountArray[1].toFloat()
+                        val krPrincipal = amountArray[2].toFloat()
+                        val usPrincipal = amountArray[3].toFloat()
+                        val sum = krEvaluatedPrice.plus(usEvaluatedPrice)
+                        totalSum += sum
+                        var diff = krEvaluatedPrice.minus(krPrincipal)
+                        krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
+                        krEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), krEvaluatedPrice, StockDataType.KR_EVALUATE_PRICE))
+                        krTradingProfitEntries.add(Entry(index.toFloat(), diff))
 //                            if (diff >= 0) krColors.add(mColorPlus) else krColors.add(mColorMinus)
 
-                            usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
-                            usEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), usEvaluatedPrice, StockDataType.US_EVALUATE_PRICE))
-                            diff = usEvaluatedPrice.minus(usPrincipal)
-                            if (diff >= 0) usColors.add(mColorPlus) else usColors.add(mColorMinus)
-                            usTradingProfitEntries.add(Entry(index.toFloat(), diff))
+                        usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
+                        usEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), usEvaluatedPrice, StockDataType.US_EVALUATE_PRICE))
+                        diff = usEvaluatedPrice.minus(usPrincipal)
+                        if (diff >= 0) usColors.add(mColorPlus) else usColors.add(mColorMinus)
+                        usTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
-                            totalPrincipalEntries.add(
-                                BarEntry(
-                                    index.toFloat(),
-                                    krPrincipal.plus(usPrincipal),
-                                ),
+                        totalPrincipalEntries.add(
+                            BarEntry(
+                                index.toFloat(),
+                                krPrincipal.plus(usPrincipal),
+                            ),
+                        )
+                        totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
+                        diff =
+                            krEvaluatedPrice
+                                .plus(usEvaluatedPrice)
+                                .minus(krPrincipal.plus(usPrincipal))
+                        if (diff >= 0) {
+                            totalColors.add(mColorPlus)
+                        } else {
+                            totalColors.add(
+                                mColorMinus,
                             )
-                            totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
-                            diff =
-                                krEvaluatedPrice
-                                    .plus(usEvaluatedPrice)
-                                    .minus(krPrincipal.plus(usPrincipal))
-                            if (diff >= 0) {
-                                totalColors.add(mColorPlus)
-                            } else {
-                                totalColors.add(
-                                    mColorMinus,
-                                )
-                            }
-                            totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
-                            kospiEntries.add(
-                                Entry(
-                                    index.toFloat(),
-                                    amountArray[4].toFloat(),
-                                ),
-                            )
+                        }
+                        totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
+                        kospiEntries.add(
+                            Entry(
+                                index.toFloat(),
+                                amountArray[4].toFloat(),
+                            ),
+                        )
 
-                            mTimeMillisMap[index] = diaryDto.currentTimeMillis
-                            index++
-                        } catch (e: Exception) {
-                            Log.i(AAF_TEST, e.message ?: "")
+                        mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                        index++
+                    } catch (e: Exception) {
+                        Log.i(AAF_TEST, e.message ?: "")
+                    }
+                }
+            }
+        }
+        if (index > 0) {
+            mTotalDataSetCnt = totalEvaluatedPriceEntries.size
+
+            fun splitEntry(
+                originEntry: ArrayList<Entry>,
+                positive: ArrayList<Entry>,
+                negative: ArrayList<Entry>,
+            ) {
+                var start = 0F
+                var splitIndex = 0f
+                val splitCnt = 10
+                originEntry.forEachIndexed { index, entry ->
+                    if (index > 0 && index < originEntry.size) {
+                        val offset = entry.y.minus(start).div(splitCnt)
+                        for (i in 0..splitCnt.minus(if (originEntry.size.minus(1) == index) 0 else 1)) {
+                            val y = offset.times(i).plus(start)
+                            negative.add(Entry(splitIndex, if (y > 0) 0f else y))
+                            positive.add(Entry(splitIndex, if (y < 0) 0f else y))
+                            splitIndex += 0.1f
+                        }
+                    }
+                    start = entry.y
+                }
+            }
+
+            // START KR Data
+            mKrPrincipalDataSet.values = krPrincipalEntries
+            mKrEvaluatedPriceDataSet.values = krEvaluatedPriceEntries
+            mKrTradingProfitDataSet.values = krTradingProfitEntries
+            splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
+            mKrTradingProfitNegativeDataSet.values = krTradingProfitNegativeEntries
+            mKrTradingProfitPositiveDataSet.values = krTradingProfitPositiveEntries
+            // END KR Data
+
+            // START US Data
+            mUsPrincipalDataSet.values = usPrincipalEntries
+            mUsEvaluatedPriceDataSet.values = usEvaluatedPriceEntries
+            mUsTradingProfitDataSet.values = usTradingProfitEntries
+            splitEntry(usTradingProfitEntries, usTradingProfitPositiveEntries, usTradingProfitNegativeEntries)
+            mUsTradingProfitNegativeDataSet.values = usTradingProfitNegativeEntries
+            mUsTradingProfitPositiveDataSet.values = usTradingProfitPositiveEntries
+            // END US Data
+
+            // START Total Data
+            mTotalEvaluatedPriceDataSet.values = totalEvaluatedPriceEntries
+            mTotalPrincipalDataSet.values = totalPrincipalEntries
+            mTotalTradingProfitDataSet.values = totalTradingProfitEntries
+            splitEntry(totalTradingProfitEntries, totalTradingProfitPositiveEntries, totalTradingProfitNegativeEntries)
+            mTotalTradingProfitNegativeDataSet.values = totalTradingProfitNegativeEntries
+            mTotalTradingProfitPositiveDataSet.values = totalTradingProfitPositiveEntries
+            // END Total Data
+
+            val kospiDataSet =
+                LineDataSet(kospiEntries, "KOSPI").apply {
+                    setDefaultLineChartColor(this)
+                }
+
+            when (mChartMode) {
+                R.id.radio_button_option_a, R.id.radio_button_option_a_1, R.id.radio_button_option_a_2 -> {
+                    mStockBarDataSets.add(mKrPrincipalDataSet)
+                    mStockLineDataSets.add(mKrTradingProfitDataSet)
+                    mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
+                    mStockLineDataSets.add(mKrTradingProfitNegativeDataSet)
+                    mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
+                    mKospiDataSets.add(kospiDataSet)
+                    mCombineChart.run {
+                        axisLeft.run {
+                            axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
+                        }
+                        axisRight.run {
+                            axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
+                        }
+                    }
+                }
+
+                R.id.radio_button_option_b -> {
+                    mStockBarDataSets.add(mUsPrincipalDataSet)
+                    mStockLineDataSets.add(mUsTradingProfitDataSet)
+                    mStockLineDataSets.add(mUsTradingProfitNegativeDataSet)
+                    mStockLineDataSets.add(mUsTradingProfitPositiveDataSet)
+                    mStockLineDataSets.add(mUsEvaluatedPriceDataSet)
+                    mCombineChart.run {
+                        axisLeft.run {
+                            axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
+                        }
+                        axisRight.run {
+                            axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
+                        }
+                    }
+                }
+
+                R.id.radio_button_option_c -> {
+                    mStockBarDataSets.add(mTotalPrincipalDataSet)
+                    mStockLineDataSets.add(mTotalTradingProfitDataSet)
+                    mStockLineDataSets.add(mTotalTradingProfitPositiveDataSet)
+                    mStockLineDataSets.add(mTotalTradingProfitNegativeDataSet)
+                    mStockLineDataSets.add(mTotalEvaluatedPriceDataSet)
+                    mCombineChart.run {
+                        axisLeft.run {
+                            axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
+                        }
+                        axisRight.run {
+                            axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
                         }
                     }
                 }
             }
-            if (index > 0) {
-                mTotalDataSetCnt = totalEvaluatedPriceEntries.size
 
-                fun splitEntry(
-                    originEntry: ArrayList<Entry>,
-                    positive: ArrayList<Entry>,
-                    negative: ArrayList<Entry>,
-                ) {
-                    var start = 0F
-                    var splitIndex = 0f
-                    val splitCnt = 10
-                    originEntry.forEachIndexed { index, entry ->
-                        if (index > 0 && index < originEntry.size) {
-                            val offset = entry.y.minus(start).div(splitCnt)
-                            for (i in 0..splitCnt.minus(if (originEntry.size.minus(1) == index) 0 else 1)) {
-                                val y = offset.times(i).plus(start)
-                                negative.add(Entry(splitIndex, if (y > 0) 0f else y))
-                                positive.add(Entry(splitIndex, if (y < 0) 0f else y))
-                                splitIndex += 0.1f
-                            }
-                        }
-                        start = entry.y
-                    }
-                }
-
-                // START KR Data
-                mKrPrincipalDataSet.values = krPrincipalEntries
-                mKrEvaluatedPriceDataSet.values = krEvaluatedPriceEntries
-                mKrTradingProfitDataSet.values = krTradingProfitEntries
-                splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
-                mKrTradingProfitNegativeDataSet.values = krTradingProfitNegativeEntries
-                mKrTradingProfitPositiveDataSet.values = krTradingProfitPositiveEntries
-                // END KR Data
-
-                // START US Data
-                mUsPrincipalDataSet.values = usPrincipalEntries
-                mUsEvaluatedPriceDataSet.values = usEvaluatedPriceEntries
-                mUsTradingProfitDataSet.values = usTradingProfitEntries
-                splitEntry(usTradingProfitEntries, usTradingProfitPositiveEntries, usTradingProfitNegativeEntries)
-                mUsTradingProfitNegativeDataSet.values = usTradingProfitNegativeEntries
-                mUsTradingProfitPositiveDataSet.values = usTradingProfitPositiveEntries
-                // END US Data
-
-                // START Total Data
-                mTotalEvaluatedPriceDataSet.values = totalEvaluatedPriceEntries
-                mTotalPrincipalDataSet.values = totalPrincipalEntries
-                mTotalTradingProfitDataSet.values = totalTradingProfitEntries
-                splitEntry(totalTradingProfitEntries, totalTradingProfitPositiveEntries, totalTradingProfitNegativeEntries)
-                mTotalTradingProfitNegativeDataSet.values = totalTradingProfitNegativeEntries
-                mTotalTradingProfitPositiveDataSet.values = totalTradingProfitPositiveEntries
-                // END Total Data
-
-                val kospiDataSet =
-                    LineDataSet(kospiEntries, "KOSPI").apply {
-                        setDefaultLineChartColor(this)
-                    }
-
-                when (mChartMode) {
-                    R.id.radio_button_option_a, R.id.radio_button_option_a_1, R.id.radio_button_option_a_2 -> {
-                        mStockBarDataSets.add(mKrPrincipalDataSet)
-                        mStockLineDataSets.add(mKrTradingProfitDataSet)
-                        mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
-                        mStockLineDataSets.add(mKrTradingProfitNegativeDataSet)
-                        mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
-                        mKospiDataSets.add(kospiDataSet)
-                        mCombineChart.run {
-                            axisLeft.run {
-                                axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
-                            }
-                            axisRight.run {
-                                axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
-                            }
-                        }
-                    }
-
-                    R.id.radio_button_option_b -> {
-                        mStockBarDataSets.add(mUsPrincipalDataSet)
-                        mStockLineDataSets.add(mUsTradingProfitDataSet)
-                        mStockLineDataSets.add(mUsTradingProfitNegativeDataSet)
-                        mStockLineDataSets.add(mUsTradingProfitPositiveDataSet)
-                        mStockLineDataSets.add(mUsEvaluatedPriceDataSet)
-                        mCombineChart.run {
-                            axisLeft.run {
-                                axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
-                            }
-                            axisRight.run {
-                                axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
-                            }
-                        }
-                    }
-
-                    R.id.radio_button_option_c -> {
-                        mStockBarDataSets.add(mTotalPrincipalDataSet)
-                        mStockLineDataSets.add(mTotalTradingProfitDataSet)
-                        mStockLineDataSets.add(mTotalTradingProfitPositiveDataSet)
-                        mStockLineDataSets.add(mTotalTradingProfitNegativeDataSet)
-                        mStockLineDataSets.add(mTotalEvaluatedPriceDataSet)
-                        mCombineChart.run {
-                            axisLeft.run {
-                                axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
-                            }
-                            axisRight.run {
-                                axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
-                                axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
-                            }
-                        }
-                    }
-                }
-
-                mKospiChart.run {
-                    axisLeft.run {
-                        axisMinimum = kospiDataSet.yMin.minus(500)
-                        axisMaximum = kospiDataSet.yMax.plus(500)
-                    }
+            mKospiChart.run {
+                axisLeft.run {
+                    axisMinimum = kospiDataSet.yMin.minus(500)
+                    axisMaximum = kospiDataSet.yMax.plus(500)
                 }
             }
-            realmInstance.close()
         }
     }
 

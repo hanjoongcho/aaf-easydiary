@@ -57,9 +57,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.simplemobiletools.commons.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.compose
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
@@ -79,8 +83,10 @@ import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
+@AndroidEntryPoint
 class Demo1Activity : EasyDiaryComposeBaseActivity() {
     /***************************************************************************************************
      *   override functions
@@ -108,13 +114,11 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                 }
 
                 5 -> {
-                    val items = EasyDiaryDbHelper.findDiary(null)
-                    FastScrollLazyColumnSample2(items)
+                    FastScrollLazyColumnSample2()
                 }
 
                 6 -> {
-                    val items = EasyDiaryDbHelper.findDiary(null)
-                    FastScrollLazyColumnSample3(items)
+                    FastScrollLazyColumnSample3()
                 }
             }
         }
@@ -399,8 +403,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
     @Composable
     fun FastScrollLazyColumnSample2(
-        items: List<DiaryDomain>,
         modifier: Modifier = Modifier,
+        diaryViewModel: DiaryViewModel = hiltViewModel(),
     ) {
         AppTheme {
             applyFullScreenStatusBarTheme()
@@ -420,6 +424,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
+                    val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
 
                     // 스크롤 이벤트 감지
                     LaunchedEffect(listState) {
@@ -518,8 +523,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
     @Composable
     fun FastScrollLazyColumnSample3(
-        items: List<DiaryDomain>,
         modifier: Modifier = Modifier,
+        diaryViewModel: DiaryViewModel = hiltViewModel(),
     ) {
         AppTheme {
             applyFullScreenStatusBarTheme()
@@ -539,6 +544,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
+                    val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
 
                     // 스크롤 이벤트 감지
                     LaunchedEffect(listState) {

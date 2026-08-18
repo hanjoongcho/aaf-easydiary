@@ -73,6 +73,7 @@ import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.fullAddress
@@ -199,47 +200,45 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mExportJsonLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             uri?.let { targetUri ->
+                lifecycleScope.launch {
+                    var items: List<Any> =
+                        when (mExportJsonOption) {
+                            ExportOption.ACTION_LOG -> {
+                                val actionLogs = EasyDiaryDbHelper.findActionLogAll()
+                                EasyDiaryDbHelper.copyFromRealm(actionLogs)
+                            }
 
-                var items: List<Any> =
-                    when (mExportJsonOption) {
-                        ExportOption.ACTION_LOG -> {
-                            val actionLogs = EasyDiaryDbHelper.findActionLogAll()
-                            EasyDiaryDbHelper.copyFromRealm(actionLogs)
+                            ExportOption.ALARM -> {
+                                val alarms = EasyDiaryDbHelper.findAlarmAll()
+                                EasyDiaryDbHelper.copyFromRealm(alarms)
+                            }
+
+                            ExportOption.D_DAY -> {
+                                val dDays = EasyDiaryDbHelper.findDDayAll()
+                                EasyDiaryDbHelper.copyFromRealm(dDays)
+                            }
+
+                            ExportOption.DIARY -> {
+                                diaryViewModel.findDiary(query = null)
+                            }
+
+                            ExportOption.PHOTO_URI -> {
+                                val photoUris = EasyDiaryDbHelper.findPhotoUriAll()
+                                EasyDiaryDbHelper.copyFromRealm(photoUris)
+                            }
                         }
 
-                        ExportOption.ALARM -> {
-                            val alarms = EasyDiaryDbHelper.findAlarmAll()
-                            EasyDiaryDbHelper.copyFromRealm(alarms)
-                        }
-
-                        ExportOption.D_DAY -> {
-                            val dDays = EasyDiaryDbHelper.findDDayAll()
-                            EasyDiaryDbHelper.copyFromRealm(dDays)
-                        }
-
-                        ExportOption.DIARY -> {
-                            EasyDiaryDbHelper.findDiary(query = null)
-                        }
-
-                        ExportOption.PHOTO_URI -> {
-                            val photoUris = EasyDiaryDbHelper.findPhotoUriAll()
-                            EasyDiaryDbHelper.copyFromRealm(photoUris)
-                        }
-                    }
-
-                lifecycleScope.launch(Dispatchers.IO) {
                     try {
-                        val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(items)
-                        contentResolver.openOutputStream(targetUri)?.use { outputStream ->
-                            IOUtils.write(jsonString, outputStream, "UTF-8")
+                        withContext(Dispatchers.IO) {
+                            val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(items)
+                            contentResolver.openOutputStream(targetUri)?.use { outputStream ->
+                                IOUtils.write(jsonString, outputStream, "UTF-8")
+                            }
                         }
-                        withContext(Dispatchers.Main) {
-                            makeToast("Export successful!")
-                        }
+
+                        makeToast("Export successful!")
                     } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            makeToast("Export failed: ${e.message}")
-                        }
+                        makeToast("Export failed: ${e.message}")
                     }
                 }
             }
@@ -567,6 +566,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 viewModel.toggleEnableJetpackRoomDatabase()
             }
             SimpleCard(
+                "🔁 Refresh",
+                "Refresh migration info",
+                modifier = modifier,
+            ) {
+                coroutineScope.launch {
+                    updateMigInfo()
+                }
+            }
+            SimpleCard(
                 "Migration realm to room",
                 "realm object를 room으로 이전합니다.",
                 modifier = modifier,
@@ -617,23 +625,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "Insert diary",
-                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 다이어리 데이터를 생성합니다.",
-                modifier = modifier,
-            ) {
-                val latestDiary =
-                    EasyDiaryDbHelper
-                        .findDiary(query = null)
-                        .firstOrNull { diary -> diary.photoUris?.isNotEmpty() ?: false }
-
-                latestDiary?.let {
-                    diaryViewModel.addDiary(it)
-                    makeToast("Diary added to Room!")
-                } ?: run {
-                    makeToast("Does not exist latest diary.")
-                }
-            }
-            SimpleCard(
                 "Inquiry latest diary (DiaryWithPhotos)",
                 "DiaryRepository를 이용하여 local(또는 remote) 저장소에 제일 마지막에 저장된 다이어리 1건의 상세정보를 조회합니다.",
                 modifier = modifier,
@@ -659,13 +650,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
         modifier: Modifier,
         maxItemsInEachRow: Int,
     ) {
-        CategoryTitleCard(title = "Export Realm To Json")
+        CategoryTitleCard(title = "Export Database To Json")
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
         ) {
             SimpleCard(
-                "export realm diary data",
+                "export diary data",
                 "realm diary 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
@@ -939,7 +930,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Over-Due",
                 modifier = modifier,
             ) {
-                openOverDueNotification()
+                lifecycleScope.launch {
+                    openOverDueNotification(
+                        diaryViewModel
+                            .findDiary(
+                                null,
+                                false,
+                                0,
+                                0,
+                                0,
+                            ).filter { item -> item.symbolSequence in 80..81 },
+                    )
+                }
             }
         }
     }

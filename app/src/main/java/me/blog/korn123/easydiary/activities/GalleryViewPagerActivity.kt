@@ -118,7 +118,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                                 this@GalleryViewPagerActivity,
                                 DiaryReadingActivity::class.java,
                             ).apply {
-                                putExtra(DIARY_SEQUENCE, it.sequence)
+                                putExtra(DIARY_SEQUENCE, it.diaryId)
                             },
                         )
                     } ?: run { makeToast("There is no linked diary information.") }

@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
-import me.blog.korn123.commons.utils.EasyDiaryUtils.applyFilter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
@@ -22,10 +25,11 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
+@AndroidEntryPoint
 class DiaryFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
@@ -34,6 +38,7 @@ class DiaryFragment : Fragment() {
     private lateinit var mBinding: FragmentDiaryBinding
     private lateinit var mBannerDiary: BannerViewPager<DiaryDomain>
     private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
+    private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -155,10 +160,12 @@ class DiaryFragment : Fragment() {
     }
 
     private fun updateDiary() {
-        mDiaryList.clear()
-        mDiaryList.addAll(applyFilter(arguments?.getString(DiaryComponentConstants.MODE_FLAG, DiaryComponentConstants.MODE_PREVIOUS_100)))
-        mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
-        mBannerDiary.data.clear()
-        mBannerDiary.addData(mDiaryList)
+        lifecycleScope.launch {
+            mDiaryList.clear()
+            mDiaryList.addAll(diaryViewModel.applyFilter(arguments?.getString(DiaryComponentConstants.MODE_FLAG, DiaryComponentConstants.MODE_PREVIOUS_100)))
+            mBinding.layoutDiaryContainer.visibility = if (mDiaryList.isNotEmpty()) View.VISIBLE else View.GONE
+            mBannerDiary.data.clear()
+            mBannerDiary.addData(mDiaryList)
+        }
     }
 }
