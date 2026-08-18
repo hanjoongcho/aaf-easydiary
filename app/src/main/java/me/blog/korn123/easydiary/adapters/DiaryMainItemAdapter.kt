@@ -34,6 +34,7 @@ import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.helper.toRealm
 import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
@@ -97,9 +98,11 @@ class DiaryMainItemAdapter(
 
     fun toggleCheckBoxALl() {
         diaryItems.forEach { diary ->
-            diary.toRealm().also {
-                it.isSelected = !it.isSelected
-                EasyDiaryDbHelper.updateDiaryBy(it)
+            diary.run {
+                isSelected = isSelected.not()
+                toRealm().also {
+                    EasyDiaryDbHelper.updateDiaryBy(it.toDomain())
+                }
             }
         }
     }
@@ -167,9 +170,8 @@ class DiaryMainItemAdapter(
                 }
 
                 selection.setOnCheckedChangeListener { _, isChecked ->
-                    val realmDiary = diary.toRealm()
-                    realmDiary.isSelected = isChecked
-                    EasyDiaryDbHelper.updateDiaryBy(realmDiary)
+                    diary.isSelected = isChecked
+                    EasyDiaryDbHelper.updateDiaryBy(diary)
                 }
 
                 when ((activity as DiaryMainActivity).mDiaryMode) {

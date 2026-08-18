@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.models.Diary
 import java.io.File
 import java.util.*
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class GalleryAdapter(
     val activity: Activity,
@@ -127,6 +128,6 @@ class GalleryAdapter(
     data class AttachedPhoto(
         val file: File,
         var isItemChecked: Boolean,
-        val diary: Diary?,
+        val diary: DiaryDomain?,
     )
 }

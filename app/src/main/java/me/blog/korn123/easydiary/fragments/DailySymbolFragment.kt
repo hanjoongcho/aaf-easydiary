@@ -112,7 +112,7 @@ class DailySymbolFragment : Fragment() {
                                         TransitionHelper.startActivityWithTransition(
                                             requireActivity(),
                                             Intent(requireContext(), DiaryReadingActivity::class.java).apply {
-                                                putExtra(DIARY_SEQUENCE, selectedItems[position].sequence)
+                                                putExtra(DIARY_SEQUENCE, selectedItems[position].diaryId)
                                             },
                                         )
                                         dialog?.dismiss()

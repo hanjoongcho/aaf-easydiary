@@ -122,7 +122,7 @@ object EasyDiaryUtils {
         return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
     }
 
-    fun summaryDiaryLabel(diary: DiaryUiModel): String = diary.title.ifEmpty { diary.contents.lines()[0] }
+    fun summaryDiaryLabel(diary: DiaryDomain): String = if (diary.title.isNullOrEmpty()) diary.contents.lines()[0] else diary.title
 
     fun searchWordIndexes(
         contents: String,
@@ -714,39 +714,6 @@ object EasyDiaryUtils {
      *   Chart Utils
      *
      ***************************************************************************************************/
-    fun getSymbolUsedCountMap(
-        isReverse: Boolean = false,
-        startTimeMillis: Long = 0,
-        endTimeMillis: Long = 0,
-    ): Map<Int, Int> {
-        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-            val listDiary =
-                EasyDiaryDbHelper.findDiary(
-                    null,
-                    false,
-                    startTimeMillis,
-                    endTimeMillis,
-                    realmInstance = realmInstance,
-                )
-
-            val map = hashMapOf<Int, Int>()
-            listDiary.forEach { diaryDto ->
-                val targetColumn = diaryDto.symbolSequence
-                if (targetColumn != 0) {
-                    if (map[targetColumn] == null) {
-                        map[targetColumn] = 1
-                    } else {
-                        map[targetColumn] = (map[targetColumn] ?: 0) + 1
-                    }
-                }
-            }
-            realmInstance.close()
-            return when (isReverse) {
-                true -> map.toList().sortedByDescending { (_, value) -> value }.toMap()
-                false -> map.toList().sortedBy { (_, value) -> value }.toMap()
-            }
-        }
-    }
 
     /***************************************************************************************************
      *   Legacy Utils
@@ -757,72 +724,4 @@ object EasyDiaryUtils {
      *   ETC.
      *
      ***************************************************************************************************/
-    fun applyFilter(mode: String?): List<DiaryDomain> {
-        val diaryList: List<DiaryDomain> =
-            when (mode) {
-                DiaryComponentConstants.MODE_TASK_TODO -> {
-                    EasyDiaryDbHelper
-                        .findDiary(
-                            null,
-                            false,
-                            0,
-                            0,
-                            0,
-                        ).filter { item -> item.symbolSequence in 80..81 }
-                        .reversed()
-                }
-
-                DiaryComponentConstants.MODE_TASK_DOING -> {
-                    EasyDiaryDbHelper.findDiary(
-                        null,
-                        false,
-                        0,
-                        0,
-                        81,
-                    )
-                }
-
-                DiaryComponentConstants.MODE_TASK_DONE -> {
-                    EasyDiaryDbHelper
-                        .findDiary(
-                            null,
-                            false,
-                            0,
-                            0,
-                            0,
-                        ).filter { item -> item.symbolSequence in 82..83 }
-                }
-
-                DiaryComponentConstants.MODE_TASK_CANCEL -> {
-                    EasyDiaryDbHelper.findDiary(
-                        null,
-                        false,
-                        0,
-                        0,
-                        83,
-                    )
-                }
-
-                DiaryComponentConstants.MODE_FUTURE -> {
-                    EasyDiaryDbHelper
-                        .findDiary(
-                            null,
-                            false,
-                            0,
-                            0,
-                            0,
-                        ).filter { item -> (item.symbolSequence !in 80..83) && item.currentTimeMillis > System.currentTimeMillis() }
-                        .reversed()
-                }
-
-                else -> {
-                    EasyDiaryDbHelper
-                        .findDiary(null, false, 0, 0, 0)
-                        .filter { item -> (item.symbolSequence !in 80..83) && item.currentTimeMillis <= System.currentTimeMillis() }
-                        .run { if (this.size > 100) this.subList(0, 100) else this }
-                }
-            }
-
-        return diaryList
-    }
 }

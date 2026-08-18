@@ -39,6 +39,7 @@ import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
 fun FastScroll(
@@ -90,7 +91,8 @@ fun FastScroll(
     // --- Fast Scroll 트랙 + 썸 ---
     fun parseBubbleText(item: Any): String =
         when (item) {
-            is Diary -> summaryDiaryLabel(items[firstIndex.value] as Diary)
+            is Diary -> summaryDiaryLabel(item)
+            is DiaryDomain -> summaryDiaryLabel(item)
             is Pair<*, *> -> (item.first as? FileNode)?.name.orEmpty()
             else -> item.toString()
         }
@@ -103,32 +105,37 @@ fun FastScroll(
                 .pointerInput(totalItems) {
                     detectDragGestures(
                         onDragStart = {
-                            updateThumbVisible(true)
-                            updateDraggingThumb(true)
-                            bubbleText = parseBubbleText(items[firstIndex.value])
+                            if (items.isNotEmpty()) {
+                                updateThumbVisible(true)
+                                updateDraggingThumb(true)
+                                val index = firstIndex.value.coerceIn(items.indices)
+                                bubbleText = parseBubbleText(items[index])
+                            }
                         },
                         onDrag = { change, drag ->
-                            dragY = drag.y
-                            change.consume()
-                            thumbY =
-                                (thumbY + drag.y).coerceIn(
-                                    0f,
-                                    containerHeightPx - thumbHeightPx,
-                                )
-                            proportion =
-                                thumbY / (containerHeightPx - thumbHeightPx)
-                            val target =
-                                ((scrollablePx * proportion) / itemHeight)
-                                    .toInt()
-                                    .coerceIn(0, totalItems - 1)
-                            offset = (scrollablePx * proportion) % itemHeight
-                            coroutineScope.launch {
-                                listState.scrollToItem(
-                                    target.coerceAtLeast(0),
-                                    offset.toInt(),
-                                )
+                            if (items.isNotEmpty()) {
+                                dragY = drag.y
+                                change.consume()
+                                thumbY =
+                                    (thumbY + drag.y).coerceIn(
+                                        0f,
+                                        containerHeightPx - thumbHeightPx,
+                                    )
+                                proportion =
+                                    thumbY / (containerHeightPx - thumbHeightPx)
+                                val target =
+                                    ((scrollablePx * proportion) / itemHeight)
+                                        .toInt()
+                                        .coerceIn(0, items.size - 1)
+                                offset = (scrollablePx * proportion) % itemHeight
+                                coroutineScope.launch {
+                                    listState.scrollToItem(
+                                        target.coerceAtLeast(0),
+                                        offset.toInt(),
+                                    )
+                                }
+                                bubbleText = parseBubbleText(items[target])
                             }
-                            bubbleText = parseBubbleText(items[target])
                         },
                         onDragEnd = {
                             updateDraggingThumb(false)

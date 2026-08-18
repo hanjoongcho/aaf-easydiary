@@ -69,7 +69,7 @@ class PostcardActivity : EasyDiaryActivity() {
 
         mBinding.run {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
-            FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.weather)
+            FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.symbolSequence)
             when (diaryDto.title.isNullOrEmpty()) {
                 true -> diaryTitle.visibility = View.GONE
                 false -> diaryTitle.text = diaryDto.title

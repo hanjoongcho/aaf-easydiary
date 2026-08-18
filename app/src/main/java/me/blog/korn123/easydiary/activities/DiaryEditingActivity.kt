@@ -2,6 +2,11 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -10,13 +15,16 @@ import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import org.apache.commons.lang3.StringUtils
+import kotlin.getValue
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
+@AndroidEntryPoint
 class DiaryEditingActivity : BaseDiaryEditingActivity() {
     /***************************************************************************************************
      *   global properties
@@ -77,64 +85,66 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
-        mSymbolSequence = diaryDto.weather
+        mSymbolSequence = diaryDto.symbolSequence
         mLinkedDiaries = diaryDto.linkedDiaries
         initData(diaryDto)
     }
 
     override fun saveContents() {
-        if (isExistEasterEggDiary(1)) {
-            duplicatedEasterEggWarning()
-        } else {
-            hideSoftInputFromWindow()
-            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-                mBinding.partialEditContents.diaryContents.requestFocus()
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        lifecycleScope.launch {
+            if (isExistEasterEggDiary(1)) {
+                duplicatedEasterEggWarning()
             } else {
-                val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-                val diaryDto =
-                    when (encryptionPass == null) {
-                        true -> {
-                            Diary(
-                                mSequence,
-                                mCurrentTimeMillis,
-                                mBinding.partialEditContents.diaryTitle.text
-                                    .toString(),
-                                mBinding.partialEditContents.diaryContents.text
-                                    .toString(),
-                            )
-                        }
-
-                        false -> {
-                            Diary(
-                                mSequence,
-                                mCurrentTimeMillis,
-                                JasyptUtils.encrypt(
+                hideSoftInputFromWindow()
+                if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                    mBinding.partialEditContents.diaryContents.requestFocus()
+                    makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+                } else {
+                    val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+                    val diaryDto =
+                        when (encryptionPass == null) {
+                            true -> {
+                                Diary(
+                                    mSequence,
+                                    mCurrentTimeMillis,
                                     mBinding.partialEditContents.diaryTitle.text
                                         .toString(),
-                                    encryptionPass,
-                                ),
-                                JasyptUtils.encrypt(
                                     mBinding.partialEditContents.diaryContents.text
                                         .toString(),
-                                    encryptionPass,
-                                ),
-                                true,
-                                JasyptUtils.sha256(encryptionPass),
-                            )
-                        }
-                    }
+                                )
+                            }
 
-                if (mLocation != null) diaryDto.location = mLocation
-                diaryDto.weather = mSelectedItemPosition
-                diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                diaryDto.linkedDiaries.clear()
-                diaryDto.linkedDiaries.addAll(mLinkedDiaries)
-                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
-                TransitionHelper.finishActivityWithTransition(this)
-                mIsDiarySaved = true
+                            false -> {
+                                Diary(
+                                    mSequence,
+                                    mCurrentTimeMillis,
+                                    JasyptUtils.encrypt(
+                                        mBinding.partialEditContents.diaryTitle.text
+                                            .toString(),
+                                        encryptionPass,
+                                    ),
+                                    JasyptUtils.encrypt(
+                                        mBinding.partialEditContents.diaryContents.text
+                                            .toString(),
+                                        encryptionPass,
+                                    ),
+                                    true,
+                                    JasyptUtils.sha256(encryptionPass),
+                                )
+                            }
+                        }
+
+                    if (mLocation != null) diaryDto.location = mLocation
+                    diaryDto.weather = mSelectedItemPosition
+                    diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
+                    applyRemoveIndex()
+                    diaryDto.photoUris = mPhotoUris
+                    diaryDto.linkedDiaries.clear()
+                    diaryDto.linkedDiaries.addAll(mLinkedDiaries)
+                    diaryViewModel.updateDiary(diaryDto.toDomain())
+                    TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
+                    mIsDiarySaved = true
+                }
             }
         }
     }
@@ -161,11 +171,14 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
 
         mBinding.partialEditContents.feelingSymbolButton.setOnClickListener {
             mBinding.partialEditContents.diaryContents.clearFocus()
-            openFeelingSymbolDialog(
-                getString(R.string.diary_symbol_guide_message),
-                mSelectedItemPosition,
-            ) { symbolSequence ->
-                selectFeelingSymbol(symbolSequence)
+            lifecycleScope.launch {
+                openFeelingSymbolDialog(
+                    getString(R.string.diary_symbol_guide_message),
+                    mSelectedItemPosition,
+                    diaryViewModel.getSymbolUsedCountMap(true),
+                ) { symbolSequence ->
+                    selectFeelingSymbol(symbolSequence)
+                }
             }
         }
     }

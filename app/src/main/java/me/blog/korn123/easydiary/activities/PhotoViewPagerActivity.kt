@@ -18,8 +18,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.Diary
 import java.io.File
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by hanjoong on 2017-06-08.
@@ -39,7 +39,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
         val diaryDto = EasyDiaryDbHelper.findDiaryBy(sequence)!!
-        mPhotoCount = diaryDto.photoUris?.size ?: 0
+        mPhotoCount = diaryDto.photoUris.size
 
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
@@ -116,7 +116,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
     }
 
     internal class PhotoPagerAdapter(
-        var diary: Diary,
+        var diary: DiaryDomain,
     ) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int = diary.photoUris?.size ?: 0
 

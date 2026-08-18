@@ -15,24 +15,25 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.simplemobiletools.commons.extensions.setVisibleIf
+import dagger.hilt.android.EntryPointAccessors
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.RenderProps
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
-import me.blog.korn123.easydiary.models.Diary
 import org.commonmark.node.Emphasis
 import org.commonmark.node.ListItem
 import org.commonmark.node.StrongEmphasis
@@ -71,7 +72,7 @@ class DiaryMainWidgetFactory(
             ).build()
 
     override fun onCreate() {
-        setData()
+        runBlocking { setData() }
     }
 
     override fun getLoadingView() = null
@@ -79,7 +80,7 @@ class DiaryMainWidgetFactory(
     override fun getItemId(position: Int) = position.toLong()
 
     override fun onDataSetChanged() {
-        setData()
+        runBlocking { setData() }
     }
 
     override fun hasStableIds() = true
@@ -115,7 +116,7 @@ class DiaryMainWidgetFactory(
                     if (context.config.enableDebugMode) {
                         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
                             val targetIndex = diaryDto.symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
-                            val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
+                            val photoUris = context.config.customSymbolPaths
                             val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
 //                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
                             val futureBitmap =
@@ -163,15 +164,19 @@ class DiaryMainWidgetFactory(
 
     override fun onDestroy() { }
 
-    private fun setData() {
+    private suspend fun setData() {
         diaryItems.clear()
         if (!context.config.aafPinLockEnable && !context.config.fingerprintLockEnable) {
-            EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-                val realmList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
-                val limit = if (realmList.size > 100) 100 else realmList.size
-                diaryItems.addAll(realmList.subList(0, limit))
-                realmInstance.close()
-            }
+            val realmList =
+                EntryPointAccessors
+                    .fromApplication(
+                        context,
+                        DiaryRepositoryEntryPoint::class.java,
+                    ).diaryRepository()
+                    .getDiariesWithPhotos(null)
+                    .first()
+            val limit = if (realmList.size > 100) 100 else realmList.size
+            diaryItems.addAll(realmList.subList(0, limit))
         }
     }
 }

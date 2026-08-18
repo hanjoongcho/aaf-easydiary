@@ -138,7 +138,7 @@ class CaldroidItemAdapter(
                             mDiaryList.size == 1 -> {
                                 item1.run {
                                     val item = mDiaryList[0]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }
@@ -155,13 +155,13 @@ class CaldroidItemAdapter(
                             mDiaryList.size == 2 -> {
                                 item1.run {
                                     val item = mDiaryList[0]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }
                                 item2.run {
                                     val item = mDiaryList[1]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }
@@ -174,19 +174,19 @@ class CaldroidItemAdapter(
                             else -> {
                                 item1.run {
                                     val item = mDiaryList[0]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }
                                 item2.run {
                                     val item = mDiaryList[1]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }
                                 item3.run {
                                     val item = mDiaryList[2]
-                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                                    FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.symbolSequence)
 //                                (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                                     activity.applyMarkDownPolicy((getChildAt(1) as TextView), EasyDiaryUtils.summaryDiaryLabel(item), false, arrayListOf(), true)
                                 }

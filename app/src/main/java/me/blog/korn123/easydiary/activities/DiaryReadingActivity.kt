@@ -32,11 +32,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
@@ -81,11 +85,12 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.Locale
@@ -94,7 +99,7 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
+@AndroidEntryPoint
 class DiaryReadingActivity : EasyDiaryActivity() {
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -111,6 +116,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
+    private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
 
     private val selectValueLauncher =
         registerForActivityResult(
@@ -127,28 +133,30 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 showAlertDialog(
                     getString(R.string.link_entry_confirm),
                     { _, _ ->
-                        selectedValue?.let {
-                            val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                            if (diary.linkedDiaries.contains(selectedValue)) {
-                                makeSnackBar("이미 연결된 항목 입니다.")
-                            } else {
-                                EasyDiaryDbHelper.beginTransaction()
-                                diary.linkedDiaries.add(selectedValue)
-                                EasyDiaryDbHelper.commitTransaction()
-                                fragment.initContents()
+                        lifecycleScope.launch {
+                            selectedValue?.let {
+                                val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                                if (diary.linkedDiaries.contains(selectedValue)) {
+                                    makeSnackBar("이미 연결된 항목 입니다.")
+                                } else {
+                                    diary.linkedDiaries.add(selectedValue)
+                                    diaryViewModel.updateDiary(diary)
+                                    fragment.initContents()
+                                }
                             }
                         }
                     },
                     { _, _ ->
-                        selectedValue?.let {
-                            val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
-                            if (diary.linkedDiaries.contains(fragment.getSequence())) {
-                                makeSnackBar("이미 연결된 항목 입니다.")
-                            } else {
-                                EasyDiaryDbHelper.beginTransaction()
-                                diary.linkedDiaries.add(fragment.getSequence())
-                                EasyDiaryDbHelper.commitTransaction()
-                                fragment.initContents()
+                        lifecycleScope.launch {
+                            selectedValue?.let {
+                                val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
+                                if (diary.linkedDiaries.contains(fragment.getSequence())) {
+                                    makeSnackBar("이미 연결된 항목 입니다.")
+                                } else {
+                                    diary.linkedDiaries.add(fragment.getSequence())
+                                    diaryViewModel.updateDiary(diary)
+                                    fragment.initContents()
+                                }
                             }
                         }
                     },
@@ -165,6 +173,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mBinding = ActivityDiaryReadingBinding.inflate(layoutInflater)
         mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
         mDialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
@@ -177,32 +186,91 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        val diaryList: List<DiaryDomain> =
-            when (intent.getStringExtra(DiaryComponentConstants.MODE_FLAG) == null) {
-                true -> EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
-                false -> EasyDiaryUtils.applyFilter(intent.getStringExtra(DiaryComponentConstants.MODE_FLAG))
-            }
-
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
-        val startPageIndex =
-            when (savedInstanceState == null) {
-                true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
-                false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt(DIARY_SEQUENCE, -1))
+        setupViewPager()
+        setupShowcase()
+
+        lifecycleScope.launch {
+            diaryList.run {
+                clear()
+                addAll(
+                    when (intent.getStringExtra(DiaryComponentConstants.MODE_FLAG) == null) {
+                        true -> {
+                            diaryViewModel.findDiary(
+                                query,
+                                config.diarySearchQueryCaseSensitive,
+                                0,
+                                0,
+                                symbolSequence,
+                            )
+                        }
+
+                        false -> {
+                            diaryViewModel.applyFilter(
+                                intent.getStringExtra(
+                                    DiaryComponentConstants.MODE_FLAG,
+                                ),
+                            )
+                        }
+                    },
+                )
             }
 
-        setupViewPager()
-        if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { mBinding.diaryViewPager.setCurrentItem(startPageIndex, false) }
-        setupShowcase()
+            mSectionsPagerAdapter.notifyDataSetChanged()
+
+            // savedInstanceState가 있을 때와 없을 때 모두 처리
+            val targetIndex =
+                if (savedInstanceState == null) {
+                    mSectionsPagerAdapter.sequenceToPageIndex(
+                        intent.getIntExtra(
+                            DIARY_SEQUENCE,
+                            -1,
+                        ),
+                    )
+                } else {
+                    // 복원된 시퀀스를 사용하여 인덱스를 다시 계산
+                    mSectionsPagerAdapter.sequenceToPageIndex(
+                        savedInstanceState.getInt(
+                            DIARY_SEQUENCE,
+                            -1,
+                        ),
+                    )
+                }
+
+            // targetIndex가 -1이 아니면(데이터가 존재하면) 강제로 setCurrentItem 호출
+            if (targetIndex >= 0) {
+                mBinding.diaryViewPager.doOnLayout {
+                    mBinding.diaryViewPager.setCurrentItem(targetIndex, false)
+
+                    // 만약 그래도 빈 화면이라면, 강제로 현재 아이템을 재연결하기 위해
+                    // 현재 페이지의 프래그먼트를 찾아 initContents()를 호출할 수 있습니다.
+                    (
+                        mSectionsPagerAdapter.instantiateItem(
+                            mBinding.diaryViewPager,
+                            targetIndex,
+                        ) as? PlaceholderFragment
+                    )?.run {
+                        if (isAdded) initContents()
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         initModule()
-        mSectionsPagerAdapter.notifyDataSetChanged()
-        mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem).run {
-            if (this is PlaceholderFragment) {
-                if (this.isAdded) this.initContents()
-            }
+        if (diaryList.isNotEmpty()) {
+            mSectionsPagerAdapter.notifyDataSetChanged()
+            mSectionsPagerAdapter
+                .instantiateItem(
+                    mBinding.diaryViewPager,
+                    mBinding.diaryViewPager.currentItem,
+                ).run {
+                    if (this is PlaceholderFragment) {
+                        if (this.isAdded) this.initContents()
+                    }
+                }
         }
     }
 
@@ -212,7 +280,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
+        val fragment =
+            mSectionsPagerAdapter.instantiateItem(
+                mBinding.diaryViewPager,
+                mBinding.diaryViewPager.currentItem,
+            )
         if (fragment is PlaceholderFragment) {
             outState.putInt(DIARY_SEQUENCE, fragment.getSequence())
         }
@@ -225,7 +297,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
-        val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
+        val fragment =
+            mSectionsPagerAdapter.instantiateItem(
+                mBinding.diaryViewPager,
+                mBinding.diaryViewPager.currentItem,
+            )
 //        val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
@@ -275,14 +351,23 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 .toString()
                                 .isNotEmpty()
                         ) {
-                            true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(), true)
-                            false -> fragment.clearHighLight()
+                            true -> {
+                                fragment.highlightDiary(
+                                    mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
+                                    true,
+                                )
+                            }
+
+                            false -> {
+                                fragment.clearHighLight()
+                            }
                         }
 //                        mDialogSearch?.dismiss()
                     }
 
                     fun updateLabel() {
-                        mDialogHighlightKeywordBinding.indexes.text = "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
+                        mDialogHighlightKeywordBinding.indexes.text =
+                            "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
                     }
                     mDialogSearch?.show() ?: run {
                         val builder =
@@ -319,7 +404,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         i: Int,
                                         i1: Int,
                                         i2: Int,
-                                    ) {}
+                                    ) {
+                                    }
 
                                     override fun onTextChanged(
                                         charSequence: CharSequence,
@@ -331,7 +417,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         mCurrentIndexesSequence = 0
                                         mSearchIndexes.clear()
                                         mSearchIndexes.addAll(
-                                            EasyDiaryUtils.searchWordIndexes(fragment.getContents(), charSequence.toString()),
+                                            EasyDiaryUtils.searchWordIndexes(
+                                                fragment.getContents(),
+                                                charSequence.toString(),
+                                            ),
                                         )
                                         highLight()
                                         if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
@@ -343,9 +432,21 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             )
                             root.run {
                                 updateTextColors(this)
-                                FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
+                                FontUtils.setFontsTypeface(
+                                    applicationContext,
+                                    null,
+                                    this,
+                                    mCustomLineSpacing,
+                                )
 //                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
-                                updateAlertDialogWithIcon(DialogMode.INFO, mDialogSearch!!, null, this, null, 200)
+                                updateAlertDialogWithIcon(
+                                    DialogMode.INFO,
+                                    mDialogSearch!!,
+                                    null,
+                                    this,
+                                    null,
+                                    200,
+                                )
                             }
                             updateLabel()
                         }
@@ -401,7 +502,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             val height = LinearLayout.LayoutParams.MATCH_PARENT
             val popupWindow =
                 PopupWindow(popupView, width, height, true).apply {
-                    showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+                    showAtLocation(
+                        findViewById<ViewGroup>(android.R.id.content).rootView,
+                        Gravity.CENTER,
+                        0,
+                        0,
+                    )
                 }
 
             closePopup.setOnClickListener {
@@ -486,7 +592,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
 
                         R.id.buttonDel -> {
-                            if (inputPass.isNotEmpty()) inputPass = inputPass.substring(0, inputPass.length.minus(1))
+                            if (inputPass.isNotEmpty()) {
+                                inputPass =
+                                    inputPass.substring(0, inputPass.length.minus(1))
+                            }
                         }
                     }
 
@@ -508,7 +617,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     }
 
                                     false -> {
-                                        guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
+                                        guideMessage.text =
+                                            getString(R.string.diary_pin_number_confirm_error)
                                     }
                                 }
                                 inputPass = ""
@@ -529,7 +639,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                                     false -> {
                                         inputPass = ""
-                                        guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                                        guideMessage.text =
+                                            getString(R.string.diary_pin_number_verification_error)
                                     }
                                 }
                             }
@@ -544,7 +655,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                                     else -> {
                                         inputPass = ""
-                                        guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                                        guideMessage.text =
+                                            getString(R.string.diary_pin_number_verification_error)
                                     }
                                 }
                             }
@@ -552,7 +664,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             else -> {
                                 confirmPass = inputPass
                                 inputPass = ""
-                                guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
+                                guideMessage.text =
+                                    getString(R.string.diary_pin_number_confirm_guide)
                             }
                         }
                         clearPassView()
@@ -589,10 +702,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     position: Int,
                     positionOffset: Float,
                     positionOffsetPixels: Int,
-                ) {}
+                ) {
+                }
 
                 override fun onPageSelected(position: Int) {
-                    val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
+                    val fragment =
+                        mSectionsPagerAdapter.instantiateItem(
+                            mBinding.diaryViewPager,
+                            mBinding.diaryViewPager.currentItem,
+                        )
                     fragment.let {
 //                    it.setFontsTypeface()
 //                    it.setFontsSize()
@@ -607,7 +725,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private fun setupShowcase() {
         val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
 
-        val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val centerParams =
+            RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            )
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         centerParams.setMargins(0, 0, 0, margin)
@@ -748,9 +870,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
 
                                 R.id.postcard -> {
-                                    val postCardIntent = Intent(this@DiaryReadingActivity, PostcardActivity::class.java)
+                                    val postCardIntent =
+                                        Intent(
+                                            this@DiaryReadingActivity,
+                                            PostcardActivity::class.java,
+                                        )
                                     postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                                    TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, postCardIntent)
+                                    TransitionHelper.startActivityWithTransition(
+                                        this@DiaryReadingActivity,
+                                        postCardIntent,
+                                    )
                                 }
 
                                 R.id.encryptData -> {
@@ -762,12 +891,20 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
 
                                 R.id.push -> {
-                                    val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                                    pushMarkDown(diary.title!!, diary.contents!!)
+                                    val diary =
+                                        EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
+                                    val title = diary.title
+                                    val contents = diary.contents
+                                    lifecycleScope.launch {
+                                        pushMarkDown(title!!, contents!!)
+                                    }
                                 }
 
                                 R.id.linkEntry -> {
-                                    Intent(this@DiaryReadingActivity, TreeTimelineActivity::class.java).apply {
+                                    Intent(
+                                        this@DiaryReadingActivity,
+                                        TreeTimelineActivity::class.java,
+                                    ).apply {
                                         putExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, false)
                                         selectValueLauncher.launch(this)
                                     }
@@ -800,6 +937,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     /**
      * A placeholder fragment containing a simple view.
      */
+    @AndroidEntryPoint
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
         private lateinit var mRootView: ViewGroup
         private lateinit var mBinding: FragmentDiaryReadBinding
@@ -808,13 +946,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private var mStoredContents: String? = null
 
         private var linkedDiaryViewModel: LinkedDiaryViewModel = LinkedDiaryViewModel()
+        private val diaryViewModel: DiaryViewModel by viewModels()
 
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?,
         ): View {
-            mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
+            mBinding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
             mBinding.lifecycleOwner = this
             mBinding.viewModel = mViewModel
             mRootView = mBinding.mainHolder
@@ -828,7 +968,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             savedInstanceState: Bundle?,
         ) {
             super.onViewCreated(view, savedInstanceState)
-            requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.ic_map_marker_2)
+            requireContext().changeDrawableIconColor(
+                config.primaryColor,
+                R.drawable.ic_map_marker_2,
+            )
             mRootView.let {
                 context?.run {
                     updateTextColors(it, 0, 0)
@@ -853,7 +996,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         val parentDiaries by linkedDiaryViewModel.parentDiaries.collectAsState()
                         // diary parents items
                         if (parentDiaries.isNotEmpty()) {
-                            CategoryTitleCard(title = getString(R.string.link_entry_category_parent), marginTop = 0)
+                            CategoryTitleCard(
+                                title = getString(R.string.link_entry_category_parent),
+                                marginTop = 0,
+                            )
                             for (parentDiary in parentDiaries) {
                                 LegacyDiarySubItemCard(
                                     diary = parentDiary,
@@ -863,7 +1009,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                 requireContext(),
                                                 DiaryReadingActivity::class.java,
                                             ).apply {
-                                                putExtra(DIARY_SEQUENCE, parentDiary.sequence)
+                                                putExtra(DIARY_SEQUENCE, parentDiary.diaryId)
                                             }
                                         TransitionHelper.startActivityWithTransition(
                                             requireActivity(),
@@ -875,18 +1021,19 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                             "Are you sure you want to unlink this diary?",
                                             { _, _ ->
                                                 EasyDiaryDbHelper
-                                                    .findDiaryBy(parentDiary.sequence)
+                                                    .findDiaryBy(parentDiary.diaryId)
                                                     ?.run {
                                                         linkedDiaries
                                                             .filter { it != getSequence() }
                                                             .let { newLinkedDiaries ->
-                                                                EasyDiaryDbHelper.beginTransaction()
-                                                                linkedDiaries.clear()
-                                                                linkedDiaries.addAll(
-                                                                    newLinkedDiaries,
-                                                                )
-                                                                EasyDiaryDbHelper.commitTransaction()
-                                                                initContents()
+                                                                lifecycleScope.launch {
+                                                                    linkedDiaries.clear()
+                                                                    linkedDiaries.addAll(
+                                                                        newLinkedDiaries,
+                                                                    )
+                                                                    diaryViewModel.updateDiary(this@run)
+                                                                    initContents()
+                                                                }
                                                             }
                                                     }
                                             },
@@ -902,7 +1049,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         val childDiaries by linkedDiaryViewModel.childDiaries.collectAsState()
                         // diary child items
                         if (childDiaries.isNotEmpty()) {
-                            CategoryTitleCard(title = getString(R.string.link_entry_category_child), marginTop = 0)
+                            CategoryTitleCard(
+                                title = getString(R.string.link_entry_category_child),
+                                marginTop = 0,
+                            )
                             for (childDiary in childDiaries) {
                                 LegacyDiarySubItemCard(
                                     diary = childDiary,
@@ -912,7 +1062,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                 requireContext(),
                                                 DiaryReadingActivity::class.java,
                                             ).apply {
-                                                putExtra(DIARY_SEQUENCE, childDiary.sequence)
+                                                putExtra(DIARY_SEQUENCE, childDiary.diaryId)
                                             }
                                         TransitionHelper.startActivityWithTransition(
                                             requireActivity(),
@@ -927,15 +1077,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                     .findDiaryBy(getSequence())
                                                     ?.run {
                                                         linkedDiaries
-                                                            .filter { it != childDiary.sequence }
+                                                            .filter { it != childDiary.diaryId }
                                                             .let { newLinkedDiaries ->
-                                                                EasyDiaryDbHelper.beginTransaction()
-                                                                linkedDiaries.clear()
-                                                                linkedDiaries.addAll(
-                                                                    newLinkedDiaries,
-                                                                )
-                                                                EasyDiaryDbHelper.commitTransaction()
-                                                                initContents()
+                                                                lifecycleScope.launch {
+                                                                    linkedDiaries.clear()
+                                                                    linkedDiaries.addAll(
+                                                                        newLinkedDiaries,
+                                                                    )
+                                                                    diaryViewModel.updateDiary(this@run)
+                                                                    initContents()
+                                                                }
                                                             }
                                                     }
                                             },
@@ -989,7 +1140,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     .indexOf(query, startIndex, true)
             if (index > 0) {
                 val layout = mBinding.diaryContents.layout
-                mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
+                mBinding.scrollDiaryContents.scrollTo(
+                    0,
+                    layout.getLineTop(layout.getLineForOffset(index)),
+                )
             }
         }
 
@@ -1007,7 +1161,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
-                diaryTitle.visibility = if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
+                diaryTitle.visibility =
+                    if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
                 diaryTitle.text = diaryDto.title
 
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
@@ -1018,8 +1173,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
                 date.text =
                     when (diaryDto.isAllDay) {
-                        true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                        false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, requireContext())
+                        true -> {
+                            DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                        }
+
+                        false -> {
+                            DateUtils.getDateTimeStringForceFormatting(
+                                diaryDto.currentTimeMillis,
+                                requireContext(),
+                            )
+                        }
                     }
                 initBottomContainer()
 
@@ -1029,7 +1192,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     }
                 }
 
-                val weatherFlag = diaryDto.weather
+                val weatherFlag = diaryDto.symbolSequence
                 FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
 
                 // TODO fixme elegance
@@ -1042,7 +1205,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
-                            diaryDto.photoUrisWithEncryptionPolicy()?.forEachIndexed { index, item ->
+                            diaryDto
+                                .photoUrisWithEncryptionPolicy()
+                                ?.forEachIndexed { index, item ->
 //                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
 //                                val imageView = when (requireActivity().isLandScape()) {
 //                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
@@ -1051,16 +1216,21 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                                photoContainer.addView(imageView)
 //                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
 
-                                photoContainerFlexBox.addView(
-                                    createAttachedPhotoViewForFlexBox(
-                                        requireActivity(),
-                                        item,
-                                        photoCount,
-                                    ).apply {
-                                        setOnClickListener(PhotoClickListener(getSequence(), index))
-                                    },
-                                )
-                            }
+                                    photoContainerFlexBox.addView(
+                                        createAttachedPhotoViewForFlexBox(
+                                            requireActivity(),
+                                            item.toRealm(),
+                                            photoCount,
+                                        ).apply {
+                                            setOnClickListener(
+                                                PhotoClickListener(
+                                                    getSequence(),
+                                                    index,
+                                                ),
+                                            )
+                                        },
+                                    )
+                                }
                         }
                     } else {
                         photoContainerFlexBox.visibility = View.GONE
@@ -1080,23 +1250,32 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         contentsLength.run {
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
-                            text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                            text =
+                                getString(
+                                    R.string.diary_contents_length,
+                                    diaryDto.contents?.length ?: 0,
+                                )
                         }
                     }
                 }
             }
 
-            linkedDiaryViewModel.updateParentDiaries(EasyDiaryDbHelper.findParentDiariesOf(diaryDto.sequence))
-
-            val linkedDiaries = mutableListOf<Diary>()
-            if (diaryDto.linkedDiaries.isNotEmpty()) {
-                for (linkedDiarySequence in diaryDto.linkedDiaries) {
-                    EasyDiaryDbHelper.findDiaryBy(linkedDiarySequence)?.let {
-                        linkedDiaries.add(it)
+            lifecycleScope.launch {
+                val linkedDiaries = mutableListOf<DiaryDomain>()
+                if (diaryDto.linkedDiaries.isNotEmpty()) {
+                    for (linkedDiarySequence in diaryDto.linkedDiaries) {
+                        diaryViewModel.findDiaryBy(linkedDiarySequence)?.let {
+                            linkedDiaries.add(it)
+                        }
                     }
                 }
+                linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
+                linkedDiaryViewModel.updateParentDiaries(
+                    EasyDiaryDbHelper.findParentDiariesOf(
+                        diaryDto.diaryId,
+                    ),
+                )
             }
-            linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
         }
 
         private fun initBottomContainer() {
@@ -1116,16 +1295,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         fun encryptData(inputPass: String) {
-            context?.let {
-                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)?.let { diaryDto ->
-                    realmInstance.beginTransaction()
-                    diaryDto.isEncrypt = true
-                    diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
-                    diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
-                    diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
-                    realmInstance.commitTransaction()
-                    realmInstance.close()
+            lifecycleScope.launch {
+                var diary = diaryViewModel.findDiaryBy(getSequence())
+                diary?.let {
+                    diary =
+                        diary.copy(
+                            isEncrypt = true,
+                            title = JasyptUtils.encrypt(it.title ?: "", inputPass),
+                            contents = JasyptUtils.encrypt(it.contents, inputPass),
+                            encryptKeyHash = JasyptUtils.sha256(inputPass),
+                        )
+                    diaryViewModel.updateDiary(diary)
                     initContents()
                 }
             }
@@ -1136,28 +1316,34 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 mBinding.run {
                     diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
 //                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
-                    requireActivity().applyMarkDownPolicy(diaryContents, JasyptUtils.decrypt(diaryDto.contents!!, inputPass))
+                    requireActivity().applyMarkDownPolicy(
+                        diaryContents,
+                        JasyptUtils.decrypt(diaryDto.contents!!, inputPass),
+                    )
                 }
             }
         }
 
         fun decryptData(inputPass: String): Boolean {
             var result = true
-            context?.let {
-                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)!!
-                if (diaryDto.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
-                    realmInstance.beginTransaction()
-                    diaryDto.isEncrypt = false
-                    diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", inputPass)
-                    diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", inputPass)
-                    realmInstance.commitTransaction()
-                    realmInstance.close()
-                    initContents()
-                } else {
-                    result = false
+            lifecycleScope.launch {
+                var diary = diaryViewModel.findDiaryBy(getSequence())
+                diary?.let {
+                    if (it.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
+                        diary =
+                            diary.copy(
+                                isEncrypt = false,
+                                title = JasyptUtils.decrypt(it.title ?: "", inputPass),
+                                contents = JasyptUtils.decrypt(it.contents, inputPass),
+                            )
+                        diaryViewModel.updateDiary(diary)
+                        initContents()
+                    } else {
+                        result = false
+                    }
                 }
             }
+
             return result
         }
 
@@ -1189,7 +1375,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
                 photoViewPager.putExtra(DIARY_ATTACH_PHOTO_INDEX, index)
-                TransitionHelper.startActivityWithTransition(activity, photoViewPager, TransitionConstants.BOTTOM_TO_TOP)
+                TransitionHelper.startActivityWithTransition(
+                    activity,
+                    photoViewPager,
+                    TransitionConstants.BOTTOM_TO_TOP,
+                )
             }
         }
     }

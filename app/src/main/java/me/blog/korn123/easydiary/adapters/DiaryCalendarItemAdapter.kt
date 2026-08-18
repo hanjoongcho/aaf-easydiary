@@ -12,9 +12,14 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -23,16 +28,22 @@ import org.apache.commons.lang3.StringUtils
  */
 
 class DiaryCalendarItemAdapter(
-        context: Context,
-        private val layoutResourceId: Int,
-        private val list: List<Diary>
-) : ArrayAdapter<Diary>(context, layoutResourceId, list) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    context: Context,
+    private val layoutResourceId: Int,
+    private val list: List<DiaryDomain>,
+) : ArrayAdapter<DiaryDomain>(context, layoutResourceId, list) {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View {
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
 
         when (itemView.tag is ViewHolder) {
-            true -> itemView.tag as ViewHolder
+            true -> {
+                itemView.tag as ViewHolder
+            }
+
             false -> {
                 val viewHolder = ViewHolder(itemView.findViewById(R.id.text1), itemView.findViewById(R.id.weather), itemView.findViewById(R.id.item_holder))
                 itemView.tag = viewHolder
@@ -48,26 +59,27 @@ class DiaryCalendarItemAdapter(
                 }
 
                 if (layoutResourceId != R.layout.item_diary_dashboard_calendar) {
-                    maxLines = when (context.config.enableContentsSummary) {
-                        true -> {
-                            context.config.summaryMaxLines
-                            //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
-                        }
+                    maxLines =
+                        when (context.config.enableContentsSummary) {
+                            true -> {
+                                context.config.summaryMaxLines
+                                //                        ellipsize = TextUtils.TruncateAt.valueOf("END")
+                            }
 
-                        false -> {
-                            Integer.MAX_VALUE
-                            //                        ellipsize = null
+                            false -> {
+                                Integer.MAX_VALUE
+                                //                        ellipsize = null
+                            }
                         }
-                    }
                 }
 
                 if (context.config.enableMarkdown) {
-                    textView1.tag = diaryDto.sequence
-                    EasyDiaryUtils.applyMarkDownEllipsize(textView1, diaryDto.sequence, 0)
+                    textView1.tag = diaryDto.diaryId
+                    EasyDiaryUtils.applyMarkDownEllipsize(textView1, diaryDto.diaryId, 0)
                 }
             }
 
-            FlavorUtils.initWeatherView(context, imageView, diaryDto.weather)
+            FlavorUtils.initWeatherView(context, imageView, diaryDto.symbolSequence)
             item_holder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
@@ -89,5 +101,9 @@ class DiaryCalendarItemAdapter(
         return itemView
     }
 
-    private class ViewHolder(val textView1: TextView, val imageView: ImageView, val item_holder: RelativeLayout)
+    private class ViewHolder(
+        val textView1: TextView,
+        val imageView: ImageView,
+        val item_holder: RelativeLayout,
+    )
 }

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -34,8 +36,11 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.views.FixedTextView
+import kotlin.getValue
 
+@AndroidEntryPoint
 class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
     private lateinit var mChartTitle: FixedTextView
@@ -45,6 +50,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     private val mTypeface: Typeface
         get() = FontUtils.getCommonTypeface(requireContext())!!
     val mSequences = arrayListOf<Int>()
+    private val diaryViewModel: DiaryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -145,7 +151,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
 
         mCoroutineJob =
             lifecycleScope.launch(Dispatchers.IO) {
-                val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
+                val sortedMap = diaryViewModel.getSymbolUsedCountMap(true)
                 val barEntries = ArrayList<BarEntry>()
                 var index = 1F
                 val itemArray = arrayListOf<HashMap<String, Int>>()

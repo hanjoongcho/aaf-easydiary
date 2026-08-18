@@ -80,8 +80,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -107,11 +109,14 @@ import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
+@AndroidEntryPoint
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     private val viewModel: DiaryMainViewModel by viewModels()
+    private val diaryViewModel: DiaryViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
 
     /***************************************************************************************************
@@ -140,7 +145,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     0.dp
                 }
 
-            val items: List<DiaryDomain> by viewModel.diaryItems.collectAsState()
+            val items: List<DiaryDomain> by diaryViewModel.diaries.collectAsStateWithLifecycle()
             val modifier: Modifier = Modifier
 
             val focusManager = LocalFocusManager.current
@@ -423,7 +428,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         currentQuery = currentQuery,
                         enableCardViewPolicy = enableCardViewPolicy,
                     ) { query ->
-                        viewModel.findDiary(query)
+                        diaryViewModel.query.value = query
                     }
                 }
 //                }
@@ -580,7 +585,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             currentQuery = currentQuery,
                             enableCardViewPolicy = enableCardViewPolicy,
                         ) { query ->
-                            viewModel.findDiary(query)
+                            diaryViewModel.query.value = query
                         }
                     }
                 }

@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.zhpan.bannerview.constants.PageStyle
+import dagger.hilt.android.AndroidEntryPoint
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -23,7 +24,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
+@AndroidEntryPoint
 class DashboardActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   global properties

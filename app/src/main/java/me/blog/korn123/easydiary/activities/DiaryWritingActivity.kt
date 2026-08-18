@@ -6,10 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
+import androidx.lifecycle.lifecycleScope
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isAccessFromOutside
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
@@ -21,7 +28,7 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
+@AndroidEntryPoint
 class DiaryWritingActivity : BaseDiaryEditingActivity() {
     /***************************************************************************************************
      *   global properties
@@ -154,37 +161,39 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     }
 
     override fun saveContents() {
-        if (isExistEasterEggDiary(0)) {
-            duplicatedEasterEggWarning()
-        } else {
-            hideSoftInputFromWindow()
-            setLocationInfo()
-            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-                mBinding.partialEditContents.diaryContents.requestFocus()
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        lifecycleScope.launch {
+            if (isExistEasterEggDiary(0)) {
+                duplicatedEasterEggWarning()
             } else {
-                val diaryDto =
-                    Diary(
-                        DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                        mCurrentTimeMillis,
-                        mBinding.partialEditContents.diaryTitle.text
-                            .toString(),
-                        mBinding.partialEditContents.diaryContents.text
-                            .toString(),
-                        mSelectedItemPosition,
-                        mBinding.partialEditContents.allDay.isChecked,
-                    )
-                if (mLocation != null) diaryDto.location = mLocation
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.insertDiary(diaryDto)
-                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-                if (isAccessFromOutside()) {
-                    startMainActivityWithClearTask()
+                hideSoftInputFromWindow()
+                setLocationInfo()
+                if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                    mBinding.partialEditContents.diaryContents.requestFocus()
+                    makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
-                    TransitionHelper.finishActivityWithTransition(this)
+                    val diaryDto =
+                        Diary(
+                            DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                            mCurrentTimeMillis,
+                            mBinding.partialEditContents.diaryTitle.text
+                                .toString(),
+                            mBinding.partialEditContents.diaryContents.text
+                                .toString(),
+                            mSelectedItemPosition,
+                            mBinding.partialEditContents.allDay.isChecked,
+                        )
+                    if (mLocation != null) diaryDto.location = mLocation
+                    applyRemoveIndex()
+                    diaryDto.photoUris = mPhotoUris
+                    EasyDiaryDbHelper.insertDiary(diaryDto)
+                    config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+                    if (isAccessFromOutside()) {
+                        startMainActivityWithClearTask()
+                    } else {
+                        TransitionHelper.finishActivityWithTransition(this@DiaryWritingActivity)
+                    }
+                    mIsDiarySaved = true
                 }
-                mIsDiarySaved = true
             }
         }
     }
@@ -210,11 +219,14 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
 
         mBinding.partialEditContents.feelingSymbolButton.setOnClickListener {
             mBinding.partialEditContents.diaryContents.clearFocus()
-            openFeelingSymbolDialog(
-                getString(R.string.diary_symbol_guide_message),
-                mSelectedItemPosition,
-            ) { symbolSequence ->
-                selectFeelingSymbol(symbolSequence)
+            lifecycleScope.launch {
+                openFeelingSymbolDialog(
+                    getString(R.string.diary_symbol_guide_message),
+                    mSelectedItemPosition,
+                    diaryViewModel.getSymbolUsedCountMap(true),
+                ) { symbolSequence ->
+                    selectFeelingSymbol(symbolSequence)
+                }
             }
         }
     }

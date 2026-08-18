@@ -13,9 +13,23 @@ class DiaryLocalDataSourceImpl
     constructor(
         private val diaryDao: DiaryDao,
     ) : DiaryDataSource {
-        override fun getAllDiaries(): Flow<List<DiaryEntity>> = diaryDao.getAllDiaries()
+        override fun getAllDiaries(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): Flow<List<DiaryEntity>> = diaryDao.getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
 
-        override suspend fun getDiariesWithPhotos(): List<DiaryWithPhotos> = diaryDao.getDiariesWithPhotos()
+        override fun getDiariesWithPhotos(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): Flow<List<DiaryWithPhotos>> = diaryDao.getDiariesWithPhotos(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
+
+        override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosById(id)
 
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = diaryDao.getDiaryById(seq)
 
@@ -31,6 +45,11 @@ class DiaryLocalDataSourceImpl
         ) = diaryDao.insertDiariesWithPhotos(diariesWithPhotos)
 
         override suspend fun updateDiary(diary: DiaryEntity) = diaryDao.updateDiary(diary)
+
+        override suspend fun updateDiaryWithPhotos(
+            diary: DiaryEntity,
+            photoUris: List<PhotoUriEntity>,
+        ) = diaryDao.updateDiaryWithPhotos(diary, photoUris)
 
         override suspend fun deleteDiary(diary: DiaryEntity) = diaryDao.deleteDiary(diary)
 

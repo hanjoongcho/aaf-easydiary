@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.BarLineChartBase
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -32,15 +34,17 @@ import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.ChartConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.views.FixedTextView
 
+@AndroidEntryPoint
 class WritingBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private var mCoroutineJob: Job? = null
+    private val diaryViewModel: DiaryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -129,11 +133,11 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
 
-                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
+                view.findViewById<ImageView>(R.id.image_expend_chart)?.let {
                     it.visibility = View.VISIBLE
-                    requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
-                    it.setOnClickListener { view ->
-                        view.postDelayed({
+                    requireActivity().updateDrawableColorInnerCardView(it, requireContext().config.textColor)
+                    it.setOnClickListener { v ->
+                        v.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
@@ -189,28 +193,25 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         mCoroutineJob?.run { if (isActive) cancel() }
     }
 
-    private fun setData(count: Int = 8): ArrayList<BarEntry> {
+    private suspend fun setData(count: Int = 8): ArrayList<BarEntry> {
         val barEntries = ArrayList<BarEntry>()
-        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-            val listDiary = EasyDiaryDbHelper.findDiary(null, realmInstance = realmInstance)
-            if (listDiary.isNotEmpty()) {
-                val map = hashMapOf<Int, Int>()
-                listDiary.map { diaryDto ->
-                    val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
-                    val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
-                    if (map[itemNumber] == null) {
-                        map.put(itemNumber, 1)
-                    } else {
-                        map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
-                    }
-                }
-                for (i in 1..count) {
-                    var total = 0
-                    if (map[i] != null) total = map[i] ?: 0
-                    barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
+        val listDiary = diaryViewModel.findDiary(null)
+        if (listDiary.isNotEmpty()) {
+            val map = hashMapOf<Int, Int>()
+            listDiary.map { diaryDto ->
+                val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
+                val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
+                if (map[itemNumber] == null) {
+                    map.put(itemNumber, 1)
+                } else {
+                    map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
                 }
             }
-            realmInstance.close()
+            for (i in 1..count) {
+                var total = 0
+                if (map[i] != null) total = map[i] ?: 0
+                barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
+            }
         }
         return barEntries
     }

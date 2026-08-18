@@ -134,7 +134,7 @@ fun LegacyDiaryItemCard(
                         }
 
                         selection.setOnCheckedChangeListener { _, isChecked ->
-                            diary.toRealm().also {
+                            diary.also {
                                 it.isSelected = isChecked
                                 EasyDiaryDbHelper.updateDiaryBy(it)
                             }
@@ -214,7 +214,7 @@ fun LegacyDiaryItemCard(
                         if ((diary.photoUris?.size ?: 0) > 0) {
                             diary.photoUrisWithEncryptionPolicy()?.map {
                                 val imageXY = dpToPixel(32F)
-                                val imageView = ImageView(activity)
+                                val imageView = ImageView(activity ?: ctx)
                                 val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
                                 imageView.layoutParams = layoutParams
                                 imageView.scaleType = ImageView.ScaleType.CENTER
@@ -290,8 +290,8 @@ fun LegacyDiaryItemCard(
 
 @Composable
 fun LegacyDiarySubItemCard(
-    diary: DiaryUiModel,
-    itemClickCallback: (diary: DiaryUiModel) -> Unit,
+    diary: DiaryDomain,
+    itemClickCallback: (diary: DiaryDomain) -> Unit,
     itemLongClickCallback: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -321,11 +321,11 @@ fun LegacyDiarySubItemCard(
                 Modifier
                     .fillMaxWidth(),
             factory = { ctx ->
-                val activity = ctx as Activity
+                val activity = ctx.findActivity()
                 val currentQuery = ""
                 val binding =
                     ItemDiarySubBinding.inflate(LayoutInflater.from(ctx)).apply {
-                        activity.run {
+                        (activity ?: ctx).run {
                             root.run {
 //                            setOnClickListener { itemClickCallback(diary) }
 //                            setOnLongClickListener {
@@ -381,7 +381,7 @@ fun LegacyDiarySubItemCard(
                         true,
                     )
 
-                    FlavorUtils.initWeatherView(context, imageSymbol, diary.weather)
+                    FlavorUtils.initWeatherView(context, imageSymbol, diary.symbolSequence)
                 }
             },
         )

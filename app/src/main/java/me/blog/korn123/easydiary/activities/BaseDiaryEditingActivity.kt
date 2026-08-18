@@ -32,8 +32,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.werb.pickphotoview.util.PickConfig
 import io.realm.RealmList
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -52,6 +54,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
@@ -174,7 +177,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var mIsDiarySaved = false
     protected var mSymbolSequence = 0
 
-    protected var mLinkedDiaries: RealmList<Int> = RealmList()
+    protected var mLinkedDiaries: List<Int> = arrayListOf()
 
     /**
      * mMonth is not Calendar.MONTH
@@ -472,19 +475,21 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     protected fun checkTemporaryDiary(originSequence: Int) {
-        EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence)?.let {
-            showAlertDialog(
-                getString(R.string.load_auto_save_diary_description),
-                { _, _ ->
-                    initData(it)
-                    initBottomToolbar()
-                    EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
-                },
-                { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) },
-                DialogMode.INFO,
-                false,
-                getString(R.string.load_auto_save_diary_title),
-            )
+        lifecycleScope.launch {
+            diaryViewModel.findTemporaryDiaryBy(originSequence)?.let {
+                showAlertDialog(
+                    getString(R.string.load_auto_save_diary_description),
+                    { _, _ ->
+                        initData(it)
+                        initBottomToolbar()
+                        EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                    },
+                    { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) },
+                    DialogMode.INFO,
+                    false,
+                    getString(R.string.load_auto_save_diary_title),
+                )
+            }
         }
     }
 
@@ -830,7 +835,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun initData(diary: Diary) {
+    protected fun initData(diary: DiaryDomain) {
         // When checkTemporaryDiary is called in edit mode, the already loaded attached photo must be cleared.
         // Start clearing
         val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
@@ -876,8 +881,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         // TODO fixme elegance
-        diary.photoUris?.let {
-            mPhotoUris.addAll(it)
+        diary.photoUris.let {
+            mPhotoUris.addAll(it.map { photoUri -> photoUri.toRealm() })
         }
 
         mPhotoUris.let {
@@ -897,14 +902,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
 //        initSpinner()
-        selectFeelingSymbol(diary.weather)
+        selectFeelingSymbol(diary.symbolSequence)
         if (config.enableLocationInfo) {
 //            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()
             diary.location?.let {
                 mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
                 mBinding.partialEditContents.locationLabel.text = it.address
-                mLocation = it
+                mLocation = it.toRealm()
             } ?: run {
                 setLocationInfo()
                 mLocation?.let {
@@ -915,8 +920,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun isExistEasterEggDiary(allowStoredCnt: Int) =
-        mSelectedItemPosition == SYMBOL_EASTER_EGG && EasyDiaryDbHelper
+    protected suspend fun isExistEasterEggDiary(allowStoredCnt: Int) =
+        mSelectedItemPosition == SYMBOL_EASTER_EGG && diaryViewModel
             .findDiary(
                 null,
                 false,

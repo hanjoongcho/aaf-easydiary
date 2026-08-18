@@ -213,7 +213,7 @@ class GalleryActivity : EasyDiaryActivity() {
                     .listFiles()
                     ?.map { file ->
                         val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
-                        GalleryAdapter.AttachedPhoto(file, false, if (diary != null) realm.copyFromRealm(diary) else null)
+                        GalleryAdapter.AttachedPhoto(file, false, diary)
                     }?.filter { attachedPhoto -> attachedPhoto.diary != null || context.config.visibleUnlinkedPhotos }
                     ?.sortedByDescending { item ->
                         item.diary?.currentTimeMillis ?: 0

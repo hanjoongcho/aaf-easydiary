@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.zhpan.bannerview.constants.PageStyle
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -113,7 +114,7 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
+@AndroidEntryPoint
 class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecyclerView>() {
     /***************************************************************************************************
      *   global properties
@@ -151,11 +152,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             exportHtmlBook(it.data, diaryDomains)
                             withContext(Dispatchers.Main) {
                                 mBinding.progressCoroutine.visibility = View.GONE
-                                diaryDomains.forEach {
-                                    it.toRealm().also { diaryDomain ->
-                                        diaryDomain.isSelected = false
-                                        EasyDiaryDbHelper.updateDiaryBy(diaryDomain)
-                                    }
+                                diaryDomains.forEach { diaryDomain ->
+                                    diaryDomain.isSelected = false
+                                    EasyDiaryDbHelper.updateDiaryBy(diaryDomain)
                                 }
                                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
@@ -219,7 +218,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupDiaryListScrollListener()
         setupOnBackPressDispatcher()
 
-        if (config.enableDebugMode) openOverDueNotification()
+        if (config.enableDebugMode) {
+            lifecycleScope.launch {
+                openOverDueNotification(
+                    diaryViewModel
+                        .findDiary(
+                            null,
+                            false,
+                            0,
+                            0,
+                            0,
+                        ).filter { item -> item.symbolSequence in 80..81 },
+                )
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -235,15 +247,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         invalidateOptionsMenu()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
-//            diaryListView.smoothScrollToPosition(0)
-//            mBinding.diaryListView.setSelection(0)
-            val maxSequence = EasyDiaryDbHelper.getMaxDiarySequence()
-            mBinding.diaryListView.layoutManager?.scrollToPosition(getIndexBySequence(maxSequence))
-//            mBinding.diaryListView.layoutManager?.scrollToPosition(maxSequence.minus(1))
-            config.previousActivity = -1
+            lifecycleScope.launch {
+                val maxSequence = diaryViewModel.getMaxDiarySequence()
+                mBinding.diaryListView.layoutManager?.scrollToPosition(getIndexBySequence(maxSequence))
+                config.previousActivity = -1
+            }
         }
-
-//        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
 
         mBinding.composeView.visibility = View.VISIBLE
 
@@ -361,7 +370,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     reversed().forEach {
                                         it.toRealm().also { realmDiary ->
                                             realmDiary.isSelected = false
-                                            EasyDiaryDbHelper.duplicateDiaryBy2(realmDiary)
+                                            EasyDiaryDbHelper.duplicateDiaryBy(realmDiary)
                                         }
                                     }
                                     refreshList()
@@ -816,12 +825,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
         mBinding.feelingSymbolButton.setOnClickListener {
-            openFeelingSymbolDialog(
-                getString(R.string.diary_symbol_search_message),
-                viewModel.symbol.value,
-            ) { symbolSequence ->
-                selectFeelingSymbol(symbolSequence)
-                refreshList()
+            lifecycleScope.launch {
+                openFeelingSymbolDialog(
+                    getString(R.string.diary_symbol_search_message),
+                    viewModel.symbol.value,
+                    diaryViewModel.getSymbolUsedCountMap(true),
+                ) { symbolSequence ->
+                    selectFeelingSymbol(symbolSequence)
+                    refreshList()
+                }
             }
         }
     }
@@ -886,37 +898,39 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshList(query: String) {
-        mDiaryList.clear()
-        mDiaryList.addAll(
-            EasyDiaryDbHelper.findDiary(
-                query,
-                config.diarySearchQueryCaseSensitive,
-                0,
-                0,
-                viewModel.symbol.value,
-                true,
-            ),
-        )
-        mDiaryMainItemAdapter?.currentQuery = query
-        mDiaryMainItemAdapter?.notifyDataSetChanged()
-        mBinding.run {
-            when (mDiaryList.isEmpty()) {
-                true -> {
-                    diaryListView.visibility = View.GONE
-                    textNoDiary.visibility = View.VISIBLE
-                }
+        lifecycleScope.launch {
+            val result =
+                diaryViewModel.findDiary(
+                    query,
+                    config.diarySearchQueryCaseSensitive,
+                    0,
+                    0,
+                    viewModel.symbol.value,
+                    true,
+                )
+            mDiaryList.clear()
+            mDiaryList.addAll(result)
+            mDiaryMainItemAdapter?.currentQuery = query
+            mDiaryMainItemAdapter?.notifyDataSetChanged()
+            mBinding.run {
+                when (mDiaryList.isEmpty()) {
+                    true -> {
+                        diaryListView.visibility = View.GONE
+                        textNoDiary.visibility = View.VISIBLE
+                    }
 
-                false -> {
-                    diaryListView.visibility = View.VISIBLE
-                    textNoDiary.visibility = View.GONE
+                    false -> {
+                        diaryListView.visibility = View.VISIBLE
+                        textNoDiary.visibility = View.GONE
+                    }
                 }
             }
-        }
 
-        if (config.enableDebugMode) {
-            supportActionBar?.run {
-                title = ""
-                subtitle = "${mDiaryList.size}"
+            if (config.enableDebugMode) {
+                supportActionBar?.run {
+                    title = ""
+                    subtitle = "${mDiaryList.size}"
+                }
             }
         }
     }

@@ -5,11 +5,14 @@ import android.graphics.Color
 import android.text.format.DateFormat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.models.PhotoUri
 import java.util.*
 
 /**
@@ -345,6 +348,18 @@ class Config(
     var enableShakeDetector: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
         set(enableShakeDetector) = prefs.edit().putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector).apply()
+
+    var customSymbolPaths: List<PhotoUri>
+        get() {
+            val jsonString = prefs.getString(SETTING_CUSTOM_SYMBOL_PATHS, null)
+            return if (jsonString == null) {
+                emptyList()
+            } else {
+                val type = object : TypeToken<List<PhotoUri>>() {}.type
+                Gson().fromJson(jsonString, type)
+            }
+        }
+        set(value) = prefs.edit().putString(SETTING_CUSTOM_SYMBOL_PATHS, Gson().toJson(value)).apply()
 
     companion object {
         fun newInstance(context: Context) = Config(context)

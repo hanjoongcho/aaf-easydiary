@@ -71,108 +71,18 @@ object EasyDiaryDbHelper {
 
     fun <E : RealmModel?> copyFromRealm(realmObjects: Iterable<E>?): MutableList<E> = getInstance().copyFromRealm(realmObjects)
 
-    /***************************************************************************************************
-     *   Manage DiaryDto model
-     *   Create: Insert
-     *   Read: Find
-     *   Update: Update
-     *   Delete: Delete
-     *
-     ***************************************************************************************************/
+    @Deprecated(message = "Use DiaryViewModel.getMaxDiarySequence() instead")
     fun getMaxDiarySequence(realmInstance: Realm = getInstance()): Int = realmInstance.where(Diary::class.java).max("sequence")?.toInt() ?: 1
 
-    fun insertDiary(
-        diary: Diary,
-        realmInstance: Realm = getInstance(),
-    ) {
-        realmInstance.executeTransaction { realm ->
-            var sequence = 1
-            if (realm.where(Diary::class.java).count() > 0L) {
-                val number = realm.where(Diary::class.java).max("sequence")
-                number?.let {
-                    sequence = it.toInt().plus(1)
-                }
-            }
-            diary.sequence = sequence
-            realm.insert(diary)
-        }
-    }
+    @Deprecated(message = "Use DiaryViewModel.findOldestDiary() instead")
+    fun findOldestDiary(): DiaryDomain? =
+        getInstance()
+            .where(Diary::class.java)
+            .sort("currentTimeMillis", Sort.ASCENDING)
+            .findFirst()
+            ?.toDomain()
 
-    fun insertTemporaryDiary(diaryTemp: Diary) {
-        deleteTemporaryDiaryBy(diaryTemp.originSequence)
-        getInstance().executeTransaction { realm ->
-            if (diaryTemp.sequence == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
-                realm.where(Diary::class.java).max("sequence")?.let {
-                    diaryTemp.sequence = it.toInt().plus(1)
-                }
-            }
-            realm.insert(diaryTemp)
-        }
-    }
-
-    fun duplicateDiaryBy(diary: Diary) {
-        getInstance().copyFromRealm(diary).run {
-            currentTimeMillis = System.currentTimeMillis()
-            updateDateString()
-            originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
-            insertDiary(this)
-        }
-    }
-
-    fun duplicateDiaryBy2(diary: Diary) {
-        diary.run {
-            currentTimeMillis = System.currentTimeMillis()
-            updateDateString()
-            originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
-            insertDiary(this)
-        }
-    }
-
-    fun findTemporaryDiaryBy(
-        originSequence: Int,
-        realmInstance: Realm = getInstance(),
-    ): Diary? = realmInstance.where(Diary::class.java).equalTo("originSequence", originSequence).findFirst()
-
-    fun findFirstDiary(): Diary? {
-        val realm = getInstance()
-        val firstItemTimeMillis =
-            (
-                realm
-                    .where(Diary::class.java)
-                    .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
-                    .min("currentTimeMillis") ?: 0L
-            ).toLong()
-        return realm.where(Diary::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
-    }
-
-    fun findMarkdownSyncTargetDiary(
-        query: String?,
-        realmInstance: Realm = getInstance(),
-    ): List<Diary> = realmInstance.where(Diary::class.java).equalTo("title", query).findAll()
-
-    fun findDiary(
-        query: String?,
-        isSensitive: Boolean = false,
-        startTimeMillis: Long = 0,
-        endTimeMillis: Long = 0,
-        symbolSequence: Int = 0,
-        realmInstance: Realm = getInstance(),
-    ): List<DiaryDomain> =
-        findDiary(
-            query,
-            isSensitive,
-            startTimeMillis,
-            endTimeMillis,
-            symbolSequence,
-            false,
-            realmInstance,
-        )
-
-    /**
-     * Makes an unmanaged in-memory copy of already persisted RealmObjects
-     *
-     * @return an in-memory detached copy of managed RealmObjects.
-     */
+    @Deprecated(message = "Use DiaryViewModel.findDiary() instead")
     fun findDiary(
         query: String?,
         isSensitive: Boolean = false,
@@ -288,80 +198,60 @@ object EasyDiaryDbHelper {
         return resultsList.map { it.toDomain() }
     }
 
-    /**
-     * Main Thread가 아닌 Background Thread에서 Realm DB 변경 사항을 즉시 반영하기 위해 호출
-     */
-    fun forceRefresh() {
-        getInstance().refresh()
-    }
+    @Deprecated(message = "Use DiaryViewModel.findTemporaryDiaryBy() instead")
+    fun findTemporaryDiaryBy(
+        originSequence: Int,
+        realmInstance: Realm = getInstance(),
+    ): DiaryDomain? =
+        realmInstance
+            .where(Diary::class.java)
+            .equalTo("originSequence", originSequence)
+            .findFirst()
+            ?.toDomain()
 
-    fun findDiary(
-        query: String?,
-        isSensitive: Boolean = false,
-        symbolSequences: List<Int>,
-    ): List<DiaryDomain> {
+    @Deprecated(message = "Use DiaryViewModel.findFirstDiary() instead")
+    fun findFirstDiary(): DiaryDomain? {
         val realm = getInstance()
-        val result: RealmResults<Diary> =
-            when (StringUtils.isEmpty(query)) {
-                true -> {
-                    realm.where(Diary::class.java).findAll()
-                }
-
-                false -> {
-                    if (isSensitive) {
-                        realm
-                            .where(Diary::class.java)
-                            .beginGroup()
-                            .contains("contents", query)
-                            .or()
-                            .contains("title", query)
-                            .endGroup()
-                            .findAll()
-                    } else {
-                        realm
-                            .where(Diary::class.java)
-                            .beginGroup()
-                            .contains("contents", query, Case.INSENSITIVE)
-                            .or()
-                            .contains("title", query, Case.INSENSITIVE)
-                            .endGroup()
-                            .findAll()
-                    }
-                }
-            }
-        return result
-            .where()
-            .`in`("weather", symbolSequences.toTypedArray())
-            .findAll()
-            .map { it.toDomain() }
+        val firstItemTimeMillis =
+            (
+                realm
+                    .where(Diary::class.java)
+                    .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+                    .min("currentTimeMillis") ?: 0L
+            ).toLong()
+        return realm
+            .where(Diary::class.java)
+            .equalTo("currentTimeMillis", firstItemTimeMillis)
+            .findFirst()
+            ?.toDomain()
     }
 
     fun findParentDiariesOf(
         sequence: Int,
         realmInstance: Realm = getInstance(),
-    ): List<Diary> =
+    ): List<DiaryDomain> =
         realmInstance
             .where(Diary::class.java)
             .equalTo("linkedDiaries", sequence)
             .findAll()
             .sort("currentTimeMillis", Sort.ASCENDING)
             .toList()
-
-    fun findOldestDiary(): Diary? = getInstance().where(Diary::class.java).sort("currentTimeMillis", Sort.ASCENDING).findFirst()
+            .map { it.toDomain() }
 
     fun findDiaryBy(
         sequence: Int,
         realmInstance: Realm = getInstance(),
-    ): Diary? =
+    ): DiaryDomain? =
         realmInstance
             .where(Diary::class.java)
             .equalTo("sequence", sequence)
             .findFirst()
+            ?.toDomain()
 
     fun findDiaryBy(
         photoUri: String,
         realmInstance: Realm = getInstance(),
-    ): Diary? {
+    ): DiaryDomain? {
         val result =
             realmInstance
                 .where(PhotoUri::class.java)
@@ -376,13 +266,13 @@ object EasyDiaryDbHelper {
             }
         }
 
-        return diary
+        return diary?.toDomain()
     }
 
     fun findDiaryByDateString(
         dateString: String?,
         sort: Sort = Sort.DESCENDING,
-    ): List<Diary> =
+    ): List<DiaryDomain> =
         getInstance()
             .where(Diary::class.java)
             .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
@@ -390,6 +280,7 @@ object EasyDiaryDbHelper {
             .findAll()
             .sort("currentTimeMillis", sort)
             .toList()
+            .map { it.toDomain() }
 
     fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUri> =
         realmInstance
@@ -398,8 +289,60 @@ object EasyDiaryDbHelper {
             .sort("photoUri", Sort.ASCENDING)
             .toList()
 
-    fun updateDiaryBy(diary: Diary) {
-        getInstance().executeTransaction { realm -> realm.insertOrUpdate(diary) }
+    fun countDiaryAll(): Long =
+        getInstance()
+            .where(Diary::class.java)
+            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+            .count()
+
+    fun countDiaryBy(dateString: String): Int =
+        getInstance()
+            .where(Diary::class.java)
+            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
+            .equalTo("dateString", dateString)
+            .count()
+            .toInt()
+
+    fun insertDiary(
+        diary: Diary,
+        realmInstance: Realm = getInstance(),
+    ) {
+        realmInstance.executeTransaction { realm ->
+            var sequence = 1
+            if (realm.where(Diary::class.java).count() > 0L) {
+                val number = realm.where(Diary::class.java).max("sequence")
+                number?.let {
+                    sequence = it.toInt().plus(1)
+                }
+            }
+            diary.sequence = sequence
+            realm.insert(diary)
+        }
+    }
+
+    fun insertTemporaryDiary(diaryTemp: Diary) {
+        deleteTemporaryDiaryBy(diaryTemp.originSequence)
+        getInstance().executeTransaction { realm ->
+            if (diaryTemp.sequence == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
+                realm.where(Diary::class.java).max("sequence")?.let {
+                    diaryTemp.sequence = it.toInt().plus(1)
+                }
+            }
+            realm.insert(diaryTemp)
+        }
+    }
+
+    fun duplicateDiaryBy(diary: Diary) {
+        diary.run {
+            currentTimeMillis = System.currentTimeMillis()
+            updateDateString()
+            originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
+            insertDiary(this)
+        }
+    }
+
+    fun updateDiaryBy(diary: DiaryDomain) {
+        getInstance().executeTransaction { realm -> realm.insertOrUpdate(diary.toRealm()) }
     }
 
     fun deleteDiaryBy(
@@ -427,27 +370,6 @@ object EasyDiaryDbHelper {
             }
         }
     }
-
-    fun countDiaryAll(): Long =
-        getInstance()
-            .where(Diary::class.java)
-            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
-            .count()
-
-    fun countDiaryBy(dateString: String): Int =
-        getInstance()
-            .where(Diary::class.java)
-            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
-            .equalTo("dateString", dateString)
-            .count()
-            .toInt()
-
-    fun countPhotoUriBy(uriString: String): Int =
-        getInstance()
-            .where(PhotoUri::class.java)
-            .equalTo("photoUri", uriString)
-            .count()
-            .toInt()
 
     /***************************************************************************************************
      *   Manage Alarm model
@@ -603,12 +525,4 @@ object EasyDiaryDbHelper {
      *   Manage ETC.
      *
      ***************************************************************************************************/
-    fun getToken(): String? {
-        var token: String? = null
-        val tokenInfo = findDiary("GitHub Personal Access Token", false, 0, 0, 0)
-        tokenInfo.let {
-            if (it.isNotEmpty()) token = it[0].contents
-        }
-        return token
-    }
 }

@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.models.Release
 import com.squareup.seismic.ShakeDetector
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -22,20 +26,24 @@ import me.blog.korn123.easydiary.extensions.isNightMode
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.syncCustomSymbolPaths
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import kotlin.getValue
 
 /**
  * Created by hanjoong on 2017-05-03.
  */
-
+@AndroidEntryPoint
 open class EasyDiaryActivity :
     BaseSimpleActivity(),
     ShakeDetector.Listener {
     var mCustomLineSpacing = true
+    protected val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -102,6 +110,9 @@ open class EasyDiaryActivity :
         }
         updateNavigationBarAppearance()
         applyPolicyForRecentApps()
+        lifecycleScope.launch {
+            syncCustomSymbolPaths()
+        }
     }
 
     override fun onPause() {

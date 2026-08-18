@@ -40,18 +40,4 @@ class DiaryMainViewModel : ViewModel() {
     fun setCurrentQuery(currentQuery: String) {
         _currentQuery.value = currentQuery
     }
-
-    private val _diaryItems = MutableStateFlow<List<DiaryDomain>>(EasyDiaryDbHelper.findDiary(null))
-    val diaryItems: StateFlow<List<DiaryDomain>> = _diaryItems.asStateFlow()
-
-    fun setDiaryItems(items: List<DiaryDomain>) {
-        _diaryItems.value = items
-    }
-
-    fun findDiary(query: String? = null) {
-        setCurrentQuery(query ?: "")
-        setDiaryItems(
-            EasyDiaryDbHelper.findDiary(query),
-        )
-    }
 }
