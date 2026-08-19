@@ -867,6 +867,10 @@
         v1.4.349.202608150 / 2026.08.15\n
         Update image picker permission checks
     </string>
+    <string name="release_350">
+        v1.4.350.202608190 / 2026.08.19\n
+        External storage permission policy changes (pre-Tiramisu)
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->

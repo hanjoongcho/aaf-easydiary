@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.350.202608190 (date: 2026.08.19)
+  * External storage permission policy changes (pre-Tiramisu)
+
 # Changes in 1.4.349.202608150 (date: 2026.08.15)
   * Update image picker permission checks
 
