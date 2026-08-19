@@ -539,7 +539,7 @@ const val SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS =
  *
  ***************************************************************************************************/
 val EXTERNAL_STORAGE_PERMISSIONS =
-    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
