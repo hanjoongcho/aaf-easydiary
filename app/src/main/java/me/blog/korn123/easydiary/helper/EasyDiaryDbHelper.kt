@@ -226,6 +226,7 @@ object EasyDiaryDbHelper {
             ?.toDomain()
     }
 
+    @Deprecated(message = "Use DiaryViewModel.findParentDiariesOf() instead")
     fun findParentDiariesOf(
         sequence: Int,
         realmInstance: Realm = getInstance(),
@@ -238,6 +239,7 @@ object EasyDiaryDbHelper {
             .toList()
             .map { it.toDomain() }
 
+    @Deprecated(message = "Use DiaryViewModel.findDiaryBy() instead")
     fun findDiaryBy(
         sequence: Int,
         realmInstance: Realm = getInstance(),
@@ -248,6 +250,7 @@ object EasyDiaryDbHelper {
             .findFirst()
             ?.toDomain()
 
+    @Deprecated(message = "Use DiaryViewModel.findDiaryBy() instead")
     fun findDiaryBy(
         photoUri: String,
         realmInstance: Realm = getInstance(),

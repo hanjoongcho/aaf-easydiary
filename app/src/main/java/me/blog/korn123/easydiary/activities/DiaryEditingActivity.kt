@@ -84,10 +84,13 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
     private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
-        mSymbolSequence = diaryDto.symbolSequence
-        mLinkedDiaries = diaryDto.linkedDiaries
-        initData(diaryDto)
+        lifecycleScope.launch {
+            diaryViewModel.findDiaryBy(mSequence)?.let {
+                mSymbolSequence = it.symbolSequence
+                mLinkedDiaries = it.linkedDiaries
+                initData(it)
+            }
+        }
     }
 
     override fun saveContents() {

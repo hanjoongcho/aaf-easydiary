@@ -45,7 +45,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
         lifecycleScope.launch(Dispatchers.IO) {
-            val attachedPhotos = GalleryActivity.getAttachedPhotos(this@GalleryViewPagerActivity)
+            val attachedPhotos = diaryViewModel.getAttachedPhotos(this@GalleryViewPagerActivity)
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()
                 attachedPhotos?.let { mAttachedPhotos.addAll(it) }

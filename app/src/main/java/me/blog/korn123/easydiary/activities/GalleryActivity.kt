@@ -70,7 +70,11 @@ class GalleryActivity : EasyDiaryActivity() {
             GridItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)) {
                 if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
             }
-        mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait)
+        mGridLayoutManager =
+            GridLayoutManager(
+                this,
+                if (isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait,
+            )
 
         EasyDiaryUtils.initWorkingDirectory(this@GalleryActivity)
         mGalleryAdapter =
@@ -99,7 +103,12 @@ class GalleryActivity : EasyDiaryActivity() {
             var dialog: Dialog? = null
             val dialogSettingGalleryBinding =
                 DialogSettingGalleryBinding.inflate(layoutInflater).apply {
-                    closeBottomSheet.setOnClickListener { view -> view.postDelayed({ dialog?.dismiss() }, 200L) }
+                    closeBottomSheet.setOnClickListener { view ->
+                        view.postDelayed(
+                            { dialog?.dismiss() },
+                            200L,
+                        )
+                    }
                     updateAppViews(root)
                     changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
                     FontUtils.setFontsTypeface(applicationContext, null, root, true)
@@ -107,21 +116,34 @@ class GalleryActivity : EasyDiaryActivity() {
                     val unlinkedPhotos = arrayListOf<File>()
 
                     fun updateInfo() {
-                        val totalPhotos = File(EasyDiaryUtils.getApplicationDataDirectory(applicationContext) + DIARY_PHOTO_DIRECTORY).listFiles()
-                        totalPhotos?.let {
-                            unlinkedPhotos.clear()
-                            unlinkedPhotos.addAll(totalPhotos.filter { file -> EasyDiaryDbHelper.findDiaryBy(file.name) == null })
-                            textLinkedPhotoCount.text = (totalPhotos.size - unlinkedPhotos.size).toString()
-                            textUnlinkedPhotoCount.text = "${unlinkedPhotos.size}"
-                            textTotalPhotoCount.text = totalPhotos.size.toString()
+                        // context.config.visibleUnlinkedPhotos
+                        lifecycleScope.launch {
+                            val attachedPhotos =
+                                diaryViewModel.getAttachedPhotos(this@GalleryActivity)
+                            attachedPhotos?.let { photos ->
+                                unlinkedPhotos.clear()
+                                val linkedCount = photos.count { it.diary != null }
+                                val unlinkedList =
+                                    photos.filter { it.diary == null }.map { it.file }
+                                unlinkedPhotos.addAll(unlinkedList)
+
+                                textLinkedPhotoCount.text = linkedCount.toString()
+                                textUnlinkedPhotoCount.text = "${unlinkedPhotos.size}"
+                                textTotalPhotoCount.text = photos.size.toString()
+                            }
                         }
                     }
 
                     fun reloadPhotos() {
-                        val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
-                        mAttachedPhotos.clear()
-                        attachedPhotos?.let { mAttachedPhotos.addAll(it) }
-                        mGalleryAdapter.notifyDataSetChanged()
+                        lifecycleScope.launch {
+                            val attachedPhotos =
+                                diaryViewModel.getAttachedPhotos(this@GalleryActivity)?.filter {
+                                    if (config.visibleUnlinkedPhotos) true else it.diary != null
+                                }
+                            mAttachedPhotos.clear()
+                            attachedPhotos?.let { mAttachedPhotos.addAll(it) }
+                            mGalleryAdapter.notifyDataSetChanged()
+                        }
                     }
 
                     switchShowUnlinkedPhoto.isChecked = config.visibleUnlinkedPhotos
@@ -188,8 +210,11 @@ class GalleryActivity : EasyDiaryActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initPostCard() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val attachedPhotos = getAttachedPhotos(this@GalleryActivity)
+        lifecycleScope.launch {
+            val attachedPhotos =
+                diaryViewModel.getAttachedPhotos(this@GalleryActivity)?.filter {
+                    if (config.visibleUnlinkedPhotos) true else it.diary != null
+                }
 
             withContext(Dispatchers.Main) {
                 mAttachedPhotos.clear()
@@ -202,24 +227,6 @@ class GalleryActivity : EasyDiaryActivity() {
                 }
                 mBinding.progressLoadingContainer.progressLoading.visibility = View.GONE
             }
-        }
-    }
-
-    companion object {
-        fun getAttachedPhotos(context: Context): List<GalleryAdapter.AttachedPhoto>? {
-            val realm = EasyDiaryDbHelper.getTemporaryInstance()
-            val listPostcard =
-                File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
-                    .listFiles()
-                    ?.map { file ->
-                        val diary = EasyDiaryDbHelper.findDiaryBy(file.name, realm)
-                        GalleryAdapter.AttachedPhoto(file, false, diary)
-                    }?.filter { attachedPhoto -> attachedPhoto.diary != null || context.config.visibleUnlinkedPhotos }
-                    ?.sortedByDescending { item ->
-                        item.diary?.currentTimeMillis ?: 0
-                    }
-            realm.close()
-            return listPostcard
         }
     }
 }

@@ -24,6 +24,8 @@ interface DiaryRepository {
 
     fun getDiaryWithPhotosById(id: Int): Flow<Diary?>
 
+    fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
+
     suspend fun getDiaryById(seq: Int): Diary?
 
     suspend fun insertDiary(diary: Diary)
@@ -41,4 +43,6 @@ interface DiaryRepository {
     suspend fun deleteAllDiaries()
 
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
+
+    fun findParentDiariesOf(sequence: Int): Flow<List<Diary>>
 }

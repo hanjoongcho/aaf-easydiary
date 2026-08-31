@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import androidx.lifecycle.lifecycleScope
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -68,72 +69,74 @@ class PostcardActivity : EasyDiaryActivity() {
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
 
         mBinding.run {
-            val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
-            FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.symbolSequence)
-            when (diaryDto.title.isNullOrEmpty()) {
-                true -> diaryTitle.visibility = View.GONE
-                false -> diaryTitle.text = diaryDto.title
-            }
-//            contents.text = diaryDto.contents
-            applyMarkDownPolicy(contents, diaryDto.contents!!)
-            date.text =
-                when (diaryDto.isAllDay) {
-                    true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, this@PostcardActivity)
+            lifecycleScope.launch {
+                val diaryDto = diaryViewModel.findDiaryBy(mSequence)!!
+                FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.symbolSequence)
+                when (diaryDto.title.isNullOrEmpty()) {
+                    true -> diaryTitle.visibility = View.GONE
+                    false -> diaryTitle.text = diaryDto.title
                 }
-            EasyDiaryUtils.boldString(applicationContext, diaryTitle)
-
-            setupShowcase()
-            savedInstanceState?.let {
-                setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
-                setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
-            }
-
-            diaryDto.photoUris?.let {
-                if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
-                    photoContainer.visibility = View.VISIBLE
-
-                    val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
-                    it.forEachIndexed { index, photoUriDto ->
-                        postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + photoUriDto.getFilePath(), index, 2, 0))
+//            contents.text = diaryDto.contents
+                applyMarkDownPolicy(contents, diaryDto.contents!!)
+                date.text =
+                    when (diaryDto.isAllDay) {
+                        true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                        false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, this@PostcardActivity)
                     }
-                    mPhotoAdapter =
-                        PhotoAdapter(this@PostcardActivity, postCardPhotoItems) {
-                            resizePhotoGrid()
+                EasyDiaryUtils.boldString(applicationContext, diaryTitle)
+
+                setupShowcase()
+                savedInstanceState?.let {
+                    setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
+                    setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
+                }
+
+                diaryDto.photoUris?.let {
+                    if (it.isNotEmpty()) {
+                        photoContainer.visibility = View.VISIBLE
+
+                        val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
+                        it.forEachIndexed { index, photoUriDto ->
+                            postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + photoUriDto.getFilePath(), index, 2, 0))
+                        }
+                        mPhotoAdapter =
+                            PhotoAdapter(this@PostcardActivity, postCardPhotoItems) {
+                                resizePhotoGrid()
+                            }
+
+                        photoGrid.run {
+                            layoutManager =
+                                FlexboxLayoutManager(this@PostcardActivity).apply {
+                                    flexWrap = FlexWrap.WRAP
+                                    flexDirection = FlexDirection.ROW
+//                            alignItems = AlignItems.STRETCH
+                                }
+                            adapter = mPhotoAdapter
+                        }
+                        resizePhotoGrid()
+                    }
+                }
+
+                fontSizeSeekBar?.setOnSeekBarChangeListener(
+                    object : SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(
+                            seekBar: SeekBar?,
+                            progress: Int,
+                            fromUser: Boolean,
+                        ) {
+                            mAddFontSize = progress - 20
+                            updateTextSize(postContainer, this@PostcardActivity, mAddFontSize)
+//                toolbar.title = "$mAddFontSize"
                         }
 
-                    photoGrid.run {
-                        layoutManager =
-                            FlexboxLayoutManager(this@PostcardActivity).apply {
-                                flexWrap = FlexWrap.WRAP
-                                flexDirection = FlexDirection.ROW
-//                            alignItems = AlignItems.STRETCH
-                            }
-                        adapter = mPhotoAdapter
-                    }
-                    resizePhotoGrid()
-                }
+                        override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                        }
+
+                        override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                        }
+                    },
+                )
             }
-
-            fontSizeSeekBar?.setOnSeekBarChangeListener(
-                object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        seekBar: SeekBar?,
-                        progress: Int,
-                        fromUser: Boolean,
-                    ) {
-                        mAddFontSize = progress - 20
-                        updateTextSize(postContainer, this@PostcardActivity, mAddFontSize)
-//                toolbar.title = "$mAddFontSize"
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    }
-                },
-            )
         }
     }
 
