@@ -25,6 +25,8 @@ interface DiaryDataSource {
 
     fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?>
 
+    fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
+
     suspend fun getDiaryById(seq: Int): DiaryEntity?
 
     suspend fun insertDiary(diary: DiaryEntity)
@@ -52,6 +54,8 @@ interface DiaryDataSource {
     suspend fun deleteAllDiaries()
 
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
+
+    fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
 }
 
 @Qualifier

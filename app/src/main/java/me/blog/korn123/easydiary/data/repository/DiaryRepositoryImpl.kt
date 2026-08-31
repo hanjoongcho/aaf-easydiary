@@ -25,7 +25,9 @@ class DiaryRepositoryImpl
         @RemoteDataSource private val remoteDataSource: DiaryDataSource,
     ) : DiaryRepository {
         private val dataSource: DiaryDataSource
-            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
+//            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
+            // FIXME: Remove temporary code when migrate to Jetpack Room
+            get() = localDataSource
 
         override fun getAllDiaries(
             query: String?,
@@ -50,8 +52,10 @@ class DiaryRepositoryImpl
                 entities.map { it.toDomain() }
             }
 
-        override fun getDiaryWithPhotosById(id: Int): Flow<Diary?> =
-            dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
+        override fun getDiaryWithPhotosById(id: Int): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
+
+        override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> =
+            dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
 
         override suspend fun getDiaryById(seq: Int): Diary? = dataSource.getDiaryById(seq)?.toDomain()
 
@@ -96,4 +100,9 @@ class DiaryRepositoryImpl
         }
 
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = dataSource.getPhotoUris()
+
+        override fun findParentDiariesOf(sequence: Int): Flow<List<Diary>> =
+            dataSource.findParentDiariesOf(sequence).map { entities ->
+                entities.map { it.toDomain() }
+            }
     }

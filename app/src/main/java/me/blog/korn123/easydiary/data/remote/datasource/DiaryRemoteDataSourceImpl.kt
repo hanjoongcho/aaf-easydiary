@@ -29,6 +29,8 @@ class DiaryRemoteDataSourceImpl
 
         override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = flowOf(null)
 
+        override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = flowOf(null)
+
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = null
 
         override suspend fun insertDiary(diary: DiaryEntity) {
@@ -72,4 +74,6 @@ class DiaryRemoteDataSourceImpl
         }
 
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = flowOf(emptyList())
+
+        override fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>> = flowOf(emptyList())
     }

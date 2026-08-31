@@ -5,11 +5,13 @@ import android.os.Handler
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.chrisbanes.photoview.PhotoView
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -38,40 +40,36 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
-        val diaryDto = EasyDiaryDbHelper.findDiaryBy(sequence)!!
-        mPhotoCount = diaryDto.photoUris.size
+        lifecycleScope.launch {
+            diaryViewModel.findDiaryBy(sequence)?.let {
+                mPhotoCount = it.photoUris.size
 
-        supportActionBar?.run {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)
-            title = "1 / $mPhotoCount"
-        }
+                supportActionBar?.run {
+                    setDisplayHomeAsUpEnabled(true)
+                    setHomeAsUpIndicator(R.drawable.ic_cross)
+                    title = "1 / $mPhotoCount"
+                }
 
-        mBinding.run {
-            viewPager.adapter = PhotoPagerAdapter(diaryDto)
-            viewPager.addOnPageChangeListener(
-                object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int,
-                    ) {}
+                mBinding.run {
+                    viewPager.adapter = PhotoPagerAdapter(it)
+                    viewPager.addOnPageChangeListener(
+                        object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                            override fun onPageScrolled(
+                                position: Int,
+                                positionOffset: Float,
+                                positionOffsetPixels: Int,
+                            ) {}
 
-                    override fun onPageSelected(position: Int) {
-                        toolbar.title = "${position + 1} / $mPhotoCount"
-                    }
+                            override fun onPageSelected(position: Int) {
+                                toolbar.title = "${position + 1} / $mPhotoCount"
+                            }
 
-                    override fun onPageScrollStateChanged(state: Int) {}
-                },
-            )
-
-//        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
-//        closeIcon?.let {
-//            it.setColorFilter(this.config.primaryColor, PorterDuff.Mode.SRC_IN)
-//            close.setImageDrawable(closeIcon)
-//        }
-
-            if (photoIndex > 0) Handler().post { viewPager.setCurrentItem(photoIndex, false) }
+                            override fun onPageScrollStateChanged(state: Int) {}
+                        },
+                    )
+                    if (photoIndex > 0) Handler().post { viewPager.setCurrentItem(photoIndex, false) }
+                }
+            }
         }
     }
 

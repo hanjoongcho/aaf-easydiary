@@ -65,6 +65,17 @@ interface DiaryDao {
     @Query("SELECT * FROM diaries WHERE diaryId = :id")
     fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?>
 
+    @Transaction
+    @Query(
+        """
+        SELECT DISTINCT d.* FROM diaries d
+        INNER JOIN photo_uris p ON d.diaryId = p.diaryId
+        WHERE p.photoUri LIKE '%' || :photoUriString || '%'
+        LIMIT 1
+    """,
+    )
+    fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
+
     @Query("SELECT * FROM diaries WHERE diaryId = :id")
     suspend fun getDiaryById(id: Int): DiaryEntity?
 
@@ -124,4 +135,14 @@ interface DiaryDao {
 
     @Query("SELECT * FROM photo_uris")
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
+
+    @Query(
+        """
+    SELECT * FROM diaries 
+    WHERE ',' || REPLACE(REPLACE(REPLACE(linkedDiaries, ' ', ''), '[', ''), ']', '') || ',' 
+          LIKE '%,' || :sequence || ',%'
+    ORDER BY currentTimeMillis ASC
+""",
+    )
+    fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
 }

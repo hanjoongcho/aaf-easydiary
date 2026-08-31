@@ -135,13 +135,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     { _, _ ->
                         lifecycleScope.launch {
                             selectedValue?.let {
-                                val diary = EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                                if (diary.linkedDiaries.contains(selectedValue)) {
-                                    makeSnackBar("이미 연결된 항목 입니다.")
-                                } else {
-                                    diary.linkedDiaries.add(selectedValue)
-                                    diaryViewModel.updateDiary(diary)
-                                    fragment.initContents()
+                                diaryViewModel.findDiaryBy(fragment.getSequence())?.let {
+                                    if (it.linkedDiaries.contains(selectedValue)) {
+                                        makeSnackBar("이미 연결된 항목 입니다.")
+                                    } else {
+                                        it.linkedDiaries.add(selectedValue)
+                                        diaryViewModel.updateDiary(it)
+                                        fragment.initContents()
+                                    }
                                 }
                             }
                         }
@@ -149,13 +150,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     { _, _ ->
                         lifecycleScope.launch {
                             selectedValue?.let {
-                                val diary = EasyDiaryDbHelper.findDiaryBy(selectedValue)!!
-                                if (diary.linkedDiaries.contains(fragment.getSequence())) {
-                                    makeSnackBar("이미 연결된 항목 입니다.")
-                                } else {
-                                    diary.linkedDiaries.add(fragment.getSequence())
-                                    diaryViewModel.updateDiary(diary)
-                                    fragment.initContents()
+                                diaryViewModel.findDiaryBy(selectedValue)?.let {
+                                    if (it.linkedDiaries.contains(fragment.getSequence())) {
+                                        makeSnackBar("이미 연결된 항목 입니다.")
+                                    } else {
+                                        it.linkedDiaries.add(fragment.getSequence())
+                                        diaryViewModel.updateDiary(it)
+                                        fragment.initContents()
+                                    }
                                 }
                             }
                         }
@@ -314,12 +316,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
 
                 R.id.edit -> {
-                    if (fragment.isEncryptContents()) {
-                        showEncryptPagePopup(fragment, DiaryReadingConstants.EDITING) { inputPass ->
-                            startEditing(fragment, inputPass)
+                    lifecycleScope.launch {
+                        if (fragment.isEncryptContents()) {
+                            showEncryptPagePopup(fragment, DiaryReadingConstants.EDITING) { inputPass ->
+                                startEditing(fragment, inputPass)
+                            }
+                        } else {
+                            startEditing(fragment)
                         }
-                    } else {
-                        startEditing(fragment)
                     }
                 }
 
@@ -626,37 +630,41 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             }
 
                             workMode == DiaryReadingConstants.DECRYPTION -> {
-                                when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                    true -> {
-                                        if (decMode1.isChecked) {
-                                            fragment.decryptDataOnce(inputPass)
-                                        } else {
-                                            fragment.decryptData(inputPass)
+                                lifecycleScope.launch {
+                                    when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                                        true -> {
+                                            if (decMode1.isChecked) {
+                                                fragment.decryptDataOnce(inputPass)
+                                            } else {
+                                                fragment.decryptData(inputPass)
+                                            }
+                                            popupWindow.dismiss()
+                                            clearHoldOrientation()
                                         }
-                                        popupWindow.dismiss()
-                                        clearHoldOrientation()
-                                    }
 
-                                    false -> {
-                                        inputPass = ""
-                                        guideMessage.text =
-                                            getString(R.string.diary_pin_number_verification_error)
+                                        false -> {
+                                            inputPass = ""
+                                            guideMessage.text =
+                                                getString(R.string.diary_pin_number_verification_error)
+                                        }
                                     }
                                 }
                             }
 
                             workMode == DiaryReadingConstants.EDITING -> {
-                                when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                    true -> {
-                                        callback?.invoke(inputPass)
-                                        popupWindow.dismiss()
-                                        clearHoldOrientation()
-                                    }
+                                lifecycleScope.launch {
+                                    when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                                        true -> {
+                                            callback?.invoke(inputPass)
+                                            popupWindow.dismiss()
+                                            clearHoldOrientation()
+                                        }
 
-                                    else -> {
-                                        inputPass = ""
-                                        guideMessage.text =
-                                            getString(R.string.diary_pin_number_verification_error)
+                                        else -> {
+                                            inputPass = ""
+                                            guideMessage.text =
+                                                getString(R.string.diary_pin_number_verification_error)
+                                        }
                                     }
                                 }
                             }
@@ -845,9 +853,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         mBinding.diaryViewPager.currentItem,
                     ) as PlaceholderFragment
                 pmrBinding.run {
-                    when (fragment.isEncryptContents()) {
-                        true -> decryptData.visibility = View.VISIBLE
-                        false -> encryptData.visibility = View.VISIBLE
+                    lifecycleScope.launch {
+                        when (fragment.isEncryptContents()) {
+                            true -> decryptData.visibility = View.VISIBLE
+                            false -> encryptData.visibility = View.VISIBLE
+                        }
                     }
                     val itemClickListener =
                         View.OnClickListener { view ->
@@ -891,12 +901,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
 
                                 R.id.push -> {
-                                    val diary =
-                                        EasyDiaryDbHelper.findDiaryBy(fragment.getSequence())!!
-                                    val title = diary.title
-                                    val contents = diary.contents
                                     lifecycleScope.launch {
-                                        pushMarkDown(title!!, contents!!)
+                                        diaryViewModel.findDiaryBy(fragment.getSequence())?.let {
+                                            val title = it.title
+                                            val contents = it.contents
+                                            pushMarkDown(title!!, contents)
+                                        }
                                     }
                                 }
 
@@ -1020,22 +1030,24 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         requireActivity().showAlertDialog(
                                             "Are you sure you want to unlink this diary?",
                                             { _, _ ->
-                                                EasyDiaryDbHelper
-                                                    .findDiaryBy(parentDiary.diaryId)
-                                                    ?.run {
-                                                        linkedDiaries
-                                                            .filter { it != getSequence() }
-                                                            .let { newLinkedDiaries ->
-                                                                lifecycleScope.launch {
-                                                                    linkedDiaries.clear()
-                                                                    linkedDiaries.addAll(
-                                                                        newLinkedDiaries,
-                                                                    )
-                                                                    diaryViewModel.updateDiary(this@run)
-                                                                    initContents()
+                                                lifecycleScope.launch {
+                                                    diaryViewModel
+                                                        .findDiaryBy(parentDiary.diaryId)
+                                                        ?.run {
+                                                            linkedDiaries
+                                                                .filter { it != getSequence() }
+                                                                .let { newLinkedDiaries ->
+                                                                    lifecycleScope.launch {
+                                                                        linkedDiaries.clear()
+                                                                        linkedDiaries.addAll(
+                                                                            newLinkedDiaries,
+                                                                        )
+                                                                        diaryViewModel.updateDiary(this@run)
+                                                                        initContents()
+                                                                    }
                                                                 }
-                                                            }
-                                                    }
+                                                        }
+                                                }
                                             },
                                             { _, _ -> },
                                             DialogMode.INFO,
@@ -1073,22 +1085,24 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         requireActivity().showAlertDialog(
                                             "Are you sure you want to unlink this diary?",
                                             { _, _ ->
-                                                EasyDiaryDbHelper
-                                                    .findDiaryBy(getSequence())
-                                                    ?.run {
-                                                        linkedDiaries
-                                                            .filter { it != childDiary.diaryId }
-                                                            .let { newLinkedDiaries ->
-                                                                lifecycleScope.launch {
+                                                lifecycleScope.launch {
+                                                    diaryViewModel
+                                                        .findDiaryBy(getSequence())
+                                                        ?.run {
+                                                            linkedDiaries
+                                                                .filter { it != childDiary.diaryId }
+                                                                .let { newLinkedDiaries ->
                                                                     linkedDiaries.clear()
                                                                     linkedDiaries.addAll(
                                                                         newLinkedDiaries,
                                                                     )
-                                                                    diaryViewModel.updateDiary(this@run)
+                                                                    diaryViewModel.updateDiary(
+                                                                        this@run,
+                                                                    )
                                                                     initContents()
                                                                 }
-                                                            }
-                                                    }
+                                                        }
+                                                }
                                             },
                                             { _, _ -> },
                                             DialogMode.INFO,
@@ -1107,9 +1121,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
 
-        fun isEncryptContents() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.isEncrypt ?: false
+        suspend fun isEncryptContents() = diaryViewModel.findDiaryBy(getSequence())?.isEncrypt ?: false
 
-        fun getPasswordHash() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.encryptKeyHash
+        suspend fun getPasswordHash() = diaryViewModel.findDiaryBy(getSequence())?.encryptKeyHash
 
         fun highlightDiary(
             query: String,
@@ -1159,55 +1173,56 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         fun initContents() {
-            val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
-            mBinding.run {
-                diaryTitle.visibility =
-                    if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
-                diaryTitle.text = diaryDto.title
-
-                EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-                if (mStoredContents != diaryDto.contents) {
-                    requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
-                    mStoredContents = diaryDto.contents
-                    Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
-                }
-                date.text =
-                    when (diaryDto.isAllDay) {
-                        true -> {
-                            DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
-                        }
-
-                        false -> {
-                            DateUtils.getDateTimeStringForceFormatting(
-                                diaryDto.currentTimeMillis,
-                                requireContext(),
-                            )
-                        }
-                    }
-                initBottomContainer()
-
-                arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
-                    if (StringUtils.isNotEmpty(query)) {
-                        highlightDiary(query)
-                    }
-                }
-
-                val weatherFlag = diaryDto.symbolSequence
-                FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
-
-                // TODO fixme elegance
-                val photoCount = diaryDto.photoUris?.size ?: 0
+            lifecycleScope.launch {
+                val diaryDto = diaryViewModel.findDiaryBy(getSequence())!!
                 mBinding.run {
-                    if (photoCount > 0) {
-                        photoContainerFlexBox.visibility = View.VISIBLE
-                        if (photoContainer.childCount > 0) photoContainer.removeAllViews()
-                        if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
+                    diaryTitle.visibility =
+                        if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
+                    diaryTitle.text = diaryDto.title
 
-                        context?.let { appContext ->
+                    EasyDiaryUtils.boldString(requireContext(), diaryTitle)
+                    if (mStoredContents != diaryDto.contents) {
+                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
+                        mStoredContents = diaryDto.contents
+                        Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
+                    }
+                    date.text =
+                        when (diaryDto.isAllDay) {
+                            true -> {
+                                DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                            }
+
+                            false -> {
+                                DateUtils.getDateTimeStringForceFormatting(
+                                    diaryDto.currentTimeMillis,
+                                    requireContext(),
+                                )
+                            }
+                        }
+                    initBottomContainer()
+
+                    arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
+                        if (StringUtils.isNotEmpty(query)) {
+                            highlightDiary(query)
+                        }
+                    }
+
+                    val weatherFlag = diaryDto.symbolSequence
+                    FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
+
+                    // TODO fixme elegance
+                    val photoCount = diaryDto.photoUris?.size ?: 0
+                    mBinding.run {
+                        if (photoCount > 0) {
+                            photoContainerFlexBox.visibility = View.VISIBLE
+                            if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                            if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
+
+                            context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
-                            diaryDto
-                                .photoUrisWithEncryptionPolicy()
-                                ?.forEachIndexed { index, item ->
+                                diaryDto
+                                    .photoUrisWithEncryptionPolicy()
+                                    ?.forEachIndexed { index, item ->
 //                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
 //                                val imageView = when (requireActivity().isLandScape()) {
 //                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
@@ -1216,51 +1231,50 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                                photoContainer.addView(imageView)
 //                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
 
-                                    photoContainerFlexBox.addView(
-                                        createAttachedPhotoViewForFlexBox(
-                                            requireActivity(),
-                                            item.toRealm(),
-                                            photoCount,
-                                        ).apply {
-                                            setOnClickListener(
-                                                PhotoClickListener(
-                                                    getSequence(),
-                                                    index,
-                                                ),
-                                            )
-                                        },
-                                    )
-                                }
+                                        photoContainerFlexBox.addView(
+                                            createAttachedPhotoViewForFlexBox(
+                                                requireActivity(),
+                                                item.toRealm(),
+                                                photoCount,
+                                            ).apply {
+                                                setOnClickListener(
+                                                    PhotoClickListener(
+                                                        getSequence(),
+                                                        index,
+                                                    ),
+                                                )
+                                            },
+                                        )
+                                    }
+                            }
+                        } else {
+                            photoContainerFlexBox.visibility = View.GONE
                         }
-                    } else {
-                        photoContainerFlexBox.visibility = View.GONE
                     }
-                }
 
-                context?.run {
-                    if (config.enableLocationInfo) {
-                        diaryDto.location?.let {
+                    context?.run {
+                        if (config.enableLocationInfo) {
+                            diaryDto.location?.let {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
-                            locationLabel.text = it.address
+                                locationLabel.text = it.address
+                            }
                         }
-                    }
 
-                    if (config.enableCountCharacters) {
-                        contentsLength.run {
+                        if (config.enableCountCharacters) {
+                            contentsLength.run {
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
-                            text =
-                                getString(
-                                    R.string.diary_contents_length,
-                                    diaryDto.contents?.length ?: 0,
-                                )
+                                text =
+                                    getString(
+                                        R.string.diary_contents_length,
+                                        diaryDto.contents?.length ?: 0,
+                                    )
+                            }
                         }
                     }
                 }
-            }
 
-            lifecycleScope.launch {
                 val linkedDiaries = mutableListOf<DiaryDomain>()
                 if (diaryDto.linkedDiaries.isNotEmpty()) {
                     for (linkedDiarySequence in diaryDto.linkedDiaries) {
@@ -1271,7 +1285,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
                 linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
                 linkedDiaryViewModel.updateParentDiaries(
-                    EasyDiaryDbHelper.findParentDiariesOf(
+                    diaryViewModel.findParentDiariesOf(
                         diaryDto.diaryId,
                     ),
                 )
@@ -1311,8 +1325,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-        fun decryptDataOnce(inputPass: String) {
-            EasyDiaryDbHelper.findDiaryBy(getSequence())?.let { diaryDto ->
+        suspend fun decryptDataOnce(inputPass: String) {
+            diaryViewModel.findDiaryBy(getSequence())?.let { diaryDto ->
                 mBinding.run {
                     diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
 //                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
