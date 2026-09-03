@@ -70,10 +70,12 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiaryBy(mSequence)
-        } else {
-            saveTemporaryDiary(mSequence)
+        lifecycleScope.launch {
+            if (mIsDiarySaved) {
+                diaryViewModel.deleteTemporaryDiaryBy(mSequence)
+            } else {
+                saveTemporaryDiary(mSequence)
+            }
         }
     }
 
