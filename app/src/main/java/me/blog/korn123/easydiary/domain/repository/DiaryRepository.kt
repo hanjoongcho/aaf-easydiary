@@ -26,13 +26,20 @@ interface DiaryRepository {
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
 
+    fun getDiariesWithPhotosByDateString(
+        dateString: String,
+        isAsc: Boolean = false,
+    ): Flow<List<Diary>>
+
     suspend fun getDiaryById(seq: Int): Diary?
 
     suspend fun insertDiary(diary: Diary)
 
-    suspend fun addAllDiaries(diaries: List<Diary>)
+    suspend fun insertTemporaryDiary(diary: Diary)
 
-    suspend fun updateDiary(diary: Diary)
+    suspend fun deleteTemporaryDiaryBy(originDiaryId: Int)
+
+    suspend fun addAllDiaries(diaries: List<Diary>)
 
     suspend fun updateDiaryWithPhotos(diary: Diary)
 

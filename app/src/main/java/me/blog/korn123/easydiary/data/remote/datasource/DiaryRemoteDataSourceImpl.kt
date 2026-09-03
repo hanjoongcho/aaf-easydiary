@@ -31,6 +31,11 @@ class DiaryRemoteDataSourceImpl
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = flowOf(null)
 
+        override fun getDiariesWithPhotosByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<DiaryWithPhotos>> = flowOf(emptyList())
+
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = null
 
         override suspend fun insertDiary(diary: DiaryEntity) {
@@ -40,8 +45,9 @@ class DiaryRemoteDataSourceImpl
         override suspend fun insertDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
-        ) {
+        ): Int {
             // Mock implementation
+            return 0
         }
 
         override suspend fun insertDiariesWithPhotos(
@@ -66,6 +72,10 @@ class DiaryRemoteDataSourceImpl
         }
 
         override suspend fun deleteDiaryById(seq: Int) {
+            // Mock implementation
+        }
+
+        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
             // Mock implementation
         }
 

@@ -272,11 +272,13 @@ object EasyDiaryDbHelper {
         return diary?.toDomain()
     }
 
+    @Deprecated(message = "Use DiaryViewModel.findDiaryByDateString() instead")
     fun findDiaryByDateString(
         dateString: String?,
         sort: Sort = Sort.DESCENDING,
+        realmInstance: Realm = getInstance(),
     ): List<DiaryDomain> =
-        getInstance()
+        realmInstance
             .where(Diary::class.java)
             .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
             .equalTo("dateString", dateString)
@@ -298,16 +300,9 @@ object EasyDiaryDbHelper {
             .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
             .count()
 
-    fun countDiaryBy(dateString: String): Int =
-        getInstance()
-            .where(Diary::class.java)
-            .equalTo("originSequence", DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT)
-            .equalTo("dateString", dateString)
-            .count()
-            .toInt()
-
+    @Deprecated(message = "Use DiaryViewModel.insertDiary() instead")
     fun insertDiary(
-        diary: Diary,
+        diary: DiaryDomain,
         realmInstance: Realm = getInstance(),
     ) {
         realmInstance.executeTransaction { realm ->
@@ -318,20 +313,22 @@ object EasyDiaryDbHelper {
                     sequence = it.toInt().plus(1)
                 }
             }
-            diary.sequence = sequence
-            realm.insert(diary)
+
+            realm.insert(if (diary.diaryId == DiaryEditingConstants.DIARY_SEQUENCE_INIT) diary.copy(diaryId = sequence).toRealm() else diary.toRealm())
         }
     }
 
-    fun insertTemporaryDiary(diaryTemp: Diary) {
-        deleteTemporaryDiaryBy(diaryTemp.originSequence)
+    @Deprecated(message = "Use DiaryViewModel.insertTemporaryDiary() instead")
+    fun insertTemporaryDiary(diaryTemp: DiaryDomain) {
+        deleteTemporaryDiaryBy(diaryTemp.originDiaryId)
         getInstance().executeTransaction { realm ->
-            if (diaryTemp.sequence == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
+            if (diaryTemp.diaryId == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
                 realm.where(Diary::class.java).max("sequence")?.let {
-                    diaryTemp.sequence = it.toInt().plus(1)
+                    realm.insert(diaryTemp.copy(diaryId = it.toInt().plus(1)).toRealm())
                 }
+            } else {
+                realm.insert(diaryTemp.toRealm())
             }
-            realm.insert(diaryTemp)
         }
     }
 
@@ -340,14 +337,16 @@ object EasyDiaryDbHelper {
             currentTimeMillis = System.currentTimeMillis()
             updateDateString()
             originSequence = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
-            insertDiary(this)
+            insertDiary(this.toDomain())
         }
     }
 
+    @Deprecated(message = "Use DiaryViewModel.updateDiary() instead")
     fun updateDiaryBy(diary: DiaryDomain) {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(diary.toRealm()) }
     }
 
+    @Deprecated(message = "Use DiaryViewModel.deleteDiaryBy() instead")
     fun deleteDiaryBy(
         sequence: Int,
         realmInstance: Realm = getInstance(),
@@ -361,6 +360,7 @@ object EasyDiaryDbHelper {
         }
     }
 
+    @Deprecated(message = "Use DiaryViewModel.deleteTemporaryDiaryBy() instead")
     fun deleteTemporaryDiaryBy(
         originSequence: Int,
         realmInstance: Realm = getInstance(),

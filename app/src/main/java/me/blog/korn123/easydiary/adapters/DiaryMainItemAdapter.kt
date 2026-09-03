@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -14,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
@@ -26,6 +30,7 @@ import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -41,6 +46,7 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainItemAdapter(
     val activity: Activity,
+    val lifecycle: LifecycleCoroutineScope,
     private val diaryItems: List<DiaryDomain>,
     val itemClickCallback: (diary: DiaryDomain) -> Unit,
     val itemLongClickCallback: () -> Unit,
@@ -97,11 +103,13 @@ class DiaryMainItemAdapter(
     }
 
     fun toggleCheckBoxALl() {
-        diaryItems.forEach { diary ->
-            diary.run {
-                isSelected = isSelected.not()
-                toRealm().also {
-                    EasyDiaryDbHelper.updateDiaryBy(it.toDomain())
+        lifecycle.launch {
+            diaryItems.forEach { diary ->
+                diary.run {
+                    isSelected = isSelected.not()
+                    toRealm().also {
+                        activity.diaryRepository.updateDiaryWithPhotos(it.toDomain())
+                    }
                 }
             }
         }
@@ -170,8 +178,10 @@ class DiaryMainItemAdapter(
                 }
 
                 selection.setOnCheckedChangeListener { _, isChecked ->
-                    diary.isSelected = isChecked
-                    EasyDiaryDbHelper.updateDiaryBy(diary)
+                    lifecycle.launch {
+                        diary.isSelected = isChecked
+                        activity.diaryRepository.updateDiaryWithPhotos(diary)
+                    }
                 }
 
                 when ((activity as DiaryMainActivity).mDiaryMode) {

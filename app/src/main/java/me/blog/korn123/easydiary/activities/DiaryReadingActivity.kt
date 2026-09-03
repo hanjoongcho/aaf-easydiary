@@ -865,8 +865,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 R.id.delete -> {
                                     val positiveListener =
                                         DialogInterface.OnClickListener { _, _ ->
-                                            EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                                            TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
+                                            lifecycleScope.launch {
+                                                diaryViewModel.deleteDiaryById(fragment.getSequence())
+                                                TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
+                                            }
                                         }
                                     showAlertDialog(
                                         getString(R.string.delete_confirm),

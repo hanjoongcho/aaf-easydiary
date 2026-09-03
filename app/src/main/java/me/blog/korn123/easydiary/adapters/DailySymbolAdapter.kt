@@ -2,8 +2,6 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.Color
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,18 +9,25 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import java.util.*
+import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
+import java.util.Calendar
+import java.util.Locale
 
 class DailySymbolAdapter(
     val activity: Activity,
     private val items: List<DailySymbol>,
 ) : RecyclerView.Adapter<DailySymbolAdapter.DailySymbolViewHolder>() {
+    val map: MutableMap<String, Pair<List<Diary>, List<Diary>>> = mutableMapOf()
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): DailySymbolViewHolder = DailySymbolViewHolder(ItemDailySymbolBinding.inflate(activity.layoutInflater), activity)
+    ): DailySymbolViewHolder = DailySymbolViewHolder(ItemDailySymbolBinding.inflate(activity.layoutInflater), activity, map)
 
     override fun onBindViewHolder(
         holder: DailySymbolViewHolder,
@@ -36,6 +41,7 @@ class DailySymbolAdapter(
     class DailySymbolViewHolder(
         private val binding: ItemDailySymbolBinding,
         val activity: Activity,
+        val map: Map<String, Pair<List<Diary>, List<Diary>>>,
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             if (itemView is ViewGroup) {
@@ -60,12 +66,7 @@ class DailySymbolAdapter(
                     else -> activity.config.textColor
                 },
             )
-            val pair =
-                EasyDiaryDbHelper.findDiaryByDateString(dailySymbol.dateString).partition { item ->
-                    activity.config.selectedSymbols
-                        .split(",")
-                        .find { it.toInt() == item.symbolSequence } != null
-                }
+            val pair = map[dailySymbol.dateString] ?: Pair(emptyList(), emptyList())
 
             when (pair.first.isEmpty()) {
                 true -> binding.noItemMessage.visibility = View.VISIBLE

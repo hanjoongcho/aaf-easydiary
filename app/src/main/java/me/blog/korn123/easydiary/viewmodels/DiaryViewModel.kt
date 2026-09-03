@@ -4,9 +4,11 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.Realm
+import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,7 @@ import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
@@ -31,6 +34,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.toRealm
 import java.io.File
+import java.time.YearMonth
 import javax.inject.Inject
 import kotlin.collections.filter
 import kotlin.collections.map
@@ -66,10 +70,6 @@ class DiaryViewModel
             }
         }
 
-        suspend fun insertDiary(diary: Diary) {
-            diaryRepository.insertDiary(diary)
-        }
-
         suspend fun addAllDiaries(diaries: List<Diary>) {
             diaryRepository.addAllDiaries(diaries)
         }
@@ -77,12 +77,6 @@ class DiaryViewModel
         fun deleteDiary(diary: Diary) {
             viewModelScope.launch {
                 diaryRepository.deleteDiary(diary)
-            }
-        }
-
-        fun deleteDiaryById(seq: Int) {
-            viewModelScope.launch {
-                diaryRepository.deleteDiaryById(seq)
             }
         }
 
@@ -270,6 +264,20 @@ class DiaryViewModel
                 EasyDiaryDbHelper.findParentDiariesOf(sequence)
             }
 
+        suspend fun findDiaryByDateString(
+            dateString: String,
+            sort: Sort = Sort.DESCENDING,
+        ): List<Diary> =
+            if (application.config.enableJetpackRoomDatabase) {
+                diaryRepository
+                    .getDiariesWithPhotosByDateString(dateString, sort == Sort.ASCENDING)
+                    .first()
+            } else {
+                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
+                    EasyDiaryDbHelper.findDiaryByDateString(dateString, sort, realm)
+                }
+            }
+
         suspend fun findTemporaryDiaryBy(
             originSequence: Int,
         ): Diary? =
@@ -286,10 +294,24 @@ class DiaryViewModel
                 EasyDiaryDbHelper.getMaxDiarySequence()
             }
 
-        // FIXME: Remove legacy realm functions
+        suspend fun insertDiary(diary: Diary) {
+            diaryRepository.insertDiary(diary)
+        }
+
+        suspend fun insertTemporaryDiary(diary: Diary) {
+            diaryRepository.insertTemporaryDiary(diary)
+        }
+
         suspend fun updateDiary(diary: Diary) {
             diaryRepository.updateDiaryWithPhotos(diary)
-            EasyDiaryDbHelper.updateDiaryBy(diary)
+        }
+
+        suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
+            diaryRepository.deleteTemporaryDiaryBy(originDiaryId)
+        }
+
+        suspend fun deleteDiaryById(seq: Int) {
+            diaryRepository.deleteDiaryById(seq)
         }
 
         suspend fun getSymbolUsedCountMap(
@@ -363,7 +385,8 @@ class DiaryViewModel
             context: Context,
         ): List<GalleryAdapter.AttachedPhoto>? =
             withContext(Dispatchers.IO) {
-                val photoDirectory = File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
+                val photoDirectory =
+                    File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
                 val files = photoDirectory.listFiles() ?: return@withContext null
 
                 val diaryMap =
@@ -405,6 +428,38 @@ class DiaryViewModel
                         item.diary?.currentTimeMillis ?: 0
                     }
             }
+
+        suspend fun getDateStringMap(
+            month: Int,
+            year: Int,
+        ): Map<String, List<Diary>> {
+            // 1. 해당 연/월의 1일 날짜 생성
+            val targetMonth = YearMonth.of(year, month)
+            val startOfMonth = targetMonth.atDay(1)
+
+            // 2. 기준 월의 시작일 - 7주(49일)
+            val startDate = startOfMonth.minusWeeks(7)
+
+            // 3. 기준 월의 시작일 + 7주(49일)
+            val endDate = startOfMonth.plusWeeks(7)
+
+            // 4. 시작일부터 종료일까지 1일씩 증가시키며 YYYY-MM-DD 형식으로 리스트 생성
+            val dateList = mutableListOf<String>()
+            var currentDate = startDate
+
+            while (!currentDate.isAfter(endDate)) {
+                dateList.add(currentDate.toString()) // LocalDate.toString()은 기본적으로 "YYYY-MM-DD" 반환
+                currentDate = currentDate.plusDays(1)
+            }
+
+            val dateStringMap = mutableMapOf<String, List<Diary>>()
+            val sort: Sort =
+                if (application.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
+            dateList.forEach {
+                dateStringMap[it] = findDiaryByDateString(it, sort)
+            }
+            return dateStringMap
+        }
 
         /***************************************************************************************************
          *   common functions

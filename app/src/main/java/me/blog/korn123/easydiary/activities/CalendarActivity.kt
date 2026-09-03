@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import androidx.lifecycle.lifecycleScope
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
 import io.realm.Sort
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.databinding.ActivityCalendarBinding
@@ -25,11 +27,11 @@ import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
+import java.time.YearMonth
 import java.util.Calendar
 import java.util.Date
 import java.util.Formatter
@@ -165,12 +167,24 @@ class CalendarActivity : EasyDiaryActivity() {
                                 monthYearFlag,
                             ).toString()
                     supportActionBar?.subtitle = monthTitle.uppercase(Locale.getDefault())
+
+                    lifecycleScope.launch {
+                        mCalendarFragment.extraData += (
+                            "dateStringMap" to
+                                diaryViewModel.getDateStringMap(
+                                    month,
+                                    year,
+                                )
+                        )
+                        mCalendarFragment.refreshView()
+                    }
                 }
 
                 override fun onLongClickDate(
                     date: Date?,
                     view: View?,
-                ) {}
+                ) {
+                }
 
                 override fun onCaldroidViewCreated() {}
             }
@@ -219,25 +233,28 @@ class CalendarActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun refreshList() {
-        val formatter = SimpleDateFormat(DateUtilConstants.DATE_PATTERN_DASH, Locale.getDefault())
-        val sort: Sort =
-            if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
-        mDiaryList.clear()
-        mDiaryList.addAll(
-            EasyDiaryDbHelper.findDiaryByDateString(
-                formatter.format(mCalendar.time),
-                sort,
-            ),
-        )
-        mArrayAdapterDiary?.notifyDataSetChanged()
-        mBinding.selectedList.setSelection(0)
+        lifecycleScope.launch {
+            val formatter =
+                SimpleDateFormat(DateUtilConstants.DATE_PATTERN_DASH, Locale.getDefault())
+            val sort: Sort =
+                if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
+            mDiaryList.clear()
+            mDiaryList.addAll(
+                diaryViewModel.findDiaryByDateString(
+                    formatter.format(mCalendar.time),
+                    sort,
+                ),
+            )
+            mArrayAdapterDiary?.notifyDataSetChanged()
+            mBinding.selectedList.setSelection(0)
 
-        if (mDiaryList.size > 0) {
-            mBinding.selectedList.visibility = View.VISIBLE
-            mBinding.emptyInfo.visibility = View.GONE
-        } else {
-            mBinding.selectedList.visibility = View.GONE
-            mBinding.emptyInfo.visibility = View.VISIBLE
+            if (mDiaryList.size > 0) {
+                mBinding.selectedList.visibility = View.VISIBLE
+                mBinding.emptyInfo.visibility = View.GONE
+            } else {
+                mBinding.selectedList.visibility = View.GONE
+                mBinding.emptyInfo.visibility = View.VISIBLE
+            }
         }
     }
 

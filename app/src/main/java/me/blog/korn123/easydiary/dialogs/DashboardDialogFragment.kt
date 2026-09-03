@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.zhpan.bannerview.constants.PageStyle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -324,17 +326,19 @@ class DashboardDialogFragment : DialogFragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             mBinding.run {
                 // Diary Update
-                mDailySymbolFragment.updateDailySymbol()
+                lifecycleScope.launch {
+                    mDailySymbolFragment.updateDailySymbol()
 
-                // FIXME:
-                // This is workaround.
-                // For pages that are invisible but have already been loaded, it will not be updated.
-                mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
+                    // FIXME:
+                    // This is workaround.
+                    // For pages that are invisible but have already been loaded, it will not be updated.
+                    mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    layoutProgressContainer.visibility = View.GONE
-                    progress.visibility = View.GONE
-                }, 300)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        layoutProgressContainer.visibility = View.GONE
+                        progress.visibility = View.GONE
+                    }, 300)
+                }
             }
         }, 300)
     }

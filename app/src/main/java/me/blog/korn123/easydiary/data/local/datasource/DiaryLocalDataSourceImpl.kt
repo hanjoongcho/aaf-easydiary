@@ -33,6 +33,11 @@ class DiaryLocalDataSourceImpl
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosByPhotoUri(photoUriString)
 
+        override fun getDiariesWithPhotosByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<DiaryWithPhotos>> = diaryDao.getDiariesWithPhotosByDateString(dateString, isAsc)
+
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = diaryDao.getDiaryById(seq)
 
         override suspend fun insertDiary(diary: DiaryEntity) = diaryDao.insertDiary(diary).let { }
@@ -56,6 +61,8 @@ class DiaryLocalDataSourceImpl
         override suspend fun deleteDiary(diary: DiaryEntity) = diaryDao.deleteDiary(diary)
 
         override suspend fun deleteDiaryById(seq: Int) = diaryDao.deleteDiaryById(seq)
+
+        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) = diaryDao.deleteTemporaryDiaryBy(originDiaryId)
 
         override suspend fun deleteAllDiaries() = diaryDao.deleteAllDiaries()
 

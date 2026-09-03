@@ -13,6 +13,8 @@ import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,15 +56,42 @@ class DiaryRepositoryImpl
 
         override fun getDiaryWithPhotosById(id: Int): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
 
-        override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> =
-            dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
+        override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> = dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
+
+        override fun getDiariesWithPhotosByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<Diary>> =
+            dataSource.getDiariesWithPhotosByDateString(dateString, isAsc).map { entities ->
+                entities.map { it.toDomain() }
+            }
 
         override suspend fun getDiaryById(seq: Int): Diary? = dataSource.getDiaryById(seq)?.toDomain()
 
         override suspend fun insertDiary(diary: Diary) {
             val diaryEntity = diary.toEntity()
             val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
-            dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+            val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.insertDiary(diary.copy(diaryId = diaryId))
+        }
+
+        override suspend fun insertTemporaryDiary(diary: Diary) {
+            dataSource.deleteTemporaryDiaryBy(diary.originDiaryId)
+            val diaryEntity = diary.toEntity()
+            val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
+            val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.insertTemporaryDiary(diary.copy(diaryId = diaryId))
+        }
+
+        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
+            dataSource.deleteTemporaryDiaryBy(originDiaryId)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(originDiaryId)
         }
 
         override suspend fun addAllDiaries(diaries: List<Diary>) {
@@ -75,15 +104,13 @@ class DiaryRepositoryImpl
             dataSource.insertDiariesWithPhotos(diariesWithPhotos)
         }
 
-        override suspend fun updateDiary(diary: Diary) {
-            val entity = diary.toEntity()
-            dataSource.updateDiary(entity)
-        }
-
         override suspend fun updateDiaryWithPhotos(diary: Diary) {
             val diaryEntity = diary.toEntity()
             val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
             dataSource.updateDiaryWithPhotos(diaryEntity, photoEntities)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.updateDiaryBy(diary)
         }
 
         override suspend fun deleteDiary(diary: Diary) {
@@ -93,6 +120,9 @@ class DiaryRepositoryImpl
 
         override suspend fun deleteDiaryById(seq: Int) {
             dataSource.deleteDiaryById(seq)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.deleteDiaryBy(seq)
         }
 
         override suspend fun deleteAllDiaries() {

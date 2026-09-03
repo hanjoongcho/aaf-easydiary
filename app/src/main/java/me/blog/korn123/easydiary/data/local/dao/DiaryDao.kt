@@ -92,10 +92,11 @@ interface DiaryDao {
     suspend fun insertDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,
-    ) {
+    ): Int {
         val diaryId = insertDiary(diary).toInt()
         val photoEntities = photoUris.map { it.copy(diaryId = diaryId) }
         insertPhotoUris(photoEntities)
+        return diaryId
     }
 
     @Transaction
@@ -127,6 +128,9 @@ interface DiaryDao {
     @Query("DELETE FROM diaries WHERE diaryId = :id")
     suspend fun deleteDiaryById(id: Int)
 
+    @Query("DELETE FROM diaries WHERE originDiaryId = :originDiaryId")
+    suspend fun deleteTemporaryDiaryBy(originDiaryId: Int)
+
     @Query("DELETE FROM diaries")
     suspend fun deleteAllDiaries()
 
@@ -145,4 +149,19 @@ interface DiaryDao {
 """,
     )
     fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM diaries 
+        WHERE originDiaryId = 0 AND dateString = :dateString 
+        ORDER BY 
+            CASE WHEN :isAsc = 1 THEN currentTimeMillis END ASC,
+            CASE WHEN :isAsc = 0 THEN currentTimeMillis END DESC
+    """,
+    )
+    fun getDiariesWithPhotosByDateString(
+        dateString: String,
+        isAsc: Boolean,
+    ): Flow<List<DiaryWithPhotos>>
 }

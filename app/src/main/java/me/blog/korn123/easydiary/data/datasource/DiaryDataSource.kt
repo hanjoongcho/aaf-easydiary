@@ -27,6 +27,11 @@ interface DiaryDataSource {
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
 
+    fun getDiariesWithPhotosByDateString(
+        dateString: String,
+        isAsc: Boolean,
+    ): Flow<List<DiaryWithPhotos>>
+
     suspend fun getDiaryById(seq: Int): DiaryEntity?
 
     suspend fun insertDiary(diary: DiaryEntity)
@@ -34,7 +39,7 @@ interface DiaryDataSource {
     suspend fun insertDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,
-    )
+    ): Int
 
     suspend fun insertDiariesWithPhotos(
         diariesWithPhotos: List<Pair<DiaryEntity, List<PhotoUriEntity>>>,
@@ -50,6 +55,8 @@ interface DiaryDataSource {
     suspend fun deleteDiary(diary: DiaryEntity)
 
     suspend fun deleteDiaryById(seq: Int)
+
+    suspend fun deleteTemporaryDiaryBy(originDiaryId: Int)
 
     suspend fun deleteAllDiaries()
 
