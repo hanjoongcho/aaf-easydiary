@@ -38,6 +38,7 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GCalendarConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.Diary
 import java.time.Instant
 import java.time.LocalDate
@@ -487,7 +488,13 @@ class GoogleAuthManager(
                 isHoliday = isHolidayCalendar
             }
 
-        EasyDiaryDbHelper.insertDiary(diary)
+        diary
+        EntryPointAccessors
+            .fromApplication(
+                context,
+                DiaryRepositoryEntryPoint::class.java,
+            ).diaryRepository()
+            .insertDiary(diary.toDomain())
         return true
     }
 }

@@ -133,12 +133,12 @@ fun LegacyDiaryItemCard(
                             contentsLengthContainer.visibility = View.GONE
                         }
 
-                        selection.setOnCheckedChangeListener { _, isChecked ->
-                            diary.also {
-                                it.isSelected = isChecked
-                                EasyDiaryDbHelper.updateDiaryBy(it)
-                            }
-                        }
+//                        selection.setOnCheckedChangeListener { _, isChecked ->
+//                            diary.also {
+//                                it.isSelected = isChecked
+//                                EasyDiaryDbHelper.updateDiaryBy(it)
+//                            }
+//                        }
 
 //                                            when ((activity as DiaryMainActivity).mDiaryMode) {
 //                                                DiaryMode.READ -> selection.visibility = View.GONE

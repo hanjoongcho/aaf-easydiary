@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -298,7 +300,7 @@ class DashboardActivity : EasyDiaryActivity() {
 //            FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        lifecycleScope.launch {
             mBinding.run {
                 // Diary Update
                 mDailySymbolFragment.updateDailySymbol()
@@ -313,7 +315,7 @@ class DashboardActivity : EasyDiaryActivity() {
                     progress.visibility = View.GONE
                 }, 300)
             }
-        }, 300)
+        }
 
         if (!isLandScape()) applyFullScreenStatusBarTheme()
 

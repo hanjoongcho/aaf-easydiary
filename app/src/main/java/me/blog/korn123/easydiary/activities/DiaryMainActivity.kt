@@ -101,6 +101,7 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
@@ -154,7 +155,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 mBinding.progressCoroutine.visibility = View.GONE
                                 diaryDomains.forEach { diaryDomain ->
                                     diaryDomain.isSelected = false
-                                    EasyDiaryDbHelper.updateDiaryBy(diaryDomain)
+                                    diaryViewModel.updateDiary(diaryDomain)
                                 }
                                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
@@ -193,33 +194,33 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             },
         )
 
-        setupComposeView()
-        mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
-        forceInitRealmLessThanOreo()
-        rescheduleEnabledAlarms()
+        lifecycleScope.launch {
+            setupComposeView()
+            mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
+            forceInitRealmLessThanOreo()
+            rescheduleEnabledAlarms()
 //        FontUtils.checkFontSetting(this)
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
-        FontUtils.checkFontSetting(this@DiaryMainActivity)
-        initDiaryGrid()
-        initDummyData()
-        updateDrawableColorInnerCardView(mBinding.imgClearQuery)
-        bindEvent()
-        confirmPrePermissions()
-        setupShowcase()
-        EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
-        migrateData(mBinding)
-        setupPopupMenu()
-        checkBundle(savedInstanceState)
-        setupReviewFlow()
-        setupPhotoHighlight()
-        checkIntent()
+            FontUtils.checkFontSetting(this@DiaryMainActivity)
+            initDiaryGrid()
+            initDummyData()
+            updateDrawableColorInnerCardView(mBinding.imgClearQuery)
+            bindEvent()
+            confirmPrePermissions()
+            setupShowcase()
+            EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
+            migrateData(mBinding)
+            setupPopupMenu()
+            checkBundle(savedInstanceState)
+            setupReviewFlow()
+            setupPhotoHighlight()
+            checkIntent()
 //        clearLockSettingsTemporary()
-        showDebugNotificationInfo()
-        setupDiaryListScrollListener()
-        setupOnBackPressDispatcher()
+            showDebugNotificationInfo()
+            setupDiaryListScrollListener()
+            setupOnBackPressDispatcher()
 
-        if (config.enableDebugMode) {
-            lifecycleScope.launch {
+            if (config.enableDebugMode) {
                 openOverDueNotification(
                     diaryViewModel
                         .findDiary(
@@ -321,8 +322,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             R.id.checkAll -> {
-                mDiaryMainItemAdapter?.toggleCheckBoxALl()
-                mDiaryMainItemAdapter?.notifyDataSetChanged()
+                lifecycleScope.launch {
+                    mBinding.progressCoroutine.visibility = View.VISIBLE
+                    mBinding.modalContainer.visibility = View.VISIBLE
+                    mDiaryMainItemAdapter?.toggleCheckBoxALl()
+                    mDiaryMainItemAdapter?.notifyDataSetChanged()
+                    mBinding.progressCoroutine.visibility = View.GONE
+                    mBinding.modalContainer.visibility = View.GONE
+                }
             }
 
             R.id.delete -> {
@@ -335,12 +342,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     size,
                                 ),
                                 { _, _ ->
-                                    EasyDiaryDbHelper.beginTransaction()
-                                    forEach {
-                                        EasyDiaryDbHelper.deleteDiaryBy(it.diaryId)
+                                    lifecycleScope.launch {
+                                        forEach {
+                                            diaryViewModel.deleteDiaryById(it.diaryId)
+                                        }
+                                        refreshList()
                                     }
-                                    EasyDiaryDbHelper.commitTransaction()
-                                    refreshList()
                                 },
                                 { _, _ -> },
                                 DialogMode.WARNING,
@@ -367,17 +374,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     size,
                                 ),
                                 { _, _ ->
-                                    reversed().forEach {
-                                        it.toRealm().also { realmDiary ->
-                                            realmDiary.isSelected = false
-                                            EasyDiaryDbHelper.duplicateDiaryBy(realmDiary)
+                                    lifecycleScope.launch {
+                                        reversed().forEach {
+                                            it.toRealm().also { realmDiary ->
+                                                realmDiary.isSelected = false
+                                                diaryViewModel.duplicateDiary(realmDiary.toDomain())
+                                            }
                                         }
-                                    }
-                                    refreshList()
-                                    Handler(Looper.getMainLooper()).post {
-                                        mBinding.diaryListView.layoutManager?.scrollToPosition(
-                                            0,
-                                        )
+                                        refreshList()
+                                        Handler(Looper.getMainLooper()).post {
+                                            mBinding.diaryListView.layoutManager?.scrollToPosition(
+                                                0,
+                                            )
+                                        }
                                     }
                                 },
                                 { _, _ -> },
@@ -935,46 +944,48 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    private fun initSampleData() {
-        EasyDiaryDbHelper.insertDiary(
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 395000000L,
-                getString(R.string.sample_diary_title_1),
-                getString(R.string.sample_diary_1),
-                1,
-            ),
-        )
-        EasyDiaryDbHelper.insertDiary(
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 263000000L,
-                getString(R.string.sample_diary_title_2),
-                getString(R.string.sample_diary_2),
-                2,
-            ),
-        )
-        EasyDiaryDbHelper.insertDiary(
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 132000000L,
-                getString(R.string.sample_diary_title_3),
-                getString(R.string.sample_diary_3),
-                3,
-            ),
-        )
-        EasyDiaryDbHelper.insertDiary(
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 4000000L,
-                getString(R.string.sample_diary_title_4),
-                getString(R.string.sample_diary_4),
-                4,
-            ),
-        )
+    private suspend fun initSampleData() {
+        diaryViewModel.run {
+            insertDiary(
+                Diary(
+                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                    System.currentTimeMillis() - 395000000L,
+                    getString(R.string.sample_diary_title_1),
+                    getString(R.string.sample_diary_1),
+                    1,
+                ).toDomain(),
+            )
+            insertDiary(
+                Diary(
+                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                    System.currentTimeMillis() - 263000000L,
+                    getString(R.string.sample_diary_title_2),
+                    getString(R.string.sample_diary_2),
+                    2,
+                ).toDomain(),
+            )
+            insertDiary(
+                Diary(
+                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                    System.currentTimeMillis() - 132000000L,
+                    getString(R.string.sample_diary_title_3),
+                    getString(R.string.sample_diary_3),
+                    3,
+                ).toDomain(),
+            )
+            insertDiary(
+                Diary(
+                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+                    System.currentTimeMillis() - 4000000L,
+                    getString(R.string.sample_diary_title_4),
+                    getString(R.string.sample_diary_4),
+                    4,
+                ).toDomain(),
+            )
+        }
     }
 
-    private fun initDummyData() {
+    private suspend fun initDummyData() {
         if (!config.isInitDummyData) {
             initSampleData()
             config.isInitDummyData = true
@@ -983,18 +994,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun initDiaryGrid() {
         mDiaryMainItemAdapter =
-            DiaryMainItemAdapter(this, mDiaryList, {
+            DiaryMainItemAdapter(this, lifecycleScope, mDiaryList, {
                 val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
                 detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
                 detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
                 detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
-                EasyDiaryDbHelper.clearSelectedStatus()
-                mDiaryMode = DiaryMode.DELETE
-                invalidateOptionsMenu()
-                refreshList()
-                //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                lifecycleScope.launch {
+                    diaryViewModel.clearSelectedStatus()
+                    mDiaryMode = DiaryMode.DELETE
+                    invalidateOptionsMenu()
+                    refreshList()
+                    //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                }
             }
 
         mGridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())

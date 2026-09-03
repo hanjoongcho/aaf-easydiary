@@ -450,7 +450,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         )
     }
 
-    protected fun saveTemporaryDiary(originSequence: Int) {
+    protected suspend fun saveTemporaryDiary(originSequence: Int) {
         val diaryTemp =
             Diary(
                 DiaryEditingConstants.DIARY_SEQUENCE_INIT,
@@ -470,7 +470,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             diaryTemp.photoUris?.isNotEmpty() == true
         ) {
             if (mLocation != null) diaryTemp.location = mLocation
-            EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+            diaryViewModel.insertTemporaryDiary(diaryTemp.toDomain())
         }
     }
 
@@ -480,11 +480,17 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 showAlertDialog(
                     getString(R.string.load_auto_save_diary_description),
                     { _, _ ->
-                        initData(it)
-                        initBottomToolbar()
-                        EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                        lifecycleScope.launch {
+                            initData(it)
+                            initBottomToolbar()
+                            diaryViewModel.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                        }
                     },
-                    { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) },
+                    { _, _ ->
+                        lifecycleScope.launch {
+                            diaryViewModel.deleteDiaryById(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                        }
+                    },
                     DialogMode.INFO,
                     false,
                     getString(R.string.load_auto_save_diary_title),
