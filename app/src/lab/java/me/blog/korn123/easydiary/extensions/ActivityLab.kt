@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
@@ -224,7 +225,7 @@ fun ComponentActivity.syncMarkDown(
                                                     DateUtilConstants.DATE_PATTERN_DASH,
                                                 ),
                                         )
-                                    EasyDiaryDbHelper.updateDiaryBy(diary)
+                                    diaryRepository.updateDiaryWithPhotos(diary)
                                 }
                             } else if (items.isEmpty()) {
                                 runOnUiThread {
@@ -237,7 +238,7 @@ fun ComponentActivity.syncMarkDown(
                                             token,
                                             content.download_url,
                                         ).execute()
-                                EasyDiaryDbHelper.insertDiary(
+                                diaryRepository.insertDiary(
                                     Diary(
                                         DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                                         System.currentTimeMillis(),
@@ -245,7 +246,7 @@ fun ComponentActivity.syncMarkDown(
                                         re.body() ?: "",
                                         checkedSymbolSequence,
                                         true,
-                                    ),
+                                    ).toDomain(),
                                 )
                             }
                         }

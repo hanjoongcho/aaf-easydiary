@@ -239,21 +239,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     )
                 }
 
-            // targetIndex가 -1이 아니면(데이터가 존재하면) 강제로 setCurrentItem 호출
             if (targetIndex >= 0) {
-                mBinding.diaryViewPager.doOnLayout {
+                mBinding.diaryViewPager.post {
                     mBinding.diaryViewPager.setCurrentItem(targetIndex, false)
-
-                    // 만약 그래도 빈 화면이라면, 강제로 현재 아이템을 재연결하기 위해
-                    // 현재 페이지의 프래그먼트를 찾아 initContents()를 호출할 수 있습니다.
-                    (
-                        mSectionsPagerAdapter.instantiateItem(
-                            mBinding.diaryViewPager,
-                            targetIndex,
-                        ) as? PlaceholderFragment
-                    )?.run {
-                        if (isAdded) initContents()
-                    }
                 }
             }
         }
@@ -865,8 +853,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 R.id.delete -> {
                                     val positiveListener =
                                         DialogInterface.OnClickListener { _, _ ->
-                                            EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                                            TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
+                                            lifecycleScope.launch {
+                                                diaryViewModel.deleteDiaryById(fragment.getSequence())
+                                                TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
+                                            }
                                         }
                                     showAlertDialog(
                                         getString(R.string.delete_confirm),

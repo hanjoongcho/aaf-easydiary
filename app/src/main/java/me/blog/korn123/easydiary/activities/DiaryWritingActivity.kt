@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
@@ -74,10 +75,12 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
-        } else {
-            saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+        lifecycleScope.launch {
+            if (mIsDiarySaved) {
+                diaryViewModel.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+            } else {
+                saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+            }
         }
     }
 
@@ -185,7 +188,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                     if (mLocation != null) diaryDto.location = mLocation
                     applyRemoveIndex()
                     diaryDto.photoUris = mPhotoUris
-                    EasyDiaryDbHelper.insertDiary(diaryDto)
+                    diaryViewModel.insertDiary(diaryDto.toDomain())
                     config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
