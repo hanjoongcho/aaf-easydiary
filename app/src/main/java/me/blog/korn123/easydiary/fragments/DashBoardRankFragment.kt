@@ -79,7 +79,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                             val endMillis = System.currentTimeMillis()
                             val startMillis = firstDiary?.currentTimeMillis ?: endMillis
                             dashboardTitle.text = getString(R.string.dashboard_title_lifetime)
-                            diaryCount.text = "${EasyDiaryDbHelper.countDiaryAll()}"
+                            diaryCount.text = "${diaryViewModel.getDiaryCount()}"
                             val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
                             val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                             val periodInfo = "$startDate - $endDate"
