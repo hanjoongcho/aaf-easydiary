@@ -8,4 +8,5 @@ enum class ExportOption {
 
 //    LOCATION,
     PHOTO_URI,
+    ALL,
 }

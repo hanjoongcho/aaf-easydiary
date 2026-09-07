@@ -62,6 +62,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
@@ -198,47 +199,100 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     private var mExportJsonOption = ExportOption.DIARY
     private val mExportJsonLauncher =
-        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
             uri?.let { targetUri ->
+                mBaseDevViewModel.isLoading = true
                 lifecycleScope.launch {
-                    var items: List<Any> =
+                    var mapOfItems: MutableMap<String, Any> =
                         when (mExportJsonOption) {
                             ExportOption.ACTION_LOG -> {
-                                val actionLogs = EasyDiaryDbHelper.findActionLogAll()
-                                EasyDiaryDbHelper.copyFromRealm(actionLogs)
+                                mutableMapOf(
+                                    "ACTION_LOG" to
+                                        EasyDiaryDbHelper.copyFromRealm(
+                                            EasyDiaryDbHelper.findActionLogAll(),
+                                        ),
+                                )
                             }
 
                             ExportOption.ALARM -> {
-                                val alarms = EasyDiaryDbHelper.findAlarmAll()
-                                EasyDiaryDbHelper.copyFromRealm(alarms)
+                                mutableMapOf("ALARM" to EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findAlarmAll()))
                             }
 
                             ExportOption.D_DAY -> {
                                 val dDays = EasyDiaryDbHelper.findDDayAll()
-                                EasyDiaryDbHelper.copyFromRealm(dDays)
+                                mutableMapOf("D_DAY" to EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findDDayAll()))
                             }
 
                             ExportOption.DIARY -> {
-                                diaryViewModel.findDiary(query = null)
+                                mutableMapOf("DIARY" to diaryViewModel.findDiary(query = null))
                             }
 
                             ExportOption.PHOTO_URI -> {
-                                val photoUris = EasyDiaryDbHelper.findPhotoUriAll()
-                                EasyDiaryDbHelper.copyFromRealm(photoUris)
+                                mutableMapOf(
+                                    "PHOTO_URI" to
+                                        EasyDiaryDbHelper.copyFromRealm(
+                                            EasyDiaryDbHelper.findPhotoUriAll(),
+                                        ),
+                                )
+                            }
+
+                            ExportOption.ALL -> {
+                                // TODO: ACTION_LOG, ALARM, D_DAY, DIARY, PHOTO_URI 데이터 셋을 json으로 생성 후 zip로 export
+                                val map = mutableMapOf<String, Any>()
+                                map["ACTION_LOG"] =
+                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findActionLogAll())
+                                map["ALARM"] =
+                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findAlarmAll())
+                                map["D_DAY"] =
+                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findDDayAll())
+                                map["DIARY"] = diaryViewModel.findDiary(query = null)
+                                map["PHOTO_URI"] =
+                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
+                                map
                             }
                         }
 
+                    mapOfItems["META"] =
+                        mapOf(
+                            "BuildConfig.FLAVOR" to BuildConfig.FLAVOR,
+                            "BuildConfig.BUILD_TYPE" to BuildConfig.BUILD_TYPE,
+                            "BuildConfig.VERSION_CODE" to BuildConfig.VERSION_CODE,
+                            "BuildConfig.VERSION_NAME" to BuildConfig.VERSION_NAME,
+                            "Build.MANUFACTURER" to Build.MANUFACTURER,
+                            "Build.MODEL" to Build.MODEL,
+                            "Build.VERSION.RELEASE" to Build.VERSION.RELEASE,
+                            "Build.VERSION.SDK_INT" to Build.VERSION.SDK_INT,
+                        )
                     try {
                         withContext(Dispatchers.IO) {
-                            val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(items)
+                            val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
+                            val fileName = targetUri.path ?: ""
+                            val isZip = fileName.endsWith(".zip", ignoreCase = true)
                             contentResolver.openOutputStream(targetUri)?.use { outputStream ->
-                                IOUtils.write(jsonString, outputStream, "UTF-8")
+                                if (isZip) {
+                                    // ZIP 압축 저장
+                                    java.util.zip.ZipOutputStream(outputStream).use { zos ->
+                                        val entryName =
+                                            when (mExportJsonOption) {
+                                                ExportOption.ALL -> "easy_diary_all.json"
+                                                else -> "easy_diary_${mExportJsonOption.name.lowercase()}.json"
+                                            }
+                                        val entry = java.util.zip.ZipEntry(entryName)
+                                        zos.putNextEntry(entry)
+                                        zos.write(jsonString.toByteArray(Charsets.UTF_8))
+                                        zos.closeEntry()
+                                    }
+                                } else {
+                                    // 일반 JSON 저장
+                                    IOUtils.write(jsonString, outputStream, "UTF-8")
+                                }
                             }
                         }
-
                         makeToast("Export successful!")
                     } catch (e: Exception) {
                         makeToast("Export failed: ${e.message}")
+                    } finally {
+                        mBaseDevViewModel.isLoading = false
                     }
                 }
             }
@@ -657,7 +711,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 "export diary data",
-                "realm diary 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "realm diary 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -667,7 +721,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "export realm alarm data",
-                "realm alarm 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "realm alarm 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -677,7 +731,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "export realm action log data",
-                "realm action log 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "realm action log 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -687,7 +741,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "export realm d-day data",
-                "realm d-day 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "realm d-day 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -697,12 +751,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "export realm photo uri data",
-                "realm photo uri 데이터를 json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "realm photo uri 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "photo_uri_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.PHOTO_URI
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export realm all data",
+                "realm 전체 데이터를 domain model json 포멧으로 변환하고 zip으로 압축 후 SAF를 이용해 외부 저장소에 export 합니다. ",
+                modifier = modifier,
+            ) {
+                val fileName =
+                    "export_all_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json.zip"
+                mExportJsonOption = ExportOption.ALL
                 mExportJsonLauncher.launch(fileName)
             }
         }
