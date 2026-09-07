@@ -86,8 +86,6 @@ class DiaryViewModel
             }
         }
 
-        suspend fun getDiaryCount(): Int = findDiary(query = null).size
-
         suspend fun getLatestDiary(): Diary? =
             diaryRepository
                 .getAllDiaries()
@@ -285,6 +283,13 @@ class DiaryViewModel
                 findDiary(null).firstOrNull { it.originDiaryId == originSequence }
             } else {
                 EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence)
+            }
+
+        suspend fun getDiaryCount(): Int =
+            if (application.config.enableJetpackRoomDatabase) {
+                findDiary(query = null).size
+            } else {
+                EasyDiaryDbHelper.countDiaryAll().toInt()
             }
 
         suspend fun getMaxDiarySequence(): Int =
