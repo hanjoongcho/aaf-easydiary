@@ -524,10 +524,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    private fun setupReviewFlow() {
+    private suspend fun setupReviewFlow() {
         if (config.enableReviewFlow) {
             config.appExecutionCount = config.appExecutionCount.plus(1)
-            if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
+            if (config.appExecutionCount > 30 && diaryViewModel.getDiaryCount() > 300) startReviewFlow()
             if (config.enableDebugOptionToastReviewFlowInfo) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
     }

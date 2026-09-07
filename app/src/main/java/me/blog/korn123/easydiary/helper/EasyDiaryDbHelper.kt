@@ -295,6 +295,7 @@ object EasyDiaryDbHelper {
             .sort("photoUri", Sort.ASCENDING)
             .toList()
 
+    @Deprecated(message = "Use DiaryViewModel.getDiaryCount() instead")
     fun countDiaryAll(): Long =
         getInstance()
             .where(Diary::class.java)
