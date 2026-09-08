@@ -52,6 +52,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
+import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -167,18 +168,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 }
             }
             item {
-                SwitchCard(
-                    stringResource(R.string.enable_welcome_dashboard_popup_title),
-                    stringResource(R.string.enable_welcome_dashboard_popup_description),
-                    settingCardModifier,
-                    enableWelcomeDashboardPopup,
-                    enableCardViewPolicy = enableCardViewPolicy,
-                ) {
-                    context.config.enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
-                    enableWelcomeDashboardPopup = !enableWelcomeDashboardPopup
-                }
-            }
-            item {
                 var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
                 SwitchCard(
                     stringResource(R.string.enable_photo_highlight_title),
@@ -265,7 +254,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                                 workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                                 label = "Quick Settings"
                             }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm.toDomain()) }
                     }
                 }
             }

@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.FullBackupService
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class AlarmWorkExecutor(
     context: Context,
@@ -21,7 +22,7 @@ class AlarmWorkExecutor(
     private val authManager by lazy { GoogleAuthManager(context) }
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    override fun executeWork(alarm: Alarm) {
+    override fun executeWork(alarm: AlarmDomain) {
         super.executeWork(alarm)
 
         context.run {
@@ -29,7 +30,7 @@ class AlarmWorkExecutor(
                 AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> {
                     scheduleNextAlarm(alarm, isScreenOn())
                     authManager.getLastSignedInAccount()?.let { account ->
-                        val alarmId = alarm.id
+                        val alarmId = alarm.alarmId
                         applicationScope.launch {
                             runCatching {
                                 DriveServiceHelper(context, account).initDriveWorkingDirectory(

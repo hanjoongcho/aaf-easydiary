@@ -180,21 +180,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    var enableWelcomeDashboardPopup by remember { mutableStateOf(requireContext().config.enableWelcomeDashboardPopup) }
-                    SwitchCard(
-                        title = getString(R.string.enable_welcome_dashboard_popup_title),
-                        description = getString(R.string.enable_welcome_dashboard_popup_description),
-                        modifier = settingCardModifier,
-                        isOn = enableWelcomeDashboardPopup,
-                        enableCardViewPolicy = enableCardViewPolicy,
-                        fontFamily = fontFamily,
-                    ) {
-                        requireActivity().run {
-                            enableWelcomeDashboardPopup = enableWelcomeDashboardPopup.not()
-                            config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopup
-                        }
-                    }
-
                     var enablePhotoHighlight by remember { mutableStateOf(requireContext().config.enablePhotoHighlight) }
                     SwitchCard(
                         title = getString(R.string.enable_photo_highlight_title),

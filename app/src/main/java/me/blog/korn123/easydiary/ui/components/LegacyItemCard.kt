@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.ui.components
 
 import android.animation.ArgbEvaluator
-import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,12 +56,8 @@ import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
-import me.blog.korn123.easydiary.helper.toRealm
-import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

@@ -218,7 +218,7 @@ fun ComponentActivity.syncMarkDown(
                                                     updateDateString,
                                                 ),
                                             dateString =
-                                                DateUtils.timeMillisToDateTime(
+                                                DateUtils.timeMillisToDate(
                                                     DateUtils.dateStringToTimeStamp(
                                                         updateDateString,
                                                     ),

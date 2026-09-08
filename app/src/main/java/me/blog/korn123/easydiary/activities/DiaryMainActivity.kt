@@ -23,6 +23,9 @@ import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -50,7 +53,6 @@ import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.compose.QuickSettingsActivity
 import me.blog.korn123.easydiary.compose.TreeTimelineActivity
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
-import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
@@ -86,7 +88,6 @@ import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_WELCOME_DASHBOARD
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
 import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
@@ -106,6 +107,8 @@ import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.ui.components.LoadingScreen
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
@@ -195,6 +198,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         )
 
         lifecycleScope.launch {
+            diaryViewModel.isLoading = true
             setupComposeView()
             mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
             forceInitRealmLessThanOreo()
@@ -214,7 +218,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             checkBundle(savedInstanceState)
             setupReviewFlow()
             setupPhotoHighlight()
-            checkIntent()
 //        clearLockSettingsTemporary()
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
@@ -232,6 +235,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         ).filter { item -> item.symbolSequence in 80..81 },
                 )
             }
+
+            diaryViewModel.isLoading = false
         }
     }
 
@@ -323,12 +328,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             R.id.checkAll -> {
                 lifecycleScope.launch {
-                    mBinding.progressCoroutine.visibility = View.VISIBLE
-                    mBinding.modalContainer.visibility = View.VISIBLE
-                    mDiaryMainItemAdapter?.toggleCheckBoxALl()
+                    diaryViewModel.isLoading = true
+                    withContext(Dispatchers.Default) {
+                        mDiaryMainItemAdapter?.toggleCheckBoxALl()
+                    }
                     mDiaryMainItemAdapter?.notifyDataSetChanged()
-                    mBinding.progressCoroutine.visibility = View.GONE
-                    mBinding.modalContainer.visibility = View.GONE
+                    diaryViewModel.isLoading = false
                 }
             }
 
@@ -493,18 +498,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun checkIntent() {
-        when (intent.getBooleanExtra(EXECUTION_MODE_WELCOME_DASHBOARD, false)) {
-            true -> {
-                intent.removeExtra(EXECUTION_MODE_WELCOME_DASHBOARD)
-//                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
-                DashboardDialogFragment().apply { show(supportFragmentManager, "DashboardDialog") }
-            }
-
-            false -> {}
-        }
-    }
-
     private fun checkBundle(savedInstanceState: Bundle?) {
         when (savedInstanceState == null) {
             true -> {
@@ -1082,6 +1075,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             openCustomOptionMenu()
                         }
                     }
+                }
+            }
+        }
+
+        mBinding.partialComposeLoadingScreen.composeView.setContent {
+            AppTheme {
+                AnimatedVisibility(
+                    visible = diaryViewModel.isLoading,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                ) {
+                    LoadingScreen(message = diaryViewModel.loadingMessage)
                 }
             }
         }

@@ -60,6 +60,10 @@ class DiaryRemoteDataSourceImpl
             // Mock implementation
         }
 
+        override suspend fun updateDiaries(diaries: List<DiaryEntity>) {
+            // Mock implementation
+        }
+
         override suspend fun updateDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,

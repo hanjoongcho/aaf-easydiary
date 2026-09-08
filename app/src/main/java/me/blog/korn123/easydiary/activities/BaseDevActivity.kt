@@ -74,7 +74,6 @@ import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.fullAddress
@@ -215,7 +214,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             }
 
                             ExportOption.ALARM -> {
-                                mutableMapOf("ALARM" to EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findAlarmAll()))
+                                mutableMapOf("ALARM" to EasyDiaryDbHelper.findAlarmAll())
                             }
 
                             ExportOption.D_DAY -> {
@@ -239,10 +238,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.ALL -> {
                                 // TODO: ACTION_LOG, ALARM, D_DAY, DIARY, PHOTO_URI 데이터 셋을 json으로 생성 후 zip로 export
                                 val map = mutableMapOf<String, Any>()
-                                map["ACTION_LOG"] =
-                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findActionLogAll())
-                                map["ALARM"] =
-                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findAlarmAll())
+                                map["ACTION_LOG"] = EasyDiaryDbHelper.findActionLogAll()
+                                map["ALARM"] = EasyDiaryDbHelper.findAlarmAll()
                                 map["D_DAY"] =
                                     EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findDDayAll())
                                 map["DIARY"] = diaryViewModel.findDiary(query = null)
@@ -637,9 +634,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     EasyDiaryDbHelper
                         .findDiary(query = null)
 
-                val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
-                val copiedRealmAlarms = EasyDiaryDbHelper.copyFromRealm(realmAlarms)
-                val domainAlarms = copiedRealmAlarms.map { it.toDomain() }
+                val domainAlarms = EasyDiaryDbHelper.findAlarmAll()
 
                 val realmActionLogs = EasyDiaryDbHelper.findActionLogAll()
                 val copiedRealmActionLogs = EasyDiaryDbHelper.copyFromRealm(realmActionLogs)

@@ -111,6 +111,9 @@ interface DiaryDao {
     @Update
     suspend fun updateDiary(diary: DiaryEntity)
 
+    @Update
+    suspend fun updateDiaries(diaries: List<DiaryEntity>)
+
     @Transaction
     suspend fun updateDiaryWithPhotos(
         diary: DiaryEntity,

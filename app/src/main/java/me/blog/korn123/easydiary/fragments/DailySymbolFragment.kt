@@ -27,6 +27,7 @@ import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DashboardActivity
@@ -46,7 +47,6 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.text.SimpleDateFormat
@@ -315,13 +315,31 @@ class DailySymbolFragment : Fragment() {
             cal.add(Calendar.DATE, -1)
         }
 
+        val startDateString = localDailyList[localDailyList.size.minus(1)].dateString
+        val endDateString = localDailyList[0].dateString
+        val periodGroup =
+            diaryViewModel
+                .findDiary(
+                    query = null,
+                    startTimeMillis =
+                        DateUtils.dateToTimeMillis(
+                            startDateString,
+                            DateUtilConstants.DATE_PATTERN_DASH,
+                        ),
+                    endTimeMillis =
+                        DateUtils.dateToTimeMillis(
+                            endDateString,
+                            DateUtilConstants.DATE_PATTERN_DASH,
+                        ),
+                ).groupBy { it.dateString }
+
         // 2. Perform the heavy mapping on the local list
         val selectedSymbolIds = config.selectedSymbols.split(",").mapNotNull { it.toIntOrNull() }
         val localMap =
             localDailyList.associateBy(
                 keySelector = { it.dateString },
                 valueTransform = { item ->
-                    diaryViewModel.findDiaryByDateString(item.dateString).partition { diary ->
+                    (periodGroup[item.dateString] ?: emptyList()).partition { diary ->
                         selectedSymbolIds.contains(diary.symbolSequence)
                     }
                 },
@@ -344,7 +362,9 @@ class DailySymbolFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     suspend fun updateDailySymbol() {
-        init365Day()
+        withContext(Dispatchers.Default) {
+            init365Day()
+        }
         mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
         mDailySymbolAdapter.notifyDataSetChanged()
     }

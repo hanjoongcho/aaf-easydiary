@@ -72,4 +72,6 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_edit" />
     </LinearLayout>
+
+    <include android:id="@+id/partial_compose_loading_screen" layout="@layout/partial_compose_loading_screen" />
 </androidx.constraintlayout.widget.ConstraintLayout>

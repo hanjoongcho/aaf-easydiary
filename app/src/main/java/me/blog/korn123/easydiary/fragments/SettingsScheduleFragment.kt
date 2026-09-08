@@ -57,6 +57,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.models.Alarm
 import kotlin.math.pow
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
@@ -65,7 +66,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsScheduleBinding
     private lateinit var mAlarmAdapter: AlarmAdapter
-    private var mAlarmList: ArrayList<Alarm> = arrayListOf()
+    private var mAlarmList: ArrayList<AlarmDomain> = arrayListOf()
     private val mActivity: Activity
         get() = requireActivity()
     private val mRequestPermissionScheduleExactAlarmLauncher =
@@ -147,11 +148,11 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private lateinit var mTemporaryAlarm: Alarm
+    private lateinit var mTemporaryAlarm: AlarmDomain
 
     fun openAlarmDialog(
-        temporaryAlarm: Alarm,
-        storedAlarm: Alarm? = null,
+        temporaryAlarm: AlarmDomain,
+        storedAlarm: AlarmDomain? = null,
     ) {
         mTemporaryAlarm = temporaryAlarm
 
@@ -232,9 +233,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                                     DialogInterface.OnClickListener { _, _ ->
                                         cancelAlarmClock(temporaryAlarm)
                                         alertDialog?.dismiss()
-                                        EasyDiaryDbHelper.beginTransaction()
-                                        storedAlarm.deleteFromRealm()
-                                        EasyDiaryDbHelper.commitTransaction()
+                                        EasyDiaryDbHelper.deleteAlarmBy(storedAlarm.alarmId)
                                         updateAlarmList()
                                     },
                                     { _, _ -> },

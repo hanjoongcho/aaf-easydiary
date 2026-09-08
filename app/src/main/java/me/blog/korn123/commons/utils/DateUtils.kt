@@ -5,6 +5,11 @@ import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -127,6 +132,52 @@ object DateUtils {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val date: Date = formatter.parse(dateString)
         return date.time
+    }
+
+    /**
+     * 날짜 문자열을 입력받아 해당 날짜의 가장 마지막 시점(23:59:59.999)의 Epoch Millisecond(Long)로 변환합니다.
+     *
+     * @param dateString 변환할 날짜 문자열 (예: "2026-09-09")
+     * @param pattern dateString의 날짜 포맷 패턴 (예: "yyyy-MM-dd")
+     * @param zoneId 적용할 타임존 (기본값: 시스템 기본 타임존)
+     * @return 해당 날짜 23:59:59.999 시점의 Epoch 밀리초 (Long)
+     */
+    fun dateToTimeMillis(
+        dateString: String,
+        pattern: String,
+        zoneId: ZoneId = ZoneId.systemDefault(),
+    ): Long {
+        // 1. 날짜 패턴 포맷터 생성
+        val formatter = DateTimeFormatter.ofPattern(pattern)
+
+        // 2. 문자열을 시간 정보가 없는 LocalDate로 파싱
+        val localDate = LocalDate.parse(dateString, formatter)
+
+        // 3. 해당 날짜의 최대 시간(23:59:59.999...)을 결합
+        val endOfDay = localDate.atTime(LocalTime.MAX)
+
+        // 4. 타임존을 결합하여 Instant로 변환 후 Epoch 밀리초 추출
+        return endOfDay
+            .atZone(zoneId)
+            .toInstant()
+            .toEpochMilli()
+    }
+
+    /**
+     * java.time API를 사용한 안전하고 명확한 타임존 변환 함수
+     *
+     * @param timeMillis 변환할 밀리초 단위의 Epoch 시간
+     * @param pattern 날짜 포맷 패턴
+     * @param zoneId 적용할 타임존 ID (기본값: ZoneId.systemDefault())
+     */
+    fun timeMillisToDate(
+        timeMillis: Long,
+        pattern: String,
+        zoneId: ZoneId = ZoneId.systemDefault(),
+    ): String {
+        val instant = Instant.ofEpochMilli(timeMillis)
+        val formatter = DateTimeFormatter.ofPattern(pattern).withZone(zoneId)
+        return formatter.format(instant)
     }
 
     // ------------------------------------------------------------------
