@@ -22,6 +22,9 @@ import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -88,6 +91,7 @@ import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MO
 import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
+import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
@@ -176,15 +180,28 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding = ActivityDiaryReadingBinding.inflate(layoutInflater)
         mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
         mDialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
-        supportActionBar?.run {
-            title = ""
-            setDisplayHomeAsUpEnabled(true)
-        }
+        mBinding =
+            ActivityDiaryReadingBinding.inflate(layoutInflater).apply {
+                setContentView(root)
+                setSupportActionBar(toolbar)
+                supportActionBar?.run {
+                    title = ""
+                    setDisplayHomeAsUpEnabled(true)
+                }
+                partialComposeLoadingScreen.composeView.setContent {
+                    AppTheme {
+                        AnimatedVisibility(
+                            visible = diaryViewModel.isLoading,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                        ) {
+                            LoadingScreen(message = diaryViewModel.loadingMessage)
+                        }
+                    }
+                }
+            }
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
@@ -193,6 +210,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         setupShowcase()
 
         lifecycleScope.launch {
+            diaryViewModel.isLoading = true
             diaryList.run {
                 clear()
                 addAll(
@@ -244,6 +262,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     mBinding.diaryViewPager.setCurrentItem(targetIndex, false)
                 }
             }
+
+            diaryViewModel.isLoading = false
         }
     }
 

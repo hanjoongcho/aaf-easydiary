@@ -53,6 +53,8 @@ class DiaryLocalDataSourceImpl
 
         override suspend fun updateDiary(diary: DiaryEntity) = diaryDao.updateDiary(diary)
 
+        override suspend fun updateDiaries(diaries: List<DiaryEntity>) = diaryDao.updateDiaries(diaries)
+
         override suspend fun updateDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,

@@ -2,6 +2,9 @@ package me.blog.korn123.easydiary.viewmodels
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.lifecycleScope
@@ -46,6 +49,9 @@ class DiaryViewModel
         application: Application,
         private val diaryRepository: DiaryRepository,
     ) : AndroidViewModel(application) {
+        var isLoading by mutableStateOf(false)
+        var loadingMessage by mutableStateOf<String?>(null)
+
         val allDiaries: StateFlow<List<Diary>> =
             diaryRepository
                 .getAllDiaries()

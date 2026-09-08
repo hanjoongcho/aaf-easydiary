@@ -45,6 +45,8 @@ interface DiaryRepository {
 
     suspend fun updateDiaryWithPhotos(diary: Diary)
 
+    suspend fun updateDiaries(diaries: List<Diary>)
+
     suspend fun deleteDiary(diary: Diary)
 
     suspend fun deleteDiaryById(seq: Int)

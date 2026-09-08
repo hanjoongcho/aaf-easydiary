@@ -70,15 +70,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
-import androidx.core.view.marginEnd
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
-import com.simplemobiletools.commons.extensions.moveLastItemToFront
-import com.simplemobiletools.commons.extensions.substringTo
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.DAY_MINUTES
@@ -182,7 +179,6 @@ import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -197,6 +193,7 @@ import java.util.Locale
 import kotlin.math.ceil
 import kotlin.math.pow
 import kotlin.math.roundToInt
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -210,11 +207,11 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
  *   Alarm Extension
  *
  ***************************************************************************************************/
-fun Context.openNotification(alarm: Alarm) {
+fun Context.openNotification(alarm: AlarmDomain) {
     val pendingIntent = getOpenAlarmTabIntent(alarm)
     val notification = getAlarmNotification(pendingIntent, alarm)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(alarm.id, notification)
+    notificationManager.notify(alarm.alarmId, notification)
 
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
     if (isScreenOn()) {
@@ -232,7 +229,7 @@ fun Context.openNotification(alarm: Alarm) {
 }
 
 fun Context.reExecuteGmsBackup(
-    alarm: Alarm,
+    alarm: AlarmDomain,
     errorMessage: String,
     className: String,
 ) {
@@ -275,7 +272,7 @@ fun Context.reExecuteGmsBackup(
 // }
 
 @SuppressLint("NewApi", "LaunchActivityFromNotification")
-fun Context.openSnoozeNotification(alarm: Alarm) {
+fun Context.openSnoozeNotification(alarm: AlarmDomain) {
     val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
     if (isOreoPlus()) {
         val importance = NotificationManager.IMPORTANCE_HIGH
@@ -296,7 +293,7 @@ fun Context.openSnoozeNotification(alarm: Alarm) {
             .setAutoCancel(true)
             .setContentTitle(
                 if (config.enableDebugOptionVisibleAlarmSequence) {
-                    "[${alarm.id}] ${getString(
+                    "[${alarm.alarmId}] ${getString(
                         R.string.schedule_gms_error_title,
                     )}"
                 } else {
@@ -312,17 +309,17 @@ fun Context.openSnoozeNotification(alarm: Alarm) {
             ).setContentIntent(
                 PendingIntent.getBroadcast(
                     this,
-                    alarm.id,
+                    alarm.alarmId,
                     Intent(this, AlarmReceiver::class.java).apply {
                         putExtra(DOZE_SCHEDULE, true)
                     },
                     pendingIntentFlag(),
                 ),
             )
-    notificationManager.notify(alarm.id, builder.build())
+    notificationManager.notify(alarm.alarmId, builder.build())
 }
 
-fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
+fun Context.getOpenAlarmTabIntent(alarm: AlarmDomain): PendingIntent {
     val intent: Intent? =
         when (alarm.workMode) {
             AlarmConstants.WORK_MODE_DIARY_WRITING -> {
@@ -339,22 +336,22 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
                 null
             }
         }
-    return PendingIntent.getActivity(this, alarm.id, intent, pendingIntentFlag())
+    return PendingIntent.getActivity(this, alarm.alarmId, intent, pendingIntentFlag())
 }
 
-fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
+fun Context.getAlarmIntent(alarm: AlarmDomain): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
-    intent.putExtra(SettingConstants.ALARM_ID, alarm.id)
-    return PendingIntent.getBroadcast(this, alarm.id, intent, pendingIntentFlag())
+    intent.putExtra(SettingConstants.ALARM_ID, alarm.alarmId)
+    return PendingIntent.getBroadcast(this, alarm.alarmId, intent, pendingIntentFlag())
 }
 
-fun Context.cancelAlarmClock(alarm: Alarm) {
+fun Context.cancelAlarmClock(alarm: AlarmDomain) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     alarmManager.cancel(getAlarmIntent(alarm))
 }
 
 fun Context.scheduleNextAlarm(
-    alarm: Alarm,
+    alarm: AlarmDomain,
     showToast: Boolean,
 ) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -381,7 +378,7 @@ fun Context.scheduleNextAlarm(
 }
 
 fun Context.setupAlarmClock(
-    alarm: Alarm,
+    alarm: AlarmDomain,
     triggerInSeconds: Int,
 ) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -394,7 +391,7 @@ fun Context.showRemainingTimeMessage(totalMinutes: Int) {
     toast(fullString, Toast.LENGTH_LONG)
 }
 
-fun Context.executeScheduledTask(alarm: Alarm) {
+fun Context.executeScheduledTask(alarm: AlarmDomain) {
     AlarmWorkExecutor(this).run { executeWork(alarm) }
 }
 
@@ -407,7 +404,7 @@ fun Context.rescheduleEnabledAlarms() {
 @SuppressLint("NewApi")
 fun Context.getAlarmNotification(
     pendingIntent: PendingIntent,
-    alarm: Alarm,
+    alarm: AlarmDomain,
 ): Notification {
     if (isOreoPlus()) {
         // Create the NotificationChannel
@@ -453,7 +450,7 @@ fun Context.getAlarmNotification(
             .setLargeIcon(largeIcon)
             .setOngoing(false)
             .setAutoCancel(true)
-            .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.id}] ${alarm.label}" else alarm.label)
+            .setContentTitle(if (config.enableDebugOptionVisibleAlarmSequence) "[${alarm.alarmId}] ${alarm.label}" else alarm.label)
             .setContentText(description)
             .setStyle(NotificationCompat.BigTextStyle().bigText(description))
             .setContentIntent(pendingIntent)

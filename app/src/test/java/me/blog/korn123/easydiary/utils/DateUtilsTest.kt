@@ -18,7 +18,7 @@ class DateUtilsTest {
     fun timeMillisToDateTime() {
         Assert.assertEquals(
             "2018-03-04",
-            DateUtils.timeMillisToDateTime(
+            DateUtils.timeMillisToDate(
                 timeMillis,
                 DateUtilConstants.DATE_PATTERN_DASH,
             ),
@@ -27,7 +27,7 @@ class DateUtilsTest {
 
     @Test
     fun timeMillisToHour() {
-        Assert.assertEquals("16", DateUtils.timeMillisToDateTime(timeMillis, "HH"))
+        Assert.assertEquals("16", DateUtils.timeMillisToDate(timeMillis, "HH"))
     }
 
 //    @Test

@@ -87,59 +87,60 @@ class DevActivity : BaseDevActivity() {
                 val configuration = LocalConfiguration.current
                 val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
                 val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-                Scaffold(
-                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                    topBar = {
-                        EasyDiaryActionBar(
-                            title = "Easy-Diary Dev Mode",
-                            subTitle = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
-                        ) {
-                            finishActivityWithPauseLock()
-                        }
-                    },
-                    containerColor = Color(config.screenBackgroundColor),
-                    content = { innerPadding ->
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            CardContainer(
-                                modifier = Modifier.padding(innerPadding),
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Scaffold(
+                        contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                        topBar = {
+                            EasyDiaryActionBar(
+                                title = "Easy-Diary Dev Mode",
+                                subTitle = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                             ) {
-                                val settingCardModifier =
-                                    Modifier
-                                        .weight(1f)
-
-                                RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
-                                Migration(settingCardModifier, maxItemsInEachRow)
-                                ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
-                                CustomLauncher(settingCardModifier, maxItemsInEachRow)
-                                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
-
-                                DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
-                                DebugToast(settingCardModifier, maxItemsInEachRow)
-
-                                Etc(settingCardModifier, maxItemsInEachRow)
-                                ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
-                                Notification(settingCardModifier, maxItemsInEachRow)
-                                AlertDialog(settingCardModifier, maxItemsInEachRow)
-
-                                LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                                Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
-                                FingerPrint(settingCardModifier, maxItemsInEachRow)
-
-                                Spacer(
-                                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
-                                )
+                                finishActivityWithPauseLock()
                             }
+                        },
+                        containerColor = Color(config.screenBackgroundColor),
+                        content = { innerPadding ->
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                CardContainer(
+                                    modifier = Modifier.padding(innerPadding),
+                                ) {
+                                    val settingCardModifier =
+                                        Modifier
+                                            .weight(1f)
 
-                            AnimatedVisibility(
-                                visible = mBaseDevViewModel.isLoading,
-                                enter = fadeIn(),
-                                exit = fadeOut(),
-                            ) {
-                                LoadingScreen(message = viewModel.loadingMessage)
+                                    RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
+                                    Migration(settingCardModifier, maxItemsInEachRow)
+                                    ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
+                                    CustomLauncher(settingCardModifier, maxItemsInEachRow)
+                                    GoogleMobileService(settingCardModifier, maxItemsInEachRow)
+
+                                    DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
+                                    DebugToast(settingCardModifier, maxItemsInEachRow)
+
+                                    Etc(settingCardModifier, maxItemsInEachRow)
+                                    ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
+                                    Notification(settingCardModifier, maxItemsInEachRow)
+                                    AlertDialog(settingCardModifier, maxItemsInEachRow)
+
+                                    LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
+                                    Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
+                                    FingerPrint(settingCardModifier, maxItemsInEachRow)
+
+                                    Spacer(
+                                        modifier = Modifier.padding(0.dp, 0.dp, 0.dp, bottomPadding),
+                                    )
+                                }
                             }
-                        }
-                    },
-                )
+                        },
+                    )
+                    AnimatedVisibility(
+                        visible = mBaseDevViewModel.isLoading,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        LoadingScreen(message = viewModel.loadingMessage)
+                    }
+                }
             }
         }
     }

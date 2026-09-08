@@ -28,4 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <include android:id="@+id/partial_compose_loading_screen" layout="@layout/partial_compose_loading_screen" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

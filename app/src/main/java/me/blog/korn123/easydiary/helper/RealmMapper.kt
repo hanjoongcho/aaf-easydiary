@@ -48,6 +48,20 @@ fun me.blog.korn123.easydiary.models.Alarm.toDomain(): Alarm =
         retryCount = this.retryCount,
     )
 
+fun Alarm.toRealm(): me.blog.korn123.easydiary.models.Alarm =
+    me.blog.korn123.easydiary.models.Alarm().apply {
+        sequence = this@toRealm.alarmId
+        timeInMinutes = this@toRealm.timeInMinutes
+        days = this@toRealm.days
+        isEnabled = this@toRealm.isEnabled
+        vibrate = this@toRealm.vibrate
+        soundTitle = this@toRealm.soundTitle
+        soundUri = this@toRealm.soundUri
+        label = this@toRealm.label
+        workMode = this@toRealm.workMode
+        retryCount = this@toRealm.retryCount
+    }
+
 fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
     DiaryEntity(
         diaryId = this.sequence,
@@ -74,7 +88,7 @@ fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
             },
         isHoliday = this.isHoliday,
     ).apply {
-        dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+        dateString = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }.toDomain(this.photoUris?.map { it.toDomain() } ?: emptyList())
 
 fun PhotoUri.toRealm(): me.blog.korn123.easydiary.models.PhotoUri =

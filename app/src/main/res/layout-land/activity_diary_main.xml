@@ -174,5 +174,7 @@
             android:layout_gravity="bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <include android:id="@+id/partial_compose_loading_screen" layout="@layout/partial_compose_loading_screen" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

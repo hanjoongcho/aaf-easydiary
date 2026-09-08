@@ -47,6 +47,8 @@ interface DiaryDataSource {
 
     suspend fun updateDiary(diary: DiaryEntity)
 
+    suspend fun updateDiaries(diaries: List<DiaryEntity>)
+
     suspend fun updateDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,

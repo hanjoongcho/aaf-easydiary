@@ -35,7 +35,6 @@ import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper.copy
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -49,6 +48,7 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import java.io.File
 import java.util.Collections
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class FullBackupService : Service() {
     private lateinit var mPhotoPath: String
@@ -150,7 +150,7 @@ class FullBackupService : Service() {
         EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
             val workStatus = WorkStatus()
             workStatusList.add(workStatus)
-            backupPhoto(it.copy(), workStatus)
+            backupPhoto(it, workStatus)
         }
         EasyDiaryDbHelper.insertActionLog(
             ActionLog(
@@ -171,7 +171,7 @@ class FullBackupService : Service() {
 
     @SuppressLint("RestrictedApi")
     private fun backupPhoto(
-        alarm: Alarm,
+        alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
         EasyDiaryDbHelper.insertActionLog(
@@ -210,7 +210,7 @@ class FullBackupService : Service() {
                 getString(R.string.cancel),
                 PendingIntent.getService(
                     this,
-                    alarm.id,
+                    alarm.alarmId,
                     Intent(this, NotificationService::class.java).apply {
                         action = NotificationConstants.ACTION_FULL_BACKUP_GMS_CANCEL
                     },
@@ -234,7 +234,7 @@ class FullBackupService : Service() {
 
     private suspend fun determineRemoteDrivePhotos(
         nextPageToken: String?,
-        alarm: Alarm,
+        alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
         EasyDiaryDbHelper.insertActionLog(
@@ -337,7 +337,7 @@ class FullBackupService : Service() {
     }
 
     private fun uploadDiaryPhoto(
-        alarm: Alarm,
+        alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
         val fileName = workStatus.targetFilenames[workStatus.targetFilenamesCursor]
@@ -369,7 +369,7 @@ class FullBackupService : Service() {
     }
 
     private fun updateNotification(
-        alarm: Alarm,
+        alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
         if (mInProcessJob) {
@@ -395,7 +395,7 @@ class FullBackupService : Service() {
                             ).setSummaryText(alarm.label),
                     ).setContentTitle(
                         if (config.enableDebugOptionVisibleAlarmSequence) {
-                            "[${alarm.id}] ${
+                            "[${alarm.alarmId}] ${
                                 getString(
                                     R.string.notification_msg_upload_progress,
                                 )
@@ -412,7 +412,7 @@ class FullBackupService : Service() {
                         workStatus.successCount + workStatus.failCount,
                         false,
                     )
-                mNotificationManager.notify(alarm.id, mNotificationBuilder.build())
+                mNotificationManager.notify(alarm.alarmId, mNotificationBuilder.build())
 
                 if (workStatus.successCount + workStatus.failCount < workStatus.targetFilenames.size) {
                     if (mInProcessJob) uploadDiaryPhoto(alarm, workStatus)
@@ -425,7 +425,7 @@ class FullBackupService : Service() {
     }
 
     private suspend fun backupDiaryRealm(
-        alarm: Alarm,
+        alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
         authManager.getLastSignedInAccount()?.let { account ->
@@ -458,7 +458,7 @@ class FullBackupService : Service() {
     }
 
     private fun launchCompleteNotification(
-        alarm: Alarm,
+        alarm: AlarmDomain,
         savedFileName: String,
         workStatus: WorkStatus,
     ) {
@@ -502,7 +502,7 @@ class FullBackupService : Service() {
                 ).setContentIntent(
                     PendingIntent.getActivity(
                         this,
-                        alarm.id,
+                        alarm.alarmId,
                         Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             putExtra(NOTIFICATION_INFO, this@FullBackupService::class.java.name)
@@ -514,15 +514,15 @@ class FullBackupService : Service() {
                     getString(R.string.dismiss),
                     PendingIntent.getService(
                         this,
-                        alarm.id,
+                        alarm.alarmId,
                         Intent(this, NotificationService::class.java).apply {
                             action = NotificationConstants.ACTION_FULL_BACKUP_GMS_DISMISS
-                            putExtra(SettingConstants.ALARM_ID, alarm.id)
+                            putExtra(SettingConstants.ALARM_ID, alarm.alarmId)
                         },
                         pendingIntentFlag(),
                     ),
                 )
-            mNotificationManager.notify(alarm.id, resultNotificationBuilder.build())
+            mNotificationManager.notify(alarm.alarmId, resultNotificationBuilder.build())
             workStatus.isDone = true
             if (workStatusList.filter { item -> item.isDone }.size == workStatusList.size) stopSelf()
         }

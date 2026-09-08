@@ -91,7 +91,6 @@ class DashboardDialogFragment : DialogFragment() {
                     dismiss()
                 }, 300)
             }
-            layoutProgressContainer.setBackgroundColor(config.primaryColor)
 
             requireActivity().getDashboardCardWidth(0.9F).also {
                 lifetime.layoutParams.width = it
@@ -315,8 +314,6 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
-            layoutProgressContainer.visibility = View.VISIBLE
-            progress.visibility = View.VISIBLE
             root.setBackgroundColor(getDashboardBackgroundColor())
             requireActivity().updateTextColors(root)
             requireActivity().updateAppViews(root)
@@ -333,11 +330,6 @@ class DashboardDialogFragment : DialogFragment() {
                     // This is workaround.
                     // For pages that are invisible but have already been loaded, it will not be updated.
                     mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        layoutProgressContainer.visibility = View.GONE
-                        progress.visibility = View.GONE
-                    }, 300)
                 }
             }
         }, 300)

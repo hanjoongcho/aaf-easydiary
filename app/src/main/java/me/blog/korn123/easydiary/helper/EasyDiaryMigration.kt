@@ -38,7 +38,7 @@ class EasyDiaryMigration : RealmMigration {
                 it
                     .addField("dateString", String::class.java)
                     .transform { obj ->
-                        val dateString = DateUtils.timeMillisToDateTime(obj.getLong("currentTimeMillis"), DateUtilConstants.DATE_PATTERN_DASH)
+                        val dateString = DateUtils.timeMillisToDate(obj.getLong("currentTimeMillis"), DateUtilConstants.DATE_PATTERN_DASH)
                         obj.set("dateString", dateString)
                     }
 

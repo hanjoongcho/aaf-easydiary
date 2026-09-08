@@ -103,14 +103,14 @@ class DiaryMainItemAdapter(
     }
 
     suspend fun toggleCheckBoxALl() {
+        val updateItems = arrayListOf<DiaryDomain>()
         diaryItems.forEach { diary ->
             diary.run {
                 isSelected = isSelected.not()
-                toRealm().also {
-                    activity.diaryRepository.updateDiaryWithPhotos(it.toDomain())
-                }
+                updateItems.add(this)
             }
         }
+        activity.diaryRepository.updateDiaries(updateItems)
     }
 
     inner class ViewHolder(

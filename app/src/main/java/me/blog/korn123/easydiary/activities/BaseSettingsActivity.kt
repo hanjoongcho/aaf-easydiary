@@ -10,9 +10,9 @@ import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 abstract class BaseSettingsActivity : EasyDiaryActivity() {
-
     /***************************************************************************************************
      *   global properties
      *
@@ -20,7 +20,6 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
     protected lateinit var mBinding: ActivityBaseSettingsBinding
     lateinit var mDotIndicatorPager2Adapter: DotIndicatorPager2Adapter
     var mCurrentPosition = 0
-
 
     /***************************************************************************************************
      *   override functions
@@ -57,13 +56,12 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
                     CustomTabsIntent.Builder().setUrlBarHidingEnabled(false).build()
                 customTabsIntent.launchUrl(
                     this@BaseSettingsActivity,
-                    Uri.parse(manualUrl())
+                    Uri.parse(manualUrl()),
                 )
             }
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     /***************************************************************************************************
      *   etc functions

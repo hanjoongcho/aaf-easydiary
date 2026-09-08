@@ -6,6 +6,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,6 +25,8 @@ import me.blog.korn123.easydiary.helper.DashboardConstants
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.ui.components.LoadingScreen
+import me.blog.korn123.easydiary.ui.theme.AppTheme
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -34,6 +39,7 @@ class DashboardActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private lateinit var mBinding: ActivityDashboardBinding
     private lateinit var mDailySymbolFragment: DailySymbolFragment
+    private var isHighLightCallbackDone = false
 
     /***************************************************************************************************
      *   override functions
@@ -44,9 +50,23 @@ class DashboardActivity : EasyDiaryActivity() {
 //        setTheme(getThemeId())
         super.onCreate(null)
 
-        mBinding = ActivityDashboardBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        mBinding =
+            ActivityDashboardBinding.inflate(layoutInflater).apply {
+                setContentView(root)
+                setSupportActionBar(toolbar)
+                partialComposeLoadingScreen.composeView.setContent {
+                    AppTheme {
+                        AnimatedVisibility(
+                            visible = diaryViewModel.isLoading,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                        ) {
+                            LoadingScreen(message = diaryViewModel.loadingMessage)
+                        }
+                    }
+                }
+            }
+
         supportActionBar?.run {
             title = "Dashboard"
             setDisplayHomeAsUpEnabled(true)
@@ -72,6 +92,8 @@ class DashboardActivity : EasyDiaryActivity() {
                         }
                     togglePhotoHighlightCallback = { isVisible: Boolean ->
                         mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+                        isHighLightCallbackDone = true
+                        hideProgressContainer()
 //                    if (!isLandScape()) mBinding.cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
                     }
                 },
@@ -292,8 +314,6 @@ class DashboardActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
-            layoutProgressContainer.visibility = View.VISIBLE
-            progress.visibility = View.VISIBLE
 //            root.setBackgroundColor(getDashboardBackgroundColor())
 //            requireActivity().updateTextColors(root)
 //            requireActivity().updateAppViews(root)
@@ -301,6 +321,7 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         lifecycleScope.launch {
+            showProgressContainer()
             mBinding.run {
                 // Diary Update
                 mDailySymbolFragment.updateDailySymbol()
@@ -310,10 +331,7 @@ class DashboardActivity : EasyDiaryActivity() {
                 // For pages that are invisible but have already been loaded, it will not be updated.
                 mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    layoutProgressContainer.visibility = View.GONE
-                    progress.visibility = View.GONE
-                }, 300)
+                if (isHighLightCallbackDone) hideProgressContainer()
             }
         }
 
@@ -369,14 +387,12 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     fun showProgressContainer() {
-        mBinding.layoutProgressContainer.visibility = View.VISIBLE
-        mBinding.progress.visibility = View.VISIBLE
+        diaryViewModel.isLoading = true
     }
 
     fun hideProgressContainer() {
         Handler(Looper.getMainLooper()).postDelayed({
-            mBinding.layoutProgressContainer.visibility = View.GONE
-            mBinding.progress.visibility = View.GONE
+            diaryViewModel.isLoading = false
         }, 300)
     }
 }

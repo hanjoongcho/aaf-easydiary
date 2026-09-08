@@ -6,7 +6,6 @@ import android.content.Intent
 import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.executeScheduledTask
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SettingConstants

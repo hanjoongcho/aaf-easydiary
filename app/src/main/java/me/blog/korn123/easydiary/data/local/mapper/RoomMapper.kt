@@ -42,7 +42,7 @@ fun Diary.toEntity(): DiaryEntity =
             },
         isHoliday = this.isHoliday,
     ).apply {
-        dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+        dateString = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }
 
 fun DiaryEntity.toDomain(photoUris: List<PhotoUri> = emptyList()): Diary =

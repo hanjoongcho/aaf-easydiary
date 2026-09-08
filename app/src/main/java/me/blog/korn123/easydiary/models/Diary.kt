@@ -7,7 +7,6 @@ import io.realm.annotations.PrimaryKey
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -60,7 +59,7 @@ open class Diary : RealmObject {
         this.currentTimeMillis = currentTimeMillis
         this.title = title
         this.contents = contents
-        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }
 
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, weather: Int, isAllDay: Boolean = false) {
@@ -68,13 +67,13 @@ open class Diary : RealmObject {
         this.currentTimeMillis = currentTimeMillis
         this.title = title
         this.contents = contents
-        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
         this.weather = weather
         this.isAllDay = isAllDay
     }
 
     fun updateDateString() {
-        this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+        this.dateString = DateUtils.timeMillisToDate(this.currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
     }
 
     fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
@@ -87,15 +86,4 @@ open class Diary : RealmObject {
                 photoUris
             }
         }
-
-    fun toUiModel() =
-        DiaryUiModel(
-            sequence = sequence,
-            title = title.orEmpty(),
-            contents = contents.orEmpty(),
-            dateString = dateString.orEmpty(),
-            currentTimeMillis = currentTimeMillis,
-            isAllDay = isAllDay,
-            weather = weather,
-        )
 }

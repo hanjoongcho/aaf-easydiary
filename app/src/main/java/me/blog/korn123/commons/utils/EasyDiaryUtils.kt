@@ -65,7 +65,6 @@ import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
 import me.blog.korn123.easydiary.helper.ColorConstants
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
-import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
@@ -75,7 +74,6 @@ import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
-import me.blog.korn123.easydiary.ui.models.DiaryUiModel
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream

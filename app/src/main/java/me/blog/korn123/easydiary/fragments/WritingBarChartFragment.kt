@@ -199,7 +199,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         if (listDiary.isNotEmpty()) {
             val map = hashMapOf<Int, Int>()
             listDiary.map { diaryDto ->
-                val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
+                val writeHour = DateUtils.timeMillisToDate(diaryDto.currentTimeMillis, "HH")
                 val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
                 if (map[itemNumber] == null) {
                     map.put(itemNumber, 1)

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.datasource.LocalDataSource
 import me.blog.korn123.easydiary.data.datasource.RemoteDataSource
+import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.mapper.toDomain
 import me.blog.korn123.easydiary.data.local.mapper.toEntity
@@ -112,6 +113,10 @@ class DiaryRepositoryImpl
                     Pair(diaryEntity, photoEntities)
                 }
             dataSource.insertDiariesWithPhotos(diariesWithPhotos)
+        }
+
+        override suspend fun updateDiaries(diaries: List<Diary>) {
+            dataSource.updateDiaries(diaries.map { it.toEntity() })
         }
 
         override suspend fun updateDiaryWithPhotos(diary: Diary) {
