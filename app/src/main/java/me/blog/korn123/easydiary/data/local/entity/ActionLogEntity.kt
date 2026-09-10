@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "action_logs")
 data class ActionLogEntity(
     @PrimaryKey(autoGenerate = true)
-    var sequence: Int = 0,
+    var id: Int = 0,
     var className: String? = null,
     var signature: String? = null,
     var key: String? = null,

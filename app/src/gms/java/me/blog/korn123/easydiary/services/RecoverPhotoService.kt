@@ -28,12 +28,12 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
+import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -41,9 +41,9 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_G
 import me.blog.korn123.easydiary.helper.NOTIFICATION_GMS_RECOVERY_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
-import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
 import java.util.Collections
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 
 class RecoverPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -120,7 +120,10 @@ class RecoverPhotoService : Service() {
                 val item = targetItems[targetIndexesCursor++]
                 applicationScope.launch {
                     runCatching {
-                        mDriveServiceHelper.downloadFile(item["id"] ?: "Undefined", "$mPhotoPath${item["name"]}")
+                        mDriveServiceHelper.downloadFile(
+                            item["id"] ?: "Undefined",
+                            "$mPhotoPath${item["name"]}",
+                        )
                     }.onSuccess {
                         successCount++
                         updateNotification()
@@ -170,14 +173,13 @@ class RecoverPhotoService : Service() {
                 }
             }
         }.onFailure { e ->
-            EasyDiaryDbHelper.insertActionLog(
-                ActionLog(
-                    this::class.java.name,
-                    "determineAttachPhoto",
-                    ActionLogKey.ERROR,
-                    e.message,
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "determineAttachPhoto",
+                    key = ActionLogKey.ERROR,
+                    value = e.message,
                 ),
-                this,
             )
         }
     }
@@ -196,14 +198,13 @@ class RecoverPhotoService : Service() {
                     val driveFileId =
                         mDriveServiceHelper
                             .createFolder(GDriveConstants.AAF_ROOT_FOLDER_NAME)
-                    EasyDiaryDbHelper.insertActionLog(
-                        ActionLog(
-                            this::class.java.name,
-                            "recoverPhoto",
-                            ActionLogKey.INFO,
-                            "driveFileId: $driveFileId",
+                    actionLogRepository.insertActionLog(
+                        ActionLogDomain(
+                            className = this::class.java.name,
+                            signature = "recoverPhoto",
+                            key = ActionLogKey.INFO,
+                            value = "driveFileId: $driveFileId",
                         ),
-                        this,
                     )
                 }
 
@@ -223,24 +224,22 @@ class RecoverPhotoService : Service() {
                 else -> {}
             }
         }.onSuccess {
-            EasyDiaryDbHelper.insertActionLog(
-                ActionLog(
-                    this::class.java.name,
-                    "recoverPhoto",
-                    ActionLogKey.INFO,
-                    "Done",
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "recoverPhoto",
+                    key = ActionLogKey.INFO,
+                    value = "Done",
                 ),
-                this,
             )
         }.onFailure { e ->
-            EasyDiaryDbHelper.insertActionLog(
-                ActionLog(
-                    this::class.java.name,
-                    "recoverPhoto",
-                    ActionLogKey.ERROR,
-                    e.message,
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "recoverPhoto",
+                    key = ActionLogKey.ERROR,
+                    value = e.message,
                 ),
-                this,
             )
         }
     }

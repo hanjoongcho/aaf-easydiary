@@ -2,24 +2,19 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import org.apache.commons.lang3.StringUtils
-import kotlin.getValue
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -72,7 +67,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         super.onPause()
         lifecycleScope.launch {
             if (mIsDiarySaved) {
-                diaryViewModel.deleteTemporaryDiaryBy(mSequence)
+                diaryViewModel.deleteTemporaryDiaryByOriginId(mSequence)
             } else {
                 saveTemporaryDiary(mSequence)
             }
@@ -87,7 +82,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         lifecycleScope.launch {
-            diaryViewModel.findDiaryBy(mSequence)?.let {
+            diaryViewModel.findDiaryById(mSequence)?.let {
                 mSymbolSequence = it.symbolSequence
                 mLinkedDiaries = it.linkedDiaries
                 initData(it)

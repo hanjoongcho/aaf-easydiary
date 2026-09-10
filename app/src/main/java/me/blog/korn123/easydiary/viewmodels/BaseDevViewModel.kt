@@ -92,7 +92,7 @@ class BaseDevViewModel
             }
         }
 
-        suspend fun getAlarmCount(): Int = alarmRepository.getAllAlarms().first().size
+        suspend fun getAlarmCount(): Int = alarmRepository.getAllAlarms().size
 
         suspend fun addAllActionLogs(actionLogs: List<ActionLog>): Int {
             var count = 0
@@ -126,7 +126,7 @@ class BaseDevViewModel
             }
         }
 
-        suspend fun getActionLogCount(): Int = actionLogRepository.getAllActionLogs().first().size
+        suspend fun getActionLogCount(): Int = actionLogRepository.getAllActionLogsFlow().first().size
 
         suspend fun addAllDDays(dDays: List<DDay>): Int {
             var count = 0

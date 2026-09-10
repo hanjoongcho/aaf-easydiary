@@ -35,7 +35,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
@@ -81,7 +80,6 @@ import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryReadingConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
@@ -139,7 +137,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     { _, _ ->
                         lifecycleScope.launch {
                             selectedValue?.let {
-                                diaryViewModel.findDiaryBy(fragment.getSequence())?.let {
+                                diaryViewModel.findDiaryById(fragment.getSequence())?.let {
                                     if (it.linkedDiaries.contains(selectedValue)) {
                                         makeSnackBar("이미 연결된 항목 입니다.")
                                     } else {
@@ -154,7 +152,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     { _, _ ->
                         lifecycleScope.launch {
                             selectedValue?.let {
-                                diaryViewModel.findDiaryBy(selectedValue)?.let {
+                                diaryViewModel.findDiaryById(selectedValue)?.let {
                                     if (it.linkedDiaries.contains(fragment.getSequence())) {
                                         makeSnackBar("이미 연결된 항목 입니다.")
                                     } else {
@@ -912,7 +910,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                                 R.id.push -> {
                                     lifecycleScope.launch {
-                                        diaryViewModel.findDiaryBy(fragment.getSequence())?.let {
+                                        diaryViewModel.findDiaryById(fragment.getSequence())?.let {
                                             val title = it.title
                                             val contents = it.contents
                                             pushMarkDown(title!!, contents)
@@ -1042,7 +1040,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                             { _, _ ->
                                                 lifecycleScope.launch {
                                                     diaryViewModel
-                                                        .findDiaryBy(parentDiary.diaryId)
+                                                        .findDiaryById(parentDiary.diaryId)
                                                         ?.run {
                                                             linkedDiaries
                                                                 .filter { it != getSequence() }
@@ -1097,7 +1095,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                             { _, _ ->
                                                 lifecycleScope.launch {
                                                     diaryViewModel
-                                                        .findDiaryBy(getSequence())
+                                                        .findDiaryById(getSequence())
                                                         ?.run {
                                                             linkedDiaries
                                                                 .filter { it != childDiary.diaryId }
@@ -1131,9 +1129,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
 
-        suspend fun isEncryptContents() = diaryViewModel.findDiaryBy(getSequence())?.isEncrypt ?: false
+        suspend fun isEncryptContents() = diaryViewModel.findDiaryById(getSequence())?.isEncrypt ?: false
 
-        suspend fun getPasswordHash() = diaryViewModel.findDiaryBy(getSequence())?.encryptKeyHash
+        suspend fun getPasswordHash() = diaryViewModel.findDiaryById(getSequence())?.encryptKeyHash
 
         fun highlightDiary(
             query: String,
@@ -1184,7 +1182,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun initContents() {
             lifecycleScope.launch {
-                val diaryDto = diaryViewModel.findDiaryBy(getSequence())!!
+                val diaryDto = diaryViewModel.findDiaryById(getSequence())!!
                 mBinding.run {
                     diaryTitle.visibility =
                         if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
@@ -1288,7 +1286,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val linkedDiaries = mutableListOf<DiaryDomain>()
                 if (diaryDto.linkedDiaries.isNotEmpty()) {
                     for (linkedDiarySequence in diaryDto.linkedDiaries) {
-                        diaryViewModel.findDiaryBy(linkedDiarySequence)?.let {
+                        diaryViewModel.findDiaryById(linkedDiarySequence)?.let {
                             linkedDiaries.add(it)
                         }
                     }
@@ -1320,7 +1318,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun encryptData(inputPass: String) {
             lifecycleScope.launch {
-                var diary = diaryViewModel.findDiaryBy(getSequence())
+                var diary = diaryViewModel.findDiaryById(getSequence())
                 diary?.let {
                     diary =
                         diary.copy(
@@ -1336,7 +1334,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         suspend fun decryptDataOnce(inputPass: String) {
-            diaryViewModel.findDiaryBy(getSequence())?.let { diaryDto ->
+            diaryViewModel.findDiaryById(getSequence())?.let { diaryDto ->
                 mBinding.run {
                     diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
 //                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
@@ -1351,7 +1349,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun decryptData(inputPass: String): Boolean {
             var result = true
             lifecycleScope.launch {
-                var diary = diaryViewModel.findDiaryBy(getSequence())
+                var diary = diaryViewModel.findDiaryById(getSequence())
                 diary?.let {
                     if (it.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
                         diary =

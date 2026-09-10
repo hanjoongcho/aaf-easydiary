@@ -1,9 +1,11 @@
 package me.blog.korn123.easydiary.domain.model
 
+import me.blog.korn123.easydiary.enums.ActionLogKey
+
 data class ActionLog(
-    val sequence: Int = 0,
+    val id: Int = 0,
     val className: String? = null,
     val signature: String? = null,
-    val key: String? = null,
-    val value: String? = null
+    val key: ActionLogKey = ActionLogKey.UNDEFINED,
+    val value: String? = null,
 )

@@ -72,6 +72,7 @@ import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.ExportOption
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
@@ -106,7 +107,6 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -124,6 +124,7 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 
 @AndroidEntryPoint
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -207,9 +208,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.ACTION_LOG -> {
                                 mutableMapOf(
                                     "ACTION_LOG" to
-                                        EasyDiaryDbHelper.copyFromRealm(
-                                            EasyDiaryDbHelper.findActionLogAll(),
-                                        ),
+                                        EasyDiaryDbHelper.findAllActionLogs(),
                                 )
                             }
 
@@ -219,7 +218,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                             ExportOption.D_DAY -> {
                                 val dDays = EasyDiaryDbHelper.findDDayAll()
-                                mutableMapOf("D_DAY" to EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findDDayAll()))
+                                mutableMapOf(
+                                    "D_DAY" to
+                                        EasyDiaryDbHelper.findDDayAll(),
+                                )
                             }
 
                             ExportOption.DIARY -> {
@@ -238,10 +240,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.ALL -> {
                                 // TODO: ACTION_LOG, ALARM, D_DAY, DIARY, PHOTO_URI 데이터 셋을 json으로 생성 후 zip로 export
                                 val map = mutableMapOf<String, Any>()
-                                map["ACTION_LOG"] = EasyDiaryDbHelper.findActionLogAll()
+                                map["ACTION_LOG"] = EasyDiaryDbHelper.findAllActionLogs()
                                 map["ALARM"] = EasyDiaryDbHelper.findAlarmAll()
-                                map["D_DAY"] =
-                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findDDayAll())
+                                map["D_DAY"] = EasyDiaryDbHelper.findDDayAll()
                                 map["DIARY"] = diaryViewModel.findDiary(query = null)
                                 map["PHOTO_URI"] =
                                     EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
@@ -262,7 +263,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         )
                     try {
                         withContext(Dispatchers.IO) {
-                            val jsonString = GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
+                            val jsonString =
+                                GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
                             val fileName = targetUri.path ?: ""
                             val isZip = fileName.endsWith(".zip", ignoreCase = true)
                             contentResolver.openOutputStream(targetUri)?.use { outputStream ->
@@ -401,11 +403,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Open dialog about action log",
                 modifier = modifier,
             ) {
-                val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
+                val actionLogs: List<ActionLogDomain> = EasyDiaryDbHelper.findAllActionLogs()
                 ActionLogDialog(
                     this@BaseDevActivity,
                     actionLogs,
-                ) { EasyDiaryDbHelper.deleteActionLogAll() }
+                ) {
+                    lifecycleScope.launch {
+                        actionLogRepository.deleteAllActionLogs(true)
+                    }
+                }
             }
             SimpleCard(
                 "ReviewFlow",
@@ -571,7 +577,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             message: String,
             tag: String = Thread.currentThread().name,
         ) {
-            mBaseDevViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
+            mBaseDevViewModel.coroutine1Console =
+                viewModel.coroutine1Console.plus("$tag: $message\n")
             moveScroll()
         }
 
@@ -579,9 +586,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             updateConsole("🍟 realm info")
             updateConsole("realm diary count: ${EasyDiaryDbHelper.findDiary(query = null).size}")
             updateConsole("realm photo-uri count: ${EasyDiaryDbHelper.findPhotoUriAll().size}")
-            updateConsole("realm unlinked photo-uri count: ${EasyDiaryDbHelper.findPhotoUriAll().count { it.diary == null || it.diary.isEmpty() }}")
+            updateConsole(
+                "realm unlinked photo-uri count: ${
+                    EasyDiaryDbHelper.findPhotoUriAll()
+                        .count { it.diary == null || it.diary.isEmpty() }
+                }",
+            )
             updateConsole("realm alarm count: ${EasyDiaryDbHelper.findAlarmAll().size}")
-            updateConsole("realm action-log count: ${EasyDiaryDbHelper.findActionLogAll().size}")
+            updateConsole("realm action-log count: ${EasyDiaryDbHelper.findAllActionLogs().size}")
             updateConsole("realm d-day count: ${EasyDiaryDbHelper.findDDayAll().size}")
             updateConsole("🍕 room info")
             updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
@@ -630,19 +642,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm object를 room으로 이전합니다.",
                 modifier = modifier,
             ) {
-                val realmDiaries =
+                val domainDiaries =
                     EasyDiaryDbHelper
                         .findDiary(query = null)
-
                 val domainAlarms = EasyDiaryDbHelper.findAlarmAll()
-
-                val realmActionLogs = EasyDiaryDbHelper.findActionLogAll()
-                val copiedRealmActionLogs = EasyDiaryDbHelper.copyFromRealm(realmActionLogs)
-                val domainActionLogs = copiedRealmActionLogs.map { it.toDomain() }
-
-                val realmDDays = EasyDiaryDbHelper.findDDayAll()
-                val copiedRealmDDays = EasyDiaryDbHelper.copyFromRealm(realmDDays)
-                val domainDDays = copiedRealmDDays.map { it.toDomain() }
+                val domainActionLogs = EasyDiaryDbHelper.findAllActionLogs()
+                val domainDDays = EasyDiaryDbHelper.findDDayAll()
 
                 // Executed in `rememberCoroutineScope` to handle `moveScroll`.
                 coroutineScope.launch {
@@ -651,7 +656,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                     mBaseDevViewModel.loadingMessage = "Diary migration..."
                     diaryViewModel.deleteAllDiaries()
-                    val diaryCount = diaryViewModel.addAllDiaries(realmDiaries)
+                    val diaryCount = diaryViewModel.addAllDiaries(domainDiaries)
                     mBaseDevViewModel.loadingMessage = "Diary migration successful: $diaryCount"
 
                     mBaseDevViewModel.loadingMessage = "Alarm migration..."
@@ -1219,7 +1224,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             message: String,
             tag: String = Thread.currentThread().name,
         ) {
-            mBaseDevViewModel.coroutine1Console = viewModel.coroutine1Console.plus("$tag: $message\n")
+            mBaseDevViewModel.coroutine1Console =
+                viewModel.coroutine1Console.plus("$tag: $message\n")
             coroutineScope.launch {
                 state.animateScrollBy(Float.MAX_VALUE)
             }

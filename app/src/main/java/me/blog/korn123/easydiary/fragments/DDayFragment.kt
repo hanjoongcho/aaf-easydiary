@@ -17,11 +17,10 @@ import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.models.DDay
 import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
+import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 
 class DDayFragment : Fragment() {
-
     /***************************************************************************************************
      *   global properties
      *
@@ -30,9 +29,8 @@ class DDayFragment : Fragment() {
     private lateinit var mDDayAdapter: DDayAdapter
     private lateinit var mLinearLayoutManager: LinearLayoutManager
     private lateinit var mSafeFlexboxLayoutManager: FlexboxLayoutManager
-    private var mDDayItems: MutableList<DDay> = mutableListOf()
+    private var mDDayItems: MutableList<DDayDomain> = mutableListOf()
     private var mDDaySortOrder = Sort.DESCENDING
-
 
     /***************************************************************************************************
      *   override functions
@@ -41,21 +39,25 @@ class DDayFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mBinging = FragmentDdayBinding.inflate(layoutInflater)
         return mBinging.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList(mDDaySortOrder) }
         mLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        mSafeFlexboxLayoutManager = SafeFlexboxLayoutManager(requireContext()).apply {
-            flexDirection = FlexDirection.ROW
-            flexWrap = FlexWrap.WRAP
-        }
+        mSafeFlexboxLayoutManager =
+            SafeFlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+            }
         mBinging.run {
             recyclerDays.apply {
                 layoutManager = getDDayLayoutManager()
@@ -68,16 +70,18 @@ class DDayFragment : Fragment() {
             flexboxOptionSwitcher.isChecked = config.enableDDayFlexboxLayout
             requireActivity().updateDrawableColorInnerCardView(imageDDaySortOrder, config.textColor)
             imageDDaySortOrder.setOnClickListener {
-                mDDaySortOrder = when (mDDaySortOrder) {
-                    Sort.ASCENDING -> {
-                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
-                        Sort.DESCENDING
+                mDDaySortOrder =
+                    when (mDDaySortOrder) {
+                        Sort.ASCENDING -> {
+                            imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
+                            Sort.DESCENDING
+                        }
+
+                        Sort.DESCENDING -> {
+                            imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
+                            Sort.ASCENDING
+                        }
                     }
-                    Sort.DESCENDING -> {
-                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
-                        Sort.ASCENDING
-                    }
-                }
                 updateDDayList(mDDaySortOrder)
             }
         }
@@ -95,9 +99,9 @@ class DDayFragment : Fragment() {
         mDDayItems.run {
             clear()
             val dDayItems = EasyDiaryDbHelper.findDDayAll(sortOrder)
-            if (dDayItems.isNotEmpty()) add(DDay("New D-Day!!!"))
+            if (dDayItems.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
             addAll(dDayItems)
-            add(DDay("New D-Day!!!"))
+            add(DDayDomain(title = "New D-Day!!!"))
         }
         mDDayAdapter.notifyDataSetChanged()
     }

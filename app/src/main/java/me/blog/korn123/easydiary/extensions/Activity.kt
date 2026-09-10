@@ -38,7 +38,6 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -58,10 +57,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
@@ -81,7 +76,6 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
-import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
@@ -118,27 +112,6 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 /***************************************************************************************************
  *   Hilt EntryPoint for Repository access in extensions
  ***************************************************************************************************/
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface DiaryRepositoryEntryPoint {
-    fun diaryRepository(): DiaryRepository
-}
-
-val Activity.diaryRepository: DiaryRepository
-    get() =
-        EntryPointAccessors
-            .fromApplication(
-                applicationContext,
-                DiaryRepositoryEntryPoint::class.java,
-            ).diaryRepository()
-
-val ComponentActivity.diaryRepository: DiaryRepository
-    get() =
-        EntryPointAccessors
-            .fromApplication(
-                applicationContext,
-                DiaryRepositoryEntryPoint::class.java,
-            ).diaryRepository()
 
 /***************************************************************************************************
  *   Confirm Permissions

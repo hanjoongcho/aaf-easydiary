@@ -20,7 +20,7 @@ class AlarmLocalDataSourceImpl
         }
 
         override suspend fun updateAlarm(alarm: AlarmEntity) {
-            alarmDao.updateAlarm(alarm)
+            alarmDao.upsertAlarm(alarm)
         }
 
         override suspend fun deleteAlarm(alarm: AlarmEntity) {

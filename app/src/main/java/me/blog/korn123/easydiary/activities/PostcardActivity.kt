@@ -70,7 +70,7 @@ class PostcardActivity : EasyDiaryActivity() {
 
         mBinding.run {
             lifecycleScope.launch {
-                val diaryDto = diaryViewModel.findDiaryBy(mSequence)!!
+                val diaryDto = diaryViewModel.findDiaryById(mSequence)!!
                 FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.symbolSequence)
                 when (diaryDto.title.isNullOrEmpty()) {
                     true -> diaryTitle.visibility = View.GONE

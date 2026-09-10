@@ -4,12 +4,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.viewmodels.AlarmViewModel
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import kotlin.getValue
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 abstract class BaseSettingsActivity : EasyDiaryActivity() {
@@ -18,7 +22,9 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     protected lateinit var mBinding: ActivityBaseSettingsBinding
+    protected val alarmViewModel: AlarmViewModel by viewModels()
     lateinit var mDotIndicatorPager2Adapter: DotIndicatorPager2Adapter
+
     var mCurrentPosition = 0
 
     /***************************************************************************************************
@@ -38,7 +44,7 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
         mBinding.run {
             buttonAddSchedule.setOnClickListener {
                 mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem).run {
-                    if (this is SettingsScheduleFragment) openAlarmDialog(EasyDiaryDbHelper.makeTemporaryAlarm())
+                    if (this is SettingsScheduleFragment) openAlarmDialog(alarmViewModel.makeTemporaryAlarm())
                 }
             }
         }

@@ -39,7 +39,7 @@ interface DiaryRepository {
 
     suspend fun duplicateDiary(diary: Diary)
 
-    suspend fun deleteTemporaryDiaryBy(originDiaryId: Int)
+    suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int)
 
     suspend fun addAllDiaries(diaries: List<Diary>)
 

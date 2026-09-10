@@ -6,17 +6,23 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.models.ActionLog
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 
-class ActionLogDialog(val activity: Activity, private val actionLogs: List<ActionLog>, private val clearCallback: () -> Unit) {
+class ActionLogDialog(
+    val activity: Activity,
+    private val actionLogs: List<ActionLogDomain>,
+    private val clearCallback: () -> Unit,
+) {
     init {
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_action_log, null)
         view.findViewById<TextView>(R.id.whats_new_content).text = getNewReleases()
 
-        AlertDialog.Builder(activity)
+        AlertDialog
+            .Builder(activity)
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton("Clear") { _, _ -> clearCallback.invoke() }
-            .create().apply {
+            .create()
+            .apply {
                 activity.setupDialogStuff(view, this, R.string.app_name)
             }
     }

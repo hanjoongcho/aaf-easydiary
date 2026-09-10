@@ -11,7 +11,7 @@ import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 
 @Dao
 interface DDayDao {
-    @Query("SELECT * FROM d_days ORDER BY sequence DESC")
+    @Query("SELECT * FROM d_days ORDER BY id DESC")
     fun getAllDDays(): Flow<List<DDayEntity>>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
@@ -23,7 +23,7 @@ interface DDayDao {
     @Delete
     suspend fun deleteDDay(dDay: DDayEntity)
 
-    @Query("DELETE FROM d_days WHERE sequence = :id")
+    @Query("DELETE FROM d_days WHERE id = :id")
     suspend fun deleteDDayById(id: Int)
 
     @Query("DELETE FROM d_days")

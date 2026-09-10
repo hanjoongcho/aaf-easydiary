@@ -526,6 +526,7 @@ class TimelineActivity : EasyDiaryActivity() {
     }
 
     private fun moveListViewScrollToBottom(itemIndex: Int = mDiaryList.size - 1) {
+        Log.i("aaf-t", "moveListViewScrollToBottom itexIndex: $itemIndex")
         mBinding.timelineList.post { mBinding.timelineList.setSelection(itemIndex) }
     }
 }

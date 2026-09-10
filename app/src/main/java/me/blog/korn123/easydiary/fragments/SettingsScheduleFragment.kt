@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -24,9 +23,13 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.moveLastItemToFront
 import com.simplemobiletools.commons.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -35,8 +38,8 @@ import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsScheduleBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.addBit
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
-import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
@@ -55,10 +58,12 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
-import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.viewmodels.AlarmViewModel
+import kotlin.getValue
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
+@AndroidEntryPoint
 class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************
      *   global properties
@@ -67,6 +72,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentSettingsScheduleBinding
     private lateinit var mAlarmAdapter: AlarmAdapter
     private var mAlarmList: ArrayList<AlarmDomain> = arrayListOf()
+    private val alarmViewModel: AlarmViewModel by viewModels()
     private val mActivity: Activity
         get() = requireActivity()
     private val mRequestPermissionScheduleExactAlarmLauncher =
@@ -100,7 +106,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                 mActivity,
                 mAlarmList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    openAlarmDialog(EasyDiaryDbHelper.duplicateAlarmBy(mAlarmList[position]), mAlarmList[position])
+                    openAlarmDialog(mAlarmList[position].copy(), mAlarmList[position])
                 },
             )
 
@@ -186,7 +192,6 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
 
                         day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
                         day.setOnClickListener {
-                            EasyDiaryDbHelper.beginTransaction()
                             val selectDay = temporaryAlarm.days and pow == 0
                             temporaryAlarm.days =
                                 if (selectDay) {
@@ -197,7 +202,6 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                             day.background = getProperDayDrawable(selectDay)
                             day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
                             textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
-                            EasyDiaryDbHelper.commitTransaction()
                         }
                         linearAlarmDaysHolder.addView(day)
                     }
@@ -231,10 +235,12 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                                 showAlertDialog(
                                     "Are you sure you want to delete the selected schedule?",
                                     DialogInterface.OnClickListener { _, _ ->
-                                        cancelAlarmClock(temporaryAlarm)
-                                        alertDialog?.dismiss()
-                                        EasyDiaryDbHelper.deleteAlarmBy(storedAlarm.alarmId)
-                                        updateAlarmList()
+                                        lifecycleScope.launch {
+                                            cancelAlarmClock(temporaryAlarm)
+                                            alertDialog?.dismiss()
+                                            alarmRepository.deleteAlarmById(storedAlarm.alarmId)
+                                            updateAlarmList()
+                                        }
                                     },
                                     { _, _ -> },
                                     DialogMode.WARNING,
@@ -293,11 +299,13 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                                         }
 
                                         // save alarm
-                                        temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
-                                        EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
-                                        alertDialog?.dismiss()
-                                        updateAlarmList()
-                                        alertDialog?.dismiss()
+                                        lifecycleScope.launch {
+                                            temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
+                                            alarmRepository.updateAlarm(temporaryAlarm)
+                                            alertDialog?.dismiss()
+                                            updateAlarmList()
+                                            alertDialog?.dismiss()
+                                        }
                                     }
                                 }
                             }
@@ -308,12 +316,14 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun updateAlarmList() {
-        mAlarmList.run {
-            clear()
-            addAll(EasyDiaryDbHelper.findAlarmAll())
-            mBinding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+        lifecycleScope.launch {
+            mAlarmList.run {
+                clear()
+                addAll(alarmViewModel.findAllAlarms())
+                mBinding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+            }
+            mAlarmAdapter.notifyDataSetChanged()
         }
-        mAlarmAdapter.notifyDataSetChanged()
     }
 
     private fun getProperDayDrawable(selected: Boolean): Drawable {

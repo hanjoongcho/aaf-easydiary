@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 
@@ -20,8 +21,8 @@ interface AlarmDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAlarm(alarm: AlarmEntity): Long
 
-    @Update
-    suspend fun updateAlarm(alarm: AlarmEntity)
+    @Upsert
+    suspend fun upsertAlarm(alarm: AlarmEntity)
 
     @Delete
     suspend fun deleteAlarm(alarm: AlarmEntity)

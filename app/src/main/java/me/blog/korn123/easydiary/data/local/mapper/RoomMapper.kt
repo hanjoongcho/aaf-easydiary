@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
+import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 
 fun Diary.toEntity(): DiaryEntity =
@@ -144,32 +145,32 @@ fun AlarmEntity.toDomain(): Alarm =
 
 fun ActionLog.toEntity(): ActionLogEntity =
     ActionLogEntity(
-        sequence = this.sequence,
+        id = this.id,
         className = this.className,
         signature = this.signature,
-        key = this.key,
+        key = this.key.name,
         value = this.value,
     )
 
 fun ActionLogEntity.toDomain(): ActionLog =
     ActionLog(
-        sequence = this.sequence,
+        id = this.id,
         className = this.className,
         signature = this.signature,
-        key = this.key,
+        key = ActionLogKey.fromString(this.key),
         value = this.value,
     )
 
 fun DDay.toEntity(): DDayEntity =
     DDayEntity(
-        sequence = this.sequence,
+        id = this.id,
         targetTimeStamp = this.targetTimeStamp,
         title = this.title,
     )
 
 fun DDayEntity.toDomain(): DDay =
     DDay(
-        sequence = this.sequence,
+        id = this.id,
         targetTimeStamp = this.targetTimeStamp,
-        title = this.title,
+        title = this.title ?: "",
     )

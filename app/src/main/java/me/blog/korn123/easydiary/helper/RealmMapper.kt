@@ -11,22 +11,43 @@ import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
+import me.blog.korn123.easydiary.enums.ActionLogKey
 
 fun me.blog.korn123.easydiary.models.DDay.toDomain(): DDay =
     DDay(
-        sequence = this.sequence,
+        id = this.sequence,
         targetTimeStamp = this.targetTimeStamp,
-        title = this.title,
+        title = this.title ?: "",
     )
+
+fun DDay.toRealm(): me.blog.korn123.easydiary.models.DDay =
+    me.blog.korn123.easydiary.models
+        .DDay(
+            title = this.title,
+            targetTimeStamp = this.targetTimeStamp,
+        ).apply {
+            sequence = this@toRealm.id
+        }
 
 fun me.blog.korn123.easydiary.models.ActionLog.toDomain(): ActionLog =
     ActionLog(
-        sequence = this.sequence,
+        id = this.sequence,
         className = this.className,
         signature = this.signature,
-        key = this.key,
+        key = ActionLogKey.fromString(this.key),
         value = this.value,
     )
+
+fun ActionLog.toRealm(): me.blog.korn123.easydiary.models.ActionLog =
+    me.blog.korn123.easydiary.models
+        .ActionLog(
+            className = this.className,
+            signature = this.signature,
+            key = this.key,
+            value = this.value,
+        ).apply {
+            sequence = this@toRealm.id
+        }
 
 fun me.blog.korn123.easydiary.models.PhotoUri.toDomain(): PhotoUri =
     PhotoUri(

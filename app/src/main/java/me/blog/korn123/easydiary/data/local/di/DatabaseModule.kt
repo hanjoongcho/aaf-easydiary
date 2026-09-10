@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.data.local.MIGRATION_1_2
 import me.blog.korn123.easydiary.data.local.MIGRATION_2_3
 import me.blog.korn123.easydiary.data.local.MIGRATION_3_4
 import me.blog.korn123.easydiary.data.local.MIGRATION_4_5
+import me.blog.korn123.easydiary.data.local.MIGRATION_5_6
 import me.blog.korn123.easydiary.data.datasource.ActionLogDataSource
 import me.blog.korn123.easydiary.data.datasource.AlarmDataSource
 import me.blog.korn123.easydiary.data.datasource.DDayDataSource
@@ -70,7 +71,7 @@ abstract class DatabaseModule {
                     context,
                     AppDatabase::class.java,
                     "easy_diary.db",
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
 
         @Provides

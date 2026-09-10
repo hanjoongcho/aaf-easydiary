@@ -16,8 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
@@ -52,7 +56,6 @@ class AlarmAdapter(
         isChecked: Boolean,
     ) {
         val alarm = alarmList[position]
-        EasyDiaryDbHelper.beginTransaction()
         alarm.isEnabled = isChecked
         if (isChecked) {
             activity.scheduleNextAlarm(alarm, true)
@@ -60,7 +63,11 @@ class AlarmAdapter(
         } else {
             activity.cancelAlarmClock(alarm)
         }
-        EasyDiaryDbHelper.commitTransaction()
+
+        // FIXME: Use lifeCycleScope instead
+        CoroutineScope(Dispatchers.Default).launch {
+            activity.alarmRepository.updateAlarm(alarm)
+        }
     }
 
     inner class AlarmCardViewHolder(

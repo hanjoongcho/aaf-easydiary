@@ -28,6 +28,8 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
+import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -44,10 +46,9 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.SettingConstants
-import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Alarm
 import java.io.File
 import java.util.Collections
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class FullBackupService : Service() {
@@ -75,15 +76,17 @@ class FullBackupService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "onCreate",
-                ActionLogKey.INFO,
-                "start",
-            ),
-            this,
-        )
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "onCreate",
+                    key = ActionLogKey.INFO,
+                    value = "start",
+                ),
+            )
+        }
+
         val credential: GoogleAccountCredential =
             GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = authManager.getLastSignedInAccount()
@@ -118,15 +121,16 @@ class FullBackupService : Service() {
                 getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "onCreate",
-                ActionLogKey.INFO,
-                "end",
-            ),
-            this,
-        )
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "onCreate",
+                    key = ActionLogKey.INFO,
+                    value = "end",
+                ),
+            )
+        }
     }
 
     override fun onStartCommand(
@@ -134,33 +138,39 @@ class FullBackupService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "onStartCommand",
-                ActionLogKey.INFO,
-                "start",
-            ),
-            this,
-        )
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "onStartCommand",
+                    key = ActionLogKey.INFO,
+                    value = "start",
+                ),
+            )
+        }
         mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: ""
 
         // test alarm sequence is 5
         val alarmId = intent?.getIntExtra(SettingConstants.ALARM_ID, 5) ?: 5
-        EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
-            val workStatus = WorkStatus()
-            workStatusList.add(workStatus)
-            backupPhoto(it, workStatus)
+        applicationScope.launch {
+            applicationContext.alarmRepository.getAlarmById(alarmId)?.let {
+                val workStatus = WorkStatus()
+                workStatusList.add(workStatus)
+                backupPhoto(it, workStatus)
+            }
         }
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "onStartCommand",
-                ActionLogKey.INFO,
-                "end",
-            ),
-            this,
-        )
+
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "onStartCommand",
+                    key = ActionLogKey.INFO,
+                    value = "end",
+                ),
+            )
+        }
+
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -174,15 +184,16 @@ class FullBackupService : Service() {
         alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "backupPhoto",
-                ActionLogKey.INFO,
-                "start",
-            ),
-            this,
-        )
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "backupPhoto",
+                    key = ActionLogKey.INFO,
+                    value = "start",
+                ),
+            )
+        }
         mNotificationBuilder.mActions.clear()
         mNotificationBuilder
             .setAutoCancel(true)
@@ -221,15 +232,16 @@ class FullBackupService : Service() {
 
         applicationScope.launch { determineRemoteDrivePhotos(null, alarm, workStatus) }
 
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "backupPhoto",
-                ActionLogKey.INFO,
-                "end",
-            ),
-            this,
-        )
+        applicationScope.launch {
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "backupPhoto",
+                    key = ActionLogKey.INFO,
+                    value = "end",
+                ),
+            )
+        }
     }
 
     private suspend fun determineRemoteDrivePhotos(
@@ -237,14 +249,13 @@ class FullBackupService : Service() {
         alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "determineRemoteDrivePhotos",
-                ActionLogKey.INFO,
-                "start",
+        actionLogRepository.insertActionLog(
+            ActionLogDomain(
+                className = this::class.java.name,
+                signature = "determineRemoteDrivePhotos",
+                key = ActionLogKey.INFO,
+                value = "start",
             ),
-            this,
         )
 
         runCatching {
@@ -255,37 +266,34 @@ class FullBackupService : Service() {
                     nextPageToken,
                 )
         }.onSuccess { photoFileList ->
-            EasyDiaryDbHelper.insertActionLog(
-                ActionLog(
-                    this::class.java.name,
-                    "determineRemoteDrivePhotos",
-                    ActionLogKey.INFO,
-                    "progress-1",
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "determineRemoteDrivePhotos",
+                    key = ActionLogKey.INFO,
+                    value = "progress-1",
                 ),
-                this@FullBackupService,
             )
             photoFileList.files.map { photoFile ->
                 workStatus.remoteDriveFileNames.add(photoFile.name)
             }
-            EasyDiaryDbHelper.insertActionLog(
-                ActionLog(
-                    this::class.java.name,
-                    "determineRemoteDrivePhotos",
-                    ActionLogKey.INFO,
-                    "progress-2",
+            actionLogRepository.insertActionLog(
+                ActionLogDomain(
+                    className = this::class.java.name,
+                    signature = "determineRemoteDrivePhotos",
+                    key = ActionLogKey.INFO,
+                    value = "progress-2",
                 ),
-                this@FullBackupService,
             )
             when (photoFileList.nextPageToken == null) {
                 true -> {
-                    EasyDiaryDbHelper.insertActionLog(
-                        ActionLog(
-                            this::class.java.name,
-                            "determineRemoteDrivePhotos",
-                            ActionLogKey.INFO,
-                            "progress-3",
+                    actionLogRepository.insertActionLog(
+                        ActionLogDomain(
+                            className = this::class.java.name,
+                            signature = "determineRemoteDrivePhotos",
+                            key = ActionLogKey.INFO,
+                            value = "progress-3",
                         ),
-                        this@FullBackupService,
                     )
                     val localPhotos = File(mPhotoPath).listFiles()
                     localPhotos?.map { photo ->
@@ -304,14 +312,13 @@ class FullBackupService : Service() {
                 }
 
                 false -> {
-                    EasyDiaryDbHelper.insertActionLog(
-                        ActionLog(
-                            this::class.java.name,
-                            "determineRemoteDrivePhotos",
-                            ActionLogKey.INFO,
-                            "progress-4",
+                    actionLogRepository.insertActionLog(
+                        ActionLogDomain(
+                            className = this::class.java.name,
+                            signature = "determineRemoteDrivePhotos",
+                            key = ActionLogKey.INFO,
+                            value = "progress-4",
                         ),
-                        this@FullBackupService,
                     )
                     determineRemoteDrivePhotos(photoFileList.nextPageToken, alarm, workStatus)
                 }
@@ -325,14 +332,13 @@ class FullBackupService : Service() {
             stopSelf()
         }
 
-        EasyDiaryDbHelper.insertActionLog(
-            ActionLog(
-                this::class.java.name,
-                "determineRemoteDrivePhotos",
-                ActionLogKey.INFO,
-                "end",
+        actionLogRepository.insertActionLog(
+            ActionLogDomain(
+                className = this::class.java.name,
+                signature = "determineRemoteDrivePhotos",
+                key = ActionLogKey.INFO,
+                value = "end",
             ),
-            this,
         )
     }
 
