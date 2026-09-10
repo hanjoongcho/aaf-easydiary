@@ -14,7 +14,9 @@ import me.blog.korn123.easydiary.models.DDay
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
+import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -410,90 +412,77 @@ object EasyDiaryDbHelper {
      *   Manage Alarm model
      *
      ***************************************************************************************************/
+
+    @Deprecated(message = "Use AlarmViewModel.makeTemporaryAlarm() instead")
     fun makeTemporaryAlarm(workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING): AlarmDomain {
         val alarm = Alarm().apply { this.workMode = workMode }
-        val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
-        when (sequence.toInt() == countAlarmAll().toInt()) {
-            true -> {
-                alarm.sequence = sequence.toInt().plus(1)
-            }
+        getTemporaryInstance().use { realm ->
+            val sequence = realm.where(Alarm::class.java).max("sequence") ?: 0
+            when (sequence.toInt() == realm.where(Alarm::class.java).count().toInt()) {
+                true -> {
+                    alarm.sequence = sequence.toInt().plus(1)
+                }
 
-            false -> {
-                run loop@{
-                    findAlarmAll().forEachIndexed { index, item ->
-                        val validSequence = index.plus(1)
-                        if (item.alarmId != validSequence) {
-                            alarm.sequence = validSequence
-                            return@loop
+                false -> {
+                    run loop@{
+                        findAlarmAll().forEachIndexed { index, item ->
+                            val validSequence = index.plus(1)
+                            if (item.alarmId != validSequence) {
+                                alarm.sequence = validSequence
+                                return@loop
+                            }
                         }
                     }
                 }
             }
+            return alarm.toDomain()
         }
-        return alarm.toDomain()
     }
 
-    fun duplicateAlarmBy(
-        alarm: AlarmDomain,
-    ): AlarmDomain = alarm.copy()
-
-    private fun findAlarmBy(
-        realmInstance: Realm,
+    @Deprecated(message = "Use AlarmViewModel.findAlarmBy() instead")
+    fun findAlarmById(
         sequence: Int,
     ): AlarmDomain? =
-        realmInstance
-            .where(Alarm::class.java)
-            .equalTo("sequence", sequence)
-            .findFirst()
-            ?.toDomain()
+        getTemporaryInstance().use {
+            it
+                .where(Alarm::class.java)
+                .equalTo("sequence", sequence)
+                .findFirst()
+                ?.toDomain()
+        }
 
-    fun findAlarmBy(sequence: Int): AlarmDomain? = findAlarmBy(getInstance(), sequence)
-
+    @Deprecated(message = "Use AlarmViewModel.findAlarmAll() instead")
     fun findAlarmAll(): List<AlarmDomain> =
-        getInstance()
-            .where(Alarm::class.java)
-            .findAll()
-            .sort("sequence", Sort.ASCENDING)
-            .map { it.toDomain() }
+        getTemporaryInstance().use {
+            it
+                .where(Alarm::class.java)
+                .findAll()
+                .sort("sequence", Sort.ASCENDING)
+                .map { it.toDomain() }
+        }
 
-    fun findSnoozeAlarms(): List<AlarmDomain> =
-        getInstance()
-            .where(Alarm::class.java)
-            .greaterThan("retryCount", 0)
-            .findAll()
-            .toList()
-            .map { it.toDomain() }
-
+    @Deprecated(message = "Use AlarmViewModel.updateAlarmBy() instead")
     fun updateAlarmBy(alarm: AlarmDomain) {
-        getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm.toRealm()) }
+        getTemporaryInstance().use {
+            it.executeTransaction { realm -> realm.insertOrUpdate(alarm.toRealm()) }
+        }
     }
 
+    @Deprecated(message = "Use AlarmViewModel.deleteAlarmBy() instead")
     fun deleteAlarmBy(sequence: Int) {
-        findAlarmBy(sequence)?.let {
-            getInstance().run {
-                beginTransaction()
-                it.toRealm().deleteFromRealm()
-                commitTransaction()
+        getTemporaryInstance().use { realm ->
+            realm.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()?.let {
+                realm.beginTransaction()
+                it.deleteFromRealm()
+                realm.commitTransaction()
             }
         }
     }
-
-    fun countAlarmAll(): Long = getInstance().where(Alarm::class.java).count()
 
     /***************************************************************************************************
      *   Manage ActionLog model
      *
      ***************************************************************************************************/
-    private fun insertActionLog(
-        actionLog: ActionLog,
-        realmInstance: Realm = getInstance(),
-    ) {
-        realmInstance.executeTransaction { realm ->
-            val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
-            actionLog.sequence = sequence.toInt().plus(1)
-            realm.insert(actionLog)
-        }
-    }
 
     /**
      * ```
@@ -507,20 +496,31 @@ object EasyDiaryDbHelper {
      * 임시 인스턴스 생성 후 use block안에서 realm 데이터를 저장하면 thread 제약없이 컨트롤이 가능함
      * ```
      */
+    @Deprecated(message = "Use ActionLogRepository.insertActionLog() instead")
     fun insertActionLog(
-        actionLog: ActionLog,
+        actionLog: ActionLogDomain,
         context: Context,
     ) {
         getTemporaryInstance().use { realm ->
             if (context.config.enableDebugMode) {
-                insertActionLog(actionLog, realm)
+                realm.executeTransaction { realm ->
+                    val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
+                    realm.insert(actionLog.copy(id = sequence.toInt().plus(1)).toRealm())
+                }
             }
         }
     }
 
-    fun findActionLogAll(): List<ActionLog> = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
+    @Deprecated(message = "Use ActionLogRepository.findAllActionLogs() instead")
+    fun findAllActionLogs(): List<ActionLogDomain> =
+        getInstance()
+            .where(ActionLog::class.java)
+            .findAll()
+            .sort("sequence", Sort.DESCENDING)
+            .map { it.toDomain() }
 
-    fun deleteActionLogAll() {
+    @Deprecated(message = "Use ActionLogRepository.deleteAllActionLogs() instead")
+    fun deleteAllActionLogs() {
         getInstance().executeTransaction { realm ->
             realm.where(ActionLog::class.java).findAll().deleteAllFromRealm()
         }
@@ -530,39 +530,41 @@ object EasyDiaryDbHelper {
      *   Manage DDay model
      *
      ***************************************************************************************************/
-    fun duplicateDDayBy(
-        dDay: DDay,
-        realmInstance: Realm = getInstance(),
-    ): DDay = realmInstance.copyFromRealm(dDay)
+    fun findDDayAll(sortOrder: Sort = Sort.ASCENDING): List<DDayDomain> =
+        getInstance()
+            .where(DDay::class.java)
+            .findAll()
+            .sort("targetTimeStamp", sortOrder)
+            .map { it.toDomain() }
 
-    private fun findDDayBy(
-        realmInstance: Realm,
-        sequence: Int,
-    ): DDay? = realmInstance.where(DDay::class.java).equalTo("sequence", sequence).findFirst()
-
-    fun findDDayBy(sequence: Int): DDay? = findDDayBy(getInstance(), sequence)
-
-    fun findDDayAll(sortOrder: Sort = Sort.ASCENDING): List<DDay> = getInstance().where(DDay::class.java).findAll().sort("targetTimeStamp", sortOrder)
-
-    fun updateDDayBy(dDay: DDay) {
-        if (dDay.sequence == -1) {
-            val sequence = getInstance().where(DDay::class.java).max("sequence") ?: 0
-            dDay.sequence = sequence.toInt().plus(1)
-        }
-        getInstance().executeTransaction { realm -> realm.insertOrUpdate(dDay) }
-    }
-
-    fun deleteDDayBy(sequence: Int) {
-        findDDayBy(sequence)?.let {
-            getInstance().run {
-                beginTransaction()
-                it.deleteFromRealm()
-                commitTransaction()
+    fun updateDDay(dDay: DDayDomain) {
+        getTemporaryInstance().use { realm ->
+            if (dDay.id == -1) {
+                val sequence = realm.where(DDay::class.java).max("sequence") ?: 0
+                realm.executeTransaction {
+                    it.insertOrUpdate(
+                        dDay
+                            .copy(
+                                id = sequence.toInt().plus(1),
+                            ).toRealm(),
+                    )
+                }
+            } else {
+                realm.executeTransaction { it.insertOrUpdate(dDay.toRealm()) }
             }
         }
     }
 
-    fun countDDayAll(): Long = getInstance().where(DDay::class.java).count()
+    @Deprecated(message = "Use DDayRepository.deleteDDay() instead")
+    fun deleteDDayById(id: Int) {
+        getTemporaryInstance().use { realm ->
+            realm.where(DDay::class.java).equalTo("sequence", id).findFirst()?.let {
+                realm.beginTransaction()
+                it.deleteFromRealm()
+                realm.commitTransaction()
+            }
+        }
+    }
 
     /***************************************************************************************************
      *   Manage ETC.

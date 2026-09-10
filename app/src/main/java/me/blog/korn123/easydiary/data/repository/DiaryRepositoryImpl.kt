@@ -98,7 +98,7 @@ class DiaryRepositoryImpl
             )
         }
 
-        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
+        override suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int) {
             dataSource.deleteTemporaryDiaryBy(originDiaryId)
 
             // FIXME: Remove legacy realm functions

@@ -7,10 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.Realm
 import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +33,6 @@ import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
-import me.blog.korn123.easydiary.helper.toRealm
 import java.io.File
 import java.time.YearMonth
 import javax.inject.Inject
@@ -219,7 +216,7 @@ class DiaryViewModel
                 }
             }
 
-        suspend fun findDiaryBy(sequence: Int): Diary? =
+        suspend fun findDiaryById(sequence: Int): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
                 diaryRepository.getDiaryWithPhotosById(sequence).first()
             } else {
@@ -228,7 +225,7 @@ class DiaryViewModel
                 }
             }
 
-        suspend fun findDiaryBy(
+        suspend fun findDiaryByPhotoUri(
             photoUriString: String,
         ): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
@@ -325,8 +322,8 @@ class DiaryViewModel
             diaryRepository.clearSelectedStatus()
         }
 
-        suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
-            diaryRepository.deleteTemporaryDiaryBy(originDiaryId)
+        suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int) {
+            diaryRepository.deleteTemporaryDiaryByOriginId(originDiaryId)
         }
 
         suspend fun deleteDiaryById(seq: Int) {

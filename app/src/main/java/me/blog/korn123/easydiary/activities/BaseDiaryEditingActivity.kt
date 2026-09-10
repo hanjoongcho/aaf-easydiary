@@ -483,7 +483,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         lifecycleScope.launch {
                             initData(it)
                             initBottomToolbar()
-                            diaryViewModel.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                            diaryViewModel.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
                         }
                     },
                     { _, _ ->

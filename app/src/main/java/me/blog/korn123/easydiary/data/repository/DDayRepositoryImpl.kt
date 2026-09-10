@@ -1,7 +1,10 @@
 package me.blog.korn123.easydiary.data.repository
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import me.blog.korn123.easydiary.data.datasource.ActionLogDataSource
 import me.blog.korn123.easydiary.data.datasource.DDayDataSource
 import me.blog.korn123.easydiary.data.datasource.LocalDataSource
 import me.blog.korn123.easydiary.data.datasource.RemoteDataSource
@@ -9,6 +12,7 @@ import me.blog.korn123.easydiary.data.local.mapper.toDomain
 import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,31 +20,40 @@ import javax.inject.Singleton
 class DDayRepositoryImpl
     @Inject
     constructor(
+        @ApplicationContext private val context: Context,
         @LocalDataSource private val localDataSource: DDayDataSource,
         @RemoteDataSource private val remoteDataSource: DDayDataSource,
     ) : DDayRepository {
+        private val dataSource: DDayDataSource
+            //            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
+            // FIXME: Remove temporary code when migrate to Jetpack Room
+            get() = localDataSource
+
         override fun getAllDDays(): Flow<List<DDay>> =
-            localDataSource.getAllDDays().map { entities ->
+            dataSource.getAllDDays().map { entities ->
                 entities.map { it.toDomain() }
             }
 
         override suspend fun insertDDay(dDay: DDay) {
             val entity = dDay.toEntity()
-            localDataSource.insertDDay(entity)
+            dataSource.insertDDay(entity)
         }
 
         override suspend fun updateDDay(dDay: DDay) {
             val entity = dDay.toEntity()
-            localDataSource.updateDDay(entity)
+            dataSource.updateDDay(entity)
         }
 
         override suspend fun deleteDDay(dDay: DDay) {
             val entity = dDay.toEntity()
-            localDataSource.deleteDDay(entity)
+            dataSource.deleteDDay(entity)
+
+            // FIXME: Remove legacy realm functions
+            EasyDiaryDbHelper.deleteDDayById(dDay.id)
         }
 
         override suspend fun deleteDDayById(id: Int) {
-            localDataSource.deleteDDayById(id)
+            dataSource.deleteDDayById(id)
         }
 
         override suspend fun deleteAllDDays() {

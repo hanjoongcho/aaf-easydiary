@@ -10,6 +10,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.simplemobiletools.commons.extensions.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -18,15 +21,24 @@ import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dDayRepository
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.models.DDay
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 
 class DDayAdapter(
     val activity: Activity,
-    private val dDayItems: MutableList<DDay>,
+    private val dDayItems: MutableList<DDayDomain>,
     private val saveDDayCallback: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(
@@ -39,6 +51,7 @@ class DDayAdapter(
         }
 
     override fun getItemViewType(position: Int): Int =
+        @Suppress("ktlint:standard:mixed-condition-operators")
         when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
             true -> 1
             false -> 0
@@ -47,10 +60,12 @@ class DDayAdapter(
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
-    ) = when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
-        true -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
-        false -> (holder as DDayViewHolder).bindTo(dDayItems[position])
-    }
+    ) =
+        @Suppress("ktlint:standard:mixed-condition-operators")
+        when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
+            true -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
+            false -> (holder as DDayViewHolder).bindTo(dDayItems[position])
+        }
 
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
@@ -61,8 +76,8 @@ class DDayAdapter(
     }
 
     fun openDDayDialog(
-        temporaryDDay: DDay,
-        storedDDay: DDay? = null,
+        temporaryDDay: DDayDomain,
+        storedDDay: DDayDomain? = null,
     ) {
         activity.run activity@{
             var alertDialog: AlertDialog? = null
@@ -131,11 +146,12 @@ class DDayAdapter(
                                 showAlertDialog(
                                     "Are you sure you want to delete the selected D-Day?",
                                     { _, _ ->
-                                        alertDialog?.dismiss()
-                                        EasyDiaryDbHelper.beginTransaction()
-                                        storedDDay.deleteFromRealm()
-                                        EasyDiaryDbHelper.commitTransaction()
-                                        saveDDayCallback.invoke()
+                                        // FIXME: Use lifeCycleScope instead
+                                        CoroutineScope(Dispatchers.Default).launch {
+                                            alertDialog?.dismiss()
+                                            dDayRepository.deleteDDay(storedDDay)
+                                            saveDDayCallback.invoke()
+                                        }
                                     },
                                     { _, _ -> },
                                     DialogMode.WARNING,
@@ -165,7 +181,7 @@ class DDayAdapter(
 
                                 else -> {
                                     temporaryDDay.title = dDayBinding.textTitle.text.toString()
-                                    EasyDiaryDbHelper.updateDDayBy(temporaryDDay)
+                                    EasyDiaryDbHelper.updateDDay(temporaryDDay)
                                     dismiss()
                                     saveDDayCallback.invoke()
                                 }
@@ -189,7 +205,7 @@ class DDayAdapter(
             }
         }
 
-        fun bindTo(dDay: DDay) {
+        fun bindTo(dDay: DDayDomain) {
             EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
                 val targetDateString = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
@@ -220,7 +236,7 @@ class DDayAdapter(
 //                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
 //                textTimeRemaining.text = dDay.getTimeRemaining()
                 root.setOnClickListener {
-                    openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
+                    openDDayDialog(dDay.copy(), dDay)
                 }
             }
         }
@@ -241,7 +257,7 @@ class DDayAdapter(
             }
         }
 
-        fun bindTo(dDay: DDay) {
+        fun bindTo(dDay: DDayDomain) {
             itemDDayAddBinding.root.setOnClickListener {
                 openDDayDialog(dDay)
             }

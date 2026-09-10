@@ -114,21 +114,19 @@ class DiaryMainWidgetFactory(
                 } else {
                     // FIXME: WIP START
                     if (context.config.enableDebugMode) {
-                        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-                            val targetIndex = diaryDto.symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
-                            val photoUris = context.config.customSymbolPaths
-                            val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
+                        val targetIndex = diaryDto.symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
+                        val photoUris = context.config.customSymbolPaths
+                        val filePath =
+                            if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
 //                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
-                            val futureBitmap =
-                                Glide
-                                    .with(context)
-                                    .asBitmap()
-                                    .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
-                                    .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                                    .submit(300, 300)
-                            setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
-                            realmInstance.close()
-                        }
+                        val futureBitmap =
+                            Glide
+                                .with(context)
+                                .asBitmap()
+                                .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                                .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                                .submit(300, 300)
+                        setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
                     }
                     // FIXME: WIP END
                 }

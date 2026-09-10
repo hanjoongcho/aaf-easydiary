@@ -18,7 +18,6 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -77,7 +76,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         super.onPause()
         lifecycleScope.launch {
             if (mIsDiarySaved) {
-                diaryViewModel.deleteTemporaryDiaryBy(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                diaryViewModel.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
             } else {
                 saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
             }

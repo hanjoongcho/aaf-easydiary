@@ -9,7 +9,7 @@ import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 
 @Dao
 interface ActionLogDao {
-    @Query("SELECT * FROM action_logs ORDER BY sequence DESC")
+    @Query("SELECT * FROM action_logs ORDER BY id DESC")
     fun getAllActionLogs(): Flow<List<ActionLogEntity>>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)

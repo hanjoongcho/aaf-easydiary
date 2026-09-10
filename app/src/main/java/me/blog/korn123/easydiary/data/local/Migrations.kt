@@ -170,3 +170,48 @@ val MIGRATION_4_5 =
             )
         }
     }
+
+val MIGRATION_5_6 =
+    object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // action_logs: sequence -> id
+            db.execSQL(
+                """
+                CREATE TABLE `action_logs_new` (
+                    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                    `className` TEXT, 
+                    `signature` TEXT, 
+                    `key` TEXT, 
+                    `value` TEXT
+                )
+                """.trimIndent()
+            )
+            db.execSQL(
+                """
+                INSERT INTO `action_logs_new` (`id`, `className`, `signature`, `key`, `value`)
+                SELECT `sequence`, `className`, `signature`, `key`, `value` FROM `action_logs`
+                """.trimIndent()
+            )
+            db.execSQL("DROP TABLE `action_logs`")
+            db.execSQL("ALTER TABLE `action_logs_new` RENAME TO `action_logs`")
+
+            // d_days: sequence -> id
+            db.execSQL(
+                """
+                CREATE TABLE `d_days_new` (
+                    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                    `targetTimeStamp` INTEGER NOT NULL, 
+                    `title` TEXT
+                )
+                """.trimIndent()
+            )
+            db.execSQL(
+                """
+                INSERT INTO `d_days_new` (`id`, `targetTimeStamp`, `title`)
+                SELECT `sequence`, `targetTimeStamp`, `title` FROM `d_days`
+                """.trimIndent()
+            )
+            db.execSQL("DROP TABLE `d_days`")
+            db.execSQL("ALTER TABLE `d_days_new` RENAME TO `d_days`")
+        }
+    }

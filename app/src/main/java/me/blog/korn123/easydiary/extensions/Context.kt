@@ -106,6 +106,10 @@ import com.simplemobiletools.commons.views.MyFloatingActionButton
 import com.simplemobiletools.commons.views.MySeekBar
 import com.simplemobiletools.commons.views.MySwitchCompat
 import com.simplemobiletools.commons.views.MyTextView
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
@@ -119,6 +123,9 @@ import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
 import io.realm.Realm
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
@@ -131,6 +138,10 @@ import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
+import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
+import me.blog.korn123.easydiary.domain.repository.AlarmRepository
+import me.blog.korn123.easydiary.domain.repository.DDayRepository
+import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
@@ -177,8 +188,6 @@ import me.blog.korn123.easydiary.helper.SETTING_SUMMARY_MAX_LINES
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
 import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.helper.SettingConstants
-import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -193,6 +202,7 @@ import java.util.Locale
 import kotlin.math.ceil
 import kotlin.math.pow
 import kotlin.math.roundToInt
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -202,6 +212,66 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
  * You can see original 'Simple-Commons' from below link.
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
+
+/***************************************************************************************************
+ *   Hilt EntryPoint for Repository access in extensions
+ ***************************************************************************************************/
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface AlarmRepositoryEntryPoint {
+    fun alarmRepository(): AlarmRepository
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface DiaryRepositoryEntryPoint {
+    fun diaryRepository(): DiaryRepository
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface ActionLogRepositoryEntryPoint {
+    fun actionLogRepository(): ActionLogRepository
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface DDayRepositoryEntryPoint {
+    fun dDayRepository(): DDayRepository
+}
+
+val Context.alarmRepository: AlarmRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                this,
+                AlarmRepositoryEntryPoint::class.java,
+            ).alarmRepository()
+
+val Context.diaryRepository: DiaryRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                DiaryRepositoryEntryPoint::class.java,
+            ).diaryRepository()
+
+val Context.actionLogRepository: ActionLogRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                ActionLogRepositoryEntryPoint::class.java,
+            ).actionLogRepository()
+
+val Context.dDayRepository: DDayRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                DDayRepositoryEntryPoint::class.java,
+            ).dDayRepository()
 
 /***************************************************************************************************
  *   Alarm Extension
@@ -233,21 +303,18 @@ fun Context.reExecuteGmsBackup(
     errorMessage: String,
     className: String,
 ) {
-    EasyDiaryDbHelper.insertActionLog(
-        ActionLog(
-            className,
-            "reExecuteGmsBackup",
-            ActionLogKey.WARN,
-            errorMessage,
-        ),
-        this,
-    )
-    EasyDiaryDbHelper.getTemporaryInstance().use {
-        it.beginTransaction()
-        alarm.retryCount = alarm.retryCount.plus(1)
-        it.commitTransaction()
+    CoroutineScope(Dispatchers.Default).launch {
+        actionLogRepository.insertActionLog(
+            ActionLogDomain(
+                className = className,
+                signature = "reExecuteGmsBackup",
+                key = ActionLogKey.WARN,
+                value = errorMessage,
+            ),
+        )
+        alarmRepository.updateAlarm(alarm.copy(retryCount = alarm.retryCount + 1))
+        openSnoozeNotification(alarm)
     }
-    openSnoozeNotification(alarm)
 }
 
 // fun Context.executeGmsBackup(alarm: Alarm) {
@@ -396,8 +463,10 @@ fun Context.executeScheduledTask(alarm: AlarmDomain) {
 }
 
 fun Context.rescheduleEnabledAlarms() {
-    EasyDiaryDbHelper.findAlarmAll().forEach {
-        if (it.isEnabled) scheduleNextAlarm(it, false)
+    CoroutineScope(Dispatchers.Default).launch {
+        alarmRepository.getAllAlarms().forEach {
+            if (it.isEnabled) scheduleNextAlarm(it, false)
+        }
     }
 }
 

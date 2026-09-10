@@ -4,7 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.domain.model.Alarm
 
 interface AlarmRepository {
-    fun getAllAlarms(): Flow<List<Alarm>>
+    fun getAllAlarmsFlow(): Flow<List<Alarm>>
+
+    suspend fun getAllAlarms(): List<Alarm>
 
     suspend fun getAlarmById(id: Int): Alarm?
 

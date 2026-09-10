@@ -21,7 +21,7 @@ import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
         ActionLogEntity::class,
         DDayEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
