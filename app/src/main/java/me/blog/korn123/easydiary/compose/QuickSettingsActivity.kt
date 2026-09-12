@@ -52,12 +52,11 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
-import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
     /***************************************************************************************************
@@ -249,12 +248,12 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         enableCardViewPolicy = enableCardViewPolicy,
                     ) {
                         val alarm =
-                            Alarm().apply {
-                                sequence = Int.MAX_VALUE
-                                workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
-                                label = "Quick Settings"
-                            }
-                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm.toDomain()) }
+                            AlarmDomain(
+                                alarmId = Int.MAX_VALUE,
+                                workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC,
+                                label = "Quick Settings",
+                            )
+                        AlarmWorkExecutor(this@QuickSettingsActivity).run { executeWork(alarm) }
                     }
                 }
             }

@@ -586,7 +586,7 @@ suspend fun Activity.syncCustomSymbolPaths() {
         }
 
     val diary = if (items != null && items.isNotEmpty()) items[0] else null
-    val result = diary?.photoUris?.map { it.toRealm() } ?: listOf()
+    val result = diary?.photoUris?.map { it } ?: listOf()
     config.customSymbolPaths = result
 }
 

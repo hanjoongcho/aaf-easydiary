@@ -407,12 +407,13 @@ object EasyDiaryDbHelper {
 
     @Deprecated(message = "Use AlarmViewModel.makeTemporaryAlarm() instead")
     fun makeTemporaryAlarm(workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING): AlarmDomain {
-        val alarm = Alarm().apply { this.workMode = workMode }
+        val alarm = AlarmDomain(workMode = workMode)
         getTemporaryInstance().use { realm ->
+            var nextAlarmId = 0
             val sequence = realm.where(Alarm::class.java).max("sequence") ?: 0
             when (sequence.toInt() == realm.where(Alarm::class.java).count().toInt()) {
                 true -> {
-                    alarm.sequence = sequence.toInt().plus(1)
+                    nextAlarmId = sequence.toInt().plus(1)
                 }
 
                 false -> {
@@ -420,14 +421,14 @@ object EasyDiaryDbHelper {
                         findAlarmAll().forEachIndexed { index, item ->
                             val validSequence = index.plus(1)
                             if (item.alarmId != validSequence) {
-                                alarm.sequence = validSequence
+                                nextAlarmId = validSequence
                                 return@loop
                             }
                         }
                     }
                 }
             }
-            return alarm.toDomain()
+            return alarm.copy(alarmId = nextAlarmId)
         }
     }
 

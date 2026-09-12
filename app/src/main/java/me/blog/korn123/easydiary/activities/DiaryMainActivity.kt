@@ -255,7 +255,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             lifecycleScope.launch {
                 val maxSequence = diaryViewModel.getMaxDiarySequence()
-                mBinding.diaryListView.layoutManager?.scrollToPosition(getIndexBySequence(maxSequence))
+                mBinding.diaryListView.layoutManager?.scrollToPosition(
+                    getIndexBySequence(
+                        maxSequence,
+                    ),
+                )
                 config.previousActivity = -1
             }
         }
@@ -621,7 +625,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                     R.id.attachedPhotoGallery -> {
                         Intent(this@DiaryMainActivity, GalleryActivity::class.java).run {
-                            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, this)
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                this,
+                            )
                         }
                     }
 
@@ -658,7 +665,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     }
 
                     R.id.gridLayout -> {
-                        openGridSettingDialog(mBinding.mainHolder, GridSpanMode.DIARY_MAIN) { spanCount ->
+                        openGridSettingDialog(
+                            mBinding.mainHolder,
+                            GridSpanMode.DIARY_MAIN,
+                        ) { spanCount ->
                             mGridLayoutManager.spanCount = spanCount
                             mBinding.diaryListView.invalidateItemDecorations()
 //                    mDiaryMainItemAdapter?.notifyDataSetChanged()
@@ -686,7 +696,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun confirmPrePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!checkPermission(arrayOf(Manifest.permission.POST_NOTIFICATIONS))) {
-                confirmPermission(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION)
+                confirmPermission(
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_CODE_NOTIFICATION,
+                )
             }
         }
     }
@@ -805,7 +818,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     i: Int,
                     i1: Int,
                     i2: Int,
-                ) {}
+                ) {
+                }
 
                 override fun onTextChanged(
                     charSequence: CharSequence,
@@ -940,40 +954,36 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private suspend fun initSampleData() {
         diaryViewModel.run {
             insertDiary(
-                Diary(
-                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                    System.currentTimeMillis() - 395000000L,
-                    getString(R.string.sample_diary_title_1),
-                    getString(R.string.sample_diary_1),
-                    1,
-                ).toDomain(),
+                DiaryDomain(
+                    currentTimeMillis = System.currentTimeMillis() - 395000000L,
+                    title = getString(R.string.sample_diary_title_1),
+                    contents = getString(R.string.sample_diary_1),
+                    symbolSequence = 1,
+                ),
             )
             insertDiary(
-                Diary(
-                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                    System.currentTimeMillis() - 263000000L,
-                    getString(R.string.sample_diary_title_2),
-                    getString(R.string.sample_diary_2),
-                    2,
-                ).toDomain(),
+                DiaryDomain(
+                    currentTimeMillis = System.currentTimeMillis() - 263000000L,
+                    title = getString(R.string.sample_diary_title_2),
+                    contents = getString(R.string.sample_diary_2),
+                    symbolSequence = 2,
+                ),
             )
             insertDiary(
-                Diary(
-                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                    System.currentTimeMillis() - 132000000L,
-                    getString(R.string.sample_diary_title_3),
-                    getString(R.string.sample_diary_3),
-                    3,
-                ).toDomain(),
+                DiaryDomain(
+                    currentTimeMillis = System.currentTimeMillis() - 132000000L,
+                    title = getString(R.string.sample_diary_title_3),
+                    contents = getString(R.string.sample_diary_3),
+                    symbolSequence = 3,
+                ),
             )
             insertDiary(
-                Diary(
-                    DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                    System.currentTimeMillis() - 4000000L,
-                    getString(R.string.sample_diary_title_4),
-                    getString(R.string.sample_diary_4),
-                    4,
-                ).toDomain(),
+                DiaryDomain(
+                    currentTimeMillis = System.currentTimeMillis() - 4000000L,
+                    title = getString(R.string.sample_diary_title_4),
+                    contents = getString(R.string.sample_diary_4),
+                    symbolSequence = 4,
+                ),
             )
         }
     }
@@ -1061,7 +1071,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
                             )
                         }
-                        CustomElevatedSquareButton(text = "Debug", iconResourceId = R.drawable.ic_bug_2) {
+                        CustomElevatedSquareButton(
+                            text = "Debug",
+                            iconResourceId = R.drawable.ic_bug_2,
+                        ) {
                             TransitionHelper.startActivityWithTransition(
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java),

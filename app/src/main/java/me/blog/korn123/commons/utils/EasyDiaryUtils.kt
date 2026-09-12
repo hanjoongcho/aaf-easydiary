@@ -72,8 +72,6 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
-import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -82,6 +80,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -115,11 +114,6 @@ object EasyDiaryUtils {
      *   String Utils
      *
      ***************************************************************************************************/
-    fun summaryDiaryLabel(diary: Diary): String {
-//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
-        return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
-    }
-
     fun summaryDiaryLabel(diary: DiaryDomain): String = if (diary.title.isNullOrEmpty()) diary.contents.lines()[0] else diary.title
 
     fun searchWordIndexes(
@@ -230,7 +224,7 @@ object EasyDiaryUtils {
 
     fun createAttachedPhotoView(
         context: Context,
-        photoUri: PhotoUri,
+        photoUri: PhotoUriDomain,
         marginLeft: Float = 0F,
         marginTop: Float = 0F,
         marginRight: Float = 3F,
@@ -266,7 +260,7 @@ object EasyDiaryUtils {
 
     fun createAttachedPhotoViewForFlexBox(
         activity: Activity,
-        photoUri: PhotoUri,
+        photoUri: PhotoUriDomain,
         attachedCount: Int,
     ): CardView {
         val spanCount =

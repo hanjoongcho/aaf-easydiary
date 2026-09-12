@@ -1242,7 +1242,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         photoContainerFlexBox.addView(
                                             createAttachedPhotoViewForFlexBox(
                                                 requireActivity(),
-                                                item.toRealm(),
+                                                item,
                                                 photoCount,
                                             ).apply {
                                                 setOnClickListener(

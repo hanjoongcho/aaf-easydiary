@@ -21,7 +21,12 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.HorizontalScrollView
@@ -44,17 +49,62 @@ import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.fullAddress
+import me.blog.korn123.easydiary.extensions.getFromLocation
+import me.blog.korn123.easydiary.extensions.getLastKnownLocation
+import me.blog.korn123.easydiary.extensions.getUriForFile
+import me.blog.korn123.easydiary.extensions.isAccessFromOutside
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
+import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
+import me.blog.korn123.easydiary.helper.CAPTURE_CAMERA_FILE_NAME
+import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
+import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.helper.LIST_URI_STRING
+import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
+import me.blog.korn123.easydiary.helper.SELECTED_DAY
+import me.blog.korn123.easydiary.helper.SELECTED_HOUR
+import me.blog.korn123.easydiary.helper.SELECTED_MINUTE
+import me.blog.korn123.easydiary.helper.SELECTED_MONTH
+import me.blog.korn123.easydiary.helper.SELECTED_SECOND
+import me.blog.korn123.easydiary.helper.SELECTED_YEAR
+import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
+import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.SettingConstants
+import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.toDomain
+import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
+import java.util.Collections
+import java.util.Locale
+import java.util.UUID
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.Location as LocationDomain
+import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
 
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
@@ -170,10 +220,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
         }
     protected lateinit var mBinding: ActivityBaseDiaryEditingBinding
-    protected val mPhotoUris: RealmList<PhotoUri> = RealmList()
+    protected val mPhotoUris: ArrayList<PhotoUriDomain> = ArrayList()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
-    protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
+    protected var mLocation: LocationDomain? = null
     protected var mIsDiarySaved = false
     protected var mSymbolSequence = 0
 
@@ -452,25 +502,25 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected suspend fun saveTemporaryDiary(originSequence: Int) {
         val diaryTemp =
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                mCurrentTimeMillis,
-                mBinding.partialEditContents.diaryTitle.text
-                    .toString(),
-                mBinding.partialEditContents.diaryContents.text
-                    .toString(),
-                mSelectedItemPosition,
-                mBinding.partialEditContents.allDay.isChecked,
-            ).apply {
-                this.originSequence = originSequence
-                photoUris = mPhotoUris
-            }
+            DiaryDomain(
+                currentTimeMillis = mCurrentTimeMillis,
+                title =
+                    mBinding.partialEditContents.diaryTitle.text
+                        .toString(),
+                contents =
+                    mBinding.partialEditContents.diaryContents.text
+                        .toString(),
+                symbolSequence = mSelectedItemPosition,
+                isAllDay = mBinding.partialEditContents.allDay.isChecked,
+                originDiaryId = originSequence,
+                photoUris = mPhotoUris.map { it },
+            )
         if (StringUtils.isNotEmpty(diaryTemp.title) ||
-            StringUtils.isNotEmpty(diaryTemp.contents) ||
-            diaryTemp.photoUris?.isNotEmpty() == true
+            StringUtils.isNotEmpty(diaryTemp.contents) || diaryTemp.photoUris.isNotEmpty()
         ) {
-            if (mLocation != null) diaryTemp.location = mLocation
-            diaryViewModel.insertTemporaryDiary(diaryTemp.toDomain())
+            diaryViewModel.insertTemporaryDiary(
+                mLocation?.let { diaryTemp.copy(location = it) } ?: diaryTemp,
+            )
         }
     }
 
@@ -572,8 +622,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         if (address.isNotEmpty()) {
                             locationInfo = fullAddress(address[0])
                             mLocation =
-                                me.blog.korn123.easydiary.models
-                                    .Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
+
+                                LocationDomain(locationInfo, knownLocation.latitude, knownLocation.longitude)
                         }
                     }
                     locationLabel.text = locationInfo
@@ -721,7 +771,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                                     MIME_TYPE_JPEG
                                 }
                             }
-                        val photoUriDto = PhotoUri(FILE_URI_PREFIX + photoPath, mimeType)
+                        val photoUriDto = PhotoUriDomain(FILE_URI_PREFIX + photoPath, mimeType)
                         mPhotoUris.add(photoUriDto)
                         val currentIndex = mPhotoUris.size - 1
                         runOnUiThread {
@@ -817,7 +867,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 photoContainer.addView(attachView)
 
                 getStringArrayList(LIST_URI_STRING)?.map { uriString ->
-                    mPhotoUris.add(PhotoUri(uriString))
+                    mPhotoUris.add(PhotoUriDomain(uriString))
                 }
                 mYear = getInt(SELECTED_YEAR, mYear)
                 mMonth = getInt(SELECTED_MONTH, mMonth)
@@ -888,7 +938,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
         // TODO fixme elegance
         diary.photoUris.let {
-            mPhotoUris.addAll(it.map { photoUri -> photoUri.toRealm() })
+            mPhotoUris.addAll(it)
         }
 
         mPhotoUris.let {
@@ -915,7 +965,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             diary.location?.let {
                 mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
                 mBinding.partialEditContents.locationLabel.text = it.address
-                mLocation = it.toRealm()
+                mLocation = it
             } ?: run {
                 setLocationInfo()
                 mLocation?.let {

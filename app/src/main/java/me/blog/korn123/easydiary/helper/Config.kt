@@ -12,8 +12,8 @@ import com.simplemobiletools.commons.helpers.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
-import me.blog.korn123.easydiary.models.PhotoUri
 import java.util.*
+import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
 
 /**
  * Created by CHO HANJOONG on 2017-12-24.
@@ -349,13 +349,13 @@ class Config(
         get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
         set(enableShakeDetector) = prefs.edit().putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector).apply()
 
-    var customSymbolPaths: List<PhotoUri>
+    var customSymbolPaths: List<PhotoUriDomain>
         get() {
             val jsonString = prefs.getString(SETTING_CUSTOM_SYMBOL_PATHS, null)
             return if (jsonString == null) {
                 emptyList()
             } else {
-                val type = object : TypeToken<List<PhotoUri>>() {}.type
+                val type = object : TypeToken<List<PhotoUriDomain>>() {}.type
                 Gson().fromJson(jsonString, type)
             }
         }
