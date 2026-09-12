@@ -105,9 +105,9 @@ class CalendarActivity : EasyDiaryActivity() {
         mBinding.selectedList.adapter = mArrayAdapterDiary
         mBinding.selectedList.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, view, i, l ->
-                val diaryDto = adapterView.adapter.getItem(i) as Diary
+                val diaryDto = adapterView.adapter.getItem(i) as DiaryDomain
                 val detailIntent = Intent(this@CalendarActivity, DiaryReadingActivity::class.java)
-                detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+                detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.diaryId)
                 TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
             }
 

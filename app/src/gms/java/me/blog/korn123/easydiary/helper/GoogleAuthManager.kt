@@ -9,7 +9,6 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
-import androidx.fragment.app.add
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -24,7 +23,6 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -34,17 +32,13 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AuthManager
-import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GCalendarConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
-import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.models.Diary
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.UUID
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Google Credential Manager
@@ -383,7 +377,14 @@ class GoogleAuthManager(
 
         // --- CASE A: 시작일과 종료일이 같은 경우 ---
         if (startDate == effectiveEndDate) {
-            if (insertDiaryIfNotExists(summary, startMillis, isAllDay, isHolidayCalendar, description)) {
+            if (insertDiaryIfNotExists(
+                    summary,
+                    startMillis,
+                    isAllDay,
+                    isHolidayCalendar,
+                    description,
+                )
+            ) {
                 insertedCount++
             }
             return insertedCount
@@ -414,7 +415,14 @@ class GoogleAuthManager(
                 }
             }
 
-            if (insertDiaryIfNotExists(summary, currentMillis, currentIsAllDay, isHolidayCalendar, description)) {
+            if (insertDiaryIfNotExists(
+                    summary,
+                    currentMillis,
+                    currentIsAllDay,
+                    isHolidayCalendar,
+                    description,
+                )
+            ) {
                 insertedCount++
             }
 
@@ -477,24 +485,21 @@ class GoogleAuthManager(
         if (isAlreadyExists) return false
 
         val diary =
-            Diary(
-                sequence = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+            DiaryDomain(
                 currentTimeMillis = millis,
                 title = if (description != null) summary.orEmpty() else "",
                 contents = description ?: summary.orEmpty(),
-                weather = SYMBOL_GOOGLE_CALENDAR,
+                symbolSequence = SYMBOL_GOOGLE_CALENDAR,
                 isAllDay = isAllDay,
-            ).apply {
-                isHoliday = isHolidayCalendar
-            }
+                isHoliday = isHolidayCalendar,
+            )
 
-        diary
         EntryPointAccessors
             .fromApplication(
                 context,
                 DiaryRepositoryEntryPoint::class.java,
             ).diaryRepository()
-            .insertDiary(diary.toDomain())
+            .insertDiary(diary)
         return true
     }
 }

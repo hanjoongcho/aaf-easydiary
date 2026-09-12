@@ -13,8 +13,8 @@ import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -101,47 +101,55 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
                     val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-                    val diaryDto =
+                    val diary =
                         when (encryptionPass == null) {
                             true -> {
-                                Diary(
-                                    mSequence,
-                                    mCurrentTimeMillis,
-                                    mBinding.partialEditContents.diaryTitle.text
-                                        .toString(),
-                                    mBinding.partialEditContents.diaryContents.text
-                                        .toString(),
+                                DiaryDomain(
+                                    diaryId = mSequence,
+                                    currentTimeMillis = mCurrentTimeMillis,
+                                    title =
+                                        mBinding.partialEditContents.diaryTitle.text
+                                            .toString(),
+                                    contents =
+                                        mBinding.partialEditContents.diaryContents.text
+                                            .toString(),
+                                    symbolSequence = mSelectedItemPosition,
+                                    isAllDay = mBinding.partialEditContents.allDay.isChecked,
+                                    photoUris = mPhotoUris.map { it.toDomain() },
+                                    location = mLocation?.toDomain(),
+                                    linkedDiaries = ArrayList(mLinkedDiaries),
                                 )
                             }
 
                             false -> {
-                                Diary(
-                                    mSequence,
-                                    mCurrentTimeMillis,
-                                    JasyptUtils.encrypt(
-                                        mBinding.partialEditContents.diaryTitle.text
-                                            .toString(),
-                                        encryptionPass,
-                                    ),
-                                    JasyptUtils.encrypt(
-                                        mBinding.partialEditContents.diaryContents.text
-                                            .toString(),
-                                        encryptionPass,
-                                    ),
-                                    true,
-                                    JasyptUtils.sha256(encryptionPass),
+                                DiaryDomain(
+                                    diaryId = mSequence,
+                                    currentTimeMillis = mCurrentTimeMillis,
+                                    title =
+                                        JasyptUtils.encrypt(
+                                            mBinding.partialEditContents.diaryTitle.text
+                                                .toString(),
+                                            encryptionPass,
+                                        ),
+                                    contents =
+                                        JasyptUtils.encrypt(
+                                            mBinding.partialEditContents.diaryContents.text
+                                                .toString(),
+                                            encryptionPass,
+                                        ),
+                                    isEncrypt = true,
+                                    encryptKeyHash = JasyptUtils.sha256(encryptionPass),
+                                    symbolSequence = mSelectedItemPosition,
+                                    isAllDay = mBinding.partialEditContents.allDay.isChecked,
+                                    photoUris = mPhotoUris.map { it.toDomain() },
+                                    location = mLocation?.toDomain(),
+                                    linkedDiaries = ArrayList(mLinkedDiaries),
                                 )
                             }
                         }
 
-                    if (mLocation != null) diaryDto.location = mLocation
-                    diaryDto.weather = mSelectedItemPosition
-                    diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
                     applyRemoveIndex()
-                    diaryDto.photoUris = mPhotoUris
-                    diaryDto.linkedDiaries.clear()
-                    diaryDto.linkedDiaries.addAll(mLinkedDiaries)
-                    diaryViewModel.updateDiary(diaryDto.toDomain())
+                    diaryViewModel.updateDiary(diary)
                     TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
                     mIsDiarySaved = true
                 }

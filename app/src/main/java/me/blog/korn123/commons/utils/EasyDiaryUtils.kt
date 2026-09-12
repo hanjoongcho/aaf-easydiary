@@ -115,11 +115,6 @@ object EasyDiaryUtils {
      *   String Utils
      *
      ***************************************************************************************************/
-    fun summaryDiaryLabel(diary: Diary): String {
-//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
-        return if (diary.title.isNullOrEmpty()) diary.contents!!.lines()[0] else diary.title!!
-    }
-
     fun summaryDiaryLabel(diary: DiaryDomain): String = if (diary.title.isNullOrEmpty()) diary.contents.lines()[0] else diary.title
 
     fun searchWordIndexes(

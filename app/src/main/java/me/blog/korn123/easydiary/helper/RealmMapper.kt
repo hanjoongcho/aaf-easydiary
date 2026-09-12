@@ -125,6 +125,13 @@ fun Location.toRealm(): me.blog.korn123.easydiary.models.Location =
         longitude = this.longitude,
     )
 
+fun me.blog.korn123.easydiary.models.Location.toDomain(): Location =
+    Location(
+        address = this.address,
+        latitude = this.latitude,
+        longitude = this.longitude,
+    )
+
 fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
     me.blog.korn123.easydiary.models.Diary().apply {
         val domainDiary = this@toRealm

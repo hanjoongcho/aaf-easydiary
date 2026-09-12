@@ -452,25 +452,25 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected suspend fun saveTemporaryDiary(originSequence: Int) {
         val diaryTemp =
-            Diary(
-                DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                mCurrentTimeMillis,
-                mBinding.partialEditContents.diaryTitle.text
-                    .toString(),
-                mBinding.partialEditContents.diaryContents.text
-                    .toString(),
-                mSelectedItemPosition,
-                mBinding.partialEditContents.allDay.isChecked,
-            ).apply {
-                this.originSequence = originSequence
-                photoUris = mPhotoUris
-            }
+            DiaryDomain(
+                currentTimeMillis = mCurrentTimeMillis,
+                title =
+                    mBinding.partialEditContents.diaryTitle.text
+                        .toString(),
+                contents =
+                    mBinding.partialEditContents.diaryContents.text
+                        .toString(),
+                symbolSequence = mSelectedItemPosition,
+                isAllDay = mBinding.partialEditContents.allDay.isChecked,
+                originDiaryId = originSequence,
+                photoUris = mPhotoUris.map { it.toDomain() },
+            )
         if (StringUtils.isNotEmpty(diaryTemp.title) ||
-            StringUtils.isNotEmpty(diaryTemp.contents) ||
-            diaryTemp.photoUris?.isNotEmpty() == true
+            StringUtils.isNotEmpty(diaryTemp.contents) || diaryTemp.photoUris.isNotEmpty()
         ) {
-            if (mLocation != null) diaryTemp.location = mLocation
-            diaryViewModel.insertTemporaryDiary(diaryTemp.toDomain())
+            diaryViewModel.insertTemporaryDiary(
+                mLocation?.let { diaryTemp.copy(location = it.toDomain()) } ?: diaryTemp,
+            )
         }
     }
 

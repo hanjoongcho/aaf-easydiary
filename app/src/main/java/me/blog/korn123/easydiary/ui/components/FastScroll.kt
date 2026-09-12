@@ -91,7 +91,6 @@ fun FastScroll(
     // --- Fast Scroll 트랙 + 썸 ---
     fun parseBubbleText(item: Any): String =
         when (item) {
-            is Diary -> summaryDiaryLabel(item)
             is DiaryDomain -> summaryDiaryLabel(item)
             is Pair<*, *> -> (item.first as? FileNode)?.name.orEmpty()
             else -> item.toString()

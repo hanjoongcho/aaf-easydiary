@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.api.models.CommitRequest
 import me.blog.korn123.easydiary.api.models.Contents
 import me.blog.korn123.easydiary.api.services.GitHubRepos
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
+import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ALL
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_DEV
 import me.blog.korn123.easydiary.helper.DEV_SYNC_MARKDOWN_ETC
@@ -27,8 +28,6 @@ import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.helper.toRealm
-import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.codec.binary.Base64
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -240,13 +239,12 @@ fun ComponentActivity.syncMarkDown(
                                         ).execute()
                                 diaryRepository.insertDiary(
                                     Diary(
-                                        DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                                        System.currentTimeMillis(),
-                                        title,
-                                        re.body() ?: "",
-                                        checkedSymbolSequence,
-                                        true,
-                                    ).toDomain(),
+                                        currentTimeMillis = System.currentTimeMillis(),
+                                        title = title,
+                                        contents = re.body() ?: "",
+                                        symbolSequence = checkedSymbolSequence,
+                                        isAllDay = true,
+                                    ),
                                 )
                             }
                         }

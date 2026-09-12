@@ -90,23 +90,6 @@ object TreeUtils {
         return root
     }
 
-    fun buildFileTreeFromModels(
-        items: List<me.blog.korn123.easydiary.models.Diary>,
-        addOptionalTitle: Boolean = false,
-        addOptionalSortPrefix: Boolean = false,
-        partsGenerator: (me.blog.korn123.easydiary.models.Diary) -> MutableList<String>,
-    ): FileNode =
-        buildFileTree(
-            items = items,
-            addOptionalTitle = addOptionalTitle,
-            addOptionalSortPrefix = addOptionalSortPrefix,
-            idGetter = { it.sequence },
-            symbolGetter = { it.weather },
-            timeGetter = { it.currentTimeMillis },
-            partsGenerator = partsGenerator,
-            summaryLabelGenerator = { EasyDiaryUtils.summaryDiaryLabel(it) },
-        )
-
     fun buildFileTreeFromDomain(
         items: List<me.blog.korn123.easydiary.domain.model.Diary>,
         addOptionalTitle: Boolean = false,

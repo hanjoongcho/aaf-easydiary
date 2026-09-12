@@ -12,6 +12,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -22,7 +23,6 @@ import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -173,21 +173,22 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                     mBinding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
-                    val diaryDto =
+                    val diary =
                         Diary(
-                            DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-                            mCurrentTimeMillis,
-                            mBinding.partialEditContents.diaryTitle.text
-                                .toString(),
-                            mBinding.partialEditContents.diaryContents.text
-                                .toString(),
-                            mSelectedItemPosition,
-                            mBinding.partialEditContents.allDay.isChecked,
+                            currentTimeMillis = mCurrentTimeMillis,
+                            title =
+                                mBinding.partialEditContents.diaryTitle.text
+                                    .toString(),
+                            contents =
+                                mBinding.partialEditContents.diaryContents.text
+                                    .toString(),
+                            symbolSequence = mSelectedItemPosition,
+                            isAllDay = mBinding.partialEditContents.allDay.isChecked,
+                            photoUris = mPhotoUris.map { it.toDomain() },
+                            location = mLocation?.toDomain(),
                         )
-                    if (mLocation != null) diaryDto.location = mLocation
                     applyRemoveIndex()
-                    diaryDto.photoUris = mPhotoUris
-                    diaryViewModel.insertDiary(diaryDto.toDomain())
+                    diaryViewModel.insertDiary(diary)
                     config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
