@@ -160,7 +160,7 @@ class BaseDevViewModel
             }
         }
 
-        suspend fun getDDayCount(): Int = dDayRepository.getAllDDays().first().size
+        suspend fun getDDayCount(): Int = dDayRepository.getAllDDays().size
 
         var enableJetpackRoomDatabase by mutableStateOf(config.enableJetpackRoomDatabase)
             private set

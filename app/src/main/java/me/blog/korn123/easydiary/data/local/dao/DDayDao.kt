@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 
@@ -17,7 +18,7 @@ interface DDayDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertDDay(dDay: DDayEntity): Long
 
-    @Update
+    @Upsert
     suspend fun updateDDay(dDay: DDayEntity)
 
     @Delete

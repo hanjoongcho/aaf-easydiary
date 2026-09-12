@@ -56,14 +56,6 @@ object EasyDiaryDbHelper {
             it.path
         }
 
-    fun beginTransaction() {
-        getInstance().beginTransaction()
-    }
-
-    fun commitTransaction() {
-        getInstance().commitTransaction()
-    }
-
     fun <E : RealmModel?> copyFromRealm(realmObjects: Iterable<E>?): MutableList<E> = getInstance().copyFromRealm(realmObjects)
 
     @Deprecated(message = "Use DiaryViewModel.clearSelectedStatus() instead")
@@ -530,6 +522,8 @@ object EasyDiaryDbHelper {
      *   Manage DDay model
      *
      ***************************************************************************************************/
+
+    @Deprecated(message = "Use DDayRepository.findDDayAll() instead")
     fun findDDayAll(sortOrder: Sort = Sort.ASCENDING): List<DDayDomain> =
         getInstance()
             .where(DDay::class.java)
@@ -537,6 +531,7 @@ object EasyDiaryDbHelper {
             .sort("targetTimeStamp", sortOrder)
             .map { it.toDomain() }
 
+    @Deprecated(message = "Use DDayRepository.updateDDay() instead")
     fun updateDDay(dDay: DDayDomain) {
         getTemporaryInstance().use { realm ->
             if (dDay.id == -1) {

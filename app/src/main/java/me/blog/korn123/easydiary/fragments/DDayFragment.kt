@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.realm.Sort
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DDayAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dDayRepository
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
@@ -96,13 +99,15 @@ class DDayFragment : Fragment() {
     private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
     private fun updateDDayList(sortOrder: Sort) {
-        mDDayItems.run {
-            clear()
-            val dDayItems = EasyDiaryDbHelper.findDDayAll(sortOrder)
-            if (dDayItems.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
-            addAll(dDayItems)
-            add(DDayDomain(title = "New D-Day!!!"))
+        lifecycleScope.launch {
+            mDDayItems.run {
+                clear()
+                val dDayItems = requireContext().dDayRepository.getAllDDays(sortOrder == Sort.DESCENDING)
+                if (dDayItems.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
+                addAll(dDayItems)
+                add(DDayDomain(title = "New D-Day!!!"))
+            }
+            mDDayAdapter.notifyDataSetChanged()
         }
-        mDDayAdapter.notifyDataSetChanged()
     }
 }
