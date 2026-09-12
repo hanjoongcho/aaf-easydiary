@@ -7,6 +7,7 @@ import android.text.format.DateFormat
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.simplemobiletools.commons.extensions.toast
@@ -180,10 +181,12 @@ class DDayAdapter(
                                 }
 
                                 else -> {
-                                    temporaryDDay.title = dDayBinding.textTitle.text.toString()
-                                    EasyDiaryDbHelper.updateDDay(temporaryDDay)
-                                    dismiss()
-                                    saveDDayCallback.invoke()
+                                    lifecycleScope.launch {
+                                        temporaryDDay.title = dDayBinding.textTitle.text.toString()
+                                        activity.dDayRepository.updateDDay(temporaryDDay)
+                                        dismiss()
+                                        saveDDayCallback.invoke()
+                                    }
                                 }
                             }
                         }

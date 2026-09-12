@@ -604,7 +604,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         LaunchedEffect(Unit) {
+            mBaseDevViewModel.isLoading = true
             updateMigInfo()
+            mBaseDevViewModel.isLoading = false
         }
 
         FlowRow(
@@ -634,7 +636,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) {
                 coroutineScope.launch {
+                    mBaseDevViewModel.isLoading = true
                     updateMigInfo()
+                    mBaseDevViewModel.isLoading = false
                 }
             }
             SimpleCard(
@@ -679,22 +683,27 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
-                "Inquiry latest diary (DiaryWithPhotos)",
-                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 제일 마지막에 저장된 다이어리 1건의 상세정보를 조회합니다.",
+                "Verify Migration",
+                "realm db <-> room db 데이터를 비교합니다.",
                 modifier = modifier,
             ) {
-                lifecycleScope.launch {
-                    val diary = diaryViewModel.getLatestDiaryWithPhotos()
-                    showAlertDialog(GsonBuilder().setPrettyPrinting().create().toJson(diary))
+                coroutineScope.launch {
+                    mBaseDevViewModel.isLoading = true
+                    // diff diary
+                    val realmDiaries = EasyDiaryDbHelper.findDiary(query = null)
+                    val roomDiaries = diaryViewModel.findDiary(query = null)
+                    // TODO: realmDiaries 모든 객체가 roomDiaries에 존재하는지 비교
+                    // 비교조건은 dairyId임
+                    updateConsole("======== 👀 start diff diary: ${realmDiaries.size}")
+                    var ok = 0
+                    realmDiaries.forEach { realmDiary ->
+                        if (roomDiaries.any { room -> room.diaryId == realmDiary.diaryId }) ++ok
+                    }
+                    updateConsole("OK: $ok")
+                    updateConsole("NG: ${realmDiaries.size.minus(ok)}")
+                    updateConsole("======== 👀 end diff diary: ${if (realmDiaries.size == ok) "Success" else "Fail" }")
+                    mBaseDevViewModel.isLoading = false
                 }
-            }
-            SimpleCard(
-                "Delete diary",
-                "DiaryRepository를 이용하여 local(또는 remote) 저장소에 저장된 다이어리를 모두 삭제합니다.",
-                modifier = modifier,
-            ) {
-                diaryViewModel.deleteAllDiaries()
-                makeToast("All diaries deleted from Room!")
             }
         }
     }
