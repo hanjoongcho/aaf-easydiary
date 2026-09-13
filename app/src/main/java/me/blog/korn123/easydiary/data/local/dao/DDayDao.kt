@@ -12,7 +12,7 @@ import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 
 @Dao
 interface DDayDao {
-    @Query("SELECT * FROM d_days ORDER BY id DESC")
+    @Query("SELECT * FROM d_days ORDER BY targetTimeStamp ASC")
     fun getAllDDays(): Flow<List<DDayEntity>>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)

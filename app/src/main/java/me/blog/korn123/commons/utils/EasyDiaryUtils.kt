@@ -13,6 +13,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -49,6 +50,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.enums.Calculation
@@ -427,6 +429,18 @@ object EasyDiaryUtils {
                 activityResultLauncher.launch(this)
             }
     }
+
+    fun getExportMeta() =
+        mapOf(
+            "BuildConfig.FLAVOR" to BuildConfig.FLAVOR,
+            "BuildConfig.BUILD_TYPE" to BuildConfig.BUILD_TYPE,
+            "BuildConfig.VERSION_CODE" to BuildConfig.VERSION_CODE,
+            "BuildConfig.VERSION_NAME" to BuildConfig.VERSION_NAME,
+            "Build.MANUFACTURER" to Build.MANUFACTURER,
+            "Build.MODEL" to Build.MODEL,
+            "Build.VERSION.RELEASE" to Build.VERSION.RELEASE,
+            "Build.VERSION.SDK_INT" to Build.VERSION.SDK_INT,
+        )
 
     /***************************************************************************************************
      *   View Utils

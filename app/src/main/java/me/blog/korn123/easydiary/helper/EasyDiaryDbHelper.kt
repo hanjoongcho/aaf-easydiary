@@ -319,6 +319,20 @@ object EasyDiaryDbHelper {
             .sort("photoUri", Sort.ASCENDING)
             .toList()
 
+    fun clearOrphanPhotoUris() =
+        getTemporaryInstance().use { realm ->
+            realm.executeTransaction {
+                it
+                    .where(PhotoUri::class.java)
+                    .findAll()
+                    .forEach { photoUri ->
+                        if (photoUri.diary == null || photoUri.diary.isEmpty()) {
+                            photoUri.deleteFromRealm()
+                        }
+                    }
+            }
+        }
+
     @Deprecated(message = "Use DiaryViewModel.getDiaryCount() instead")
     fun countDiaryAll(): Long =
         getInstance()

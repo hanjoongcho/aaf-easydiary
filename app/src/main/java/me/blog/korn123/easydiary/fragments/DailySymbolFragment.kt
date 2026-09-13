@@ -70,6 +70,8 @@ class DailySymbolFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
         }
+    private var selectedYear = 0
+    private var selectedMonth = 0
 
     /***************************************************************************************************
      *   override functions
@@ -192,15 +194,10 @@ class DailySymbolFragment : Fragment() {
                             mBinding.textCalendarDate.text =
                                 monthTitle.uppercase(Locale.getDefault())
 
+                            selectedYear = year
+                            selectedMonth = month
                             lifecycleScope.launch {
-                                mCalendarFragment.extraData += (
-                                    "dateStringMap" to
-                                        diaryViewModel.getDateStringMap(
-                                            month,
-                                            year,
-                                        )
-                                )
-                                mCalendarFragment.refreshView()
+                                refreshCalendar(year, month)
                             }
                         }
 
@@ -241,7 +238,23 @@ class DailySymbolFragment : Fragment() {
      ***************************************************************************************************/
     val map: MutableMap<String, Pair<List<Diary>, List<Diary>>> = mutableMapOf()
 
-    private suspend fun initializeDailySymbol() {
+    private suspend fun refreshCalendar(
+        year: Int,
+        month: Int,
+    ) {
+        if (year != 0 && month != 0) {
+            mCalendarFragment.extraData += (
+                "dateStringMap" to
+                    diaryViewModel.getDateStringMap(
+                        month,
+                        year,
+                    )
+            )
+            mCalendarFragment.refreshView()
+        }
+    }
+
+    private fun initializeDailySymbol() {
         mDailySymbolAdapter =
             DailySymbolAdapter(
                 requireActivity(),
@@ -367,6 +380,7 @@ class DailySymbolFragment : Fragment() {
         }
         mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
         mDailySymbolAdapter.notifyDataSetChanged()
+        refreshCalendar(selectedYear, selectedMonth)
     }
 
     private fun updateDailyCard() {

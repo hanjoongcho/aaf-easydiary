@@ -140,7 +140,7 @@ fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
         currentTimeMillis = domainDiary.currentTimeMillis
         title = domainDiary.title
         contents = domainDiary.contents
-        dateString = domainDiary.dateString
+        dateString = DateUtils.timeMillisToDate(domainDiary.currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
         weather = domainDiary.symbolSequence
         photoUris =
             RealmList<me.blog.korn123.easydiary.models.PhotoUri>().apply {

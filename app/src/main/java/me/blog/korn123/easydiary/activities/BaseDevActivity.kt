@@ -45,6 +45,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -56,6 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,8 +75,11 @@ import me.blog.korn123.easydiary.enums.ExportOption
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dDayRepository
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.fullAddress
@@ -250,17 +255,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             }
                         }
 
-                    mapOfItems["META"] =
-                        mapOf(
-                            "BuildConfig.FLAVOR" to BuildConfig.FLAVOR,
-                            "BuildConfig.BUILD_TYPE" to BuildConfig.BUILD_TYPE,
-                            "BuildConfig.VERSION_CODE" to BuildConfig.VERSION_CODE,
-                            "BuildConfig.VERSION_NAME" to BuildConfig.VERSION_NAME,
-                            "Build.MANUFACTURER" to Build.MANUFACTURER,
-                            "Build.MODEL" to Build.MODEL,
-                            "Build.VERSION.RELEASE" to Build.VERSION.RELEASE,
-                            "Build.VERSION.SDK_INT" to Build.VERSION.SDK_INT,
-                        )
+                    mapOfItems["META"] = EasyDiaryUtils.getExportMeta()
                     try {
                         withContext(Dispatchers.IO) {
                             val jsonString =
@@ -595,12 +590,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             updateConsole("realm alarm count: ${EasyDiaryDbHelper.findAlarmAll().size}")
             updateConsole("realm action-log count: ${EasyDiaryDbHelper.findAllActionLogs().size}")
             updateConsole("realm d-day count: ${EasyDiaryDbHelper.findDDayAll().size}")
-            updateConsole("🍕 room info")
-            updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
-            updateConsole("room photo-uri count: ${diaryViewModel.getPhotoUriCount()}")
-            updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
-            updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
-            updateConsole("room d-day count: ${viewModel.getDDayCount()}")
+            if (config.enableJetpackRoomDatabase) {
+                updateConsole("🍕 room info")
+                updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
+                updateConsole("room photo-uri count: ${diaryViewModel.getPhotoUriCount()}")
+                updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
+                updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
+                updateConsole("room d-day count: ${viewModel.getDDayCount()}")
+            }
         }
 
         LaunchedEffect(Unit) {
@@ -683,6 +680,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
             SimpleCard(
+                "Clear orphan PhotoUri",
+                "참조정보가 없는 PhotoUri realm object를 삭제합니다.",
+                modifier = modifier,
+            ) {
+                coroutineScope.launch {
+                    EasyDiaryDbHelper.clearOrphanPhotoUris()
+                    updateMigInfo()
+                }
+            }
+            SimpleCard(
                 "Verify Migration",
                 "realm db <-> room db 데이터를 비교합니다.",
                 modifier = modifier,
@@ -692,16 +699,65 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     // diff diary
                     val realmDiaries = EasyDiaryDbHelper.findDiary(query = null)
                     val roomDiaries = diaryViewModel.findDiary(query = null)
-                    // TODO: realmDiaries 모든 객체가 roomDiaries에 존재하는지 비교
-                    // 비교조건은 dairyId임
                     updateConsole("======== 👀 start diff diary: ${realmDiaries.size}")
                     var ok = 0
-                    realmDiaries.forEach { realmDiary ->
-                        if (roomDiaries.any { room -> room.diaryId == realmDiary.diaryId }) ++ok
+                    realmDiaries.forEach { realm ->
+                        if (roomDiaries.any { room -> room.diaryId == realm.diaryId }) ++ok
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmDiaries.size.minus(ok)}")
                     updateConsole("======== 👀 end diff diary: ${if (realmDiaries.size == ok) "Success" else "Fail" }")
+
+                    // diff action-log
+                    val realmActionLogs = EasyDiaryDbHelper.findAllActionLogs()
+                    val roomActionLogs = actionLogRepository.getAllActionLogs()
+                    updateConsole("======== 👀 start diff action-logs: ${realmActionLogs.size}")
+                    ok = 0
+                    realmActionLogs.forEach { realm ->
+                        if (roomActionLogs.any { room -> room.id == realm.id }) ++ok
+                    }
+                    updateConsole("OK: $ok")
+                    updateConsole("NG: ${realmActionLogs.size.minus(ok)}")
+                    updateConsole("======== 👀 end diff acgion-logs: ${if (realmActionLogs.size == ok) "Success" else "Fail" }")
+
+                    // diff alarm
+                    val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
+                    val roomAlarms = alarmRepository.getAllAlarms()
+                    updateConsole("======== 👀 start diff alarms: ${realmAlarms.size}")
+                    ok = 0
+                    realmAlarms.forEach { realm ->
+                        if (roomAlarms.any { room -> room.alarmId == realm.alarmId }) ++ok
+                    }
+                    updateConsole("OK: $ok")
+                    updateConsole("NG: ${realmAlarms.size.minus(ok)}")
+                    updateConsole("======== 👀 end diff alarms: ${if (realmAlarms.size == ok) "Success" else "Fail" }")
+
+                    // diff photoUri
+                    val realmPhotoUris = EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
+                    val roomPhotoUris = diaryRepository.getPhotoUris().first()
+                    updateConsole("======== 👀 start diff photoUris: ${realmPhotoUris.size}")
+                    ok = 0
+                    withContext(Dispatchers.Default) {
+                        realmPhotoUris.forEach { realm ->
+                            if (roomPhotoUris.any { room -> room.photoUri == realm.photoUri }) ++ok
+                        }
+                    }
+                    updateConsole("OK: $ok")
+                    updateConsole("NG: ${realmPhotoUris.size.minus(ok)}")
+                    updateConsole("======== 👀 end diff photoUris: ${if (realmPhotoUris.size == ok) "Success" else "Fail" }")
+
+                    // diff d-day
+                    val realmDDays = EasyDiaryDbHelper.findDDayAll()
+                    val roomDDays = dDayRepository.getAllDDays()
+                    updateConsole("======== 👀 start diff d-days: ${realmDDays.size}")
+                    ok = 0
+                    realmDDays.forEach { realm ->
+                        if (roomDDays.any { room -> room.id == realm.id }) ++ok
+                    }
+                    updateConsole("OK: $ok")
+                    updateConsole("NG: ${realmDDays.size.minus(ok)}")
+                    updateConsole("======== 👀 end diff d-days: ${if (realmDDays.size == ok) "Success" else "Fail" }")
+
                     mBaseDevViewModel.isLoading = false
                 }
             }

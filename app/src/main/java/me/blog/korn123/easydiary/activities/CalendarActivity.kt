@@ -55,6 +55,8 @@ class CalendarActivity : EasyDiaryActivity() {
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
     private var mDiaryList: MutableList<DiaryDomain> = mutableListOf()
     private var mArrayAdapterDiary: ArrayAdapter<DiaryDomain>? = null
+    private var selectedYear = 0
+    private var selectedMonth = 0
 
     /***************************************************************************************************
      *   override functions
@@ -168,15 +170,10 @@ class CalendarActivity : EasyDiaryActivity() {
                             ).toString()
                     supportActionBar?.subtitle = monthTitle.uppercase(Locale.getDefault())
 
+                    selectedYear = year
+                    selectedMonth = month
                     lifecycleScope.launch {
-                        mCalendarFragment.extraData += (
-                            "dateStringMap" to
-                                diaryViewModel.getDateStringMap(
-                                    month,
-                                    year,
-                                )
-                        )
-                        mCalendarFragment.refreshView()
+                        refreshCalendar(year, month)
                     }
                 }
 
@@ -199,10 +196,25 @@ class CalendarActivity : EasyDiaryActivity() {
         }
     }
 
+    private suspend fun refreshCalendar(year: Int, month: Int) {
+        if (year != 0 && month != 0) {
+            mCalendarFragment.extraData += (
+                    "dateStringMap" to
+                            diaryViewModel.getDateStringMap(
+                                month,
+                                year,
+                            )
+                    )
+            mCalendarFragment.refreshView()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         refreshList()
-        mCalendarFragment.refreshView()
+        lifecycleScope.launch {
+            refreshCalendar(selectedYear, selectedMonth)
+        }
     }
 
     /**
