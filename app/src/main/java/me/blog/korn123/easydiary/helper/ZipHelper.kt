@@ -225,12 +225,20 @@ class ZipHelper(
         try {
             val zipInputStream = ZipInputStream(uriStream)
             var zipEntry: ZipEntry? = zipInputStream.nextEntry
-            val workingPath = EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
+            val workingDirectory = File(EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY).canonicalFile
+            val workingDirectoryPrefix = if (workingDirectory.path.endsWith(File.separator)) workingDirectory.path else workingDirectory.path + File.separator
             var index = 0
             while (zipEntry != null) {
                 if (!isOnProgress) break
                 val fileName = zipEntry.name
-                val newFile = File(workingPath + fileName)
+                if (File(fileName).isAbsolute) {
+                    throw IOException("ZIP entry has an absolute path: $fileName")
+                }
+
+                val newFile = File(workingDirectory, fileName).canonicalFile
+                if (!newFile.path.startsWith(workingDirectoryPrefix)) {
+                    throw IOException("ZIP entry escapes the working directory: $fileName")
+                }
 
                 File(newFile.parent).mkdirs()
                 val fileOutputStream = FileOutputStream(newFile)
@@ -257,7 +265,6 @@ class ZipHelper(
             e.printStackTrace()
         }
     }
-
     fun decompress(
         zipFileName: String,
         compressDirectoryName: String,
