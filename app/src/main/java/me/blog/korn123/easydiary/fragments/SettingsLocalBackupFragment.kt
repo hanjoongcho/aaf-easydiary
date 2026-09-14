@@ -30,8 +30,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
@@ -41,12 +44,22 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
+import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
+import me.blog.korn123.easydiary.domain.model.ActionLog
+import me.blog.korn123.easydiary.domain.model.Alarm
+import me.blog.korn123.easydiary.domain.model.DDay
+import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.enums.ExportOption
+import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
+import me.blog.korn123.easydiary.extensions.dDayRepository
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.exportRealmFile
 import me.blog.korn123.easydiary.extensions.getUriForFile
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -74,11 +87,14 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPOR
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ROOM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ZIP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_REALM
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ROOM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_XLS
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
 import me.blog.korn123.easydiary.helper.RealmConstants
+import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.ui.components.SimpleCard
@@ -97,6 +113,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.Date
+import kotlin.collections.set
 
 @AndroidEntryPoint
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
@@ -122,6 +139,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         when (mTaskFlag) {
                             REQUEST_CODE_SAF_READ_ZIP -> importFullBackupFile(it.data!!.data)
                             REQUEST_CODE_SAF_READ_REALM -> importRealmFileWithSAF(it.data!!.data)
+                            REQUEST_CODE_SAF_READ_ROOM -> lifecycleScope.launch { importRoomDataWithSAF(it.data!!.data) }
                         }
                     }
                 }
@@ -136,6 +154,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             REQUEST_CODE_SAF_WRITE_ZIP -> exportFullBackupFile(it.data!!.data)
                             REQUEST_CODE_SAF_WRITE_XLS -> exportExcel(it.data!!.data)
                             REQUEST_CODE_SAF_WRITE_REALM -> exportRealmFileWithSAF(it.data!!.data)
+                            REQUEST_CODE_SAF_WRITE_ROOM -> lifecycleScope.launch { exportRoomDataWithSAF(it.data!!.data) }
                         }
                     }
                 }
@@ -351,6 +370,111 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             os?.close()
             `is`.close()
             requireActivity().makeSnackBar("Operation completed.")
+        }
+    }
+
+    private suspend fun exportRoomDataWithSAF(uri: Uri?) {
+        uri?.let {
+            requireActivity().run {
+                val mapOfItems: MutableMap<String, Any> = mutableMapOf()
+                mapOfItems["META"] = EasyDiaryUtils.getExportMeta()
+                mapOfItems["ACTION_LOG"] = actionLogRepository.getAllActionLogs()
+                mapOfItems["ALARM"] = alarmRepository.getAllAlarms()
+                mapOfItems["D_DAY"] = dDayRepository.getAllDDays()
+                mapOfItems["DIARY"] = diaryRepository.getDiariesWithPhotos()
+
+                withContext(Dispatchers.IO) {
+                    val jsonString =
+                        GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
+                    contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        java.util.zip.ZipOutputStream(outputStream).use { zos ->
+                            val entryName = "easy_diary_all.json"
+                            val entry = java.util.zip.ZipEntry(entryName)
+                            zos.putNextEntry(entry)
+                            zos.write(jsonString.toByteArray(Charsets.UTF_8))
+                            zos.closeEntry()
+                        }
+                    }
+                }
+            }
+            requireActivity().makeSnackBar("Operation completed.")
+        }
+    }
+
+    private suspend fun importRoomDataWithSAF(uri: Uri?) {
+        uri?.let {
+            try {
+                withContext(Dispatchers.IO) {
+                    requireActivity().contentResolver.openInputStream(uri)?.use { inputStream ->
+                        java.util.zip.ZipInputStream(inputStream).use { zis ->
+                            var entry = zis.nextEntry
+                            while (entry != null) {
+                                if (entry.name == "easy_diary_all.json") {
+                                    // 1. Read JSON string
+                                    val jsonString = zis.bufferedReader().readText()
+
+                                    // 2. Convert to Map using Gson
+                                    // Use TypeToken to preserve data types.
+                                    val type = object : com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
+                                    val dataMap: Map<String, Any> = Gson().fromJson(jsonString, type)
+
+                                    // 3. Convert each data to domain model list and save to DB
+                                    // Note: When Gson converts numbers to Double or uses a generic map,
+                                    // type casting errors may occur, so a process of converting to the exact model class is required.
+                                    val gson = Gson()
+
+                                    requireContext().run {
+                                        // Save ActionLog
+                                        dataMap["ACTION_LOG"]?.let { it ->
+                                            val json = gson.toJson(it)
+                                            val list: List<ActionLog> = gson.fromJson(json, object : com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type)
+                                            actionLogRepository.deleteAllActionLogs(true)
+                                            list.forEach { actionLog -> actionLogRepository.insertActionLog(actionLog) }
+                                        }
+
+                                        // Save Alarm
+                                        dataMap["ALARM"]?.let {
+                                            val json = gson.toJson(it)
+                                            val list: List<Alarm> = gson.fromJson(json, object : com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type)
+                                            alarmRepository.deleteAllAlarms()
+                                            list.forEach { alarm -> alarmRepository.insertAlarm(alarm) }
+                                        }
+
+                                        // Save D-Day
+                                        dataMap["D_DAY"]?.let {
+                                            val json = gson.toJson(it)
+                                            val list: List<DDay> = gson.fromJson(json, object : com.google.gson.reflect.TypeToken<List<DDay>>() {}.type)
+                                            dDayRepository.deleteAllDDays()
+                                            list.forEach { dDay -> dDayRepository.insertDDay(dDay) }
+                                        }
+
+                                        // Save Diary (including photos)
+                                        dataMap["DIARY"]?.let {
+                                            val json = gson.toJson(it)
+                                            val list: List<Diary> = gson.fromJson(json, object : com.google.gson.reflect.TypeToken<List<Diary>>() {}.type)
+                                            diaryRepository.deleteAllDiaries()
+                                            diaryRepository.insertAllDiaries(list)
+                                        }
+                                    }
+
+                                    break // Found the file, so terminate the loop
+                                }
+                                entry = zis.nextEntry
+                            }
+                        }
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    requireActivity().makeSnackBar("Import completed.")
+                    // UI update or Activity restart may be required for data renewal.
+                    requireActivity().refreshApp()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    requireActivity().makeSnackBar("Error: ${e.message}")
+                }
+            }
         }
     }
 
@@ -720,14 +844,20 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 modeExternal.setOnClickListener {
                     when (popupMode) {
                         SettingLocalConstants.MODE_BACKUP -> {
-                            setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
-                                EasyDiaryUtils.writeFileWithSAF(RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+//                            setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
+//                                EasyDiaryUtils.writeFileWithSAF(RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+//                            }
+                            setupLauncher(REQUEST_CODE_SAF_WRITE_ROOM) {
+                                EasyDiaryUtils.writeFileWithSAF(RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                             }
                         }
 
                         SettingLocalConstants.MODE_RECOVERY -> {
-                            setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
-                                EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
+//                            setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
+//                                EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
+//                            }
+                            setupLauncher(REQUEST_CODE_SAF_READ_ROOM) {
+                                EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
                             }
                         }
                     }

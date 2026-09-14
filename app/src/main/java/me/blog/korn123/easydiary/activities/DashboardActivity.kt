@@ -326,11 +326,6 @@ class DashboardActivity : EasyDiaryActivity() {
                 // Diary Update
                 mDailySymbolFragment.updateDailySymbol()
 
-                // FIXME:
-                // This is workaround.
-                // For pages that are invisible but have already been loaded, it will not be updated.
-                mDailySymbolFragment.mCalendarFragment.refreshViewOnlyCurrentPage()
-
                 if (isHighLightCallbackDone) hideProgressContainer()
             }
         }

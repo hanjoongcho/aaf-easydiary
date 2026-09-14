@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.data.repository
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -13,6 +14,7 @@ import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,6 +54,7 @@ class ActionLogRepositoryImpl
         }
 
         override suspend fun deleteAllActionLogs(excludeRealm: Boolean) {
+            Log.i(AAF_TEST, "deleteAllActionLogs excludeRealm: $excludeRealm")
             dataSource.deleteAllActionLogs()
 
             // FIXME: Remove legacy realm functions

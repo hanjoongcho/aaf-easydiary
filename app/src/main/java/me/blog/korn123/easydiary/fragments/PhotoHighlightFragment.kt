@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.gestures.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -14,6 +15,8 @@ import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -108,51 +111,69 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                             val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
                             val betweenDays = betweenMillis / oneDayMillis
 
-                            suspend fun makeHistory(
+                            // makeHistory를 suspend function에서 결과를 반환하는 일반 함수 형태로 생각하거나
+                            // 병렬 처리를 위해 deferred list를 사용합니다.
+                            val deferredHistories = mutableListOf<kotlinx.coroutines.Deferred<List<History>>>()
+
+                            suspend fun fetchHistoryForPeriod(
                                 pastMillis: Long,
                                 historyTag: String,
-                            ) {
+                            ): List<History> {
+                                val periodHistories = mutableListOf<History>()
                                 val defaultDayBuffer = 1
                                 val noDataDayBufferMaxLoop = 3
-                                val pastMillisBuffer = pastMillis.plus(defaultDayBuffer * oneDayMillis)
-                                var diaryItems = diaryViewModel.findDiary(null, false, pastMillis, pastMillisBuffer)
-                                if (diaryItems.isEmpty()) {
-                                    for (i in 1..noDataDayBufferMaxLoop) {
-                                        diaryItems = diaryViewModel.findDiary(null, false, pastMillis, pastMillisBuffer.plus(i * oneDayMillis))
-                                        if (diaryItems.isNotEmpty()) break
+
+                                // 처음부터 4일치 데이터를 한 번에 조회하여 반복 쿼리 방지 시도
+                                val maxBufferMillis = pastMillis.plus((defaultDayBuffer + noDataDayBufferMaxLoop) * oneDayMillis)
+                                val diaryItems = diaryViewModel.findDiary(null, false, pastMillis, maxBufferMillis)
+
+                                // 가져온 데이터 중 가장 이른 날짜(또는 기준일에 가장 가까운 날짜)의 데이터만 추출
+                                if (diaryItems.isNotEmpty()) {
+                                    val targetDate = diaryItems.first().currentTimeMillis // findDiary 정렬 기준에 따라 조정 필요
+                                    diaryItems.filter { it.currentTimeMillis <= targetDate + oneDayMillis }.forEach { diary ->
+                                        diary.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
+                                            periodHistories.add(
+                                                History(
+                                                    historyTag,
+                                                    DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.FULL),
+                                                    if (diary.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
+                                                    diary.diaryId,
+                                                ),
+                                            )
+                                        }
                                     }
                                 }
-                                diaryItems.forEach {
-                                    it.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
-                                        historyItems.add(
-                                            History(
-                                                historyTag,
-                                                DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
-                                                if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
-                                                it.diaryId,
-                                            ),
-                                        )
-                                    }
-                                }
+                                return periodHistories
                             }
 
-                            // 1 month history of less than 1 year
+                            // 월간 하이라이트 작업 예약
                             for (i in 1..11) {
                                 val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
                                 if (oldestDiary.currentTimeMillis < pastMills) {
-                                    makeHistory(
-                                        pastMills,
-                                        MessageFormat.format(getString(R.string.monthly_highlight_tag), i),
+                                    deferredHistories.add(
+                                        async {
+                                            fetchHistoryForPeriod(pastMills, MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
+                                        },
                                     )
                                 }
                             }
 
-                            // 1 year history of more than 1 year
+                            // 연간 하이라이트 작업 예약
                             if (betweenDays > oneYearDays) {
                                 for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                                    makeHistory(EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus()), MessageFormat.format(getString(R.string.yearly_highlight_tag), i))
+                                    val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus())
+                                    deferredHistories.add(
+                                        async {
+                                            fetchHistoryForPeriod(pastMills, MessageFormat.format(getString(R.string.yearly_highlight_tag), i))
+                                        },
+                                    )
                                 }
                             }
+
+                            // 모든 작업이 완료될 때까지 기다린 후 결과 합치기
+                            val results = deferredHistories.awaitAll()
+                            results.forEach { historyItems.addAll(it) }
+
                             historyItems.reverse()
 
                             if (historyItems.isNotEmpty()) {

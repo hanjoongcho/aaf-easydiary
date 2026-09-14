@@ -122,7 +122,7 @@ class BaseDevViewModel
 
         fun deleteAllActionLogs() {
             viewModelScope.launch {
-                actionLogRepository.deleteAllActionLogs()
+                actionLogRepository.deleteAllActionLogs(true)
             }
         }
 

@@ -454,8 +454,9 @@ const val REQUEST_CODE_SAF_WRITE_XLS = 41
 const val REQUEST_CODE_SAF_WRITE_REALM = 42
 const val REQUEST_CODE_SAF_READ_ZIP = 43
 const val REQUEST_CODE_SAF_READ_REALM = 44
+const val REQUEST_CODE_SAF_WRITE_ROOM = 50
+const val REQUEST_CODE_SAF_READ_ROOM = 51
 // const val REQUEST_CODE_SAF_HTML_BOOK = 45
-
 // const val REQUEST_CODE_FONT_PICK = 103
 // const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
 
@@ -877,6 +878,10 @@ object GalleryConstants {
 object RealmConstants {
     const val DIARY_DB_NAME = "diary.realm"
     const val SCHEMA_VERSION = 24L
+}
+
+object RoomConstants {
+    const val DIARY_DB_NAME = "easy_diary.db"
 }
 
 object AuthManager {

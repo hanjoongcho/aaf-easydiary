@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.domain.model.Diary
 
@@ -14,7 +15,7 @@ interface DiaryRepository {
         checkFutureDiaryOption: Boolean = false,
     ): Flow<List<Diary>>
 
-    fun getDiariesWithPhotos(
+    fun getDiariesWithPhotosFlow(
         query: String? = null,
         isSensitive: Boolean = false,
         startTimeMillis: Long = 0,
@@ -22,14 +23,27 @@ interface DiaryRepository {
         symbolSequence: Int = 0,
     ): Flow<List<Diary>>
 
+    suspend fun getDiariesWithPhotos(
+        query: String? = null,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+    ): List<Diary>
+
     fun getDiaryWithPhotosById(id: Int): Flow<Diary?>
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
 
-    fun getDiariesWithPhotosByDateString(
+    suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean = false,
-    ): Flow<List<Diary>>
+    ): List<Diary>
+
+    suspend fun getDiariesByDateRange(
+        startDate: String,
+        endDate: String,
+    ): List<Diary>
 
     suspend fun getDiaryById(seq: Int): Diary?
 
@@ -41,7 +55,7 @@ interface DiaryRepository {
 
     suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int)
 
-    suspend fun addAllDiaries(diaries: List<Diary>)
+    suspend fun insertAllDiaries(diaries: List<Diary>)
 
     suspend fun updateDiaryWithPhotos(diary: Diary)
 

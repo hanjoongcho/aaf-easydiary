@@ -172,7 +172,6 @@ class DiaryMainWidgetFactory(
                         DiaryRepositoryEntryPoint::class.java,
                     ).diaryRepository()
                     .getDiariesWithPhotos(null)
-                    .first()
             val limit = if (realmList.size > 100) 100 else realmList.size
             diaryItems.addAll(realmList.subList(0, limit))
         }

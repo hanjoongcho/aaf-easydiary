@@ -52,7 +52,7 @@ class DDayRepositoryImpl
         }
 
         override suspend fun updateDDay(dDay: DDay) {
-            val nextId = if (dDay.id > 0) (this.getAllDDays().maxOfOrNull { it.id } ?: 0) + 1 else 1
+            val nextId = if (dDay.id == 0) (this.getAllDDays().maxOfOrNull { it.id } ?: 0) + 1 else dDay.id
             val entity = dDay.toEntity()
             dataSource.updateDDay(entity.copy(id = nextId))
 

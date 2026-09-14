@@ -21,22 +21,49 @@ class DiaryLocalDataSourceImpl
             symbolSequence: Int,
         ): Flow<List<DiaryEntity>> = diaryDao.getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
 
-        override fun getDiariesWithPhotos(
+        override fun getDiariesWithPhotosFlow(
             query: String?,
             isSensitive: Boolean,
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
-        ): Flow<List<DiaryWithPhotos>> = diaryDao.getDiariesWithPhotos(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
+        ): Flow<List<DiaryWithPhotos>> =
+            diaryDao.getDiariesWithPhotosFlow(
+                query,
+                isSensitive,
+                startTimeMillis,
+                endTimeMillis,
+                symbolSequence,
+            )
+
+        override suspend fun getDiariesWithPhotos(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): List<DiaryWithPhotos> =
+            diaryDao.getDiariesWithPhotos(
+                query,
+                isSensitive,
+                startTimeMillis,
+                endTimeMillis,
+                symbolSequence,
+            )
 
         override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosById(id)
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosByPhotoUri(photoUriString)
 
-        override fun getDiariesWithPhotosByDateString(
+        override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,
-        ): Flow<List<DiaryWithPhotos>> = diaryDao.getDiariesWithPhotosByDateString(dateString, isAsc)
+        ): List<DiaryEntity> = diaryDao.getDiariesByDateString(dateString, isAsc)
+
+        override suspend fun getDiariesByDateRange(
+            startDate: String,
+            endDate: String,
+        ): List<DiaryEntity> = diaryDao.getDiariesByDateRange(startDate, endDate)
 
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = diaryDao.getDiaryById(seq)
 

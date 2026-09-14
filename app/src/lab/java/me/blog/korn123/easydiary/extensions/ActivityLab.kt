@@ -106,7 +106,7 @@ suspend fun ComponentActivity.pushMarkDown(
 }
 
 suspend fun ComponentActivity.getToken(): String? {
-    val result = diaryRepository.getDiariesWithPhotos("GitHub Personal Access Token").first()
+    val result = diaryRepository.getDiariesWithPhotos("GitHub Personal Access Token")
     return if (result.size == 1) result[0].contents else null
 }
 
@@ -171,7 +171,7 @@ fun ComponentActivity.syncMarkDown(
                                     }
                                 }
 
-                            val items = diaryRepository.getDiariesWithPhotos(title).first()
+                            val items = diaryRepository.getDiariesWithPhotos(title)
 
                             fun getUpdateDate(body: String): String {
                                 val regex = Regex("""UPDATE:\s(\d{4}-\d{2}-\d{2})""")

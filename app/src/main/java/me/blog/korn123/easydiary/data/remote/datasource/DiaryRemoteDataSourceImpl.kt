@@ -19,7 +19,7 @@ class DiaryRemoteDataSourceImpl
             symbolSequence: Int,
         ): Flow<List<DiaryEntity>> = flowOf(emptyList())
 
-        override fun getDiariesWithPhotos(
+        override fun getDiariesWithPhotosFlow(
             query: String?,
             isSensitive: Boolean,
             startTimeMillis: Long,
@@ -27,14 +27,27 @@ class DiaryRemoteDataSourceImpl
             symbolSequence: Int,
         ): Flow<List<DiaryWithPhotos>> = flowOf(emptyList())
 
+        override suspend fun getDiariesWithPhotos(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): List<DiaryWithPhotos> = emptyList()
+
         override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = flowOf(null)
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = flowOf(null)
 
-        override fun getDiariesWithPhotosByDateString(
+        override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,
-        ): Flow<List<DiaryWithPhotos>> = flowOf(emptyList())
+        ): List<DiaryEntity> = emptyList()
+
+        override suspend fun getDiariesByDateRange(
+            startDate: String,
+            endDate: String,
+        ): List<DiaryEntity> = emptyList()
 
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = null
 

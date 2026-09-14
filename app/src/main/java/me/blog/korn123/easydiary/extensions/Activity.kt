@@ -577,7 +577,7 @@ suspend fun Activity.syncCustomSymbolPaths() {
                 .getDiariesWithPhotos(
                     query = null,
                     symbolSequence = SYMBOL_EASTER_EGG,
-                ).firstOrNull()
+                )
         } else {
             EasyDiaryDbHelper.findDiary(
                 query = null,
@@ -585,7 +585,7 @@ suspend fun Activity.syncCustomSymbolPaths() {
             )
         }
 
-    val diary = if (items != null && items.isNotEmpty()) items[0] else null
+    val diary = if (items.isNotEmpty()) items[0] else null
     val result = diary?.photoUris?.map { it } ?: listOf()
     config.customSymbolPaths = result
 }

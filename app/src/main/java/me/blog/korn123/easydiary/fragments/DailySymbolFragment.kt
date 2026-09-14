@@ -54,6 +54,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Formatter
 import java.util.Locale
+import kotlin.toString
 
 @AndroidEntryPoint
 class DailySymbolFragment : Fragment() {
@@ -242,6 +243,7 @@ class DailySymbolFragment : Fragment() {
         year: Int,
         month: Int,
     ) {
+        Log.i(AAF_TEST, "refreshCalendar year: $year, month: $month")
         if (year != 0 && month != 0) {
             mCalendarFragment.extraData += (
                 "dateStringMap" to
