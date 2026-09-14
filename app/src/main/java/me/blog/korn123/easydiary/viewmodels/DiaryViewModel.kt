@@ -49,38 +49,8 @@ class DiaryViewModel
         var isLoading by mutableStateOf(false)
         var loadingMessage by mutableStateOf<String?>(null)
 
-        val allDiaries: StateFlow<List<Diary>> =
-            diaryRepository
-                .getAllDiaries()
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000),
-                    initialValue = emptyList(),
-                )
-
-        val diaryCount: StateFlow<Int> =
-            allDiaries
-                .map { it.size }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000),
-                    initialValue = 0,
-                )
-
-        fun addDiary(diary: Diary) {
-            viewModelScope.launch {
-                diaryRepository.insertDiary(diary)
-            }
-        }
-
         suspend fun addAllDiaries(diaries: List<Diary>) {
-            diaryRepository.addAllDiaries(diaries)
-        }
-
-        fun deleteDiary(diary: Diary) {
-            viewModelScope.launch {
-                diaryRepository.deleteDiary(diary)
-            }
+            diaryRepository.insertAllDiaries(diaries)
         }
 
         fun deleteAllDiaries() {
@@ -88,18 +58,6 @@ class DiaryViewModel
                 diaryRepository.deleteAllDiaries()
             }
         }
-
-        suspend fun getLatestDiary(): Diary? =
-            diaryRepository
-                .getAllDiaries()
-                .first()
-                .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
-
-        suspend fun getLatestDiaryWithPhotos(): Diary? =
-            diaryRepository
-                .getDiariesWithPhotos()
-                .first()
-                .firstOrNull { diary -> diary.photoUris.isNotEmpty() }
 
         suspend fun getPhotoUriCount(): Int = diaryRepository.getPhotoUris().first().size
 
@@ -151,7 +109,7 @@ class DiaryViewModel
             findDiaryParams
                 .flatMapLatest { params ->
                     diaryRepository
-                        .getDiariesWithPhotos(
+                        .getDiariesWithPhotosFlow(
                             query = params.query,
                             isSensitive = params.isSensitive,
                             startTimeMillis = params.startTimeMillis,
@@ -193,7 +151,7 @@ class DiaryViewModel
                             startTimeMillis = startTimeMillis,
                             endTimeMillis = endTimeMillis,
                             symbolSequence = symbolSequence,
-                        ).first()
+                        )
 
                 resolveDiaryFilter(
                     results,
@@ -241,8 +199,7 @@ class DiaryViewModel
                 diaryRepository
                     .getDiariesWithPhotos(
                         query = null,
-                    ).first()
-                    .minByOrNull { it.currentTimeMillis }
+                    ).minByOrNull { it.currentTimeMillis }
             } else {
                 EasyDiaryDbHelper.findOldestDiary()
             }
@@ -271,8 +228,7 @@ class DiaryViewModel
         ): List<Diary> =
             if (application.config.enableJetpackRoomDatabase) {
                 diaryRepository
-                    .getDiariesWithPhotosByDateString(dateString, sort == Sort.ASCENDING)
-                    .first()
+                    .getDiariesByDateString(dateString, sort == Sort.ASCENDING)
             } else {
                 EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
                     EasyDiaryDbHelper.findDiaryByDateString(dateString, sort, realm)
@@ -407,7 +363,7 @@ class DiaryViewModel
 
                 val diaryMap =
                     if (application.config.enableJetpackRoomDatabase) {
-                        val allDiariesWithPhotos = diaryRepository.getDiariesWithPhotos().first()
+                        val allDiariesWithPhotos = diaryRepository.getDiariesWithPhotos()
                         val map = mutableMapOf<String, Diary>()
                         allDiariesWithPhotos.forEach { diary ->
                             diary.photoUris.forEach { photo ->
@@ -459,22 +415,37 @@ class DiaryViewModel
             // 3. 기준 월의 시작일 + 7주(49일)
             val endDate = startOfMonth.plusWeeks(7)
 
-            // 4. 시작일부터 종료일까지 1일씩 증가시키며 YYYY-MM-DD 형식으로 리스트 생성
-            val dateList = mutableListOf<String>()
-            var currentDate = startDate
+            val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
 
+            val allDiariesInRange = if (application.config.enableJetpackRoomDatabase) {
+                diaryRepository.getDiariesByDateRange(startDate.toString(), endDate.toString())
+            } else {
+                // Realm legacy: fetch one by one as before to keep compatibility
+                val sort = if (sortAsc) Sort.ASCENDING else Sort.DESCENDING
+                val dateList = mutableListOf<String>()
+                var current = startDate
+                while (!current.isAfter(endDate)) {
+                    dateList.add(current.toString())
+                    current = current.plusDays(1)
+                }
+                return dateList.associateWith { findDiaryByDateString(it, sort) }
+            }
+
+            // Grouping for Room
+            val groupedMap = if (sortAsc) {
+                allDiariesInRange.sortedBy { it.currentTimeMillis }
+            } else {
+                allDiariesInRange.sortedByDescending { it.currentTimeMillis }
+            }.groupBy { it.dateString ?: "" }
+
+            val resultMap = mutableMapOf<String, List<Diary>>()
+            var currentDate = startDate
             while (!currentDate.isAfter(endDate)) {
-                dateList.add(currentDate.toString()) // LocalDate.toString()은 기본적으로 "YYYY-MM-DD" 반환
+                val dateStr = currentDate.toString()
+                resultMap[dateStr] = groupedMap[dateStr] ?: emptyList()
                 currentDate = currentDate.plusDays(1)
             }
-
-            val dateStringMap = mutableMapOf<String, List<Diary>>()
-            val sort: Sort =
-                if (application.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
-            dateList.forEach {
-                dateStringMap[it] = findDiaryByDateString(it, sort)
-            }
-            return dateStringMap
+            return resultMap
         }
 
         /***************************************************************************************************
@@ -489,30 +460,7 @@ class DiaryViewModel
             checkFutureDiaryOption: Boolean = false,
         ): List<Diary> {
             // apply date filter & sorting (sync with EasyDiaryDbHelper)
-            var results =
-                when {
-                    startTimeMillis > 0 && endTimeMillis > 0 -> {
-                        diaries
-                            .filter { it.currentTimeMillis in startTimeMillis..endTimeMillis }
-                            .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-                    }
-
-                    startTimeMillis > 0 -> {
-                        diaries
-                            .filter { it.currentTimeMillis >= startTimeMillis }
-                            .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-                    }
-
-                    endTimeMillis > 0 -> {
-                        diaries
-                            .filter { it.currentTimeMillis <= endTimeMillis }
-                            .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-                    }
-
-                    else -> {
-                        diaries.sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-                    }
-                }
+            var results = diaries
 
             // apply future diary filter
             if (checkFutureDiaryOption && getApplication<Application>().config.disableFutureDiary) {
@@ -520,11 +468,6 @@ class DiaryViewModel
                     results
                         .filter { it.currentTimeMillis <= System.currentTimeMillis() }
                         .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-            }
-
-            // apply feeling symbol filter
-            if (symbolSequence != 0 && symbolSequence != SYMBOL_SELECT_ALL) {
-                results = results.filter { it.symbolSequence == symbolSequence }
             }
 
             // apply temporary diary filter (originDiaryId == 0 is normal diary)

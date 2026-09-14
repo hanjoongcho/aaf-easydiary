@@ -213,24 +213,23 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.ACTION_LOG -> {
                                 mutableMapOf(
                                     "ACTION_LOG" to
-                                        EasyDiaryDbHelper.findAllActionLogs(),
+                                        actionLogRepository.getAllActionLogs(),
                                 )
                             }
 
                             ExportOption.ALARM -> {
-                                mutableMapOf("ALARM" to EasyDiaryDbHelper.findAlarmAll())
+                                mutableMapOf("ALARM" to alarmRepository.getAllAlarms())
                             }
 
                             ExportOption.D_DAY -> {
-                                val dDays = EasyDiaryDbHelper.findDDayAll()
                                 mutableMapOf(
                                     "D_DAY" to
-                                        EasyDiaryDbHelper.findDDayAll(),
+                                        dDayRepository.getAllDDays(),
                                 )
                             }
 
                             ExportOption.DIARY -> {
-                                mutableMapOf("DIARY" to diaryViewModel.findDiary(query = null))
+                                mutableMapOf("DIARY" to diaryRepository.getAllDiaries())
                             }
 
                             ExportOption.PHOTO_URI -> {
@@ -245,12 +244,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.ALL -> {
                                 // TODO: ACTION_LOG, ALARM, D_DAY, DIARY, PHOTO_URI 데이터 셋을 json으로 생성 후 zip로 export
                                 val map = mutableMapOf<String, Any>()
-                                map["ACTION_LOG"] = EasyDiaryDbHelper.findAllActionLogs()
-                                map["ALARM"] = EasyDiaryDbHelper.findAlarmAll()
-                                map["D_DAY"] = EasyDiaryDbHelper.findDDayAll()
-                                map["DIARY"] = diaryViewModel.findDiary(query = null)
-                                map["PHOTO_URI"] =
-                                    EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
+                                map["ACTION_LOG"] = actionLogRepository.getAllActionLogs()
+                                map["ALARM"] = alarmRepository.getAllAlarms()
+                                map["D_DAY"] = dDayRepository.getAllDDays()
+                                map["DIARY"] = diaryRepository.getAllDiaries()
                                 map
                             }
                         }
@@ -404,7 +401,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     actionLogs,
                 ) {
                     lifecycleScope.launch {
-                        actionLogRepository.deleteAllActionLogs(true)
+                        actionLogRepository.deleteAllActionLogs()
                     }
                 }
             }
@@ -706,7 +703,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmDiaries.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff diary: ${if (realmDiaries.size == ok) "Success" else "Fail" }")
+                    updateConsole("======== 👀 end diff diary: ${if (realmDiaries.size == ok) "⭕ Success" else "❌ Fail" }\n")
 
                     // diff action-log
                     val realmActionLogs = EasyDiaryDbHelper.findAllActionLogs()
@@ -718,7 +715,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmActionLogs.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff acgion-logs: ${if (realmActionLogs.size == ok) "Success" else "Fail" }")
+                    updateConsole("======== 👀 end diff acgion-logs: ${if (realmActionLogs.size == ok) "⭕ Success" else "❌ Fail" }\n")
 
                     // diff alarm
                     val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
@@ -730,7 +727,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmAlarms.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff alarms: ${if (realmAlarms.size == ok) "Success" else "Fail" }")
+                    updateConsole("======== 👀 end diff alarms: ${if (realmAlarms.size == ok) "⭕ Success" else "❌ Fail" }\n")
 
                     // diff photoUri
                     val realmPhotoUris = EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
@@ -744,7 +741,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmPhotoUris.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff photoUris: ${if (realmPhotoUris.size == ok) "Success" else "Fail" }")
+                    updateConsole("======== 👀 end diff photoUris: ${if (realmPhotoUris.size == ok) "⭕ Success" else "❌ Fail" }\n")
 
                     // diff d-day
                     val realmDDays = EasyDiaryDbHelper.findDDayAll()
@@ -756,7 +753,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     updateConsole("OK: $ok")
                     updateConsole("NG: ${realmDDays.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff d-days: ${if (realmDDays.size == ok) "Success" else "Fail" }")
+                    updateConsole("======== 👀 end diff d-days: ${if (realmDDays.size == ok) "⭕ Success" else "❌ Fail" }\n")
 
                     mBaseDevViewModel.isLoading = false
                 }

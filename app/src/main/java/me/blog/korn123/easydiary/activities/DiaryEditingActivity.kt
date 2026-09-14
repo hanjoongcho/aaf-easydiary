@@ -41,18 +41,20 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
         }
 //        mCustomLineSpacing = false
 
-        addTextWatcher()
-        setupRecognizer()
+        lifecycleScope.launch {
+            addTextWatcher()
+            setupRecognizer()
 //        setupSpinner()
-        initData()
-        initDateTime()
-        setupDialog()
-        setupPhotoView()
-        setDateTime()
-        bindEvent()
-        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
-        initBottomToolbar()
-        toggleSimpleLayout()
+            initData()
+            initDateTime()
+            setupDialog()
+            setupPhotoView()
+            setDateTime()
+            bindEvent()
+            savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
+            initBottomToolbar()
+            toggleSimpleLayout()
+        }
     }
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
@@ -77,15 +79,13 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun initData() {
+    private suspend fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        lifecycleScope.launch {
-            diaryViewModel.findDiaryById(mSequence)?.let {
-                mSymbolSequence = it.symbolSequence
-                mLinkedDiaries = it.linkedDiaries
-                initData(it)
-            }
+        diaryViewModel.findDiaryById(mSequence)?.let {
+            mSymbolSequence = it.symbolSequence
+            mLinkedDiaries = it.linkedDiaries
+            initData(it)
         }
     }
 

@@ -88,7 +88,6 @@ class DDayFragment : Fragment() {
                 updateDDayList(mDDaySortOrder)
             }
         }
-        updateDDayList(mDDaySortOrder)
     }
 
     override fun onResume() {

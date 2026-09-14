@@ -15,7 +15,7 @@ interface DiaryDataSource {
         symbolSequence: Int = 0,
     ): Flow<List<DiaryEntity>>
 
-    fun getDiariesWithPhotos(
+    fun getDiariesWithPhotosFlow(
         query: String? = null,
         isSensitive: Boolean = false,
         startTimeMillis: Long = 0,
@@ -23,14 +23,27 @@ interface DiaryDataSource {
         symbolSequence: Int = 0,
     ): Flow<List<DiaryWithPhotos>>
 
+    suspend fun getDiariesWithPhotos(
+        query: String? = null,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+    ): List<DiaryWithPhotos>
+
     fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?>
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
 
-    fun getDiariesWithPhotosByDateString(
+    suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean,
-    ): Flow<List<DiaryWithPhotos>>
+    ): List<DiaryEntity>
+
+    suspend fun getDiariesByDateRange(
+        startDate: String,
+        endDate: String,
+    ): List<DiaryEntity>
 
     suspend fun getDiaryById(seq: Int): DiaryEntity?
 

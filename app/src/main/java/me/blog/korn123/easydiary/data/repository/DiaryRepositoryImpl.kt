@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.data.repository
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.datasource.LocalDataSource
@@ -28,7 +29,7 @@ class DiaryRepositoryImpl
         @RemoteDataSource private val remoteDataSource: DiaryDataSource,
     ) : DiaryRepository {
         private val dataSource: DiaryDataSource
-//            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
+            //            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
             // FIXME: Remove temporary code when migrate to Jetpack Room
             get() = localDataSource
 
@@ -40,32 +41,62 @@ class DiaryRepositoryImpl
             symbolSequence: Int,
             checkFutureDiaryOption: Boolean,
         ): Flow<List<Diary>> =
-            dataSource.getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence).map { entities ->
-                entities.map { it.toDomain() }
-            }
+            dataSource
+                .getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
+                .map { entities ->
+                    entities.map { it.toDomain() }
+                }
 
-        override fun getDiariesWithPhotos(
+        override fun getDiariesWithPhotosFlow(
             query: String?,
             isSensitive: Boolean,
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
         ): Flow<List<Diary>> =
-            dataSource.getDiariesWithPhotos(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence).map { entities ->
-                entities.map { it.toDomain() }
-            }
+            dataSource
+                .getDiariesWithPhotosFlow(
+                    query,
+                    isSensitive,
+                    startTimeMillis,
+                    endTimeMillis,
+                    symbolSequence,
+                ).map { entities ->
+                    entities.map { it.toDomain() }
+                }
+
+        override suspend fun getDiariesWithPhotos(
+            query: String?,
+            isSensitive: Boolean,
+            startTimeMillis: Long,
+            endTimeMillis: Long,
+            symbolSequence: Int,
+        ): List<Diary> =
+            dataSource
+                .getDiariesWithPhotos(
+                    query,
+                    isSensitive,
+                    startTimeMillis,
+                    endTimeMillis,
+                    symbolSequence,
+                ).map { it.toDomain() }
 
         override fun getDiaryWithPhotosById(id: Int): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> = dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
 
-        override fun getDiariesWithPhotosByDateString(
+        override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,
-        ): Flow<List<Diary>> =
-            dataSource.getDiariesWithPhotosByDateString(dateString, isAsc).map { entities ->
-                entities.map { it.toDomain() }
+        ): List<Diary> =
+            dataSource.getDiariesByDateString(dateString, isAsc).map {
+                it.toDomain()
             }
+
+        override suspend fun getDiariesByDateRange(
+            startDate: String,
+            endDate: String,
+        ): List<Diary> = dataSource.getDiariesByDateRange(startDate, endDate).map { it.toDomain() }
 
         override suspend fun getDiaryById(seq: Int): Diary? = dataSource.getDiaryById(seq)?.toDomain()
 
@@ -105,7 +136,7 @@ class DiaryRepositoryImpl
             EasyDiaryDbHelper.deleteTemporaryDiaryBy(originDiaryId)
         }
 
-        override suspend fun addAllDiaries(diaries: List<Diary>) {
+        override suspend fun insertAllDiaries(diaries: List<Diary>) {
             val diariesWithPhotos =
                 diaries.map { diary ->
                     val diaryEntity = diary.toEntity()
@@ -126,6 +157,7 @@ class DiaryRepositoryImpl
 
             // FIXME: Remove legacy realm functions
             EasyDiaryDbHelper.updateDiaryBy(diary)
+            EasyDiaryDbHelper.clearOrphanPhotoUris()
         }
 
         override suspend fun deleteDiary(diary: Diary) {

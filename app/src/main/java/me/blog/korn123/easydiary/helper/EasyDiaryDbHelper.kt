@@ -540,16 +540,19 @@ object EasyDiaryDbHelper {
 
     @Deprecated(message = "Use DDayRepository.findDDayAll() instead")
     fun findDDayAll(sortOrder: Sort = Sort.ASCENDING): List<DDayDomain> =
-        getInstance()
-            .where(DDay::class.java)
-            .findAll()
-            .sort("targetTimeStamp", sortOrder)
-            .map { it.toDomain() }
+        getTemporaryInstance().use { realm ->
+            realm.refresh()
+            realm
+                .where(DDay::class.java)
+                .findAll()
+                .sort("targetTimeStamp", sortOrder)
+                .map { it.toDomain() }
+        }
 
     @Deprecated(message = "Use DDayRepository.updateDDay() instead")
     fun updateDDay(dDay: DDayDomain) {
         getTemporaryInstance().use { realm ->
-            if (dDay.id == -1) {
+            if (dDay.id == 0) {
                 val sequence = realm.where(DDay::class.java).max("sequence") ?: 0
                 realm.executeTransaction {
                     it.insertOrUpdate(
@@ -568,10 +571,12 @@ object EasyDiaryDbHelper {
     @Deprecated(message = "Use DDayRepository.deleteDDay() instead")
     fun deleteDDayById(id: Int) {
         getTemporaryInstance().use { realm ->
-            realm.where(DDay::class.java).equalTo("sequence", id).findFirst()?.let {
-                realm.beginTransaction()
-                it.deleteFromRealm()
-                realm.commitTransaction()
+            realm.executeTransaction { realTransaction ->
+                realTransaction
+                    .where(DDay::class.java)
+                    .equalTo("sequence", id)
+                    .findFirst()
+                    ?.deleteFromRealm()
             }
         }
     }

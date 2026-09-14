@@ -53,7 +53,31 @@ interface DiaryDao {
         ORDER BY currentTimeMillis DESC
     """,
     )
-    fun getDiariesWithPhotos(
+    suspend fun getDiariesWithPhotos(
+        query: String? = null,
+        isSensitive: Boolean = false,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+    ): List<DiaryWithPhotos>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM diaries 
+        WHERE (:query IS NULL OR :query = '' OR 
+            CASE WHEN :isSensitive = 1 
+                 THEN (LOWER(title) LIKE '%' || LOWER(:query) || '%' OR LOWER(contents) LIKE '%' || LOWER(:query) || '%')
+                 ELSE (title LIKE '%' || :query || '%' OR contents LIKE '%' || :query || '%')
+            END
+        )
+        AND (:startTimeMillis = 0 OR currentTimeMillis >= :startTimeMillis)
+        AND (:endTimeMillis = 0 OR currentTimeMillis <= :endTimeMillis)
+        AND (:symbolSequence = 0 OR :symbolSequence = 9999 OR symbolSequence = :symbolSequence)
+        ORDER BY currentTimeMillis DESC
+    """,
+    )
+    fun getDiariesWithPhotosFlow(
         query: String? = null,
         isSensitive: Boolean = false,
         startTimeMillis: Long = 0,
@@ -153,7 +177,6 @@ interface DiaryDao {
     )
     fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
 
-    @Transaction
     @Query(
         """
         SELECT * FROM diaries 
@@ -163,10 +186,22 @@ interface DiaryDao {
             CASE WHEN :isAsc = 0 THEN currentTimeMillis END DESC
     """,
     )
-    fun getDiariesWithPhotosByDateString(
+    suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean,
-    ): Flow<List<DiaryWithPhotos>>
+    ): List<DiaryEntity>
+
+    @Query(
+        """
+        SELECT * FROM diaries 
+        WHERE originDiaryId = 0 AND dateString BETWEEN :startDate AND :endDate
+        ORDER BY currentTimeMillis DESC
+    """,
+    )
+    suspend fun getDiariesByDateRange(
+        startDate: String,
+        endDate: String,
+    ): List<DiaryEntity>
 
     @Query("UPDATE diaries SET isSelected = 0")
     suspend fun clearSelectedStatus()

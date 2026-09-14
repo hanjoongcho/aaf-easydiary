@@ -479,7 +479,6 @@ class GoogleAuthManager(
                     DiaryRepositoryEntryPoint::class.java,
                 ).diaryRepository()
                 .getDiariesWithPhotos(summary)
-                .first()
                 .any { diary -> diary.currentTimeMillis == millis }
 
         if (isAlreadyExists) return false
