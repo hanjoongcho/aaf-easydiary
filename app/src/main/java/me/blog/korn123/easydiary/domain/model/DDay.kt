@@ -8,7 +8,7 @@ import kotlin.math.abs
 
 data class DDay(
     val id: Int = 0,
-    var targetTimeStamp: Long = 0,
+    var targetTimeStamp: Long = System.currentTimeMillis(),
     var title: String,
 ) {
     fun getDayRemaining(
