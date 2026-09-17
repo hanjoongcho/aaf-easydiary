@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
@@ -316,11 +318,13 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun updateAlarmList() {
+        Log.i(AAF_TEST, "updateAlarmList")
         lifecycleScope.launch {
             mAlarmList.run {
                 clear()
                 addAll(alarmViewModel.findAllAlarms())
                 mBinding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+                Log.i(AAF_TEST, this.toString())
             }
             mAlarmAdapter.notifyDataSetChanged()
         }

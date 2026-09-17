@@ -12,8 +12,11 @@ interface ActionLogDao {
     @Query("SELECT * FROM action_logs ORDER BY id DESC")
     fun getAllActionLogs(): Flow<List<ActionLogEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertActionLog(actionLog: ActionLogEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllActionLog(actionLogs: List<ActionLogEntity>)
 
     @Query("DELETE FROM action_logs")
     suspend fun deleteAllActionLogs()

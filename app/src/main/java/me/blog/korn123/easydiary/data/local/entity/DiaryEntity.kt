@@ -2,10 +2,14 @@ package me.blog.korn123.easydiary.data.local.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 
-@Entity(tableName = "diaries")
+@Entity(
+    tableName = "diaries",
+    indices = [Index(value = ["currentTimeMillis"])]
+)
 data class DiaryEntity(
     @PrimaryKey(autoGenerate = true)
     var diaryId: Int = 0,

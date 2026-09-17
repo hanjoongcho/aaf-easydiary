@@ -6,5 +6,6 @@ import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 interface ActionLogDataSource {
     fun getAllActionLogs(): Flow<List<ActionLogEntity>>
     suspend fun insertActionLog(actionLog: ActionLogEntity)
+    suspend fun insertAllActionLog(actionLogs: List<ActionLogEntity>)
     suspend fun deleteAllActionLogs()
 }

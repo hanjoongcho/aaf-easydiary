@@ -12,7 +12,7 @@ import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 
 @Dao
 interface AlarmDao {
-    @Query("SELECT * FROM alarms ORDER BY alarmId DESC")
+    @Query("SELECT * FROM alarms ORDER BY alarmId ASC")
     fun getAllAlarms(): Flow<List<AlarmEntity>>
 
     @Query("SELECT * FROM alarms WHERE alarmId = :id")

@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
@@ -76,7 +77,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         super.onPause()
         lifecycleScope.launch {
             if (mIsDiarySaved) {
-                diaryViewModel.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                diaryRepository.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
             } else {
                 saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
             }
@@ -188,7 +189,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                             location = mLocation,
                         )
                     applyRemoveIndex()
-                    diaryViewModel.insertDiary(diary)
+                    diaryRepository.insertDiary(diary)
                     config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()

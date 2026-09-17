@@ -33,6 +33,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.preference.PreferenceManager
 import android.text.Spannable
@@ -455,7 +457,10 @@ fun Context.setupAlarmClock(
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
     val fullString = String.format("Time remaining till the alarm goes off: %s", formatMinutesToTimeString(totalMinutes))
-    toast(fullString, Toast.LENGTH_LONG)
+
+    CoroutineScope(Dispatchers.Main).launch {
+        toast(fullString, Toast.LENGTH_LONG)
+    }
 }
 
 fun Context.executeScheduledTask(alarm: AlarmDomain) {

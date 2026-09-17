@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
@@ -62,6 +63,7 @@ import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
@@ -142,7 +144,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         makeSnackBar("이미 연결된 항목 입니다.")
                                     } else {
                                         it.linkedDiaries.add(selectedValue)
-                                        diaryViewModel.updateDiary(it)
+                                        diaryRepository.updateDiaryWithPhotos(it)
                                         fragment.initContents()
                                     }
                                 }
@@ -157,7 +159,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         makeSnackBar("이미 연결된 항목 입니다.")
                                     } else {
                                         it.linkedDiaries.add(fragment.getSequence())
-                                        diaryViewModel.updateDiary(it)
+                                        diaryRepository.updateDiaryWithPhotos(it)
                                         fragment.initContents()
                                     }
                                 }
@@ -872,7 +874,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     val positiveListener =
                                         DialogInterface.OnClickListener { _, _ ->
                                             lifecycleScope.launch {
-                                                diaryViewModel.deleteDiaryById(fragment.getSequence())
+                                                diaryRepository.deleteDiaryById(fragment.getSequence())
                                                 TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
                                             }
                                         }
@@ -1050,7 +1052,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                                         linkedDiaries.addAll(
                                                                             newLinkedDiaries,
                                                                         )
-                                                                        diaryViewModel.updateDiary(this@run)
+                                                                        requireContext().diaryRepository.updateDiaryWithPhotos(this@run)
                                                                         initContents()
                                                                     }
                                                                 }
@@ -1104,7 +1106,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                                     linkedDiaries.addAll(
                                                                         newLinkedDiaries,
                                                                     )
-                                                                    diaryViewModel.updateDiary(
+                                                                    requireContext().diaryRepository.updateDiaryWithPhotos(
                                                                         this@run,
                                                                     )
                                                                     initContents()
@@ -1327,7 +1329,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             contents = JasyptUtils.encrypt(it.contents, inputPass),
                             encryptKeyHash = JasyptUtils.sha256(inputPass),
                         )
-                    diaryViewModel.updateDiary(diary)
+                    requireContext().diaryRepository.updateDiaryWithPhotos(diary)
                     initContents()
                 }
             }
@@ -1358,7 +1360,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 title = JasyptUtils.decrypt(it.title ?: "", inputPass),
                                 contents = JasyptUtils.decrypt(it.contents, inputPass),
                             )
-                        diaryViewModel.updateDiary(diary)
+                        requireContext().diaryRepository.updateDiaryWithPhotos(diary)
                         initContents()
                     } else {
                         result = false

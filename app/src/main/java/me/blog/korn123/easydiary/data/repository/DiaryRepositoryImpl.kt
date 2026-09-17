@@ -3,18 +3,15 @@ package me.blog.korn123.easydiary.data.repository
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.datasource.LocalDataSource
 import me.blog.korn123.easydiary.data.datasource.RemoteDataSource
-import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.mapper.toDomain
 import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
@@ -32,20 +29,6 @@ class DiaryRepositoryImpl
             //            get() = if (context.config.enableJetpackRoomDatabase) localDataSource else remoteDataSource
             // FIXME: Remove temporary code when migrate to Jetpack Room
             get() = localDataSource
-
-        override fun getAllDiaries(
-            query: String?,
-            isSensitive: Boolean,
-            startTimeMillis: Long,
-            endTimeMillis: Long,
-            symbolSequence: Int,
-            checkFutureDiaryOption: Boolean,
-        ): Flow<List<Diary>> =
-            dataSource
-                .getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
-                .map { entities ->
-                    entities.map { it.toDomain() }
-                }
 
         override fun getDiariesWithPhotosFlow(
             query: String?,
@@ -189,4 +172,6 @@ class DiaryRepositoryImpl
             dataSource.findParentDiariesOf(sequence).map { entities ->
                 entities.map { it.toDomain() }
             }
+
+        override suspend fun findOldestDiary(): Diary? = dataSource.findOldestDiary()
     }

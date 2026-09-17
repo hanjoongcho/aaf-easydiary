@@ -23,6 +23,7 @@ import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,11 +57,14 @@ import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
 import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
@@ -88,6 +92,7 @@ import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_WELCOME_DASHBOARD
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
 import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
@@ -109,10 +114,15 @@ import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
+import kotlin.getValue
+import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
+import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
+import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -126,6 +136,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private lateinit var mGridLayoutManager: GridLayoutManager
+    private val baseDevViewModel: BaseDevViewModel by viewModels()
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
     private var mShowcaseIndex = 1
@@ -158,7 +169,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 mBinding.progressCoroutine.visibility = View.GONE
                                 diaryDomains.forEach { diaryDomain ->
                                     diaryDomain.isSelected = false
-                                    diaryViewModel.updateDiary(diaryDomain)
+                                    diaryRepository.updateDiaryWithPhotos(diaryDomain)
                                 }
                                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
@@ -222,6 +233,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
             setupOnBackPressDispatcher()
+            migRealmToRoom()
 
             if (config.enableDebugMode) {
                 openOverDueNotification(
@@ -353,7 +365,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 { _, _ ->
                                     lifecycleScope.launch {
                                         forEach {
-                                            diaryViewModel.deleteDiaryById(it.diaryId)
+                                            diaryRepository.deleteDiaryById(it.diaryId)
                                         }
                                         refreshList()
                                     }
@@ -387,7 +399,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                         reversed().forEach {
                                             it.toRealm().also { realmDiary ->
                                                 realmDiary.isSelected = false
-                                                diaryViewModel.duplicateDiary(realmDiary.toDomain())
+                                                diaryRepository.duplicateDiary(realmDiary.toDomain())
                                             }
                                         }
                                         refreshList()
@@ -952,7 +964,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private suspend fun initSampleData() {
-        diaryViewModel.run {
+        diaryRepository.run {
             insertDiary(
                 DiaryDomain(
                     currentTimeMillis = System.currentTimeMillis() - 395000000L,
@@ -1005,7 +1017,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
                 lifecycleScope.launch {
-                    diaryViewModel.clearSelectedStatus()
+                    diaryRepository.clearSelectedStatus()
                     mDiaryMode = DiaryMode.DELETE
                     invalidateOptionsMenu()
                     refreshList()
@@ -1156,5 +1168,39 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             },
         )
+    }
+
+    private suspend fun migRealmToRoom() {
+        if (!config.enableJetpackRoomDatabase) {
+            val domainDiaries = mutableListOf<DiaryDomain>()
+            val domainAlarms = mutableListOf<AlarmDomain>()
+            val domainActionLogs = mutableListOf<ActionLogDomain>()
+            val domainDDays = mutableListOf<DDayDomain>()
+            EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
+                domainDiaries.addAll(EasyDiaryDbHelper.findDiary(query = null, realmInstance = realm))
+                domainAlarms.addAll(EasyDiaryDbHelper.findAlarmAll())
+                domainActionLogs.addAll(EasyDiaryDbHelper.findAllActionLogs())
+                domainDDays.addAll(EasyDiaryDbHelper.findDDayAll())
+            }
+
+            diaryViewModel.loadingMessage = "migrating realm to room..."
+            diaryViewModel.loadingMessage = "Diary migration..."
+            diaryRepository.deleteAllDiaries()
+            diaryRepository.insertAllDiaries(domainDiaries)
+
+            diaryViewModel.loadingMessage = "Alarm migration..."
+            baseDevViewModel.deleteAllAlarms()
+            baseDevViewModel.addAllAlarms(domainAlarms)
+
+            diaryViewModel.loadingMessage = "ActionLog migration..."
+            baseDevViewModel.deleteAllActionLogs()
+            actionLogRepository.insertAllActionLogs(domainActionLogs)
+
+            diaryViewModel.loadingMessage = "D-Day migration..."
+            baseDevViewModel.deleteAllDDays()
+            baseDevViewModel.addAllDDays(domainDDays)
+
+            config.enableJetpackRoomDatabase = true
+        }
     }
 }

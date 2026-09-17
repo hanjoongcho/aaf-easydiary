@@ -4,17 +4,10 @@ import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
+import me.blog.korn123.easydiary.domain.model.Diary
 import javax.inject.Qualifier
 
 interface DiaryDataSource {
-    fun getAllDiaries(
-        query: String? = null,
-        isSensitive: Boolean = false,
-        startTimeMillis: Long = 0,
-        endTimeMillis: Long = 0,
-        symbolSequence: Int = 0,
-    ): Flow<List<DiaryEntity>>
-
     fun getDiariesWithPhotosFlow(
         query: String? = null,
         isSensitive: Boolean = false,
@@ -80,6 +73,8 @@ interface DiaryDataSource {
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
 
     fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
+
+    suspend fun findOldestDiary(): Diary?
 }
 
 @Qualifier

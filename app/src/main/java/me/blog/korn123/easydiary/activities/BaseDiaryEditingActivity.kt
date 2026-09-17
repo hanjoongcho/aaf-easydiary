@@ -55,6 +55,7 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.fullAddress
 import me.blog.korn123.easydiary.extensions.getFromLocation
@@ -518,7 +519,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         if (StringUtils.isNotEmpty(diaryTemp.title) ||
             StringUtils.isNotEmpty(diaryTemp.contents) || diaryTemp.photoUris.isNotEmpty()
         ) {
-            diaryViewModel.insertTemporaryDiary(
+            diaryRepository.insertTemporaryDiary(
                 mLocation?.let { diaryTemp.copy(location = it) } ?: diaryTemp,
             )
         }
@@ -533,12 +534,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         lifecycleScope.launch {
                             initData(it)
                             initBottomToolbar()
-                            diaryViewModel.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                            diaryRepository.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
                         }
                     },
                     { _, _ ->
                         lifecycleScope.launch {
-                            diaryViewModel.deleteDiaryById(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                            diaryRepository.deleteDiaryById(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
                         }
                     },
                     DialogMode.INFO,

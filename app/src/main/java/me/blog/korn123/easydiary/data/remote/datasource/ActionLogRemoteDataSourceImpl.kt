@@ -15,6 +15,10 @@ class ActionLogRemoteDataSourceImpl
             // Mock implementation
         }
 
+        override suspend fun insertAllActionLog(actionLogs: List<ActionLogEntity>) {
+            // Mock implementation
+        }
+
         override suspend fun deleteAllActionLogs() {
             // Mock implementation
         }

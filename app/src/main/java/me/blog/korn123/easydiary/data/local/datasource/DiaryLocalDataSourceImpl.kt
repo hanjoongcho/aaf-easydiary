@@ -5,7 +5,9 @@ import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.local.dao.DiaryDao
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
+import me.blog.korn123.easydiary.data.local.mapper.toDomain
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
+import me.blog.korn123.easydiary.domain.model.Diary
 import javax.inject.Inject
 
 class DiaryLocalDataSourceImpl
@@ -13,14 +15,6 @@ class DiaryLocalDataSourceImpl
     constructor(
         private val diaryDao: DiaryDao,
     ) : DiaryDataSource {
-        override fun getAllDiaries(
-            query: String?,
-            isSensitive: Boolean,
-            startTimeMillis: Long,
-            endTimeMillis: Long,
-            symbolSequence: Int,
-        ): Flow<List<DiaryEntity>> = diaryDao.getAllDiaries(query, isSensitive, startTimeMillis, endTimeMillis, symbolSequence)
-
         override fun getDiariesWithPhotosFlow(
             query: String?,
             isSensitive: Boolean,
@@ -67,37 +61,57 @@ class DiaryLocalDataSourceImpl
 
         override suspend fun getDiaryById(seq: Int): DiaryEntity? = diaryDao.getDiaryById(seq)
 
-        override suspend fun insertDiary(diary: DiaryEntity) = diaryDao.insertDiary(diary).let { }
+        override suspend fun insertDiary(diary: DiaryEntity) {
+            diaryDao.insertDiary(diary)
+        }
 
         override suspend fun insertDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
-        ) = diaryDao.insertDiaryWithPhotos(diary, photoUris)
+        ): Int = diaryDao.insertDiaryWithPhotos(diary, photoUris)
 
-        override suspend fun insertDiariesWithPhotos(
-            diariesWithPhotos: List<Pair<DiaryEntity, List<PhotoUriEntity>>>,
-        ) = diaryDao.insertDiariesWithPhotos(diariesWithPhotos)
+        override suspend fun insertDiariesWithPhotos(diariesWithPhotos: List<Pair<DiaryEntity, List<PhotoUriEntity>>>) {
+            diaryDao.insertDiariesWithPhotos(diariesWithPhotos)
+        }
 
-        override suspend fun updateDiary(diary: DiaryEntity) = diaryDao.updateDiary(diary)
+        override suspend fun updateDiary(diary: DiaryEntity) {
+            diaryDao.updateDiary(diary)
+        }
 
-        override suspend fun updateDiaries(diaries: List<DiaryEntity>) = diaryDao.updateDiaries(diaries)
+        override suspend fun updateDiaries(diaries: List<DiaryEntity>) {
+            diaryDao.updateDiaries(diaries)
+        }
 
         override suspend fun updateDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
-        ) = diaryDao.updateDiaryWithPhotos(diary, photoUris)
+        ) {
+            diaryDao.updateDiaryWithPhotos(diary, photoUris)
+        }
 
-        override suspend fun deleteDiary(diary: DiaryEntity) = diaryDao.deleteDiary(diary)
+        override suspend fun deleteDiary(diary: DiaryEntity) {
+            diaryDao.deleteDiary(diary)
+        }
 
-        override suspend fun deleteDiaryById(seq: Int) = diaryDao.deleteDiaryById(seq)
+        override suspend fun deleteDiaryById(seq: Int) {
+            diaryDao.deleteDiaryById(seq)
+        }
 
-        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) = diaryDao.deleteTemporaryDiaryBy(originDiaryId)
+        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
+            diaryDao.deleteTemporaryDiaryBy(originDiaryId)
+        }
 
-        override suspend fun deleteAllDiaries() = diaryDao.deleteAllDiaries()
+        override suspend fun deleteAllDiaries() {
+            diaryDao.deleteAllDiaries()
+        }
 
-        override suspend fun clearSelectedStatus() = diaryDao.clearSelectedStatus()
+        override suspend fun clearSelectedStatus() {
+            diaryDao.clearSelectedStatus()
+        }
 
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = diaryDao.getPhotoUris()
 
         override fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>> = diaryDao.findParentDiariesOf(sequence)
+
+        override suspend fun findOldestDiary(): Diary? = diaryDao.findOldestDiary()?.toDomain()
     }

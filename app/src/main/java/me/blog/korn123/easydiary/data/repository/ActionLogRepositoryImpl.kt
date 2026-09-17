@@ -53,6 +53,11 @@ class ActionLogRepositoryImpl
             EasyDiaryDbHelper.insertActionLog(actionLog, context)
         }
 
+        override suspend fun insertAllActionLogs(actionLogs: List<ActionLog>) {
+            val entities = actionLogs.map { it.toEntity() }
+            dataSource.insertAllActionLog(entities)
+        }
+
         override suspend fun deleteAllActionLogs(excludeRealm: Boolean) {
             Log.i(AAF_TEST, "deleteAllActionLogs excludeRealm: $excludeRealm")
             dataSource.deleteAllActionLogs()

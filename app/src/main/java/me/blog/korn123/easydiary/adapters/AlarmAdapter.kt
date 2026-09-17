@@ -104,7 +104,7 @@ class AlarmAdapter(
                                     else -> "${prefix}unclassified"
                                 }
 
-                            var isOn by remember { mutableStateOf(alarm.isEnabled) }
+                            var isOn by remember(alarm.alarmId, alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
                             AlarmCard(
                                 alarmTime = alarm.timeInMinutes,
                                 alarmDays = activity.getSelectedDaysString(alarm.days),

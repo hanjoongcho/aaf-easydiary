@@ -6,19 +6,12 @@ import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
+import me.blog.korn123.easydiary.domain.model.Diary
 import javax.inject.Inject
 
 class DiaryRemoteDataSourceImpl
     @Inject
     constructor() : DiaryDataSource {
-        override fun getAllDiaries(
-            query: String?,
-            isSensitive: Boolean,
-            startTimeMillis: Long,
-            endTimeMillis: Long,
-            symbolSequence: Int,
-        ): Flow<List<DiaryEntity>> = flowOf(emptyList())
-
         override fun getDiariesWithPhotosFlow(
             query: String?,
             isSensitive: Boolean,
@@ -107,4 +100,6 @@ class DiaryRemoteDataSourceImpl
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = flowOf(emptyList())
 
         override fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>> = flowOf(emptyList())
+
+        override suspend fun findOldestDiary(): Diary? = null
     }

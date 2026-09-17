@@ -215,3 +215,10 @@ val MIGRATION_5_6 =
             db.execSQL("ALTER TABLE `d_days_new` RENAME TO `d_days`")
         }
     }
+
+val MIGRATION_6_7 =
+    object : Migration(6, 7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_diaries_currentTimeMillis` ON `diaries` (`currentTimeMillis`)")
+        }
+    }

@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,22 +25,29 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
+import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.helper.PhotoHighlightManager
 import java.io.File
+import java.text.MessageFormat
+import java.text.SimpleDateFormat
 import java.time.YearMonth
+import java.util.Calendar
 import javax.inject.Inject
-import kotlin.collections.filter
-import kotlin.collections.map
+import kotlin.system.measureTimeMillis
 
 @HiltViewModel
 class DiaryViewModel
@@ -45,26 +55,137 @@ class DiaryViewModel
     constructor(
         application: Application,
         private val diaryRepository: DiaryRepository,
+        private val photoHighlightManager: PhotoHighlightManager,
     ) : AndroidViewModel(application) {
-        var isLoading by mutableStateOf(false)
-        var loadingMessage by mutableStateOf<String?>(null)
-
-        suspend fun addAllDiaries(diaries: List<Diary>) {
-            diaryRepository.insertAllDiaries(diaries)
-        }
-
-        fun deleteAllDiaries() {
-            viewModelScope.launch {
-                diaryRepository.deleteAllDiaries()
-            }
-        }
-
-        suspend fun getPhotoUriCount(): Int = diaryRepository.getPhotoUris().first().size
-
         /***************************************************************************************************
          *   compose layout functions
          *
          ***************************************************************************************************/
+
+        var isLoading by mutableStateOf(false)
+        var loadingMessage by mutableStateOf<String?>(null)
+
+        val photoHighlightList: StateFlow<List<History>> = photoHighlightManager.historyList
+
+        fun updatePhotoHighlightIfNeeded() {
+            if (photoHighlightManager.isCalculated()) return
+
+            val startTime = System.currentTimeMillis()
+            var totalHistoryCount = 0
+            Log.i(AAF_TEST, "updateHistory start from ViewModel")
+
+            viewModelScope.launch(Dispatchers.IO) {
+                val oldestDiary = findOldestDiary() ?: return@launch
+                val historyItems = mutableListOf<History>()
+                val oneDayMillis: Long = 1000 * 60 * 60 * 24
+                val oneYearDays = 365
+                val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
+                val betweenDays = betweenMillis / oneDayMillis
+
+                val allDiaries = findDiary(null)
+
+                val deferredHistories = mutableListOf<kotlinx.coroutines.Deferred<List<History>>>()
+
+                fun fetchHistoryForPeriod(
+                    pastMillis: Long,
+                    historyTag: String,
+                ): List<History> {
+                    val periodHistories = mutableListOf<History>()
+                    val defaultDayBuffer = 1
+                    val noDataDayBufferMaxLoop = 3
+                    val elapsedTime =
+                        measureTimeMillis {
+                            val maxBufferMillis =
+                                pastMillis.plus((defaultDayBuffer + noDataDayBufferMaxLoop) * oneDayMillis)
+
+                            val diaryItems =
+                                allDiaries
+                                    .filter { it.currentTimeMillis in pastMillis..maxBufferMillis }
+                                    .sortedBy { it.currentTimeMillis }
+
+                            if (diaryItems.isNotEmpty()) {
+                                val targetDate = diaryItems.first().currentTimeMillis
+                                diaryItems
+                                    .filter { it.currentTimeMillis <= targetDate + oneDayMillis }
+                                    .forEach { diary ->
+                                        diary.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
+                                            periodHistories.add(
+                                                History(
+                                                    historyTag,
+                                                    DateUtils.getDateStringFromTimeMillis(
+                                                        diary.currentTimeMillis,
+                                                        SimpleDateFormat.FULL,
+                                                    ),
+                                                    if (diary.isEncrypt) {
+                                                        ""
+                                                    } else {
+                                                        EasyDiaryUtils.getApplicationDataDirectory(
+                                                            application,
+                                                        ) + photoUri.getFilePath()
+                                                    },
+                                                    diary.diaryId,
+                                                ),
+                                            )
+                                        }
+                                    }
+                            }
+                        }
+                    Log.i(AAF_TEST, "[$totalHistoryCount] fetchHistoryForPeriod end: ${elapsedTime}ms")
+                    totalHistoryCount++
+                    return periodHistories
+                }
+
+                for (i in 1..11) {
+                    val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
+                    if (oldestDiary.currentTimeMillis < pastMills) {
+                        deferredHistories.add(
+                            async {
+                                fetchHistoryForPeriod(
+                                    pastMills,
+                                    MessageFormat.format(
+                                        application.getString(R.string.monthly_highlight_tag),
+                                        i,
+                                    ),
+                                )
+                            },
+                        )
+                    }
+                }
+
+                if (betweenDays > oneYearDays) {
+                    for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                        val pastMills =
+                            EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus())
+                        deferredHistories.add(
+                            async {
+                                fetchHistoryForPeriod(
+                                    pastMills,
+                                    MessageFormat.format(
+                                        application.getString(R.string.yearly_highlight_tag),
+                                        i,
+                                    ),
+                                )
+                            },
+                        )
+                    }
+                }
+
+                val results = deferredHistories.awaitAll()
+                results.forEach { historyItems.addAll(it) }
+                historyItems.reverse()
+                Log.i(
+                    AAF_TEST,
+                    "[totalHistoryCount: $totalHistoryCount] updateHistory step-02 finished time in ViewModel: ${System.currentTimeMillis() - startTime}",
+                )
+
+                photoHighlightManager.updateHistory(historyItems)
+            }
+        }
+
+        fun invalidatePhotoHighlightCache() {
+            photoHighlightManager.invalidateCache()
+        }
+
         val query = MutableStateFlow("")
         val isSensitive = MutableStateFlow(false)
         val startTimeMillis = MutableStateFlow(0L)
@@ -183,23 +304,10 @@ class DiaryViewModel
                 }
             }
 
-        suspend fun findDiaryByPhotoUri(
-            photoUriString: String,
-        ): Diary? =
-            if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.getDiaryWithPhotosByPhotoUri(photoUriString).first()
-            } else {
-                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    EasyDiaryDbHelper.findDiaryBy(photoUriString, realm)
-                }
-            }
-
         suspend fun findOldestDiary(): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
                 diaryRepository
-                    .getDiariesWithPhotos(
-                        query = null,
-                    ).minByOrNull { it.currentTimeMillis }
+                    .findOldestDiary()
             } else {
                 EasyDiaryDbHelper.findOldestDiary()
             }
@@ -257,34 +365,6 @@ class DiaryViewModel
             } else {
                 EasyDiaryDbHelper.getMaxDiarySequence()
             }
-
-        suspend fun insertDiary(diary: Diary) {
-            diaryRepository.insertDiary(diary)
-        }
-
-        suspend fun insertTemporaryDiary(diary: Diary) {
-            diaryRepository.insertTemporaryDiary(diary)
-        }
-
-        suspend fun duplicateDiary(diary: Diary) {
-            diaryRepository.duplicateDiary(diary)
-        }
-
-        suspend fun updateDiary(diary: Diary) {
-            diaryRepository.updateDiaryWithPhotos(diary)
-        }
-
-        suspend fun clearSelectedStatus() {
-            diaryRepository.clearSelectedStatus()
-        }
-
-        suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int) {
-            diaryRepository.deleteTemporaryDiaryByOriginId(originDiaryId)
-        }
-
-        suspend fun deleteDiaryById(seq: Int) {
-            diaryRepository.deleteDiaryById(seq)
-        }
 
         suspend fun getSymbolUsedCountMap(
             isReverse: Boolean = false,
@@ -417,26 +497,28 @@ class DiaryViewModel
 
             val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
 
-            val allDiariesInRange = if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.getDiariesByDateRange(startDate.toString(), endDate.toString())
-            } else {
-                // Realm legacy: fetch one by one as before to keep compatibility
-                val sort = if (sortAsc) Sort.ASCENDING else Sort.DESCENDING
-                val dateList = mutableListOf<String>()
-                var current = startDate
-                while (!current.isAfter(endDate)) {
-                    dateList.add(current.toString())
-                    current = current.plusDays(1)
+            val allDiariesInRange =
+                if (application.config.enableJetpackRoomDatabase) {
+                    diaryRepository.getDiariesByDateRange(startDate.toString(), endDate.toString())
+                } else {
+                    // Realm legacy: fetch one by one as before to keep compatibility
+                    val sort = if (sortAsc) Sort.ASCENDING else Sort.DESCENDING
+                    val dateList = mutableListOf<String>()
+                    var current = startDate
+                    while (!current.isAfter(endDate)) {
+                        dateList.add(current.toString())
+                        current = current.plusDays(1)
+                    }
+                    return dateList.associateWith { findDiaryByDateString(it, sort) }
                 }
-                return dateList.associateWith { findDiaryByDateString(it, sort) }
-            }
 
             // Grouping for Room
-            val groupedMap = if (sortAsc) {
-                allDiariesInRange.sortedBy { it.currentTimeMillis }
-            } else {
-                allDiariesInRange.sortedByDescending { it.currentTimeMillis }
-            }.groupBy { it.dateString ?: "" }
+            val groupedMap =
+                if (sortAsc) {
+                    allDiariesInRange.sortedBy { it.currentTimeMillis }
+                } else {
+                    allDiariesInRange.sortedByDescending { it.currentTimeMillis }
+                }.groupBy { it.dateString ?: "" }
 
             val resultMap = mutableMapOf<String, List<Diary>>()
             var currentDate = startDate

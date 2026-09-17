@@ -14,29 +14,6 @@ import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 
 @Dao
 interface DiaryDao {
-    @Query(
-        """
-        SELECT * FROM diaries 
-        WHERE (:query IS NULL OR :query = '' OR 
-            CASE WHEN :isSensitive = 1 
-                 THEN (LOWER(title) LIKE '%' || LOWER(:query) || '%' OR LOWER(contents) LIKE '%' || LOWER(:query) || '%')
-                 ELSE (title LIKE '%' || :query || '%' OR contents LIKE '%' || :query || '%')
-            END
-        )
-        AND (:startTimeMillis = 0 OR currentTimeMillis >= :startTimeMillis)
-        AND (:endTimeMillis = 0 OR currentTimeMillis <= :endTimeMillis)
-        AND (:symbolSequence = 0 OR :symbolSequence = 9999 OR symbolSequence = :symbolSequence)
-        ORDER BY currentTimeMillis DESC
-    """,
-    )
-    fun getAllDiaries(
-        query: String? = null,
-        isSensitive: Boolean = false,
-        startTimeMillis: Long = 0,
-        endTimeMillis: Long = 0,
-        symbolSequence: Int = 0,
-    ): Flow<List<DiaryEntity>>
-
     @Transaction
     @Query(
         """
@@ -205,4 +182,8 @@ interface DiaryDao {
 
     @Query("UPDATE diaries SET isSelected = 0")
     suspend fun clearSelectedStatus()
+
+    @Transaction
+    @Query("SELECT * FROM diaries ORDER BY currentTimeMillis ASC LIMIT 1")
+    suspend fun findOldestDiary(): DiaryEntity?
 }

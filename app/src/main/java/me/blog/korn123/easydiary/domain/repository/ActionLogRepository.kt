@@ -10,5 +10,7 @@ interface ActionLogRepository {
 
     suspend fun insertActionLog(actionLog: ActionLog)
 
+    suspend fun insertAllActionLogs(actionLogs: List<ActionLog>)
+
     suspend fun deleteAllActionLogs(excludeRealm: Boolean = false)
 }

@@ -17,6 +17,10 @@ class ActionLogLocalDataSourceImpl
             actionLogDao.insertActionLog(actionLog)
         }
 
+        override suspend fun insertAllActionLog(actionLogs: List<ActionLogEntity>) {
+            actionLogDao.insertAllActionLog(actionLogs)
+        }
+
         override suspend fun deleteAllActionLogs() {
             actionLogDao.deleteAllActionLogs()
         }

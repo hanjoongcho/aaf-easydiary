@@ -70,7 +70,7 @@ class TreeViewModel
 
         val allDiaries: StateFlow<List<Diary>> =
             diaryRepository
-                .getAllDiaries()
+                .getDiariesWithPhotosFlow()
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000),

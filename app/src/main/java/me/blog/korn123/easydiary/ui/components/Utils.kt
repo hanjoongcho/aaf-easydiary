@@ -37,7 +37,7 @@ fun LoadingScreen(message: String? = null) {
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(Color(LocalContext.current.config.backgroundColor).copy(alpha = 0.7f)) // 반투명 배경
+                .background(Color(LocalContext.current.config.backgroundColor).copy(alpha = if (!message.isNullOrEmpty()) 0.7f else 0f))
                 .pointerInput(Unit) {},
         // 로딩 중 터치 이벤트 무시 (클릭 방지)
         contentAlignment = Alignment.Center,

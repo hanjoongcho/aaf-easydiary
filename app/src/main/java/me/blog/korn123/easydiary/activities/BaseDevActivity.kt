@@ -229,7 +229,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             }
 
                             ExportOption.DIARY -> {
-                                mutableMapOf("DIARY" to diaryRepository.getAllDiaries())
+                                mutableMapOf("DIARY" to diaryRepository.getDiariesWithPhotos())
                             }
 
                             ExportOption.PHOTO_URI -> {
@@ -247,7 +247,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 map["ACTION_LOG"] = actionLogRepository.getAllActionLogs()
                                 map["ALARM"] = alarmRepository.getAllAlarms()
                                 map["D_DAY"] = dDayRepository.getAllDDays()
-                                map["DIARY"] = diaryRepository.getAllDiaries()
+                                map["DIARY"] = diaryRepository.getDiariesWithPhotos()
                                 map
                             }
                         }
@@ -590,7 +590,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             if (config.enableJetpackRoomDatabase) {
                 updateConsole("🍕 room info")
                 updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
-                updateConsole("room photo-uri count: ${diaryViewModel.getPhotoUriCount()}")
+                updateConsole("room photo-uri count: ${diaryRepository.getPhotoUris().first().size}")
                 updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
                 updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
                 updateConsole("room d-day count: ${viewModel.getDDayCount()}")
@@ -653,8 +653,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     mBaseDevViewModel.coroutine1Console = ""
 
                     mBaseDevViewModel.loadingMessage = "Diary migration..."
-                    diaryViewModel.deleteAllDiaries()
-                    val diaryCount = diaryViewModel.addAllDiaries(domainDiaries)
+                    diaryRepository.deleteAllDiaries()
+                    val diaryCount = diaryRepository.insertAllDiaries(domainDiaries)
                     mBaseDevViewModel.loadingMessage = "Diary migration successful: $diaryCount"
 
                     mBaseDevViewModel.loadingMessage = "Alarm migration..."
@@ -664,7 +664,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                     mBaseDevViewModel.loadingMessage = "ActionLog migration..."
                     mBaseDevViewModel.deleteAllActionLogs()
-                    val count3 = mBaseDevViewModel.addAllActionLogs(domainActionLogs)
+                    val count3 = actionLogRepository.insertAllActionLogs(domainActionLogs)
                     mBaseDevViewModel.loadingMessage = "ActionLog migration successful: $count3"
 
                     mBaseDevViewModel.loadingMessage = "D-Day migration..."

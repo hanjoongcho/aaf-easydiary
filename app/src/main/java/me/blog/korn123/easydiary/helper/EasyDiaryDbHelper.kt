@@ -76,11 +76,13 @@ object EasyDiaryDbHelper {
 
     @Deprecated(message = "Use DiaryViewModel.findOldestDiary() instead")
     fun findOldestDiary(): DiaryDomain? =
-        getInstance()
-            .where(Diary::class.java)
-            .sort("currentTimeMillis", Sort.ASCENDING)
-            .findFirst()
-            ?.toDomain()
+        getTemporaryInstance().use { realm ->
+            realm
+                .where(Diary::class.java)
+                .sort("currentTimeMillis", Sort.ASCENDING)
+                .findFirst()
+                ?.toDomain()
+        }
 
     @Deprecated(message = "Use DiaryViewModel.findDiary() instead")
     fun findDiary(
@@ -423,6 +425,7 @@ object EasyDiaryDbHelper {
     fun makeTemporaryAlarm(workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING): AlarmDomain {
         val alarm = AlarmDomain(workMode = workMode)
         getTemporaryInstance().use { realm ->
+            realm.refresh()
             var nextAlarmId = 0
             val sequence = realm.where(Alarm::class.java).max("sequence") ?: 0
             when (sequence.toInt() == realm.where(Alarm::class.java).count().toInt()) {
@@ -451,6 +454,7 @@ object EasyDiaryDbHelper {
         sequence: Int,
     ): AlarmDomain? =
         getTemporaryInstance().use {
+            it.refresh()
             it
                 .where(Alarm::class.java)
                 .equalTo("sequence", sequence)
@@ -461,6 +465,7 @@ object EasyDiaryDbHelper {
     @Deprecated(message = "Use AlarmViewModel.findAlarmAll() instead")
     fun findAlarmAll(): List<AlarmDomain> =
         getTemporaryInstance().use {
+            it.refresh()
             it
                 .where(Alarm::class.java)
                 .findAll()
@@ -471,6 +476,7 @@ object EasyDiaryDbHelper {
     @Deprecated(message = "Use AlarmViewModel.updateAlarmBy() instead")
     fun updateAlarmBy(alarm: AlarmDomain) {
         getTemporaryInstance().use {
+            it.refresh()
             it.executeTransaction { realm -> realm.insertOrUpdate(alarm.toRealm()) }
         }
     }
@@ -478,6 +484,7 @@ object EasyDiaryDbHelper {
     @Deprecated(message = "Use AlarmViewModel.deleteAlarmBy() instead")
     fun deleteAlarmBy(sequence: Int) {
         getTemporaryInstance().use { realm ->
+            realm.refresh()
             realm.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()?.let {
                 realm.beginTransaction()
                 it.deleteFromRealm()
@@ -520,11 +527,13 @@ object EasyDiaryDbHelper {
 
     @Deprecated(message = "Use ActionLogRepository.findAllActionLogs() instead")
     fun findAllActionLogs(): List<ActionLogDomain> =
-        getInstance()
-            .where(ActionLog::class.java)
-            .findAll()
-            .sort("sequence", Sort.DESCENDING)
-            .map { it.toDomain() }
+        getTemporaryInstance().use { realm ->
+            realm
+                .where(ActionLog::class.java)
+                .findAll()
+                .sort("sequence", Sort.DESCENDING)
+                .map { it.toDomain() }
+        }
 
     @Deprecated(message = "Use ActionLogRepository.deleteAllActionLogs() instead")
     fun deleteAllActionLogs() {
