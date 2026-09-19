@@ -10,6 +10,8 @@ interface AlarmDataSource {
 
     suspend fun insertAlarm(alarm: AlarmEntity)
 
+    suspend fun insertAllAlarms(alarms: List<AlarmEntity>)
+
     suspend fun updateAlarm(alarm: AlarmEntity)
 
     suspend fun deleteAlarm(alarm: AlarmEntity)

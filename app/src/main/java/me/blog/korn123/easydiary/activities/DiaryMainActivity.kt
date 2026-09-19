@@ -58,7 +58,6 @@ import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.actionLogRepository
-import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -89,8 +88,6 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.helper.EXECUTION_MODE_WELCOME_DASHBOARD
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
@@ -109,7 +106,6 @@ import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.helper.toRealm
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
@@ -233,7 +229,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
             setupOnBackPressDispatcher()
-            migRealmToRoom()
+            diaryViewModel.migRealmToRoom()
 
             if (config.enableDebugMode) {
                 openOverDueNotification(
@@ -1168,39 +1164,5 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             },
         )
-    }
-
-    private suspend fun migRealmToRoom() {
-        if (!config.enableJetpackRoomDatabase) {
-            val domainDiaries = mutableListOf<DiaryDomain>()
-            val domainAlarms = mutableListOf<AlarmDomain>()
-            val domainActionLogs = mutableListOf<ActionLogDomain>()
-            val domainDDays = mutableListOf<DDayDomain>()
-            EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                domainDiaries.addAll(EasyDiaryDbHelper.findDiary(query = null, realmInstance = realm))
-                domainAlarms.addAll(EasyDiaryDbHelper.findAlarmAll())
-                domainActionLogs.addAll(EasyDiaryDbHelper.findAllActionLogs())
-                domainDDays.addAll(EasyDiaryDbHelper.findDDayAll())
-            }
-
-            diaryViewModel.loadingMessage = "migrating realm to room..."
-            diaryViewModel.loadingMessage = "Diary migration..."
-            diaryRepository.deleteAllDiaries()
-            diaryRepository.insertAllDiaries(domainDiaries)
-
-            diaryViewModel.loadingMessage = "Alarm migration..."
-            baseDevViewModel.deleteAllAlarms()
-            baseDevViewModel.addAllAlarms(domainAlarms)
-
-            diaryViewModel.loadingMessage = "ActionLog migration..."
-            baseDevViewModel.deleteAllActionLogs()
-            actionLogRepository.insertAllActionLogs(domainActionLogs)
-
-            diaryViewModel.loadingMessage = "D-Day migration..."
-            baseDevViewModel.deleteAllDDays()
-            baseDevViewModel.addAllDDays(domainDDays)
-
-            config.enableJetpackRoomDatabase = true
-        }
     }
 }

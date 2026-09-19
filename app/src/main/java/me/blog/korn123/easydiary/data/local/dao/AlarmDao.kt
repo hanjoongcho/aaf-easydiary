@@ -21,6 +21,9 @@ interface AlarmDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAlarm(alarm: AlarmEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertAllAlarms(alarms: List<AlarmEntity>)
+
     @Upsert
     suspend fun upsertAlarm(alarm: AlarmEntity)
 

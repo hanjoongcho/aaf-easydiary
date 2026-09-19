@@ -4,22 +4,37 @@ import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.domain.model.Diary
 
-/**
- * [Data Layer / Repository 메서드 Naming Conventions]
+/*
+ * =====================================================================================
+ *  Data Layer Method Naming Convention
+ * =====================================================================================
  *
- * 1. get...
- *   - [의도] 데이터의 존재가 명확하거나, 비즈니스 로직상 반드시 존재해야 하는 대상을 조회합니다.
- *   - [단일 객체] 반환 타입: Non-nullable (T)
- *     - 대상 데이터가 없으면 Exception을 던집니다 (e.g., NoSuchElementException).
- *   - [컬렉션/배열] 반환 타입: List<T>
- *     - 대상 목록이 비어있는 상황 자체가 비정상(에러)일 때 사용하며, 비어있을 경우 Exception을 던집니다.
+ *  CRUD         | Dao                  | LocalDataSource  | RemoteDataSource | Repository       | ViewModel
+ *  -------------+----------------------+------------------+------------------+------------------+----------
+ *  Create       | insert               | insertX          | createX          | addX             | addX
+ *  Read (one)   | getById/observeById  | getX/observeX    | fetchX           | getX/observeX    | loadX
+ *  Read (list)  | getAll/observeAll    | getXs/observeXs  | fetchXs          | getXs/observeXs  | loadXs
+ *  Update       | update               | updateX          | updateX          | updateX          | updateX
+ *  Delete       | delete/deleteById    | deleteX          | deleteX          | deleteX          | deleteX
+ *  Upsert       | upsert               | upsertX          | (putX)           | saveX            | saveX
+ *  Sync         | -                    | -                | -                | refreshX         | refresh
  *
- * 2. find...
- *   - [의도] 데이터 존재 여부가 불확실하여 조건에 맞는 대상을 검색/조회합니다.
- *   - [단일 객체] 반환 타입: Nullable (T?)
- *     - 대상 데이터가 없으면 null을 반환합니다.
- *   - [컬렉션/배열] 반환 타입: List<T>
- *     - 결과가 없는 상황도 정상 흐름으로 간주하며, 비어있을 경우 emptyList()를 반환합니다.
+ *  Rules
+ *  -----
+ *  1. get     : suspend one-shot read from local/cache.
+ *  2. observe : any function returning Flow. Always use the observe prefix.
+ *  3. fetch   : network read. RemoteDataSource only. Repository never exposes fetch.
+ *  4. refreshX: Remote.fetchX -> Local.upsertX. Repository only.
+ *  5. saveX   : caller doesn't care insert vs update; the branch lives in Repository.
+ *  6. ViewModel: no get*. Use load/refresh for state updates, onXClicked for UI events.
+ *
+ *  Prefix -> layer hint
+ *  --------------------
+ *  insert / getById / observeAll -> Dao or LocalDataSource
+ *  create / fetch                -> RemoteDataSource
+ *  add / save / refresh          -> Repository
+ *  load / onXClicked             -> ViewModel
+ * =====================================================================================
  */
 interface DiaryRepository {
     fun getDiariesWithPhotosFlow(

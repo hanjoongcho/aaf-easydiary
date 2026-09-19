@@ -17,6 +17,10 @@ class AlarmRemoteDataSourceImpl
             // Mock implementation
         }
 
+        override suspend fun insertAllAlarms(alarms: List<AlarmEntity>) {
+            // Mock implementation
+        }
+
         override suspend fun updateAlarm(alarm: AlarmEntity) {
             // Mock implementation
         }

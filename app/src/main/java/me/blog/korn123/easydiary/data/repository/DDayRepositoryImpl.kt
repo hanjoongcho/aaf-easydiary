@@ -51,8 +51,13 @@ class DDayRepositoryImpl
             dataSource.insertDDay(entity)
         }
 
+        override suspend fun insertAllDDays(dDays: List<DDay>) {
+            dataSource.insertAllDDays(dDays.map { it.toEntity() })
+        }
+
         override suspend fun updateDDay(dDay: DDay) {
-            val nextId = if (dDay.id == 0) (this.getAllDDays().maxOfOrNull { it.id } ?: 0) + 1 else dDay.id
+            val nextId =
+                if (dDay.id == 0) (this.getAllDDays().maxOfOrNull { it.id } ?: 0) + 1 else dDay.id
             val entity = dDay.toEntity()
             dataSource.updateDDay(entity.copy(id = nextId))
 

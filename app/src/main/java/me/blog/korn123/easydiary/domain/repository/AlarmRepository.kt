@@ -12,6 +12,8 @@ interface AlarmRepository {
 
     suspend fun insertAlarm(alarm: Alarm)
 
+    suspend fun insertAllAlarms(alarms: List<Alarm>)
+
     suspend fun updateAlarm(alarm: Alarm)
 
     suspend fun deleteAlarm(alarm: Alarm)

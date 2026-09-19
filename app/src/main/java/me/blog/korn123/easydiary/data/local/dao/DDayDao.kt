@@ -18,6 +18,9 @@ interface DDayDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertDDay(dDay: DDayEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertAllDDays(dDays: List<DDayEntity>)
+
     @Upsert
     suspend fun updateDDay(dDay: DDayEntity)
 

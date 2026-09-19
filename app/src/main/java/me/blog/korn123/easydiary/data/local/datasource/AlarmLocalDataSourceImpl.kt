@@ -19,6 +19,10 @@ class AlarmLocalDataSourceImpl
             alarmDao.insertAlarm(alarm)
         }
 
+        override suspend fun insertAllAlarms(alarms: List<AlarmEntity>) {
+            alarmDao.insertAllAlarms(alarms)
+        }
+
         override suspend fun updateAlarm(alarm: AlarmEntity) {
             alarmDao.upsertAlarm(alarm)
         }

@@ -10,6 +10,8 @@ interface DDayRepository {
 
     suspend fun insertDDay(dDay: DDay)
 
+    suspend fun insertAllDDays(dDays: List<DDay>)
+
     suspend fun updateDDay(dDay: DDay)
 
     suspend fun deleteDDay(dDay: DDay)

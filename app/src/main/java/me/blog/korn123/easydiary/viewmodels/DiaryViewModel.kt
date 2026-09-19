@@ -29,11 +29,17 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
+import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
+import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
+import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dDayRepository
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
@@ -528,6 +534,40 @@ class DiaryViewModel
                 currentDate = currentDate.plusDays(1)
             }
             return resultMap
+        }
+
+        suspend fun migRealmToRoom() {
+            if (!application.config.enableJetpackRoomDatabase) {
+                val domainDiaries = mutableListOf<Diary>()
+                val domainAlarms = mutableListOf<Alarm>()
+                val domainActionLogs = mutableListOf<ActionLog>()
+                val domainDDays = mutableListOf<DDay>()
+                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
+                    domainDiaries.addAll(EasyDiaryDbHelper.findDiary(query = null, realmInstance = realm))
+                    domainAlarms.addAll(EasyDiaryDbHelper.findAlarmAll())
+                    domainActionLogs.addAll(EasyDiaryDbHelper.findAllActionLogs())
+                    domainDDays.addAll(EasyDiaryDbHelper.findDDayAll())
+                }
+
+                loadingMessage = "migrating realm to room..."
+                loadingMessage = "Diary migration..."
+                diaryRepository.deleteAllDiaries()
+                diaryRepository.insertAllDiaries(domainDiaries)
+
+                loadingMessage = "Alarm migration..."
+                application.alarmRepository.deleteAllAlarms()
+                application.alarmRepository.insertAllAlarms(domainAlarms)
+
+                loadingMessage = "ActionLog migration..."
+                application.actionLogRepository.deleteAllActionLogs()
+                application.actionLogRepository.insertAllActionLogs(domainActionLogs)
+
+                loadingMessage = "D-Day migration..."
+                application.dDayRepository.deleteAllDDays()
+                application.dDayRepository.insertAllDDays(domainDDays)
+
+                application.config.enableJetpackRoomDatabase = true
+            }
         }
 
         /***************************************************************************************************

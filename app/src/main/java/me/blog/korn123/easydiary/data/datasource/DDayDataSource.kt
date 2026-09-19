@@ -6,6 +6,7 @@ import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 interface DDayDataSource {
     fun getAllDDays(): Flow<List<DDayEntity>>
     suspend fun insertDDay(dDay: DDayEntity)
+    suspend fun insertAllDDays(dDays: List<DDayEntity>)
     suspend fun updateDDay(dDay: DDayEntity)
     suspend fun deleteDDay(dDay: DDayEntity)
     suspend fun deleteDDayById(id: Int)

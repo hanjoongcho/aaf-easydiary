@@ -17,6 +17,10 @@ class DDayLocalDataSourceImpl
             dDayDao.insertDDay(dDay)
         }
 
+        override suspend fun insertAllDDays(dDays: List<DDayEntity>) {
+            dDayDao.insertAllDDays(dDays)
+        }
+
         override suspend fun updateDDay(dDay: DDayEntity) {
             dDayDao.updateDDay(dDay)
         }

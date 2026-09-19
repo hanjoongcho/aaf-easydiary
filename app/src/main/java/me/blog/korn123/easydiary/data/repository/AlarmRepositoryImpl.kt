@@ -60,6 +60,10 @@ class AlarmRepositoryImpl
             dataSource.insertAlarm(entity)
         }
 
+        override suspend fun insertAllAlarms(alarms: List<Alarm>) {
+            dataSource.insertAllAlarms(alarms.map { it.toEntity() })
+        }
+
         override suspend fun updateAlarm(alarm: Alarm) {
             val entity = alarm.toEntity()
             dataSource.updateAlarm(entity)

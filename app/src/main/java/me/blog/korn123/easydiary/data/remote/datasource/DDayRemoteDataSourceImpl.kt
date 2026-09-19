@@ -15,6 +15,10 @@ class DDayRemoteDataSourceImpl
             // Mock implementation
         }
 
+        override suspend fun insertAllDDays(dDays: List<DDayEntity>) {
+            // Mock implementation
+        }
+
         override suspend fun updateDDay(dDay: DDayEntity) {
             // Mock implementation
         }

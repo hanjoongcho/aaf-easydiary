@@ -45,7 +45,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.application
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -64,7 +63,6 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.compose.Demo1Activity
 import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
@@ -111,7 +109,6 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
-import me.blog.korn123.easydiary.helper.toDomain
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -640,37 +637,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "realm object를 room으로 이전합니다.",
                 modifier = modifier,
             ) {
-                val domainDiaries =
-                    EasyDiaryDbHelper
-                        .findDiary(query = null)
-                val domainAlarms = EasyDiaryDbHelper.findAlarmAll()
-                val domainActionLogs = EasyDiaryDbHelper.findAllActionLogs()
-                val domainDDays = EasyDiaryDbHelper.findDDayAll()
-
                 // Executed in `rememberCoroutineScope` to handle `moveScroll`.
                 coroutineScope.launch {
                     mBaseDevViewModel.isLoading = true
-                    mBaseDevViewModel.coroutine1Console = ""
-
-                    mBaseDevViewModel.loadingMessage = "Diary migration..."
-                    diaryRepository.deleteAllDiaries()
-                    val diaryCount = diaryRepository.insertAllDiaries(domainDiaries)
-                    mBaseDevViewModel.loadingMessage = "Diary migration successful: $diaryCount"
-
-                    mBaseDevViewModel.loadingMessage = "Alarm migration..."
-                    mBaseDevViewModel.deleteAllAlarms()
-                    val count2 = mBaseDevViewModel.addAllAlarms(domainAlarms)
-                    mBaseDevViewModel.loadingMessage = "Alarm migration successful: $count2"
-
-                    mBaseDevViewModel.loadingMessage = "ActionLog migration..."
-                    mBaseDevViewModel.deleteAllActionLogs()
-                    val count3 = actionLogRepository.insertAllActionLogs(domainActionLogs)
-                    mBaseDevViewModel.loadingMessage = "ActionLog migration successful: $count3"
-
-                    mBaseDevViewModel.loadingMessage = "D-Day migration..."
-                    mBaseDevViewModel.deleteAllDDays()
-                    val count4 = mBaseDevViewModel.addAllDDays(domainDDays)
-                    mBaseDevViewModel.loadingMessage = "D-Day migration successful: $count4"
+                    diaryViewModel.migRealmToRoom()
 
                     updateMigInfo()
                     mBaseDevViewModel.isLoading = false
