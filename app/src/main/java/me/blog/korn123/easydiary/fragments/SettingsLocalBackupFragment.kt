@@ -530,6 +530,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             IOUtils.copy(inputStream, outputStream)
             inputStream?.close()
             outputStream.close()
+            config.enableJetpackRoomDatabase = false
             requireActivity().refreshApp()
         }
     }

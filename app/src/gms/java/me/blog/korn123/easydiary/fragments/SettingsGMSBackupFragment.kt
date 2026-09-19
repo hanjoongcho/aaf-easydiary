@@ -475,6 +475,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             EasyDiaryDbHelper.closeInstance()
                             lifecycleScope.launch {
                                 driveServiceHelper.downloadFile(realmFileId as String, realmPath)
+                                config.enableJetpackRoomDatabase = false
                                 requireActivity().refreshApp()
                             }
                         }

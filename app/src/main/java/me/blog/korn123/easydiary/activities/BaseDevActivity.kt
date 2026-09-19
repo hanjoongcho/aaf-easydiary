@@ -392,13 +392,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "Open dialog about action log",
                 modifier = modifier,
             ) {
-                val actionLogs: List<ActionLogDomain> = EasyDiaryDbHelper.findAllActionLogs()
-                ActionLogDialog(
-                    this@BaseDevActivity,
-                    actionLogs,
-                ) {
-                    lifecycleScope.launch {
-                        actionLogRepository.deleteAllActionLogs()
+                lifecycleScope.launch {
+                    val actionLogs: List<ActionLogDomain> = actionLogRepository.getAllActionLogs()
+                    ActionLogDialog(
+                        this@BaseDevActivity,
+                        actionLogs,
+                    ) {
+                        lifecycleScope.launch {
+                            actionLogRepository.deleteAllActionLogs()
+                        }
                     }
                 }
             }

@@ -559,7 +559,7 @@ class DiaryViewModel
                 application.alarmRepository.insertAllAlarms(domainAlarms)
 
                 loadingMessage = "ActionLog migration..."
-                application.actionLogRepository.deleteAllActionLogs()
+                application.actionLogRepository.deleteAllActionLogs(true)
                 application.actionLogRepository.insertAllActionLogs(domainActionLogs)
 
                 loadingMessage = "D-Day migration..."
