@@ -47,7 +47,7 @@ object TreeUtils {
         items: List<T>,
         addOptionalTitle: Boolean = false,
         addOptionalSortPrefix: Boolean = false,
-        idGetter: (T) -> Int,
+        idGetter: (T) -> Long,
         symbolGetter: (T) -> Int,
         timeGetter: (T) -> Long,
         partsGenerator: (T) -> MutableList<String>,
@@ -153,7 +153,7 @@ data class FileNode(
     val children: MutableList<FileNode> = mutableListOf(),
     val isFile: Boolean = false,
     val currentTimeMillis: Long = 0,
-    val sequence: Int,
+    val sequence: Long,
     val weather: Int,
     var fullPath: String = "",
     var isShow: Boolean = true, // 현재 보이는 지 여부

@@ -348,11 +348,11 @@ object EasyDiaryDbHelper {
         realmInstance: Realm = getInstance(),
     ) {
         realmInstance.executeTransaction { realm ->
-            var sequence = 1
+            var sequence = 1L
             if (realm.where(Diary::class.java).count() > 0L) {
                 val number = realm.where(Diary::class.java).max("sequence")
                 number?.let {
-                    sequence = it.toInt().plus(1)
+                    sequence = it.toLong().plus(1)
                 }
             }
 
@@ -371,11 +371,11 @@ object EasyDiaryDbHelper {
 
     @Deprecated(message = "Use DiaryViewModel.insertTemporaryDiary() instead")
     fun insertTemporaryDiary(diaryTemp: DiaryDomain) {
-        deleteTemporaryDiaryBy(diaryTemp.originDiaryId)
+        deleteTemporaryDiaryBy(diaryTemp.originDiaryId.toInt())
         getInstance().executeTransaction { realm ->
             if (diaryTemp.diaryId == DiaryEditingConstants.DIARY_SEQUENCE_INIT) {
                 realm.where(Diary::class.java).max("sequence")?.let {
-                    realm.insert(diaryTemp.copy(diaryId = it.toInt().plus(1)).toRealm())
+                    realm.insert(diaryTemp.copy(diaryId = it.toLong().plus(1)).toRealm())
                 }
             } else {
                 realm.insert(diaryTemp.toRealm())

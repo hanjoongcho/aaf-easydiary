@@ -132,7 +132,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         mBinding.diaryViewPager,
                         mBinding.diaryViewPager.currentItem,
                     ) as PlaceholderFragment
-                val selectedValue = result.data?.getIntExtra("sequence", 0)
+                val selectedValue = result.data?.getLongExtra("sequence", 0)
 
                 showAlertDialog(
                     getString(R.string.link_entry_confirm),
@@ -242,7 +242,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             val targetIndex =
                 if (savedInstanceState == null) {
                     mSectionsPagerAdapter.sequenceToPageIndex(
-                        intent.getIntExtra(
+                        intent.getLongExtra(
                             DIARY_SEQUENCE,
                             -1,
                         ),
@@ -250,7 +250,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 } else {
                     // 복원된 시퀀스를 사용하여 인덱스를 다시 계산
                     mSectionsPagerAdapter.sequenceToPageIndex(
-                        savedInstanceState.getInt(
+                        savedInstanceState.getLong(
                             DIARY_SEQUENCE,
                             -1,
                         ),
@@ -296,7 +296,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 mBinding.diaryViewPager.currentItem,
             )
         if (fragment is PlaceholderFragment) {
-            outState.putInt(DIARY_SEQUENCE, fragment.getSequence())
+            outState.putLong(DIARY_SEQUENCE, fragment.getSequence())
         }
         super.onSaveInstanceState(outState)
     }
@@ -1127,7 +1127,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-        fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
+        fun getSequence() = arguments?.getLong(DIARY_SEQUENCE) ?: -1L
 
         fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
 
@@ -1379,12 +1379,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
              * number.
              */
             fun newInstance(
-                sequence: Int,
+                sequence: Long,
                 query: String?,
             ): PlaceholderFragment {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
-                args.putInt(DIARY_SEQUENCE, sequence)
+                args.putLong(DIARY_SEQUENCE, sequence)
                 args.putString(SELECTED_SEARCH_QUERY, query)
                 fragment.arguments = args
                 return fragment
@@ -1392,7 +1392,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         inner class PhotoClickListener(
-            private var diarySequence: Int,
+            private var diarySequence: Long,
             var index: Int,
         ) : View.OnClickListener {
             override fun onClick(v: View) {
@@ -1423,7 +1423,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             return PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
         }
 
-        fun sequenceToPageIndex(sequence: Int): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
+        fun sequenceToPageIndex(sequence: Long): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
 
         override fun getCount(): Int = diaryList.size
     }

@@ -295,12 +295,12 @@ class DiaryViewModel
                 }
             }
 
-        suspend fun findDiaryById(sequence: Int): Diary? =
+        suspend fun findDiaryById(sequence: Long): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
                 diaryRepository.getDiaryWithPhotosById(sequence).first()
             } else {
                 EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    EasyDiaryDbHelper.findDiaryBy(sequence, realm)
+                    EasyDiaryDbHelper.findDiaryBy(sequence.toInt(), realm)
                 }
             }
 
@@ -322,12 +322,12 @@ class DiaryViewModel
             }
 
         suspend fun findParentDiariesOf(
-            sequence: Int,
+            sequence: Long,
         ): List<Diary> =
             if (application.config.enableJetpackRoomDatabase) {
                 diaryRepository.findParentDiariesOf(sequence).first()
             } else {
-                EasyDiaryDbHelper.findParentDiariesOf(sequence)
+                EasyDiaryDbHelper.findParentDiariesOf(sequence.toInt())
             }
 
         suspend fun findDiaryByDateString(
@@ -344,12 +344,12 @@ class DiaryViewModel
             }
 
         suspend fun findTemporaryDiaryBy(
-            originSequence: Int,
+            originSequence: Long,
         ): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
                 findDiary(null).firstOrNull { it.originDiaryId == originSequence }
             } else {
-                EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence)
+                EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence.toInt())
             }
 
         suspend fun getDiaryCount(): Int =
@@ -359,11 +359,11 @@ class DiaryViewModel
                 EasyDiaryDbHelper.countDiaryAll().toInt()
             }
 
-        suspend fun getMaxDiarySequence(): Int =
+        suspend fun getMaxDiarySequence(): Long =
             if (application.config.enableJetpackRoomDatabase) {
-                findDiary(null).maxByOrNull { it.diaryId }?.diaryId ?: 1
+                findDiary(null).maxByOrNull { it.diaryId }?.diaryId ?: 1L
             } else {
-                EasyDiaryDbHelper.getMaxDiarySequence()
+                EasyDiaryDbHelper.getMaxDiarySequence().toLong()
             }
 
         suspend fun getSymbolUsedCountMap(

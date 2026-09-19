@@ -108,7 +108,7 @@ fun PhotoUriEntity.toDomain(): PhotoUri =
         photoUri = this.photoUri,
     )
 
-fun PhotoUri.toEntity(diaryId: Int): PhotoUriEntity =
+fun PhotoUri.toEntity(diaryId: Long): PhotoUriEntity =
     PhotoUriEntity(
         diaryId = diaryId,
         photoUri = this.photoUri,

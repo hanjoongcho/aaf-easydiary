@@ -228,7 +228,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var mIsDiarySaved = false
     protected var mSymbolSequence = 0
 
-    protected var mLinkedDiaries: List<Int> = arrayListOf()
+    protected var mLinkedDiaries: List<Long> = arrayListOf()
 
     /**
      * mMonth is not Calendar.MONTH
@@ -501,7 +501,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         )
     }
 
-    protected suspend fun saveTemporaryDiary(originSequence: Int) {
+    protected suspend fun saveTemporaryDiary(originSequence: Long) {
         val diaryTemp =
             DiaryDomain(
                 currentTimeMillis = mCurrentTimeMillis,
@@ -525,7 +525,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun checkTemporaryDiary(originSequence: Int) {
+    protected fun checkTemporaryDiary(originSequence: Long) {
         lifecycleScope.launch {
             diaryViewModel.findTemporaryDiaryBy(originSequence)?.let {
                 showAlertDialog(
@@ -985,7 +985,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 0,
                 0,
                 SYMBOL_EASTER_EGG,
-            ).filter { diary -> diary.symbolSequence == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
+            ).filter { diary -> diary.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
             .size > allowStoredCnt
 
     protected fun duplicatedEasterEggWarning() {

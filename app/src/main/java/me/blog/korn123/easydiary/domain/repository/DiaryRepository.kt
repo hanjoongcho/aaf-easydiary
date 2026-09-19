@@ -38,7 +38,7 @@ interface DiaryRepository {
         symbolSequence: Int = 0,
     ): List<Diary>
 
-    fun getDiaryWithPhotosById(id: Int): Flow<Diary?>
+    fun getDiaryWithPhotosById(id: Long): Flow<Diary?>
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
 
@@ -52,7 +52,7 @@ interface DiaryRepository {
         endDate: String,
     ): List<Diary>
 
-    suspend fun getDiaryById(seq: Int): Diary?
+    suspend fun getDiaryById(seq: Long): Diary?
 
     suspend fun insertDiary(diary: Diary)
 
@@ -60,7 +60,7 @@ interface DiaryRepository {
 
     suspend fun duplicateDiary(diary: Diary)
 
-    suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int)
+    suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Long)
 
     suspend fun insertAllDiaries(diaries: List<Diary>)
 
@@ -70,7 +70,7 @@ interface DiaryRepository {
 
     suspend fun deleteDiary(diary: Diary)
 
-    suspend fun deleteDiaryById(seq: Int)
+    suspend fun deleteDiaryById(seq: Long)
 
     suspend fun deleteAllDiaries()
 
@@ -78,7 +78,7 @@ interface DiaryRepository {
 
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
 
-    fun findParentDiariesOf(sequence: Int): Flow<List<Diary>>
+    fun findParentDiariesOf(sequence: Long): Flow<List<Diary>>
 
     suspend fun findOldestDiary(): Diary?
 }

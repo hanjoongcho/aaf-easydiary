@@ -591,7 +591,7 @@ object EasyDiaryUtils {
 
     fun applyMarkDownEllipsize(
         textContents: TextView,
-        sequence: Int,
+        sequence: Long,
         delayMillis: Long = 0,
     ) {
         Handler(Looper.getMainLooper()).postDelayed({
@@ -674,7 +674,7 @@ object EasyDiaryUtils {
      ***************************************************************************************************/
     fun sequenceToPageIndex(
         diaryList: List<DiaryDomain>,
-        sequence: Int,
+        sequence: Long,
     ): Int {
         var pageIndex = 0
         if (sequence > -1) {

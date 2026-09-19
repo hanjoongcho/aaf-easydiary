@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
 data class PhotoUriEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var diaryId: Int = 0,
+    var diaryId: Long = 0,
     var photoUri: String? = null,
     var mimeType: String? = null
 )

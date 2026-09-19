@@ -64,7 +64,7 @@ interface DiaryDao {
 
     @Transaction
     @Query("SELECT * FROM diaries WHERE diaryId = :id")
-    fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?>
+    fun getDiaryWithPhotosById(id: Long): Flow<DiaryWithPhotos?>
 
     @Transaction
     @Query(
@@ -78,7 +78,7 @@ interface DiaryDao {
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
 
     @Query("SELECT * FROM diaries WHERE diaryId = :id")
-    suspend fun getDiaryById(id: Int): DiaryEntity?
+    suspend fun getDiaryById(id: Long): DiaryEntity?
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertDiary(diary: DiaryEntity): Long
@@ -93,8 +93,8 @@ interface DiaryDao {
     suspend fun insertDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,
-    ): Int {
-        val diaryId = insertDiary(diary).toInt()
+    ): Long {
+        val diaryId = insertDiary(diary)
         val photoEntities = photoUris.map { it.copy(diaryId = diaryId) }
         insertPhotoUris(photoEntities)
         return diaryId
@@ -130,16 +130,16 @@ interface DiaryDao {
     suspend fun deleteDiary(diary: DiaryEntity)
 
     @Query("DELETE FROM diaries WHERE diaryId = :id")
-    suspend fun deleteDiaryById(id: Int)
+    suspend fun deleteDiaryById(id: Long)
 
     @Query("DELETE FROM diaries WHERE originDiaryId = :originDiaryId")
-    suspend fun deleteTemporaryDiaryBy(originDiaryId: Int)
+    suspend fun deleteTemporaryDiaryBy(originDiaryId: Long)
 
     @Query("DELETE FROM diaries")
     suspend fun deleteAllDiaries()
 
     @Query("DELETE FROM photo_uris WHERE diaryId = :diaryId")
-    suspend fun deletePhotoUrisByDiaryId(diaryId: Int)
+    suspend fun deletePhotoUrisByDiaryId(diaryId: Long)
 
     @Query("SELECT * FROM photo_uris")
     fun getPhotoUris(): Flow<List<PhotoUriEntity>>
@@ -152,7 +152,7 @@ interface DiaryDao {
     ORDER BY currentTimeMillis ASC
 """,
     )
-    fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>>
+    fun findParentDiariesOf(sequence: Long): Flow<List<DiaryEntity>>
 
     @Query(
         """

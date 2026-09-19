@@ -28,7 +28,7 @@ class DiaryRemoteDataSourceImpl
             symbolSequence: Int,
         ): List<DiaryWithPhotos> = emptyList()
 
-        override fun getDiaryWithPhotosById(id: Int): Flow<DiaryWithPhotos?> = flowOf(null)
+        override fun getDiaryWithPhotosById(id: Long): Flow<DiaryWithPhotos?> = flowOf(null)
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = flowOf(null)
 
@@ -42,7 +42,7 @@ class DiaryRemoteDataSourceImpl
             endDate: String,
         ): List<DiaryEntity> = emptyList()
 
-        override suspend fun getDiaryById(seq: Int): DiaryEntity? = null
+        override suspend fun getDiaryById(seq: Long): DiaryEntity? = null
 
         override suspend fun insertDiary(diary: DiaryEntity) {
             // Mock implementation
@@ -51,9 +51,9 @@ class DiaryRemoteDataSourceImpl
         override suspend fun insertDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
-        ): Int {
+        ): Long {
             // Mock implementation
-            return 0
+            return 0L
         }
 
         override suspend fun insertDiariesWithPhotos(
@@ -81,11 +81,11 @@ class DiaryRemoteDataSourceImpl
             // Mock implementation
         }
 
-        override suspend fun deleteDiaryById(seq: Int) {
+        override suspend fun deleteDiaryById(seq: Long) {
             // Mock implementation
         }
 
-        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Int) {
+        override suspend fun deleteTemporaryDiaryBy(originDiaryId: Long) {
             // Mock implementation
         }
 
@@ -99,7 +99,7 @@ class DiaryRemoteDataSourceImpl
 
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = flowOf(emptyList())
 
-        override fun findParentDiariesOf(sequence: Int): Flow<List<DiaryEntity>> = flowOf(emptyList())
+        override fun findParentDiariesOf(sequence: Long): Flow<List<DiaryEntity>> = flowOf(emptyList())
 
         override suspend fun findOldestDiary(): Diary? = null
     }

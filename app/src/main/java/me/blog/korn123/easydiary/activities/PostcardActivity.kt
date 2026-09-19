@@ -48,7 +48,7 @@ class PostcardActivity : EasyDiaryActivity() {
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
     lateinit var mPhotoAdapter: PhotoAdapter
-    private var mSequence: Int = 0
+    private var mSequence: Long = 0
     private var mBgColor = POSTCARD_BG_COLOR_VALUE
     private var mTextColor = POSTCARD_TEXT_COLOR_VALUE
     private var showcaseIndex = 1
@@ -66,7 +66,7 @@ class PostcardActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
             elevation = 0F
         }
-        mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
+        mSequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
 
         mBinding.run {
             lifecycleScope.launch {

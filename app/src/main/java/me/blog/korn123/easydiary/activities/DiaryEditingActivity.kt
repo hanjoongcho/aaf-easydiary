@@ -25,7 +25,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private var mSequence: Int = 0
+    private var mSequence: Long = 0
 
     /***************************************************************************************************
      *   override functions
@@ -82,7 +82,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
      ***************************************************************************************************/
     private suspend fun initData() {
         val intent = intent
-        mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
+        mSequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
         diaryViewModel.findDiaryById(mSequence)?.let {
             mSymbolSequence = it.symbolSequence
             mLinkedDiaries = it.linkedDiaries

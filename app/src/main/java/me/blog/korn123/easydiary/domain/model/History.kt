@@ -4,5 +4,5 @@ data class History(
     val historyTag: String,
     val date: String,
     val attachedPhotoPath: String,
-    val sequence: Int
+    val sequence: Long,
 )

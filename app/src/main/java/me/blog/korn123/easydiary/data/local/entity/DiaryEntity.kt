@@ -8,18 +8,18 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 
 @Entity(
     tableName = "diaries",
-    indices = [Index(value = ["currentTimeMillis"])]
+    indices = [Index(value = ["currentTimeMillis"])],
 )
 data class DiaryEntity(
     @PrimaryKey(autoGenerate = true)
-    var diaryId: Int = 0,
-    var originDiaryId: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
+    var diaryId: Long = 0,
+    var originDiaryId: Long = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
     var currentTimeMillis: Long = System.currentTimeMillis(),
     var title: String? = null,
     var contents: String? = null,
     var dateString: String? = null,
     var symbolSequence: Int = 0,
-    var linkedDiaries: List<Int> = emptyList(),
+    var linkedDiaries: List<Long> = emptyList(),
     var fontName: String? = null,
     var fontSize: Float = 0f,
     var isAllDay: Boolean = false,

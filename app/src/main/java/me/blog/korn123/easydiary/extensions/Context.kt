@@ -620,7 +620,7 @@ fun Context.openOverDueNotification(diaryList: List<DiaryDomain>) {
             NotificationInfo(
                 if (diary.symbolSequence == DAILY_TODO) R.drawable.ic_todo else R.drawable.ic_doing,
                 useActionButton = true,
-                notificationStartId + diary.diaryId,
+                (notificationStartId + diary.diaryId).toInt(),
             )
         if (ActivityCompat.checkSelfPermission(
                 this,

@@ -885,7 +885,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    private fun getIndexBySequence(sequence: Int): Int {
+    private fun getIndexBySequence(sequence: Long): Int {
         var targetIndex = -1
         mDiaryList.forEachIndexed { index, diary ->
             if (diary.diaryId == sequence) {

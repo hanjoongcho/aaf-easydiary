@@ -3,15 +3,15 @@ package me.blog.korn123.easydiary.domain.model
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 
 data class Diary(
-    val diaryId: Int = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
-    val originDiaryId: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
+    val diaryId: Long = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
+    val originDiaryId: Long = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
     val currentTimeMillis: Long = System.currentTimeMillis(),
     val title: String? = null,
     val contents: String = "",
     val dateString: String? = null,
     val symbolSequence: Int = 0,
     val photoUris: List<PhotoUri> = emptyList(),
-    val linkedDiaries: ArrayList<Int> = arrayListOf(),
+    val linkedDiaries: ArrayList<Long> = arrayListOf(),
     val fontName: String? = null,
     val fontSize: Float = 0f,
     val isAllDay: Boolean = false,

@@ -64,7 +64,7 @@ class DiaryRepositoryImpl
                     symbolSequence,
                 ).map { it.toDomain() }
 
-        override fun getDiaryWithPhotosById(id: Int): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
+        override fun getDiaryWithPhotosById(id: Long): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> = dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
 
@@ -81,7 +81,7 @@ class DiaryRepositoryImpl
             endDate: String,
         ): List<Diary> = dataSource.getDiariesByDateRange(startDate, endDate).map { it.toDomain() }
 
-        override suspend fun getDiaryById(seq: Int): Diary? = dataSource.getDiaryById(seq)?.toDomain()
+        override suspend fun getDiaryById(seq: Long): Diary? = dataSource.getDiaryById(seq)?.toDomain()
 
         override suspend fun insertDiary(diary: Diary) {
             val diaryEntity = diary.toEntity()
@@ -112,11 +112,11 @@ class DiaryRepositoryImpl
             )
         }
 
-        override suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Int) {
+        override suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Long) {
             dataSource.deleteTemporaryDiaryBy(originDiaryId)
 
             // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.deleteTemporaryDiaryBy(originDiaryId)
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(originDiaryId.toInt())
         }
 
         override suspend fun insertAllDiaries(diaries: List<Diary>) {
@@ -148,11 +148,11 @@ class DiaryRepositoryImpl
             dataSource.deleteDiary(entity)
         }
 
-        override suspend fun deleteDiaryById(seq: Int) {
+        override suspend fun deleteDiaryById(seq: Long) {
             dataSource.deleteDiaryById(seq)
 
             // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.deleteDiaryBy(seq)
+            EasyDiaryDbHelper.deleteDiaryBy(seq.toInt())
         }
 
         override suspend fun deleteAllDiaries() {
@@ -168,7 +168,7 @@ class DiaryRepositoryImpl
 
         override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = dataSource.getPhotoUris()
 
-        override fun findParentDiariesOf(sequence: Int): Flow<List<Diary>> =
+        override fun findParentDiariesOf(sequence: Long): Flow<List<Diary>> =
             dataSource.findParentDiariesOf(sequence).map { entities ->
                 entities.map { it.toDomain() }
             }

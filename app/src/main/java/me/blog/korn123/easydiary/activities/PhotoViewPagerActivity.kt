@@ -38,7 +38,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         setSupportActionBar(mBinding.toolbar)
 
         val intent = intent
-        val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
+        val sequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
         lifecycleScope.launch {
             diaryViewModel.findDiaryById(sequence)?.let {

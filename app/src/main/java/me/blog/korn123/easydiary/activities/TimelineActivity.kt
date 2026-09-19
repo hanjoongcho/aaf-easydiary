@@ -213,7 +213,7 @@ class TimelineActivity : EasyDiaryActivity() {
                         ),
                     )
 
-                    diaryId = savedInstanceState.getInt(DIARY_SEQUENCE, -1)
+                    diaryId = savedInstanceState.getLong(DIARY_SEQUENCE, -1)
                 }
             }
 
@@ -223,7 +223,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (mDiaryList.isNotEmpty()) {
-            outState.putInt(
+            outState.putLong(
                 DIARY_SEQUENCE,
                 mDiaryList[mBinding.timelineList.firstVisiblePosition].diaryId,
             )
@@ -453,7 +453,7 @@ class TimelineActivity : EasyDiaryActivity() {
             }
     }
 
-    private var diaryId = 0
+    private var diaryId = 0L
 
     private suspend fun refreshList() {
         diaryViewModel.isLoading = true

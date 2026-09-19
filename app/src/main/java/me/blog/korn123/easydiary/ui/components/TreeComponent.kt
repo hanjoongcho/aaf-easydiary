@@ -82,7 +82,7 @@ fun TreeContent(
     updateQuery: (String) -> Unit,
     toggleWholeTree: (Boolean) -> Unit,
     folderOnClick: (FileNode) -> Unit,
-    resultAPICallback: (Int) -> Unit,
+    resultAPICallback: (Long) -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -374,7 +374,7 @@ fun TreeToolbar(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TreeCard(
-    sequence: Int,
+    sequence: Long,
     weather: Int,
     title: String,
     subTitle: String,
@@ -467,7 +467,7 @@ fun TreeCard(
 @Composable
 private fun NodeHeaderRow(
     isFile: Boolean,
-    sequence: Int,
+    sequence: Long,
     title: String,
     weather: Int,
     currentQuery: String,
@@ -642,7 +642,7 @@ private fun handleNodeClick(
     context: android.content.Context,
     activity: android.app.Activity?,
     currentQuery: String,
-    resultAPICallback: (Int) -> Unit,
+    resultAPICallback: (Long) -> Unit,
     folderOnClick: (FileNode) -> Unit,
 ) {
     if (node.isFile) {
@@ -683,5 +683,5 @@ private fun getAnnotatedTitle(
 
 private fun getIndexBySequence(
     treeData: List<Pair<FileNode, Int>>,
-    sequence: Int,
+    sequence: Long,
 ): Int = treeData.indexOfFirst { it.first.sequence == sequence }

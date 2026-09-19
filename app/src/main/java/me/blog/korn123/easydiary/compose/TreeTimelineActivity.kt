@@ -101,7 +101,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         onQueryChange: (String) -> Unit,
         onToggleWholeTree: (Boolean) -> Unit,
         onFolderClick: (FileNode) -> Unit,
-        onResultAPICallback: (Int) -> Unit = {},
+        onResultAPICallback: (Long) -> Unit = {},
     ) {
         AppTheme {
             Scaffold(

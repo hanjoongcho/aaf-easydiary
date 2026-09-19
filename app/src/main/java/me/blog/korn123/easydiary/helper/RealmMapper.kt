@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
+import androidx.compose.runtime.snapshots.toInt
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
@@ -85,14 +86,14 @@ fun Alarm.toRealm(): me.blog.korn123.easydiary.models.Alarm =
 
 fun me.blog.korn123.easydiary.models.Diary.toDomain(): Diary =
     DiaryEntity(
-        diaryId = this.sequence,
-        originDiaryId = this.originSequence,
+        diaryId = this.sequence.toLong(),
+        originDiaryId = this.originSequence.toLong(),
         currentTimeMillis = this.currentTimeMillis,
         title = this.title,
         contents = this.contents,
         dateString = this.dateString,
         symbolSequence = this.weather,
-        linkedDiaries = this.linkedDiaries.toList(),
+        linkedDiaries = this.linkedDiaries.toList().map { it.toLong() },
         fontName = this.fontName,
         fontSize = this.fontSize,
         isAllDay = this.isAllDay,
@@ -135,8 +136,8 @@ fun me.blog.korn123.easydiary.models.Location.toDomain(): Location =
 fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
     me.blog.korn123.easydiary.models.Diary().apply {
         val domainDiary = this@toRealm
-        sequence = domainDiary.diaryId
-        originSequence = domainDiary.originDiaryId
+        sequence = domainDiary.diaryId.toInt()
+        originSequence = domainDiary.originDiaryId.toInt()
         currentTimeMillis = domainDiary.currentTimeMillis
         title = domainDiary.title
         contents = domainDiary.contents
@@ -148,7 +149,7 @@ fun Diary.toRealm(): me.blog.korn123.easydiary.models.Diary =
             }
         linkedDiaries =
             RealmList<Int>().apply {
-                addAll(domainDiary.linkedDiaries)
+                addAll(domainDiary.linkedDiaries.map { it.toInt() })
             }
         fontName = domainDiary.fontName
         fontSize = domainDiary.fontSize

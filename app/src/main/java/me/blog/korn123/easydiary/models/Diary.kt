@@ -14,8 +14,8 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 
 open class Diary : RealmObject {
     @PrimaryKey
-    var sequence: Int = DiaryEditingConstants.DIARY_SEQUENCE_INIT
-    var originSequence: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT
+    var sequence: Int = DiaryEditingConstants.DIARY_SEQUENCE_INIT.toInt()
+    var originSequence: Int = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT.toInt()
 
     @Ignore
     private val sessionId: Int = 0
