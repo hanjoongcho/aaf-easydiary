@@ -100,6 +100,8 @@ object EasyDiaryUtils {
             return "text/aaf_v$currentVersion"
         }
 
+    val easyDiaryRoomMimeType: String = "room/zip"
+
     val easyDiaryMimeTypeAll: Array<String?>
         get() {
             val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
@@ -407,6 +409,18 @@ object EasyDiaryUtils {
         val intent =
             Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = mimeType
+            }
+        activityResultLauncher.launch(intent)
+    }
+
+    fun readFileWithSAF(
+        mimeTypes: Array<String>,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        val intent =
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
             }
         activityResultLauncher.launch(intent)
     }

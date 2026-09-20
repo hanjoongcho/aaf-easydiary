@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +41,7 @@ import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dDayRepository
+import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
@@ -46,6 +49,7 @@ import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PhotoHighlightManager
+import me.blog.korn123.easydiary.helper.RoomConstants
 import java.io.File
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -535,6 +539,10 @@ class DiaryViewModel
             return resultMap
         }
 
+        /***************************************************************************************************
+         *   backup and restore functions
+         *
+         ***************************************************************************************************/
         suspend fun migRealmToRoom() {
             if (!application.config.enableJetpackRoomDatabase) {
                 val domainDiaries = mutableListOf<Diary>()
@@ -542,7 +550,12 @@ class DiaryViewModel
                 val domainActionLogs = mutableListOf<ActionLog>()
                 val domainDDays = mutableListOf<DDay>()
                 EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    domainDiaries.addAll(EasyDiaryDbHelper.findDiary(query = null, realmInstance = realm))
+                    domainDiaries.addAll(
+                        EasyDiaryDbHelper.findDiary(
+                            query = null,
+                            realmInstance = realm,
+                        ),
+                    )
                     domainAlarms.addAll(EasyDiaryDbHelper.findAlarmAll())
                     domainActionLogs.addAll(EasyDiaryDbHelper.findAllActionLogs())
                     domainDDays.addAll(EasyDiaryDbHelper.findDDayAll())

@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
@@ -59,10 +58,15 @@ import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.databinding.DialogSyncGoogleCalendarBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.UriFileType
 import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.classifyUriByExtension
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.deleteTemporaryRoomFile
+import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
+import me.blog.korn123.easydiary.extensions.importRoomData
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
@@ -76,11 +80,12 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.helper.RealmConstants
+import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_IMPORT_GOOGLE_DRIVE
@@ -91,6 +96,7 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import java.io.File
 import java.util.Locale
 import kotlin.coroutines.resume
 
@@ -120,8 +126,8 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     pauseLock()
                     if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                         when (mTaskFlag) {
-                            SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
-                            SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
+                            SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRoom()
+                            SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRoom()
                             SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
                             SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
                         }
@@ -232,7 +238,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     ) {
                         mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
                         if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            backupDiaryRealm()
+                            backupDiaryRoom()
                         } else { // Permission has already been granted
                             mRequestExternalStoragePermissionLauncher.launch(
                                 EXTERNAL_STORAGE_PERMISSIONS,
@@ -247,7 +253,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     ) {
                         mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
                         if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            recoverDiaryRealm()
+                            recoverDiaryRoom()
                         } else { // Permission has already been granted
                             mRequestExternalStoragePermissionLauncher.launch(
                                 EXTERNAL_STORAGE_PERMISSIONS,
@@ -386,23 +392,34 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun backupDiaryRealm() {
+    private fun backupDiaryRoom() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
-        val realmPath = EasyDiaryDbHelper.getRealmPath()
         lifecycleScope.launch {
+            val realmPath = EasyDiaryDbHelper.getRealmPath()
+            val roomPath = requireActivity().exportRoomData()
+
             val finalResult =
                 runCatching {
                     val googleAccount = authManager.getGoogleAccount()
                     requestDrivePermissions()
                     val driveServiceHelper = DriveServiceHelper(requireContext(), googleAccount)
-                    val rootDriveId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME)
+                    val rootDriveId =
+                        driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_REALM_FOLDER_NAME)
+//                    driveServiceHelper
+//                        .createFile(
+//                            rootDriveId,
+//                            realmPath,
+//                            RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+//                            EasyDiaryUtils.easyDiaryMimeType,
+//                        )
+
                     driveServiceHelper
                         .createFile(
                             rootDriveId,
-                            realmPath,
-                            RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
-                            EasyDiaryUtils.easyDiaryMimeType,
+                            roomPath,
+                            RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss") + ".zip",
+                            EasyDiaryUtils.easyDiaryRoomMimeType,
                         )
                 }
 
@@ -417,16 +434,18 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     progressContainer.visibility = View.GONE
                     requireActivity().clearHoldOrientation()
                 }
+
+            requireActivity().deleteTemporaryRoomFile(roomPath)
         }
     }
 
-    private fun recoverDiaryRealm() {
+    private fun recoverDiaryRoom() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
-        openRealmFilePickerDialog()
+        openRoomFilePickerDialog()
     }
 
-    private fun openRealmFilePickerDialog() {
+    private fun openRoomFilePickerDialog() {
         lifecycleScope.launch {
             val googleAccount = authManager.getGoogleAccount()
             requestDrivePermissions()
@@ -437,7 +456,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString(
                             "' or mimeType = '",
                         )
-                    }') and trashed = false",
+                    }' or mimeType ='${EasyDiaryUtils.easyDiaryRoomMimeType}') and trashed = false",
                     1000,
                 )
             }.onSuccess { fileList ->
@@ -469,17 +488,48 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                     AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo =
                             parent.adapter.getItem(position) as HashMap<*, *>
-                        itemInfo["id"]?.let { realmFileId ->
-                            progressContainer.visibility = View.VISIBLE
-                            val realmPath = EasyDiaryDbHelper.getRealmPath()
-                            EasyDiaryDbHelper.closeInstance()
-                            lifecycleScope.launch {
-                                driveServiceHelper.downloadFile(realmFileId as String, realmPath)
-                                config.enableJetpackRoomDatabase = false
-                                requireActivity().refreshApp()
+
+                        // check file name
+                        when (classifyUriByExtension((itemInfo["name"] ?: "") as String)) {
+                            UriFileType.ROOM -> {
+                                progressContainer.visibility = View.VISIBLE
+                                val destFilePath = BACKUP_DB_DIRECTORY + RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+                                val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + destFilePath + ".zip")
+                                lifecycleScope.launch {
+                                    driveServiceHelper.downloadFile(itemInfo["id"] as String, destFile.absolutePath)
+                                    requireActivity().run {
+                                        importRoomData(destFile, { message ->
+                                            makeSnackBar(message)
+                                            refreshApp()
+                                        }, { message ->
+                                            makeSnackBar(message)
+                                        })
+                                    }
+                                    destFile.delete()
+                                    progressContainer.visibility = View.GONE
+                                }
+                                alertDialog?.cancel()
+                            }
+
+                            UriFileType.REALM -> {
+                                itemInfo["id"]?.let { realmFileId ->
+                                    progressContainer.visibility = View.VISIBLE
+                                    val realmPath = EasyDiaryDbHelper.getRealmPath()
+                                    EasyDiaryDbHelper.closeInstance()
+                                    lifecycleScope.launch {
+                                        driveServiceHelper.downloadFile(realmFileId as String, realmPath)
+                                        config.enableJetpackRoomDatabase = false
+                                        requireActivity().refreshApp()
+                                    }
+                                }
+                                alertDialog?.cancel()
+                            }
+
+                            UriFileType.UNKNOWN -> {
+                                alertDialog?.cancel()
+                                requireActivity().makeSnackBar("Unknown file type.")
                             }
                         }
-                        alertDialog?.cancel()
                     }
 
                 alertDialog =

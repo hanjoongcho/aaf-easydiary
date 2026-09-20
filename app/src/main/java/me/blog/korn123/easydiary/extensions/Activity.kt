@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -45,6 +46,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.ActivityCompat
+import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -58,6 +60,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -554,6 +557,8 @@ fun Activity.startActivityWithTransition(intent: Intent) {
 // }
 
 fun Activity.refreshApp() {
+    getSystemService<NotificationManager>()?.cancelAll()
+
     val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
     readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     TransitionHelper.startActivityWithTransition(this, readDiaryIntent)

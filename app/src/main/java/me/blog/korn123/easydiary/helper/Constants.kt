@@ -882,6 +882,7 @@ object RealmConstants {
 
 object RoomConstants {
     const val DIARY_DB_NAME = "easy_diary.db"
+    const val EXPORT_JSON_FILE_ENTRY_NAME = "easy_diary_all.json"
 }
 
 object AuthManager {

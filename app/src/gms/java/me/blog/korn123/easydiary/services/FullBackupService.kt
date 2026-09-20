@@ -32,6 +32,8 @@ import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
+import me.blog.korn123.easydiary.extensions.deleteTemporaryRoomFile
+import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
@@ -45,6 +47,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.RealmConstants
+import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingConstants
 import java.io.File
 import java.util.Collections
@@ -380,7 +383,7 @@ class FullBackupService : Service() {
     ) {
         if (mInProcessJob) {
             if (workStatus.targetFilenames.isEmpty()) {
-                applicationScope.launch { backupDiaryRealm(alarm, workStatus) }
+                applicationScope.launch { backupDiaryRoom(alarm, workStatus) }
             } else {
                 val stringBuilder =
                     createBackupContentText(
@@ -424,20 +427,20 @@ class FullBackupService : Service() {
                     if (mInProcessJob) uploadDiaryPhoto(alarm, workStatus)
                 } else {
                     config.photoBackupGoogle = System.currentTimeMillis()
-                    applicationScope.launch { backupDiaryRealm(alarm, workStatus) }
+                    applicationScope.launch { backupDiaryRoom(alarm, workStatus) }
                 }
             }
         }
     }
 
-    private suspend fun backupDiaryRealm(
+    private suspend fun backupDiaryRoom(
         alarm: AlarmDomain,
         workStatus: WorkStatus,
     ) {
+        val roomPath = applicationContext.exportRoomData()
         authManager.getLastSignedInAccount()?.let { account ->
-
             val dbFileName =
-                RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+                RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss") + ".zip"
             val driveServiceHelper = DriveServiceHelper(applicationContext, account)
             runCatching {
                 val realmFolderId =
@@ -445,9 +448,9 @@ class FullBackupService : Service() {
                 driveServiceHelper
                     .createFile(
                         realmFolderId,
-                        EasyDiaryDbHelper.getRealmPath(),
+                        roomPath,
                         dbFileName,
-                        EasyDiaryUtils.easyDiaryMimeType,
+                        EasyDiaryUtils.easyDiaryRoomMimeType,
                     )
             }.onSuccess {
                 config.diaryBackupGoogle = System.currentTimeMillis()
@@ -461,6 +464,8 @@ class FullBackupService : Service() {
                 stopSelf()
             }
         }
+
+        applicationContext.deleteTemporaryRoomFile(roomPath)
     }
 
     private fun launchCompleteNotification(

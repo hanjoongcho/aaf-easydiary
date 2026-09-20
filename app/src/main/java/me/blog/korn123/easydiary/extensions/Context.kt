@@ -33,8 +33,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.preference.PreferenceManager
 import android.text.Spannable
@@ -73,7 +71,10 @@ import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.application
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
@@ -128,6 +129,7 @@ import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
@@ -140,6 +142,10 @@ import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
+import me.blog.korn123.easydiary.domain.model.ActionLog
+import me.blog.korn123.easydiary.domain.model.Alarm
+import me.blog.korn123.easydiary.domain.model.DDay
+import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
@@ -177,6 +183,7 @@ import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
 import me.blog.korn123.easydiary.helper.RealmConstants
+import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
 import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_SORTING
@@ -198,6 +205,7 @@ import me.blog.korn123.easydiary.views.ItemCardView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.Locale
@@ -1423,14 +1431,6 @@ fun Context.shareFile(
     }
 }
 
-fun Context.exportRealmFile() {
-    val srcFile = File(EasyDiaryDbHelper.getRealmPath())
-    val destFilePath = BACKUP_DB_DIRECTORY + RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
-    FileUtils.copyFile(srcFile, destFile, false)
-    config.diaryBackupLocal = System.currentTimeMillis()
-}
-
 fun Context.formatTime(
     showSeconds: Boolean,
     use24HourFormat: Boolean,
@@ -1902,3 +1902,302 @@ tailrec fun Context.findActivity(): Activity? =
         is ContextWrapper -> baseContext.findActivity()
         else -> null
     }
+
+enum class UriFileType {
+    REALM,
+    ROOM,
+    UNKNOWN,
+}
+
+fun classifyUriByExtension(uriString: String): UriFileType {
+    // URI 또는 파일 경로에서 마지막 파일명 및 확장자 추출
+    val fileName = uriString.substringAfterLast('/')
+
+    // 확장자 추출 (파일명 내 첫 번째 점 또는 마지막 점 기준)
+    val extension =
+        if (fileName.contains('.')) {
+            fileName.substringAfterLast('.')
+        } else {
+            ""
+        }
+
+    return when {
+        // 확장자가 zip이고 파일명에 db_ 문자열이 포함된 경우 (ROOM)
+        extension.equals("zip", ignoreCase = true) && fileName.contains("db_", ignoreCase = true) -> UriFileType.ROOM
+
+        // 확장자가 realm_ 으로 시작하는 경우 (예: .realm_backup)
+        extension.startsWith("realm_", ignoreCase = true) -> UriFileType.REALM
+
+        else -> UriFileType.UNKNOWN
+    }
+}
+
+fun Context.exportRealmFile() {
+    val srcFile = File(EasyDiaryDbHelper.getRealmPath())
+    val destFilePath = BACKUP_DB_DIRECTORY + RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
+    FileUtils.copyFile(srcFile, destFile, false)
+    config.diaryBackupLocal = System.currentTimeMillis()
+}
+
+suspend fun Context.exportRoomData(): String {
+    val destFilePath = BACKUP_DB_DIRECTORY + RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath + ".zip")
+    val roomDataMap = generateRoomDataMap()
+    withContext(Dispatchers.IO) {
+        val jsonString =
+            GsonBuilder().setPrettyPrinting().create().toJson(roomDataMap)
+        FileOutputStream(destFile).use { outputStream ->
+            java.util.zip.ZipOutputStream(outputStream).use { zos ->
+                val entryName = RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME
+                val entry = java.util.zip.ZipEntry(entryName)
+                zos.putNextEntry(entry)
+                zos.write(jsonString.toByteArray(Charsets.UTF_8))
+                zos.closeEntry()
+            }
+        }
+    }
+
+    config.diaryBackupLocal = System.currentTimeMillis()
+    return destFile.absolutePath
+}
+
+suspend fun Context.generateRoomDataMap(): Map<String, Any> =
+    mutableMapOf(
+        "META" to EasyDiaryUtils.getExportMeta(),
+        "ACTION_LOG" to actionLogRepository.getAllActionLogs(),
+        "ALARM" to alarmRepository.getAllAlarms(),
+        "D_DAY" to dDayRepository.getAllDDays(),
+        "DIARY" to diaryRepository.getDiariesWithPhotos(),
+    )
+
+suspend fun Context.exportRoomDataWithSAF(uri: Uri?) {
+    uri?.let {
+        val roomDataMap = generateRoomDataMap()
+        withContext(Dispatchers.IO) {
+            val jsonString =
+                GsonBuilder().setPrettyPrinting().create().toJson(roomDataMap)
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                java.util.zip.ZipOutputStream(outputStream).use { zos ->
+                    val entryName = RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME
+                    val entry = java.util.zip.ZipEntry(entryName)
+                    zos.putNextEntry(entry)
+                    zos.write(jsonString.toByteArray(Charsets.UTF_8))
+                    zos.closeEntry()
+                }
+            }
+        }
+    }
+}
+
+suspend fun Context.importRoomDataWithSAF(
+    uri: Uri?,
+    successCallback: (String) -> Unit,
+    failCallback: (String) -> Unit,
+) {
+    uri?.let {
+        try {
+            withContext(Dispatchers.IO) {
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    java.util.zip.ZipInputStream(inputStream).use { zis ->
+                        var entry = zis.nextEntry
+                        while (entry != null) {
+                            if (entry.name == RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME) {
+                                // 1. Read JSON string
+                                val jsonString = zis.bufferedReader().readText()
+
+                                // 2. Convert to Map using Gson
+                                // Use TypeToken to preserve data types.
+                                val type =
+                                    object :
+                                        com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
+                                val dataMap: Map<String, Any> =
+                                    Gson().fromJson(jsonString, type)
+
+                                // 3. Convert each data to domain model list and save to DB
+                                // Note: When Gson converts numbers to Double or uses a generic map,
+                                // type casting errors may occur, so a process of converting to the exact model class is required.
+                                val gson = Gson()
+
+                                // Save ActionLog
+                                dataMap["ACTION_LOG"]?.let { it ->
+                                    val json = gson.toJson(it)
+                                    val list: List<ActionLog> =
+                                        gson.fromJson(
+                                            json,
+                                            object :
+                                                com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type,
+                                        )
+                                    actionLogRepository.deleteAllActionLogs(true)
+                                    actionLogRepository.insertAllActionLogs(list)
+                                }
+
+                                // Save Alarm
+                                dataMap["ALARM"]?.let {
+                                    val json = gson.toJson(it)
+                                    val list: List<Alarm> =
+                                        gson.fromJson(
+                                            json,
+                                            object :
+                                                com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
+                                        )
+                                    alarmRepository.deleteAllAlarms()
+                                    alarmRepository.insertAllAlarms(list)
+                                }
+
+                                // Save D-Day
+                                dataMap["D_DAY"]?.let {
+                                    val json = gson.toJson(it)
+                                    val list: List<DDay> =
+                                        gson.fromJson(
+                                            json,
+                                            object :
+                                                com.google.gson.reflect.TypeToken<List<DDay>>() {}.type,
+                                        )
+                                    dDayRepository.deleteAllDDays()
+                                    dDayRepository.insertAllDDays(list)
+                                }
+
+                                // Save Diary (including photos)
+                                dataMap["DIARY"]?.let {
+                                    val json = gson.toJson(it)
+                                    val list: List<Diary> =
+                                        gson.fromJson(
+                                            json,
+                                            object :
+                                                com.google.gson.reflect.TypeToken<List<Diary>>() {}.type,
+                                        )
+                                    diaryRepository.deleteAllDiaries()
+                                    diaryRepository.insertAllDiaries(list)
+                                }
+
+                                break // Found the file, so terminate the loop
+                            }
+                            entry = zis.nextEntry
+                        }
+                    }
+                }
+            }
+            withContext(Dispatchers.Main) {
+                successCallback("Import completed.")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                failCallback("Error: ${e.message}")
+            }
+        }
+    }
+}
+
+suspend fun Context.importRoomData(
+    file: File,
+    successCallback: (String) -> Unit,
+    failCallback: (String) -> Unit,
+) {
+    try {
+        withContext(Dispatchers.IO) {
+            FileInputStream(file).use { inputStream ->
+                java.util.zip.ZipInputStream(inputStream).use { zis ->
+                    var entry = zis.nextEntry
+                    while (entry != null) {
+                        if (entry.name == RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME) {
+                            // 1. Read JSON string
+                            val jsonString = zis.bufferedReader().readText()
+
+                            // 2. Convert to Map using Gson
+                            // Use TypeToken to preserve data types.
+                            val type =
+                                object :
+                                    com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
+                            val dataMap: Map<String, Any> =
+                                Gson().fromJson(jsonString, type)
+
+                            // 3. Convert each data to domain model list and save to DB
+                            // Note: When Gson converts numbers to Double or uses a generic map,
+                            // type casting errors may occur, so a process of converting to the exact model class is required.
+                            val gson = Gson()
+
+                            // Save ActionLog
+                            dataMap["ACTION_LOG"]?.let { it ->
+                                val json = gson.toJson(it)
+                                val list: List<ActionLog> =
+                                    gson.fromJson(
+                                        json,
+                                        object :
+                                            com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type,
+                                    )
+                                actionLogRepository.deleteAllActionLogs(true)
+                                actionLogRepository.insertAllActionLogs(list)
+                            }
+
+                            // Save Alarm
+                            dataMap["ALARM"]?.let {
+                                val json = gson.toJson(it)
+                                val list: List<Alarm> =
+                                    gson.fromJson(
+                                        json,
+                                        object :
+                                            com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
+                                    )
+                                alarmRepository.deleteAllAlarms()
+                                alarmRepository.insertAllAlarms(list)
+                            }
+
+                            // Save D-Day
+                            dataMap["D_DAY"]?.let {
+                                val json = gson.toJson(it)
+                                val list: List<DDay> =
+                                    gson.fromJson(
+                                        json,
+                                        object :
+                                            com.google.gson.reflect.TypeToken<List<DDay>>() {}.type,
+                                    )
+                                dDayRepository.deleteAllDDays()
+                                dDayRepository.insertAllDDays(list)
+                            }
+
+                            // Save Diary (including photos)
+                            dataMap["DIARY"]?.let {
+                                val json = gson.toJson(it)
+                                val list: List<Diary> =
+                                    gson.fromJson(
+                                        json,
+                                        object :
+                                            com.google.gson.reflect.TypeToken<List<Diary>>() {}.type,
+                                    )
+                                diaryRepository.deleteAllDiaries()
+                                diaryRepository.insertAllDiaries(list)
+                            }
+
+                            break // Found the file, so terminate the loop
+                        }
+                        entry = zis.nextEntry
+                    }
+                }
+            }
+        }
+        withContext(Dispatchers.Main) {
+            successCallback("Import completed.")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        withContext(Dispatchers.Main) {
+            failCallback("Error: ${e.message}")
+        }
+    }
+
+    deleteTemporaryRoomFile(file.absolutePath)
+}
+
+suspend fun Context.deleteTemporaryRoomFile(roomPath: String) {
+    actionLogRepository.insertActionLog(
+        ActionLogDomain(
+            className = this::class.java.name,
+            signature = "deleteTemporaryRoomFile",
+            key = ActionLogKey.INFO,
+            value = roomPath,
+        ),
+    )
+    File(roomPath).delete()
+}

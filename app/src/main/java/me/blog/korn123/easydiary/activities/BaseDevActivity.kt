@@ -43,6 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
@@ -1040,6 +1041,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ).filter { item -> item.symbolSequence in 80..81 },
                     )
                 }
+            }
+            SimpleCard(
+                "Notification-05",
+                "Cancel All Notification",
+                modifier = modifier,
+            ) {
+                getSystemService<NotificationManager>()?.cancelAll()
             }
         }
     }

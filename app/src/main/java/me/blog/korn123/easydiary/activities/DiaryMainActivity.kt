@@ -44,6 +44,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
