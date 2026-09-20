@@ -39,7 +39,6 @@ import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dDayRepository
-import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
@@ -236,7 +235,7 @@ class DiaryViewModel
             findDiaryParams
                 .flatMapLatest { params ->
                     diaryRepository
-                        .getDiariesWithPhotosFlow(
+                        .observeDiariesWithPhotos(
                             query = params.query,
                             isSensitive = params.isSensitive,
                             startTimeMillis = params.startTimeMillis,
@@ -303,7 +302,7 @@ class DiaryViewModel
 
         suspend fun findDiaryById(sequence: Long): Diary? =
             if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.getDiaryWithPhotosById(sequence).first()
+                diaryRepository.observeDiaryWithPhotosById(sequence).first()
             } else {
                 EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
                     EasyDiaryDbHelper.findDiaryBy(sequence.toInt(), realm)
@@ -331,7 +330,7 @@ class DiaryViewModel
             sequence: Long,
         ): List<Diary> =
             if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.findParentDiariesOf(sequence).first()
+                diaryRepository.observeParentDiariesOf(sequence).first()
             } else {
                 EasyDiaryDbHelper.findParentDiariesOf(sequence.toInt())
             }

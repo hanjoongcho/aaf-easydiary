@@ -37,13 +37,21 @@ import me.blog.korn123.easydiary.domain.model.Diary
  * =====================================================================================
  */
 interface DiaryRepository {
-    fun getDiariesWithPhotosFlow(
+    fun observeDiariesWithPhotos(
         query: String? = null,
         isSensitive: Boolean = false,
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
     ): Flow<List<Diary>>
+
+    fun observeDiaryWithPhotosById(id: Long): Flow<Diary?>
+
+    fun observeDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
+
+    fun observePhotoUris(): Flow<List<PhotoUriEntity>>
+
+    fun observeParentDiariesOf(sequence: Long): Flow<List<Diary>>
 
     suspend fun getDiariesWithPhotos(
         query: String? = null,
@@ -52,10 +60,6 @@ interface DiaryRepository {
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
     ): List<Diary>
-
-    fun getDiaryWithPhotosById(id: Long): Flow<Diary?>
-
-    fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?>
 
     suspend fun getDiariesByDateString(
         dateString: String,
@@ -90,10 +94,6 @@ interface DiaryRepository {
     suspend fun deleteAllDiaries()
 
     suspend fun clearSelectedStatus()
-
-    fun getPhotoUris(): Flow<List<PhotoUriEntity>>
-
-    fun findParentDiariesOf(sequence: Long): Flow<List<Diary>>
 
     suspend fun findOldestDiary(): Diary?
 }

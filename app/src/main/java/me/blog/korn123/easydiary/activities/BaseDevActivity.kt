@@ -589,7 +589,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             if (config.enableJetpackRoomDatabase) {
                 updateConsole("🍕 room info")
                 updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
-                updateConsole("room photo-uri count: ${diaryRepository.getPhotoUris().first().size}")
+                updateConsole("room photo-uri count: ${diaryRepository.observePhotoUris().first().size}")
                 updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
                 updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
                 updateConsole("room d-day count: ${viewModel.getDDayCount()}")
@@ -703,7 +703,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                     // diff photoUri
                     val realmPhotoUris = EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
-                    val roomPhotoUris = diaryRepository.getPhotoUris().first()
+                    val roomPhotoUris = diaryRepository.observePhotoUris().first()
                     updateConsole("======== 👀 start diff photoUris: ${realmPhotoUris.size}")
                     ok = 0
                     withContext(Dispatchers.Default) {

@@ -30,7 +30,7 @@ class DiaryRepositoryImpl
             // FIXME: Remove temporary code when migrate to Jetpack Room
             get() = localDataSource
 
-        override fun getDiariesWithPhotosFlow(
+        override fun observeDiariesWithPhotos(
             query: String?,
             isSensitive: Boolean,
             startTimeMillis: Long,
@@ -48,6 +48,17 @@ class DiaryRepositoryImpl
                     entities.map { it.toDomain() }
                 }
 
+        override fun observeDiaryWithPhotosById(id: Long): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
+
+        override fun observeDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> = dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
+
+        override fun observePhotoUris(): Flow<List<PhotoUriEntity>> = dataSource.getPhotoUris()
+
+        override fun observeParentDiariesOf(sequence: Long): Flow<List<Diary>> =
+            dataSource.findParentDiariesOf(sequence).map { entities ->
+                entities.map { it.toDomain() }
+            }
+
         override suspend fun getDiariesWithPhotos(
             query: String?,
             isSensitive: Boolean,
@@ -63,10 +74,6 @@ class DiaryRepositoryImpl
                     endTimeMillis,
                     symbolSequence,
                 ).map { it.toDomain() }
-
-        override fun getDiaryWithPhotosById(id: Long): Flow<Diary?> = dataSource.getDiaryWithPhotosById(id).map { it?.toDomain() }
-
-        override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<Diary?> = dataSource.getDiaryWithPhotosByPhotoUri(photoUriString).map { it?.toDomain() }
 
         override suspend fun getDiariesByDateString(
             dateString: String,
@@ -165,13 +172,6 @@ class DiaryRepositoryImpl
             // FIXME: Remove legacy realm functions
             EasyDiaryDbHelper.clearSelectedStatus()
         }
-
-        override fun getPhotoUris(): Flow<List<PhotoUriEntity>> = dataSource.getPhotoUris()
-
-        override fun findParentDiariesOf(sequence: Long): Flow<List<Diary>> =
-            dataSource.findParentDiariesOf(sequence).map { entities ->
-                entities.map { it.toDomain() }
-            }
 
         override suspend fun findOldestDiary(): Diary? = dataSource.findOldestDiary()
     }
