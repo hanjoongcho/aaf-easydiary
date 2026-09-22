@@ -39,15 +39,14 @@ class ZipHelper(
     var isOnProgress = true
 
     @SuppressLint("NewApi")
-    fun showNotification(
+    fun createNotification(
         notificationId: Int,
         title: String,
         message: String,
         actionString: String,
-    ) {
+    ): Notification {
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         if (isOreoPlus()) {
-//            val importance = NotificationManager.IMPORTANCE_HIGH
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_zip_helper", context.getString(R.string.notification_channel_name_zip_helper), importance)
             mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
@@ -68,7 +67,6 @@ class ZipHelper(
                 .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$notificationId] $title" else title)
                 .setContentText(message)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(title))
-//                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(
                     R.drawable.ic_easydiary,
@@ -82,10 +80,22 @@ class ZipHelper(
                         context.pendingIntentFlag(),
                     ),
                 )
-        notificationManager.notify(notificationId, mBuilder.build())
+        return mBuilder.build()
+    }
+
+    fun showNotification(
+        notificationId: Int,
+        title: String,
+        message: String,
+        actionString: String,
+    ) {
+        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        val notification = createNotification(notificationId, title, message, actionString)
+        notificationManager.notify(notificationId, notification)
     }
 
     private fun updateCompressProgress(progress: Int) {
+        Log.i(AAF_TEST, "updateCompressProgress ${progress.plus(1)}/${mFileNames.size}")
         val currentTime = System.currentTimeMillis()
         if ((isOnProgress && progress == mFileNames.size.minus(1)) || currentTime - lastUpdateTime >= updateInterval) {
             lastUpdateTime = currentTime
@@ -125,10 +135,11 @@ class ZipHelper(
         message: String,
     ) {
         if (isOnProgress) {
-            val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID) NotificationConstants.ACTION_DISMISS_COMPRESS else NotificationConstants.ACTION_DISMISS_DECOMPRESS
+            val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID || notificationId == NOTIFICATION_COMPRESS_COMPLETE_ID) NotificationConstants.ACTION_DISMISS_COMPRESS else NotificationConstants.ACTION_DISMISS_DECOMPRESS
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.mActions.clear()
-            mBuilder // .setProgress(0, 0, false)
+            mBuilder
+                .setProgress(0, 0, false)
                 .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$notificationId] $title" else title)
                 .setContentText(message)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message))
@@ -265,6 +276,7 @@ class ZipHelper(
             e.printStackTrace()
         }
     }
+
     fun decompress(
         zipFileName: String,
         compressDirectoryName: String,

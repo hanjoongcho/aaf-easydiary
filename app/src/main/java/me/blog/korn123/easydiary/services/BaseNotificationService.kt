@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import com.simplemobiletools.commons.extensions.toast
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_DECOMPRESS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
@@ -20,10 +21,12 @@ open class BaseNotificationService(
             when (it.action) {
                 NotificationConstants.ACTION_DISMISS_COMPRESS -> {
                     NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
+                    NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_COMPLETE_ID)
                 }
 
                 NotificationConstants.ACTION_DISMISS_DECOMPRESS -> {
                     NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
+                    NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_COMPLETE_ID)
                 }
 
                 NotificationConstants.ACTION_DEV_DISMISS -> {
