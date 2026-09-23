@@ -142,6 +142,7 @@ import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
+import me.blog.korn123.easydiary.di.ApplicationScope
 import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.model.DDay
@@ -251,6 +252,13 @@ interface DDayRepositoryEntryPoint {
     fun dDayRepository(): DDayRepository
 }
 
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface ApplicationScopeEntryPoint {
+    @ApplicationScope
+    fun applicationScope(): CoroutineScope
+}
+
 val Context.alarmRepository: AlarmRepository
     get() =
         EntryPointAccessors
@@ -282,6 +290,14 @@ val Context.dDayRepository: DDayRepository
                 applicationContext,
                 DDayRepositoryEntryPoint::class.java,
             ).dDayRepository()
+
+val Context.applicationScope: CoroutineScope
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                ApplicationScopeEntryPoint::class.java,
+            ).applicationScope()
 
 /***************************************************************************************************
  *   Alarm Extension
@@ -2092,6 +2108,7 @@ suspend fun Context.importRoomDataWithSAF(
 
 suspend fun Context.importRoomData(
     file: File,
+    deleteImportedFile: Boolean,
     successCallback: (String) -> Unit,
     failCallback: (String) -> Unit,
 ) {
@@ -2187,7 +2204,7 @@ suspend fun Context.importRoomData(
         }
     }
 
-    deleteTemporaryRoomFile(file.absolutePath)
+    if (deleteImportedFile) deleteTemporaryRoomFile(file.absolutePath)
 }
 
 suspend fun Context.deleteTemporaryRoomFile(roomPath: String) {

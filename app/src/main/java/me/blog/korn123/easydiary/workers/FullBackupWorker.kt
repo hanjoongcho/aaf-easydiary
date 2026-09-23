@@ -64,6 +64,7 @@ class FullBackupWorker(
             FileUtils.copyFile(compressFile, os)
             os?.close()
             isExportSuccessful = true
+            compressFile.delete()
 
             // WorkManager가 종료될 때 생성해둔 포그라운드 노티가 제거되므로,
             // 별도의 일반 Notification ID(NOTIFICATION_GMS_BACKUP_COMPLETE_ID)로 상단 바에 알림을 새로 띄워 유지시킵니다.

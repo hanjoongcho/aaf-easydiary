@@ -493,12 +493,20 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         when (classifyUriByExtension((itemInfo["name"] ?: "") as String)) {
                             UriFileType.ROOM -> {
                                 progressContainer.visibility = View.VISIBLE
-                                val destFilePath = BACKUP_DB_DIRECTORY + RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-                                val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + destFilePath + ".zip")
+                                val destFilePath =
+                                    BACKUP_DB_DIRECTORY + RoomConstants.DIARY_DB_NAME + "_" +
+                                        DateUtils.getCurrentDateTime(
+                                            "yyyyMMdd_HHmmss",
+                                        )
+                                val destFile =
+                                    File(EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + destFilePath + ".zip")
                                 lifecycleScope.launch {
-                                    driveServiceHelper.downloadFile(itemInfo["id"] as String, destFile.absolutePath)
+                                    driveServiceHelper.downloadFile(
+                                        itemInfo["id"] as String,
+                                        destFile.absolutePath,
+                                    )
                                     requireActivity().run {
-                                        importRoomData(destFile, { message ->
+                                        importRoomData(destFile, true, { message ->
                                             makeSnackBar(message)
                                             refreshApp()
                                         }, { message ->

@@ -29,6 +29,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -58,7 +59,6 @@ class RecoverPhotoService : Service() {
     private lateinit var mPhotoPath: String
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private val authManager by lazy { GoogleAuthManager(this) }
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -105,6 +105,39 @@ class RecoverPhotoService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
+        notificationBuilder
+            .setAutoCancel(true)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setStyle(NotificationCompat.InboxStyle())
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_easydiary)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_download))
+            .setOnlyAlertOnce(true)
+            .setContentTitle(
+                if (config.enableDebugOptionVisibleAlarmSequence) {
+                    "[$NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID] ${
+                        getString(
+                            R.string.task_progress_message,
+                        )
+                    }"
+                } else {
+                    getString(R.string.task_progress_message)
+                },
+            ).setProgress(0, 0, true)
+            .addAction(
+                R.drawable.ic_easydiary,
+                getString(R.string.cancel),
+                PendingIntent.getService(
+                    this,
+                    NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID,
+                    Intent(this, NotificationService::class.java).apply {
+                        action = NotificationConstants.ACTION_PHOTO_RECOVER_GMS_CANCEL
+                    },
+                    pendingIntentFlag(),
+                ),
+            )
+        startForeground(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
+
         applicationScope.launch { recoverPhoto() }
         return super.onStartCommand(intent, flags, startId)
     }

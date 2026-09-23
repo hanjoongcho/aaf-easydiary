@@ -27,6 +27,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.actionLogRepository
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
@@ -61,7 +62,6 @@ class BackupPhotoService : Service() {
     private lateinit var mPhotoPath: String
     private lateinit var mWorkingFolderId: String
     private val authManager by lazy { GoogleAuthManager(this) }
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onBind(intent: Intent?): IBinder? = null
 

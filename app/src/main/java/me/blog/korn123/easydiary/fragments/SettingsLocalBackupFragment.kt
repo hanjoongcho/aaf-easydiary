@@ -594,9 +594,13 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 UriFileType.ROOM -> {
                                     lifecycleScope.launch {
                                         val srcFile =
-                                            File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                                            File(
+                                                EasyDiaryUtils.getApplicationDataDirectory(
+                                                    requireActivity(),
+                                                ) + BACKUP_DB_DIRECTORY + itemInfo["name"],
+                                            )
                                         requireActivity().run {
-                                            importRoomData(srcFile, { message ->
+                                            importRoomData(srcFile, false, { message ->
                                                 makeSnackBar(message)
                                                 requireActivity().refreshApp()
                                             }, { message ->
@@ -609,7 +613,11 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
                                 UriFileType.REALM -> {
                                     val srcFile =
-                                        File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                                        File(
+                                            EasyDiaryUtils.getApplicationDataDirectory(
+                                                requireActivity(),
+                                            ) + BACKUP_DB_DIRECTORY + itemInfo["name"],
+                                        )
                                     val destFile = File(EasyDiaryDbHelper.getRealmPath())
                                     EasyDiaryDbHelper.closeInstance()
                                     FileUtils.copyFile(srcFile, destFile)
