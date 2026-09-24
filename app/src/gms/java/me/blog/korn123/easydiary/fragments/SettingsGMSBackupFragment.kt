@@ -506,12 +506,18 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                         destFile.absolutePath,
                                     )
                                     requireActivity().run {
-                                        importRoomData(destFile, true, { message ->
-                                            makeSnackBar(message)
-                                            refreshApp()
-                                        }, { message ->
-                                            makeSnackBar(message)
-                                        })
+                                        importRoomData(
+                                            destFile,
+                                            true,
+                                            isMergeData = false,
+                                            successCallback = { message ->
+                                                makeSnackBar(message)
+                                                refreshApp()
+                                            },
+                                            failCallback = { message ->
+                                                makeSnackBar(message)
+                                            },
+                                        )
                                     }
                                     destFile.delete()
                                     progressContainer.visibility = View.GONE

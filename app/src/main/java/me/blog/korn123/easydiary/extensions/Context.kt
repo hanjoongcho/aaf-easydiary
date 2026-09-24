@@ -1953,7 +1953,7 @@ fun Context.exportRealmFile() {
     config.diaryBackupLocal = System.currentTimeMillis()
 }
 
-suspend fun Context.exportRoomData(): String {
+suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): String {
     val destFilePath = BACKUP_DB_DIRECTORY + RoomConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
     val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath + ".zip")
     val roomDataMap = generateRoomDataMap()
@@ -1971,7 +1971,7 @@ suspend fun Context.exportRoomData(): String {
         }
     }
 
-    config.diaryBackupLocal = System.currentTimeMillis()
+    if (updateLocalBackupTime) config.diaryBackupLocal = System.currentTimeMillis()
     return destFile.absolutePath
 }
 
@@ -2003,8 +2003,79 @@ suspend fun Context.exportRoomDataWithSAF(uri: Uri?) {
     }
 }
 
+suspend fun Context.importRoomData(
+    jsonString: String,
+    isMergeData: Boolean,
+) {
+    // 1. Convert to Map using Gson
+    // Use TypeToken to preserve data types.
+    val type =
+        object :
+            com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
+    val dataMap: Map<String, Any> =
+        Gson().fromJson(jsonString, type)
+
+    // 2. Convert each data to domain model list and save to DB
+    // Note: When Gson converts numbers to Double or uses a generic map,
+    // type casting errors may occur, so a process of converting to the exact model class is required.
+    val gson = Gson()
+
+    // Save ActionLog
+    dataMap["ACTION_LOG"]?.let { it ->
+        val json = gson.toJson(it)
+        val list: List<ActionLog> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type,
+            )
+        actionLogRepository.deleteAllActionLogs(true)
+        actionLogRepository.insertAllActionLogs(list)
+    }
+
+    // Save Alarm
+    dataMap["ALARM"]?.let {
+        val json = gson.toJson(it)
+        val list: List<Alarm> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
+            )
+        alarmRepository.deleteAllAlarms()
+        alarmRepository.insertAllAlarms(list)
+    }
+
+    // Save D-Day
+    dataMap["D_DAY"]?.let {
+        val json = gson.toJson(it)
+        val list: List<DDay> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<DDay>>() {}.type,
+            )
+        dDayRepository.deleteAllDDays()
+        dDayRepository.insertAllDDays(list)
+    }
+
+    // Save Diary (including photos)
+    dataMap["DIARY"]?.let {
+        val json = gson.toJson(it)
+        val list: List<Diary> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<Diary>>() {}.type,
+            )
+        diaryRepository.deleteAllDiaries()
+        diaryRepository.insertAllDiaries(list)
+    }
+}
+
 suspend fun Context.importRoomDataWithSAF(
     uri: Uri?,
+    isMergeData: Boolean,
     successCallback: (String) -> Unit,
     failCallback: (String) -> Unit,
 ) {
@@ -2016,74 +2087,8 @@ suspend fun Context.importRoomDataWithSAF(
                         var entry = zis.nextEntry
                         while (entry != null) {
                             if (entry.name == RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME) {
-                                // 1. Read JSON string
                                 val jsonString = zis.bufferedReader().readText()
-
-                                // 2. Convert to Map using Gson
-                                // Use TypeToken to preserve data types.
-                                val type =
-                                    object :
-                                        com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
-                                val dataMap: Map<String, Any> =
-                                    Gson().fromJson(jsonString, type)
-
-                                // 3. Convert each data to domain model list and save to DB
-                                // Note: When Gson converts numbers to Double or uses a generic map,
-                                // type casting errors may occur, so a process of converting to the exact model class is required.
-                                val gson = Gson()
-
-                                // Save ActionLog
-                                dataMap["ACTION_LOG"]?.let { it ->
-                                    val json = gson.toJson(it)
-                                    val list: List<ActionLog> =
-                                        gson.fromJson(
-                                            json,
-                                            object :
-                                                com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type,
-                                        )
-                                    actionLogRepository.deleteAllActionLogs(true)
-                                    actionLogRepository.insertAllActionLogs(list)
-                                }
-
-                                // Save Alarm
-                                dataMap["ALARM"]?.let {
-                                    val json = gson.toJson(it)
-                                    val list: List<Alarm> =
-                                        gson.fromJson(
-                                            json,
-                                            object :
-                                                com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
-                                        )
-                                    alarmRepository.deleteAllAlarms()
-                                    alarmRepository.insertAllAlarms(list)
-                                }
-
-                                // Save D-Day
-                                dataMap["D_DAY"]?.let {
-                                    val json = gson.toJson(it)
-                                    val list: List<DDay> =
-                                        gson.fromJson(
-                                            json,
-                                            object :
-                                                com.google.gson.reflect.TypeToken<List<DDay>>() {}.type,
-                                        )
-                                    dDayRepository.deleteAllDDays()
-                                    dDayRepository.insertAllDDays(list)
-                                }
-
-                                // Save Diary (including photos)
-                                dataMap["DIARY"]?.let {
-                                    val json = gson.toJson(it)
-                                    val list: List<Diary> =
-                                        gson.fromJson(
-                                            json,
-                                            object :
-                                                com.google.gson.reflect.TypeToken<List<Diary>>() {}.type,
-                                        )
-                                    diaryRepository.deleteAllDiaries()
-                                    diaryRepository.insertAllDiaries(list)
-                                }
-
+                                importRoomData(jsonString, isMergeData)
                                 break // Found the file, so terminate the loop
                             }
                             entry = zis.nextEntry
@@ -2106,6 +2111,7 @@ suspend fun Context.importRoomDataWithSAF(
 suspend fun Context.importRoomData(
     file: File,
     deleteImportedFile: Boolean,
+    isMergeData: Boolean,
     successCallback: (String) -> Unit,
     failCallback: (String) -> Unit,
 ) {
@@ -2116,74 +2122,8 @@ suspend fun Context.importRoomData(
                     var entry = zis.nextEntry
                     while (entry != null) {
                         if (entry.name == RoomConstants.EXPORT_JSON_FILE_ENTRY_NAME) {
-                            // 1. Read JSON string
                             val jsonString = zis.bufferedReader().readText()
-
-                            // 2. Convert to Map using Gson
-                            // Use TypeToken to preserve data types.
-                            val type =
-                                object :
-                                    com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
-                            val dataMap: Map<String, Any> =
-                                Gson().fromJson(jsonString, type)
-
-                            // 3. Convert each data to domain model list and save to DB
-                            // Note: When Gson converts numbers to Double or uses a generic map,
-                            // type casting errors may occur, so a process of converting to the exact model class is required.
-                            val gson = Gson()
-
-                            // Save ActionLog
-                            dataMap["ACTION_LOG"]?.let { it ->
-                                val json = gson.toJson(it)
-                                val list: List<ActionLog> =
-                                    gson.fromJson(
-                                        json,
-                                        object :
-                                            com.google.gson.reflect.TypeToken<List<ActionLog>>() {}.type,
-                                    )
-                                actionLogRepository.deleteAllActionLogs(true)
-                                actionLogRepository.insertAllActionLogs(list)
-                            }
-
-                            // Save Alarm
-                            dataMap["ALARM"]?.let {
-                                val json = gson.toJson(it)
-                                val list: List<Alarm> =
-                                    gson.fromJson(
-                                        json,
-                                        object :
-                                            com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
-                                    )
-                                alarmRepository.deleteAllAlarms()
-                                alarmRepository.insertAllAlarms(list)
-                            }
-
-                            // Save D-Day
-                            dataMap["D_DAY"]?.let {
-                                val json = gson.toJson(it)
-                                val list: List<DDay> =
-                                    gson.fromJson(
-                                        json,
-                                        object :
-                                            com.google.gson.reflect.TypeToken<List<DDay>>() {}.type,
-                                    )
-                                dDayRepository.deleteAllDDays()
-                                dDayRepository.insertAllDDays(list)
-                            }
-
-                            // Save Diary (including photos)
-                            dataMap["DIARY"]?.let {
-                                val json = gson.toJson(it)
-                                val list: List<Diary> =
-                                    gson.fromJson(
-                                        json,
-                                        object :
-                                            com.google.gson.reflect.TypeToken<List<Diary>>() {}.type,
-                                    )
-                                diaryRepository.deleteAllDiaries()
-                                diaryRepository.insertAllDiaries(list)
-                            }
-
+                            importRoomData(jsonString, isMergeData)
                             break // Found the file, so terminate the loop
                         }
                         entry = zis.nextEntry

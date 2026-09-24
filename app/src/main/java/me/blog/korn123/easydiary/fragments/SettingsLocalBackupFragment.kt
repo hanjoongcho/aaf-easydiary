@@ -157,12 +157,17 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                     when (classifyUriByExtension(uri.toString())) {
                                         UriFileType.ROOM -> {
                                             lifecycleScope.launch {
-                                                importRoomDataWithSAF(uri, { message ->
-                                                    makeSnackBar(message)
-                                                    refreshApp()
-                                                }, { message ->
-                                                    makeSnackBar(message)
-                                                })
+                                                importRoomDataWithSAF(
+                                                    uri = uri,
+                                                    isMergeData = false,
+                                                    successCallback = { message ->
+                                                        makeSnackBar(message)
+                                                        refreshApp()
+                                                    },
+                                                    failCallback = { message ->
+                                                        makeSnackBar(message)
+                                                    },
+                                                )
                                             }
                                         }
 
@@ -472,7 +477,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private suspend fun exportRoomData(showDialog: Boolean = true) {
         requireActivity().run {
-            exportRoomData()
+            exportRoomData(updateLocalBackupTime = true)
             makeSnackBar("Operation completed.")
         }
     }
@@ -600,12 +605,20 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                                 ) + BACKUP_DB_DIRECTORY + itemInfo["name"],
                                             )
                                         requireActivity().run {
-                                            importRoomData(srcFile, false, { message ->
-                                                makeSnackBar(message)
-                                                requireActivity().refreshApp()
-                                            }, { message ->
-                                                makeSnackBar(message)
-                                            })
+                                            lifecycleScope.launch {
+                                                importRoomData(
+                                                    srcFile,
+                                                    false,
+                                                    isMergeData = false,
+                                                    successCallback = { message ->
+                                                        makeSnackBar(message)
+                                                        requireActivity().refreshApp()
+                                                    },
+                                                    failCallback = { message ->
+                                                        makeSnackBar(message)
+                                                    },
+                                                )
+                                            }
                                         }
                                         alertDialog?.cancel()
                                     }
