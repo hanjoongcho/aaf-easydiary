@@ -30,6 +30,7 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.alarmRepository
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.deleteTemporaryRoomFile
@@ -63,7 +64,6 @@ class FullBackupService : Service() {
     private var mInProcessJob = true
     private var workStatusList = arrayListOf<WorkStatus>()
     private val authManager by lazy { GoogleAuthManager(this) }
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     data class WorkStatus(
         var localDeviceFileCount: Int = 0,

@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -296,46 +297,48 @@ class GoogleAuthManager(
         val mTimeMin = DateTime(fromCalendar.timeInMillis)
         val mTimeMax = DateTime(toCalendar.timeInMillis)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val result =
-                if (nextPageToken == null) {
-                    calendarService
-                        .events()
-                        .list(calendarId)
-                        .setMaxResults(2000)
-                        .setTimeMin(mTimeMin)
-                        .setTimeMax(mTimeMax)
-                        .setSingleEvents(true)
-                        .execute()
-                } else {
-                    calendarService
-                        .events()
-                        .list(calendarId)
-                        .setPageToken(nextPageToken)
-                        .setMaxResults(2000)
-                        .setTimeMin(mTimeMin)
-                        .setTimeMax(mTimeMax)
-                        .setSingleEvents(true)
-                        .execute()
-                }
-            result.items.forEachIndexed { index, item ->
-                Log.i(
-                    AAF_TEST,
-                    "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}",
-                )
+        context.applicationScope.launch {
+            withContext(Dispatchers.IO) {
+                val result =
+                    if (nextPageToken == null) {
+                        calendarService
+                            .events()
+                            .list(calendarId)
+                            .setMaxResults(2000)
+                            .setTimeMin(mTimeMin)
+                            .setTimeMax(mTimeMax)
+                            .setSingleEvents(true)
+                            .execute()
+                    } else {
+                        calendarService
+                            .events()
+                            .list(calendarId)
+                            .setPageToken(nextPageToken)
+                            .setMaxResults(2000)
+                            .setTimeMin(mTimeMin)
+                            .setTimeMax(mTimeMax)
+                            .setSingleEvents(true)
+                            .execute()
+                    }
+                result.items.forEachIndexed { index, item ->
+                    Log.i(
+                        AAF_TEST,
+                        "$index ${item.start?.date} ${item.summary} ${item.start?.dateTime}",
+                    )
 //                                descriptions.add(item.summary)
-                withContext(Dispatchers.Main) {
-                    insertCount += calendarEventToDiary(item, calendarId)
+                    withContext(Dispatchers.Main) {
+                        insertCount += calendarEventToDiary(item, calendarId)
+                    }
                 }
-            }
-            if (result.nextPageToken != null) {
-                fetchData(
-                    context,
-                    calendarService,
-                    calendarId,
-                    result.nextPageToken,
-                    total.plus(insertCount),
-                )
+                if (result.nextPageToken != null) {
+                    fetchData(
+                        context,
+                        calendarService,
+                        calendarId,
+                        result.nextPageToken,
+                        total.plus(insertCount),
+                    )
+                }
             }
         }
     }

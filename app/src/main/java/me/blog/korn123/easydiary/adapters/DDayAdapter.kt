@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dDayRepository
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -147,8 +148,7 @@ class DDayAdapter(
                                 showAlertDialog(
                                     "Are you sure you want to delete the selected D-Day?",
                                     { _, _ ->
-                                        // FIXME: Use lifeCycleScope instead
-                                        CoroutineScope(Dispatchers.Default).launch {
+                                        activity.applicationScope.launch {
                                             alertDialog?.dismiss()
                                             dDayRepository.deleteDDay(storedDDay)
                                             saveDDayCallback.invoke()

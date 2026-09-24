@@ -16,18 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
 import me.blog.korn123.easydiary.extensions.alarmRepository
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.AlarmConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
@@ -64,8 +62,7 @@ class AlarmAdapter(
             activity.cancelAlarmClock(alarm)
         }
 
-        // FIXME: Use lifeCycleScope instead
-        CoroutineScope(Dispatchers.Default).launch {
+        activity.applicationScope.launch {
             activity.alarmRepository.updateAlarm(alarm)
         }
     }

@@ -337,7 +337,7 @@ class PostcardActivity : EasyDiaryActivity() {
 //            }
             progressBar.visibility = View.VISIBLE
             // generate postcard file another thread
-            CoroutineScope(Dispatchers.Default).launch {
+            applicationScope.launch {
                 try {
                     val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath

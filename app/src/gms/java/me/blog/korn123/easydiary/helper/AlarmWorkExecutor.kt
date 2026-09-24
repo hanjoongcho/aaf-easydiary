@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.isScreenOn
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
@@ -20,7 +21,6 @@ class AlarmWorkExecutor(
     context: Context,
 ) : BaseAlarmWorkExecutor(context) {
     private val authManager by lazy { GoogleAuthManager(context) }
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun executeWork(alarm: AlarmDomain) {
         super.executeWork(alarm)
@@ -63,7 +63,7 @@ class AlarmWorkExecutor(
                                 context,
                                 it,
                             )
-                        CoroutineScope(Dispatchers.IO).launch {
+                        applicationScope.launch {
                             val result = calendarService.calendarList().list().execute()
                             result.items.forEach { calendar ->
                                 authManager.fetchData(context, calendarService, calendar.id, null)

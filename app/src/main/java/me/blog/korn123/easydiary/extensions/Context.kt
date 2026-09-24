@@ -329,7 +329,7 @@ fun Context.reExecuteGmsBackup(
     errorMessage: String,
     className: String,
 ) {
-    CoroutineScope(Dispatchers.Default).launch {
+    applicationScope.launch {
         actionLogRepository.insertActionLog(
             ActionLogDomain(
                 className = className,
@@ -481,10 +481,7 @@ fun Context.setupAlarmClock(
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
     val fullString = String.format("Time remaining till the alarm goes off: %s", formatMinutesToTimeString(totalMinutes))
-
-    CoroutineScope(Dispatchers.Main).launch {
-        toast(fullString, Toast.LENGTH_LONG)
-    }
+    toast(fullString, Toast.LENGTH_LONG)
 }
 
 fun Context.executeScheduledTask(alarm: AlarmDomain) {
@@ -492,7 +489,7 @@ fun Context.executeScheduledTask(alarm: AlarmDomain) {
 }
 
 fun Context.rescheduleEnabledAlarms() {
-    CoroutineScope(Dispatchers.Default).launch {
+    applicationScope.launch {
         alarmRepository.getAllAlarms().forEach {
             if (it.isEnabled) scheduleNextAlarm(it, false)
         }

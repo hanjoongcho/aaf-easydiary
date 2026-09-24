@@ -14,6 +14,7 @@ import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
@@ -27,10 +28,16 @@ import org.apache.commons.lang3.StringUtils
  *
  */
 
-class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>
-) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+class FontItemAdapter(
+    val activity: Activity,
+    private val layoutResourceId: Int,
+    private val list: List<Map<String, String>>,
+) : ArrayAdapter<Map<String, String>>(activity, layoutResourceId, list) {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View {
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
         if (itemView is ViewGroup) {
             activity.run {
@@ -40,7 +47,10 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         }
 
         when (itemView.tag is ViewHolder) {
-            true -> itemView.tag as ViewHolder
+            true -> {
+                itemView.tag as ViewHolder
+            }
+
             false -> {
                 val viewHolder = ViewHolder(itemView.findViewById(R.id.textView), itemView.findViewById(R.id.checkIcon))
                 itemView.tag = viewHolder
@@ -68,9 +78,17 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         return itemView
     }
 
-    class ViewHolder(val textView: TextView, val imageView: ImageView, var position: Int = 0)
+    class ViewHolder(
+        val textView: TextView,
+        val imageView: ImageView,
+        var position: Int = 0,
+    )
 
-    inner class FontItemRenderer(val activity: Activity, val holder: ViewHolder, val position: Int) : Thread() {
+    inner class FontItemRenderer(
+        val activity: Activity,
+        val holder: ViewHolder,
+        val position: Int,
+    ) : Thread() {
         override fun run() {
             when (holder.position == position) {
                 true -> {
@@ -83,16 +101,23 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
                     }
                     Log.i(AAF_TEST, "$position End")
                 }
-                false -> { Log.i(AAF_TEST, "$position Cancel") }
+
+                false -> {
+                    Log.i(AAF_TEST, "$position Cancel")
+                }
             }
         }
     }
 
-    private fun renderJob(activity: Activity, holder: ViewHolder, position: Int) {
+    private fun renderJob(
+        activity: Activity,
+        holder: ViewHolder,
+        position: Int,
+    ) {
         Log.i(AAF_TEST, "$position Start")
 //        FontItemRenderer(activity, holder, position).apply { start() }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        activity.applicationScope.launch {
             when (holder.position == position) {
                 true -> {
                     holder.textView.run {
@@ -106,7 +131,10 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
                     }
                     Log.i(AAF_TEST, "${holder.position} End")
                 }
-                false -> { Log.i(AAF_TEST, "$position Cancel") }
+
+                false -> {
+                    Log.i(AAF_TEST, "$position Cancel")
+                }
             }
         }
     }
