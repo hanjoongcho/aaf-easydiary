@@ -100,6 +100,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                     mBinding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
+                    applyRemoveIndex()
                     val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
                     val diary =
                         when (encryptionPass == null) {
@@ -148,7 +149,6 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                             }
                         }
 
-                    applyRemoveIndex()
                     diaryRepository.updateDiaryWithPhotos(diary)
                     TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
                     mIsDiarySaved = true

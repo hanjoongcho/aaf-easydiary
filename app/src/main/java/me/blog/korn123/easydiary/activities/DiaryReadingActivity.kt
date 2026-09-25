@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.isNotEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
@@ -1225,8 +1226,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     mBinding.run {
                         if (photoCount > 0) {
                             photoContainerFlexBox.visibility = View.VISIBLE
-                            if (photoContainer.childCount > 0) photoContainer.removeAllViews()
-                            if (photoContainerFlexBox.childCount > 0) photoContainerFlexBox.removeAllViews()
+                            if (photoContainerFlexBox.isNotEmpty()) photoContainerFlexBox.removeAllViews()
 
                             context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize

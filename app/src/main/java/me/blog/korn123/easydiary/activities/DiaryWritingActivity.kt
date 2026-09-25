@@ -174,6 +174,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                     mBinding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
+                    applyRemoveIndex()
                     val diary =
                         Diary(
                             currentTimeMillis = mCurrentTimeMillis,
@@ -188,7 +189,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                             photoUris = mPhotoUris.map { it },
                             location = mLocation,
                         )
-                    applyRemoveIndex()
                     diaryRepository.insertDiary(diary)
                     config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                     if (isAccessFromOutside()) {
