@@ -5,8 +5,4 @@ enum class ExportOption {
     ALARM,
     D_DAY,
     DIARY,
-
-//    LOCATION,
-    PHOTO_URI,
-    ALL,
 }

@@ -229,25 +229,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             ExportOption.DIARY -> {
                                 mutableMapOf("DIARY" to diaryRepository.getDiariesWithPhotos())
                             }
-
-                            ExportOption.PHOTO_URI -> {
-                                mutableMapOf(
-                                    "PHOTO_URI" to
-                                        EasyDiaryDbHelper.copyFromRealm(
-                                            EasyDiaryDbHelper.findPhotoUriAll(),
-                                        ),
-                                )
-                            }
-
-                            ExportOption.ALL -> {
-                                // TODO: ACTION_LOG, ALARM, D_DAY, DIARY, PHOTO_URI 데이터 셋을 json으로 생성 후 zip로 export
-                                val map = mutableMapOf<String, Any>()
-                                map["ACTION_LOG"] = actionLogRepository.getAllActionLogs()
-                                map["ALARM"] = alarmRepository.getAllAlarms()
-                                map["D_DAY"] = dDayRepository.getAllDDays()
-                                map["DIARY"] = diaryRepository.getDiariesWithPhotos()
-                                map
-                            }
                         }
 
                     mapOfItems["META"] = EasyDiaryUtils.getExportMeta()
@@ -256,25 +237,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                             val jsonString =
                                 GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
                             val fileName = targetUri.path ?: ""
-                            val isZip = fileName.endsWith(".zip", ignoreCase = true)
                             contentResolver.openOutputStream(targetUri)?.use { outputStream ->
-                                if (isZip) {
-                                    // ZIP 압축 저장
-                                    java.util.zip.ZipOutputStream(outputStream).use { zos ->
-                                        val entryName =
-                                            when (mExportJsonOption) {
-                                                ExportOption.ALL -> "easy_diary_all.json"
-                                                else -> "easy_diary_${mExportJsonOption.name.lowercase()}.json"
-                                            }
-                                        val entry = java.util.zip.ZipEntry(entryName)
-                                        zos.putNextEntry(entry)
-                                        zos.write(jsonString.toByteArray(Charsets.UTF_8))
-                                        zos.closeEntry()
-                                    }
-                                } else {
-                                    // 일반 JSON 저장
-                                    IOUtils.write(jsonString, outputStream, "UTF-8")
-                                }
+                                IOUtils.write(jsonString, outputStream, "UTF-8")
                             }
                         }
                         makeToast("Export successful!")
@@ -746,7 +710,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 "export diary data",
-                "realm diary 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "diary 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -755,8 +719,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mExportJsonLauncher.launch(fileName)
             }
             SimpleCard(
-                "export realm alarm data",
-                "realm alarm 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "export alarm data",
+                "alarm 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -765,8 +729,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mExportJsonLauncher.launch(fileName)
             }
             SimpleCard(
-                "export realm action log data",
-                "realm action log 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "export action log data",
+                "action log 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
@@ -775,33 +739,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mExportJsonLauncher.launch(fileName)
             }
             SimpleCard(
-                "export realm d-day data",
-                "realm d-day 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "export d-day data",
+                "d-day 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "d-day_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.D_DAY
-                mExportJsonLauncher.launch(fileName)
-            }
-            SimpleCard(
-                "export realm photo uri data",
-                "realm photo uri 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
-                modifier = modifier,
-            ) {
-                val fileName =
-                    "photo_uri_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonOption = ExportOption.PHOTO_URI
-                mExportJsonLauncher.launch(fileName)
-            }
-            SimpleCard(
-                "export realm all data",
-                "realm 전체 데이터를 domain model json 포멧으로 변환하고 zip으로 압축 후 SAF를 이용해 외부 저장소에 export 합니다. ",
-                modifier = modifier,
-            ) {
-                val fileName =
-                    "export_all_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json.zip"
-                mExportJsonOption = ExportOption.ALL
                 mExportJsonLauncher.launch(fileName)
             }
         }
