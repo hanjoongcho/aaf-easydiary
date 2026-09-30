@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.351.202609300 (date: 2026.09.30)
+  * Migrate local database from Realm to Room
+
 # Changes in 1.4.350.202608190 (date: 2026.08.19)
   * External storage permission policy changes (pre-Tiramisu)
 
