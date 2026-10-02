@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Realm Java SDK (레거시) 대응 클래스패스
+        classpath("io.realm:realm-gradle-plugin:10.19.0")
+    }
+}
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -14,8 +24,6 @@ plugins {
 
     // Hilt - Updated to 2.60.1 to fix "Unexpected annotation value" errors
     id("com.google.dagger.hilt.android") version "2.55" apply false
-
-    id("io.realm.kotlin") version "1.4.0" apply true
 }
 
 allprojects {
