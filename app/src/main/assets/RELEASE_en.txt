@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.352.202610020 (date: 2026.10.02)
+  * Migrate local database from Realm to Room
+
 # Changes in 1.4.351.202609300 (date: 2026.09.30)
   * Migrate local database from Realm to Room
 
