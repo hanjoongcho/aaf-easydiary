@@ -67,7 +67,6 @@ import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
 import me.blog.korn123.easydiary.helper.ColorConstants
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
@@ -92,27 +91,7 @@ object EasyDiaryUtils {
      *   Constants
      *
      ***************************************************************************************************/
-    val easyDiaryMimeType: String
-        get() {
-            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-            val currentVersion = realmInstance.version.toInt()
-            realmInstance.close()
-            return "text/aaf_v$currentVersion"
-        }
-
     val easyDiaryRoomMimeType: String = "room/zip"
-
-    val easyDiaryMimeTypeAll: Array<String?>
-        get() {
-            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-            val currentVersion = realmInstance.version.toInt()
-            realmInstance.close()
-            val easyDiaryMimeType = arrayOfNulls<String>(currentVersion)
-            for (i in 0 until currentVersion) {
-                easyDiaryMimeType[i] = "text/aaf_v" + (i + 1)
-            }
-            return easyDiaryMimeType
-        }
 
     /***************************************************************************************************
      *   String Utils

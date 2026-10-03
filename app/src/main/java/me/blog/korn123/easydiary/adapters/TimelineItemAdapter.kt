@@ -1,10 +1,7 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.graphics.Typeface
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -14,8 +11,12 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain

@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.viewmodels
 
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,9 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -31,25 +28,16 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
-import me.blog.korn123.easydiary.domain.model.ActionLog
-import me.blog.korn123.easydiary.domain.model.Alarm
-import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
-import me.blog.korn123.easydiary.extensions.actionLogRepository
-import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.dDayRepository
-import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PhotoHighlightManager
-import me.blog.korn123.easydiary.helper.RoomConstants
 import java.io.File
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -272,108 +260,50 @@ class DiaryViewModel
             symbolSequence: Int = 0,
             checkFutureDiaryOption: Boolean = false,
         ): List<Diary> =
-            if (application.config.enableJetpackRoomDatabase) {
-                val results =
-                    diaryRepository
-                        .getDiariesWithPhotos(
-                            query = query,
-                            isSensitive = isSensitive,
-                            startTimeMillis = startTimeMillis,
-                            endTimeMillis = endTimeMillis,
-                            symbolSequence = symbolSequence,
-                        )
+            resolveDiaryFilter(
+                diaryRepository
+                    .getDiariesWithPhotos(
+                        query = query,
+                        isSensitive = isSensitive,
+                        startTimeMillis = startTimeMillis,
+                        endTimeMillis = endTimeMillis,
+                        symbolSequence = symbolSequence,
+                    ),
+                startTimeMillis,
+                endTimeMillis,
+                symbolSequence,
+                checkFutureDiaryOption,
+            )
 
-                resolveDiaryFilter(
-                    results,
-                    startTimeMillis,
-                    endTimeMillis,
-                    symbolSequence,
-                    checkFutureDiaryOption,
-                )
-            } else {
-                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    EasyDiaryDbHelper.findDiary(
-                        query,
-                        isSensitive,
-                        startTimeMillis,
-                        endTimeMillis,
-                        symbolSequence,
-                        checkFutureDiaryOption,
-                        realmInstance = realm,
-                    )
-                }
-            }
-
-        suspend fun findDiaryById(sequence: Long): Diary? =
-            if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.observeDiaryWithPhotosById(sequence).first()
-            } else {
-                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    EasyDiaryDbHelper.findDiaryBy(sequence.toInt(), realm)
-                }
-            }
+        suspend fun findDiaryById(sequence: Long): Diary? = diaryRepository.observeDiaryWithPhotosById(sequence).first()
 
         suspend fun findOldestDiary(): Diary? =
-            if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository
-                    .findOldestDiary()
-            } else {
-                EasyDiaryDbHelper.findOldestDiary()
-            }
+            diaryRepository
+                .findOldestDiary()
 
         suspend fun findFirstDiary(): Diary? =
-            if (application.config.enableJetpackRoomDatabase) {
-                findDiary(null)
-                    .filter { it.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
-                    .minByOrNull { it.currentTimeMillis }
-            } else {
-                EasyDiaryDbHelper.findFirstDiary()
-            }
+            findDiary(null)
+                .filter { it.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
+                .minByOrNull { it.currentTimeMillis }
 
         suspend fun findParentDiariesOf(
             sequence: Long,
-        ): List<Diary> =
-            if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository.observeParentDiariesOf(sequence).first()
-            } else {
-                EasyDiaryDbHelper.findParentDiariesOf(sequence.toInt())
-            }
+        ): List<Diary> = diaryRepository.observeParentDiariesOf(sequence).first()
 
         suspend fun findDiaryByDateString(
             dateString: String,
-            sort: Sort = Sort.DESCENDING,
+            isAsc: Boolean = false,
         ): List<Diary> =
-            if (application.config.enableJetpackRoomDatabase) {
-                diaryRepository
-                    .getDiariesByDateString(dateString, sort == Sort.ASCENDING)
-            } else {
-                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    EasyDiaryDbHelper.findDiaryByDateString(dateString, sort, realm)
-                }
-            }
+            diaryRepository
+                .getDiariesByDateString(dateString, isAsc)
 
         suspend fun findTemporaryDiaryBy(
             originSequence: Long,
-        ): Diary? =
-            if (application.config.enableJetpackRoomDatabase) {
-                findDiary(null).firstOrNull { it.originDiaryId == originSequence }
-            } else {
-                EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence.toInt())
-            }
+        ): Diary? = findDiary(null).firstOrNull { it.originDiaryId == originSequence }
 
-        suspend fun getDiaryCount(): Int =
-            if (application.config.enableJetpackRoomDatabase) {
-                findDiary(query = null).size
-            } else {
-                EasyDiaryDbHelper.countDiaryAll().toInt()
-            }
+        suspend fun getDiaryCount(): Int = findDiary(query = null).size
 
-        suspend fun getMaxDiarySequence(): Long =
-            if (application.config.enableJetpackRoomDatabase) {
-                findDiary(null).maxByOrNull { it.diaryId }?.diaryId ?: 1L
-            } else {
-                EasyDiaryDbHelper.getMaxDiarySequence().toLong()
-            }
+        suspend fun getMaxDiarySequence(): Long = findDiary(null).maxByOrNull { it.diaryId }?.diaryId ?: 1L
 
         suspend fun getSymbolUsedCountMap(
             isReverse: Boolean = false,
@@ -450,36 +380,17 @@ class DiaryViewModel
                     File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
                 val files = photoDirectory.listFiles() ?: return@withContext null
 
-                val diaryMap =
-                    if (application.config.enableJetpackRoomDatabase) {
-                        val allDiariesWithPhotos = diaryRepository.getDiariesWithPhotos()
-                        val map = mutableMapOf<String, Diary>()
-                        allDiariesWithPhotos.forEach { diary ->
-                            diary.photoUris.forEach { photo ->
-                                photo.photoUri?.let { uri ->
-                                    val fileName = uri.substringAfterLast('/')
-                                    if (!map.containsKey(fileName)) {
-                                        map[fileName] = diary
-                                    }
-                                }
+                val diaryMap = mutableMapOf<String, Diary>()
+                diaryRepository.getDiariesWithPhotos().forEach { diary ->
+                    diary.photoUris.forEach { photo ->
+                        photo.photoUri?.let { uri ->
+                            val fileName = uri.substringAfterLast('/')
+                            if (!diaryMap.containsKey(fileName)) {
+                                diaryMap[fileName] = diary
                             }
                         }
-                        map
-                    } else {
-                        val listPostcard =
-                            File(EasyDiaryUtils.getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
-                                .listFiles()
-                                ?.map { file ->
-                                    val diary =
-                                        EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                                            EasyDiaryDbHelper.findDiaryBy(file.name, realm)
-                                        }
-                                    GalleryAdapter.AttachedPhoto(file, false, diary)
-                                }?.sortedByDescending { item ->
-                                    item.diary?.currentTimeMillis ?: 0
-                                }
-                        return@withContext listPostcard
                     }
+                }
 
                 files
                     .map { file ->
@@ -511,14 +422,13 @@ class DiaryViewModel
                     diaryRepository.getDiariesByDateRange(startDate.toString(), endDate.toString())
                 } else {
                     // Realm legacy: fetch one by one as before to keep compatibility
-                    val sort = if (sortAsc) Sort.ASCENDING else Sort.DESCENDING
                     val dateList = mutableListOf<String>()
                     var current = startDate
                     while (!current.isAfter(endDate)) {
                         dateList.add(current.toString())
                         current = current.plusDays(1)
                     }
-                    return dateList.associateWith { findDiaryByDateString(it, sort) }
+                    return dateList.associateWith { findDiaryByDateString(it, sortAsc) }
                 }
 
             // Grouping for Room
@@ -543,44 +453,6 @@ class DiaryViewModel
          *   backup and restore functions
          *
          ***************************************************************************************************/
-        suspend fun migRealmToRoom() {
-            if (!application.config.enableJetpackRoomDatabase) {
-                val domainDiaries = mutableListOf<Diary>()
-                val domainAlarms = mutableListOf<Alarm>()
-                val domainActionLogs = mutableListOf<ActionLog>()
-                val domainDDays = mutableListOf<DDay>()
-                EasyDiaryDbHelper.getTemporaryInstance().use { realm ->
-                    domainDiaries.addAll(
-                        EasyDiaryDbHelper.findDiary(
-                            query = null,
-                            realmInstance = realm,
-                        ),
-                    )
-                    domainAlarms.addAll(EasyDiaryDbHelper.findAlarmAll())
-                    domainActionLogs.addAll(EasyDiaryDbHelper.findAllActionLogs())
-                    domainDDays.addAll(EasyDiaryDbHelper.findDDayAll())
-                }
-
-                loadingMessage = "migrating realm to room..."
-                loadingMessage = "Diary migration..."
-                diaryRepository.deleteAllDiaries()
-                diaryRepository.insertAllDiaries(domainDiaries)
-
-                loadingMessage = "Alarm migration..."
-                application.alarmRepository.deleteAllAlarms()
-                application.alarmRepository.insertAllAlarms(domainAlarms)
-
-                loadingMessage = "ActionLog migration..."
-                application.actionLogRepository.deleteAllActionLogs(true)
-                application.actionLogRepository.insertAllActionLogs(domainActionLogs)
-
-                loadingMessage = "D-Day migration..."
-                application.dDayRepository.deleteAllDDays()
-                application.dDayRepository.insertAllDDays(domainDDays)
-
-                application.config.enableJetpackRoomDatabase = true
-            }
-        }
 
         /***************************************************************************************************
          *   common functions

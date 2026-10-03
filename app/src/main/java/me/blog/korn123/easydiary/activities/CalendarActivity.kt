@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
-import io.realm.Sort
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
@@ -29,9 +28,7 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
-import java.time.YearMonth
 import java.util.Calendar
 import java.util.Date
 import java.util.Formatter
@@ -196,15 +193,18 @@ class CalendarActivity : EasyDiaryActivity() {
         }
     }
 
-    private suspend fun refreshCalendar(year: Int, month: Int) {
+    private suspend fun refreshCalendar(
+        year: Int,
+        month: Int,
+    ) {
         if (year != 0 && month != 0) {
             mCalendarFragment.extraData += (
-                    "dateStringMap" to
-                            diaryViewModel.getDateStringMap(
-                                month,
-                                year,
-                            )
+                "dateStringMap" to
+                    diaryViewModel.getDateStringMap(
+                        month,
+                        year,
                     )
+            )
             mCalendarFragment.refreshView()
         }
     }
@@ -248,13 +248,11 @@ class CalendarActivity : EasyDiaryActivity() {
         lifecycleScope.launch {
             val formatter =
                 SimpleDateFormat(DateUtilConstants.DATE_PATTERN_DASH, Locale.getDefault())
-            val sort: Sort =
-                if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
             mDiaryList.clear()
             mDiaryList.addAll(
                 diaryViewModel.findDiaryByDateString(
                     formatter.format(mCalendar.time),
-                    sort,
+                    config.calendarSorting == CALENDAR_SORTING_ASC,
                 ),
             )
             mArrayAdapterDiary?.notifyDataSetChanged()

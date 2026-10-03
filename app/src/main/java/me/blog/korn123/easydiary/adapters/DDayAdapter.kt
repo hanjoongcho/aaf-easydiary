@@ -32,7 +32,6 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

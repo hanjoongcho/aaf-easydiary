@@ -1,14 +1,3 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        // Realm Java SDK (레거시) 대응 클래스패스
-        classpath("io.realm:realm-gradle-plugin:10.19.0")
-    }
-}
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     // Android Gradle Plugin

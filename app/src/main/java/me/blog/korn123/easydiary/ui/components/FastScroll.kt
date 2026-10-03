@@ -38,7 +38,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils.summaryDiaryLabel
 import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
