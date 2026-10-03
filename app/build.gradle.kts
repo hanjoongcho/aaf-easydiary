@@ -3,8 +3,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
@@ -84,7 +82,7 @@ configure<ApplicationExtension> {
             res.directories.add("src/gmsProd/res")
         }
         getByName("androidTest") {
-            assets.srcDirs(files("$projectDir/schemas"))
+            assets.directories.add("$projectDir/schemas")
         }
     }
 
@@ -277,7 +275,7 @@ dependencies {
     implementation("io.noties.markwon:ext-strikethrough:4.6.2")
     implementation("io.noties.markwon:linkify:4.6.2")
     implementation("io.noties:prism4j:2.0.0")
-    kapt("io.noties:prism4j-bundler:2.0.0")
+    annotationProcessor("io.noties:prism4j-bundler:2.0.0")
 
     implementation("com.squareup:seismic:1.0.3")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
