@@ -53,10 +53,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/symbolImageView"
                             android:layout_width="@dimen/diary_symbol_width"
                             android:layout_height="@dimen/diary_symbol_height"
-                            android:layout_marginEnd="10dp"
-                            app:symbolSequence="@{view_model.symbol}" />
+                            android:layout_marginEnd="10dp" />
 
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/symbolTextArrow"
