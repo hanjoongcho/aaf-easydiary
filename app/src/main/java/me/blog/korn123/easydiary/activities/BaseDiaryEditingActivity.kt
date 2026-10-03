@@ -39,7 +39,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.werb.pickphotoview.util.PickConfig
-import io.realm.RealmList
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -92,9 +91,6 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.helper.toRealm
-import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException

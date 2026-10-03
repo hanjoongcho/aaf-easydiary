@@ -23,7 +23,6 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.helper.toDomain
 import org.apache.commons.lang3.StringUtils
 
 /**

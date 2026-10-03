@@ -23,7 +23,6 @@ import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
 import dagger.hilt.android.AndroidEntryPoint
-import io.realm.Sort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +53,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Formatter
 import java.util.Locale
-import kotlin.toString
 
 @AndroidEntryPoint
 class DailySymbolFragment : Fragment() {
@@ -113,7 +111,7 @@ class DailySymbolFragment : Fragment() {
                                 val selectedItems =
                                     diaryViewModel.findDiaryByDateString(
                                         formatter.format(date),
-                                        if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING,
+                                        config.calendarSorting == CALENDAR_SORTING_ASC,
                                     )
 
                                 clearSelectedDates()

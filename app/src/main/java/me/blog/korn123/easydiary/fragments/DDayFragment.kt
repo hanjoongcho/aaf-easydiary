@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import io.realm.Sort
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DDayAdapter
@@ -19,7 +18,6 @@ import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dDayRepository
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
 import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 
@@ -33,7 +31,7 @@ class DDayFragment : Fragment() {
     private lateinit var mLinearLayoutManager: LinearLayoutManager
     private lateinit var mSafeFlexboxLayoutManager: FlexboxLayoutManager
     private var mDDayItems: MutableList<DDayDomain> = mutableListOf()
-    private var mDDaySortOrder = Sort.DESCENDING
+    private var isReverseOrder = true
 
     /***************************************************************************************************
      *   override functions
@@ -54,7 +52,7 @@ class DDayFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList(mDDaySortOrder) }
+        mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList(isReverseOrder) }
         mLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         mSafeFlexboxLayoutManager =
             SafeFlexboxLayoutManager(requireContext()).apply {
@@ -73,35 +71,35 @@ class DDayFragment : Fragment() {
             flexboxOptionSwitcher.isChecked = config.enableDDayFlexboxLayout
             requireActivity().updateDrawableColorInnerCardView(imageDDaySortOrder, config.textColor)
             imageDDaySortOrder.setOnClickListener {
-                mDDaySortOrder =
-                    when (mDDaySortOrder) {
-                        Sort.ASCENDING -> {
+                isReverseOrder =
+                    when (isReverseOrder) {
+                        true -> {
                             imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
-                            Sort.DESCENDING
+                            false
                         }
 
-                        Sort.DESCENDING -> {
+                        false -> {
                             imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
-                            Sort.ASCENDING
+                            true
                         }
                     }
-                updateDDayList(mDDaySortOrder)
+                updateDDayList(isReverseOrder)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        updateDDayList(mDDaySortOrder)
+        updateDDayList(isReverseOrder)
     }
 
     private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
-    private fun updateDDayList(sortOrder: Sort) {
+    private fun updateDDayList(isAsc: Boolean) {
         lifecycleScope.launch {
             mDDayItems.run {
                 clear()
-                val dDayItems = requireContext().dDayRepository.getAllDDays(sortOrder == Sort.DESCENDING)
+                val dDayItems = requireContext().dDayRepository.getAllDDays(isAsc)
                 if (dDayItems.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
                 addAll(dDayItems)
                 add(DDayDomain(title = "New D-Day!!!"))

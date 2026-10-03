@@ -4,7 +4,6 @@ plugins {
     id("kotlin-android")
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
-    id("realm-android")
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.10"
     id("com.google.dagger.hilt.android")
 }

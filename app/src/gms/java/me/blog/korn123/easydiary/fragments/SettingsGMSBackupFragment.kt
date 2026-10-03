@@ -83,7 +83,6 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
@@ -396,7 +395,6 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         lifecycleScope.launch {
-            val realmPath = EasyDiaryDbHelper.getRealmPath()
             val roomPath = requireActivity().exportRoomData()
 
             val finalResult =
@@ -452,11 +450,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
             val driveServiceHelper = DriveServiceHelper(requireContext(), googleAccount)
             runCatching {
                 driveServiceHelper.queryFiles(
-                    "(mimeType = '${
-                        EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString(
-                            "' or mimeType = '",
-                        )
-                    }' or mimeType ='${EasyDiaryUtils.easyDiaryRoomMimeType}') and trashed = false",
+                    "(mimeType = '${EasyDiaryUtils.easyDiaryRoomMimeType}') and trashed = false",
                     1000,
                 )
             }.onSuccess { fileList ->
@@ -521,20 +515,6 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                     }
                                     destFile.delete()
                                     progressContainer.visibility = View.GONE
-                                }
-                                alertDialog?.cancel()
-                            }
-
-                            UriFileType.REALM -> {
-                                itemInfo["id"]?.let { realmFileId ->
-                                    progressContainer.visibility = View.VISIBLE
-                                    val realmPath = EasyDiaryDbHelper.getRealmPath()
-                                    EasyDiaryDbHelper.closeInstance()
-                                    lifecycleScope.launch {
-                                        driveServiceHelper.downloadFile(realmFileId as String, realmPath)
-                                        config.enableJetpackRoomDatabase = false
-                                        requireActivity().refreshApp()
-                                    }
                                 }
                                 alertDialog?.cancel()
                             }
