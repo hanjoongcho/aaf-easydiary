@@ -3,6 +3,8 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
@@ -67,17 +69,14 @@ configure<ApplicationExtension> {
         getByName("gmsProd") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
-            kotlin.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("gmsDev") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
-            kotlin.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("foss") {
             manifest.srcFile("src/foss/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
-            kotlin.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
         }
         getByName("lab") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
@@ -85,7 +84,7 @@ configure<ApplicationExtension> {
             res.directories.add("src/gmsProd/res")
         }
         getByName("androidTest") {
-            assets.directories.add("$projectDir/schemas")
+            assets.srcDirs(files("$projectDir/schemas"))
         }
     }
 
@@ -278,7 +277,7 @@ dependencies {
     implementation("io.noties.markwon:ext-strikethrough:4.6.2")
     implementation("io.noties.markwon:linkify:4.6.2")
     implementation("io.noties:prism4j:2.0.0")
-    annotationProcessor("io.noties:prism4j-bundler:2.0.0")
+    kapt("io.noties:prism4j-bundler:2.0.0")
 
     implementation("com.squareup:seismic:1.0.3")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")

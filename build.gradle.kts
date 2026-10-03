@@ -5,6 +5,7 @@ plugins {
     id("com.android.library") version "9.4.1" apply false
 
     // Kotlin - Synchronized to 2.1.10 for stability with Hilt 2.60.1
+    id("org.jetbrains.kotlin.android") version "2.4.20" apply false
     id("org.jetbrains.kotlin.plugin.compose") version "2.4.20" apply false
 
     // KSP - Must match Kotlin version (2.1.10)
@@ -23,6 +24,5 @@ allprojects {
 }
 
 tasks.register<Delete>("clean") {
-    description = "Cleans the build directory for the root project."
     delete(rootProject.layout.buildDirectory)
 }
