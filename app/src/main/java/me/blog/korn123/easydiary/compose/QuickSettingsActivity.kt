@@ -215,9 +215,9 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                         val appTasks = activityManager.appTasks
                         if (appTasks.isNotEmpty()) {
                             val taskInfo = appTasks[0].taskInfo
-                            val topActivityName = taskInfo.topActivity?.className ?: "알 수 없음"
-                            val baseActivityName = taskInfo.baseActivity?.className ?: "알 수 없음"
-                            val backStackCount = appTasks[0].taskInfo.numActivities
+                            val topActivityName = taskInfo?.topActivity?.className ?: "알 수 없음"
+                            val baseActivityName = taskInfo?.baseActivity?.className ?: "알 수 없음"
+                            val backStackCount = appTasks[0].taskInfo?.numActivities
                             showAlertDialog("BackStackLog: 현재 스택에 ${backStackCount}개($baseActivityName, $topActivityName)의 화면이 있습니다.")
                         } else {
                             showAlertDialog("BackStackLog: 현재 스택에 0개의 화면이 있습니다.")

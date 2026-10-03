@@ -1,29 +1,35 @@
+import com.android.build.api.dsl.ApplicationExtension
 import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("com.google.devtools.ksp")
     id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.1.10"
+    id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
 }
 
-val appCompileSdk = 36
+val appCompileSdk = 37
 
-android {
+// AGP 9.0+ / 10.0+ 대응을 위한 ApplicationExtension 적용
+configure<ApplicationExtension> {
     compileSdk = appCompileSdk
 
     val properties =
         Properties().apply {
-            load(rootProject.file("local.properties").inputStream())
+            val localPropertiesFile = rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                load(localPropertiesFile.inputStream())
+            }
         }
 
     signingConfigs {
         create("config") {
             keyAlias = "android"
-            keyPassword = properties["storePassword"] as String
-            storeFile = file(properties["storeFile"] as String)
-            storePassword = properties["storePassword"] as String
+            keyPassword = properties.getProperty("storePassword", "")
+            storeFile = file(properties.getProperty("storeFile", "dummy.jks"))
+            storePassword = properties.getProperty("storePassword", "")
         }
     }
 
@@ -36,8 +42,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
-        renderscriptTargetApi = 18
-        renderscriptSupportModeEnabled = true
         signingConfig = signingConfigs.getByName("config")
     }
 
@@ -64,20 +68,20 @@ android {
     sourceSets {
         getByName("gmsProd") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
-            java.srcDirs("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java")
+            java.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("gmsDev") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
-            java.srcDirs("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java")
+            java.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("foss") {
             manifest.srcFile("src/foss/AndroidManifest.xml")
-            java.srcDirs("src/main/java", "src/foss/java", "src/dummy/java")
+            java.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
         }
         getByName("lab") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
-            java.srcDirs("src/main/java", "src/gmsProd/java", "src/gms/java", "src/lab/java")
-            res.srcDirs("src/gmsProd/res")
+            kotlin.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/lab/java"))
+            res.directories.add("src/gmsProd/res")
         }
         getByName("androidTest") {
             assets.srcDirs(files("$projectDir/schemas"))
@@ -94,6 +98,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -121,12 +126,6 @@ android {
         }
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_18)
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
@@ -140,11 +139,17 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_18)
+    }
+}
+
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
-configurations.matching { it.name == "fossImplementation" }.all {
+configurations.matching { it.name == "fossImplementation" }.configureEach {
     exclude(group = "com.google.android.gms", module = "play-services-auth")
     exclude(group = "com.google.android.play", module = "review")
     exclude(group = "com.google.android.play", module = "review-ktx")
@@ -157,7 +162,7 @@ configurations.matching { it.name == "fossImplementation" }.all {
 }
 
 afterEvaluate {
-    configurations.all {
+    configurations.configureEach {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }
 }
@@ -180,9 +185,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.work:work-runtime-ktx:2.11.2")
-    implementation("androidx.work:work-runtime-ktx:2.10.0") {
-        exclude(group = "com.google.guava", module = "listenablefuture")
-    }
     implementation("androidx.browser:browser:1.10.0")
     implementation("androidx.core:core-splashscreen:1.2.0")
 
@@ -202,16 +204,16 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
 
     // room
-    val roomVersion = "2.6.1"
+    val roomVersion = "2.8.5"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // hilt
-    val hiltVersion = "2.55"
+    val hiltVersion = "2.60.1"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     ksp("com.google.dagger:hilt-compiler:$hiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.4.0")
 
     // gms
     implementation("com.google.android.gms:play-services-auth:21.5.1")
@@ -233,9 +235,6 @@ dependencies {
     implementation("com.google.guava:guava:33.5.0-android")
 
     // Apache Commons
-    // From version 2.7, it calls the java.nio.file API internally.
-    // NIO is available from Android 8.0 (API Level 26)
-    // Therefore, we must use version 2.6 before the minimum supported Android version becomes API Level 26 or higher.
     implementation("commons-io:commons-io:2.22.0")
     implementation("org.apache.commons:commons-lang3:3.20.0")
     //noinspection NewerVersionAvailable
@@ -247,7 +246,6 @@ dependencies {
         exclude(group = "com.werb.moretype", module = "moretype")
         exclude(group = "id.zelory", module = "compressor")
     }
-//    implementation project(":aafactory-commons")
 
     // etc.
     implementation("com.github.woxingxiao:BubbleSeekBar:3.20")
@@ -257,10 +255,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.github.chrisbanes:PhotoView:2.1.3")
-    implementation("com.github.QuadFlask:colorpicker:0.0.13") // Version Change Prohibited: This is the last version available for download from JitPack.
+    implementation("com.github.QuadFlask:colorpicker:0.0.13") // Version Change Prohibited
     implementation("com.github.amlcurran.showcaseview:library:5.4.3")
     implementation("com.github.zhpanvip:bannerviewpager:3.5.5")
-//    implementation ("com.github.bumptech.glide:glide:4.16.0") //  Landscapist-Glide includes version 4.16.0
     implementation("com.github.skydoves:landscapist-glide:2.5.1")
     implementation("jp.wasabeef:glide-transformations:4.3.0") {
         exclude(group = "com.github.bumptech.glide", module = "glide")
@@ -271,7 +268,7 @@ dependencies {
     implementation("com.simplecityapps:recyclerview-fastscroll:2.0.1")
     implementation("org.jasypt:jasypt:1.9.3")
 
-    // io.noties
+    // io.noties (Markwon & Prism4j)
     implementation("io.noties.markwon:core:4.6.2")
     implementation("io.noties.markwon:syntax-highlight:4.6.2")
     implementation("io.noties.markwon:ext-tables:4.6.2")
@@ -280,15 +277,14 @@ dependencies {
     implementation("io.noties.markwon:ext-strikethrough:4.6.2")
     implementation("io.noties.markwon:linkify:4.6.2")
     implementation("io.noties:prism4j:2.0.0")
+    kapt("io.noties:prism4j-bundler:2.0.0")
+
     implementation("com.squareup:seismic:1.0.3")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation("com.squareup.retrofit2:converter-scalars:3.0.0")
-    kapt("io.noties:prism4j-bundler:2.0.0")
 
-//    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.7")
-
-    // android test
+    // test
     androidTestImplementation("androidx.test:core:1.7.0")
     androidTestImplementation("androidx.test:core-ktx:1.7.0")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
@@ -298,6 +294,5 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
-    // test
     testImplementation("junit:junit:4.13.2")
 }
