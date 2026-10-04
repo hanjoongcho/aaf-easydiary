@@ -96,7 +96,6 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -121,9 +120,7 @@ import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
-import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
@@ -312,6 +309,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         currentContext,
                         me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java,
                     ),
+                )
+            }
+            SimpleCard(
+                "Mig Calendar",
+                "Compose Calendar sample using kizitonwose/Calendar",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarActivity::class.java),
                 )
             }
         }
@@ -791,16 +798,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 6)
                     },
-                )
-            }
-            SimpleCard(
-                "Calendar Demo (kizitonwose)",
-                "Compose Calendar sample using kizitonwose/Calendar",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarDemoActivity::class.java),
                 )
             }
         }

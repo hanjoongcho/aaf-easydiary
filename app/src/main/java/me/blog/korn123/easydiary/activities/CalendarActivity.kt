@@ -98,7 +98,7 @@ class CalendarActivity : EasyDiaryActivity() {
 
         val cal = Calendar.getInstance()
         val currentDate = cal.time
-        refreshList()
+//        refreshList()
         mArrayAdapterDiary =
             DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
         mBinding.selectedList.adapter = mArrayAdapterDiary

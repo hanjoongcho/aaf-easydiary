@@ -195,7 +195,7 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.CalendarDemoActivity"
+            android:name=".compose.CalendarActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />

@@ -72,61 +72,64 @@ fun LegacyDiaryItemCard(
             Modifier
                 .fillMaxWidth(),
         factory = { ctx ->
+            ItemDiaryMainMigBinding.inflate(LayoutInflater.from(ctx)).root
+        },
+        update = { view ->
+            val binding = ItemDiaryMainMigBinding.bind(view)
+            val ctx = view.context
             val activity = ctx.findActivity()
             val currentQuery = ""
-            val binding =
-                ItemDiaryMainMigBinding.inflate(LayoutInflater.from(ctx)).apply {
-                    if (diary.currentTimeMillis > System.currentTimeMillis()) {
-                        viewFutureDiaryBadge.visibility = View.VISIBLE
-                        cardFutureDiaryBadge.visibility = View.VISIBLE
-                        textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
-                    } else {
-                        viewFutureDiaryBadge.visibility = View.GONE
-                        cardFutureDiaryBadge.visibility = View.GONE
+            if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                binding.viewFutureDiaryBadge.visibility = View.VISIBLE
+                binding.cardFutureDiaryBadge.visibility = View.VISIBLE
+                binding.textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+            } else {
+                binding.viewFutureDiaryBadge.visibility = View.GONE
+                binding.cardFutureDiaryBadge.visibility = View.GONE
+            }
+
+            ctx.applicationContext.run {
+                binding.root.run {
+                    setOnClickListener { itemClickCallback(diary) }
+                    setOnLongClickListener {
+                        itemLongClickCallback()
+                        true
                     }
+                    updateTextColors(this, 0, 0)
+                    updateAppViews(this)
+                    initTextSize(this)
+                    updateCardViewPolicy(this)
+                    FontUtils.setFontsTypeface(context, null, this)
+                }
 
-                    ctx.applicationContext.run {
-                        root.run {
-                            setOnClickListener { itemClickCallback(diary) }
-                            setOnLongClickListener {
-                                itemLongClickCallback()
-                                true
-                            }
-                            updateTextColors(this, 0, 0)
-                            updateAppViews(this)
-                            initTextSize(this)
-                            updateCardViewPolicy(this)
-                            FontUtils.setFontsTypeface(context, null, this)
-                        }
+                if (config.enableLocationInfo) {
+                    diary.location?.let {
+                        changeDrawableIconColor(
+                            config.primaryColor,
+                            R.drawable.ic_map_marker_2,
+                        )
 
-                        if (config.enableLocationInfo) {
-                            diary.location?.let {
-                                changeDrawableIconColor(
-                                    config.primaryColor,
-                                    R.drawable.ic_map_marker_2,
-                                )
+                        binding.locationLabel.text = it.address
+                        binding.locationContainer.visibility = View.VISIBLE
+                    } ?: run {
+                        binding.locationContainer.visibility = View.GONE
+                    }
+                } else {
+                    binding.locationContainer.visibility = View.GONE
+                }
 
-                                locationLabel.text = it.address
-                                locationContainer.visibility = View.VISIBLE
-                            } ?: run {
-                                locationContainer.visibility = View.GONE
-                            }
-                        } else {
-                            locationContainer.visibility = View.GONE
-                        }
-
-                        if (config.enableCountCharacters) {
-                            contentsLength.run {
-                                text =
-                                    context.getString(
-                                        R.string.diary_contents_length,
-                                        diary.contents?.length ?: 0,
-                                    )
-                            }
-                            contentsLengthContainer.visibility = View.VISIBLE
-                        } else {
-                            contentsLengthContainer.visibility = View.GONE
-                        }
+                if (config.enableCountCharacters) {
+                    binding.contentsLength.run {
+                        text =
+                            context.getString(
+                                R.string.diary_contents_length,
+                                diary.contents?.length ?: 0,
+                            )
+                    }
+                    binding.contentsLengthContainer.visibility = View.VISIBLE
+                } else {
+                    binding.contentsLengthContainer.visibility = View.GONE
+                }
 
 //                        selection.setOnCheckedChangeListener { _, isChecked ->
 //                            diary.also {
@@ -142,144 +145,141 @@ fun LegacyDiaryItemCard(
 //                                                    selection.isChecked = diary.isSelected
 //                                                }
 //                                            }
-                        selection.visibility = View.GONE
+                binding.selection.visibility = View.GONE
 
-                        if (StringUtils.isEmpty(diary.title)) {
-                            textTitle.visibility = View.GONE
-                        } else {
-                            textTitle.visibility = View.VISIBLE
-                        }
-                        textTitle.text = diary.title
+                if (StringUtils.isEmpty(diary.title)) {
+                    binding.textTitle.visibility = View.GONE
+                } else {
+                    binding.textTitle.visibility = View.VISIBLE
+                }
+                binding.textTitle.text = diary.title
 
-                        applyMarkDownPolicy(
-                            textContents,
-                            diary.contents!!,
-                            false,
-                            arrayListOf(),
-                            true,
-                        )
-                        if (config.enableMarkdown) {
-                            textContents.tag = diary.diaryId
-                            EasyDiaryUtils.applyMarkDownEllipsize(textContents, diary.diaryId, 500)
-                        }
+                applyMarkDownPolicy(
+                    binding.textContents,
+                    diary.contents!!,
+                    false,
+                    arrayListOf(),
+                    true,
+                )
+                if (config.enableMarkdown) {
+                    binding.textContents.tag = diary.diaryId
+                    EasyDiaryUtils.applyMarkDownEllipsize(binding.textContents, diary.diaryId, 500)
+                }
 
-                        // highlight current query
-                        if (StringUtils.isNotEmpty(currentQuery)) {
-                            val color = ArgbEvaluator().evaluate(0.75F, 0x000000, 0xffffff) as Int
-                            if (config.diarySearchQueryCaseSensitive) {
-                                EasyDiaryUtils.highlightString(textTitle, currentQuery)
-                                EasyDiaryUtils.highlightString(textContents, currentQuery)
-                            } else {
-                                EasyDiaryUtils.highlightStringIgnoreCase(textTitle, currentQuery)
-                                EasyDiaryUtils.highlightStringIgnoreCase(textContents, currentQuery)
-                            }
-                        }
-                        EasyDiaryUtils.boldString(ctx, textTitle)
-
-                        textDateTime.text =
-                            when (diary.isAllDay) {
-                                true -> {
-                                    DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
-                                }
-
-                                false -> {
-                                    DateUtils.getDateTimeStringForceFormatting(
-                                        diary.currentTimeMillis,
-                                        ctx.applicationContext,
-                                    )
-                                }
-                            }
-                        if (config.enableDebugOptionVisibleDiarySequence) {
-                            textDateTime.text =
-                                "[${diary.diaryId}, ${diary.originDiaryId}] ${textDateTime.text}"
-                        }
-                        FlavorUtils.initWeatherView(ctx.applicationContext, imageSymbol, diary.symbolSequence)
-
-                        when ((diary.photoUris?.size ?: 0) > 0) {
-                            true -> {
-                                photoViews.visibility = View.VISIBLE
-                            }
-
-                            false -> {
-                                photoViews.visibility = View.GONE
-                            }
-                        }
-
-                        photoViews.removeAllViews()
-                        if ((diary.photoUris?.size ?: 0) > 0) {
-                            diary.photoUrisWithEncryptionPolicy()?.map {
-                                val imageXY = dpToPixel(32F)
-                                val imageView = ImageView(activity ?: ctx)
-                                val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
-                                imageView.layoutParams = layoutParams
-                                imageView.scaleType = ImageView.ScaleType.CENTER
-                                val listener =
-                                    object : RequestListener<Drawable> {
-                                        override fun onLoadFailed(
-                                            e: GlideException?,
-                                            model: Any?,
-                                            target: Target<Drawable?>,
-                                            isFirstResource: Boolean,
-                                        ): Boolean = false
-
-                                        override fun onResourceReady(
-                                            resource: Drawable,
-                                            model: Any,
-                                            target: Target<Drawable?>?,
-                                            dataSource: DataSource,
-                                            isFirstResource: Boolean,
-                                        ): Boolean = false
-                                    }
-                                Glide
-                                    .with(ctx.applicationContext)
-                                    .load(EasyDiaryUtils.getApplicationDataDirectory(ctx.applicationContext) + it.getFilePath())
-                                    .listener(listener)
-                                    .apply(
-                                        createThumbnailGlideOptions(
-                                            imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
-                                            it.isEncrypt(),
-                                        ),
-                                    ).into(imageView)
-
-                                val margin = dpToPixel(3F)
-                                val contentPadding = dpToPixel(1F)
-                                val cardView =
-                                    me.blog.korn123.easydiary.views
-                                        .FixedCardView(ctx.applicationContext)
-                                        .apply {
-                                            updateDashboardInnerCard(this)
-                                            setLayoutParams(
-                                                ViewGroup
-                                                    .MarginLayoutParams(
-                                                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                    ).apply {
-                                                    },
-                                            )
-
-                                            radius = imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-                                            fixedAppcompatPadding = true
-                                            setContentPadding(
-                                                contentPadding,
-                                                contentPadding,
-                                                contentPadding,
-                                                contentPadding,
-                                            )
-                                            addView(imageView)
-                                        }
-                                photoViews.addView(cardView)
-                            }
-                        }
-                        textContents.maxLines =
-                            when (config.enableContentsSummary) {
-                                true -> config.summaryMaxLines
-                                false -> Integer.MAX_VALUE
-                            }
+                // highlight current query
+                if (StringUtils.isNotEmpty(currentQuery)) {
+                    val color = ArgbEvaluator().evaluate(0.75F, 0x000000, 0xffffff) as Int
+                    if (config.diarySearchQueryCaseSensitive) {
+                        EasyDiaryUtils.highlightString(binding.textTitle, currentQuery)
+                        EasyDiaryUtils.highlightString(binding.textContents, currentQuery)
+                    } else {
+                        EasyDiaryUtils.highlightStringIgnoreCase(binding.textTitle, currentQuery)
+                        EasyDiaryUtils.highlightStringIgnoreCase(binding.textContents, currentQuery)
                     }
                 }
-            binding.root
+                EasyDiaryUtils.boldString(ctx, binding.textTitle)
+
+                binding.textDateTime.text =
+                    when (diary.isAllDay) {
+                        true -> {
+                            DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                        }
+
+                        false -> {
+                            DateUtils.getDateTimeStringForceFormatting(
+                                diary.currentTimeMillis,
+                                ctx.applicationContext,
+                            )
+                        }
+                    }
+                if (config.enableDebugOptionVisibleDiarySequence) {
+                    binding.textDateTime.text =
+                        "[${diary.diaryId}, ${diary.originDiaryId}] ${binding.textDateTime.text}"
+                }
+                FlavorUtils.initWeatherView(ctx.applicationContext, binding.imageSymbol, diary.symbolSequence)
+
+                when ((diary.photoUris?.size ?: 0) > 0) {
+                    true -> {
+                        binding.photoViews.visibility = View.VISIBLE
+                    }
+
+                    false -> {
+                        binding.photoViews.visibility = View.GONE
+                    }
+                }
+
+                binding.photoViews.removeAllViews()
+                if ((diary.photoUris?.size ?: 0) > 0) {
+                    diary.photoUrisWithEncryptionPolicy()?.map {
+                        val imageXY = dpToPixel(32F)
+                        val imageView = ImageView(activity ?: ctx)
+                        val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
+                        imageView.layoutParams = layoutParams
+                        imageView.scaleType = ImageView.ScaleType.CENTER
+                        val listener =
+                            object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable?>,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
+                            }
+                        Glide
+                            .with(ctx.applicationContext)
+                            .load(EasyDiaryUtils.getApplicationDataDirectory(ctx.applicationContext) + it.getFilePath())
+                            .listener(listener)
+                            .apply(
+                                createThumbnailGlideOptions(
+                                    imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
+                                    it.isEncrypt(),
+                                ),
+                            ).into(imageView)
+
+                        val margin = dpToPixel(3F)
+                        val contentPadding = dpToPixel(1F)
+                        val cardView =
+                            me.blog.korn123.easydiary.views
+                                .FixedCardView(ctx.applicationContext)
+                                .apply {
+                                    updateDashboardInnerCard(this)
+                                    setLayoutParams(
+                                        ViewGroup
+                                            .MarginLayoutParams(
+                                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ).apply {
+                                            },
+                                    )
+
+                                    radius = imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+                                    fixedAppcompatPadding = true
+                                    setContentPadding(
+                                        contentPadding,
+                                        contentPadding,
+                                        contentPadding,
+                                        contentPadding,
+                                    )
+                                    addView(imageView)
+                                }
+                        binding.photoViews.addView(cardView)
+                    }
+                }
+                binding.textContents.maxLines =
+                    when (config.enableContentsSummary) {
+                        true -> config.summaryMaxLines
+                        false -> Integer.MAX_VALUE
+                    }
+            }
         },
-        update = {},
     )
 }
 
