@@ -67,14 +67,17 @@ configure<ApplicationExtension> {
         getByName("gmsProd") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("gmsDev") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("foss") {
             manifest.srcFile("src/foss/AndroidManifest.xml")
             java.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
         }
         getByName("lab") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
