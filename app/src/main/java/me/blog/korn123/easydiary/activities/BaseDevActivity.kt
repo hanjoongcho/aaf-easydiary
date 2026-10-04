@@ -314,6 +314,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     ),
                 )
             }
+            SimpleCard(
+                "Mig Calendar",
+                "Compose Calendar sample using kizitonwose/Calendar",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarDemoActivity::class.java),
+                )
+            }
         }
     }
 
@@ -791,16 +801,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 6)
                     },
-                )
-            }
-            SimpleCard(
-                "Calendar Demo (kizitonwose)",
-                "Compose Calendar sample using kizitonwose/Calendar",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarDemoActivity::class.java),
                 )
             }
         }

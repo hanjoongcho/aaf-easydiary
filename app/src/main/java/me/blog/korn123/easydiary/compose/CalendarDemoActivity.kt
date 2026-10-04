@@ -270,8 +270,10 @@ class CalendarDemoActivity : EasyDiaryComposeBaseActivity() {
                     color =
                         when {
                             isSelected -> MaterialTheme.colorScheme.onPrimary
-                            hasEvents && isCurrentMonth -> MaterialTheme.colorScheme.onSecondaryContainer
+
+                            //                            hasEvents && isCurrentMonth -> MaterialTheme.colorScheme.onSecondaryContainer
                             isCurrentMonth -> MaterialTheme.colorScheme.onSurface
+
                             else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                         },
                     style = MaterialTheme.typography.bodyMedium,
