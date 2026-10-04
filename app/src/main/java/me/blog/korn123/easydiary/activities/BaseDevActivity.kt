@@ -793,6 +793,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     },
                 )
             }
+            SimpleCard(
+                "Calendar Demo (kizitonwose)",
+                "Compose Calendar sample using kizitonwose/Calendar",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarDemoActivity::class.java),
+                )
+            }
         }
     }
 

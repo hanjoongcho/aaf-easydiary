@@ -194,6 +194,11 @@
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".compose.CalendarDemoActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
         <!-- End Jetpack Compose Activity -->
 
         <provider
