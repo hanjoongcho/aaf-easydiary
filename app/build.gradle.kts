@@ -246,6 +246,7 @@ dependencies {
     }
 
     // etc.
+    implementation("com.kizitonwose.calendar:compose:2.10.1")
     implementation("com.github.woxingxiao:BubbleSeekBar:3.20")
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     //noinspection NewerVersionAvailable
