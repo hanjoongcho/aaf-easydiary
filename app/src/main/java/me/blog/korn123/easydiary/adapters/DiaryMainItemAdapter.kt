@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -37,10 +35,7 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.helper.toRealm
 import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

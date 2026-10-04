@@ -13,7 +13,6 @@ import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -94,9 +93,6 @@ class DiaryRepositoryImpl
             val diaryEntity = diary.toEntity()
             val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
             val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.insertDiary(diary.copy(diaryId = diaryId))
         }
 
         override suspend fun insertTemporaryDiary(diary: Diary) {
@@ -104,9 +100,6 @@ class DiaryRepositoryImpl
             val diaryEntity = diary.toEntity()
             val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
             val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.insertTemporaryDiary(diary.copy(diaryId = diaryId))
         }
 
         override suspend fun duplicateDiary(diary: Diary) {
@@ -121,9 +114,6 @@ class DiaryRepositoryImpl
 
         override suspend fun deleteTemporaryDiaryByOriginId(originDiaryId: Long) {
             dataSource.deleteTemporaryDiaryBy(originDiaryId)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.deleteTemporaryDiaryBy(originDiaryId.toInt())
         }
 
         override suspend fun insertAllDiaries(diaries: List<Diary>) {
@@ -144,10 +134,6 @@ class DiaryRepositoryImpl
             val diaryEntity = diary.toEntity()
             val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
             dataSource.updateDiaryWithPhotos(diaryEntity, photoEntities)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.updateDiaryBy(diary)
-            EasyDiaryDbHelper.clearOrphanPhotoUris()
         }
 
         override suspend fun deleteDiary(diary: Diary) {
@@ -157,9 +143,6 @@ class DiaryRepositoryImpl
 
         override suspend fun deleteDiaryById(seq: Long) {
             dataSource.deleteDiaryById(seq)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.deleteDiaryBy(seq.toInt())
         }
 
         override suspend fun deleteAllDiaries() {
@@ -168,9 +151,6 @@ class DiaryRepositoryImpl
 
         override suspend fun clearSelectedStatus() {
             dataSource.clearSelectedStatus()
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.clearSelectedStatus()
         }
 
         override suspend fun findOldestDiary(): Diary? = dataSource.findOldestDiary()

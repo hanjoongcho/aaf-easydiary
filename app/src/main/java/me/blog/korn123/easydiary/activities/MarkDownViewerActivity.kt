@@ -9,16 +9,17 @@ import android.view.View
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
-import io.noties.markwon.syntax.Prism4jThemeDefault
-import io.noties.markwon.syntax.SyntaxHighlightPlugin
 import io.noties.markwon.utils.ColorUtils
 import io.noties.markwon.utils.Dip
-import io.noties.prism4j.Prism4j
-import io.noties.prism4j.annotations.PrismBundle
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.isConnectedOrConnecting
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MarkdownConstants
@@ -31,12 +32,10 @@ import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
 
-@PrismBundle(include = ["java", "kotlin", "javascript"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewerActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityMarkdownViewerBinding
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
-    private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
     private var mForceAppendCodeBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,8 +96,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
 //                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
 //                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
                 },
-            ).usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-            .build()
+            ).build()
             .apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
     }
 

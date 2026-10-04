@@ -30,12 +30,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.simplemobiletools.commons.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
@@ -45,25 +41,14 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
-import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
-import me.blog.korn123.easydiary.domain.model.ActionLog
-import me.blog.korn123.easydiary.domain.model.Alarm
-import me.blog.korn123.easydiary.domain.model.DDay
-import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.enums.ExportOption
 import me.blog.korn123.easydiary.extensions.UriFileType
-import me.blog.korn123.easydiary.extensions.actionLogRepository
-import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.classifyUriByExtension
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
-import me.blog.korn123.easydiary.extensions.dDayRepository
-import me.blog.korn123.easydiary.extensions.diaryRepository
-import me.blog.korn123.easydiary.extensions.exportRealmFile
 import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.exportRoomDataWithSAF
 import me.blog.korn123.easydiary.extensions.getUriForFile
@@ -84,8 +69,6 @@ import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.MIME_TYPE_REALM
 import me.blog.korn123.easydiary.helper.MIME_TYPE_XLS
 import me.blog.korn123.easydiary.helper.MIME_TYPE_ZIP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM
@@ -93,14 +76,11 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPOR
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ROOM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_READ_ZIP
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ROOM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_XLS
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
-import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
@@ -109,18 +89,14 @@ import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.Date
-import kotlin.collections.set
 
 @AndroidEntryPoint
 class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
@@ -148,10 +124,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 importFullBackupFile(it.data!!.data)
                             }
 
-                            REQUEST_CODE_SAF_READ_REALM -> {
-                                importRealmFileWithSAF(it.data!!.data)
-                            }
-
                             REQUEST_CODE_SAF_READ_ROOM -> {
                                 it.data?.data?.let { uri ->
                                     when (classifyUriByExtension(uri.toString())) {
@@ -169,10 +141,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                                     },
                                                 )
                                             }
-                                        }
-
-                                        UriFileType.REALM -> {
-                                            importRealmFileWithSAF(uri)
                                         }
 
                                         UriFileType.UNKNOWN -> {
@@ -202,10 +170,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
                             REQUEST_CODE_SAF_WRITE_XLS -> {
                                 exportExcel(it.data!!.data)
-                            }
-
-                            REQUEST_CODE_SAF_WRITE_REALM -> {
-                                exportRealmFileWithSAF(it.data!!.data)
                             }
 
                             REQUEST_CODE_SAF_WRITE_ROOM -> {
@@ -470,89 +434,10 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-    private fun exportRealmFile(showDialog: Boolean = true) {
-        requireActivity().exportRealmFile()
-        requireActivity().makeSnackBar("Operation completed.")
-    }
-
     private suspend fun exportRoomData(showDialog: Boolean = true) {
         requireActivity().run {
             exportRoomData(updateLocalBackupTime = true)
             makeSnackBar("Operation completed.")
-        }
-    }
-
-    private fun exportRealmFileWithSAF(uri: Uri?) {
-        uri?.let {
-            val os = requireActivity().contentResolver.openOutputStream(it)
-            val `is` = FileInputStream(EasyDiaryDbHelper.getRealmPath())
-            IOUtils.copy(`is`, os)
-            os?.close()
-            `is`.close()
-            requireActivity().makeSnackBar("Operation completed.")
-        }
-    }
-
-    private fun importRealmFile() {
-        val files =
-            File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY).listFiles()
-        files?.let {
-            when (it.isNotEmpty()) {
-                true -> {
-                    var alertDialog: AlertDialog? = null
-                    val builder = AlertDialog.Builder(requireActivity())
-                    builder.setNegativeButton(getString(android.R.string.cancel), null)
-//                    builder.setMessage(getString(R.string.open_realm_file_message))
-
-                    val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
-                    it.sortDescending()
-                    it.map { file ->
-                        val itemInfo =
-                            hashMapOf<String, String>(
-                                "name" to file.name,
-                                "createdTime" to Date(file.lastModified()).toString(),
-                            )
-                        realmFiles.add(itemInfo)
-                    }
-
-                    val inflater =
-                        requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val rootView = inflater.inflate(R.layout.dialog_realm_files, null)
-                    val listView = rootView.findViewById<ListView>(R.id.files)
-                    val adapter =
-                        RealmFileItemAdapter(
-                            requireActivity(),
-                            R.layout.item_realm_file,
-                            realmFiles,
-                        )
-                    listView.adapter = adapter
-                    listView.onItemClickListener =
-                        AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val itemInfo =
-                                parent.adapter.getItem(position) as HashMap<String, String>
-                            val srcFile =
-                                File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_DB_DIRECTORY + itemInfo["name"])
-                            val destFile = File(EasyDiaryDbHelper.getRealmPath())
-                            EasyDiaryDbHelper.closeInstance()
-                            FileUtils.copyFile(srcFile, destFile)
-                            requireActivity().refreshApp()
-                            alertDialog?.cancel()
-                        }
-
-                    alertDialog =
-                        builder.create().apply {
-                            requireActivity().updateAlertDialogWithIcon(
-                                DialogMode.SETTING,
-                                this,
-                                null,
-                                rootView,
-                                "${getString(R.string.open_realm_file_title)} (Total: ${it.size})",
-                            )
-                        }
-                }
-
-                false -> {}
-            }
         }
     }
 
@@ -624,21 +509,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                     }
                                 }
 
-                                UriFileType.REALM -> {
-                                    val srcFile =
-                                        File(
-                                            EasyDiaryUtils.getApplicationDataDirectory(
-                                                requireActivity(),
-                                            ) + BACKUP_DB_DIRECTORY + itemInfo["name"],
-                                        )
-                                    val destFile = File(EasyDiaryDbHelper.getRealmPath())
-                                    EasyDiaryDbHelper.closeInstance()
-                                    FileUtils.copyFile(srcFile, destFile)
-                                    config.enableJetpackRoomDatabase = false
-                                    requireActivity().refreshApp()
-                                    alertDialog?.cancel()
-                                }
-
                                 UriFileType.UNKNOWN -> {
                                     alertDialog?.cancel()
                                     requireActivity().makeSnackBar("Unknown file type.")
@@ -660,19 +530,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
                 false -> {}
             }
-        }
-    }
-
-    private fun importRealmFileWithSAF(uri: Uri?) {
-        uri?.let {
-            val inputStream = requireActivity().contentResolver.openInputStream(it)
-            val outputStream = FileOutputStream(File(EasyDiaryDbHelper.getRealmPath()))
-            EasyDiaryDbHelper.closeInstance()
-            IOUtils.copy(inputStream, outputStream)
-            inputStream?.close()
-            outputStream.close()
-            config.enableJetpackRoomDatabase = false
-            requireActivity().refreshApp()
         }
     }
 
@@ -1089,7 +946,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 //                            }
                             setupLauncher(REQUEST_CODE_SAF_READ_ROOM) {
                                 EasyDiaryUtils.readFileWithSAF(
-                                    arrayOf(MIME_TYPE_REALM, MIME_TYPE_ZIP),
+                                    arrayOf(MIME_TYPE_ZIP),
                                     mRequestReadFileWithSAF,
                                 )
                             }

@@ -487,7 +487,6 @@ const val DIARY_MODE = "diary_mode"
 const val MIME_TYPE_BINARY = "application/octet-stream"
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
-const val MIME_TYPE_REALM = "application/octet-stream"
 const val MIME_TYPE_JPEG = "image/jpeg"
 const val MIME_TYPE_HTML = "text/html"
 

@@ -4,16 +4,12 @@ import GoogleAuthManager
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.isScreenOn
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
-import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.FullBackupService
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 

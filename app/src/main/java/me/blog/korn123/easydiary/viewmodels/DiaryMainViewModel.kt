@@ -7,10 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
-import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainViewModel : ViewModel() {
     init {

@@ -39,7 +39,6 @@ import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID

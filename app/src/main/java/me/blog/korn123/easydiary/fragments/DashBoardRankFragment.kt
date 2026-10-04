@@ -13,7 +13,6 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardRankBinding
 import me.blog.korn123.easydiary.helper.DashboardConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar

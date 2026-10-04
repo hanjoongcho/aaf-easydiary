@@ -63,7 +63,6 @@ import com.simplemobiletools.commons.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.compose
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
@@ -76,8 +75,6 @@ import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard

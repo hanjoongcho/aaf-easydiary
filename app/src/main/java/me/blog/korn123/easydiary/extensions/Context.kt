@@ -127,7 +127,6 @@ import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
-import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -175,7 +174,6 @@ import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
 import me.blog.korn123.easydiary.helper.ENABLE_CARD_VIEW_POLICY
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.HOLD_POSITION_ENTER_EDIT_SCREEN
 import me.blog.korn123.easydiary.helper.LINE_SPACING_SCALE_FACTOR
 import me.blog.korn123.easydiary.helper.MIME_TYPE_BINARY
@@ -1557,13 +1555,6 @@ fun Context.createRecoveryContentText(
         .append(getString(R.string.notification_msg_download_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_download_fail, "*", failCount, "<br>"))
 
-fun Context.forceInitRealmLessThanOreo() {
-    // android marshmallow minor version bug workaround
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-        Realm.init(this)
-    }
-}
-
 fun Context.isLocationEnabled(): Boolean {
     val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return LocationManagerCompat.isLocationEnabled(locationManager)
@@ -1921,7 +1912,6 @@ tailrec fun Context.findActivity(): Activity? =
     }
 
 enum class UriFileType {
-    REALM,
     ROOM,
     UNKNOWN,
 }
@@ -1942,19 +1932,8 @@ fun classifyUriByExtension(uriString: String): UriFileType {
         // 확장자가 zip이고 파일명에 db_ 문자열이 포함된 경우 (ROOM)
         extension.equals("zip", ignoreCase = true) && fileName.contains("db_", ignoreCase = true) -> UriFileType.ROOM
 
-        // 확장자가 realm_ 으로 시작하는 경우 (예: .realm_backup)
-        extension.startsWith("realm_", ignoreCase = true) -> UriFileType.REALM
-
         else -> UriFileType.UNKNOWN
     }
-}
-
-fun Context.exportRealmFile() {
-    val srcFile = File(EasyDiaryDbHelper.getRealmPath())
-    val destFilePath = BACKUP_DB_DIRECTORY + RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
-    FileUtils.copyFile(srcFile, destFile, false)
-    config.diaryBackupLocal = System.currentTimeMillis()
 }
 
 suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): String {

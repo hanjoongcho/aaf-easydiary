@@ -44,7 +44,6 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
@@ -58,7 +57,6 @@ import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
-import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -66,14 +64,12 @@ import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
-import me.blog.korn123.easydiary.extensions.forceInitRealmLessThanOreo
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
-import me.blog.korn123.easydiary.extensions.migrateData
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
@@ -90,7 +86,6 @@ import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
 import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
@@ -105,8 +100,6 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.helper.toDomain
-import me.blog.korn123.easydiary.helper.toRealm
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
@@ -116,10 +109,6 @@ import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
-import kotlin.getValue
-import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
-import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
-import me.blog.korn123.easydiary.domain.model.DDay as DDayDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -209,7 +198,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             diaryViewModel.isLoading = true
             setupComposeView()
             mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
-            forceInitRealmLessThanOreo()
             rescheduleEnabledAlarms()
 //        FontUtils.checkFontSetting(this)
 //        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
@@ -221,7 +209,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             confirmPrePermissions()
             setupShowcase()
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
-            migrateData(mBinding)
             setupPopupMenu()
             checkBundle(savedInstanceState)
             setupReviewFlow()
@@ -230,7 +217,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
             setupOnBackPressDispatcher()
-            diaryViewModel.migRealmToRoom()
 
             if (config.enableDebugMode) {
                 openOverDueNotification(
@@ -394,10 +380,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 { _, _ ->
                                     lifecycleScope.launch {
                                         reversed().forEach {
-                                            it.toRealm().also { realmDiary ->
-                                                realmDiary.isSelected = false
-                                                diaryRepository.duplicateDiary(realmDiary.toDomain())
-                                            }
+                                            it.isSelected = false
+                                            diaryRepository.duplicateDiary(it)
                                         }
                                         refreshList()
                                         Handler(Looper.getMainLooper()).post {

@@ -2,14 +2,10 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -26,10 +22,16 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemDiaryDashboardBinding
 import me.blog.korn123.easydiary.enums.Calculation
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
