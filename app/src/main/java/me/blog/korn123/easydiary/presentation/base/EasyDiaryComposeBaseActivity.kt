@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.compose
+package me.blog.korn123.easydiary.presentation.base
 
 import android.content.Intent
 import android.hardware.SensorManager
@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.extensions.isBelowVanillaIceCream
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 open class EasyDiaryComposeBaseActivity :

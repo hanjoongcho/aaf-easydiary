@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.compose
+package me.blog.korn123.easydiary.presentation.settings
 
 import android.app.ActivityManager
 import android.content.Context
@@ -52,6 +52,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.showBetaFeatureMessage
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
@@ -262,7 +263,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Preview(heightDp = 1100)
-//    @Preview(name = "Landscape Pixel 4 XL", device = "spec:width=1280dp,height=720dp")
     @Composable
     private fun QuickSettingsPreview() {
         AppTheme {

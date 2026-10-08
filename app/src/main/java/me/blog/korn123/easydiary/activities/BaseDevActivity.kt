@@ -65,8 +65,6 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.compose.Demo1Activity
-import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -108,6 +106,8 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
+import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -307,7 +307,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(
                         currentContext,
-                        me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java,
+                        me.blog.korn123.easydiary.presentation.main.DiaryMainActivity::class.java,
                     ),
                 )
             }
@@ -318,7 +318,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) {
                 TransitionHelper.startActivityWithTransition(
                     currentActivity,
-                    Intent(currentContext, me.blog.korn123.easydiary.compose.CalendarActivity::class.java),
+                    Intent(currentContext, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java),
                 )
             }
         }

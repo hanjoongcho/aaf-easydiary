@@ -1,9 +1,10 @@
-package me.blog.korn123.easydiary.compose
+package me.blog.korn123.easydiary.presentation.calendar
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -44,11 +45,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,7 +59,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -84,12 +81,12 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -100,23 +97,24 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class CalendarActivity : EasyDiaryComposeBaseActivity() {
+    private val calendarViewModel: CalendarViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalendarScreen()
+            CalendarScreen(calendarViewModel = calendarViewModel)
         }
     }
 
     @Composable
-    fun CalendarScreen(
-        diaryViewModel: DiaryViewModel = hiltViewModel(),
-    ) {
+    fun CalendarScreen(calendarViewModel: CalendarViewModel) {
         val context = LocalContext.current
-        val currentMonth = remember { YearMonth.now() }
-        var startMonth by remember { mutableStateOf(currentMonth.minusYears(2)) }
-        var endMonth by remember { mutableStateOf(currentMonth.plusYears(2)) }
-        var selection by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
-        var eventsMap by remember { mutableStateOf<Map<LocalDate, List<Diary>>>(emptyMap()) }
+        val startMonth = calendarViewModel.startMonth
+        val endMonth = calendarViewModel.endMonth
+        val selection = calendarViewModel.selection
+        val eventsMap = calendarViewModel.eventsMap
+        val isLoading = calendarViewModel.isLoading
+
         val daysOfWeek =
             remember {
                 when (context.config.calendarStartDay) {
@@ -163,44 +161,13 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                 startMonth = startMonth,
                 endMonth = endMonth,
                 firstDayOfWeek = daysOfWeek.first(),
-                firstVisibleMonth = currentMonth,
+                firstVisibleMonth = calendarViewModel.currentMonth,
             )
 
         val visibleMonth = state.firstVisibleMonth.yearMonth
-        val formatter =
-            remember {
-                DateTimeFormatter.ofPattern(
-                    android.text.format.DateFormat
-                        .getBestDateTimePattern(Locale.getDefault(), "yyyyMMMM"),
-                    Locale.getDefault(),
-                )
-            }
-        val currentMonthTitle = visibleMonth.format(formatter)
 
         LaunchedEffect(visibleMonth) {
-            diaryViewModel.isLoading = true
-            if (!visibleMonth.isAfter(startMonth.plusMonths(3))) {
-                startMonth = startMonth.minusYears(2)
-            }
-            if (!visibleMonth.isBefore(endMonth.minusMonths(3))) {
-                endMonth = endMonth.plusYears(2)
-            }
-
-            diaryViewModel.observeDateStringMap(visibleMonth.monthValue, visibleMonth.year).collect { dateStringMap ->
-                val newMap = mutableMapOf<LocalDate, List<Diary>>()
-                for ((dateStr, diaries) in dateStringMap) {
-                    if (diaries.isNotEmpty()) {
-                        try {
-                            val localDate = LocalDate.parse(dateStr)
-                            newMap[localDate] = diaries
-                        } catch (_: Exception) {
-                            diaryViewModel.isLoading = false
-                        }
-                    }
-                }
-                eventsMap = newMap
-                diaryViewModel.isLoading = false
-            }
+            calendarViewModel.observeEventsForMonth(visibleMonth)
         }
 
         val bottomPadding =
@@ -244,7 +211,6 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                             Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
-//                            .background(Color(context.config.backgroundColor))
                                 .verticalScroll(rememberScrollState()),
                     ) {
                         key(selection) {
@@ -259,7 +225,7 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                                         events = events,
                                     ) { clicked ->
                                         if (day.position == DayPosition.MonthDate) {
-                                            selection = clicked
+                                            calendarViewModel.setSelectedDate(clicked)
                                         }
                                     }
                                 },
@@ -289,15 +255,10 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                         Spacer(modifier = Modifier.height(VERTICAL_PADDING.dp))
 
                         val events = selection?.let { eventsMap[it] } ?: emptyList()
-//                    Log.i(
-//                        AAF_TEST,
-//                        "selection: $selection, events: $events, eventsMap: $eventsMap",
-//                    )
                         if (events.isEmpty()) {
                             SimpleCard(title = getString(R.string.guide_message_4), description = null, modifier = Modifier.fillMaxWidth())
                         } else {
                             Column(
-//                            verticalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier =
                                     Modifier
                                         .fillMaxWidth()
@@ -333,7 +294,7 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                         }
                     }
                     AnimatedVisibility(
-                        visible = diaryViewModel.isLoading,
+                        visible = isLoading,
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
@@ -439,7 +400,6 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
         onClick: (LocalDate) -> Unit,
     ) {
         val isCurrentMonth = day.position == DayPosition.MonthDate
-        val hasEvents = events.isNotEmpty()
         val displayEvents = events.take(3)
 
         Box(
@@ -527,7 +487,6 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                 }
 
                 if (displayEvents.isNotEmpty() && isCurrentMonth) {
-//                    Spacer(modifier = Modifier.height(1.dp))
                     displayEvents.forEach { diary ->
                         Box(
                             modifier =
@@ -542,7 +501,6 @@ class CalendarActivity : EasyDiaryComposeBaseActivity() {
                             val pxValue = with(density) { 10.sp.toPx() }
                             SimpleText(text = EasyDiaryUtils.summaryDiaryLabel(diary), maxLines = 1, fontSize = pxValue)
                         }
-//                        Spacer(modifier = Modifier.height(1.dp))
                     }
                 }
             }

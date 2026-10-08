@@ -52,7 +52,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.compose.TreeTimelineActivity
 import me.blog.korn123.easydiary.databinding.ActivityDiaryReadingBinding
 import me.blog.korn123.easydiary.databinding.DialogHighlightKeywordBinding
 import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
@@ -88,6 +87,7 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
 import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
 import me.blog.korn123.easydiary.ui.components.LoadingScreen

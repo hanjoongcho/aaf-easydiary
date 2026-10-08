@@ -1,6 +1,5 @@
-package me.blog.korn123.easydiary.compose
+package me.blog.korn123.easydiary.presentation.dev
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
@@ -14,8 +13,10 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,25 +26,25 @@ import me.blog.korn123.commons.utils.FileNode
 import me.blog.korn123.commons.utils.TreeUtils
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
+import me.blog.korn123.easydiary.presentation.tree.TreeViewModel
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.components.TreeContent
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.TreeViewModel
 
 @AndroidEntryPoint
-class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
-    val treeViewModel: TreeViewModel by viewModels()
+class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
+    private val treeViewModel: TreeViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val isResultAPI = intent.getBooleanExtra(IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT, true).not()
         setContent {
-            TreeTimeline(isResultAPI = isResultAPI)
+            SelfDevelopmentRepo()
         }
     }
 
@@ -52,7 +53,7 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
      *
      ***************************************************************************************************/
     @Composable
-    fun TreeTimeline(isResultAPI: Boolean = false) {
+    fun SelfDevelopmentRepo() {
         LocalActivity.current?.applyFullScreenStatusBarTheme()
 
         val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
@@ -60,15 +61,19 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
         val total: Int by treeViewModel.total.collectAsState()
         val isLoading: Boolean by treeViewModel.isLoading.collectAsState()
+        val allDiaries by treeViewModel.allDiaries.collectAsState()
 
-        TreeTimelineContent(
-            isResultAPI = isResultAPI,
+        LaunchedEffect(Unit) {
+            treeViewModel.isSelfDevelopmentRepository = true
+        }
+
+        SelfDevelopmentRepoContent(
             enableCardViewPolicy = enableCardViewPolicy,
             currentQuery = currentQuery,
             treeData = treeData,
             total = total,
             isLoading = isLoading,
-            onRefresh = { treeViewModel.fetchTimeLineDiary() },
+            onRefresh = { treeViewModel.fetchSelfDevelopmentRepoDiary(allDiaries) },
             onQueryChange = { treeViewModel.setCurrentQuery(it) },
             backgroundColor = Color(config.screenBackgroundColor),
             onToggleWholeTree = { isExpand ->
@@ -77,20 +82,11 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             onFolderClick = { node ->
                 treeViewModel.setTreeData(TreeUtils.toggleChildren(treeData, node))
             },
-            onResultAPICallback = { sequence ->
-                val resultIntent =
-                    Intent().apply {
-                        putExtra("sequence", sequence)
-                    }
-                setResult(RESULT_OK, resultIntent)
-                finish()
-            },
         )
     }
 
     @Composable
-    fun TreeTimelineContent(
-        isResultAPI: Boolean = false,
+    fun SelfDevelopmentRepoContent(
         enableCardViewPolicy: Boolean = false,
         currentQuery: String = "",
         treeData: List<Pair<FileNode, Int>> = emptyList(),
@@ -101,7 +97,6 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
         onQueryChange: (String) -> Unit,
         onToggleWholeTree: (Boolean) -> Unit,
         onFolderClick: (FileNode) -> Unit,
-        onResultAPICallback: (Long) -> Unit = {},
     ) {
         AppTheme {
             Scaffold(
@@ -113,16 +108,14 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
                         TreeContent(
                             innerPadding = innerPadding,
                             enableCardViewPolicy = enableCardViewPolicy,
-                            showDebugCard = false,
                             total = total,
                             treeData = treeData,
                             currentQuery = currentQuery,
-                            isResultAPI = isResultAPI,
                             fetchDiary = onRefresh,
                             updateQuery = onQueryChange,
                             toggleWholeTree = onToggleWholeTree,
                             folderOnClick = onFolderClick,
-                            resultAPICallback = onResultAPICallback,
+                            resultAPICallback = {},
                         )
 
                         AnimatedVisibility(
@@ -137,8 +130,4 @@ class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {
             )
         }
     }
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
 }
