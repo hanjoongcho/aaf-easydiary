@@ -125,10 +125,6 @@
             android:name=".activities.StatisticsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CalendarActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/SplashScreenTheme" />
-        <activity
             android:name=".activities.PhotoViewPagerActivity"
             android:hardwareAccelerated="false"
             android:theme="@style/AppTheme.NoActionBar" />

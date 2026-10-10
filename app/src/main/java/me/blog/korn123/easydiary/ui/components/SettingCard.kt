@@ -163,6 +163,7 @@ fun SimpleCard(
             )
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    isBoldTitle: Boolean = true,
     onLongClick: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
@@ -176,6 +177,7 @@ fun SimpleCard(
         fontSize = fontSize,
         fontFamily = fontFamily,
         lineSpacingScaleFactor = lineSpacingScaleFactor,
+        isBoldTitle = isBoldTitle,
         onLongClick = onLongClick,
         onClick = onClick,
     )
@@ -200,6 +202,7 @@ fun SimpleCardWithImage(
             )
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    isBoldTitle: Boolean = true,
     onLongClick: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
@@ -233,7 +236,7 @@ fun SimpleCardWithImage(
             ) {
                 SimpleText(
                     text = title,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = if (isBoldTitle) FontWeight.Bold else FontWeight.Normal,
                     fontSize = fontSize,
                     fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,

@@ -418,7 +418,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             R.id.planner -> {
-                val calendarIntent = Intent(this@DiaryMainActivity, CalendarActivity::class.java)
+                val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
                 //                startActivity(calendarIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
