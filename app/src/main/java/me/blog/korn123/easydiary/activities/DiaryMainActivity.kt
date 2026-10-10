@@ -216,7 +216,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //        clearLockSettingsTemporary()
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
-            setupOnBackPressDispatcher()
 
             if (config.enableDebugMode) {
                 openOverDueNotification(
@@ -244,7 +243,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
-        initTextSize(mBinding.progressDialog)
         invalidateOptionsMenu()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
@@ -1135,17 +1133,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             }
                         }
                     }
-                }
-            },
-        )
-    }
-
-    private fun setupOnBackPressDispatcher() {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (mBinding.progressDialog.isGone) ActivityCompat.finishAffinity(this@DiaryMainActivity)
                 }
             },
         )
