@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.compose
+package me.blog.korn123.easydiary.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -101,15 +101,17 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
+import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
 import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
@@ -371,12 +373,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     .asPaddingValues()
                                     .calculateBottomPadding()
                                     .toPx()
-//                                                    .plus(
-//                                                        WindowInsets.statusBars
-//                                                            .asPaddingValues()
-//                                                            .calculateTopPadding()
-//                                                            .toPx(),
-//                                                    )
                             },
                         ),
                     isDraggingThumb = isDraggingThumb,
@@ -386,10 +382,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         Modifier
                             .align(Alignment.TopEnd)
                             .padding(
-//                                                top =
-//                                                    WindowInsets.statusBars
-//                                                        .asPaddingValues()
-//                                                        .calculateTopPadding(),
                                 bottom =
                                     WindowInsets.navigationBars
                                         .asPaddingValues()
@@ -413,14 +405,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     },
                 )
 
-//                this@Column.AnimatedVisibility(
-//                    visible = !thumbVisible,
-//                    enter = fadeIn(animationSpec = tween(durationMillis)),
-//                    exit = fadeOut(animationSpec = tween(durationMillis)),
-//                    modifier =
-//                        Modifier
-//                            .align(Alignment.BottomCenter),
-//                ) {
                 Row(modifier = Modifier.align(Alignment.BottomCenter)) {
                     BottomSheet(
                         title = "[Total: ${items.size}] category or title",
@@ -430,7 +414,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         diaryViewModel.query.value = query
                     }
                 }
-//                }
             }
         }
     }
@@ -459,7 +442,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         Row(
             modifier =
                 Modifier
-                    .fillMaxWidth(), // 가로 전체를 꽉 채웁니다.
+                    .fillMaxWidth(),
         ) {
             Column(
                 modifier =
@@ -529,12 +512,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         .asPaddingValues()
                                         .calculateBottomPadding()
                                         .toPx()
-//                                                    .plus(
-//                                                        WindowInsets.statusBars
-//                                                            .asPaddingValues()
-//                                                            .calculateTopPadding()
-//                                                            .toPx(),
-//                                                    )
                                 },
                             ),
                         isDraggingThumb = isDraggingThumb,
@@ -544,10 +521,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(
-//                                                top =
-//                                                    WindowInsets.statusBars
-//                                                        .asPaddingValues()
-//                                                        .calculateTopPadding(),
                                     bottom =
                                         WindowInsets.navigationBars
                                             .asPaddingValues()
@@ -613,27 +586,16 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         callbackQuery: (query: String) -> Unit = {},
     ) {
         Column {
-//            SearchToolbar(
-//                title = title,
-//                currentQuery = currentQuery,
-//                enableCardViewPolicy = enableCardViewPolicy,
-//            ) { query ->
-//                viewModel.findDiary(query)
-//            }
-
             var isFocused by remember { mutableStateOf(false) }
             Box(
-//        shape = RoundedCornerShape(bottomStart = roundedCornerShapeSize.dp, bottomEnd = roundedCornerShapeSize.dp),
-//        shape = RoundedCornerShape(15.dp),
-//        colors = CardDefaults.cardColors(Color(LocalContext.current.config.primaryColor)),
                 modifier =
                     Modifier
-                        .imePadding() // navigationBarsPadding() 보다 우선 순위가 높음
+                        .imePadding()
                         .padding(0.dp, 10.dp, 0.dp, 0.dp)
                         .shadow(
                             elevation = 15.dp,
                             shape = RoundedCornerShape(15.dp),
-                            clip = false, // 기본값
+                            clip = false,
                         ).background(
                             color =
                                 if (isFocused || currentQuery.isNotEmpty()) {
@@ -651,10 +613,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             ),
                             shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                         ),
-                //            .alpha(0.8f)
-//        modifier = (if (enableCardViewPolicy) modifier.padding(horizontalPadding.dp, verticalPadding.dp) else modifier
-//            .padding(5.dp, 5.dp)),
-//        elevation = CardDefaults.cardElevation(defaultElevation = roundedCornerShapeSize.dp),
             ) {
                 Column(
                     modifier =
@@ -676,12 +634,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
 
                         val focusRequester = remember { FocusRequester() }
 
-                        // 화면이 그려진 직후 포커스 요청
-//                LaunchedEffect(Unit) {
-//                    // 약간의 delay를 주면 레이아웃이 안정된 후 포커스됨
-//                    delay(100)
-//                    focusRequester.requestFocus()
-//                }
                         TextField(
                             value = text,
                             onValueChange = {
@@ -695,8 +647,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         TextStyle(
                                             fontFamily = fontFamily,
                                             fontWeight = fontWeight,
-//                        fontStyle = FontStyle.Italic,
-//                        color = fontColor.copy(alpha),
                                             color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
                                             fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                                         ),
@@ -707,15 +657,13 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     cursorColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
-                                    focusedContainerColor = Color.Transparent, // 포커스 시 배경
-                                    unfocusedContainerColor = Color.Transparent, // 포커스 없을 때 배경
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
                                 ),
                             textStyle =
                                 TextStyle(
                                     fontFamily = fontFamily,
                                     fontWeight = fontWeight,
-//                        fontStyle = FontStyle.Italic,
-//                        color = fontColor.copy(alpha),
                                     color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
                                     fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                                 ),
@@ -774,7 +722,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             iconResourceId = R.drawable.ic_time_8_w,
                             iconSize = 16.dp,
                         ) {
-                            //                                        moveToday()
                             makeSnackBar("moveToday()")
                         }
 
@@ -803,7 +750,6 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                 iconResourceId = R.drawable.ic_options_three_dots,
                                 iconSize = 16.dp,
                             ) {
-                                //                                            openCustomOptionMenu()
                                 makeSnackBar("openCustomOptionMenu()")
                             }
                         }

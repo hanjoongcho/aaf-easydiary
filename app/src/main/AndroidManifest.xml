@@ -171,26 +171,31 @@
 
         <!-- Start Jetpack Compose Activity -->
         <activity
-            android:name=".compose.QuickSettingsActivity"
+            android:name=".presentation.settings.QuickSettingsActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.SelfDevelopmentRepoActivity"
+            android:name=".presentation.dev.SelfDevelopmentRepoActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.TreeTimelineActivity"
+            android:name=".presentation.tree.TreeTimelineActivity"
             android:label=""
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.DiaryMainActivity"
+            android:name=".presentation.main.DiaryMainActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.Demo1Activity"
+            android:name=".presentation.dev.Demo1Activity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".presentation.calendar.CalendarActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />

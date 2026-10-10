@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -400,6 +401,42 @@ class DiaryViewModel
                         item.diary?.currentTimeMillis ?: 0
                     }
             }
+
+        fun observeDateStringMap(
+            month: Int,
+            year: Int,
+        ): Flow<Map<String, List<Diary>>> {
+            val targetMonth = YearMonth.of(year, month)
+            val startOfMonth = targetMonth.atDay(1)
+            val startDate = startOfMonth.minusWeeks(7)
+            val endDate = startOfMonth.plusWeeks(7)
+            val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
+
+            val startMillis = startDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val endMillis = endDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() + 86400000L
+
+            return diaryRepository
+                .observeDiariesWithPhotos(
+                    startTimeMillis = startMillis,
+                    endTimeMillis = endMillis,
+                ).map { allDiariesInRange ->
+                    val groupedMap =
+                        if (sortAsc) {
+                            allDiariesInRange.sortedBy { it.currentTimeMillis }
+                        } else {
+                            allDiariesInRange.sortedByDescending { it.currentTimeMillis }
+                        }.groupBy { it.dateString ?: "" }
+
+                    val resultMap = mutableMapOf<String, List<Diary>>()
+                    var currentDate = startDate
+                    while (!currentDate.isAfter(endDate)) {
+                        val dateStr = currentDate.toString()
+                        resultMap[dateStr] = groupedMap[dateStr] ?: emptyList()
+                        currentDate = currentDate.plusDays(1)
+                    }
+                    resultMap
+                }
+        }
 
         suspend fun getDateStringMap(
             month: Int,

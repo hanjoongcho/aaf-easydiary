@@ -65,8 +65,6 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.compose.Demo1Activity
-import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -96,7 +94,6 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -109,6 +106,8 @@ import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_N
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
+import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -121,9 +120,7 @@ import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
-import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
@@ -310,8 +307,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(
                         currentContext,
-                        me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java,
+                        me.blog.korn123.easydiary.presentation.main.DiaryMainActivity::class.java,
                     ),
+                )
+            }
+            SimpleCard(
+                "Mig Calendar",
+                "Compose Calendar sample using kizitonwose/Calendar",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java),
                 )
             }
         }
