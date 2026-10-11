@@ -2,9 +2,7 @@ package me.blog.korn123.easydiary.presentation.calendar
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -55,6 +53,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.HorizontalCalendar
@@ -64,6 +63,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.config
@@ -75,10 +75,10 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SimpleText
 import me.blog.korn123.easydiary.ui.theme.AppTheme
@@ -92,19 +92,22 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
+private fun navigationBottomPadding(): Dp =
+    if (isVanillaIceCreamPlus()) {
+        WindowInsets.navigationBars
+            .asPaddingValues()
+            .calculateBottomPadding()
+    } else {
+        0.dp
+    }
+
+@Composable
 fun CalendarScreen(
     calendarViewModel: CalendarViewModel,
     enableScroll: Boolean = true,
 ) {
     val context = LocalContext.current
-    val bottomPadding =
-        if (isVanillaIceCreamPlus()) {
-            WindowInsets.navigationBars
-                .asPaddingValues()
-                .calculateBottomPadding()
-        } else {
-            0.dp
-        }
+    val bottomPadding = navigationBottomPadding()
 
     AppTheme {
         Scaffold(
@@ -157,7 +160,6 @@ fun CalendarContent(
     val endMonth = calendarViewModel.endMonth
     val selection = calendarViewModel.selection
     val eventsMap = calendarViewModel.eventsMap
-    val isLoading = calendarViewModel.isLoading
 
     val daysOfWeek =
         remember {
@@ -214,14 +216,7 @@ fun CalendarContent(
         calendarViewModel.observeEventsForMonth(visibleMonth)
     }
 
-    val bottomPadding =
-        if (isVanillaIceCreamPlus()) {
-            WindowInsets.navigationBars
-                .asPaddingValues()
-                .calculateBottomPadding()
-        } else {
-            0.dp
-        }
+    val bottomPadding = navigationBottomPadding()
 
     Box(modifier = modifier) {
         val columnModifier =
@@ -297,51 +292,70 @@ fun CalendarContent(
 
             Spacer(modifier = Modifier.height(VERTICAL_PADDING.dp))
 
-            val events = selection?.let { eventsMap[it] } ?: emptyList()
-            if (events.isEmpty()) {
-                SimpleCard(title = stringResource(R.string.guide_message_4), description = null, modifier = Modifier.fillMaxWidth(), isBoldTitle = false)
-            } else {
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = if (enableScroll) 72.dp.plus(bottomPadding) else 0.dp),
-                ) {
-                    events.forEach { event ->
-                        key(event.diaryId) {
-                            Card(
-                                shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-                                colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                                modifier = (
-                                    if (LocalContext.current.config.enableCardViewPolicy) {
-                                        Modifier.padding(
-                                            HORIZONTAL_PADDING.dp,
-                                            VERTICAL_PADDING.dp,
-                                        )
-                                    } else {
-                                        Modifier
-                                            .padding(1.dp, 1.dp)
-                                    }
-                                ),
-                                elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
-                            ) {
-                                LegacyDiaryItemCard(
-                                    diary = event,
-                                    itemClickCallback = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
-                                    itemLongClickCallback = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
+            SelectedDateEventsSection(
+                events = selection?.let { eventsMap[it] } ?: emptyList(),
+                enableScroll = enableScroll,
+                bottomPadding = bottomPadding,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SelectedDateEventsSection(
+    events: List<Diary>,
+    enableScroll: Boolean,
+    bottomPadding: Dp,
+) {
+    val context = LocalContext.current
+    val activity = LocalActivity.current
+    if (events.isEmpty()) {
+        SimpleCard(
+            title = stringResource(R.string.guide_message_4),
+            description = null,
+            modifier = Modifier.fillMaxWidth(),
+            isBoldTitle = false,
+        )
+    } else {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = if (enableScroll) 72.dp.plus(bottomPadding) else 0.dp),
+        ) {
+            events.forEach { event ->
+                key(event.diaryId) {
+                    Card(
+                        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                        colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
+                        modifier = (
+                            if (context.config.enableCardViewPolicy) {
+                                Modifier.padding(
+                                    HORIZONTAL_PADDING.dp,
+                                    VERTICAL_PADDING.dp,
                                 )
+                            } else {
+                                Modifier
+                                    .padding(1.dp, 1.dp)
                             }
-                        }
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                    ) {
+                        LegacyDiaryItemCard(
+                            diary = event,
+                            itemClickCallback = {
+                                TransitionHelper.startActivityWithTransition(
+                                    activity,
+                                    Intent(context, DiaryReadingActivity::class.java).apply {
+                                        putExtra(DIARY_SEQUENCE, event.diaryId)
+                                    },
+                                )
+                            },
+                            itemLongClickCallback = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
+                        )
                     }
                 }
             }
-        }
-        AnimatedVisibility(
-            visible = isLoading,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            LoadingScreen()
         }
     }
 }

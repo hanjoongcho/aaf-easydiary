@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -40,8 +39,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.github.amlcurran.showcaseview.ShowcaseView
-import com.github.amlcurran.showcaseview.targets.ViewTarget
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
@@ -83,7 +80,6 @@ import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryReadingConstants
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
@@ -117,8 +113,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
     private lateinit var mDialogHighlightKeywordBinding: DialogHighlightKeywordBinding
     private var mTextToSpeech: TextToSpeech? = null
-    private var mShowcaseView: ShowcaseView? = null
-    private var mShowcaseIndex = 1
     private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
 
     private val selectValueLauncher =
@@ -206,7 +200,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         setupViewPager()
-        setupShowcase()
 
         lifecycleScope.launch {
             diaryViewModel.isLoading = true
@@ -735,69 +728,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 override fun onPageScrollStateChanged(state: Int) {}
             },
         )
-    }
-
-    private fun setupShowcase() {
-        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
-
-        val centerParams =
-            RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        centerParams.setMargins(0, 0, 0, margin)
-
-        val showcaseViewOnClickListener =
-            View.OnClickListener {
-                mShowcaseView?.run {
-                    when (mShowcaseIndex) {
-                        1 -> {
-                            setButtonPosition(centerParams)
-                            setShowcase(ViewTarget(mBinding.diaryViewPager), false)
-                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_1))
-                            setContentText(getString(R.string.read_diary_detail_showcase_message_1))
-                        }
-
-                        2 -> {
-                            setButtonPosition(centerParams)
-                            setTarget(ViewTarget(R.id.edit, this@DiaryReadingActivity))
-                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_2))
-                            setContentText(getString(R.string.read_diary_detail_showcase_message_2))
-                        }
-
-                        3 -> {
-                            setButtonPosition(centerParams)
-                            setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadingActivity))
-                            setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
-                            setContentText(getString(R.string.read_diary_detail_showcase_message_3))
-                            setButtonText(getString(R.string.create_diary_showcase_button_2))
-                        }
-
-                        4 -> {
-                            hide()
-                        }
-                    }
-                }
-                mShowcaseIndex++
-            }
-
-        mShowcaseView =
-            ShowcaseView
-                .Builder(this)
-                .withMaterialShowcase()
-                .setContentTitle(getString(R.string.read_diary_detail_showcase_title_0))
-                .setContentText(getString(R.string.read_diary_detail_showcase_message_0))
-                .setStyle(R.style.ShowcaseTheme)
-                .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER.toLong())
-                .setOnClickListener(showcaseViewOnClickListener)
-                .blockAllTouches()
-                .build()
-        mShowcaseView?.run {
-            setButtonText(getString(R.string.read_diary_detail_showcase_button_1))
-            setButtonPosition(centerParams)
-        }
     }
 
     private fun initModule() {

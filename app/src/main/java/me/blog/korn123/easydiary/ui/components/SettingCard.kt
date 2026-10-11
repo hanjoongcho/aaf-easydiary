@@ -5,7 +5,6 @@ import android.net.Uri
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -34,6 +33,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -57,14 +58,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import com.xw.repo.BubbleSeekBar
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.PartialBubbleSeekBarBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
@@ -814,64 +812,23 @@ fun LineSpacing(
                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AndroidView(
-                    modifier = modifier,
-                    factory = { ctx ->
-                        val binding =
-                            PartialBubbleSeekBarBinding.inflate(LayoutInflater.from(ctx)).apply {
-                                fontLineSpacing.configBuilder
-                                    .min(0.2F)
-                                    .max(1.8F)
-                                    .progress(lineSpacingScaleFactor)
-                                    .floatType()
-                                    .secondTrackColor(ctx.config.textColor)
-                                    .trackColor(ctx.config.textColor)
-                                    .sectionCount(16)
-                                    .sectionTextInterval(2)
-                                    .showSectionText()
-                                    .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
-                                    .autoAdjustSectionMark()
-                                    .build()
-                                val bubbleSeekBarListener =
-                                    object : BubbleSeekBar.OnProgressChangedListener {
-                                        override fun onProgressChanged(
-                                            bubbleSeekBar: BubbleSeekBar?,
-                                            progress: Int,
-                                            progressFloat: Float,
-                                            fromUser: Boolean,
-                                        ) {
-                                            ctx.config.lineSpacingScaleFactor = progressFloat
-//                                    setFontsStyle()
-                                            callback(progressFloat)
-                                        }
-
-                                        override fun getProgressOnActionUp(
-                                            bubbleSeekBar: BubbleSeekBar?,
-                                            progress: Int,
-                                            progressFloat: Float,
-                                        ) {
-                                        }
-
-                                        override fun getProgressOnFinally(
-                                            bubbleSeekBar: BubbleSeekBar?,
-                                            progress: Int,
-                                            progressFloat: Float,
-                                            fromUser: Boolean,
-                                        ) {
-                                        }
-                                    }
-                                fontLineSpacing.onProgressChangedListener = bubbleSeekBarListener
-                            }
-
-                        binding.root
+                val ctx = LocalContext.current
+                Slider(
+                    value = lineSpacingScaleFactor,
+                    onValueChange = { progressFloat ->
+                        val rounded = kotlin.math.round(progressFloat * 10) / 10.0f
+                        ctx.config.lineSpacingScaleFactor = rounded
+                        callback(rounded)
                     },
-                    update = { view ->
-                        val binding = PartialBubbleSeekBarBinding.bind(view)
-                        binding.fontLineSpacing.run {
-                            setProgress(lineSpacingScaleFactor)
-                            invalidate()
-                        }
-                    },
+                    valueRange = 0.2f..1.8f,
+                    steps = 15,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors =
+                        SliderDefaults.colors(
+                            thumbColor = Color(ctx.config.primaryColor),
+                            activeTrackColor = Color(ctx.config.primaryColor),
+                            inactiveTrackColor = Color(ctx.config.textColor).copy(alpha = 0.3f),
+                        ),
                 )
             }
 

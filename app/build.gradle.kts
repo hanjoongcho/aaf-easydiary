@@ -3,8 +3,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
@@ -149,6 +147,10 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+configurations.all {
+    exclude(group = "com.android.support")
+}
+
 configurations.matching { it.name == "fossImplementation" }.configureEach {
     exclude(group = "com.google.android.gms", module = "play-services-auth")
     exclude(group = "com.google.android.play", module = "review")
@@ -249,22 +251,18 @@ dependencies {
 
     // etc.
     implementation("com.kizitonwose.calendar:compose:2.10.1")
-    implementation("com.github.woxingxiao:BubbleSeekBar:3.20")
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     //noinspection NewerVersionAvailable
     implementation("id.zelory:compressor:2.1.1") // Version Change Prohibited
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.github.chrisbanes:PhotoView:2.1.3")
-    implementation("com.github.QuadFlask:colorpicker:0.0.13") // Version Change Prohibited
-    implementation("com.github.amlcurran.showcaseview:library:5.4.3")
     implementation("com.github.zhpanvip:bannerviewpager:3.5.5")
     implementation("com.github.skydoves:landscapist-glide:2.5.1")
     implementation("jp.wasabeef:glide-transformations:4.3.0") {
         exclude(group = "com.github.bumptech.glide", module = "glide")
     }
     implementation("com.github.ksoichiro:android-observablescrollview:1.6.0")
-    implementation("com.roomorama:caldroid:3.0.1")
     implementation("com.nineoldandroids:library:2.4.0")
     implementation("com.simplecityapps:recyclerview-fastscroll:2.0.1")
     implementation("org.jasypt:jasypt:1.9.3")
@@ -278,7 +276,6 @@ dependencies {
     implementation("io.noties.markwon:ext-strikethrough:4.6.2")
     implementation("io.noties.markwon:linkify:4.6.2")
     implementation("io.noties:prism4j:2.0.0")
-    kapt("io.noties:prism4j-bundler:2.0.0")
 
     implementation("com.squareup:seismic:1.0.3")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
