@@ -2,10 +2,10 @@ import com.android.build.api.dsl.ApplicationExtension
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    id("com.google.devtools.ksp")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 val appCompileSdk = 37
@@ -39,7 +39,6 @@ configure<ApplicationExtension> {
         versionName = "1.4.353.202610xx0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled = true
         signingConfig = signingConfigs.getByName("config")
     }
 
@@ -66,15 +65,15 @@ configure<ApplicationExtension> {
     sourceSets {
         getByName("gmsProd") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
-            java.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/gmsProd/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("gmsDev") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
-            java.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/gmsDev/java", "src/gms/java", "src/dummy/java"))
         }
         getByName("foss") {
             manifest.srcFile("src/foss/AndroidManifest.xml")
-            java.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
+            kotlin.directories.addAll(listOf("src/main/java", "src/foss/java", "src/dummy/java"))
         }
         getByName("lab") {
             manifest.srcFile("src/gms/AndroidManifest.xml")
@@ -173,124 +172,122 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     // androidx
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.vectordrawable:vectordrawable:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("androidx.biometric:biometric:1.1.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
-    implementation("androidx.activity:activity-ktx:1.13.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.work:work-runtime-ktx:2.11.2")
-    implementation("androidx.browser:browser:1.10.0")
-    implementation("androidx.core:core-splashscreen:1.2.0")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.vectordrawable)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.core.splashscreen)
 
     // compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
-    implementation("androidx.activity:activity-compose:1.13.0")
-    implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("androidx.compose.runtime:runtime-livedata:1.11.0")
-    implementation("androidx.compose.foundation:foundation-layout:1.11.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.11.0")
-    implementation("androidx.compose.ui:ui-graphics:1.11.0")
-    implementation("androidx.compose.ui:ui-tooling:1.11.0")
-    implementation("androidx.credentials:credentials:1.6.0")
-    implementation("androidx.fragment:fragment-compose:1.8.9")
-    implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.fragment.compose)
+    implementation(libs.androidx.compose.material3.windowsizeclass)
 
     // room
-    val roomVersion = "2.8.5"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    val roomVersion = libs.versions.room.get()
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // hilt
-    val hiltVersion = "2.60.1"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    ksp("com.google.dagger:hilt-compiler:$hiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.4.0")
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // gms
-    implementation("com.google.android.gms:play-services-auth:21.5.1")
-    implementation("com.google.android.play:review:2.0.2")
-    implementation("com.google.android.play:review-ktx:2.0.2")
-    implementation("com.google.api-client:google-api-client-android:2.9.0")
-    implementation("com.google.android.gms:play-services-drive:17.0.0")
-    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0")
-    implementation("com.google.apis:google-api-services-calendar:v3-rev411-1.25.0")
-    implementation("com.google.http-client:google-http-client-gson:2.1.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
+    implementation(libs.google.android.gms.play.services.auth)
+    implementation(libs.google.android.play.review)
+    implementation(libs.google.android.play.review.ktx)
+    implementation(libs.google.api.client.android)
+    implementation(libs.google.android.gms.play.services.drive)
+    implementation(libs.google.apis.google.api.services.drive)
+    implementation(libs.google.apis.google.api.services.calendar)
+    implementation(libs.google.http.client.gson)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.google.android.libraries.identity.googleid)
 
     // google components common
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.google.android.material:material:1.13.0")
-    implementation("com.google.code.gson:gson:2.14.0")
+    implementation(libs.google.android.flexbox)
+    implementation(libs.google.android.material)
+    implementation(libs.google.code.gson)
     //noinspection NewerVersionAvailable
-    implementation("com.google.guava:guava:33.5.0-android")
+    implementation(libs.google.guava)
 
     // Apache Commons
-    implementation("commons-io:commons-io:2.22.0")
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation(libs.commons.io)
+    implementation(libs.org.apache.commons.lang3)
     //noinspection NewerVersionAvailable
-    implementation("org.apache.poi:poi:3.13") // Version Change Prohibited
+    implementation(libs.org.apache.poi) // Version Change Prohibited
 
     // AAFactory
-    implementation("io.github.aafactory:commons:1.2.0") {
+    implementation(libs.io.github.aafactory.commons) {
         exclude(group = "com.werb.eventbuskotlin", module = "eventbuskotlin")
         exclude(group = "com.werb.moretype", module = "moretype")
         exclude(group = "id.zelory", module = "compressor")
     }
 
     // etc.
-    implementation("com.kizitonwose.calendar:compose:2.10.1")
-    implementation("com.tbuonomo:dotsindicator:5.1.0")
+    implementation(libs.com.kizitonwose.calendar.compose)
+    implementation(libs.com.tbuonomo.dotsindicator)
     //noinspection NewerVersionAvailable
-    implementation("id.zelory:compressor:2.1.1") // Version Change Prohibited
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
-    implementation("com.github.chrisbanes:PhotoView:2.1.3")
-    implementation("com.github.zhpanvip:bannerviewpager:3.5.5")
-    implementation("com.github.skydoves:landscapist-glide:2.5.1")
-    implementation("jp.wasabeef:glide-transformations:4.3.0") {
+    implementation(libs.id.zelory.compressor) // Version Change Prohibited
+    implementation(libs.org.jetbrains.kotlin.kotlin.stdlib.jdk7)
+    implementation(libs.com.github.philjay.mpandroidchart)
+    implementation(libs.com.github.chrisbanes.photoview)
+    implementation(libs.com.github.zhpanvip.bannerviewpager)
+    implementation(libs.com.github.skydoves.landscapist.glide)
+    implementation(libs.jp.wasabeef.glide.transformations) {
         exclude(group = "com.github.bumptech.glide", module = "glide")
     }
-    implementation("com.github.ksoichiro:android-observablescrollview:1.6.0")
-    implementation("com.nineoldandroids:library:2.4.0")
-    implementation("com.simplecityapps:recyclerview-fastscroll:2.0.1")
-    implementation("org.jasypt:jasypt:1.9.3")
+    implementation(libs.com.github.ksoichiro.android.observablescrollview)
+    implementation(libs.com.nineoldandroids.library)
+    implementation(libs.com.simplecityapps.recyclerview.fastscroll)
+    implementation(libs.org.jasypt.jasypt)
 
     // io.noties (Markwon & Prism4j)
-    implementation("io.noties.markwon:core:4.6.2")
-    implementation("io.noties.markwon:syntax-highlight:4.6.2")
-    implementation("io.noties.markwon:ext-tables:4.6.2")
-    implementation("io.noties.markwon:image:4.6.2")
-    implementation("io.noties.markwon:html:4.6.2")
-    implementation("io.noties.markwon:ext-strikethrough:4.6.2")
-    implementation("io.noties.markwon:linkify:4.6.2")
-    implementation("io.noties:prism4j:2.0.0")
+    implementation(libs.io.noties.markwon.core)
+    implementation(libs.io.noties.markwon.syntax.highlight)
+    implementation(libs.io.noties.markwon.ext.tables)
+    implementation(libs.io.noties.markwon.image)
+    implementation(libs.io.noties.markwon.html)
+    implementation(libs.io.noties.markwon.ext.strikethrough)
+    implementation(libs.io.noties.markwon.linkify)
+    implementation(libs.io.noties.prism4j)
 
-    implementation("com.squareup:seismic:1.0.3")
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-    implementation("com.squareup.retrofit2:converter-scalars:3.0.0")
+    implementation(libs.com.squareup.seismic)
+    implementation(libs.com.squareup.retrofit2.retrofit)
+    implementation(libs.com.squareup.retrofit2.converter.gson)
+    implementation(libs.com.squareup.retrofit2.converter.scalars)
 
     // test
-    androidTestImplementation("androidx.test:core:1.7.0")
-    androidTestImplementation("androidx.test:core-ktx:1.7.0")
-    androidTestImplementation("androidx.test.ext:junit:1.3.0")
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.3.0")
-    androidTestImplementation("androidx.test:runner:1.7.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0-alpha02") {
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.core.ktx)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.espresso.core) {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
 }

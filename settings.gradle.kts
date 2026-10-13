@@ -7,6 +7,14 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
+rootProject.name = "aaf-easydiary"
 include(":app")
-// include ':app', ':aafactory-commons'
-// project(':aafactory-commons').projectDir = new File(settingsDir, "../aafactory-commons/commons")

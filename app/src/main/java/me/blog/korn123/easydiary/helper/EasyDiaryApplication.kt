@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.helper
 
-import androidx.multidex.MultiDexApplication
 import dagger.hilt.android.HiltAndroidApp
 
 /**
@@ -8,8 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
  */
 
 @HiltAndroidApp
-class EasyDiaryApplication : MultiDexApplication() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+class EasyDiaryApplication : android.app.Application()
