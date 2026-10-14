@@ -113,6 +113,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
     private lateinit var mDialogHighlightKeywordBinding: DialogHighlightKeywordBinding
     private var mTextToSpeech: TextToSpeech? = null
+    private var mIsTtsInitialized = false
+    private var mPendingSpeechText: String? = null
     private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
 
     private val selectValueLauncher =
@@ -261,7 +263,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
-        initModule()
         if (diaryList.isNotEmpty()) {
             mSectionsPagerAdapter.notifyDataSetChanged()
             mSectionsPagerAdapter
@@ -278,6 +279,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     override fun onPause() {
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         destroyModule()
     }
 
@@ -328,7 +333,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
 
                 R.id.speechOutButton -> {
-                    textToSpeech(fragment.getDiaryContents())
+                    initModule(fragment.getDiaryContents())
                 }
 
                 //                R.id.postCard -> {
@@ -730,17 +735,34 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         )
     }
 
-    private fun initModule() {
-        mTextToSpeech =
-            TextToSpeech(this@DiaryReadingActivity) { status ->
-                if (status == TextToSpeech.SUCCESS) {
-                    mTextToSpeech?.run {
-                        language = Locale.getDefault()
-                        setPitch(1.3f)
-                        setSpeechRate(1f)
+    private fun initModule(textToSpeak: String? = null) {
+        textToSpeak?.let {
+            mPendingSpeechText = it
+        }
+        if (mTextToSpeech == null) {
+            mTextToSpeech =
+                TextToSpeech(this@DiaryReadingActivity) { status ->
+                    if (status == TextToSpeech.SUCCESS) {
+                        mTextToSpeech?.run {
+                            language = Locale.getDefault()
+                            setPitch(1.3f)
+                            setSpeechRate(1f)
+                        }
+                        mIsTtsInitialized = true
+                        mPendingSpeechText?.let { text ->
+                            textToSpeech(text)
+                            mPendingSpeechText = null
+                        }
+                    } else {
+                        mIsTtsInitialized = false
                     }
                 }
+        } else if (mIsTtsInitialized) {
+            mPendingSpeechText?.let { text ->
+                textToSpeech(text)
+                mPendingSpeechText = null
             }
+        }
     }
 
     private fun destroyModule() {
@@ -749,6 +771,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             shutdown()
             mTextToSpeech = null
         }
+        mIsTtsInitialized = false
+        mPendingSpeechText = null
     }
 
     private fun textToSpeech(text: String) {
