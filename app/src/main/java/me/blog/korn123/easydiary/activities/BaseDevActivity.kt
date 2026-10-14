@@ -306,16 +306,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     ),
                 )
             }
-            SimpleCard(
-                "Mig Calendar",
-                "Compose Calendar sample using kizitonwose/Calendar",
-                modifier = modifier,
-            ) {
-                TransitionHelper.startActivityWithTransition(
-                    currentActivity,
-                    Intent(currentContext, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java),
-                )
-            }
         }
     }
 

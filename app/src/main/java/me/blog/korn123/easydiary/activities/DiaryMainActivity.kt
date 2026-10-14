@@ -15,14 +15,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -97,7 +94,6 @@ import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
@@ -115,7 +111,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private lateinit var mGridLayoutManager: GridLayoutManager
-    private val baseDevViewModel: BaseDevViewModel by viewModels()
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
     private var mPopupWindow: PopupWindow? = null
@@ -136,7 +131,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
 
-                result.data?.let { it ->
+                result.data?.let {
                     mDiaryMainItemAdapter?.getSelectedItems()?.run {
                         val diaryDomains = this
                         mBinding.progressCoroutine.visibility = View.VISIBLE
@@ -190,15 +185,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             setupComposeView()
             mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
             rescheduleEnabledAlarms()
-//        FontUtils.checkFontSetting(this)
-//        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
             FontUtils.checkFontSetting(this@DiaryMainActivity)
             initDiaryGrid()
             initDummyData()
             updateDrawableColorInnerCardView(mBinding.imgClearQuery)
             bindEvent()
             confirmPrePermissions()
-            setupShowcase()
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
             setupPopupMenu()
             checkBundle(savedInstanceState)
@@ -394,7 +386,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             R.id.saveAsHtml -> {
-//                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
                 EasyDiaryUtils.writeFileWithSAF(
                     "${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
                     MIME_TYPE_HTML,
@@ -404,13 +395,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
-                //                startActivity(timelineIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
             }
 
             R.id.planner -> {
                 val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
-                //                startActivity(calendarIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
 
@@ -419,12 +408,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             R.id.openDashboard -> {
-//                DashboardDialogFragment().apply {
-//                    show(
-//                        supportFragmentManager,
-//                        "DashboardDialog"
-//                    )
-//                }
                 TransitionHelper.startActivityWithTransition(
                     this@DiaryMainActivity,
                     Intent(this@DiaryMainActivity, DashboardActivity::class.java),
@@ -443,10 +426,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.activity_diary_main, menu)
-//                menu.findItem(R.id.devConsole).run {
-//                    applyFontToMenuItem(this)
-//                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
-//                }
             }
 
             DiaryMode.DELETE -> {
@@ -457,28 +436,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
         return true
     }
-
-//    override fun hearShake() {
-//        var position = -1
-//        val tomorrowTimeMillis = EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
-//        val filteredDiary = mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
-//        val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
-//        target?.let {
-//            run outer@ {
-//                mDiaryList.forEachIndexed { index, diary ->
-//                    if (diary.sequence == it.sequence) {
-//                        position = index
-//                        return@outer
-//                    }
-//                }
-//            }
-//
-//            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
-//            if (position != -1) {
-//                mBinding.diaryListView.scrollToPosition(position)
-//            }
-//        }
-//    }
 
     /***************************************************************************************************
      *   etc functions
@@ -559,12 +516,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     } else {
                         mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
                     }
-
-//                    setRevealWidth(dpToPixel(10F))
-//                    create(historyItems)
-                } else {
-//                    setRevealWidth(dpToPixel(50F))
-//                    create(historyItems)
                 }
             }
 
@@ -577,13 +528,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
         }
-
-//        if (config.enablePhotoHighlight) {
-// //            if (mPhotoHighlightFragment.countHighlightItems() > 0) mBinding.layoutBannerContainer.visibility = View.VISIBLE
-//
-//        } else {
-//
-//        }
     }
 
     private fun setupPopupMenu() {
@@ -614,10 +558,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
                     }
 
-                    //                R.id.dashboard -> TransitionHelper.startActivityWithTransition(
-//                    this@DiaryMainActivity,
-//                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
-//                )
                     R.id.chart -> {
                         TransitionHelper.startActivityWithTransition(
                             this@DiaryMainActivity,
@@ -653,7 +593,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         ) { spanCount ->
                             mGridLayoutManager.spanCount = spanCount
                             mBinding.diaryListView.invalidateItemDecorations()
-//                    mDiaryMainItemAdapter?.notifyDataSetChanged()
                         }
                     }
                 }
@@ -665,7 +604,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             updateTextColors(this.root)
             FontUtils.setFontsTypeface(this@DiaryMainActivity, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
-//            dashboard.setOnClickListener(customItemClickListener)
             attachedPhotoGallery.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
@@ -689,10 +627,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
 
-//        val isVisible = if (config.enableDebugMode) View.VISIBLE else View.GONE
-//        mPopupMenuBinding.devConsole.visibility = isVisible
-//        mPopupMenuBinding.quickSettings.visibility = isVisible
-
         mPopupWindow =
             EasyDiaryUtils.openCustomOptionMenu(
                 mPopupMenuBinding.root,
@@ -701,7 +635,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupMenuBinding.run {
             updateDrawableColorInnerCardView(imgDevConsole)
             updateDrawableColorInnerCardView(imgPostcard)
-//            updateDrawableColorInnerCardView(imgDashboard)
             updateDrawableColorInnerCardView(imgAttachedPhotoGallery)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgGridLayout)
@@ -713,28 +646,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun openPostcardViewer() {
         val postCardViewer = Intent(this@DiaryMainActivity, PostcardViewerActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
-    }
-
-    private fun setupShowcase() {
-        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
-
-        val centerParams =
-            RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        centerParams.setMargins(0, 0, 0, margin)
-
-        val leftParams =
-            RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-        leftParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-        leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-        leftParams.setMargins(margin, margin, margin, margin)
     }
 
     private fun bindEvent() {
