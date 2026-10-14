@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.lifecycle.lifecycleScope
-import com.github.amlcurran.showcaseview.ShowcaseView
-import com.github.amlcurran.showcaseview.targets.ViewTarget
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
@@ -34,7 +32,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
 
     /***************************************************************************************************
@@ -53,7 +50,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
 
         addTextWatcher()
         setupRecognizer()
-        setupShowcase()
         initDateTime()
         setupDialog()
         setupPhotoView()
@@ -87,75 +83,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun setupShowcase() {
-        val margin = ((resources.displayMetrics.density * 60) as Number).toInt()
-
-        val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        centerParams.setMargins(0, 0, 0, margin)
-
-        val showcaseViewOnClickListener =
-            View.OnClickListener {
-                when (mShowcaseIndex) {
-                    2 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryTitle), true)
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_2))
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_2))
-                    }
-
-                    3 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryContents), true)
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
-                    }
-
-                    4 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setShowcase(ViewTarget(R.id.datePicker, this), true)
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
-                    }
-
-                    5 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setShowcase(ViewTarget(R.id.timePicker, this), true)
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
-                    }
-
-                    6 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setShowcase(ViewTarget(R.id.saveContents, this), true)
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
-                        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
-                    }
-
-                    7 -> {
-                        mShowcaseView.hide()
-                    }
-                }
-                mShowcaseIndex++
-            }
-
-        mShowcaseView =
-            ShowcaseView
-                .Builder(this)
-                .withMaterialShowcase()
-                .setTarget(ViewTarget(mBinding.partialEditContents.feelingSymbolButton))
-                .setContentTitle(getString(R.string.create_diary_showcase_title_1))
-                .setContentText(getString(R.string.create_diary_showcase_message_1))
-                .setStyle(R.style.ShowcaseTheme)
-                .singleShot(SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER.toLong())
-                .setOnClickListener(showcaseViewOnClickListener)
-                .blockAllTouches()
-                .build()
-        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_1))
-        mShowcaseView.setButtonPosition(centerParams)
-    }
 
     private fun setupKeypad() {
         val hasShot = getSharedPreferences("showcase_internal", Context.MODE_PRIVATE).getBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false)

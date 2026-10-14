@@ -95,27 +95,15 @@
                 android:layout_height="wrap_content" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/layout_calendar_container"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:visibility="visible"
             android:visibility="gone">
 
-            <com.simplemobiletools.commons.views.MyTextView
-                tools:text="2024.07"
-                android:layout_margin="@dimen/layout_margin_medium"
-                android:id="@+id/text_calendar_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:id="@+id/calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.compose.ui.platform.ComposeView>
     </LinearLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 

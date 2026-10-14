@@ -21,7 +21,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
@@ -30,17 +29,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.amlcurran.showcaseview.ShowcaseView
-import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +58,6 @@ import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
-import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -94,7 +88,6 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_NOTIFICATION
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -125,8 +118,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private val baseDevViewModel: BaseDevViewModel by viewModels()
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
-    private var mShowcaseIndex = 1
-    private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
     private var mLastHistoryCheckMillis = System.currentTimeMillis()
     private val mRequestSpeechInputLauncher =
@@ -216,7 +207,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //        clearLockSettingsTemporary()
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
-            setupOnBackPressDispatcher()
 
             if (config.enableDebugMode) {
                 openOverDueNotification(
@@ -244,7 +234,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
-        initTextSize(mBinding.progressDialog)
         invalidateOptionsMenu()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
@@ -420,7 +409,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             R.id.planner -> {
-                val calendarIntent = Intent(this@DiaryMainActivity, CalendarActivity::class.java)
+                val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
                 //                startActivity(calendarIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
@@ -746,61 +735,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
         leftParams.setMargins(margin, margin, margin, margin)
-        val showcaseViewOnClickListener =
-            View.OnClickListener {
-                mShowcaseView?.run {
-                    when (mShowcaseIndex) {
-                        1 -> {
-                            setButtonPosition(centerParams)
-                            setShowcase(ViewTarget(mBinding.diaryListView), true)
-                            setContentTitle(getString(R.string.read_diary_showcase_title_8))
-                            setContentText(getString(R.string.read_diary_showcase_message_8))
-                        }
-
-                        2 -> {
-                            setButtonPosition(centerParams)
-                            setTarget(ViewTarget(R.id.planner, this@DiaryMainActivity))
-                            setContentTitle(getString(R.string.read_diary_showcase_title_4))
-                            setContentText(getString(R.string.read_diary_showcase_message_4))
-                        }
-
-                        3 -> {
-                            setButtonPosition(centerParams)
-                            setTarget(ViewTarget(R.id.timeline, this@DiaryMainActivity))
-                            setContentTitle(getString(R.string.read_diary_showcase_title_5))
-                            setContentText(getString(R.string.read_diary_showcase_message_5))
-                        }
-
-                        4 -> {
-                            setButtonPosition(centerParams)
-                            setTarget(ViewTarget(R.id.microphone, this@DiaryMainActivity))
-                            setContentTitle(getString(R.string.read_diary_showcase_title_3))
-                            setContentText(getString(R.string.read_diary_showcase_message_3))
-                            setButtonText(getString(R.string.create_diary_showcase_button_2))
-                        }
-
-                        5 -> {
-                            hide()
-                        }
-                    }
-                }
-                mShowcaseIndex++
-            }
-
-        mShowcaseView =
-            ShowcaseView
-                .Builder(this)
-                .withMaterialShowcase()
-                .setTarget(ViewTarget(mBinding.query))
-                .setContentTitle(getString(R.string.read_diary_showcase_title_2))
-                .setContentText(getString(R.string.read_diary_showcase_message_2))
-                .setStyle(R.style.ShowcaseTheme)
-                .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
-                .setOnClickListener(showcaseViewOnClickListener)
-                .blockAllTouches()
-                .build()
-        mShowcaseView?.setButtonText(getString(R.string.read_diary_showcase_button_1))
-        mShowcaseView?.setButtonPosition(centerParams)
     }
 
     private fun bindEvent() {
@@ -1135,17 +1069,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             }
                         }
                     }
-                }
-            },
-        )
-    }
-
-    private fun setupOnBackPressDispatcher() {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (mBinding.progressDialog.isGone) ActivityCompat.finishAffinity(this@DiaryMainActivity)
                 }
             },
         )

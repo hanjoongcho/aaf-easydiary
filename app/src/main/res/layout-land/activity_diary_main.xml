@@ -133,35 +133,6 @@
             android:gravity="center"
             android:orientation="vertical"/>
 
-        <LinearLayout
-            android:id="@+id/progressDialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/migrationMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/diary_photo_migration_message" />
-
-            <ProgressBar
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp" />
-
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/progressInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="10dp" />
-        </LinearLayout>
-
         <ProgressBar
             android:id="@+id/progress_coroutine"
             android:layout_width="20dp"
