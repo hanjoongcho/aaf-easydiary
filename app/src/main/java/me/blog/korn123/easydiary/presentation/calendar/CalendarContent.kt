@@ -92,7 +92,7 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-private fun navigationBottomPadding(): Dp =
+internal fun navigationBottomPadding(): Dp =
     if (isVanillaIceCreamPlus()) {
         WindowInsets.navigationBars
             .asPaddingValues()
@@ -283,26 +283,35 @@ fun CalendarContent(
                             events = events,
                         ) { clicked ->
                             if (day.position == DayPosition.MonthDate) {
-                                calendarViewModel.setSelectedDate(clicked)
+                                if (enableScroll) {
+                                    calendarViewModel.setSelectedDate(clicked)
+                                } else {
+                                    val intent = Intent(context, SelectedDateEventsActivity::class.java).apply {
+                                        putExtra("SELECTED_DATE", clicked.toString())
+                                    }
+                                    TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
+                                }
                             }
                         }
                     },
                 )
             }
 
-            Spacer(modifier = Modifier.height(VERTICAL_PADDING.dp))
+            if (enableScroll) {
+                Spacer(modifier = Modifier.height(VERTICAL_PADDING.dp))
 
-            SelectedDateEventsSection(
-                events = selection?.let { eventsMap[it] } ?: emptyList(),
-                enableScroll = enableScroll,
-                bottomPadding = bottomPadding,
-            )
+                SelectedDateEventsSection(
+                    events = selection?.let { eventsMap[it] } ?: emptyList(),
+                    enableScroll = enableScroll,
+                    bottomPadding = bottomPadding,
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun SelectedDateEventsSection(
+internal fun SelectedDateEventsSection(
     events: List<Diary>,
     enableScroll: Boolean,
     bottomPadding: Dp,

@@ -61,7 +61,6 @@ fun EasyDiaryActionBar(
             Column(
                 modifier =
                 Modifier,
-//                        .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 title?.let {
@@ -80,7 +79,7 @@ fun EasyDiaryActionBar(
                                 color = Color.White,
                                 fontSize =
                                     TextUnit(
-                                        currentTextUnit.value.times(1.0F),
+                                        currentTextUnit.value.times(if (subTitle != null) 1.0F else 1.2F),
                                         TextUnitType.Sp,
                                     ),
                             ),
@@ -107,9 +106,6 @@ fun EasyDiaryActionBar(
                                     ),
                             ),
                         modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-//                   modifier = Modifier
-//                       .fillMaxWidth()
-//                       .wrapContentWidth(Alignment.End)
                     )
                 }
             }
@@ -122,40 +118,14 @@ fun EasyDiaryActionBar(
                 )
             }
         },
-//        actions = {
-//            IconButton(onClick = { close.invoke() }) {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.ic_cross),
-//                    contentDescription = "액션 아이콘"
-//                )
-//            }
-//        },
         colors =
             TopAppBarColors(
-//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
-//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
                 containerColor = Color(LocalContext.current.config.primaryColor),
                 scrolledContainerColor = Color(LocalContext.current.config.primaryColor),
                 navigationIconContentColor = Color.White,
                 titleContentColor = Color.White,
                 actionIconContentColor = Color.White,
                 subtitleContentColor = Color.White,
-            ),
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DummyActionBar() {
-    TopAppBar(
-        title = {},
-        colors =
-            TopAppBarColors(
-                Color(LocalContext.current.config.primaryColor),
-                Color(LocalContext.current.config.primaryColor),
-                Color.White,
-                Color.White,
-                Color.White,
             ),
     )
 }
