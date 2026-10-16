@@ -3,9 +3,9 @@
     <!-- Android 12 이상에서 클라우드 백업 설정을 정의합니다. -->
     <cloud-backup>
         <!-- 백업에 포함할 항목 -->
-        <include domain="root" />
-        <include domain="file" path="databases" />
+        <include domain="database" />
         <include domain="sharedpref" />
+        <include domain="file" />
 
         <!-- 백업에서 제외할 항목 (보안이 중요한 데이터나 임시 파일) -->
         <exclude domain="file" path="cache" />
@@ -14,9 +14,9 @@
 
     <!-- 기기 간 전송(Device-to-device transfer) 설정을 정의합니다. -->
     <device-transfer>
-        <include domain="root" />
-        <include domain="file" path="databases" />
+        <include domain="database" />
         <include domain="sharedpref" />
+        <include domain="file" />
 
         <exclude domain="file" path="cache" />
     </device-transfer>

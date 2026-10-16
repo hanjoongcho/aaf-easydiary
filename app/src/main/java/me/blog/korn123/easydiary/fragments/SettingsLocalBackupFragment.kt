@@ -15,16 +15,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -87,7 +83,6 @@ import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
 import org.apache.commons.io.FilenameUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -109,7 +104,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRequestWriteFileWithSAF: ActivityResultLauncher<Intent>
     private lateinit var mRequestReadFileWithSAF: ActivityResultLauncher<Intent>
     private var mTaskFlag = 0
-    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
     private val diaryViewModel: DiaryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,7 +115,9 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     if (it.resultCode == Activity.RESULT_OK && it.data != null) {
                         when (mTaskFlag) {
                             REQUEST_CODE_SAF_READ_ZIP -> {
-                                importFullBackupFile(it.data!!.data)
+                                it.data?.data?.let { uri ->
+                                    importFullBackupFile(uri)
+                                }
                             }
 
                             REQUEST_CODE_SAF_READ_ROOM -> {
@@ -165,17 +161,23 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     ) {
                         when (mTaskFlag) {
                             REQUEST_CODE_SAF_WRITE_ZIP -> {
-                                exportFullBackupFile(it.data!!.data)
+                                it.data?.data?.let { uri ->
+                                    exportFullBackupFile(uri)
+                                }
                             }
 
                             REQUEST_CODE_SAF_WRITE_XLS -> {
-                                exportExcel(it.data!!.data)
+                                it.data?.data?.let { uri ->
+                                    exportExcel(uri)
+                                }
                             }
 
                             REQUEST_CODE_SAF_WRITE_ROOM -> {
-                                lifecycleScope.launch {
-                                    exportRoomDataWithSAF(it.data!!.data)
-                                    makeSnackBar("Operation completed.")
+                                it.data?.data?.let { uri ->
+                                    lifecycleScope.launch {
+                                        exportRoomDataWithSAF(uri)
+                                        makeSnackBar("Operation completed.")
+                                    }
                                 }
                             }
                         }
@@ -243,12 +245,11 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         mBinding = FragmentSettingsBackupLocalBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -267,14 +268,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         Modifier
                             .fillMaxWidth()
                             .weight(1f)
-
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
-                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.collectAsState()
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
-                    val informationTitle: String by mSettingsViewModel.informationTitle.collectAsState()
-                    val profileImageUrl: Uri? by mSettingsViewModel.profileImageUrl.collectAsState()
-                    val accountInfo: String by mSettingsViewModel.accountInfo.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.export_realm_title),
@@ -434,7 +427,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-    private suspend fun exportRoomData(showDialog: Boolean = true) {
+    private suspend fun exportRoomData() {
         requireActivity().run {
             exportRoomData(updateLocalBackupTime = true)
             makeSnackBar("Operation completed.")
@@ -454,7 +447,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
                     val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                     it.sortDescending()
-                    it.map { file ->
+                    it.forEach { file ->
                         val itemInfo =
                             hashMapOf<String, String>(
                                 "name" to file.name,
@@ -475,19 +468,19 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         )
                     listView.adapter = adapter
                     listView.onItemClickListener =
-                        AdapterView.OnItemClickListener { parent, view, position, id ->
+                        AdapterView.OnItemClickListener { parent, _, position, _ ->
                             val itemInfo =
-                                parent.adapter.getItem(position) as HashMap<String, String>
+                                parent.adapter.getItem(position) as HashMap<*, *>
 
                             // check file name
-                            when (classifyUriByExtension(itemInfo["name"] ?: "")) {
+                            when (classifyUriByExtension((itemInfo["name"] ?: "") as String)) {
                                 UriFileType.ROOM -> {
                                     lifecycleScope.launch {
                                         val srcFile =
                                             File(
                                                 EasyDiaryUtils.getApplicationDataDirectory(
                                                     requireActivity(),
-                                                ) + BACKUP_DB_DIRECTORY + itemInfo["name"],
+                                                ) + BACKUP_DB_DIRECTORY + (itemInfo["name"] ?: ""),
                                             )
                                         requireActivity().run {
                                             lifecycleScope.launch {
@@ -547,7 +540,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
 
                     it.sortDescending()
-                    it.map { file ->
+                    it.forEach { file ->
                         realmInfoList.add(
                             SimpleCheckboxAdapter.SimpleCheckbox(
                                 file.name,
@@ -823,31 +816,9 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         return wb
     }
 
-//    @TargetApi(Build.VERSION_CODES.KITKAT)
-//    private fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-//        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-//            // Filter to only show results that can be "opened", such as
-//            // a file (as opposed to a list of contacts or timezones).
-//            addCategory(Intent.CATEGORY_OPENABLE)
-//
-//            type = mimeType
-//            // Create a file with the requested MIME type.
-//            putExtra(Intent.EXTRA_TITLE, fileName)
-//        }
-//        activityResultLauncher.launch(intent)
-//    }
-
-//    private fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-//        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-//            type = mimeType
-//        }
-//        activityResultLauncher.launch(intent)
-//    }
-
     private fun exportFullBackupFile(uri: Uri?) {
-//        exportRealmFile(false)
         lifecycleScope.launch {
-            exportRoomData(false)
+            exportRoomData()
             BackupOperations
                 .Builder(
                     requireActivity(),
@@ -905,17 +876,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 modeExternalDescription.text = externalDescription
 
                 root.setBackgroundColor(requireActivity().config.backgroundColor)
-//            closePopup.setOnClickListener { dialog?.dismiss() }
                 modeInternal.setOnClickListener {
                     lifecycleScope.launch {
                         when (popupMode) {
                             SettingLocalConstants.MODE_BACKUP -> {
-//                            exportRealmFile()
                                 exportRoomData()
                             }
 
                             SettingLocalConstants.MODE_RECOVERY -> {
-//                                importRealmFile()
                                 importRoomFile()
                             }
                         }
@@ -925,9 +893,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 modeExternal.setOnClickListener {
                     when (popupMode) {
                         SettingLocalConstants.MODE_BACKUP -> {
-//                            setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
-//                                EasyDiaryUtils.writeFileWithSAF(RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
-//                            }
                             setupLauncher(REQUEST_CODE_SAF_WRITE_ROOM) {
                                 EasyDiaryUtils.writeFileWithSAF(
                                     RoomConstants.DIARY_DB_NAME + "_" +
@@ -941,9 +906,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         }
 
                         SettingLocalConstants.MODE_RECOVERY -> {
-//                            setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
-//                                EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
-//                            }
                             setupLauncher(REQUEST_CODE_SAF_READ_ROOM) {
                                 EasyDiaryUtils.readFileWithSAF(
                                     arrayOf(MIME_TYPE_ZIP),
@@ -965,7 +927,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         builder.setView(popupView.root)
         dialog =
             builder.create().apply {
-//            requireActivity().updateAlertDialog(this, null, popupView.root)
                 requireActivity().updateAlertDialogWithIcon(
                     DialogMode.SETTING,
                     this,
