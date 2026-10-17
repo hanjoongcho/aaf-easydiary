@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +39,7 @@ fun EasyDiaryActionBar(
     title: String? = null,
     subTitle: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    useCloseIcon: Boolean = false,
     close: () -> Unit,
 ) {
     val isDarkMode = isSystemInDarkTheme()
@@ -79,7 +82,7 @@ fun EasyDiaryActionBar(
                                 color = Color.White,
                                 fontSize =
                                     TextUnit(
-                                        currentTextUnit.value.times(if (subTitle != null) 1.0F else 1.2F),
+                                        currentTextUnit.value.times(if (subTitle != null) 1.2F else 1.3F),
                                         TextUnitType.Sp,
                                     ),
                             ),
@@ -112,10 +115,17 @@ fun EasyDiaryActionBar(
         },
         navigationIcon = {
             IconButton(onClick = { close.invoke() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "액션 아이콘",
-                )
+                if (useCloseIcon) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cross),
+                        contentDescription = "닫기 아이콘",
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "뒤로가기 아이콘",
+                    )
+                }
             }
         },
         colors =
