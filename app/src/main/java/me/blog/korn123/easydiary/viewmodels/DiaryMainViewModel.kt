@@ -8,14 +8,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import kotlin.time.Duration.Companion.milliseconds
 
 class DiaryMainViewModel : ViewModel() {
-    init {
-        viewModelScope.launch {
-            delay(500L)
-            markAsReady()
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            delay(500L)
+//            markAsReady()
+//        }
+//    }
 
     private val _symbol: MutableStateFlow<Int> = MutableStateFlow(SYMBOL_SELECT_ALL)
     val symbol: StateFlow<Int> = _symbol.asStateFlow()
@@ -28,7 +29,10 @@ class DiaryMainViewModel : ViewModel() {
     val isReady: StateFlow<Boolean> = _isReady.asStateFlow()
 
     fun markAsReady() {
-        _isReady.value = true
+        viewModelScope.launch {
+            delay(500L.milliseconds)
+            _isReady.value = true
+        }
     }
 
     private val _currentQuery = MutableStateFlow("")

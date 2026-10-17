@@ -214,6 +214,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             diaryViewModel.isLoading = false
+            viewModel.markAsReady()
         }
     }
 
