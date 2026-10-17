@@ -1173,4 +1173,5 @@
     <string name="link_entry_as_child">子としてリンク</string>
     <string name="link_entry_later">あとで</string>
     <string name="menu_speech_to_text">音声認識</string>
+    <string name="diary_count_format">%d件</string>
 </resources>

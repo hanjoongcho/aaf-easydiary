@@ -1173,4 +1173,5 @@
     <string name="link_entry_as_child">बच्चों के रूप में</string>
     <string name="link_entry_later">बाद में</string>
     <string name="menu_speech_to_text">स्पीच टू टेक्स्ट</string>
+    <string name="diary_count_format">%d प्रविष्टियाँ</string>
 </resources>

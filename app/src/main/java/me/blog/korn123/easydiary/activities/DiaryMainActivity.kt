@@ -164,7 +164,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         super.onCreate(savedInstanceState)
 
         supportActionBar?.run {
-            setDisplayShowTitleEnabled(config.enableDebugMode)
+            setDisplayShowTitleEnabled(true)
         }
 
         mBinding.root.viewTreeObserver.addOnPreDrawListener(
@@ -392,11 +392,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     MIME_TYPE_HTML,
                     mRequestSAFForHtmlBookLauncher,
                 )
-            }
-
-            R.id.timeline -> {
-                val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
             }
 
             R.id.planner -> {
@@ -781,11 +776,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
 
-            if (config.enableDebugMode) {
-                supportActionBar?.run {
-                    title = ""
-                    subtitle = "${mDiaryList.size}"
-                }
+            supportActionBar?.run {
+                title = ""
+                subtitle = getString(R.string.diary_count_format, mDiaryList.size)
             }
         }
     }
@@ -918,6 +911,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java),
                             )
+                        }
+                        CustomElevatedSquareButton(
+                            text = getString(R.string.menu_timeline),
+                            iconResourceId = R.drawable.ic_settings_11,
+                        ) {
+                            val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
+                            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
                         }
                         CustomElevatedSquareButton(
                             text = "Menu",
