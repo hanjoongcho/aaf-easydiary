@@ -10,6 +10,11 @@ This document outlines the coding standards, architecture rules, and guidelines 
   * When adding new UI elements to an existing XML layout, use `ComposeView`.
   * If a legacy Custom View or XML-based view is required inside Compose, wrap it using `AndroidView`.
 
+* **Navigation Icon Guidelines (TopAppBar / Action Bar):**
+  * When implementing or using action bars (e.g., `EasyDiaryActionBar`), follow standard icon conventions:
+    * **Default (Back / Navigation):** Use `Icons.AutoMirrored.Filled.ArrowBack` for standard back navigation.
+    * **Close (Dismiss / Exit):** Use `R.drawable.ic_cross` explicitly via `useCloseIcon = true` when the screen represents a modal, settings sheet, or an editing flow where dismissing rather than navigating back is appropriate.
+
 * **Compose Coding Conventions:**
   * Use the combination of `StateFlow` and `collectAsStateWithLifecycle()` as the default pattern for state management.
   * Always provide `@Preview` annotations for UI components to ensure layout verification in IDE preview.
