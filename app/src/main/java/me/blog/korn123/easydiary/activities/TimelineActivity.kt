@@ -1,37 +1,94 @@
 package me.blog.korn123.easydiary.activities
 
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.TextUtils
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
+import android.widget.ImageView
+import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
-import me.blog.korn123.easydiary.databinding.ActivityTimelineBinding
-import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.findActivity
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.FILTER_END_DATE
 import me.blog.korn123.easydiary.helper.FILTER_END_ENABLE
@@ -48,224 +105,117 @@ import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
+import org.apache.commons.lang3.StringUtils
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
  * Created by hanjoong on 2017-07-16.
+ * Migrated to Jetpack Compose.
  */
 @AndroidEntryPoint
-class TimelineActivity : EasyDiaryActivity() {
+class TimelineActivity : EasyDiaryComposeBaseActivity() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityTimelineBinding
-    private lateinit var mSDatePickerDialog: DatePickerDialog
-    private lateinit var mEDatePickerDialog: DatePickerDialog
-    private var mTimelineItemAdapter: TimelineItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
-    private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mSymbolSequence = SYMBOL_SELECT_ALL
+    private var mSYear = mCalendar.get(Calendar.YEAR)
+    private var mSMonth = mCalendar.get(Calendar.MONTH)
+    private var mSDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+    private var mEYear = mCalendar.get(Calendar.YEAR)
+    private var mEMonth = mCalendar.get(Calendar.MONTH)
+    private var mEDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+    private val mStartDateText = MutableStateFlow("")
+    private val mEndDateText = MutableStateFlow("")
+    private val mQueryText = MutableStateFlow("")
+    private val mSymbolSequence = MutableStateFlow(SYMBOL_SELECT_ALL)
+    private val mIsFilterVisible = MutableStateFlow(false)
+    private val mDiaryList = MutableStateFlow<List<DiaryDomain>>(emptyList())
+
+    private var mTargetDiaryId = -1L
     private var mRefreshJob: Job? = null
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding =
-            ActivityTimelineBinding.inflate(layoutInflater).apply {
-                setContentView(root)
-                setSupportActionBar(toolbar)
-                partialComposeLoadingScreen.composeView.setContent {
-                    AppTheme {
-                        AnimatedVisibility(
-                            visible = diaryViewModel.isLoading,
-                            enter = fadeIn(),
-                            exit = fadeOut(),
-                        ) {
-                            LoadingScreen(message = diaryViewModel.loadingMessage)
-                        }
-                    }
-                }
-            }
+        restoreState(savedInstanceState)
 
-        supportActionBar?.run {
-            title = getString(R.string.timeline_title)
-            setDisplayHomeAsUpEnabled(true)
+        setContent {
+            AppTheme {
+                val startDateText by mStartDateText.collectAsStateWithLifecycle()
+                val endDateText by mEndDateText.collectAsStateWithLifecycle()
+                val queryText by mQueryText.collectAsStateWithLifecycle()
+                val symbolSequence by mSymbolSequence.collectAsStateWithLifecycle()
+                val isFilterVisible by mIsFilterVisible.collectAsStateWithLifecycle()
+                val diaryList by mDiaryList.collectAsStateWithLifecycle()
+
+                TimelineScreen(
+                    diaryList = diaryList,
+                    isLoading = diaryViewModel.isLoading,
+                    loadingMessage = diaryViewModel.loadingMessage ?: "",
+                    isFilterVisible = isFilterVisible,
+                    startDateText = startDateText,
+                    endDateText = endDateText,
+                    queryText = queryText,
+                    symbolSequence = symbolSequence,
+                    onToggleFilter = { mIsFilterVisible.value = !mIsFilterVisible.value },
+                    onCloseFilter = { mIsFilterVisible.value = false },
+                    onStartDateClick = { showStartDatePicker() },
+                    onEndDateClick = { showEndDatePicker() },
+                    onQueryChange = { query ->
+                        mQueryText.value = query
+                        startRefreshJob(debounce = 300L)
+                    },
+                    onSymbolClick = { showSymbolDialog() },
+                    onClearFilter = { clearFilter() },
+                    onDiaryClick = { diary -> openDiaryReading(diary) },
+                    onWriteDiaryClick = { openDiaryWriting() },
+                    onBackClick = { finishActivityWithPauseLock() },
+                )
+            }
         }
 
-//        changeDrawableIconColor(config.primaryColor, R.drawable.ic_calendar_4_w)
-        changeDrawableIconColor(config.primaryColor, mBinding.partialTimelineFilter.startDatePicker)
-        changeDrawableIconColor(config.primaryColor, mBinding.partialTimelineFilter.endDatePicker)
-
-        mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList)
-        mBinding.timelineList.adapter = mTimelineItemAdapter
-
-        setupTimelineSearch()
-
-        bindEvent()
-        initTextSize(mBinding.partialTimelineFilter.root)
-
-        lifecycleScope.launch {
-            when (savedInstanceState) {
-                null -> {
-                    mSDatePickerDialog =
-                        DatePickerDialog(
-                            this@TimelineActivity,
-                            mStartDateListener,
-                            mCalendar.get(Calendar.YEAR),
-                            mCalendar.get(Calendar.MONTH),
-                            mCalendar.get(Calendar.DAY_OF_MONTH),
-                        )
-                    mEDatePickerDialog =
-                        DatePickerDialog(
-                            this@TimelineActivity,
-                            mEndDateListener,
-                            mCalendar.get(Calendar.YEAR),
-                            mCalendar.get(Calendar.MONTH),
-                            mCalendar.get(Calendar.DAY_OF_MONTH),
-                        )
-                    refreshList()
-                    moveListViewScrollToBottom()
-                }
-
-                else -> {
-                    val filterSYear =
-                        savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
-                    val filterSMonth =
-                        savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
-                    val filterSDate =
-                        savedInstanceState.getInt(
-                            FILTER_START_DATE,
-                            mCalendar.get(Calendar.DAY_OF_MONTH),
-                        )
-                    if (savedInstanceState.getBoolean(FILTER_START_ENABLE, false)) {
-                        Log.i("aaf-t", "get date $filterSYear $filterSMonth $filterSDate")
-                        mBinding.partialTimelineFilter.startDate.text =
-                            DateUtils.getDateStringFromTimeMillis(
-                                EasyDiaryUtils.datePickerToTimeMillis(
-                                    filterSDate,
-                                    filterSMonth,
-                                    filterSYear,
-                                ),
-                            )
-                    }
-
-                    val filterEYear =
-                        savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
-                    val filterEMonth =
-                        savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
-                    val filterEDate =
-                        savedInstanceState.getInt(
-                            FILTER_START_DATE,
-                            mCalendar.get(Calendar.DAY_OF_MONTH),
-                        )
-                    if (savedInstanceState.getBoolean(FILTER_END_ENABLE, false)) {
-                        mBinding.partialTimelineFilter.endDate.text =
-                            DateUtils.getDateStringFromTimeMillis(
-                                EasyDiaryUtils.datePickerToTimeMillis(
-                                    filterEDate,
-                                    filterEMonth,
-                                    filterEYear,
-                                ),
-                            )
-                    }
-
-                    mSDatePickerDialog =
-                        DatePickerDialog(
-                            this@TimelineActivity,
-                            mStartDateListener,
-                            filterSYear,
-                            filterSMonth,
-                            filterSDate,
-                        )
-                    mEDatePickerDialog =
-                        DatePickerDialog(
-                            this@TimelineActivity,
-                            mEndDateListener,
-                            filterEYear,
-                            filterEMonth,
-                            filterEDate,
-                        )
-
-                    if (savedInstanceState.getBoolean(
-                            FILTER_VIEW_VISIBLE,
-                            false,
-                        )
-                    ) {
-                        toggleFilterView(true)
-                    }
-
-                    // refreshList call from onTextChanged listener
-                    Log.i("aaf-t", "mBinding.partialTimelineFilter.query.setText")
-                    mBinding.partialTimelineFilter.query.setText(
-                        savedInstanceState.getString(
-                            FILTER_QUERY,
-                            "",
-                        ),
-                    )
-
-                    diaryId = savedInstanceState.getLong(DIARY_SEQUENCE, -1)
-                }
-            }
-
-            selectFeelingSymbol()
+        if (savedInstanceState == null) {
+            startRefreshJob()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (mDiaryList.isNotEmpty()) {
-            outState.putLong(
-                DIARY_SEQUENCE,
-                mDiaryList[mBinding.timelineList.firstVisiblePosition].diaryId,
-            )
-            Log.i("aaf-t", "firstVisiblePosition ${mBinding.timelineList.firstVisiblePosition}")
+        if (mDiaryList.value.isNotEmpty()) {
+            outState.putLong(DIARY_SEQUENCE, mTargetDiaryId)
         }
 
-        if (mBinding.partialTimelineFilter.startDate.text
-                .isNotEmpty()
-        ) {
+        if (mStartDateText.value.isNotEmpty()) {
             outState.putBoolean(FILTER_START_ENABLE, true)
-            outState.putInt(FILTER_START_YEAR, mSDatePickerDialog.datePicker.year)
-            outState.putInt(FILTER_START_MONTH, mSDatePickerDialog.datePicker.month)
-            outState.putInt(FILTER_START_DATE, mSDatePickerDialog.datePicker.dayOfMonth)
-            Log.i(
-                "aaf-t",
-                "set date ${mSDatePickerDialog.datePicker.year} ${mSDatePickerDialog.datePicker.month} ${mSDatePickerDialog.datePicker.dayOfMonth}",
-            )
+            outState.putInt(FILTER_START_YEAR, mSYear)
+            outState.putInt(FILTER_START_MONTH, mSMonth)
+            outState.putInt(FILTER_START_DATE, mSDay)
         }
 
-        if (mBinding.partialTimelineFilter.endDate.text
-                .isNotEmpty()
-        ) {
+        if (mEndDateText.value.isNotEmpty()) {
             outState.putBoolean(FILTER_END_ENABLE, true)
-            outState.putInt(FILTER_END_YEAR, mEDatePickerDialog.datePicker.year)
-            outState.putInt(FILTER_END_MONTH, mEDatePickerDialog.datePicker.month)
-            outState.putInt(FILTER_END_DATE, mEDatePickerDialog.datePicker.dayOfMonth)
+            outState.putInt(FILTER_END_YEAR, mEYear)
+            outState.putInt(FILTER_END_MONTH, mEMonth)
+            outState.putInt(FILTER_END_DATE, mEDay)
         }
 
-        if (mBinding.partialTimelineFilter.filterView.translationY == 0F) {
-            outState.putBoolean(
-                FILTER_VIEW_VISIBLE,
-                true,
-            )
+        if (mIsFilterVisible.value) {
+            outState.putBoolean(FILTER_VIEW_VISIBLE, true)
         }
 
-        outState.putString(
-            FILTER_QUERY,
-            mBinding.partialTimelineFilter.query.text
-                .toString(),
-        )
-
-        Log.i("aaf-t", "translationY ${mBinding.partialTimelineFilter.filterView.translationY}")
+        outState.putString(FILTER_QUERY, mQueryText.value)
 
         super.onSaveInstanceState(outState)
     }
@@ -274,173 +224,117 @@ class TimelineActivity : EasyDiaryActivity() {
         super.onResume()
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             startRefreshJob()
-            moveListViewScrollToBottom()
             config.previousActivity = -1
         } else {
             startRefreshJob()
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_timeline, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.search -> {
-                toggleFilterView(true)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
-    @SuppressLint("ClickableViewAccessibility")
-    private fun bindEvent() {
-        mBinding.partialTimelineFilter.run {
-            mBinding.insertDiaryButton.setOnClickListener { _ ->
-                val createDiary = Intent(this@TimelineActivity, DiaryWritingActivity::class.java)
-                TransitionHelper.startActivityWithTransition(this@TimelineActivity, createDiary)
+    private fun restoreState(savedInstanceState: Bundle?) {
+        savedInstanceState?.let { bundle ->
+            mSYear = bundle.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
+            mSMonth = bundle.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
+            mSDay = bundle.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
+            if (bundle.getBoolean(FILTER_START_ENABLE, false)) {
+                val startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
+                mStartDateText.value = DateUtils.getDateStringFromTimeMillis(startMillis)
             }
 
-            closeToolbar.setOnClickListener {
-                toggleFilterView(false)
+            mEYear = bundle.getInt(FILTER_END_YEAR, mCalendar.get(Calendar.YEAR))
+            mEMonth = bundle.getInt(FILTER_END_MONTH, mCalendar.get(Calendar.MONTH))
+            mEDay = bundle.getInt(FILTER_END_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
+            if (bundle.getBoolean(FILTER_END_ENABLE, false)) {
+                val endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear)
+                mEndDateText.value = DateUtils.getDateStringFromTimeMillis(endMillis)
             }
 
-            filterView.setOnTouchListener { v, motionEvent ->
-                if (mFirstTouch == 0F || mFirstTouch < motionEvent.y) mFirstTouch = motionEvent.y
-
-                Log.i("aaf-t", "${motionEvent.action} ${motionEvent.actionIndex} ${motionEvent.y}")
-                if (motionEvent.action == MotionEvent.ACTION_UP) {
-                    if (mFirstTouch - motionEvent.y > 100) {
-                        toggleFilterView(false)
-                    } else {
-                        v.performClick()
-                    }
-                }
-                true
+            if (bundle.getBoolean(FILTER_VIEW_VISIBLE, false)) {
+                mIsFilterVisible.value = true
             }
 
-            query.addTextChangedListener(
-                object : TextWatcher {
-                    override fun beforeTextChanged(
-                        charSequence: CharSequence,
-                        i: Int,
-                        i1: Int,
-                        i2: Int,
-                    ) {
-                    }
+            mQueryText.value = bundle.getString(FILTER_QUERY, "") ?: ""
+            mTargetDiaryId = bundle.getLong(DIARY_SEQUENCE, -1L)
+        }
+    }
 
-                    override fun onTextChanged(
-                        charSequence: CharSequence,
-                        i: Int,
-                        i1: Int,
-                        i2: Int,
-                    ) {
-                        startRefreshJob(debounce = 300L)
-                    }
+    private fun showStartDatePicker() {
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                mSYear = year
+                mSMonth = month
+                mSDay = dayOfMonth
+                val startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
+                mStartDateText.value = DateUtils.getDateStringFromTimeMillis(startMillis)
+                startRefreshJob()
+            },
+            mSYear,
+            mSMonth,
+            mSDay,
+        ).show()
+    }
 
-                    override fun afterTextChanged(editable: Editable) {}
-                },
-            )
+    private fun showEndDatePicker() {
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                mEYear = year
+                mEMonth = month
+                mEDay = dayOfMonth
+                val endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear)
+                mEndDateText.value = DateUtils.getDateStringFromTimeMillis(endMillis)
+                startRefreshJob()
+            },
+            mEYear,
+            mEMonth,
+            mEDay,
+        ).show()
+    }
 
-            clearFilter.setOnClickListener {
-                startDate.text = null
-                endDate.text = null
-                query.text = null
-                mSymbolSequence = SYMBOL_SELECT_ALL
-                FlavorUtils.initWeatherView(this@TimelineActivity, symbol, mSymbolSequence, false)
+    private fun showSymbolDialog() {
+        lifecycleScope.launch {
+            openFeelingSymbolDialog(
+                getString(R.string.diary_symbol_search_message),
+                selectedSymbolSequence = 0,
+                diaryViewModel.getSymbolUsedCountMap(true),
+            ) { symbolSequence ->
+                mSymbolSequence.value = if (symbolSequence == 0) SYMBOL_SELECT_ALL else symbolSequence
                 startRefreshJob()
             }
-
-            startDatePicker.setOnClickListener { mSDatePickerDialog.show() }
-            endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
-
-            feelingSymbolButton.setOnClickListener {
-                lifecycleScope.launch {
-                    openFeelingSymbolDialog(
-                        getString(R.string.diary_symbol_search_message),
-                        selectedSymbolSequence = 0,
-                        diaryViewModel.getSymbolUsedCountMap(true),
-                    ) { symbolSequence ->
-                        selectFeelingSymbol(symbolSequence)
-                        startRefreshJob()
-                    }
-                }
-            }
         }
     }
 
-    private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
-        mSymbolSequence = if (index == 0) SYMBOL_SELECT_ALL else index
-        FlavorUtils.initWeatherView(
-            this,
-            mBinding.partialTimelineFilter.symbol,
-            mSymbolSequence,
-            false,
-        )
+    private fun clearFilter() {
+        mStartDateText.value = ""
+        mEndDateText.value = ""
+        mQueryText.value = ""
+        mSymbolSequence.value = SYMBOL_SELECT_ALL
+        mSYear = mCalendar.get(Calendar.YEAR)
+        mSMonth = mCalendar.get(Calendar.MONTH)
+        mSDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+        mEYear = mCalendar.get(Calendar.YEAR)
+        mEMonth = mCalendar.get(Calendar.MONTH)
+        mEDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+        startRefreshJob()
     }
 
-    private var mStartDateListener: DatePickerDialog.OnDateSetListener =
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-            mBinding.partialTimelineFilter.startDate.text =
-                DateUtils.getDateStringFromTimeMillis(startMillis)
-            startRefreshJob()
-            Log.i("aaf-t", "mStartDateListener")
-        }
-
-    private var mEndDateListener: DatePickerDialog.OnDateSetListener =
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-            mBinding.partialTimelineFilter.endDate.text =
-                DateUtils.getDateStringFromTimeMillis(endMillis)
-            startRefreshJob()
-            Log.i("aaf-t", "mEndDateListener")
-        }
-
-    private fun toggleFilterView(isVisible: Boolean) {
-        mFirstTouch = 0F
-        val height =
-            if (isVisible) {
-                0F
-            } else {
-                mBinding.partialTimelineFilter.filterView.height
-                    .toFloat()
-                    .unaryMinus()
+    private fun openDiaryReading(diary: DiaryDomain) {
+        val detailIntent =
+            Intent(this, DiaryReadingActivity::class.java).apply {
+                putExtra(DIARY_SEQUENCE, diary.diaryId)
+                putExtra(SELECTED_SEARCH_QUERY, mQueryText.value)
+                putExtra(SELECTED_SYMBOL_SEQUENCE, mSymbolSequence.value)
             }
-        if (!isVisible) {
-            this.currentFocus?.let { focusView ->
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
-            }
-        }
-        ObjectAnimator
-            .ofFloat(mBinding.partialTimelineFilter.filterView, "translationY", height)
-            .apply {
-                duration = 700
-                start()
-            }
+        TransitionHelper.startActivityWithTransition(this, detailIntent)
     }
 
-    private fun setupTimelineSearch() {
-        mBinding.timelineList.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, _, i, _ ->
-                val diaryDto = adapterView.adapter.getItem(i) as DiaryDomain
-                val detailIntent = Intent(this@TimelineActivity, DiaryReadingActivity::class.java)
-                detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.diaryId)
-                detailIntent.putExtra(
-                    SELECTED_SEARCH_QUERY,
-                    mBinding.partialTimelineFilter.query.text
-                        .toString(),
-                )
-                detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, mSymbolSequence)
-                TransitionHelper.startActivityWithTransition(this@TimelineActivity, detailIntent)
-            }
+    private fun openDiaryWriting() {
+        val createDiary = Intent(this, DiaryWritingActivity::class.java)
+        TransitionHelper.startActivityWithTransition(this, createDiary)
     }
 
     private fun startRefreshJob(debounce: Long = 0L) {
@@ -453,80 +347,497 @@ class TimelineActivity : EasyDiaryActivity() {
             }
     }
 
-    private var diaryId = 0L
-
     private suspend fun refreshList() {
         diaryViewModel.isLoading = true
-        Log.i("aaf-t", "refreshList")
         var startMillis = 0L
         var endMillis = 0L
 
-        if (mBinding.partialTimelineFilter.startDate.text
-                .isNotEmpty()
-        ) {
-            startMillis =
-                EasyDiaryUtils.datePickerToTimeMillis(
-                    mSDatePickerDialog.datePicker.dayOfMonth,
-                    mSDatePickerDialog.datePicker.month,
-                    mSDatePickerDialog.datePicker.year,
-                )
+        if (mStartDateText.value.isNotEmpty()) {
+            startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
         }
-        if (mBinding.partialTimelineFilter.endDate.text
-                .isNotEmpty()
-        ) {
-            endMillis =
-                EasyDiaryUtils.datePickerToTimeMillis(
-                    mEDatePickerDialog.datePicker.dayOfMonth,
-                    mEDatePickerDialog.datePicker.month,
-                    mEDatePickerDialog.datePicker.year,
-                    true,
-                )
+        if (mEndDateText.value.isNotEmpty()) {
+            endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear, true)
         }
 
         val results =
             diaryViewModel.findDiary(
-                mBinding.partialTimelineFilter.query.text
-                    .toString(),
+                mQueryText.value,
                 config.diarySearchQueryCaseSensitive,
                 startMillis,
                 endMillis,
-                mSymbolSequence,
+                mSymbolSequence.value,
                 true,
             )
 
-        mDiaryList.run {
-            clear()
-            addAll(results.reversed())
-        }
-
-        mTimelineItemAdapter?.run {
-            currentQuery =
-                mBinding.partialTimelineFilter.query.text
-                    .toString()
-            notifyDataSetChanged()
-        }
-
-        mBinding.run {
-            if (mDiaryList.isEmpty()) {
-                timelineList.visibility = View.GONE
-                textNoDiary.visibility = View.VISIBLE
-            } else {
-                timelineList.visibility = View.VISIBLE
-                textNoDiary.visibility = View.GONE
-            }
-        }
-
-        val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, diaryId)
-        if (diaryId > 0 && itemIndex > -1) {
-            moveListViewScrollToBottom(itemIndex)
-            diaryId = 0
-        }
-
+        mDiaryList.value = results.reversed()
         diaryViewModel.isLoading = false
     }
+}
 
-    private fun moveListViewScrollToBottom(itemIndex: Int = mDiaryList.size - 1) {
-        Log.i("aaf-t", "moveListViewScrollToBottom itexIndex: $itemIndex")
-        mBinding.timelineList.post { mBinding.timelineList.setSelection(itemIndex) }
+/***************************************************************************************************
+ *   Compose Screen & Components
+ *
+ ***************************************************************************************************/
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimelineScreen(
+    diaryList: List<DiaryDomain>,
+    isLoading: Boolean,
+    loadingMessage: String,
+    isFilterVisible: Boolean,
+    startDateText: String,
+    endDateText: String,
+    queryText: String,
+    symbolSequence: Int,
+    onToggleFilter: () -> Unit,
+    onCloseFilter: () -> Unit,
+    onStartDateClick: () -> Unit,
+    onEndDateClick: () -> Unit,
+    onQueryChange: (String) -> Unit,
+    onSymbolClick: () -> Unit,
+    onClearFilter: () -> Unit,
+    onDiaryClick: (DiaryDomain) -> Unit,
+    onWriteDiaryClick: () -> Unit,
+    onBackClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    val primaryColor = Color(context.config.primaryColor)
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(diaryList) {
+        if (diaryList.isNotEmpty()) {
+            listState.scrollToItem(diaryList.size - 1)
+        }
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+        containerColor = Color(context.config.screenBackgroundColor),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.timeline_title),
+                        style =
+                            TextStyle(
+                                fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(context),
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White,
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onToggleFilter) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_search_10),
+                            contentDescription = "Search Filter",
+                            tint = Color.White,
+                        )
+                    }
+                },
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = primaryColor,
+                        scrolledContainerColor = primaryColor,
+                        navigationIconContentColor = Color.White,
+                        titleContentColor = Color.White,
+                        actionIconContentColor = Color.White,
+                    ),
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onWriteDiaryClick,
+                containerColor = primaryColor,
+                contentColor = Color.White,
+                shape = CircleShape,
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = stringResource(id = R.string.write_diary),
+                )
+            }
+        },
+    ) { innerPadding ->
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                AnimatedVisibility(
+                    visible = isFilterVisible,
+                    enter = slideInVertically() + fadeIn(),
+                    exit = slideOutVertically() + fadeOut(),
+                ) {
+                    TimelineFilterPanel(
+                        startDateText = startDateText,
+                        endDateText = endDateText,
+                        queryText = queryText,
+                        symbolSequence = symbolSequence,
+                        onStartDateClick = onStartDateClick,
+                        onEndDateClick = onEndDateClick,
+                        onQueryChange = onQueryChange,
+                        onSymbolClick = onSymbolClick,
+                        onClearFilter = onClearFilter,
+                        onCloseFilter = onCloseFilter,
+                    )
+                }
+
+                if (diaryList.isEmpty()) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "There is no written diary.",
+                            style =
+                                TextStyle(
+                                    fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(context),
+                                    color = Color(context.config.textColor),
+                                    fontSize = 16.sp,
+                                ),
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        state = listState,
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                    ) {
+                        itemsIndexed(
+                            items = diaryList,
+                            key = { _, item -> item.diaryId },
+                        ) { index, diary ->
+                            val isFirstInGroup = index == 0 || diary.dateString != diaryList[index - 1].dateString
+                            TimelineItemCard(
+                                diary = diary,
+                                isFirstInGroup = isFirstInGroup,
+                                currentQuery = queryText,
+                                onDiaryClick = onDiaryClick,
+                            )
+                        }
+                    }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = isLoading,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                LoadingScreen(message = loadingMessage)
+            }
+        }
+    }
+}
+
+@Composable
+fun TimelineFilterPanel(
+    startDateText: String,
+    endDateText: String,
+    queryText: String,
+    symbolSequence: Int,
+    onStartDateClick: () -> Unit,
+    onEndDateClick: () -> Unit,
+    onQueryChange: (String) -> Unit,
+    onSymbolClick: () -> Unit,
+    onClearFilter: () -> Unit,
+    onCloseFilter: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val primaryColor = Color(context.config.primaryColor)
+    val textColor = Color(context.config.textColor)
+
+    Card(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(0.dp),
+        shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = BorderStroke(1.dp, primaryColor),
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            // Start Date Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.filter_start_date),
+                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                    modifier = Modifier.weight(3f),
+                )
+                Row(
+                    modifier =
+                        Modifier
+                            .weight(7f)
+                            .clickable { onStartDateClick() },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = startDateText.ifEmpty { stringResource(id = R.string.filter_start_date_hint) },
+                        style = TextStyle(color = if (startDateText.isEmpty()) Color.Gray else textColor),
+                        modifier = Modifier.weight(1f),
+                    )
+                    IconButton(onClick = onStartDateClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_calendar_4_w),
+                            contentDescription = "Start Date",
+                            tint = primaryColor,
+                        )
+                    }
+                }
+            }
+
+            // End Date Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.filter_end_date),
+                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                    modifier = Modifier.weight(3f),
+                )
+                Row(
+                    modifier =
+                        Modifier
+                            .weight(7f)
+                            .clickable { onEndDateClick() },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = endDateText.ifEmpty { stringResource(id = R.string.filter_end_date_hint) },
+                        style = TextStyle(color = if (endDateText.isEmpty()) Color.Gray else textColor),
+                        modifier = Modifier.weight(1f),
+                    )
+                    IconButton(onClick = onEndDateClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_calendar_4_w),
+                            contentDescription = "End Date",
+                            tint = primaryColor,
+                        )
+                    }
+                }
+            }
+
+            // Search Word Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.filter_search_word),
+                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                    modifier = Modifier.weight(3f),
+                )
+                OutlinedTextField(
+                    value = queryText,
+                    onValueChange = onQueryChange,
+                    modifier = Modifier.weight(7f),
+                    placeholder = {
+                        Text(
+                            text = stringResource(id = R.string.filter_search_word_hint),
+                            style = TextStyle(color = Color.Gray, fontSize = 14.sp),
+                        )
+                    },
+                    singleLine = true,
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = primaryColor,
+                            unfocusedBorderColor = Color.LightGray,
+                        ),
+                )
+            }
+
+            // Diary Symbol Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.diary_symbol),
+                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                    modifier = Modifier.weight(3f),
+                )
+                Row(
+                    modifier =
+                        Modifier
+                            .weight(7f)
+                            .clickable { onSymbolClick() },
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    AndroidView(
+                        modifier = Modifier.size(30.dp),
+                        factory = { ctx -> ImageView(ctx) },
+                        update = { imageView ->
+                            FlavorUtils.initWeatherView(imageView.context, imageView, symbolSequence, false)
+                        },
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "▼",
+                        style = TextStyle(color = textColor, fontSize = 12.sp),
+                    )
+                }
+            }
+
+            // Action Buttons Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Button(
+                    onClick = onClearFilter,
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+                    shape = RoundedCornerShape(4.dp),
+                ) {
+                    Text(text = stringResource(id = R.string.filter_clear), color = Color.White)
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = onCloseFilter,
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+                    shape = RoundedCornerShape(4.dp),
+                ) {
+                    Text(text = stringResource(id = R.string.filter_close), color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TimelineItemCard(
+    diary: DiaryDomain,
+    isFirstInGroup: Boolean,
+    currentQuery: String?,
+    onDiaryClick: (DiaryDomain) -> Unit,
+) {
+    AndroidView(
+        modifier = Modifier.fillMaxWidth(),
+        factory = { ctx ->
+            ItemTimelineBinding.inflate(LayoutInflater.from(ctx)).root
+        },
+        update = { view ->
+            val binding = ItemTimelineBinding.bind(view)
+            val ctx = view.context
+            val activity = ctx.findActivity()
+
+            if (isFirstInGroup) {
+                binding.title.text = DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                binding.titleContainer.visibility = View.VISIBLE
+                binding.topLine.visibility = View.VISIBLE
+            } else {
+                binding.titleContainer.visibility = View.GONE
+                binding.topLine.visibility = View.GONE
+            }
+
+            FlavorUtils.initWeatherView(ctx, binding.diarySymbol, diary.symbolSequence, false)
+
+            val lineBreakStrings = arrayListOf<String>()
+            when (diary.isAllDay) {
+                true -> {
+                    lineBreakStrings.add(
+                        if (ctx.config.enableDebugOptionVisibleDiarySequence) {
+                            "[${diary.originDiaryId}] ${ctx.resources.getString(R.string.all_day)}"
+                        } else {
+                            ctx.resources.getString(R.string.all_day)
+                        },
+                    )
+                }
+
+                false -> {
+                    lineBreakStrings.add(
+                        if (ctx.config.enableDebugOptionVisibleDiarySequence) {
+                            "[${diary.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM)}"
+                        } else {
+                            DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM)
+                        },
+                    )
+                }
+            }
+            if (StringUtils.isNotEmpty(diary.title)) lineBreakStrings.add(diary.title!!)
+
+            activity?.applyMarkDownPolicy(binding.text1, diary.contents, true, lineBreakStrings, true)
+
+            ctx.updateTextColors(binding.itemHolder, 0, 0)
+            ctx.updateAppViews(binding.itemHolder)
+            ctx.updateCardViewPolicy(binding.itemHolder)
+            ctx.initTextSize(binding.itemHolder)
+            FontUtils.setFontsTypeface(ctx, null, binding.root)
+
+            if (!currentQuery.isNullOrEmpty()) {
+                if (ctx.config.diarySearchQueryCaseSensitive) {
+                    EasyDiaryUtils.highlightString(binding.text1, currentQuery)
+                } else {
+                    EasyDiaryUtils.highlightStringIgnoreCase(binding.text1, currentQuery)
+                }
+            }
+
+            if (ctx.config.enableContentsSummary) {
+                binding.text1.maxLines = ctx.config.summaryMaxLines.plus(1)
+                binding.text1.ellipsize = TextUtils.TruncateAt.valueOf("END")
+            } else {
+                binding.text1.maxLines = Integer.MAX_VALUE
+                binding.text1.ellipsize = null
+            }
+
+            if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                binding.textDDayCount.visibility = View.VISIBLE
+                binding.textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}）"
+            } else {
+                binding.textDDayCount.visibility = View.GONE
+            }
+
+            binding.root.setOnClickListener { onDiaryClick(diary) }
+        },
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TimelineFilterPanelPreview() {
+    AppTheme {
+        TimelineFilterPanel(
+            startDateText = "2023-11-20",
+            endDateText = "2023-11-25",
+            queryText = "Diary search",
+            symbolSequence = 0,
+            onStartDateClick = {},
+            onEndDateClick = {},
+            onQueryChange = {},
+            onSymbolClick = {},
+            onClearFilter = {},
+            onCloseFilter = {},
+        )
     }
 }

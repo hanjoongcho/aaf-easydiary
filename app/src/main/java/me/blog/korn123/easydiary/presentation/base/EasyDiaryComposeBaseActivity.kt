@@ -15,12 +15,14 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 open class EasyDiaryComposeBaseActivity :
     BaseSimpleActivity(),
     ShakeDetector.Listener {
-    val mSettingsViewModel: SettingsViewModel by viewModels()
+    protected val settingsViewModel: SettingsViewModel by viewModels()
+    protected val diaryViewModel: DiaryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

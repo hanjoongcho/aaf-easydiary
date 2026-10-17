@@ -141,7 +141,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
         var enableWelcomeDashboardPopup by remember { mutableStateOf(context.config.enableWelcomeDashboardPopup) }
         var enableMarkdown by remember { mutableStateOf(context.config.enableMarkdown) }
         val settingCardModifier = Modifier.fillMaxWidth()
-        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+        val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
         val maxItemsInEachRow =
             when {
                 LocalInspectionMode.current -> 1
@@ -190,7 +190,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     enableCardViewPolicy = enableCardViewPolicy,
                 ) {
                     context.config.enableCardViewPolicy = enableCardViewPolicy.not()
-                    mSettingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
+                    settingsViewModel.setEnableCardViewPolicy(context.config.enableCardViewPolicy)
                 }
             }
             item {

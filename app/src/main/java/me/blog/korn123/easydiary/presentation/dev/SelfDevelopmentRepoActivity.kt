@@ -56,7 +56,7 @@ class SelfDevelopmentRepoActivity : EasyDiaryComposeBaseActivity() {
     fun SelfDevelopmentRepo() {
         LocalActivity.current?.applyFullScreenStatusBarTheme()
 
-        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+        val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
         val currentQuery: String by treeViewModel.currentQuery.collectAsState()
         val treeData: List<Pair<FileNode, Int>> by treeViewModel.treeData.collectAsState()
         val total: Int by treeViewModel.total.collectAsState()

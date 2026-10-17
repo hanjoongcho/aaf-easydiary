@@ -111,14 +111,11 @@ import me.blog.korn123.easydiary.ui.components.FastScroll
 import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
     private val viewModel: DiaryMainViewModel by viewModels()
-    private val diaryViewModel: DiaryViewModel by viewModels()
-    private val settingsViewModel: SettingsViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -172,7 +169,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         val activity = LocalActivity.current
                         val coroutineScope = rememberCoroutineScope()
                         val settingCardModifier = Modifier.fillMaxWidth()
-                        val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
+                        val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                         var topToolbarHeight by remember { mutableStateOf(0.dp) }
                         val density = LocalDensity.current
                         val listState = rememberLazyListState()
