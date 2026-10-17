@@ -235,8 +235,9 @@ class DiaryViewModel
                             endTimeMillis = params.endTimeMillis,
                             symbolSequence = params.symbolSequence,
                         ).map {
-                            resolveDiaryFilter(
+                            EasyDiaryUtils.resolveDiaryFilter(
                                 it,
+                                application,
                                 params.startTimeMillis,
                                 params.endTimeMillis,
                                 params.symbolSequence,
@@ -261,7 +262,7 @@ class DiaryViewModel
             symbolSequence: Int = 0,
             checkFutureDiaryOption: Boolean = false,
         ): List<Diary> =
-            resolveDiaryFilter(
+            EasyDiaryUtils.resolveDiaryFilter(
                 diaryRepository
                     .getDiariesWithPhotos(
                         query = query,
@@ -270,6 +271,7 @@ class DiaryViewModel
                         endTimeMillis = endTimeMillis,
                         symbolSequence = symbolSequence,
                     ),
+                application,
                 startTimeMillis,
                 endTimeMillis,
                 symbolSequence,
@@ -412,8 +414,13 @@ class DiaryViewModel
             val endDate = startOfMonth.plusWeeks(7)
             val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
 
-            val startMillis = startDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
-            val endMillis = endDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() + 86400000L
+            val startMillis =
+                startDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val endMillis =
+                endDate
+                    .atStartOfDay(java.time.ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli() + 86400000L
 
             return diaryRepository
                 .observeDiariesWithPhotos(
@@ -495,39 +502,4 @@ class DiaryViewModel
          *   common functions
          *
          ***************************************************************************************************/
-        fun resolveDiaryFilter(
-            diaries: List<Diary>,
-            startTimeMillis: Long = 0,
-            endTimeMillis: Long = 0,
-            symbolSequence: Int = 0,
-            checkFutureDiaryOption: Boolean = false,
-        ): List<Diary> {
-            // apply date filter & sorting (sync with EasyDiaryDbHelper)
-            var results = diaries
-
-            // apply future diary filter
-            if (checkFutureDiaryOption && getApplication<Application>().config.disableFutureDiary) {
-                results =
-                    results
-                        .filter { it.currentTimeMillis <= System.currentTimeMillis() }
-                        .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
-            }
-
-            // apply temporary diary filter (originDiaryId == 0 is normal diary)
-            if (!application.config.enableDebugOptionVisibleTemporaryDiary) {
-                results =
-                    results.filter { it.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
-            }
-
-            // apply task symbol top order logic
-            if (application.config.enableTaskSymbolTopOrder) {
-                val taskSymbols = listOf(80, 81)
-                val mergedList = mutableListOf<Diary>()
-                mergedList.addAll(results.filter { it.symbolSequence in taskSymbols })
-                mergedList.addAll(results.filter { it.symbolSequence !in taskSymbols })
-                results = mergedList
-            }
-
-            return results
-        }
     }

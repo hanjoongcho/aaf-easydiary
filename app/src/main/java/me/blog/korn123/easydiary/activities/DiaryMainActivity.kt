@@ -89,6 +89,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton

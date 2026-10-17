@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -39,6 +40,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.application
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.MultiTransformation
@@ -53,6 +55,7 @@ import id.zelory.compressor.Compressor
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
+import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
@@ -67,6 +70,7 @@ import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
 import me.blog.korn123.easydiary.helper.ColorConstants
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
@@ -707,6 +711,43 @@ object EasyDiaryUtils {
     fun hashMapToJsonString(map: HashMap<String, Any>): String {
         val gson = GsonBuilder().setPrettyPrinting().create()
         return gson.toJson(map)
+    }
+
+    fun resolveDiaryFilter(
+        diaries: List<Diary>,
+        context: Context,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+        checkFutureDiaryOption: Boolean = false,
+    ): List<Diary> {
+        // apply date filter & sorting (sync with EasyDiaryDbHelper)
+        var results = diaries
+
+        // apply future diary filter
+        if (checkFutureDiaryOption && context.config.disableFutureDiary) {
+            results =
+                results
+                    .filter { it.currentTimeMillis <= System.currentTimeMillis() }
+                    .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
+        }
+
+        // apply temporary diary filter (originDiaryId == 0 is normal diary)
+        if (!context.config.enableDebugOptionVisibleTemporaryDiary) {
+            results =
+                results.filter { it.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
+        }
+
+        // apply task symbol top order logic
+        if (context.config.enableTaskSymbolTopOrder) {
+            val taskSymbols = listOf(80, 81)
+            val mergedList = mutableListOf<Diary>()
+            mergedList.addAll(results.filter { it.symbolSequence in taskSymbols })
+            mergedList.addAll(results.filter { it.symbolSequence !in taskSymbols })
+            results = mergedList
+        }
+
+        return results
     }
 
     /***************************************************************************************************

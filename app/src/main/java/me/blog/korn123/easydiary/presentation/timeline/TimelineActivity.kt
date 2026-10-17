@@ -1,14 +1,14 @@
-package me.blog.korn123.easydiary.activities
+package me.blog.korn123.easydiary.presentation.timeline
 
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -71,15 +71,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryReadingActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
@@ -90,16 +89,6 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.FILTER_END_DATE
-import me.blog.korn123.easydiary.helper.FILTER_END_ENABLE
-import me.blog.korn123.easydiary.helper.FILTER_END_MONTH
-import me.blog.korn123.easydiary.helper.FILTER_END_YEAR
-import me.blog.korn123.easydiary.helper.FILTER_QUERY
-import me.blog.korn123.easydiary.helper.FILTER_START_DATE
-import me.blog.korn123.easydiary.helper.FILTER_START_ENABLE
-import me.blog.korn123.easydiary.helper.FILTER_START_MONTH
-import me.blog.korn123.easydiary.helper.FILTER_START_YEAR
-import me.blog.korn123.easydiary.helper.FILTER_VIEW_VISIBLE
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
@@ -110,8 +99,6 @@ import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -124,24 +111,7 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mSYear = mCalendar.get(Calendar.YEAR)
-    private var mSMonth = mCalendar.get(Calendar.MONTH)
-    private var mSDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-
-    private var mEYear = mCalendar.get(Calendar.YEAR)
-    private var mEMonth = mCalendar.get(Calendar.MONTH)
-    private var mEDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-
-    private val mStartDateText = MutableStateFlow("")
-    private val mEndDateText = MutableStateFlow("")
-    private val mQueryText = MutableStateFlow("")
-    private val mSymbolSequence = MutableStateFlow(SYMBOL_SELECT_ALL)
-    private val mIsFilterVisible = MutableStateFlow(false)
-    private val mDiaryList = MutableStateFlow<List<DiaryDomain>>(emptyList())
-
-    private var mTargetDiaryId = -1L
-    private var mRefreshJob: Job? = null
+    private val timelineViewModel: TimelineViewModel by viewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -150,36 +120,34 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        restoreState(savedInstanceState)
+        timelineViewModel.restoreState(savedInstanceState)
 
         setContent {
             AppTheme {
-                val startDateText by mStartDateText.collectAsStateWithLifecycle()
-                val endDateText by mEndDateText.collectAsStateWithLifecycle()
-                val queryText by mQueryText.collectAsStateWithLifecycle()
-                val symbolSequence by mSymbolSequence.collectAsStateWithLifecycle()
-                val isFilterVisible by mIsFilterVisible.collectAsStateWithLifecycle()
-                val diaryList by mDiaryList.collectAsStateWithLifecycle()
+                val startDateText by timelineViewModel.startDateText.collectAsStateWithLifecycle()
+                val endDateText by timelineViewModel.endDateText.collectAsStateWithLifecycle()
+                val queryText by timelineViewModel.queryText.collectAsStateWithLifecycle()
+                val symbolSequence by timelineViewModel.symbolSequence.collectAsStateWithLifecycle()
+                val isFilterVisible by timelineViewModel.isFilterVisible.collectAsStateWithLifecycle()
+                val diaryList by timelineViewModel.diaryList.collectAsStateWithLifecycle()
+                val isLoading by timelineViewModel.isLoading.collectAsStateWithLifecycle()
 
                 TimelineScreen(
                     diaryList = diaryList,
-                    isLoading = diaryViewModel.isLoading,
+                    isLoading = isLoading,
                     loadingMessage = diaryViewModel.loadingMessage ?: "",
                     isFilterVisible = isFilterVisible,
                     startDateText = startDateText,
                     endDateText = endDateText,
                     queryText = queryText,
                     symbolSequence = symbolSequence,
-                    onToggleFilter = { mIsFilterVisible.value = !mIsFilterVisible.value },
-                    onCloseFilter = { mIsFilterVisible.value = false },
+                    onToggleFilter = { timelineViewModel.toggleFilterVisible() },
+                    onCloseFilter = { timelineViewModel.closeFilter() },
                     onStartDateClick = { showStartDatePicker() },
                     onEndDateClick = { showEndDatePicker() },
-                    onQueryChange = { query ->
-                        mQueryText.value = query
-                        startRefreshJob(debounce = 300L)
-                    },
+                    onQueryChange = { query -> timelineViewModel.setQueryText(query) },
                     onSymbolClick = { showSymbolDialog() },
-                    onClearFilter = { clearFilter() },
+                    onClearFilter = { timelineViewModel.clearFilter() },
                     onDiaryClick = { diary -> openDiaryReading(diary) },
                     onWriteDiaryClick = { openDiaryWriting() },
                     onBackClick = { finishActivityWithPauseLock() },
@@ -188,45 +156,22 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
         }
 
         if (savedInstanceState == null) {
-            startRefreshJob()
+            timelineViewModel.startRefreshJob()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (mDiaryList.value.isNotEmpty()) {
-            outState.putLong(DIARY_SEQUENCE, mTargetDiaryId)
-        }
-
-        if (mStartDateText.value.isNotEmpty()) {
-            outState.putBoolean(FILTER_START_ENABLE, true)
-            outState.putInt(FILTER_START_YEAR, mSYear)
-            outState.putInt(FILTER_START_MONTH, mSMonth)
-            outState.putInt(FILTER_START_DATE, mSDay)
-        }
-
-        if (mEndDateText.value.isNotEmpty()) {
-            outState.putBoolean(FILTER_END_ENABLE, true)
-            outState.putInt(FILTER_END_YEAR, mEYear)
-            outState.putInt(FILTER_END_MONTH, mEMonth)
-            outState.putInt(FILTER_END_DATE, mEDay)
-        }
-
-        if (mIsFilterVisible.value) {
-            outState.putBoolean(FILTER_VIEW_VISIBLE, true)
-        }
-
-        outState.putString(FILTER_QUERY, mQueryText.value)
-
+        timelineViewModel.saveState(outState)
         super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
-            startRefreshJob()
+            timelineViewModel.startRefreshJob()
             config.previousActivity = -1
         } else {
-            startRefreshJob()
+            timelineViewModel.startRefreshJob()
         }
     }
 
@@ -234,47 +179,15 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun restoreState(savedInstanceState: Bundle?) {
-        savedInstanceState?.let { bundle ->
-            mSYear = bundle.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
-            mSMonth = bundle.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
-            mSDay = bundle.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
-            if (bundle.getBoolean(FILTER_START_ENABLE, false)) {
-                val startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
-                mStartDateText.value = DateUtils.getDateStringFromTimeMillis(startMillis)
-            }
-
-            mEYear = bundle.getInt(FILTER_END_YEAR, mCalendar.get(Calendar.YEAR))
-            mEMonth = bundle.getInt(FILTER_END_MONTH, mCalendar.get(Calendar.MONTH))
-            mEDay = bundle.getInt(FILTER_END_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
-            if (bundle.getBoolean(FILTER_END_ENABLE, false)) {
-                val endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear)
-                mEndDateText.value = DateUtils.getDateStringFromTimeMillis(endMillis)
-            }
-
-            if (bundle.getBoolean(FILTER_VIEW_VISIBLE, false)) {
-                mIsFilterVisible.value = true
-            }
-
-            mQueryText.value = bundle.getString(FILTER_QUERY, "") ?: ""
-            mTargetDiaryId = bundle.getLong(DIARY_SEQUENCE, -1L)
-        }
-    }
-
     private fun showStartDatePicker() {
         DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                mSYear = year
-                mSMonth = month
-                mSDay = dayOfMonth
-                val startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
-                mStartDateText.value = DateUtils.getDateStringFromTimeMillis(startMillis)
-                startRefreshJob()
+                timelineViewModel.setStartDate(year, month, dayOfMonth)
             },
-            mSYear,
-            mSMonth,
-            mSDay,
+            timelineViewModel.startYear,
+            timelineViewModel.startMonth,
+            timelineViewModel.startDay,
         ).show()
     }
 
@@ -282,16 +195,11 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
         DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                mEYear = year
-                mEMonth = month
-                mEDay = dayOfMonth
-                val endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear)
-                mEndDateText.value = DateUtils.getDateStringFromTimeMillis(endMillis)
-                startRefreshJob()
+                timelineViewModel.setEndDate(year, month, dayOfMonth)
             },
-            mEYear,
-            mEMonth,
-            mEDay,
+            timelineViewModel.endYear,
+            timelineViewModel.endMonth,
+            timelineViewModel.endDay,
         ).show()
     }
 
@@ -302,32 +210,17 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
                 selectedSymbolSequence = 0,
                 diaryViewModel.getSymbolUsedCountMap(true),
             ) { symbolSequence ->
-                mSymbolSequence.value = if (symbolSequence == 0) SYMBOL_SELECT_ALL else symbolSequence
-                startRefreshJob()
+                timelineViewModel.setSymbolSequence(if (symbolSequence == 0) SYMBOL_SELECT_ALL else symbolSequence)
             }
         }
-    }
-
-    private fun clearFilter() {
-        mStartDateText.value = ""
-        mEndDateText.value = ""
-        mQueryText.value = ""
-        mSymbolSequence.value = SYMBOL_SELECT_ALL
-        mSYear = mCalendar.get(Calendar.YEAR)
-        mSMonth = mCalendar.get(Calendar.MONTH)
-        mSDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-        mEYear = mCalendar.get(Calendar.YEAR)
-        mEMonth = mCalendar.get(Calendar.MONTH)
-        mEDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-        startRefreshJob()
     }
 
     private fun openDiaryReading(diary: DiaryDomain) {
         val detailIntent =
             Intent(this, DiaryReadingActivity::class.java).apply {
                 putExtra(DIARY_SEQUENCE, diary.diaryId)
-                putExtra(SELECTED_SEARCH_QUERY, mQueryText.value)
-                putExtra(SELECTED_SYMBOL_SEQUENCE, mSymbolSequence.value)
+                putExtra(SELECTED_SEARCH_QUERY, timelineViewModel.queryText.value)
+                putExtra(SELECTED_SYMBOL_SEQUENCE, timelineViewModel.symbolSequence.value)
             }
         TransitionHelper.startActivityWithTransition(this, detailIntent)
     }
@@ -335,42 +228,6 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
     private fun openDiaryWriting() {
         val createDiary = Intent(this, DiaryWritingActivity::class.java)
         TransitionHelper.startActivityWithTransition(this, createDiary)
-    }
-
-    private fun startRefreshJob(debounce: Long = 0L) {
-        Log.i("aaf-t", "startRefreshJob")
-        mRefreshJob?.cancel()
-        mRefreshJob =
-            lifecycleScope.launch {
-                if (debounce > 0) delay(debounce)
-                refreshList()
-            }
-    }
-
-    private suspend fun refreshList() {
-        diaryViewModel.isLoading = true
-        var startMillis = 0L
-        var endMillis = 0L
-
-        if (mStartDateText.value.isNotEmpty()) {
-            startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDay, mSMonth, mSYear)
-        }
-        if (mEndDateText.value.isNotEmpty()) {
-            endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDay, mEMonth, mEYear, true)
-        }
-
-        val results =
-            diaryViewModel.findDiary(
-                mQueryText.value,
-                config.diarySearchQueryCaseSensitive,
-                startMillis,
-                endMillis,
-                mSymbolSequence.value,
-                true,
-            )
-
-        mDiaryList.value = results.reversed()
-        diaryViewModel.isLoading = false
     }
 }
 

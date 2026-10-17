@@ -135,7 +135,7 @@
             android:name=".activities.PostcardViewerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.TimelineActivity"
+            android:name=".presentation.timeline.TimelineActivity"
             android:theme="@style/SplashScreenTheme" />
         <activity
             android:name=".activities.DashboardActivity"
