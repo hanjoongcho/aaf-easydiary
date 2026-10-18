@@ -2,6 +2,9 @@ package me.blog.korn123.easydiary.presentation.timeline
 
 import android.app.Application
 import android.os.Bundle
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
@@ -16,6 +19,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.FILTER_END_DATE
@@ -33,6 +37,7 @@ import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class TimelineViewModel
@@ -80,6 +85,8 @@ class TimelineViewModel
 
         var targetDiaryId: Long = -1L
             private set
+
+        var isContainerLoading by mutableStateOf(true)
 
         private var refreshJob: Job? = null
 
@@ -234,6 +241,11 @@ class TimelineViewModel
 
             _diaryList.value = results.reversed()
             _isLoading.value = false
+
+            application.applicationScope.launch {
+                delay(200L.milliseconds)
+                isContainerLoading = false
+            }
         }
 
         suspend fun findDiary(

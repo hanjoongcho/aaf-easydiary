@@ -16,6 +16,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,11 +53,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -134,8 +138,9 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
 
                 TimelineScreen(
                     diaryList = diaryList,
+                    isContainerLoading = timelineViewModel.isContainerLoading,
                     isLoading = isLoading,
-                    loadingMessage = diaryViewModel.loadingMessage ?: "",
+                    loadingMessage = diaryViewModel.loadingMessage ?: "Initializing...",
                     isFilterVisible = isFilterVisible,
                     startDateText = startDateText,
                     endDateText = endDateText,
@@ -239,6 +244,7 @@ class TimelineActivity : EasyDiaryComposeBaseActivity() {
 @Composable
 fun TimelineScreen(
     diaryList: List<DiaryDomain>,
+    isContainerLoading: Boolean,
     isLoading: Boolean,
     loadingMessage: String,
     isFilterVisible: Boolean,
@@ -261,7 +267,7 @@ fun TimelineScreen(
     val primaryColor = Color(context.config.primaryColor)
     val listState = rememberLazyListState()
 
-    LaunchedEffect(diaryList) {
+    LaunchedEffect(isContainerLoading) {
         if (diaryList.isNotEmpty()) {
             listState.scrollToItem(diaryList.size - 1)
         }
@@ -396,7 +402,7 @@ fun TimelineScreen(
             }
 
             AnimatedVisibility(
-                visible = isLoading,
+                visible = isLoading || isContainerLoading,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
@@ -547,18 +553,42 @@ fun TimelineFilterPanel(
                 Row(
                     modifier =
                         Modifier
-                            .weight(7f)
-                            .clickable { onSymbolClick() },
+                            .weight(7f),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AndroidView(
-                        modifier = Modifier.size(30.dp),
-                        factory = { ctx -> ImageView(ctx) },
-                        update = { imageView ->
-                            FlavorUtils.initWeatherView(imageView.context, imageView, symbolSequence, false)
-                        },
-                    )
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(46.dp)
+                                .clip(CircleShape)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = ripple(bounded = true),
+                                    onClick = onSymbolClick,
+                                ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        AndroidView(
+                            modifier =
+                                Modifier
+                                    .size(32.dp),
+                            factory = { ctx ->
+                                ImageView(ctx).apply {
+                                    isClickable = false
+                                    isFocusable = false
+                                }
+                            },
+                            update = { imageView ->
+                                FlavorUtils.initWeatherView(
+                                    imageView.context,
+                                    imageView,
+                                    symbolSequence,
+                                    false,
+                                )
+                            },
+                        )
+                    }
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "▼",
