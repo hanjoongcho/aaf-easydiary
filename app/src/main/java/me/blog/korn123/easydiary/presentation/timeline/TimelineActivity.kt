@@ -101,7 +101,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
-import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -672,7 +671,7 @@ fun TimelineItemCard(
                     )
                 }
             }
-            if (StringUtils.isNotEmpty(diary.title)) lineBreakStrings.add(diary.title!!)
+            if (diary.title?.isNotEmpty() == true) lineBreakStrings.add(diary.title)
 
             activity?.applyMarkDownPolicy(binding.text1, diary.contents, true, lineBreakStrings, true)
 

@@ -36,7 +36,6 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
-import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryMainItemAdapter(
@@ -188,7 +187,7 @@ class DiaryMainItemAdapter(
                     }
                 }
 
-                if (StringUtils.isEmpty(diary.title)) {
+                if (diary.title.isNullOrEmpty()) {
                     textTitle.visibility = View.GONE
                 } else {
                     textTitle.visibility = View.VISIBLE
@@ -201,7 +200,7 @@ class DiaryMainItemAdapter(
                 }
 
                 // highlight current query
-                if (StringUtils.isNotEmpty(currentQuery)) {
+                if (currentQuery?.isNotEmpty() == true) {
                     val color = ArgbEvaluator().evaluate(0.75F, 0x000000, 0xffffff) as Int
                     if (activity.config.diarySearchQueryCaseSensitive) {
                         EasyDiaryUtils.highlightString(textTitle, currentQuery)

@@ -32,7 +32,6 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class DiaryDashboardItemAdapter(
@@ -55,7 +54,7 @@ class DiaryDashboardItemAdapter(
             FontUtils.setFontsTypeface(context, null, this)
             binding.run {
                 textTitle.run {
-                    visibility = if (StringUtils.isEmpty(diary.title)) View.GONE else View.VISIBLE
+                    visibility = if (diary.title.isNullOrEmpty()) View.GONE else View.VISIBLE
                     text = diary.title
                     EasyDiaryUtils.boldString(activity, this)
                 }

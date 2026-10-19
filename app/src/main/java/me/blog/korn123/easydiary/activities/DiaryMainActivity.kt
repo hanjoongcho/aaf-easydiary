@@ -96,7 +96,6 @@ import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.ui.components.LoadingScreen
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
-import org.apache.commons.lang3.StringUtils
 import java.util.Calendar
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
@@ -740,7 +739,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun refreshList() {
         var queryString = ""
-        if (StringUtils.isNotEmpty(mBinding.query.text)) {
+        if (mBinding.query.text?.isNotEmpty() == true) {
             queryString =
                 mBinding.query.text.toString()
         }

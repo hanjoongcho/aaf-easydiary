@@ -58,7 +58,6 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
-import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
@@ -147,7 +146,7 @@ fun LegacyDiaryItemCard(
 //                                            }
                 binding.selection.visibility = View.GONE
 
-                if (StringUtils.isEmpty(diary.title)) {
+                if (diary.title?.isEmpty() == true) {
                     binding.textTitle.visibility = View.GONE
                 } else {
                     binding.textTitle.visibility = View.VISIBLE
@@ -167,7 +166,7 @@ fun LegacyDiaryItemCard(
                 }
 
                 // highlight current query
-                if (StringUtils.isNotEmpty(currentQuery)) {
+                if (currentQuery?.isNotEmpty() == true) {
                     val color = ArgbEvaluator().evaluate(0.75F, 0x000000, 0xffffff) as Int
                     if (config.diarySearchQueryCaseSensitive) {
                         EasyDiaryUtils.highlightString(binding.textTitle, currentQuery)

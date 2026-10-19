@@ -21,7 +21,6 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -96,7 +95,9 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
             } else {
                 hideSoftInputFromWindow()
                 setLocationInfo()
-                if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                if (mBinding.partialEditContents.diaryContents.text
+                        .isNullOrEmpty()
+                ) {
                     mBinding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {

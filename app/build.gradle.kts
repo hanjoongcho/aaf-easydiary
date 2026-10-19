@@ -174,7 +174,6 @@ dependencies {
     // androidx
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
-    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.vectordrawable)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.biometric)
@@ -235,7 +234,6 @@ dependencies {
 
     // Apache Commons
     implementation(libs.commons.io)
-    implementation(libs.org.apache.commons.lang3)
     //noinspection NewerVersionAvailable
     implementation(libs.org.apache.poi) // Version Change Prohibited
 

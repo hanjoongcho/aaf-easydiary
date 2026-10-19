@@ -17,7 +17,6 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -64,7 +63,7 @@ class TimelineItemAdapter(
             setFontsTypeface(this)
 
             val diaryDto = list[position]
-            if (position > 0 && StringUtils.equals(diaryDto.dateString, list[position - 1].dateString)) {
+            if (position > 0 && diaryDto.dateString == list[position - 1].dateString) {
                 titleContainer.visibility = View.GONE
                 topLine.visibility = View.GONE
             } else {
@@ -79,8 +78,8 @@ class TimelineItemAdapter(
                 true -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
                 false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
             }
-            if (StringUtils.isNotEmpty(diaryDto.title)) lineBreakStrings.add(diaryDto.title!!)
-            activity.applyMarkDownPolicy(text1, diaryDto.contents!!, true, lineBreakStrings, true)
+            if (diaryDto.title?.isNotEmpty() == true) lineBreakStrings.add(diaryDto.title)
+            activity.applyMarkDownPolicy(text1, diaryDto.contents, true, lineBreakStrings, true)
             itemHolder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)

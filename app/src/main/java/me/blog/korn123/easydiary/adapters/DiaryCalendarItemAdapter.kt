@@ -18,7 +18,6 @@ import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -53,7 +52,7 @@ class DiaryCalendarItemAdapter(
             FontUtils.setFontsTypeface(context, null, item_holder)
             val diaryDto = list[position]
             textView1.run {
-                when (StringUtils.isNotEmpty(diaryDto.title)) {
+                when (diaryDto.title?.isNotEmpty() == true) {
                     true -> context.applyMarkDownPolicy(this, "${diaryDto.title}\n${diaryDto.contents}", false, arrayListOf(), true)
                     false -> context.applyMarkDownPolicy(this, "${diaryDto.contents}", false, arrayListOf(), true)
                 }

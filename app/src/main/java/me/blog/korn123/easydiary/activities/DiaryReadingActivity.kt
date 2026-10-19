@@ -91,7 +91,6 @@ import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
-import org.apache.commons.lang3.StringUtils
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -1140,7 +1139,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val diaryDto = diaryViewModel.findDiaryById(getSequence())!!
                 mBinding.run {
                     diaryTitle.visibility =
-                        if (StringUtils.isEmpty(diaryDto.title)) View.GONE else View.VISIBLE
+                        if (diaryDto.title.isNullOrEmpty()) View.GONE else View.VISIBLE
                     diaryTitle.text = diaryDto.title
 
                     EasyDiaryUtils.boldString(requireContext(), diaryTitle)
@@ -1165,7 +1164,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     initBottomContainer()
 
                     arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
-                        if (StringUtils.isNotEmpty(query)) {
+                        if (query?.isNotEmpty() == true) {
                             highlightDiary(query)
                         }
                     }

@@ -91,7 +91,6 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -512,8 +511,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 originDiaryId = originSequence,
                 photoUris = mPhotoUris.map { it },
             )
-        if (StringUtils.isNotEmpty(diaryTemp.title) ||
-            StringUtils.isNotEmpty(diaryTemp.contents) || diaryTemp.photoUris.isNotEmpty()
+        if (diaryTemp.title?.isNotEmpty() == true ||
+            diaryTemp.contents.isNotEmpty() || diaryTemp.photoUris.isNotEmpty()
         ) {
             diaryRepository.insertTemporaryDiary(
                 mLocation?.let { diaryTemp.copy(location = it) } ?: diaryTemp,
