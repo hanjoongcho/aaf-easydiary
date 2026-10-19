@@ -234,8 +234,6 @@ dependencies {
 
     // Apache Commons
     implementation(libs.commons.io)
-    //noinspection NewerVersionAvailable
-    implementation(libs.org.apache.poi) // Version Change Prohibited
 
     // AAFactory
     implementation(libs.io.github.aafactory.commons) {

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -22,17 +21,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
@@ -47,7 +42,6 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
 import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.exportRoomDataWithSAF
-import me.blog.korn123.easydiary.extensions.getUriForFile
 import me.blog.korn123.easydiary.extensions.importRoomData
 import me.blog.korn123.easydiary.extensions.importRoomDataWithSAF
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -61,14 +55,11 @@ import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
-import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MIME_TYPE_XLS
 import me.blog.korn123.easydiary.helper.MIME_TYPE_ZIP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM
@@ -84,13 +75,7 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
-import org.apache.commons.io.FilenameUtils
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.CellStyle
-import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
-import java.io.FileOutputStream
 import java.util.Date
 
 @AndroidEntryPoint
@@ -166,12 +151,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 }
                             }
 
-                            REQUEST_CODE_SAF_WRITE_XLS -> {
-                                it.data?.data?.let { uri ->
-                                    exportExcel(uri)
-                                }
-                            }
-
                             REQUEST_CODE_SAF_WRITE_ROOM -> {
                                 it.data?.data?.let { uri ->
                                     lifecycleScope.launch {
@@ -191,10 +170,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     pauseLock()
                     if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                         when (mTaskFlag) {
-                            REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> {
-                                createExportExcelUri()
-                            }
-
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> {
                                 showLocationSelectionPopup(
                                     SettingLocalConstants.MODE_BACKUP,
@@ -342,35 +317,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 }
                             }
                         }
-                    }
-
-                    SimpleCard(
-                        title = getString(R.string.export_excel_title),
-                        description = getString(R.string.export_excel_description),
-                        modifier = settingCardModifier,
-                    ) {
-                        when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                            true -> {
-                                createExportExcelUri()
-                            }
-
-                            false -> {
-                                setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL) {
-                                    requireActivity().confirmExternalStoragePermission(
-                                        EXTERNAL_STORAGE_PERMISSIONS,
-                                        mRequestExternalStoragePermissionLauncher,
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    SimpleCard(
-                        title = getString(R.string.send_email_attach_excel_title),
-                        description = getString(R.string.send_email_attach_excel_description),
-                        modifier = settingCardModifier,
-                    ) {
-                        sendEmailWithExcel()
                     }
 
                     SimpleCard(
@@ -603,46 +549,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun sendEmailWithExcel() {
-        val exportFileName =
-            "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}"
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
-        builder.setCancelable(false)
-//        builder.setPositiveButton(getString(R.string.ok), null)
-        val alert = builder.create()
-        val inflater =
-            requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
-        val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
-        alert.setView(containerView)
-        alert.show()
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val workBook = createWorkBook(progressInfo, "Create excel file...")
-            val outputStream =
-                FileOutputStream("${EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
-            workBook.write(outputStream)
-            outputStream.close()
-            withContext(Dispatchers.Main) { alert.cancel() }
-
-            val destFile =
-                File(
-                    File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + BACKUP_EXCEL_DIRECTORY),
-                    "$exportFileName.xls",
-                )
-            // test code for attach file to email
-            val emailIntent: Intent = Intent(Intent.ACTION_SEND)
-            emailIntent.type = "text/plain"
-//            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@example.com"))
-//            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here")
-//            emailIntent.putExtra(Intent.EXTRA_TEXT, "body text")
-            emailIntent.putExtra(Intent.EXTRA_STREAM, requireActivity().getUriForFile(destFile))
-            startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"))
-        }
-    }
-
     private fun createExportExcelUri() {
         setupLauncher(REQUEST_CODE_SAF_WRITE_XLS) {
             EasyDiaryUtils.writeFileWithSAF(
@@ -651,169 +557,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 mRequestWriteFileWithSAF,
             )
         }
-    }
-
-    private fun exportExcel(uri: Uri?) {
-//        EasyDiaryUtils.initLegacyWorkingDirectory(mActivity)
-        val exportFileName =
-            "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}"
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
-        builder.setCancelable(false)
-//        builder.setPositiveButton(getString(R.string.ok), null)
-        val alert = builder.create()
-        val inflater =
-            requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
-        val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
-        val confirmButton = containerView.findViewById<TextView>(R.id.confirm)
-        progressInfo.text = "Preparing to export..."
-        alert.setView(containerView)
-        alert.show()
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val workBook = createWorkBook(progressInfo, "$exportFileName.xls")
-//            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
-            val outputStream = requireActivity().contentResolver.openOutputStream(uri!!)
-            workBook.write(outputStream)
-            outputStream?.close()
-            withContext(Dispatchers.Main) {
-                confirmButton.visibility = View.VISIBLE
-                confirmButton.setOnClickListener { alert.cancel() }
-            }
-        }
-    }
-
-    private suspend fun createWorkBook(
-        infoView: TextView? = null,
-        guideMessage: String? = "",
-    ): Workbook {
-        val diaryList = diaryViewModel.findDiary(null, false, 0, 0, 0, false)
-        val wb: Workbook = HSSFWorkbook()
-        val sheet = wb.createSheet("new sheet")
-
-        val headerFont =
-            wb.createFont().apply {
-                color = IndexedColors.WHITE.index
-            }
-        val headerStyle =
-            wb.createCellStyle().apply {
-                wrapText = true
-                fillForegroundColor = IndexedColors.BLUE.index
-                fillPattern = CellStyle.SOLID_FOREGROUND
-                alignment = CellStyle.ALIGN_CENTER
-                verticalAlignment = CellStyle.VERTICAL_CENTER
-                setFont(headerFont)
-            }
-        val bodyStyle =
-            wb.createCellStyle().apply {
-                wrapText = true
-                verticalAlignment = CellStyle.VERTICAL_TOP
-            }
-
-        val headerRow = sheet.createRow(0)
-        headerRow.height = (256 * 3).toShort()
-        headerRow
-            .createCell(SettingLocalConstants.SEQ)
-            .setCellValue(getString(R.string.export_excel_header_seq))
-        headerRow
-            .createCell(SettingLocalConstants.WRITE_DATE)
-            .setCellValue(getString(R.string.export_excel_header_write_date))
-        headerRow
-            .createCell(SettingLocalConstants.TITLE)
-            .setCellValue(getString(R.string.export_excel_header_title))
-        headerRow
-            .createCell(SettingLocalConstants.CONTENTS)
-            .setCellValue(getString(R.string.export_excel_header_contents))
-        headerRow
-            .createCell(SettingLocalConstants.ATTACH_PHOTO_NAME)
-            .setCellValue(getString(R.string.export_excel_header_attach_photo_path))
-        headerRow
-            .createCell(SettingLocalConstants.ATTACH_PHOTO_SIZE)
-            .setCellValue(getString(R.string.export_excel_header_attach_photo_size))
-        headerRow
-            .createCell(SettingLocalConstants.WRITE_TIME_MILLIS)
-            .setCellValue(getString(R.string.export_excel_header_write_time_millis))
-        headerRow
-            .createCell(SettingLocalConstants.SYMBOL)
-            .setCellValue(getString(R.string.export_excel_header_symbol))
-        headerRow
-            .createCell(SettingLocalConstants.IS_ALL_DAY)
-            .setCellValue(getString(R.string.export_excel_header_is_all_day))
-
-        headerRow.getCell(SettingLocalConstants.SEQ).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.WRITE_DATE).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.TITLE).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.CONTENTS).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.ATTACH_PHOTO_NAME).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.ATTACH_PHOTO_SIZE).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.WRITE_TIME_MILLIS).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.SYMBOL).cellStyle = headerStyle
-        headerRow.getCell(SettingLocalConstants.IS_ALL_DAY).cellStyle = headerStyle
-
-        // FIXME:
-        // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-        sheet.setColumnWidth(SettingLocalConstants.SEQ, 256 * 10)
-        sheet.setColumnWidth(SettingLocalConstants.WRITE_DATE, 256 * 30)
-        sheet.setColumnWidth(SettingLocalConstants.TITLE, 256 * 30)
-        sheet.setColumnWidth(SettingLocalConstants.CONTENTS, 256 * 50)
-        sheet.setColumnWidth(SettingLocalConstants.ATTACH_PHOTO_NAME, 256 * 80)
-        sheet.setColumnWidth(SettingLocalConstants.ATTACH_PHOTO_SIZE, 256 * 15)
-        sheet.setColumnWidth(SettingLocalConstants.WRITE_TIME_MILLIS, 256 * 60)
-        sheet.setColumnWidth(SettingLocalConstants.SYMBOL, 256 * 10)
-        sheet.setColumnWidth(SettingLocalConstants.IS_ALL_DAY, 256 * 30)
-        val diarySymbolMap = FlavorUtils.getDiarySymbolMap(requireActivity())
-        val size = diaryList.size
-        diaryList.forEachIndexed { index, diaryDto ->
-            val row = sheet.createRow(index + 1)
-            val photoNames = StringBuffer()
-            val photoSizes = StringBuffer()
-            diaryDto.photoUris.map {
-                photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
-                photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
-            }
-
-            val sequence = row.createCell(SettingLocalConstants.SEQ).apply { cellStyle = bodyStyle }
-            val writeDate =
-                row.createCell(SettingLocalConstants.WRITE_DATE).apply { cellStyle = bodyStyle }
-            val title = row.createCell(SettingLocalConstants.TITLE).apply { cellStyle = bodyStyle }
-            val contents =
-                row.createCell(SettingLocalConstants.CONTENTS).apply { cellStyle = bodyStyle }
-            val attachPhotoNames =
-                row
-                    .createCell(SettingLocalConstants.ATTACH_PHOTO_NAME)
-                    .apply { cellStyle = bodyStyle }
-            val attachPhotoSizes =
-                row
-                    .createCell(SettingLocalConstants.ATTACH_PHOTO_SIZE)
-                    .apply { cellStyle = bodyStyle }
-            val writeTimeMillis =
-                row
-                    .createCell(SettingLocalConstants.WRITE_TIME_MILLIS)
-                    .apply { cellStyle = bodyStyle }
-            val weather =
-                row.createCell(SettingLocalConstants.SYMBOL).apply { cellStyle = bodyStyle }
-            val isAllDay =
-                row.createCell(SettingLocalConstants.IS_ALL_DAY).apply { cellStyle = bodyStyle }
-
-            sequence.setCellValue(diaryDto.diaryId.toDouble())
-            writeDate.setCellValue(DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis))
-            title.setCellValue(diaryDto.title)
-            contents.setCellValue(diaryDto.contents)
-            attachPhotoNames.setCellValue(photoNames.toString())
-            attachPhotoSizes.setCellValue(photoSizes.toString())
-            writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
-            isAllDay.setCellValue(diaryDto.isAllDay)
-            weather.setCellValue(diarySymbolMap[diaryDto.symbolSequence])
-
-            requireActivity().runOnUiThread {
-                infoView?.run {
-                    text = "${index.plus(1)} / $size\n$guideMessage"
-                }
-            }
-        }
-        return wb
     }
 
     private fun exportFullBackupFile(uri: Uri?) {
