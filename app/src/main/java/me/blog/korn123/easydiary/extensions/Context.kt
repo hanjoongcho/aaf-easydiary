@@ -77,6 +77,7 @@ import androidx.lifecycle.application
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
@@ -134,6 +135,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
+import me.blog.korn123.commons.utils.EasyDiaryUtils.jsonFileToHashMap
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -1393,8 +1395,7 @@ fun Context.createTemporaryPhotoFile(
     return temporaryFile
 }
 
-fun Context.preferenceToJsonString(): String {
-    var jsonString: String = ""
+fun Context.preferenceToJsonString(): HashMap<String, Any> {
     val preferenceMap: HashMap<String, Any> = hashMapOf()
 
     // Settings Basic
@@ -1421,13 +1422,50 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
 
     // Settings Lock
-    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
-    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
+//    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
+//    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
 
     // ETC.
     preferenceMap[SETTING_SELECTED_SYMBOLS] = config.selectedSymbols
 
-    return hashMapToJsonString(preferenceMap)
+    return preferenceMap
+}
+
+fun Context.jsonStringToPreference(jsonString: String) {
+    val gson = Gson()
+    val type = object : TypeToken<HashMap<String, Any>>() {}.type
+    val map: HashMap<String, Any> = gson.fromJson(jsonString, type)
+    config.run {
+        // Settings Basic
+        primaryColor = (map[PRIMARY_COLOR] as Double).toInt()
+        backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
+        screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
+        textColor = (map[TEXT_COLOR] as Double).toInt()
+        settingThumbnailSize = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
+        enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
+        summaryMaxLines = (map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
+        enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
+//                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
+        diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean
+        calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
+        calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()
+        enableCountCharacters = map[SETTING_COUNT_CHARACTERS] as Boolean
+        holdPositionEnterEditScreen = map[HOLD_POSITION_ENTER_EDIT_SCREEN] as Boolean
+
+        // Settings font
+        settingFontName = map[SETTING_FONT_NAME] as String
+        lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
+        settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
+        settingCalendarFontScale = (map[SETTING_CALENDAR_FONT_SCALE] as Double).toFloat()
+        boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
+
+        // Settings Lock
+
+        // ETC.
+        selectedSymbols = map[SETTING_SELECTED_SYMBOLS] as String
+
+        updatePreference = true
+    }
 }
 
 fun Context.shareFile(targetFile: File) {
@@ -1960,6 +1998,7 @@ suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): Stri
 
 suspend fun Context.generateRoomDataMap(): Map<String, Any> =
     mutableMapOf(
+        "PREFERENCE" to preferenceToJsonString(),
         "META" to EasyDiaryUtils.getExportMeta(),
         "ACTION_LOG" to actionLogRepository.getAllActionLogs(),
         "ALARM" to alarmRepository.getAllAlarms(),
@@ -2053,6 +2092,11 @@ suspend fun Context.importRoomData(
             )
         diaryRepository.deleteAllDiaries()
         diaryRepository.insertAllDiaries(list)
+    }
+
+    dataMap["PREFERENCE"]?.let {
+        val json = gson.toJson(it)
+        jsonStringToPreference(json)
     }
 }
 

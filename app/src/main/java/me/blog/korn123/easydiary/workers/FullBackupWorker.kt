@@ -8,12 +8,15 @@ import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.extensions.preferenceToJsonString
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.toDisplaySize
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_COMPLETE_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
+import me.blog.korn123.easydiary.helper.NotificationConstants
+import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
+import me.blog.korn123.easydiary.helper.WorkerConstants
+import me.blog.korn123.easydiary.helper.ZipHelper
 import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.FileOutputStream
 
 class FullBackupWorker(
     private val context: Context,
@@ -51,11 +54,6 @@ class FullBackupWorker(
         val compressFile = File(workingPath, "bak.zip")
         if (compressFile.exists()) compressFile.delete()
 
-        // create preference json
-        val fos = FileOutputStream(workingPath + "preference.json")
-        IOUtils.write(context.preferenceToJsonString(), fos, "UTF-8")
-        fos.close()
-
         mZipHelper.determineFiles(workingPath)
 //        mZipHelper.printFileNames()
         mZipHelper.compress(compressFile)
@@ -64,7 +62,7 @@ class FullBackupWorker(
             FileUtils.copyFile(compressFile, os)
             os?.close()
             isExportSuccessful = true
-            val compressFileSize = FileUtils.byteCountToDisplaySize(compressFile.length())
+            val compressFileSize = compressFile.length().toDisplaySize()
             compressFile.delete()
 
             // WorkManager가 종료될 때 생성해둔 포그라운드 노티가 제거되므로,
