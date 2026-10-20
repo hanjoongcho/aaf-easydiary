@@ -42,23 +42,19 @@ configure<ApplicationExtension> {
         signingConfig = signingConfigs.getByName("config")
     }
 
-    flavorDimensions += "buildType"
+    flavorDimensions += "mode"
     productFlavors {
         create("gmsProd") {
-            dimension = "buildType"
-            signingConfig = signingConfigs.getByName("config")
+            dimension = "mode"
         }
         create("gmsDev") {
-            dimension = "buildType"
-            signingConfig = signingConfigs.getByName("config")
+            dimension = "mode"
         }
         create("foss") {
-            dimension = "buildType"
-            signingConfig = signingConfigs.getByName("config")
+            dimension = "mode"
         }
         create("lab") {
-            dimension = "buildType"
-            signingConfig = signingConfigs.getByName("config")
+            dimension = "mode"
         }
     }
 
@@ -100,7 +96,6 @@ configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = signingConfigs.getByName("config")
         }
         getByName("debug") {
             isMinifyEnabled = false
@@ -108,7 +103,6 @@ configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = signingConfigs.getByName("config")
         }
     }
 
@@ -148,18 +142,6 @@ ksp {
 
 configurations.all {
     exclude(group = "com.android.support")
-}
-
-configurations.matching { it.name == "fossImplementation" }.configureEach {
-    exclude(group = "com.google.android.gms", module = "play-services-auth")
-    exclude(group = "com.google.android.play", module = "review")
-    exclude(group = "com.google.android.play", module = "review-ktx")
-    exclude(group = "com.google.api-client", module = "google-api-client-android")
-    exclude(group = "com.google.apis", module = "google-api-services-drive")
-    exclude(group = "com.google.apis", module = "google-api-services-calendar")
-    exclude(group = "com.google.http-client", module = "google-http-client-gson")
-    exclude(group = "androidx.credentials", module = "credentials-play-services-auth")
-    exclude(group = "com.google.android.libraries.identity.googleid", module = "googleid")
 }
 
 afterEvaluate {
@@ -213,17 +195,23 @@ dependencies {
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // gms
-    implementation(libs.google.android.gms.play.services.auth)
-    implementation(libs.google.android.play.review)
-    implementation(libs.google.android.play.review.ktx)
-    implementation(libs.google.api.client.android)
-    implementation(libs.google.android.gms.play.services.drive)
-    implementation(libs.google.apis.google.api.services.drive)
-    implementation(libs.google.apis.google.api.services.calendar)
-    implementation(libs.google.http.client.gson)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.google.android.libraries.identity.googleid)
+    // gms (for gmsProd, gmsDev, lab)
+    listOf(
+        libs.google.android.gms.play.services.auth,
+        libs.google.android.play.review,
+        libs.google.android.play.review.ktx,
+        libs.google.api.client.android,
+        libs.google.android.gms.play.services.drive,
+        libs.google.apis.google.api.services.drive,
+        libs.google.apis.google.api.services.calendar,
+        libs.google.http.client.gson,
+        libs.androidx.credentials.play.services.auth,
+        libs.google.android.libraries.identity.googleid,
+    ).forEach { lib ->
+        add("gmsProdImplementation", lib)
+        add("gmsDevImplementation", lib)
+        add("labImplementation", lib)
+    }
 
     // google components common
     implementation(libs.google.android.flexbox)
@@ -234,6 +222,7 @@ dependencies {
 
     // Apache Commons
     implementation(libs.commons.io)
+    implementation(libs.commons.codec)
 
     // AAFactory
     implementation(libs.io.github.aafactory.commons) {

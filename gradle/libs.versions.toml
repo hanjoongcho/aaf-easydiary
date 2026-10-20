@@ -42,6 +42,7 @@ gson = "2.14.0"
 guava = "33.7.2-android"
 
 commonsIo = "2.22.0"
+commonsCodec = "1.18.0"
 poi = "3.13"
 
 aafactoryCommons = "1.2.0"
@@ -126,6 +127,7 @@ google-code-gson = { group = "com.google.code.gson", name = "gson", version.ref 
 google-guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
+commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commonsCodec" }
 org-apache-poi = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
 
 io-github-aafactory-commons = { group = "io.github.aafactory", name = "commons", version.ref = "aafactoryCommons" }
