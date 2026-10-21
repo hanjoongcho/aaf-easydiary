@@ -222,7 +222,6 @@ dependencies {
 
     // Apache Commons
     implementation(libs.commons.io)
-    implementation(libs.commons.codec)
 
     // AAFactory
     implementation(libs.io.github.aafactory.commons) {

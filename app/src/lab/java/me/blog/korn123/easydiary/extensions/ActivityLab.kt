@@ -24,7 +24,6 @@ import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_ETF
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_FICS
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import org.apache.commons.codec.binary.Base64
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -66,7 +65,7 @@ suspend fun ComponentActivity.pushMarkDown(
                 val commitRequest =
                     CommitRequest(
                         "AUTOMATIC COMMIT: Easy Diary",
-                        Base64.encodeBase64String(contents.toByteArray(Charsets.UTF_8)),
+                        contents.toByteArray(Charsets.UTF_8).toBase64(),
                         "main",
                         sha,
                     )

@@ -84,7 +84,6 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.SlidingTabLayout
-import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
@@ -848,7 +847,7 @@ fun Activity.photoToBase64(photoPath: String): String {
 //        IOUtils.copy(fis, bos)
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
-        image64 = Base64.encodeBase64String(bos.toByteArray())
+        image64 = bos.toByteArray().toBase64()
     } catch (e: Exception) {
         bos.close()
     }
@@ -862,7 +861,7 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     if (bitmap != null) {
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
-        image64 = Base64.encodeBase64String(bos.toByteArray())
+        image64 = bos.toByteArray().toBase64()
         bos.close()
     }
     return image64
