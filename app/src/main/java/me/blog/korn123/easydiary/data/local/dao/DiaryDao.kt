@@ -163,6 +163,20 @@ interface DiaryDao {
             CASE WHEN :isAsc = 0 THEN currentTimeMillis END DESC
     """,
     )
+    fun observeDiariesByDateString(
+        dateString: String,
+        isAsc: Boolean,
+    ): Flow<List<DiaryEntity>>
+
+    @Query(
+        """
+        SELECT * FROM diaries 
+        WHERE originDiaryId = 0 AND dateString = :dateString 
+        ORDER BY 
+            CASE WHEN :isAsc = 1 THEN currentTimeMillis END ASC,
+            CASE WHEN :isAsc = 0 THEN currentTimeMillis END DESC
+    """,
+    )
     suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean,

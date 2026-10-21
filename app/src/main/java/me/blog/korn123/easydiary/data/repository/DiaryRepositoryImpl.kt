@@ -74,6 +74,14 @@ class DiaryRepositoryImpl
                     symbolSequence,
                 ).map { it.toDomain() }
 
+        override fun observeDiariesByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<Diary>> =
+            dataSource.observeDiariesByDateString(dateString, isAsc).map { entities ->
+                entities.map { it.toDomain() }
+            }
+
         override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,

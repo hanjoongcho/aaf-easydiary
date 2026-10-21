@@ -61,6 +61,11 @@ interface DiaryRepository {
         symbolSequence: Int = 0,
     ): List<Diary>
 
+    fun observeDiariesByDateString(
+        dateString: String,
+        isAsc: Boolean = false,
+    ): Flow<List<Diary>>
+
     suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean = false,

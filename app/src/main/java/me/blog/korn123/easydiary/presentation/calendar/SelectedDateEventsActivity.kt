@@ -26,10 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
@@ -60,35 +63,24 @@ class SelectedDateEventsViewModel
     @Inject
     constructor(
         application: Application,
-        private val diaryRepository: DiaryRepository,
+        diaryRepository: DiaryRepository,
         savedStateHandle: SavedStateHandle,
     ) : AndroidViewModel(application) {
         val dateString: String = savedStateHandle.get<String>("SELECTED_DATE") ?: LocalDate.now().toString()
 
-        var diaries by mutableStateOf<List<Diary>>(emptyList())
-            private set
+        val diaries: StateFlow<List<Diary>> =
+            diaryRepository
+                .observeDiariesByDateString(
+                    dateString,
+                    getApplication<Application>().config.calendarSorting == CALENDAR_SORTING_ASC,
+                ).stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = emptyList(),
+                )
 
         var isLoading by mutableStateOf(false)
             private set
-
-        init {
-            loadDiaries()
-        }
-
-        fun loadDiaries() {
-            viewModelScope.launch {
-                isLoading = true
-                diaries =
-                    try {
-                        val sortAsc = getApplication<Application>().config.calendarSorting == CALENDAR_SORTING_ASC
-                        diaryRepository.getDiariesByDateString(dateString, sortAsc)
-                    } catch (_: Exception) {
-                        emptyList()
-                    } finally {
-                        isLoading = false
-                    }
-            }
-        }
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +91,7 @@ fun SelectedDateEventsScreen(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val bottomPadding = navigationBottomPadding()
-    val diaries = viewModel.diaries
+    val diaries by viewModel.diaries.collectAsStateWithLifecycle()
 
     val formattedTitle =
         remember(viewModel.dateString) {
