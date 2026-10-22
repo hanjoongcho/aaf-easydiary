@@ -608,6 +608,7 @@ fun RadioGroupCard(
     modifier: Modifier,
     options: List<Map<String, Any>>,
     selectedKey: Int,
+    enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontFamily: FontFamily? =
         if (LocalInspectionMode.current) {
             null
@@ -622,7 +623,7 @@ fun RadioGroupCard(
         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
         modifier =
-            if (LocalContext.current.config.enableCardViewPolicy) {
+            if (enableCardViewPolicy) {
                 modifier.padding(
                     HORIZONTAL_PADDING.dp,
                     VERTICAL_PADDING.dp,

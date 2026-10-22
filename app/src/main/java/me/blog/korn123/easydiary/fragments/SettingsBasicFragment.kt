@@ -357,6 +357,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 ),
                             ),
                         selectedKey = calendarStartDay,
+                        enableCardViewPolicy = enableCardViewPolicy,
                         fontFamily = fontFamily,
                     ) { key ->
                         calendarStartDay = key
@@ -380,6 +381,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 ),
                             ),
                         selectedKey = calendarSorting,
+                        enableCardViewPolicy = enableCardViewPolicy,
                         fontFamily = fontFamily,
                     ) { key ->
                         config.calendarSorting = key
