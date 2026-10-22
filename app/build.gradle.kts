@@ -272,3 +272,62 @@ dependencies {
 
     testImplementation(libs.junit)
 }
+
+tasks.register<JavaExec>("syncReleaseString") {
+    group = "release"
+    description = "Sync release strings across locale folders"
+    val compileKotlinTask = tasks.named("compileFossDebugKotlin")
+    dependsOn(compileKotlinTask)
+    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    classpath = files(
+        compileKotlinTask.map { it.outputs.files }
+    ) + configurations.getByName("fossDebugCompileClasspath")
+    workingDir = projectDir
+    args("sync_release_string")
+    standardOutput = System.out
+    errorOutput = System.out
+}
+
+tasks.register<JavaExec>("syncNewString") {
+    group = "release"
+    description = "Sync new strings across locale folders"
+    val compileKotlinTask = tasks.named("compileFossDebugKotlin")
+    dependsOn(compileKotlinTask)
+    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    classpath = files(
+        compileKotlinTask.map { it.outputs.files }
+    ) + configurations.getByName("fossDebugCompileClasspath")
+    workingDir = projectDir
+    args("sync_new_string")
+    standardOutput = System.out
+    errorOutput = System.out
+}
+
+tasks.register<JavaExec>("syncReleaseNote") {
+    group = "release"
+    description = "Sync release notes from strings.xml"
+    val compileKotlinTask = tasks.named("compileFossDebugKotlin")
+    dependsOn(compileKotlinTask)
+    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    classpath = files(
+        compileKotlinTask.map { it.outputs.files }
+    ) + configurations.getByName("fossDebugCompileClasspath")
+    workingDir = projectDir
+    args("sync_release_note")
+    standardOutput = System.out
+    errorOutput = System.out
+}
+
+tasks.register<JavaExec>("prepareRelease") {
+    group = "release"
+    description = "Sync all release strings and release notes"
+    val compileKotlinTask = tasks.named("compileFossDebugKotlin")
+    dependsOn(compileKotlinTask)
+    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    classpath = files(
+        compileKotlinTask.map { it.outputs.files }
+    ) + configurations.getByName("fossDebugCompileClasspath")
+    workingDir = projectDir
+    standardOutput = System.out
+    errorOutput = System.out
+}
