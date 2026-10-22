@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import me.blog.korn123.easydiary.extensions.exportRealmFile
+import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.extensions.applicationScope
+import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.openNotification
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
@@ -12,7 +14,10 @@ open class BaseAlarmWorkExecutor(
         context.run {
             when (alarm.workMode) {
                 AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> {
-                    exportRealmFile()
+                    applicationScope.launch {
+                        exportRoomData()
+                    }
+
                     openNotification(alarm)
                 }
 

@@ -1173,4 +1173,5 @@
     <string name="link_entry_as_child">ᱜᱤᱫᱽᱨᱟᱹ ᱞᱮᱠᱷᱟ</string>
     <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ</string>
     <string name="menu_speech_to_text">ᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱚᱱᱚᱞ</string>
+    <string name="diary_count_format">%d ᱚᱞᱠᱚ</string>
 </resources>

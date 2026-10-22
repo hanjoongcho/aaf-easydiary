@@ -12,8 +12,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.*
 
 /**
@@ -27,7 +25,6 @@ object BitmapUtils {
     /// ------------------------------------------------------------------
     fun saveBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int, orientation: Int = 1): Boolean {
         var result = true
-        var outputStream: OutputStream? = null
         try {
             val options = BitmapFactory.Options().apply {
                 inJustDecodeBounds = true
@@ -54,13 +51,12 @@ object BitmapUtils {
                 true -> Bitmap.createScaledBitmap(rotateBitmap, fixedWidthHeight, downSampleHeight.toInt(), false)
                 false -> Bitmap.createScaledBitmap(rotateBitmap, downSampleWidth.toInt(), fixedWidthHeight, false)
             }
-            outputStream = FileOutputStream(destPath)
-            thumbNail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            FileOutputStream(destPath).use { outputStream ->
+                thumbNail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             result = false
-        } finally {
-            IOUtils.closeQuietly(outputStream)
         }
         return result
     }
@@ -79,36 +75,36 @@ object BitmapUtils {
     }
     
     fun decodeFile(path: String, fixedWidth: Int, fixedHeight: Int): Bitmap {
-        var inputStream: InputStream = FileUtils.openInputStream(File(path))
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
-
-        BitmapFactory.decodeStream(inputStream, null, options)
-        IOUtils.closeQuietly(inputStream)
+        File(path).inputStream().use { inputStream ->
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val inSampleSize = calculateInSampleSize(options, fixedWidth, fixedHeight)
 
-        inputStream = FileUtils.openInputStream(File(path))
-        options.inJustDecodeBounds = false
-        options.inSampleSize = inSampleSize
-        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val tempBitmap = File(path).inputStream().use { inputStream ->
+            options.inJustDecodeBounds = false
+            options.inSampleSize = inSampleSize
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         return Bitmap.createScaledBitmap(tempBitmap!!, fixedWidth, fixedHeight, false)
     }
     
     fun decodeFile(context: Context, uri: Uri, fixedWidth: Int, fixedHeight: Int): Bitmap {
-        var inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
-
-        BitmapFactory.decodeStream(inputStream, null, options)
-        IOUtils.closeQuietly(inputStream)
+        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val inSampleSize = calculateInSampleSize(options, fixedWidth, fixedHeight)
 
-        inputStream = context.contentResolver.openInputStream(uri)!!
-        options.inJustDecodeBounds = false
-        options.inSampleSize = inSampleSize
-        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val tempBitmap = context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            options.inJustDecodeBounds = false
+            options.inSampleSize = inSampleSize
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         return Bitmap.createScaledBitmap(tempBitmap!!, fixedWidth, fixedHeight, false)
     }
     
@@ -122,18 +118,18 @@ object BitmapUtils {
     }
 
     fun decodeFileCropCenter(path: String, fixedWidthHeight: Int): Bitmap {
-        var inputStream: InputStream = FileUtils.openInputStream(File(path))
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
-
-        BitmapFactory.decodeStream(inputStream, null, options)
-        IOUtils.closeQuietly(inputStream)
+        File(path).inputStream().use { inputStream ->
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val inSampleSize = calculateInSampleSize(options, fixedWidthHeight, fixedWidthHeight)
-        inputStream = FileUtils.openInputStream(File(path))
-        options.inJustDecodeBounds = false
-        options.inSampleSize = inSampleSize
-        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val tempBitmap = File(path).inputStream().use { inputStream ->
+            options.inJustDecodeBounds = false
+            options.inSampleSize = inSampleSize
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val sampling = when (tempBitmap!!.width > tempBitmap.height) {
             true -> {
                 val ratio: Float = fixedWidthHeight * 1.0F / tempBitmap.height
@@ -162,18 +158,18 @@ object BitmapUtils {
     }
 
     fun decodeFileMaxWidthHeight(path: String, maxWidthHeight: Int): Bitmap {
-        var inputStream: InputStream? = FileUtils.openInputStream(File(path))
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
-
-        BitmapFactory.decodeStream(inputStream, null, options)
-        IOUtils.closeQuietly(inputStream)
+        File(path).inputStream().use { inputStream ->
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val inSampleSize = calculateInSampleSize(options, maxWidthHeight, maxWidthHeight)
-        inputStream = FileUtils.openInputStream(File(path))
-        options.inJustDecodeBounds = false
-        options.inSampleSize = inSampleSize
-        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val tempBitmap = File(path).inputStream().use { inputStream ->
+            options.inJustDecodeBounds = false
+            options.inSampleSize = inSampleSize
+            BitmapFactory.decodeStream(inputStream, null, options)
+        }
         val sampling = when (tempBitmap!!.width < tempBitmap!!.height) {
             true -> {
                 val ratio: Float = maxWidthHeight * 1.0F / tempBitmap!!.height
@@ -212,23 +208,14 @@ object BitmapUtils {
 
     fun saveBitmapToFileCache(bitmap: Bitmap, strFilePath: String) {
         val fileCacheItem = File(strFilePath)
-        var out: OutputStream? = null
-
         try {
             fileCacheItem.createNewFile()
-            out = FileOutputStream(fileCacheItem)
-
-            //quality int: Hint to the compressor, 0-100. 0 meaning compress for small size, 100 meaning compress for max quality. Some formats, like PNG which is lossless, will ignore the quality setting
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+            FileOutputStream(fileCacheItem).use { out ->
+                //quality int: Hint to the compressor, 0-100. 0 meaning compress for small size, 100 meaning compress for max quality. Some formats, like PNG which is lossless, will ignore the quality setting
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            try {
-                out?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
         }
     }
 

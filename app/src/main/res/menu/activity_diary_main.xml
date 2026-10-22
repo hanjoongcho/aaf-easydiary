@@ -14,12 +14,6 @@
         android:title="@string/menu_calendar"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/ic_settings_11"
-        android:id="@+id/timeline"
-        android:orderInCategory="100"
-        android:title="@string/menu_timeline"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/ic_microphone"
         android:id="@+id/microphone"
         android:orderInCategory="100"

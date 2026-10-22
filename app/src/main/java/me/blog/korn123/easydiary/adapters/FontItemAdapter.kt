@@ -20,7 +20,6 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -57,7 +56,7 @@ class FontItemAdapter(
                 viewHolder
             }
         }.run {
-            if (StringUtils.equals(context.config.settingFontName, list[position]["fontName"])) {
+            if (context.config.settingFontName == list[position]["fontName"]) {
                 activity.updateDrawableColorInnerCardView(R.drawable.ic_check_mark)
                 ContextCompat.getDrawable(context, R.drawable.ic_check_mark).run {
                     imageView.setImageDrawable(this)
@@ -67,7 +66,7 @@ class FontItemAdapter(
                 imageView.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.ic_check_mark_off))
                 imageView.alpha = 0.1F
             }
-            textView.text = StringUtils.EMPTY
+            textView.text = ""
             Log.i(AAF_TEST, "${this.position} -> $position")
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
 

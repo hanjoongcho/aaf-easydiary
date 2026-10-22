@@ -52,7 +52,7 @@
             <TextView
                 android:id="@+id/topLine"
                 android:background="@android:color/white"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:layout_width="3dp"
                 android:layout_height="5dp" />
         </RelativeLayout>
@@ -67,14 +67,14 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="6dp"
                     android:background="@android:color/white"
                     android:layout_width="3dp"
                     android:layout_height="match_parent">
                 </TextView>
                 <TextView
                     android:id="@+id/horizontalLine2"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginStart="4dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@android:color/white"
@@ -82,15 +82,17 @@
                     android:layout_height="3dp" />
                 <ImageView
                     android:id="@+id/circle"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="15dp"
                     android:layout_gravity="start"
                     android:src="@drawable/bg_card_timeline_circle"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp" />
+                    android:layout_width="15dp"
+                    android:layout_height="15dp" />
             </FrameLayout>
-            <androidx.cardview.widget.CardView
+            <me.blog.korn123.easydiary.views.FixedCardView
                 android:layout_marginStart="-5dp"
                 style="@style/AppCard.Timeline"
+                app:fixedAppcompatPadding="true"
+                app:applyCardBackgroundColor="true"
                 android:layout_marginEnd="34dp">
                 <LinearLayout
                     android:orientation="horizontal"
@@ -109,18 +111,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
         
         <RelativeLayout
             android:layout_marginStart="30dp"
             android:layout_width="20dp"
             android:layout_height="wrap_content">
+
             <TextView
-                android:background="@android:color/white"
-                android:layout_marginStart="4dp"
                 android:layout_width="3dp"
-                android:layout_height="6dp" />
+                android:layout_height="6dp"
+                android:layout_marginStart="6dp"
+                android:background="@android:color/white" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

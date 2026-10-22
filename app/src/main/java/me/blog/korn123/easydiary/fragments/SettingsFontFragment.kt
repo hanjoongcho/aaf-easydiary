@@ -20,19 +20,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -42,10 +38,11 @@ import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsFontBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
+import me.blog.korn123.easydiary.extensions.getBaseName
+import me.blog.korn123.easydiary.extensions.getExtension
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -61,8 +58,6 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import java.io.File
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {
@@ -90,15 +85,18 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
                         activityResult.data!!.data?.let { uri ->
                             val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
-                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                            if (fileName.getExtension().equals("ttf", true)) {
                                 Thread(
                                     Runnable {
-                                        val inputStream = contentResolver.openInputStream(uri)
                                         val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
-                                        FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                                        contentResolver.openInputStream(uri)?.use { inputStream ->
+                                            File(fontDestDir, fileName).outputStream().use { fos ->
+                                                inputStream.copyTo(fos)
+                                            }
+                                        }
                                         runOnUiThread {
                                             progressContainer.visibility = View.GONE
-                                            showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
+                                            showAlertDialog("${fileName.getBaseName()} font file is registered.", null)
                                         }
                                     },
                                 ).start()
@@ -395,18 +393,18 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         var selectedIndex = 0
         for (i in fontNameArray.indices) {
             val map = HashMap<String, String>()
-            map.put("disPlayFontName", fontNameArray[i])
-            map.put("fontName", fontPathArray[i])
+            map["disPlayFontName"] = fontNameArray[i]
+            map["fontName"] = fontPathArray[i]
             listFont.add(map)
         }
 
         val fontDir = File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
-                if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {
+                if (fontName.getExtension().equals("ttf", ignoreCase = true)) {
                     val map = HashMap<String, String>()
-                    map.put("disPlayFontName", FilenameUtils.getBaseName(fontName))
-                    map.put("fontName", fontName)
+                    map["disPlayFontName"] = fontName.getBaseName()
+                    map["fontName"] = fontName
                     listFont.add(map)
                 }
             }

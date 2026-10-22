@@ -15,7 +15,6 @@ import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,22 +37,13 @@ class AlarmRepositoryImpl
             }
 
         // FIXME: Remove legacy realm functions
-        override suspend fun getAllAlarms(): List<Alarm> =
-            if (context.config.enableJetpackRoomDatabase) {
-                this.getAllAlarmsFlow().first()
-            } else {
-                EasyDiaryDbHelper.findAlarmAll()
-            }
+        override suspend fun getAllAlarms(): List<Alarm> = this.getAllAlarmsFlow().first()
 
         // FIXME: Remove legacy realm functions
         override suspend fun getAlarmById(id: Int): Alarm? =
-            if (context.config.enableJetpackRoomDatabase) {
-                dataSource
-                    .getAlarmById(id)
-                    ?.toDomain()
-            } else {
-                EasyDiaryDbHelper.findAlarmById(id)
-            }
+            dataSource
+                .getAlarmById(id)
+                ?.toDomain()
 
         override suspend fun insertAlarm(alarm: Alarm) {
             val entity = alarm.toEntity()
@@ -67,9 +57,6 @@ class AlarmRepositoryImpl
         override suspend fun updateAlarm(alarm: Alarm) {
             val entity = alarm.toEntity()
             dataSource.updateAlarm(entity)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.updateAlarmBy(alarm)
         }
 
         override suspend fun deleteAlarm(alarm: Alarm) {
@@ -80,9 +67,6 @@ class AlarmRepositoryImpl
         override suspend fun deleteAlarmById(id: Int) {
             Log.i("aaf-t", "deleteAlarmById id: $id")
             dataSource.deleteAlarmById(id)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.deleteAlarmBy(id)
         }
 
         override suspend fun deleteAllAlarms() {

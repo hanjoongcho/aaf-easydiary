@@ -23,11 +23,14 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
+import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -56,6 +59,12 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         setSupportActionBar(mBinding.toolBar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
+
+        lifecycleScope.launch {
+            viewModel.symbol.collect { symbolSequence ->
+                FlavorUtils.initWeatherView(this@ToolbarControlBaseActivity, mBinding.symbolImageView, symbolSequence)
+            }
+        }
     }
 
     protected abstract fun createScrollable(): S

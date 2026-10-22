@@ -77,6 +77,7 @@ import androidx.lifecycle.application
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
@@ -127,7 +128,6 @@ import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.utils.Dip
-import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -135,6 +135,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
+import me.blog.korn123.commons.utils.EasyDiaryUtils.jsonFileToHashMap
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -175,7 +176,6 @@ import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
 import me.blog.korn123.easydiary.helper.ENABLE_CARD_VIEW_POLICY
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.HOLD_POSITION_ENTER_EDIT_SCREEN
 import me.blog.korn123.easydiary.helper.LINE_SPACING_SCALE_FACTOR
 import me.blog.korn123.easydiary.helper.MIME_TYPE_BINARY
@@ -205,8 +205,6 @@ import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -1382,9 +1380,11 @@ fun Context.createTemporaryPhotoFile(
 
     when (fromUri) {
         true -> {
-            val inputStream = contentResolver.openInputStream(uri!!)
-            IOUtils.copy(inputStream, FileOutputStream(temporaryFile.absoluteFile))
-            IOUtils.closeQuietly(inputStream)
+            contentResolver.openInputStream(uri!!)?.use { inputStream ->
+                FileOutputStream(temporaryFile.absoluteFile).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
         }
 
         false -> {
@@ -1395,8 +1395,7 @@ fun Context.createTemporaryPhotoFile(
     return temporaryFile
 }
 
-fun Context.preferenceToJsonString(): String {
-    var jsonString: String = ""
+fun Context.preferenceToJsonString(): HashMap<String, Any> {
     val preferenceMap: HashMap<String, Any> = hashMapOf()
 
     // Settings Basic
@@ -1423,13 +1422,50 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
 
     // Settings Lock
-    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
-    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
+//    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
+//    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
 
     // ETC.
     preferenceMap[SETTING_SELECTED_SYMBOLS] = config.selectedSymbols
 
-    return hashMapToJsonString(preferenceMap)
+    return preferenceMap
+}
+
+fun Context.jsonStringToPreference(jsonString: String) {
+    val gson = Gson()
+    val type = object : TypeToken<HashMap<String, Any>>() {}.type
+    val map: HashMap<String, Any> = gson.fromJson(jsonString, type)
+    config.run {
+        // Settings Basic
+        primaryColor = (map[PRIMARY_COLOR] as Double).toInt()
+        backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
+        screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
+        textColor = (map[TEXT_COLOR] as Double).toInt()
+        settingThumbnailSize = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
+        enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
+        summaryMaxLines = (map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
+        enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
+//                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
+        diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean
+        calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
+        calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()
+        enableCountCharacters = map[SETTING_COUNT_CHARACTERS] as Boolean
+        holdPositionEnterEditScreen = map[HOLD_POSITION_ENTER_EDIT_SCREEN] as Boolean
+
+        // Settings font
+        settingFontName = map[SETTING_FONT_NAME] as String
+        lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
+        settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
+        settingCalendarFontScale = (map[SETTING_CALENDAR_FONT_SCALE] as Double).toFloat()
+        boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
+
+        // Settings Lock
+
+        // ETC.
+        selectedSymbols = map[SETTING_SELECTED_SYMBOLS] as String
+
+        updatePreference = true
+    }
 }
 
 fun Context.shareFile(targetFile: File) {
@@ -1556,13 +1592,6 @@ fun Context.createRecoveryContentText(
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
         .append(getString(R.string.notification_msg_download_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_download_fail, "*", failCount, "<br>"))
-
-fun Context.forceInitRealmLessThanOreo() {
-    // android marshmallow minor version bug workaround
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-        Realm.init(this)
-    }
-}
 
 fun Context.isLocationEnabled(): Boolean {
     val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -1921,7 +1950,6 @@ tailrec fun Context.findActivity(): Activity? =
     }
 
 enum class UriFileType {
-    REALM,
     ROOM,
     UNKNOWN,
 }
@@ -1942,19 +1970,8 @@ fun classifyUriByExtension(uriString: String): UriFileType {
         // 확장자가 zip이고 파일명에 db_ 문자열이 포함된 경우 (ROOM)
         extension.equals("zip", ignoreCase = true) && fileName.contains("db_", ignoreCase = true) -> UriFileType.ROOM
 
-        // 확장자가 realm_ 으로 시작하는 경우 (예: .realm_backup)
-        extension.startsWith("realm_", ignoreCase = true) -> UriFileType.REALM
-
         else -> UriFileType.UNKNOWN
     }
-}
-
-fun Context.exportRealmFile() {
-    val srcFile = File(EasyDiaryDbHelper.getRealmPath())
-    val destFilePath = BACKUP_DB_DIRECTORY + RealmConstants.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
-    FileUtils.copyFile(srcFile, destFile, false)
-    config.diaryBackupLocal = System.currentTimeMillis()
 }
 
 suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): String {
@@ -1981,6 +1998,7 @@ suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): Stri
 
 suspend fun Context.generateRoomDataMap(): Map<String, Any> =
     mutableMapOf(
+        "PREFERENCE" to preferenceToJsonString(),
         "META" to EasyDiaryUtils.getExportMeta(),
         "ACTION_LOG" to actionLogRepository.getAllActionLogs(),
         "ALARM" to alarmRepository.getAllAlarms(),
@@ -2074,6 +2092,11 @@ suspend fun Context.importRoomData(
             )
         diaryRepository.deleteAllDiaries()
         diaryRepository.insertAllDiaries(list)
+    }
+
+    dataMap["PREFERENCE"]?.let {
+        val json = gson.toJson(it)
+        jsonStringToPreference(json)
     }
 }
 

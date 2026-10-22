@@ -23,7 +23,6 @@ import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.GridItemDecorationPostcardViewer
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import org.apache.commons.io.FileUtils
 import java.io.File
 
 /**
@@ -95,7 +94,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                         getString(R.string.delete_confirm),
                         DialogInterface.OnClickListener { _, _ ->
                             selectedItems.forEachIndexed { _, item ->
-                                FileUtils.forceDelete(item.file)
+                                if (item.file.exists()) item.file.delete()
                             }
                             initPostCard()
                         },

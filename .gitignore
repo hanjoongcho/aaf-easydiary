@@ -2,6 +2,7 @@
 .gradle
 .idea/
 .kotlin/
+.artifacts
 build
 local.properties
 

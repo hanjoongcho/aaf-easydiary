@@ -29,7 +29,6 @@ import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
-import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.Collections
 
@@ -127,7 +126,7 @@ class DriveServiceHelper(
 
         // Convert content to an AbstractInputStreamContent instance.
         val contentStream =
-            ByteArrayContent(mimeType, IOUtils.toByteArray(FileInputStream(File(filePath))))
+            ByteArrayContent(mimeType, File(filePath).readBytes())
 
         val googleFile =
             mDriveService.files().create(metadata, contentStream).execute()
@@ -139,10 +138,11 @@ class DriveServiceHelper(
         destFilePath: String,
     ): Int =
         withContext(Dispatchers.IO) {
-            IOUtils.copy(
-                mDriveService.files().get(fileId).executeMediaAsInputStream(),
-                FileOutputStream(File(destFilePath)),
-            )
+            mDriveService.files().get(fileId).executeMediaAsInputStream().use { inputStream ->
+                FileOutputStream(File(destFilePath)).use { outputStream ->
+                    inputStream.copyTo(outputStream).toInt()
+                }
+            }
         }
 
     /**

@@ -13,7 +13,6 @@ import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import org.apache.commons.lang3.StringUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
@@ -96,7 +95,9 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                 duplicatedEasterEggWarning()
             } else {
                 hideSoftInputFromWindow()
-                if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                if (mBinding.partialEditContents.diaryContents.text
+                        .isNullOrEmpty()
+                ) {
                     mBinding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {

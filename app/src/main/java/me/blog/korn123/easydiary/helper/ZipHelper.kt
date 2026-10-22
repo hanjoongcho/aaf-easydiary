@@ -18,7 +18,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.NotificationService
-import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -185,25 +184,23 @@ class ZipHelper(
 
     fun compress(destFile: File) {
         showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", NotificationConstants.ACTION_FULL_BACKUP_CANCEL)
-        val zipOutputStream: ZipOutputStream
         try {
-            zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
-
-            mFileNames.forEachIndexed { index, fileName ->
-                if (!isOnProgress) return@forEachIndexed
-                updateCompressProgress(index)
-                try {
-                    val fileInputStream = FileInputStream(mRootDirectoryName + fileName)
-                    zipOutputStream.putNextEntry(ZipEntry(fileName))
-                    val bytes = IOUtils.toByteArray(fileInputStream)
-                    zipOutputStream.write(bytes, 0, bytes.size)
-                    zipOutputStream.closeEntry()
-                    fileInputStream.close()
-                } catch (ex: IOException) {
-                    System.err.println(ex)
+            ZipOutputStream(FileOutputStream(destFile)).use { zipOutputStream ->
+                mFileNames.forEachIndexed { index, fileName ->
+                    if (!isOnProgress) return@forEachIndexed
+                    updateCompressProgress(index)
+                    try {
+                        FileInputStream(mRootDirectoryName + fileName).use { fileInputStream ->
+                            zipOutputStream.putNextEntry(ZipEntry(fileName))
+                            val bytes = fileInputStream.readBytes()
+                            zipOutputStream.write(bytes, 0, bytes.size)
+                            zipOutputStream.closeEntry()
+                        }
+                    } catch (ex: IOException) {
+                        System.err.println(ex)
+                    }
                 }
             }
-            zipOutputStream.close()
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {

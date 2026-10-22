@@ -15,7 +15,6 @@ import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,19 +37,11 @@ class ActionLogRepositoryImpl
             }
 
         // FIXME: Remove legacy realm functions
-        override suspend fun getAllActionLogs(): List<ActionLog> =
-            if (context.config.enableJetpackRoomDatabase) {
-                this.getAllActionLogsFlow().first()
-            } else {
-                EasyDiaryDbHelper.findAllActionLogs()
-            }
+        override suspend fun getAllActionLogs(): List<ActionLog> = this.getAllActionLogsFlow().first()
 
         override suspend fun insertActionLog(actionLog: ActionLog) {
             val entity = actionLog.toEntity()
             dataSource.insertActionLog(entity)
-
-            // FIXME: Remove legacy realm functions
-            EasyDiaryDbHelper.insertActionLog(actionLog, context)
         }
 
         override suspend fun insertAllActionLogs(actionLogs: List<ActionLog>) {
@@ -61,10 +52,5 @@ class ActionLogRepositoryImpl
         override suspend fun deleteAllActionLogs(excludeRealm: Boolean) {
             Log.i(AAF_TEST, "deleteAllActionLogs excludeRealm: $excludeRealm")
             dataSource.deleteAllActionLogs()
-
-            // FIXME: Remove legacy realm functions
-            if (excludeRealm.not()) {
-                EasyDiaryDbHelper.deleteAllActionLogs()
-            }
         }
     }

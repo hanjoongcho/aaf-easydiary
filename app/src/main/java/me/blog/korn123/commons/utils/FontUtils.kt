@@ -11,12 +11,11 @@ import androidx.compose.ui.text.font.FontFamily
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.getBaseName
 import me.blog.korn123.easydiary.extensions.preferencesContains
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedTextView
-import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.util.*
 
@@ -26,10 +25,18 @@ import java.util.*
 object FontUtils {
     private var sTypeface: Typeface? = null
 
-    private fun setTypeface(context: Context, viewGroup: ViewGroup, typeface: Typeface?, customLineSpacing: Boolean) {
+    private fun setTypeface(
+        context: Context,
+        viewGroup: ViewGroup,
+        typeface: Typeface?,
+        customLineSpacing: Boolean,
+    ) {
         for (i in 0 until viewGroup.childCount) {
             when (val targetView = viewGroup.getChildAt(i)) {
-                is ViewGroup -> setTypeface(context, targetView, typeface, customLineSpacing)
+                is ViewGroup -> {
+                    setTypeface(context, targetView, typeface, customLineSpacing)
+                }
+
                 is TextView -> {
                     targetView.also {
                         it.typeface = typeface
@@ -41,16 +48,20 @@ object FontUtils {
                         if (it is FixedTextView && it.applyBoldStyle) it.setTypeface(typeface, Typeface.BOLD)
                     }
                 }
+
                 else -> {}
             }
         }
     }
 
-    private fun isValidTypeface(fontArray: Array<String>?, fontName: String?): Boolean {
+    private fun isValidTypeface(
+        fontArray: Array<String>?,
+        fontName: String?,
+    ): Boolean {
         var result = false
         if (fontArray != null) {
             for (name in fontArray) {
-                if (StringUtils.equalsIgnoreCase(name, fontName)) {
+                if (name.equals(fontName, ignoreCase = true)) {
                     result = true
                     break
                 }
@@ -98,45 +109,72 @@ object FontUtils {
         sTypeface = getTypeface(context, commonFontName)
     }
 
-    fun setFontsTypeface(context: Context, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean = true) {
-        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, customFontName) else getCommonTypeface(context)
+    fun setFontsTypeface(
+        context: Context,
+        customFontName: String?,
+        rootView: ViewGroup?,
+        customLineSpacing: Boolean = true,
+    ) {
+        val typeface = if (customFontName?.isNotEmpty() == true) getTypeface(context, customFontName) else getCommonTypeface(context)
         rootView?.let {
             setTypeface(context, it, typeface, customLineSpacing)
         }
     }
 
-    fun getTypeface(context: Context, fontName: String?): Typeface? {
+    fun getTypeface(
+        context: Context,
+        fontName: String?,
+    ): Typeface? {
         val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
         val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
         return when {
             isValidTypeface(assetsFonts, fontName) -> {
-                if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
+                if (fontName.equals(CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT, ignoreCase = true)) {
                     Typeface.DEFAULT
                 } else {
                     Typeface.createFromAsset(context.assets, "fonts/" + fontName)
                 }
             }
-            isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)
-            else -> Typeface.DEFAULT
+
+            isValidTypeface(userFonts, fontName) -> {
+                Typeface.createFromFile(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)
+            }
+
+            else -> {
+                Typeface.DEFAULT
+            }
         }
     }
 
-    fun fontFileNameToDisplayName(context: Context, fontFileName: String): String {
+    fun fontFileNameToDisplayName(
+        context: Context,
+        fontFileName: String,
+    ): String {
         var displayName: String? = null
         val fontNames = context.resources.getStringArray(R.array.pref_list_fonts_values)
         val displayNames = context.resources.getStringArray(R.array.pref_list_fonts_title)
         for (i in fontNames.indices) {
-            if (StringUtils.equals(fontFileName, fontNames[i])) {
+            if (fontFileName.equals(fontNames[i], ignoreCase = true)) {
                 displayName = displayNames[i]
                 break
             }
         }
-        return displayName ?: FilenameUtils.getBaseName(fontFileName)
+        return displayName ?: fontFileName.getBaseName()
     }
 
-    fun measureTextWidth(context: Context, paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.apply {
-        typeface = getCommonTypeface(context)
-    }.measureText(text).toInt().times(scaleFactor).toInt()
+    fun measureTextWidth(
+        context: Context,
+        paint: Paint,
+        text: String,
+        scaleFactor: Float = 1.9f,
+    ): Int =
+        paint
+            .apply {
+                typeface = getCommonTypeface(context)
+            }.measureText(text)
+            .toInt()
+            .times(scaleFactor)
+            .toInt()
 
     fun checkFontSetting(activity: Activity) {
         activity.run {
@@ -150,9 +188,7 @@ object FontUtils {
         }
     }
 
-    fun isDeviceSettingFont(context: Context): Boolean {
-        return context.config.settingFontName == CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
-    }
+    fun isDeviceSettingFont(context: Context): Boolean = context.config.settingFontName == CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 
     fun getCommonFontFile(context: Context): FontFamily? {
 //        return File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName)
@@ -162,7 +198,7 @@ object FontUtils {
         val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
         return when {
             isValidTypeface(assetsFonts, fontName) -> {
-                if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
+                if (fontName.equals(CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT, ignoreCase = true)) {
                     null
                 } else {
 //                    Typeface.createFromAsset(context.assets, "fonts/" + fontName)
@@ -170,17 +206,18 @@ object FontUtils {
                     FontFamily(typeface)
                 }
             }
+
             isValidTypeface(userFonts, fontName) -> {
                 FontFamily(
-                    Font(File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName))
+                    Font(File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + context.config.settingFontName)),
                 )
             }
-            else -> null
+
+            else -> {
+                null
+            }
         }
     }
 
-    fun getComposeFontFamily(context: Context): FontFamily? {
-        return if (isDeviceSettingFont(context)) null else getCommonFontFile(context)
-    }
+    fun getComposeFontFamily(context: Context): FontFamily? = if (isDeviceSettingFont(context)) null else getCommonFontFile(context)
 }
-

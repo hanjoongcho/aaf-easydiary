@@ -28,6 +28,11 @@ interface DiaryDataSource {
 
     fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?>
 
+    fun observeDiariesByDateString(
+        dateString: String,
+        isAsc: Boolean,
+    ): Flow<List<DiaryEntity>>
+
     suspend fun getDiariesByDateString(
         dateString: String,
         isAsc: Boolean,

@@ -9,34 +9,30 @@ import android.view.View
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
-import io.noties.markwon.syntax.Prism4jThemeDefault
-import io.noties.markwon.syntax.SyntaxHighlightPlugin
 import io.noties.markwon.utils.ColorUtils
 import io.noties.markwon.utils.Dip
-import io.noties.prism4j.Prism4j
-import io.noties.prism4j.annotations.PrismBundle
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.isConnectedOrConnecting
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
 
-@PrismBundle(include = ["java", "kotlin", "javascript"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewerActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityMarkdownViewerBinding
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
-    private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
     private var mForceAppendCodeBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,8 +93,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
 //                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
 //                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
                 },
-            ).usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-            .build()
+            ).build()
             .apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
     }
 
@@ -113,14 +108,14 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             // always check HTTP response code first
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // opens input stream from the HTTP connection
-                val inputStream = httpConn.inputStream
-                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }.toMutableList()
                 if (mForceAppendCodeBlock) {
                     lines.add(0, "```java")
                     lines.add("```")
                 }
-                FileUtils.writeLines(File(saveFilePath), "UTF-8", lines)
-                inputStream.close()
+                File(saveFilePath).printWriter(Charsets.UTF_8).use { writer ->
+                    lines.forEach { writer.println(it) }
+                }
             }
             httpConn.disconnect()
 
@@ -183,7 +178,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     private fun readSavedFile(): String {
         val sb = StringBuilder()
         try {
-            val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
+            val lines = File(savedFilePath).readLines(Charsets.UTF_8)
             lines.map {
                 sb.append(it)
                 sb.append(System.lineSeparator())

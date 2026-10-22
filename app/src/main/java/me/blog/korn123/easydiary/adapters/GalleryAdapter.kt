@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
 import android.widget.ImageView
-import android.widget.Toolbar.LayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
@@ -16,12 +15,14 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemGalleryBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.helper.GalleryConstants
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
-import me.blog.korn123.easydiary.models.Diary
 import java.io.File
-import java.util.*
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 class GalleryAdapter(

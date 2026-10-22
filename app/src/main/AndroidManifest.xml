@@ -125,10 +125,6 @@
             android:name=".activities.StatisticsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CalendarActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/SplashScreenTheme" />
-        <activity
             android:name=".activities.PhotoViewPagerActivity"
             android:hardwareAccelerated="false"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -139,7 +135,7 @@
             android:name=".activities.PostcardViewerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.TimelineActivity"
+            android:name=".presentation.timeline.TimelineActivity"
             android:theme="@style/SplashScreenTheme" />
         <activity
             android:name=".activities.DashboardActivity"
@@ -171,26 +167,36 @@
 
         <!-- Start Jetpack Compose Activity -->
         <activity
-            android:name=".compose.QuickSettingsActivity"
+            android:name=".presentation.settings.QuickSettingsActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.SelfDevelopmentRepoActivity"
+            android:name=".presentation.dev.SelfDevelopmentRepoActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.TreeTimelineActivity"
+            android:name=".presentation.tree.TreeTimelineActivity"
             android:label=""
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.DiaryMainActivity"
+            android:name=".presentation.main.DiaryMainActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
-            android:name=".compose.Demo1Activity"
+            android:name=".presentation.dev.Demo1Activity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".presentation.calendar.CalendarActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <activity
+            android:name=".presentation.calendar.SelectedDateEventsActivity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />

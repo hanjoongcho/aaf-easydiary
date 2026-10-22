@@ -1,12 +1,21 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.DiarySymbol
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
@@ -50,7 +59,47 @@ object FlavorUtils {
 
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
-            setImageResource(sequenceToSymbolResourceId(weatherFlag))
+            if (weatherFlag < SYMBOL_USER_CUSTOM_START) {
+                setImageResource(sequenceToSymbolResourceId(weatherFlag))
+            } else {
+                // FIXME: WIP START
+                if (context.config.enableDebugMode) {
+                    val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
+
+                    val filePath =
+                        if (context.config.customSymbolPaths.size > targetIndex) {
+                            context.config.customSymbolPaths[targetIndex].getFilePath()
+                        } else {
+                            ""
+                        }
+//                    setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath))
+                    Glide
+                        .with(this)
+                        .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                        .listener(
+                            object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: com.bumptech.glide.request.target.Target<Drawable?>,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean,
+                                ): Boolean = false
+                            },
+                        ).transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                        .into(this)
+                } else {
+                    setImageResource(0)
+                }
+                // FIXME: WIP END
+            }
         }
     }
 

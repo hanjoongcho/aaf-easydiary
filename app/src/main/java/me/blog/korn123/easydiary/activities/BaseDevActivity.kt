@@ -42,7 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -65,8 +64,6 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiom
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.compose.Demo1Activity
-import me.blog.korn123.easydiary.compose.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -96,20 +93,16 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
+import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.ui.components.AlarmCard
 import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
@@ -122,9 +115,6 @@ import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
-import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
@@ -238,7 +228,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
                             val fileName = targetUri.path ?: ""
                             contentResolver.openOutputStream(targetUri)?.use { outputStream ->
-                                IOUtils.write(jsonString, outputStream, "UTF-8")
+                                outputStream.write(jsonString.toByteArray(Charsets.UTF_8))
                             }
                         }
                         makeToast("Export successful!")
@@ -311,7 +301,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(
                         currentContext,
-                        me.blog.korn123.easydiary.compose.DiaryMainActivity::class.java,
+                        me.blog.korn123.easydiary.presentation.main.DiaryMainActivity::class.java,
                     ),
                 )
             }
@@ -375,18 +365,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 modifier = modifier,
             ) { startReviewFlow() }
             SimpleCard(
-                "Reset Showcase",
-                "Resets the showcase execution history.",
-                modifier = modifier,
-            ) {
-                getSharedPreferences("showcase_internal", MODE_PRIVATE).edit {
-                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false)
-                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false)
-                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false)
-                    putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false)
-                }
-            }
-            SimpleCard(
                 "Reset Font Size",
                 null,
                 modifier = modifier,
@@ -421,8 +399,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         // opens input stream from the HTTP connection
-                        val inputStream = httpConn.inputStream
-                        val lines = IOUtils.readLines(inputStream, "UTF-8")
+                        val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }
                         withContext(Dispatchers.Main) {
                             makeToast(lines[0])
 //                            if (lines[0].contains("true")) {
@@ -431,7 +408,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 //                                finish()
 //                            }
                         }
-                        inputStream.close()
                     }
                     httpConn.disconnect()
                 }
@@ -452,31 +428,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         "https://aafactory.github.io/".toUri(),
                     )
                 }
-            }
-            SimpleCard(
-                "Clear-Unused-Photo",
-                null,
-                modifier = modifier,
-            ) {
-                val localPhotoBaseNames = arrayListOf<String>()
-                val unUsedPhotos = arrayListOf<String>()
-                val targetFiles =
-                    File(EasyDiaryUtils.getApplicationDataDirectory(this@BaseDevActivity) + DIARY_PHOTO_DIRECTORY)
-                targetFiles.listFiles()?.forEach {
-                    localPhotoBaseNames.add(it.name)
-                }
-
-                EasyDiaryDbHelper.findPhotoUriAll().forEach { photoUriDto ->
-                    if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
-                        unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
-                    }
-                }
-                showAlertDialog(
-                    unUsedPhotos.size.toString(),
-                    null,
-                    { _, _ -> },
-                    DialogMode.WARNING,
-                )
             }
             SimpleCard(
                 "PickMultipleVisualMedia",
@@ -539,18 +490,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         suspend fun updateMigInfo() {
-            updateConsole("🍟 realm info")
-            updateConsole("realm diary count: ${EasyDiaryDbHelper.findDiary(query = null).size}")
-            updateConsole("realm photo-uri count: ${EasyDiaryDbHelper.findPhotoUriAll().size}")
-            updateConsole(
-                "realm unlinked photo-uri count: ${
-                    EasyDiaryDbHelper.findPhotoUriAll()
-                        .count { it.diary == null || it.diary.isEmpty() }
-                }",
-            )
-            updateConsole("realm alarm count: ${EasyDiaryDbHelper.findAlarmAll().size}")
-            updateConsole("realm action-log count: ${EasyDiaryDbHelper.findAllActionLogs().size}")
-            updateConsole("realm d-day count: ${EasyDiaryDbHelper.findDDayAll().size}")
             if (config.enableJetpackRoomDatabase) {
                 updateConsole("🍕 room info")
                 updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
@@ -596,102 +535,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 coroutineScope.launch {
                     mBaseDevViewModel.isLoading = true
                     updateMigInfo()
-                    mBaseDevViewModel.isLoading = false
-                }
-            }
-            SimpleCard(
-                "Migration realm to room",
-                "realm object를 room으로 이전합니다.",
-                modifier = modifier,
-            ) {
-                // Executed in `rememberCoroutineScope` to handle `moveScroll`.
-                coroutineScope.launch {
-                    mBaseDevViewModel.isLoading = true
-                    diaryViewModel.migRealmToRoom()
-
-                    updateMigInfo()
-                    mBaseDevViewModel.isLoading = false
-                }
-            }
-            SimpleCard(
-                "Clear orphan PhotoUri",
-                "참조정보가 없는 PhotoUri realm object를 삭제합니다.",
-                modifier = modifier,
-            ) {
-                coroutineScope.launch {
-                    EasyDiaryDbHelper.clearOrphanPhotoUris()
-                    updateMigInfo()
-                }
-            }
-            SimpleCard(
-                "Verify Migration",
-                "realm db <-> room db 데이터를 비교합니다.",
-                modifier = modifier,
-            ) {
-                coroutineScope.launch {
-                    mBaseDevViewModel.isLoading = true
-                    // diff diary
-                    val realmDiaries = EasyDiaryDbHelper.findDiary(query = null)
-                    val roomDiaries = diaryViewModel.findDiary(query = null)
-                    updateConsole("======== 👀 start diff diary: ${realmDiaries.size}")
-                    var ok = 0
-                    realmDiaries.forEach { realm ->
-                        if (roomDiaries.any { room -> room.diaryId == realm.diaryId }) ++ok
-                    }
-                    updateConsole("OK: $ok")
-                    updateConsole("NG: ${realmDiaries.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff diary: ${if (realmDiaries.size == ok) "⭕ Success" else "❌ Fail" }\n")
-
-                    // diff action-log
-                    val realmActionLogs = EasyDiaryDbHelper.findAllActionLogs()
-                    val roomActionLogs = actionLogRepository.getAllActionLogs()
-                    updateConsole("======== 👀 start diff action-logs: ${realmActionLogs.size}")
-                    ok = 0
-                    realmActionLogs.forEach { realm ->
-                        if (roomActionLogs.any { room -> room.id == realm.id }) ++ok
-                    }
-                    updateConsole("OK: $ok")
-                    updateConsole("NG: ${realmActionLogs.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff acgion-logs: ${if (realmActionLogs.size == ok) "⭕ Success" else "❌ Fail" }\n")
-
-                    // diff alarm
-                    val realmAlarms = EasyDiaryDbHelper.findAlarmAll()
-                    val roomAlarms = alarmRepository.getAllAlarms()
-                    updateConsole("======== 👀 start diff alarms: ${realmAlarms.size}")
-                    ok = 0
-                    realmAlarms.forEach { realm ->
-                        if (roomAlarms.any { room -> room.alarmId == realm.alarmId }) ++ok
-                    }
-                    updateConsole("OK: $ok")
-                    updateConsole("NG: ${realmAlarms.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff alarms: ${if (realmAlarms.size == ok) "⭕ Success" else "❌ Fail" }\n")
-
-                    // diff photoUri
-                    val realmPhotoUris = EasyDiaryDbHelper.copyFromRealm(EasyDiaryDbHelper.findPhotoUriAll())
-                    val roomPhotoUris = diaryRepository.observePhotoUris().first()
-                    updateConsole("======== 👀 start diff photoUris: ${realmPhotoUris.size}")
-                    ok = 0
-                    withContext(Dispatchers.Default) {
-                        realmPhotoUris.forEach { realm ->
-                            if (roomPhotoUris.any { room -> room.photoUri == realm.photoUri }) ++ok
-                        }
-                    }
-                    updateConsole("OK: $ok")
-                    updateConsole("NG: ${realmPhotoUris.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff photoUris: ${if (realmPhotoUris.size == ok) "⭕ Success" else "❌ Fail" }\n")
-
-                    // diff d-day
-                    val realmDDays = EasyDiaryDbHelper.findDDayAll()
-                    val roomDDays = dDayRepository.getAllDDays()
-                    updateConsole("======== 👀 start diff d-days: ${realmDDays.size}")
-                    ok = 0
-                    realmDDays.forEach { realm ->
-                        if (roomDDays.any { room -> room.id == realm.id }) ++ok
-                    }
-                    updateConsole("OK: $ok")
-                    updateConsole("NG: ${realmDDays.size.minus(ok)}")
-                    updateConsole("======== 👀 end diff d-days: ${if (realmDDays.size == ok) "⭕ Success" else "❌ Fail" }\n")
-
                     mBaseDevViewModel.isLoading = false
                 }
             }

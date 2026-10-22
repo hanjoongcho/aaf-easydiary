@@ -1,0 +1,758 @@
+package me.blog.korn123.easydiary.presentation.main
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.simplemobiletools.commons.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DevActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
+import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
+import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
+import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
+import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
+import me.blog.korn123.easydiary.ui.components.FastScroll
+import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
+import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+
+@AndroidEntryPoint
+class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
+    private val viewModel: DiaryMainViewModel by viewModels()
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
+    @OptIn(
+        ExperimentalMaterial3Api::class,
+        ExperimentalLayoutApi::class,
+        ExperimentalMaterial3WindowSizeClassApi::class,
+    )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(getThemeId())
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            val currentQuery: String by viewModel.currentQuery.collectAsState()
+            val topAppBarState = rememberTopAppBarState()
+            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+            val bottomPadding =
+                if (isVanillaIceCreamPlus()) {
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding()
+                } else {
+                    0.dp
+                }
+
+            val items: List<DiaryDomain> by diaryViewModel.diaries.collectAsStateWithLifecycle()
+            val modifier: Modifier = Modifier
+
+            val focusManager = LocalFocusManager.current
+            val isKeyboardVisible = WindowInsets.isImeVisible
+
+            val windowSizeClass = calculateWindowSizeClass(this)
+
+            LaunchedEffect(isKeyboardVisible) {
+                if (!isKeyboardVisible) {
+                    focusManager.clearFocus()
+                }
+            }
+
+            AppTheme {
+                enableEdgeToEdge()
+                applyFullScreenStatusBarTheme()
+                updateNavigationBarAppearance()
+                Scaffold(
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                    containerColor = Color(config.screenBackgroundColor),
+                    content = { innerPadding ->
+                        val context = LocalContext.current
+                        val activity = LocalActivity.current
+                        val coroutineScope = rememberCoroutineScope()
+                        val settingCardModifier = Modifier.fillMaxWidth()
+                        val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
+                        var topToolbarHeight by remember { mutableStateOf(0.dp) }
+                        val density = LocalDensity.current
+                        val listState = rememberLazyListState()
+                        var thumbVisible by remember { mutableStateOf(false) }
+                        var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
+                        var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
+                        var hideJob: Job? by remember { mutableStateOf(null) }
+                        val delayTimeMillis = 500L
+                        val durationMillis = 1200
+
+                        // 스크롤 이벤트 감지
+                        LaunchedEffect(listState) {
+                            snapshotFlow { listState.isScrollInProgress }
+                                .collect { isScrolling ->
+                                    if (isScrolling) {
+                                        hideJob?.cancel()
+                                        thumbVisible = true
+                                    } else {
+                                        hideJob?.cancel()
+                                        hideJob =
+                                            launch {
+                                                delay(delayTimeMillis)
+                                                if (!isDraggingThumb) thumbVisible = false
+                                            }
+                                    }
+                                }
+                        }
+
+                        fun itemClickCallback(diary: DiaryDomain) {
+                            activity?.toast("itemClickCallback: ${diary.title}")
+                        }
+
+                        fun itemLongClickCallback() {
+                            activity?.toast("itemLongClickCallback")
+                        }
+
+                        when (windowSizeClass.widthSizeClass) {
+                            WindowWidthSizeClass.Compact -> {
+                                // 폰: 리스트 하나만 꽉 채워서 보여줌
+//                                makeToast("MyPhoneLayout()")
+                                CompactLayout(
+                                    innerPadding = innerPadding,
+                                    modifier = modifier,
+                                    listState = listState,
+                                    containerSize = containerSize,
+                                    isDraggingThumb = isDraggingThumb,
+                                    thumbVisible = thumbVisible,
+                                    hideJob = hideJob,
+                                    currentQuery = currentQuery,
+                                    delayTimeMillis = delayTimeMillis,
+                                    durationMillis = durationMillis,
+                                    enableCardViewPolicy = enableCardViewPolicy,
+                                    items = items,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                    thumbVisibleCallback = { value -> thumbVisible = value },
+                                    isDraggingThumbCallback = { value -> isDraggingThumb = value },
+                                    hideJobCallback = { value -> hideJob = value },
+                                    containerSizeCallback = { value -> containerSize = value },
+                                )
+                            }
+
+                            WindowWidthSizeClass.Medium -> {
+                                // 폴더블: 리스트를 보여주고 옆에 작은 툴바를 띄움
+//                                makeToast("MyFoldableLayout()")
+                                MediumLayout(
+                                    innerPadding = innerPadding,
+                                    modifier = modifier,
+                                    listState = listState,
+                                    containerSize = containerSize,
+                                    isDraggingThumb = isDraggingThumb,
+                                    thumbVisible = thumbVisible,
+                                    hideJob = hideJob,
+                                    currentQuery = currentQuery,
+                                    delayTimeMillis = delayTimeMillis,
+                                    durationMillis = durationMillis,
+                                    enableCardViewPolicy = enableCardViewPolicy,
+                                    items = items,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                    thumbVisibleCallback = { value -> thumbVisible = value },
+                                    isDraggingThumbCallback = { value -> isDraggingThumb = value },
+                                    hideJobCallback = { value -> hideJob = value },
+                                    containerSizeCallback = { value -> containerSize = value },
+                                )
+                            }
+
+                            WindowWidthSizeClass.Expanded -> {
+                                // 태블릿: 좌측엔 리스트, 우측엔 상세화면 (2단 분리)
+//                                makeToast("MyTabletSplitLayout()")
+                            }
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    /***************************************************************************************************
+     *   Define Compose
+     *
+     ***************************************************************************************************/
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun CompactLayout(
+        innerPadding: PaddingValues,
+        modifier: Modifier,
+        listState: LazyListState,
+        containerSize: IntSize,
+        isDraggingThumb: Boolean,
+        thumbVisible: Boolean,
+        hideJob: Job?,
+        currentQuery: String,
+        delayTimeMillis: Long,
+        durationMillis: Int,
+        enableCardViewPolicy: Boolean,
+        items: List<DiaryDomain>,
+        thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
+        isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
+        hideJobCallback: (job: Job) -> Unit,
+        containerSizeCallback: (containerSize: IntSize) -> Unit,
+        itemClickCallback: (diary: DiaryDomain) -> Unit = {},
+        itemLongClickCallback: () -> Unit = {},
+    ) {
+        val context = LocalContext.current
+        var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+        LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+            enablePhotoHighlight = context.config.enablePhotoHighlight
+        }
+
+        Column(
+            modifier =
+                modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+        ) {
+            PhotoHighlightCard(
+                height = 160.dp,
+                isVisible = enablePhotoHighlight,
+                onVisibilityChanged = { isVisible ->
+                    enablePhotoHighlight = isVisible
+                },
+            )
+            Box(
+                modifier = Modifier.weight(1f),
+            ) {
+                LazyColumn(
+                    state = listState,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .onSizeChanged {
+                                containerSizeCallback(it)
+                            },
+                    contentPadding =
+                        PaddingValues(
+                            bottom =
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding(),
+                        ),
+                ) {
+                    itemsIndexed(items) { index, diary ->
+                        Card(
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                            colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                            modifier = (
+                                if (enableCardViewPolicy) {
+                                    modifier.padding(
+                                        HORIZONTAL_PADDING.dp,
+                                        VERTICAL_PADDING.dp,
+                                    )
+                                } else {
+                                    modifier
+                                        .padding(1.dp, 1.dp)
+                                }
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                        ) {
+                            LegacyDiaryItemCard(
+                                diary = diary,
+                                itemClickCallback = { itemClickCallback(it) },
+                                itemLongClickCallback = { itemLongClickCallback() },
+                            )
+                        }
+                    }
+                }
+
+                FastScroll(
+                    items = items,
+                    listState = listState,
+                    containerHeightPx =
+                        containerSize.height.toFloat().minus(
+                            with(
+                                LocalDensity.current,
+                            ) {
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding()
+                                    .toPx()
+                            },
+                        ),
+                    isDraggingThumb = isDraggingThumb,
+                    thumbVisible = thumbVisible,
+                    containerSize = containerSize,
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(
+                                bottom =
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding(),
+                            ),
+                    showDebugCard = false,
+                    updateThumbVisible = { thumbVisibleCallback(it) },
+                    updateDraggingThumb = { isDraggingThumbCallback(it) },
+                    dragEndCallback = {
+                        hideJob?.cancel()
+                        lifecycleScope.launch {
+                            val hideJob =
+                                launch {
+                                    delay(delayTimeMillis)
+                                    if (!isDraggingThumb) {
+                                        thumbVisibleCallback(false)
+                                    }
+                                }
+                            hideJobCallback(hideJob)
+                        }
+                    },
+                )
+
+                Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    BottomSheet(
+                        title = "[Total: ${items.size}] category or title",
+                        currentQuery = currentQuery,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                    ) { query ->
+                        diaryViewModel.query.value = query
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun MediumLayout(
+        innerPadding: PaddingValues,
+        modifier: Modifier,
+        listState: LazyListState,
+        containerSize: IntSize,
+        isDraggingThumb: Boolean,
+        thumbVisible: Boolean,
+        hideJob: Job?,
+        currentQuery: String,
+        delayTimeMillis: Long,
+        durationMillis: Int,
+        enableCardViewPolicy: Boolean,
+        items: List<DiaryDomain>,
+        thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
+        isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
+        hideJobCallback: (job: Job) -> Unit,
+        containerSizeCallback: (containerSize: IntSize) -> Unit,
+        itemClickCallback: (diary: DiaryDomain) -> Unit = {},
+        itemLongClickCallback: () -> Unit = {},
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
+        ) {
+            Column(
+                modifier =
+                    modifier
+                        .weight(0.4f)
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+            ) {
+                PhotoHighlightCard(onVisibilityChanged = { isVisible ->
+                })
+            }
+            Column(modifier = Modifier.weight(0.6f)) {
+                Box(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    LazyColumn(
+                        state = listState,
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .onSizeChanged {
+                                    containerSizeCallback(it)
+                                },
+                        contentPadding =
+                            PaddingValues(
+                                bottom =
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding(),
+                            ),
+                    ) {
+                        itemsIndexed(items) { index, diary ->
+                            Card(
+                                shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                                colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
+                                modifier = (
+                                    if (enableCardViewPolicy) {
+                                        modifier.padding(
+                                            HORIZONTAL_PADDING.dp,
+                                            VERTICAL_PADDING.dp,
+                                        )
+                                    } else {
+                                        modifier
+                                            .padding(1.dp, 1.dp)
+                                    }
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
+                            ) {
+                                LegacyDiaryItemCard(
+                                    diary = diary,
+                                    itemClickCallback = { itemClickCallback(it) },
+                                    itemLongClickCallback = { itemLongClickCallback() },
+                                )
+                            }
+                        }
+                    }
+
+                    FastScroll(
+                        items = items,
+                        listState = listState,
+                        containerHeightPx =
+                            containerSize.height.toFloat().minus(
+                                with(
+                                    LocalDensity.current,
+                                ) {
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding()
+                                        .toPx()
+                                },
+                            ),
+                        isDraggingThumb = isDraggingThumb,
+                        thumbVisible = thumbVisible,
+                        containerSize = containerSize,
+                        modifier =
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(
+                                    bottom =
+                                        WindowInsets.navigationBars
+                                            .asPaddingValues()
+                                            .calculateBottomPadding(),
+                                ),
+                        showDebugCard = false,
+                        updateThumbVisible = { thumbVisibleCallback(it) },
+                        updateDraggingThumb = { isDraggingThumbCallback(it) },
+                        dragEndCallback = {
+                            hideJob?.cancel()
+                            lifecycleScope.launch {
+                                val hideJob =
+                                    launch {
+                                        delay(delayTimeMillis)
+                                        if (!isDraggingThumb) {
+                                            thumbVisibleCallback(false)
+                                        }
+                                    }
+                                hideJobCallback(hideJob)
+                            }
+                        },
+                    )
+
+                    this@Column.AnimatedVisibility(
+                        visible = !thumbVisible,
+                        enter = fadeIn(animationSpec = tween(durationMillis)),
+                        exit = fadeOut(animationSpec = tween(durationMillis)),
+                        modifier =
+                            Modifier
+                                .align(Alignment.BottomCenter),
+                    ) {
+                        BottomSheet(
+                            title = "[Total: ${items.size}] category or title",
+                            currentQuery = currentQuery,
+                            enableCardViewPolicy = enableCardViewPolicy,
+                        ) { query ->
+                            diaryViewModel.query.value = query
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun BottomSheet(
+        title: String,
+        currentQuery: String,
+        enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
+        fontSize: Float = LocalContext.current.config.settingFontSize,
+        fontColor: Color = Color(LocalContext.current.config.textColor),
+        alpha: Float = 1.0f,
+        fontWeight: FontWeight = FontWeight.Normal,
+        fontFamily: FontFamily? =
+            if (LocalInspectionMode.current) {
+                null
+            } else {
+                FontUtils.getComposeFontFamily(
+                    LocalContext.current,
+                )
+            },
+        lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+        callbackQuery: (query: String) -> Unit = {},
+    ) {
+        Column {
+            var isFocused by remember { mutableStateOf(false) }
+            Box(
+                modifier =
+                    Modifier
+                        .imePadding()
+                        .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                        .shadow(
+                            elevation = 15.dp,
+                            shape = RoundedCornerShape(15.dp),
+                            clip = false,
+                        ).background(
+                            color =
+                                if (isFocused || currentQuery.isNotEmpty()) {
+                                    Color(LocalContext.current.config.primaryColor).copy(alpha = 0.9f)
+                                } else {
+                                    Color(
+                                        LocalContext.current.config.backgroundColor,
+                                    ).copy(alpha = 0.9f)
+                                },
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp, ROUNDED_CORNER_SHAPE_SIZE.dp, 0.dp, 0.dp),
+                        ).border(
+                            1.dp,
+                            Color(
+                                LocalContext.current.config.primaryColor,
+                            ),
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
+                        ),
+            ) {
+                Column(
+                    modifier =
+                        Modifier
+                            .padding(5.dp)
+                            .navigationBarsPadding(),
+                ) {
+                    Row(
+                        modifier = Modifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        var text by remember { mutableStateOf(currentQuery) }
+                        val density = LocalDensity.current
+                        val textUnit =
+                            with(density) {
+                                val temp = fontSize.toDp()
+                                temp.toSp()
+                            }
+
+                        val focusRequester = remember { FocusRequester() }
+
+                        TextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                                callbackQuery.invoke(text)
+                            },
+                            label = {
+                                Text(
+                                    text = title,
+                                    style =
+                                        TextStyle(
+                                            fontFamily = fontFamily,
+                                            fontWeight = fontWeight,
+                                            color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
+                                            fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                                        ),
+                                )
+                            },
+                            colors =
+                                TextFieldDefaults.colors(
+                                    cursorColor = Color.White,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                ),
+                            textStyle =
+                                TextStyle(
+                                    fontFamily = fontFamily,
+                                    fontWeight = fontWeight,
+                                    color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(LocalContext.current.config.textColor),
+                                    fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                                ),
+                            singleLine = true,
+                            trailingIcon = {
+                                if (text.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        text = ""
+                                        callbackQuery.invoke(text)
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Clear text",
+                                            tint = Color.White,
+                                        )
+                                    }
+                                }
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp)
+                                    .focusRequester(focusRequester)
+                                    .onFocusChanged { focusState ->
+                                        isFocused = focusState.isFocused
+                                    },
+                        )
+                    }
+                    BottomToolBarContainer(
+                        isAutoPadding = false,
+                    ) {
+                        CustomElevatedButton(
+                            text = getString(R.string.button_new_entry),
+                            iconResourceId = R.drawable.ic_edit,
+                            iconSize = 16.dp,
+                        ) {
+                            val createDiary =
+                                Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                createDiary,
+                            )
+                        }
+                        CustomElevatedButton(
+                            text = getString(R.string.button_tree_view),
+                            iconResourceId = R.drawable.ic_tree_structure,
+                            iconSize = 16.dp,
+                        ) {
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
+                            )
+                        }
+                        CustomElevatedButton(
+                            text = "TODAY",
+                            iconResourceId = R.drawable.ic_time_8_w,
+                            iconSize = 16.dp,
+                        ) {
+                            makeSnackBar("moveToday()")
+                        }
+
+                        if (config.enableDebugMode) {
+                            CustomElevatedButton(
+                                text = getString(R.string.button_quick_settings),
+                                iconResourceId = R.drawable.ic_running,
+                                iconSize = 16.dp,
+                            ) {
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
+                                )
+                            }
+                            CustomElevatedButton(
+                                iconResourceId = R.drawable.ic_bug_2,
+                                iconSize = 16.dp,
+                            ) {
+                                TransitionHelper.startActivityWithTransition(
+                                    this@DiaryMainActivity,
+                                    Intent(this@DiaryMainActivity, DevActivity::class.java),
+                                )
+                            }
+                            CustomElevatedButton(
+                                text = "MENU",
+                                iconResourceId = R.drawable.ic_options_three_dots,
+                                iconSize = 16.dp,
+                            ) {
+                                makeSnackBar("openCustomOptionMenu()")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

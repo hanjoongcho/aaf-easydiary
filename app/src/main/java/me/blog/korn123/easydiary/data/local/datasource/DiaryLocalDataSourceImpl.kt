@@ -49,6 +49,11 @@ class DiaryLocalDataSourceImpl
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosByPhotoUri(photoUriString)
 
+        override fun observeDiariesByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<DiaryEntity>> = diaryDao.observeDiariesByDateString(dateString, isAsc)
+
         override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,

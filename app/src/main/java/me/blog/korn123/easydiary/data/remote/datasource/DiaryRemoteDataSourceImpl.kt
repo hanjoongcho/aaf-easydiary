@@ -32,6 +32,11 @@ class DiaryRemoteDataSourceImpl
 
         override fun getDiaryWithPhotosByPhotoUri(photoUriString: String): Flow<DiaryWithPhotos?> = flowOf(null)
 
+        override fun observeDiariesByDateString(
+            dateString: String,
+            isAsc: Boolean,
+        ): Flow<List<DiaryEntity>> = flowOf(emptyList())
+
         override suspend fun getDiariesByDateString(
             dateString: String,
             isAsc: Boolean,

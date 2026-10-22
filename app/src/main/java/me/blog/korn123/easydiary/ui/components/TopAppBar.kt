@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +39,7 @@ fun EasyDiaryActionBar(
     title: String? = null,
     subTitle: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    useCloseIcon: Boolean = false,
     close: () -> Unit,
 ) {
     val isDarkMode = isSystemInDarkTheme()
@@ -61,7 +64,6 @@ fun EasyDiaryActionBar(
             Column(
                 modifier =
                 Modifier,
-//                        .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 title?.let {
@@ -80,7 +82,7 @@ fun EasyDiaryActionBar(
                                 color = Color.White,
                                 fontSize =
                                     TextUnit(
-                                        currentTextUnit.value.times(1.0F),
+                                        currentTextUnit.value.times(if (subTitle != null) 1.2F else 1.3F),
                                         TextUnitType.Sp,
                                     ),
                             ),
@@ -107,55 +109,33 @@ fun EasyDiaryActionBar(
                                     ),
                             ),
                         modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
-//                   modifier = Modifier
-//                       .fillMaxWidth()
-//                       .wrapContentWidth(Alignment.End)
                     )
                 }
             }
         },
         navigationIcon = {
             IconButton(onClick = { close.invoke() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = "액션 아이콘",
-                )
+                if (useCloseIcon) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cross),
+                        contentDescription = "닫기 아이콘",
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "뒤로가기 아이콘",
+                    )
+                }
             }
         },
-//        actions = {
-//            IconButton(onClick = { close.invoke() }) {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.ic_cross),
-//                    contentDescription = "액션 아이콘"
-//                )
-//            }
-//        },
         colors =
             TopAppBarColors(
-//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
-//            Color(ColorUtils.setAlphaComponent(LocalContext.current.config.primaryColor, 230)),
                 containerColor = Color(LocalContext.current.config.primaryColor),
                 scrolledContainerColor = Color(LocalContext.current.config.primaryColor),
                 navigationIconContentColor = Color.White,
                 titleContentColor = Color.White,
                 actionIconContentColor = Color.White,
                 subtitleContentColor = Color.White,
-            ),
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DummyActionBar() {
-    TopAppBar(
-        title = {},
-        colors =
-            TopAppBarColors(
-                Color(LocalContext.current.config.primaryColor),
-                Color(LocalContext.current.config.primaryColor),
-                Color.White,
-                Color.White,
-                Color.White,
             ),
     )
 }

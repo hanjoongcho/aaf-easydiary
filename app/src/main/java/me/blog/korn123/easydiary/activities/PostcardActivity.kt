@@ -16,14 +16,10 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
-import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder
-import com.github.amlcurran.showcaseview.ShowcaseView
-import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import kotlinx.coroutines.CoroutineScope
+import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,8 +31,30 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardBinding
 import me.blog.korn123.easydiary.enums.Calculation
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.actionBarHeight
+import me.blog.korn123.easydiary.extensions.applicationScope
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.getUriForFile
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.statusBarHeight
+import me.blog.korn123.easydiary.extensions.updateTextSize
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.POSTCARD_BG_COLOR
+import me.blog.korn123.easydiary.helper.POSTCARD_BG_COLOR_VALUE
+import me.blog.korn123.easydiary.helper.POSTCARD_TEXT_COLOR
+import me.blog.korn123.easydiary.helper.POSTCARD_TEXT_COLOR_VALUE
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.io.File
 
 /**
@@ -45,7 +63,6 @@ import java.io.File
 
 class PostcardActivity : EasyDiaryActivity() {
     lateinit var mBinding: ActivityPostcardBinding
-    lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
     lateinit var mPhotoAdapter: PhotoAdapter
     private var mSequence: Long = 0
@@ -206,35 +223,15 @@ class PostcardActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.bgColor -> {
-                ColorPickerDialogBuilder
-                    .with(this@PostcardActivity)
-                    //                        .setTitle("Choose Color")
-                    .initialColor(mBgColor)
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .setPositiveButton("ok") { dialog, selectedColor, allColors ->
-                        setBackgroundColor(selectedColor)
-                    }.setNegativeButton("cancel") { dialog, which -> }
-                    // 						.showColorEdit(true)
-                    //                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
-                    .build()
-                    .show()
+                ColorPickerDialog(this, mBgColor) { color ->
+                    setBackgroundColor(color)
+                }
             }
 
             R.id.textColor -> {
-                ColorPickerDialogBuilder
-                    .with(this@PostcardActivity)
-                    //                        .setTitle("Choose Color")
-                    .initialColor(mTextColor)
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .setPositiveButton("ok") { dialog, selectedColor, allColors ->
-                        setTextColor(selectedColor)
-                    }.setNegativeButton("cancel") { dialog, which -> }
-                    // 						.showColorEdit(true)
-                    //                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
-                    .build()
-                    .show()
+                ColorPickerDialog(this, mTextColor) { color ->
+                    setTextColor(color)
+                }
             }
 
             R.id.save -> {
@@ -280,52 +277,6 @@ class PostcardActivity : EasyDiaryActivity() {
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         centerParams.setMargins(0, 0, 0, margin)
-
-        val showcaseViewOnClickListener =
-            View.OnClickListener {
-                when (showcaseIndex) {
-                    1 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setTarget(ViewTarget(R.id.textColor, this@PostcardActivity))
-                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_1))
-                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_1))
-                    }
-
-                    2 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setTarget(ViewTarget(R.id.bgColor, this@PostcardActivity))
-                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_2))
-                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_2))
-                    }
-
-                    3 -> {
-                        mShowcaseView.setButtonPosition(centerParams)
-                        mShowcaseView.setTarget(ViewTarget(R.id.save, this@PostcardActivity))
-                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3))
-                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3))
-                        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
-                    }
-
-                    4 -> {
-                        mShowcaseView.hide()
-                    }
-                }
-                showcaseIndex++
-            }
-
-        mShowcaseView =
-            ShowcaseView
-                .Builder(this)
-                .withMaterialShowcase()
-                .setContentTitle(getString(R.string.post_card_showcase_title_0))
-                .setContentText(getString(R.string.post_card_showcase_message_0))
-                .setStyle(R.style.ShowcaseTheme)
-                .singleShot(SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER.toLong())
-                .setOnClickListener(showcaseViewOnClickListener)
-                .blockAllTouches()
-                .build()
-        mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_1))
-        mShowcaseView.setButtonPosition(centerParams)
     }
 
     private fun exportDiaryCard(showInfoDialog: Boolean) {
