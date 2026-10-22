@@ -205,8 +205,6 @@ import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -1382,9 +1380,11 @@ fun Context.createTemporaryPhotoFile(
 
     when (fromUri) {
         true -> {
-            val inputStream = contentResolver.openInputStream(uri!!)
-            IOUtils.copy(inputStream, FileOutputStream(temporaryFile.absoluteFile))
-            IOUtils.closeQuietly(inputStream)
+            contentResolver.openInputStream(uri!!)?.use { inputStream ->
+                FileOutputStream(temporaryFile.absoluteFile).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
         }
 
         false -> {

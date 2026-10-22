@@ -2,11 +2,8 @@ package me.blog.korn123.commons.utils
 
 import android.annotation.SuppressLint
 import me.blog.korn123.easydiary.helper.PrepareReleaseConstants
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import org.junit.Test
 import java.io.File
-import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 
 class PrepareRelease {
@@ -76,7 +73,7 @@ class PrepareRelease {
                 File("./src/main/res/").listFiles()?.map { localeFolder ->
                     if (localeFolder.name.startsWith("values")) {
                         if (localeFolder.name == "values") {
-                            valuesDefault = FileUtils.readLines(File(localeFolder.absolutePath + "/strings.xml"), StandardCharsets.UTF_8)
+                            valuesDefault = File(localeFolder, "strings.xml").readLines(StandardCharsets.UTF_8)
                             println("Total lines: ${valuesDefault?.size}")
                             defaultRelease = determineLastReleaseStartLine(valuesDefault)
                             defaultRelease?.let {
@@ -94,7 +91,7 @@ class PrepareRelease {
                         } else {
                             localeFolder.listFiles()?.map { targetFile ->
                                 if (targetFile.name == "strings.xml") {
-                                    val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
+                                    val valuesOther = targetFile.readLines(StandardCharsets.UTF_8).toMutableList()
                                     println(localeFolder.name + ": " + valuesOther.size)
                                     val valuesDefaultTotal = valuesDefault?.size ?: 0
                                     val otherRelease = determineLastReleaseStartLine(valuesOther)
@@ -123,9 +120,9 @@ class PrepareRelease {
                                             }
                                         }
                                     }
-                                    val os = FileOutputStream(targetFile)
-                                    IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
-                                    os.close()
+                                    targetFile.printWriter(StandardCharsets.UTF_8).use { writer ->
+                                        valuesOther.forEach { writer.println(it) }
+                                    }
                                 }
                             }
                         }
@@ -144,12 +141,12 @@ class PrepareRelease {
                                 file.name.startsWith("RELEASE_ja.txt") -> "ja"
                                 else -> "ko"
                             }
-                        val releaseNotes = FileUtils.readLines(file, StandardCharsets.UTF_8)
+                        val releaseNotes = file.readLines(StandardCharsets.UTF_8).toMutableList()
                         releaseNotes?.let {
                             val infoLine = it[6]
                             val releaseNoteVersionName = infoLine.split("# Changes in ")[1].split(" ")[0]
                             val valuesFilePath = "./src/main/res/values-$locale/strings.xml"
-                            val strings = FileUtils.readLines(File(valuesFilePath), StandardCharsets.UTF_8)
+                            val strings = File(valuesFilePath).readLines(StandardCharsets.UTF_8)
                             val release = determineLastReleaseStartLine(strings)
                             determineLastReleaseEndLine(strings, release, true)
                             if (releaseNoteVersionName != release.currentVersionName) {
@@ -169,9 +166,9 @@ class PrepareRelease {
                                 }
                             }
 
-                            val os = FileOutputStream(file)
-                            IOUtils.writeLines(releaseNotes, null, os, StandardCharsets.UTF_8)
-                            os.close()
+                            file.printWriter(StandardCharsets.UTF_8).use { writer ->
+                                releaseNotes.forEach { writer.println(it) }
+                            }
                         }
                     }
                 }

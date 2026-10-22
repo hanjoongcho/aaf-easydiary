@@ -6,7 +6,6 @@ hilt = "2.60.1"
 
 appcompat = "1.8.0"
 cardview = "1.0.0"
-legacySupportV4 = "1.0.0"
 vectordrawable = "1.2.0"
 constraintlayout = "2.2.2"
 biometric = "1.1.0"
@@ -40,8 +39,6 @@ material = "1.14.0"
 gson = "2.14.0"
 guava = "33.7.2-android"
 
-commonsIo = "2.22.0"
-
 aafactoryCommons = "1.2.0"
 calendarCompose = "2.10.1"
 dotsindicator = "5.1.2"
@@ -71,7 +68,6 @@ junit = "4.13.2"
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
-androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-vectordrawable = { group = "androidx.vectordrawable", name = "vectordrawable", version.ref = "vectordrawable" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
@@ -122,8 +118,6 @@ google-android-flexbox = { group = "com.google.android.flexbox", name = "flexbox
 google-android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 google-code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 google-guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
-
-commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
 
 io-github-aafactory-commons = { group = "io.github.aafactory", name = "commons", version.ref = "aafactoryCommons" }
 

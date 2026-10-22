@@ -15,7 +15,6 @@ import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.helper.ZipHelper
-import org.apache.commons.io.FileUtils
 import java.io.File
 
 class FullBackupWorker(
@@ -58,9 +57,11 @@ class FullBackupWorker(
 //        mZipHelper.printFileNames()
         mZipHelper.compress(compressFile)
         if (mZipHelper.isOnProgress) {
-//            FileUtils.moveFile(compressFile, destFile)
-            FileUtils.copyFile(compressFile, os)
-            os?.close()
+            compressFile.inputStream().use { input ->
+                os?.use { output ->
+                    input.copyTo(output)
+                }
+            }
             isExportSuccessful = true
             val compressFileSize = compressFile.length().toDisplaySize()
             compressFile.delete()

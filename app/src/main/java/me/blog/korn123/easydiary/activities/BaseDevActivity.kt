@@ -115,7 +115,6 @@ import me.blog.korn123.easydiary.ui.components.SymbolCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import org.apache.commons.io.IOUtils
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
@@ -229,7 +228,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 GsonBuilder().setPrettyPrinting().create().toJson(mapOfItems)
                             val fileName = targetUri.path ?: ""
                             contentResolver.openOutputStream(targetUri)?.use { outputStream ->
-                                IOUtils.write(jsonString, outputStream, "UTF-8")
+                                outputStream.write(jsonString.toByteArray(Charsets.UTF_8))
                             }
                         }
                         makeToast("Export successful!")
@@ -400,8 +399,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         // opens input stream from the HTTP connection
-                        val inputStream = httpConn.inputStream
-                        val lines = IOUtils.readLines(inputStream, "UTF-8")
+                        val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }
                         withContext(Dispatchers.Main) {
                             makeToast(lines[0])
 //                            if (lines[0].contains("true")) {
@@ -410,7 +408,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 //                                finish()
 //                            }
                         }
-                        inputStream.close()
                     }
                     httpConn.disconnect()
                 }

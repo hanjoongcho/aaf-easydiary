@@ -24,10 +24,7 @@ import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -111,14 +108,14 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             // always check HTTP response code first
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // opens input stream from the HTTP connection
-                val inputStream = httpConn.inputStream
-                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }.toMutableList()
                 if (mForceAppendCodeBlock) {
                     lines.add(0, "```java")
                     lines.add("```")
                 }
-                FileUtils.writeLines(File(saveFilePath), "UTF-8", lines)
-                inputStream.close()
+                File(saveFilePath).printWriter(Charsets.UTF_8).use { writer ->
+                    lines.forEach { writer.println(it) }
+                }
             }
             httpConn.disconnect()
 
@@ -181,7 +178,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     private fun readSavedFile(): String {
         val sb = StringBuilder()
         try {
-            val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
+            val lines = File(savedFilePath).readLines(Charsets.UTF_8)
             lines.map {
                 sb.append(it)
                 sb.append(System.lineSeparator())

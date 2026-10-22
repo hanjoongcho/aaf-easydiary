@@ -220,9 +220,6 @@ dependencies {
     //noinspection NewerVersionAvailable
     implementation(libs.google.guava)
 
-    // Apache Commons
-    implementation(libs.commons.io)
-
     // AAFactory
     implementation(libs.io.github.aafactory.commons) {
         exclude(group = "com.werb.eventbuskotlin", module = "eventbuskotlin")

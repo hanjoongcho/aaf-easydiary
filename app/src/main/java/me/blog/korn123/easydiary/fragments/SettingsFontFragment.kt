@@ -58,7 +58,6 @@ import me.blog.korn123.easydiary.ui.components.SimpleCard
 import me.blog.korn123.easydiary.ui.components.SwitchCard
 import me.blog.korn123.easydiary.ui.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
-import org.apache.commons.io.FileUtils
 import java.io.File
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {
@@ -89,9 +88,12 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                             if (fileName.getExtension().equals("ttf", true)) {
                                 Thread(
                                     Runnable {
-                                        val inputStream = contentResolver.openInputStream(uri)
                                         val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
-                                        FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                                        contentResolver.openInputStream(uri)?.use { inputStream ->
+                                            File(fontDestDir, fileName).outputStream().use { fos ->
+                                                inputStream.copyTo(fos)
+                                            }
+                                        }
                                         runOnUiThread {
                                             progressContainer.visibility = View.GONE
                                             showAlertDialog("${fileName.getBaseName()} font file is registered.", null)

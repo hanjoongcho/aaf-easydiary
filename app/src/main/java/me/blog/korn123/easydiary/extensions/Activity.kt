@@ -84,11 +84,8 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.SlidingTabLayout
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -747,9 +744,9 @@ fun Activity.exportHtmlBook(
     diaryList: List<DiaryDomain>,
 ) {
     uri?.let {
-        val os = contentResolver.openOutputStream(it)
-        IOUtils.write(createHtmlString(diaryList), os, "UTF-8")
-        os?.close()
+        contentResolver.openOutputStream(it)?.use { os ->
+            os.write(createHtmlString(diaryList).toByteArray(Charsets.UTF_8))
+        }
     }
 }
 
@@ -843,8 +840,6 @@ fun Activity.photoToBase64(photoPath: String): String {
     val bos = ByteArrayOutputStream()
     try {
         val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
-//        val fis = FileInputStream(photoPath)
-//        IOUtils.copy(fis, bos)
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
         image64 = bos.toByteArray().toBase64()
@@ -1110,14 +1105,14 @@ fun Activity.uriToFile(
     var result = false
     try {
         val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
-        val inputStream = contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(tempFile)
-        IOUtils.copy(inputStream, outputStream)
-        IOUtils.closeQuietly(inputStream)
-        IOUtils.closeQuietly(outputStream)
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            tempFile.outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
 
         val compressedFile = Compressor(this).setQuality(70).compressToFile(tempFile)
-        FileUtils.copyFile(compressedFile, File(photoPath))
+        compressedFile.copyTo(File(photoPath), overwrite = true)
         result = true
     } catch (e: Exception) {
         e.printStackTrace()

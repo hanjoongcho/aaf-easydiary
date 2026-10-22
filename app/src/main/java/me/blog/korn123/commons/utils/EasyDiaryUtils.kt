@@ -77,7 +77,6 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
-import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -309,24 +308,25 @@ object EasyDiaryUtils {
         destFile: File,
     ): String {
         val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
-        val uriStream = context.contentResolver.openInputStream(uri)
         when (mimeType) {
             "image/gif" -> {
 //                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
-                val fos = FileOutputStream(destFile)
-                IOUtils.copy(uriStream, fos)
-                uriStream?.close()
-                fos.close()
+                context.contentResolver.openInputStream(uri)?.use { input ->
+                    FileOutputStream(destFile).use { fos ->
+                        input.copyTo(fos)
+                    }
+                }
             }
 
             else -> {
                 val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
-                val fos = FileOutputStream(tempFile)
-                IOUtils.copy(uriStream, fos)
+                context.contentResolver.openInputStream(uri)?.use { input ->
+                    FileOutputStream(tempFile).use { fos ->
+                        input.copyTo(fos)
+                    }
+                }
                 val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
                 compressedFile.copyTo(destFile, true)
-                uriStream?.close()
-                fos.close()
                 tempFile.delete()
             }
         }
