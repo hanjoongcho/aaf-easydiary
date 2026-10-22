@@ -11,11 +11,11 @@ import androidx.compose.ui.text.font.FontFamily
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
+import me.blog.korn123.easydiary.extensions.getBaseName
 import me.blog.korn123.easydiary.extensions.preferencesContains
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedTextView
-import org.apache.commons.io.FilenameUtils
 import java.io.File
 import java.util.*
 
@@ -159,7 +159,7 @@ object FontUtils {
                 break
             }
         }
-        return displayName ?: FilenameUtils.getBaseName(fontFileName)
+        return displayName ?: fontFileName.getBaseName()
     }
 
     fun measureTextWidth(
