@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -106,8 +107,26 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             }
 
                             REQUEST_CODE_SAF_READ_ROOM -> {
+                                fun getFileNameFromUri(uri: Uri): String {
+                                    if (uri.scheme == "content") {
+                                        applicationContext.contentResolver
+                                            .query(
+                                                uri,
+                                                arrayOf(OpenableColumns.DISPLAY_NAME),
+                                                null,
+                                                null,
+                                                null,
+                                            )?.use { cursor ->
+                                                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                                                if (nameIndex != -1 && cursor.moveToFirst()) {
+                                                    return cursor.getString(nameIndex)
+                                                }
+                                            }
+                                    }
+                                    return ""
+                                }
                                 it.data?.data?.let { uri ->
-                                    when (classifyUriByExtension(uri.toString())) {
+                                    when (classifyUriByExtension(getFileNameFromUri(uri))) {
                                         UriFileType.ROOM -> {
                                             lifecycleScope.launch {
                                                 importRoomDataWithSAF(
