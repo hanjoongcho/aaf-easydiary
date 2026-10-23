@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.helper.Config
+import me.blog.korn123.easydiary.utils.FontUtils
 
 val Fragment.config: Config get() = Config.newInstance(requireContext().applicationContext)
 

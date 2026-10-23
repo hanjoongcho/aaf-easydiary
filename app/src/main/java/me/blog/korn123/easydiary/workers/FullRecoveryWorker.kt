@@ -7,17 +7,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
-import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.TEXT_COLOR
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.jsonFileToHashMap
-import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.jsonStringToPreference
 import me.blog.korn123.easydiary.helper.*
-import java.io.File
+import me.blog.korn123.easydiary.utils.FontUtils
 
 class FullRecoveryWorker(
     private val context: Context,

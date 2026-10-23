@@ -40,11 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.werb.pickphotoview.util.PickConfig
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -91,6 +87,10 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createBackgroundGradientDrawable
+import me.blog.korn123.easydiary.utils.JasyptUtils
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat

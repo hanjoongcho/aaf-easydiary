@@ -22,10 +22,7 @@ import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.RenderProps
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
@@ -33,6 +30,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import org.commonmark.node.Emphasis
 import org.commonmark.node.ListItem
 import org.commonmark.node.StrongEmphasis

@@ -316,6 +316,7 @@ import me.blog.korn123.easydiary.helper.WEATHER_TEMPERATURE_H
 import me.blog.korn123.easydiary.helper.WEATHER_TEMPERATURE_L
 import me.blog.korn123.easydiary.helper.WEATHER_TEMPERATURE_M
 import me.blog.korn123.easydiary.helper.WEATHER_UMBRELLA
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 
 object FlavorUtils {
     fun sequenceToSymbolResourceId(sequence: Int) =

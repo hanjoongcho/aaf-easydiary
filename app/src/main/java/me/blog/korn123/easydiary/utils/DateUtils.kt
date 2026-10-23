@@ -1,4 +1,4 @@
-package me.blog.korn123.commons.utils
+package me.blog.korn123.easydiary.utils
 
 import android.content.Context
 import me.blog.korn123.easydiary.enums.DateTimeFormat

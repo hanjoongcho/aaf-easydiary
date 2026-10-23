@@ -51,10 +51,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.presentation.tree.FileNode
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -70,6 +67,9 @@ import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivit
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.components.FastScroll
 import me.blog.korn123.easydiary.presentation.components.SimpleText
+import me.blog.korn123.easydiary.presentation.tree.FileNode
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.util.Calendar
 
 @Composable

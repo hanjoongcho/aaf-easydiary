@@ -87,7 +87,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DevActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -102,15 +101,15 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
-import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
-import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
 import me.blog.korn123.easydiary.presentation.components.FastScroll
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.main.components.PhotoHighlightCard
+import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint

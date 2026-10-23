@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPinLockBinding
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -19,6 +18,7 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
+import me.blog.korn123.easydiary.utils.FontUtils
 
 class PinLockActivity : BaseSimpleActivity() {
     private lateinit var mBinding: ActivityPinLockBinding

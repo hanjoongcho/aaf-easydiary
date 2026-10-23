@@ -61,7 +61,6 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -82,6 +81,7 @@ import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -286,9 +286,10 @@ fun CalendarContent(
                                 if (enableScroll) {
                                     calendarViewModel.setSelectedDate(clicked)
                                 } else {
-                                    val intent = Intent(context, SelectedDateEventsActivity::class.java).apply {
-                                        putExtra("SELECTED_DATE", clicked.toString())
-                                    }
+                                    val intent =
+                                        Intent(context, SelectedDateEventsActivity::class.java).apply {
+                                            putExtra("SELECTED_DATE", clicked.toString())
+                                        }
                                     TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
                                 }
                             }

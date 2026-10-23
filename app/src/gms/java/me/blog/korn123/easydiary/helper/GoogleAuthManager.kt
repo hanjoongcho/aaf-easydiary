@@ -20,12 +20,9 @@ import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.EventDateTime
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
 import me.blog.korn123.easydiary.extensions.applicationScope
@@ -35,6 +32,7 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AuthManager
 import me.blog.korn123.easydiary.helper.GCalendarConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId

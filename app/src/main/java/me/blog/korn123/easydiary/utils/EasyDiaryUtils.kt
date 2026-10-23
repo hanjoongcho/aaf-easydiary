@@ -1,10 +1,9 @@
-package me.blog.korn123.commons.utils
+package me.blog.korn123.easydiary.utils
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -40,7 +39,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
-import androidx.lifecycle.application
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.MultiTransformation
@@ -77,6 +75,7 @@ import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.views.FixedCardView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -282,7 +281,7 @@ object EasyDiaryUtils {
 
         val margin = activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP, Calculation.FLOOR)
         val contentPadding = activity.dpToPixel(attachCardContentPadding, Calculation.FLOOR)
-        return me.blog.korn123.easydiary.views.FixedCardView(activity).apply {
+        return FixedCardView(activity).apply {
             activity.updateDashboardInnerCard(this)
             setLayoutParams(
                 ViewGroup

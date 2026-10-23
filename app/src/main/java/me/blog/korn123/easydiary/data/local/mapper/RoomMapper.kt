@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.data.local.mapper
 
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 import me.blog.korn123.easydiary.data.local.entity.DDayEntity
@@ -16,6 +15,7 @@ import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.utils.DateUtils
 
 fun Diary.toEntity(): DiaryEntity =
     DiaryEntity(

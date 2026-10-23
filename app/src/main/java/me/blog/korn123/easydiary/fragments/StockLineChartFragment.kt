@@ -25,10 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
@@ -36,6 +33,9 @@ import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -581,7 +581,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 false,
                 requireContext().config.devStockChartOptionFromMillis,
                 mEndMillis,
-                DAILY_STOCK
+                DAILY_STOCK,
             )
         var index = 0
         var totalSum = 0F

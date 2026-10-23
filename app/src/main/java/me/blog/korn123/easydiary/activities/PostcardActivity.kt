@@ -23,9 +23,6 @@ import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.BitmapUtils
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
@@ -40,6 +37,7 @@ import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.getUriForFile
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.saveBitmapToFileCache
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.statusBarHeight
 import me.blog.korn123.easydiary.extensions.updateTextSize
@@ -53,8 +51,9 @@ import me.blog.korn123.easydiary.helper.POSTCARD_TEXT_COLOR
 import me.blog.korn123.easydiary.helper.POSTCARD_TEXT_COLOR_VALUE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD
-import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.io.File
 
 /**
@@ -293,7 +292,7 @@ class PostcardActivity : EasyDiaryActivity() {
                     val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
                     EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
-                    BitmapUtils.saveBitmapToFileCache(createBitmap(), mSavedDiaryCardPath)
+                    createBitmap().saveBitmapToFileCache(mSavedDiaryCardPath)
                     withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         if (showInfoDialog) {

@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.activities.DashboardActivity
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
@@ -33,11 +32,11 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DateUtilConstants
-import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.calendar.CalendarContent
 import me.blog.korn123.easydiary.presentation.calendar.CalendarViewModel
-import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

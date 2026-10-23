@@ -13,7 +13,6 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityFingerprintLockBinding
 import me.blog.korn123.easydiary.extensions.applyBottomNavigationInsets
@@ -25,6 +24,7 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator

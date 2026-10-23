@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.utils.FontUtils
 
 @Composable
 fun SimpleText(

@@ -1,4 +1,4 @@
-package me.blog.korn123.commons.utils
+package me.blog.korn123.easydiary.utils
 
 import me.blog.korn123.easydiary.helper.PrepareReleaseConstants
 import java.io.File
@@ -90,9 +90,10 @@ class PrepareRelease {
 
         when (syncMode) {
             PrepareReleaseConstants.SYNC_RELEASE_STRING, PrepareReleaseConstants.SYNC_NEW_STRING -> {
-                val otherLocaleFolders = resDir.listFiles()?.filter {
-                    it.isDirectory && it.name.startsWith("values-")
-                } ?: emptyList()
+                val otherLocaleFolders =
+                    resDir.listFiles()?.filter {
+                        it.isDirectory && it.name.startsWith("values-")
+                    } ?: emptyList()
 
                 otherLocaleFolders.forEach { localeFolder ->
                     val targetFile = File(localeFolder, "strings.xml")
@@ -142,11 +143,12 @@ class PrepareRelease {
                 val assetsDir = File("./src/main/assets/")
                 assetsDir.listFiles()?.filter { it.isFile && it.name.startsWith("RELEASE") }?.forEach { file ->
                     println(file.absolutePath)
-                    val locale = when {
-                        file.name.startsWith("RELEASE_en.txt") -> "en"
-                        file.name.startsWith("RELEASE_ja.txt") -> "ja"
-                        else -> "ko"
-                    }
+                    val locale =
+                        when {
+                            file.name.startsWith("RELEASE_en.txt") -> "en"
+                            file.name.startsWith("RELEASE_ja.txt") -> "ja"
+                            else -> "ko"
+                        }
                     val releaseNotes = file.readLines(StandardCharsets.UTF_8).toMutableList()
                     if (releaseNotes.size > 6) {
                         val infoLine = releaseNotes[6]
@@ -160,9 +162,10 @@ class PrepareRelease {
                                 determineLastReleaseEndLine(strings, release, true)
                                 if (releaseNoteVersionName != release.currentVersionName) {
                                     println("Update release note version to ${release.currentVersionName} from $releaseNoteVersionName")
-                                    val newLines = arrayListOf(
-                                        "\n# Changes in ${release.currentVersionName} (date: ${release.currentVersionReleaseDate})"
-                                    )
+                                    val newLines =
+                                        arrayListOf(
+                                            "\n# Changes in ${release.currentVersionName} (date: ${release.currentVersionReleaseDate})",
+                                        )
                                     if (release.releaseInfoLines.size >= 3) {
                                         for (lineIndex in 2 until release.releaseInfoLines.size - 1) {
                                             val newLine = "  * ${release.releaseInfoLines[lineIndex].replace("\\n", "").trim()}"

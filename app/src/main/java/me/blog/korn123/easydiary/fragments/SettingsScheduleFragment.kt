@@ -31,7 +31,6 @@ import com.simplemobiletools.commons.extensions.moveLastItemToFront
 import com.simplemobiletools.commons.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
@@ -60,6 +59,7 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
+import me.blog.korn123.easydiary.utils.FontUtils
 import kotlin.getValue
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain

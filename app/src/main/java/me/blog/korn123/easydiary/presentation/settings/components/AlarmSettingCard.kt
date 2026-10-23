@@ -40,13 +40,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.SimpleText
+import me.blog.korn123.easydiary.utils.FontUtils
 
 /***************************************************************************************************
  *   Alarm Setting Card
@@ -130,8 +130,7 @@ fun AlarmCard(
                                 .background(
                                     Color.White,
                                     shape = RoundedCornerShape(3.dp),
-                                )
-                                .border(
+                                ).border(
                                     1.dp,
                                     Color(LocalContext.current.config.primaryColor).copy(1.0f),
                                     shape = RoundedCornerShape(3.dp),

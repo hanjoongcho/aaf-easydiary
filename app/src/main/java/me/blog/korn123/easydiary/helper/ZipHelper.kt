@@ -13,11 +13,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException

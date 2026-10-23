@@ -60,9 +60,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
@@ -101,9 +98,10 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
 import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
-import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.settings.components.ScrollableCard
@@ -113,8 +111,10 @@ import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.presentation.settings.components.SymbolCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
-import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.utils.BiometricUtils.Companion.startListeningBiometric
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain

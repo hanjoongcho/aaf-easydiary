@@ -1,4 +1,4 @@
-package me.blog.korn123.commons.utils
+package me.blog.korn123.easydiary.utils
 
 import android.app.Activity
 import android.content.Context
@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -22,10 +23,10 @@ class BiometricUtils {
         }
 
         private fun canAuthenticateWithBiometrics(context: Context): Boolean {
-            val biometricManager = androidx.biometric.BiometricManager.from(context)
+            val biometricManager = BiometricManager.from(context)
             return biometricManager.canAuthenticate(
-                androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG,
-            ) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+                BiometricManager.Authenticators.BIOMETRIC_STRONG,
+            ) == BiometricManager.BIOMETRIC_SUCCESS
         }
 
         private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
