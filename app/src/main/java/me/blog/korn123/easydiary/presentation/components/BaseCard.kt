@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

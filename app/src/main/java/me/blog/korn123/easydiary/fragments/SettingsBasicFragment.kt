@@ -58,11 +58,11 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.ui.components.RadioGroupCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SwitchCard
-import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.settings.components.RadioGroupCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardTodo
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 import java.text.SimpleDateFormat
 

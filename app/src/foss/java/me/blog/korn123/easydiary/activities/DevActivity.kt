@@ -28,10 +28,10 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
-import me.blog.korn123.easydiary.ui.components.CardContainer
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {

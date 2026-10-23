@@ -71,8 +71,8 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
 import java.io.File

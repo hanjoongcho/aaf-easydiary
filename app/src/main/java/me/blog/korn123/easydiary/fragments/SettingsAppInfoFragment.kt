@@ -34,8 +34,8 @@ import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
 
 class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {

@@ -27,9 +27,9 @@ import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.components.TreeContent
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.tree.components.TreeContent
 
 @AndroidEntryPoint
 class TreeTimelineActivity : EasyDiaryComposeBaseActivity() {

@@ -40,8 +40,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject

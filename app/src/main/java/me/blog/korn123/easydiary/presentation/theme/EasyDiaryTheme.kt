@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.theme
+package me.blog.korn123.easydiary.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

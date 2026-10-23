@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.tree.components
 
 import android.content.Intent
 import android.widget.ImageView
@@ -67,6 +67,9 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.presentation.components.SimpleText
 import java.util.Calendar
 
 @Composable

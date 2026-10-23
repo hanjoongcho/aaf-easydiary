@@ -78,10 +78,10 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleText
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.SimpleText
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

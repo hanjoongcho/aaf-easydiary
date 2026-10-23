@@ -76,11 +76,11 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.components.FastScroll
-import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

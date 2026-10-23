@@ -105,12 +105,12 @@ import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.ui.components.CustomElevatedButton
-import me.blog.korn123.easydiary.ui.components.FastScroll
-import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
-import me.blog.korn123.easydiary.ui.components.PhotoHighlightCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
+import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.presentation.main.components.PhotoHighlightCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint

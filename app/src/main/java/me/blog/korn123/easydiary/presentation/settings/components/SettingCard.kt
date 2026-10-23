@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.settings.components
 
 import android.graphics.Typeface
 import android.net.Uri
@@ -68,6 +68,7 @@ import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
+import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 /***************************************************************************************************

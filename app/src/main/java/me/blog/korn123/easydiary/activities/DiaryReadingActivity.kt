@@ -84,10 +84,10 @@ import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
-import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiarySubItemCard
+import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures

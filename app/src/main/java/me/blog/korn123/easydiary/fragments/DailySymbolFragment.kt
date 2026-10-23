@@ -36,7 +36,7 @@ import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.calendar.CalendarContent
 import me.blog.korn123.easydiary.presentation.calendar.CalendarViewModel
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar

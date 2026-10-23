@@ -91,10 +91,10 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import java.util.Calendar
 import java.util.Locale

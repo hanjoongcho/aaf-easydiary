@@ -48,13 +48,13 @@ import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.services.FullBackupService
-import me.blog.korn123.easydiary.ui.components.CardContainer
-import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
+import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWithImage
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {

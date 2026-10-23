@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.main.components
 
 import android.animation.ArgbEvaluator
 import android.graphics.drawable.Drawable

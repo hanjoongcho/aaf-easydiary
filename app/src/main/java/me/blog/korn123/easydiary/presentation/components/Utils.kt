@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.ui.components
+package me.blog.korn123.easydiary.presentation.components
 
 import android.content.pm.ActivityInfo
 import androidx.activity.compose.LocalActivity
