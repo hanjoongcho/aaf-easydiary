@@ -33,7 +33,7 @@ import me.blog.korn123.easydiary.helper.FILTER_START_MONTH
 import me.blog.korn123.easydiary.helper.FILTER_START_YEAR
 import me.blog.korn123.easydiary.helper.FILTER_VIEW_VISIBLE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject

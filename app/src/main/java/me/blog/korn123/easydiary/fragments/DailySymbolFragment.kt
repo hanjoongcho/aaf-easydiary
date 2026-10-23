@@ -37,7 +37,7 @@ import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.calendar.CalendarContent
 import me.blog.korn123.easydiary.presentation.calendar.CalendarViewModel
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

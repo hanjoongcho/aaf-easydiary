@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.viewmodels
+package me.blog.korn123.easydiary.presentation.diary
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

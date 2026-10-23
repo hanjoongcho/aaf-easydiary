@@ -23,7 +23,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.presentation.components.SimpleText
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 
 /***************************************************************************************************
  *   Symbol Setting Card

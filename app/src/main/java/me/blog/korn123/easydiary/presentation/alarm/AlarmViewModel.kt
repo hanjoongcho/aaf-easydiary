@@ -1,13 +1,11 @@
-package me.blog.korn123.easydiary.viewmodels
+package me.blog.korn123.easydiary.presentation.alarm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import javax.inject.Inject
 
@@ -18,15 +16,6 @@ class AlarmViewModel
         application: Application,
         private val alarmRepository: AlarmRepository,
     ) : AndroidViewModel(application) {
-        /***************************************************************************************************
-         *   compose layout functions
-         *
-         ***************************************************************************************************/
-
-        /***************************************************************************************************
-         *   legacy layout functions
-         *
-         ***************************************************************************************************/
         fun makeTemporaryAlarm(workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING): Alarm {
             val alarms =
                 runBlocking { alarmRepository.getAllAlarms() }.sortedBy { it.alarmId }
@@ -59,8 +48,4 @@ class AlarmViewModel
             )
 
         suspend fun deleteAlarmById(id: Int) = alarmRepository.deleteAlarmById(id)
-        /***************************************************************************************************
-         *   common functions
-         *
-         ***************************************************************************************************/
     }

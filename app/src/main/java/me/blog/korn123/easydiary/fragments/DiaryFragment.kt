@@ -25,7 +25,7 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

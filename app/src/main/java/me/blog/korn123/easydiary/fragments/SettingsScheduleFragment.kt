@@ -59,7 +59,7 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
-import me.blog.korn123.easydiary.viewmodels.AlarmViewModel
+import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
 import kotlin.getValue
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain

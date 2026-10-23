@@ -63,7 +63,7 @@ import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardTodo
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {

@@ -57,7 +57,7 @@ import me.blog.korn123.easydiary.presentation.settings.components.LineSpacing
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import java.io.File
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {

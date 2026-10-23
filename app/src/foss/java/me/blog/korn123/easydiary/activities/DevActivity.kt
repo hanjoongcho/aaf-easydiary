@@ -32,7 +32,7 @@ import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
 import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************

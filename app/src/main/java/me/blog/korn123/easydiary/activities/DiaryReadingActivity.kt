@@ -88,9 +88,9 @@ import me.blog.korn123.easydiary.presentation.components.LoadingScreen
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiarySubItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryReadViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.LinkedDiaryViewModel
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

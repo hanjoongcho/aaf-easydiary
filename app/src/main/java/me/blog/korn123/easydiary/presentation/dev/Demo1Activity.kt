@@ -81,7 +81,7 @@ import me.blog.korn123.easydiary.presentation.components.FastScroll
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint

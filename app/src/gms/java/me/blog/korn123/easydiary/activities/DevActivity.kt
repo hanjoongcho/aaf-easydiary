@@ -55,7 +55,7 @@ import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleC
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************

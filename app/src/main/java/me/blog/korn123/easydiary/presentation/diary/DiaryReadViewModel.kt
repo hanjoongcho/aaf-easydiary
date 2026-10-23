@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.viewmodels
+package me.blog.korn123.easydiary.presentation.diary
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

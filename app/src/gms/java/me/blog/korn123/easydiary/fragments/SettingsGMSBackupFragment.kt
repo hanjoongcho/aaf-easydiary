@@ -94,7 +94,7 @@ import me.blog.korn123.easydiary.services.RecoverPhotoService
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import java.io.File
 import java.util.Locale
 import kotlin.coroutines.resume

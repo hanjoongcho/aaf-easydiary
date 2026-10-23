@@ -36,7 +36,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.views.FixedTextView
 import kotlin.getValue
 

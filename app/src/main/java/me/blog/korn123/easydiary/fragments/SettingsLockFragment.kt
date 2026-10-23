@@ -39,7 +39,7 @@ import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 
 class SettingsLockFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************

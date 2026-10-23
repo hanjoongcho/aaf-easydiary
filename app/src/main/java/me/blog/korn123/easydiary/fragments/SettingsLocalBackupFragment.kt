@@ -73,7 +73,7 @@ import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.workers.BackupOperations
 import java.io.File
 import java.util.Date

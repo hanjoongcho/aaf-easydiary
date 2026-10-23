@@ -35,7 +35,7 @@ import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*

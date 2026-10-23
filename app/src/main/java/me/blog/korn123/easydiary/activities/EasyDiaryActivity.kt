@@ -32,7 +32,7 @@ import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import kotlin.getValue
 import kotlin.jvm.java
 

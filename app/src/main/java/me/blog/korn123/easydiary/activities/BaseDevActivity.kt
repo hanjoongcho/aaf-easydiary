@@ -113,8 +113,8 @@ import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.presentation.settings.components.SymbolCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain

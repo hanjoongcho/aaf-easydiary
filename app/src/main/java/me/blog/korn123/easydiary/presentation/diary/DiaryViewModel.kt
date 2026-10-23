@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.viewmodels
+package me.blog.korn123.easydiary.presentation.diary
 
 import android.app.Application
 import android.content.Context
@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,15 +50,11 @@ import kotlin.system.measureTimeMillis
 class DiaryViewModel
     @Inject
     constructor(
-        application: Application,
+        app: Application,
         private val diaryRepository: DiaryRepository,
         private val photoHighlightManager: PhotoHighlightManager,
-    ) : AndroidViewModel(application) {
-        /***************************************************************************************************
-         *   compose layout functions
-         *
-         ***************************************************************************************************/
-
+    ) : AndroidViewModel(app) {
+        val app = app
         var isLoading by mutableStateOf(false)
         var loadingMessage by mutableStateOf<String?>(null)
 
@@ -118,7 +113,7 @@ class DiaryViewModel
                                                         ""
                                                     } else {
                                                         EasyDiaryUtils.getApplicationDataDirectory(
-                                                            application,
+                                                            app,
                                                         ) + photoUri.getFilePath()
                                                     },
                                                     diary.diaryId,
@@ -141,7 +136,7 @@ class DiaryViewModel
                                 fetchHistoryForPeriod(
                                     pastMills,
                                     MessageFormat.format(
-                                        application.getString(R.string.monthly_highlight_tag),
+                                        app.getString(R.string.monthly_highlight_tag),
                                         i,
                                     ),
                                 )
@@ -159,7 +154,7 @@ class DiaryViewModel
                                 fetchHistoryForPeriod(
                                     pastMills,
                                     MessageFormat.format(
-                                        application.getString(R.string.yearly_highlight_tag),
+                                        app.getString(R.string.yearly_highlight_tag),
                                         i,
                                     ),
                                 )
@@ -216,7 +211,7 @@ class DiaryViewModel
                 ->
                 FindDiaryParams(
                     query,
-                    application.config.diarySearchQueryCaseSensitive,
+                    app.config.diarySearchQueryCaseSensitive,
                     startTimeMillis,
                     endTimeMillis,
                     symbolSequence,
@@ -237,7 +232,7 @@ class DiaryViewModel
                         ).map {
                             EasyDiaryUtils.resolveDiaryFilter(
                                 it,
-                                application,
+                                app,
                                 params.startTimeMillis,
                                 params.endTimeMillis,
                                 params.symbolSequence,
@@ -250,10 +245,6 @@ class DiaryViewModel
                     initialValue = emptyList(),
                 )
 
-        /***************************************************************************************************
-         *   legacy layout functions
-         *
-         ***************************************************************************************************/
         suspend fun findDiary(
             query: String?,
             isSensitive: Boolean = false,
@@ -271,7 +262,7 @@ class DiaryViewModel
                         endTimeMillis = endTimeMillis,
                         symbolSequence = symbolSequence,
                     ),
-                application,
+                app,
                 startTimeMillis,
                 endTimeMillis,
                 symbolSequence,
@@ -370,7 +361,7 @@ class DiaryViewModel
                 else -> {
                     findDiary(query = null)
                         .filter { it.symbolSequence !in 80..83 && it.currentTimeMillis <= currentTime }
-                        .take(100) // subList(0, 100) 보다 가독성이 좋은 take() 사용
+                        .take(100)
                 }
             }
         }
@@ -412,7 +403,7 @@ class DiaryViewModel
             val startOfMonth = targetMonth.atDay(1)
             val startDate = startOfMonth.minusWeeks(7)
             val endDate = startOfMonth.plusWeeks(7)
-            val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
+            val sortAsc = app.config.calendarSorting == CALENDAR_SORTING_ASC
 
             val startMillis =
                 startDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
@@ -449,23 +440,16 @@ class DiaryViewModel
             month: Int,
             year: Int,
         ): Map<String, List<Diary>> {
-            // 1. 해당 연/월의 1일 날짜 생성
             val targetMonth = YearMonth.of(year, month)
             val startOfMonth = targetMonth.atDay(1)
-
-            // 2. 기준 월의 시작일 - 7주(49일)
             val startDate = startOfMonth.minusWeeks(7)
-
-            // 3. 기준 월의 시작일 + 7주(49일)
             val endDate = startOfMonth.plusWeeks(7)
-
-            val sortAsc = application.config.calendarSorting == CALENDAR_SORTING_ASC
+            val sortAsc = app.config.calendarSorting == CALENDAR_SORTING_ASC
 
             val allDiariesInRange =
-                if (application.config.enableJetpackRoomDatabase) {
+                if (app.config.enableJetpackRoomDatabase) {
                     diaryRepository.getDiariesByDateRange(startDate.toString(), endDate.toString())
                 } else {
-                    // Realm legacy: fetch one by one as before to keep compatibility
                     val dateList = mutableListOf<String>()
                     var current = startDate
                     while (!current.isAfter(endDate)) {
@@ -475,7 +459,6 @@ class DiaryViewModel
                     return dateList.associateWith { findDiaryByDateString(it, sortAsc) }
                 }
 
-            // Grouping for Room
             val groupedMap =
                 if (sortAsc) {
                     allDiariesInRange.sortedBy { it.currentTimeMillis }
@@ -492,14 +475,4 @@ class DiaryViewModel
             }
             return resultMap
         }
-
-        /***************************************************************************************************
-         *   backup and restore functions
-         *
-         ***************************************************************************************************/
-
-        /***************************************************************************************************
-         *   common functions
-         *
-         ***************************************************************************************************/
     }
