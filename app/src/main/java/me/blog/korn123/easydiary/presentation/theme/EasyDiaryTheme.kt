@@ -6,7 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import me.blog.korn123.commons.utils.ColorUtils
+import me.blog.korn123.easydiary.extensions.adjustAlpha
 import me.blog.korn123.easydiary.extensions.config
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -32,9 +32,9 @@ fun AppTheme(
 
     val lightColorScheme =
         lightColorScheme(
-            primary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
-            secondary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
-            tertiary = Color(ColorUtils.adjustAlpha(LocalContext.current.config.primaryColor, 1f)),
+            primary = Color(LocalContext.current.config.primaryColor.adjustAlpha(1f)),
+            secondary = Color(LocalContext.current.config.primaryColor.adjustAlpha(1f)),
+            tertiary = Color(LocalContext.current.config.primaryColor.adjustAlpha(1f)),
         )
 
     val replyColorScheme =

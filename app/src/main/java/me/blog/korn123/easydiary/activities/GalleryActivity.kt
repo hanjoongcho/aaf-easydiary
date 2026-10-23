@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -26,6 +25,7 @@ import me.blog.korn123.easydiary.databinding.ActivityGalleryBinding
 import me.blog.korn123.easydiary.databinding.DialogSettingGalleryBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.adjustAlpha
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
@@ -97,7 +97,7 @@ class GalleryActivity : EasyDiaryActivity() {
         }
 
         initPostCard()
-        mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
+        mBinding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
         mBinding.imgOpenGalleryOptions.setOnClickListener {
             var dialog: Dialog? = null
             val dialogSettingGalleryBinding =
