@@ -1,4 +1,4 @@
-package me.blog.korn123.commons.utils
+package me.blog.korn123.easydiary.presentation.tree
 
 import me.blog.korn123.easydiary.helper.TreeConstants
 
@@ -131,13 +131,10 @@ object TreeUtils {
             val isSelectedFolderOpen = selectedNode.isFolderOpen.not()
 
             if (pair.first.fullPath == selectedNode.fullPath) {
-                // 자기자신인 경우
                 pair.copy(first = pair.first.copy(isFolderOpen = isSelectedFolderOpen))
             } else if (pair.first.fullPath.startsWith(selectedNode.fullPath + "/") && pair.first.fullPath != selectedNode.fullPath) {
-                // 자식 노드인 경우
                 val isFirstChildNode = selectedNode.children.any { child -> child.fullPath == pair.first.fullPath }
                 if (isFirstChildNode) {
-                    // 선택노드 하위 1레벨 자식인 경우 선택노드 오픈여부에 따라 isShow 처리
                     pair.copy(first = pair.first.copy(isShow = isSelectedFolderOpen, isParentFolderOpen = isSelectedFolderOpen))
                 } else {
                     pair.copy(first = pair.first.copy(isParentFolderOpen = isSelectedFolderOpen))
@@ -156,7 +153,7 @@ data class FileNode(
     val sequence: Long,
     val weather: Int,
     var fullPath: String = "",
-    var isShow: Boolean = true, // 현재 보이는 지 여부
-    var isFolderOpen: Boolean = true, // 자기 자신이 폴더 일때 열려 있는지 여부
-    var isParentFolderOpen: Boolean = true, // 상위 폴더가 열려 있는지 여부
+    var isShow: Boolean = true,
+    var isFolderOpen: Boolean = true,
+    var isParentFolderOpen: Boolean = true,
 )
