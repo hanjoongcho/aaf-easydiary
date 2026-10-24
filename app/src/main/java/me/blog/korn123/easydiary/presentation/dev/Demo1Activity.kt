@@ -77,6 +77,7 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryLargeActionBar
 import me.blog.korn123.easydiary.presentation.components.FastScroll
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
@@ -117,6 +118,10 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
                 6 -> {
                     FastScrollLazyColumnSample3()
+                }
+
+                7 -> {
+                    LargeTopAppBarSample()
                 }
             }
         }
@@ -672,6 +677,89 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         )
                     }
                 },
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun LargeTopAppBarSample() {
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+        val bottomPadding =
+            if (isVanillaIceCreamPlus()) {
+                WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            } else {
+                0.dp
+            }
+
+        AppTheme {
+            updateStatusBarAppearance()
+            updateNavigationBarAppearance()
+            Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                topBar = {
+                    EasyDiaryLargeActionBar(
+                        title = "Large TopAppBar Sample",
+                        subTitle = "exitUntilCollapsedScrollBehavior",
+                        scrollBehavior = scrollBehavior,
+                    ) {
+                        finishActivityWithTransition()
+                    }
+                },
+                containerColor = Color(config.screenBackgroundColor),
+                content = { innerPadding ->
+                    val context = LocalContext.current
+                    val settingCardModifier = Modifier.fillMaxWidth()
+                    val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
+                    val maxItemsInEachRow =
+                        when {
+                            LocalInspectionMode.current -> 1
+                            isLandScape() -> 2
+                            else -> 1
+                        }
+                    val itemSize = 30
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(maxItemsInEachRow),
+                        modifier =
+                            Modifier
+                                .padding(innerPadding)
+                                .fillMaxWidth()
+                                .background(Color(context.config.screenBackgroundColor)),
+                        contentPadding = PaddingValues(bottom = 72.dp.plus(bottomPadding)),
+                        state = rememberLazyGridState(),
+                    ) {
+                        items(itemSize) { index ->
+                            SimpleCard(
+                                "Item #$index",
+                                "LargeTopAppBar scrollBehavior testing item description #$index",
+                                modifier = settingCardModifier,
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) {}
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    Box(modifier = Modifier.padding(bottom = bottomPadding)) {
+                        FloatingActionButton(
+                            onClick = { finishActivityWithTransition() },
+                            containerColor = Color(config.primaryColor),
+                            contentColor = Color.White,
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                            modifier = Modifier.size(40.dp),
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cross),
+                                contentDescription = "Finish Activity",
+                            )
+                        }
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
             )
         }
     }

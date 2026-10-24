@@ -770,6 +770,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     },
                 )
             }
+            SimpleCard(
+                "LargeTopAppBar & scrollBehavior",
+                "LargeTopAppBar + exitUntilCollapsedScrollBehavior",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 7)
+                    },
+                )
+            }
         }
     }
 

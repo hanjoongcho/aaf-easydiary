@@ -14,9 +14,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -136,6 +138,110 @@ fun EasyDiaryActionBar(
                 titleContentColor = Color.White,
                 actionIconContentColor = Color.White,
                 subtitleContentColor = Color.White,
+            ),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EasyDiaryLargeActionBar(
+    title: String? = null,
+    subTitle: String? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    useCloseIcon: Boolean = false,
+    close: () -> Unit,
+) {
+    val context = LocalContext.current
+
+    val pixelValue = context.config.settingFontSize
+    val density = LocalDensity.current
+    val currentTextUnit =
+        with(density) {
+            val temp = pixelValue.toDp()
+            temp.toSp()
+        }
+
+    LargeTopAppBar(
+        scrollBehavior = scrollBehavior,
+        modifier =
+            Modifier
+                .padding(
+                    WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues(),
+                ),
+        title = {
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                title?.let {
+                    Text(
+                        text = title,
+                        style =
+                            TextStyle(
+                                fontFamily =
+                                    if (LocalInspectionMode.current) {
+                                        null
+                                    } else {
+                                        FontUtils.getComposeFontFamily(
+                                            LocalContext.current,
+                                        )
+                                    },
+                                color = Color.White,
+                                fontSize =
+                                    TextUnit(
+                                        currentTextUnit.value.times(if (subTitle != null) 1.2F else 1.3F),
+                                        TextUnitType.Sp,
+                                    ),
+                            ),
+                    )
+                }
+                subTitle?.let {
+                    Text(
+                        text = subTitle,
+                        style =
+                            TextStyle(
+                                fontFamily =
+                                    if (LocalInspectionMode.current) {
+                                        null
+                                    } else {
+                                        FontUtils.getComposeFontFamily(
+                                            LocalContext.current,
+                                        )
+                                    },
+                                color = Color.White,
+                                fontSize =
+                                    TextUnit(
+                                        currentTextUnit.value.times(0.9F),
+                                        TextUnitType.Sp,
+                                    ),
+                            ),
+                        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = { close.invoke() }) {
+                if (useCloseIcon) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cross),
+                        contentDescription = "닫기 아이콘",
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "뒤로가기 아이콘",
+                    )
+                }
+            }
+        },
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = Color(LocalContext.current.config.primaryColor),
+                scrolledContainerColor = Color(LocalContext.current.config.primaryColor),
+                navigationIconContentColor = Color.White,
+                titleContentColor = Color.White,
+                actionIconContentColor = Color.White,
             ),
     )
 }
