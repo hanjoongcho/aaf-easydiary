@@ -329,6 +329,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     ),
                 )
             }
+            SimpleCard(
+                "Mig DiaryMain2",
+                "Migrated DiaryMain screen to Jetpack Compose",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(
+                        currentContext,
+                        me.blog.korn123.easydiary.presentation.main.DiaryMain2Activity::class.java,
+                    ),
+                )
+            }
         }
     }
 

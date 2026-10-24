@@ -186,6 +186,11 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />
         <activity
+            android:name=".presentation.main.DiaryMain2Activity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents" />
+        <activity
             android:name=".presentation.dev.Demo1Activity"
             android:label=""
             android:launchMode="singleTask"
