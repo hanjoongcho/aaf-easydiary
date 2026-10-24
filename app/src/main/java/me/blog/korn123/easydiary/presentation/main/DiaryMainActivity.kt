@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -53,8 +54,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -63,17 +66,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -171,7 +172,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                 applyFullScreenStatusBarTheme()
                 updateNavigationBarAppearance()
                 Scaffold(
-                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
                     containerColor = Color(config.screenBackgroundColor),
                     content = { innerPadding ->
                         val context = LocalContext.current
@@ -309,13 +310,15 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
             enablePhotoHighlight = context.config.enablePhotoHighlight
         }
 
-        val photoHighlightScrollBehavior = rememberPhotoHighlightScrollBehavior(160.dp)
-        val statusBarTop = innerPadding.calculateTopPadding()
+        val statusBarTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+        val photoHighlightMaxHeight = 160.dp + statusBarTop
+        val photoHighlightScrollBehavior = rememberPhotoHighlightScrollBehavior(photoHighlightMaxHeight)
         val bottomBarPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
         Column(
             modifier =
                 modifier
+                    .padding(innerPadding)
                     .fillMaxSize()
                     .nestedScroll(photoHighlightScrollBehavior.nestedScrollConnection),
         ) {
@@ -324,16 +327,22 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(statusBarTop + photoHighlightScrollBehavior.currentHeight)
+                            .height(photoHighlightScrollBehavior.currentHeight)
                             .graphicsLayer {
                                 alpha = photoHighlightScrollBehavior.alpha
                             },
                 ) {
+                    val currentTopPadding =
+                        if (photoHighlightMaxHeight > 0.dp) {
+                            statusBarTop * (photoHighlightScrollBehavior.currentHeight / photoHighlightMaxHeight)
+                        } else {
+                            0.dp
+                        }
                     PhotoHighlightCard(
                         modifier =
                             Modifier
                                 .fillMaxSize()
-                                .padding(top = statusBarTop),
+                                .padding(top = currentTopPadding),
                         height = 160.dp,
                         isVisible = enablePhotoHighlight,
                         onVisibilityChanged = { isVisible ->
@@ -359,6 +368,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             },
                     contentPadding =
                         PaddingValues(
+                            top = if (enablePhotoHighlight) 0.dp else statusBarTop,
                             bottom = bottomBarPadding,
                         ),
                 ) {
@@ -396,10 +406,9 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                             with(
                                 LocalDensity.current,
                             ) {
-                                WindowInsets.navigationBars
-                                    .asPaddingValues()
-                                    .calculateBottomPadding()
-                                    .toPx()
+                                bottomBarPadding.toPx().plus(
+                                    if (enablePhotoHighlight) 0f else statusBarTop.toPx(),
+                                )
                             },
                         ),
                     isDraggingThumb = isDraggingThumb,
@@ -409,6 +418,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         Modifier
                             .align(Alignment.TopEnd)
                             .padding(
+                                top = if (enablePhotoHighlight) 0.dp else statusBarTop,
                                 bottom = bottomBarPadding,
                             ),
                     showDebugCard = false,
@@ -817,32 +827,36 @@ fun rememberPhotoHighlightScrollBehavior(
     val maxHeightPx = with(density) { maxHeight.toPx() }
     val heightOffset = remember { mutableFloatStateOf(0f) }
 
-    val nestedScrollConnection = remember(maxHeightPx) {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val currentOffset = heightOffset.floatValue
+    val nestedScrollConnection =
+        remember(maxHeightPx) {
+            object : NestedScrollConnection {
+                override fun onPreScroll(
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    val delta = available.y
+                    val currentOffset = heightOffset.floatValue
 
-                // 상단 이동 (델타가 음수: 스크롤을 아래로 내려서 컨텐츠를 위로 올릴 때) -> 헤더 축소
-                if (delta < 0f && currentOffset > -maxHeightPx) {
-                    val newOffset = (currentOffset + delta).coerceIn(-maxHeightPx, 0f)
-                    heightOffset.floatValue = newOffset
-                    val consumed = newOffset - currentOffset
-                    return Offset(0f, consumed)
+                    // 상단 이동 (델타가 음수: 스크롤을 아래로 내려서 컨텐츠를 위로 올릴 때) -> 헤더 축소
+                    if (delta < 0f && currentOffset > -maxHeightPx) {
+                        val newOffset = (currentOffset + delta).coerceIn(-maxHeightPx, 0f)
+                        heightOffset.floatValue = newOffset
+                        val consumed = newOffset - currentOffset
+                        return Offset(0f, consumed)
+                    }
+
+                    // 하단 이동 (델타가 양수: 스크롤을 위로 올려서 컨텐츠를 아래로 내릴 때) -> 헤더 즉시 확장
+                    if (delta > 0f && currentOffset < 0f) {
+                        val newOffset = (currentOffset + delta).coerceIn(-maxHeightPx, 0f)
+                        heightOffset.floatValue = newOffset
+                        val consumed = newOffset - currentOffset
+                        return Offset(0f, consumed)
+                    }
+
+                    return Offset.Zero
                 }
-
-                // 하단 이동 (델타가 양수: 스크롤을 위로 올려서 컨텐츠를 아래로 내릴 때) -> 헤더 즉시 확장
-                if (delta > 0f && currentOffset < 0f) {
-                    val newOffset = (currentOffset + delta).coerceIn(-maxHeightPx, 0f)
-                    heightOffset.floatValue = newOffset
-                    val consumed = newOffset - currentOffset
-                    return Offset(0f, consumed)
-                }
-
-                return Offset.Zero
             }
         }
-    }
 
     return remember(maxHeightPx, density) {
         PhotoHighlightScrollBehavior(
