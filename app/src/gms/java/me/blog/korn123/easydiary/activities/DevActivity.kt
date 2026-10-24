@@ -109,7 +109,6 @@ class DevActivity : BaseDevActivity() {
                                             .weight(1f)
 
                                     RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
-                                    Migration(settingCardModifier, maxItemsInEachRow)
                                     ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
                                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                                     GoogleMobileService(settingCardModifier, maxItemsInEachRow)

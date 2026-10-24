@@ -162,15 +162,6 @@ class BaseDevViewModel
 
         suspend fun getDDayCount(): Int = dDayRepository.getAllDDays().size
 
-        var enableJetpackRoomDatabase by mutableStateOf(config.enableJetpackRoomDatabase)
-            private set
-
-        fun toggleEnableJetpackRoomDatabase() {
-            val newValue = enableJetpackRoomDatabase.not()
-            config.enableJetpackRoomDatabase = newValue
-            enableJetpackRoomDatabase = newValue
-        }
-
         var enableDebugOptionVisibleDiarySequence by mutableStateOf(config.enableDebugOptionVisibleDiarySequence)
             private set
 
