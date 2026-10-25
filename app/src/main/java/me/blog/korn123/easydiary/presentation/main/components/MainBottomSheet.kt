@@ -109,7 +109,13 @@ fun MainBottomSheet(
                                     context.config.backgroundColor,
                                 ).copy(alpha = 0.9f)
                             },
-                        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp, ROUNDED_CORNER_SHAPE_SIZE.dp, 0.dp, 0.dp),
+                        shape =
+                            RoundedCornerShape(
+                                ROUNDED_CORNER_SHAPE_SIZE.dp,
+                                ROUNDED_CORNER_SHAPE_SIZE.dp,
+                                0.dp,
+                                0.dp,
+                            ),
                     ).border(
                         1.dp,
                         Color(
@@ -121,14 +127,14 @@ fun MainBottomSheet(
             Column(
                 modifier =
                     Modifier
-                        .padding(5.dp, 5.dp, 5.dp, 1.dp)
+                        .padding(0.dp, 5.dp, 0.dp, 5.dp)
                         .navigationBarsPadding(),
             ) {
                 Row(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(5.dp),
+                            .padding(5.dp, 5.dp, 15.dp, 1.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -153,7 +159,7 @@ fun MainBottomSheet(
                             tint = Color(context.config.primaryColor),
                         )
                     }
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = {
                             onMicrophoneClick.invoke()
