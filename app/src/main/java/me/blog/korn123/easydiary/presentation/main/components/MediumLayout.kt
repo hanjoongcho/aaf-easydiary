@@ -27,16 +27,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import java.util.Locale
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -66,6 +73,7 @@ fun MediumLayout(
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     val activity = LocalActivity.current
     val coroutineScope = rememberCoroutineScope()
     val speechLauncher =
@@ -95,22 +103,32 @@ fun MediumLayout(
             activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
         }
     }
+    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        enablePhotoHighlight = context.config.enablePhotoHighlight
+    }
 
     Row(
         modifier =
             Modifier
                 .fillMaxWidth(),
     ) {
-        Column(
-            modifier =
-                modifier
-                    .weight(0.4f)
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-        ) {
-            PhotoHighlightCard(onVisibilityChanged = { _ ->
-            })
+        if (enablePhotoHighlight) {
+            Column(
+                modifier =
+                    modifier
+                        .weight(0.4f)
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+            ) {
+                PhotoHighlightCard(
+                    isVisible = enablePhotoHighlight,
+                    onVisibilityChanged = { isVisible ->
+                        enablePhotoHighlight = isVisible
+                    })
+            }
         }
+
         Column(modifier = Modifier.weight(0.6f)) {
             Box(
                 modifier = Modifier.weight(1f),
