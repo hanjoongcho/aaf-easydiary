@@ -4,28 +4,37 @@ import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -34,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +51,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DashboardActivity
 import me.blog.korn123.easydiary.activities.DevActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.config
@@ -50,6 +61,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.FontUtils
 
@@ -71,6 +83,7 @@ fun MainBottomSheet(
             )
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
+    onMicrophoneClick: () -> Unit = {},
     callbackQuery: (query: String) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -108,14 +121,62 @@ fun MainBottomSheet(
             Column(
                 modifier =
                     Modifier
-                        .padding(5.dp)
+                        .padding(5.dp, 5.dp, 5.dp, 1.dp)
                         .navigationBarsPadding(),
             ) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(
+                        onClick = {
+                            activity?.let {
+                                TransitionHelper.startActivityWithTransition(
+                                    it,
+                                    Intent(it, DashboardActivity::class.java),
+                                )
+                            }
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_statistics),
+                            contentDescription = "Statistics",
+                            tint = Color(context.config.primaryColor),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(4.dp))
+                    IconButton(
+                        onClick = {
+                            onMicrophoneClick.invoke()
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_microphone),
+                            contentDescription = "Speech input",
+                            tint = Color(context.config.primaryColor),
+                        )
+                    }
+                }
+
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    var text by remember { mutableStateOf(currentQuery) }
+                    var text by remember(currentQuery) { mutableStateOf(currentQuery) }
                     val density = LocalDensity.current
                     val textUnit =
                         with(density) {
@@ -200,6 +261,13 @@ fun MainBottomSheet(
                         }
                     }
                     CustomElevatedSquareButton(
+                        text = "TODAY",
+                        iconResourceId = R.drawable.ic_time_8_w,
+                        iconSize = 16.dp,
+                    ) {
+                        activity?.makeSnackBar("moveToday()")
+                    }
+                    CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_tree_view) ?: "",
                         iconResourceId = R.drawable.ic_tree_structure,
                         iconSize = 16.dp,
@@ -212,11 +280,15 @@ fun MainBottomSheet(
                         }
                     }
                     CustomElevatedSquareButton(
-                        text = "TODAY",
-                        iconResourceId = R.drawable.ic_time_8_w,
-                        iconSize = 16.dp,
+                        text = activity?.getString(R.string.menu_timeline) ?: "",
+                        iconResourceId = R.drawable.ic_settings_11,
                     ) {
-                        activity?.makeSnackBar("moveToday()")
+                        activity?.let {
+                            TransitionHelper.startActivityWithTransition(
+                                it,
+                                Intent(it, TimelineActivity::class.java),
+                            )
+                        }
                     }
 
                     if (context.config.enableDebugMode) {
@@ -245,9 +317,9 @@ fun MainBottomSheet(
                             }
                         }
                         CustomElevatedSquareButton(
-                            text = "MENU",
-                            iconResourceId = R.drawable.ic_options_three_dots,
-                            iconSize = 16.dp,
+                            text = "Menu",
+                            iconPadding = 2.dp,
+                            iconResourceId = R.drawable.ic_menu,
                         ) {
                             activity?.makeSnackBar("openCustomOptionMenu()")
                         }

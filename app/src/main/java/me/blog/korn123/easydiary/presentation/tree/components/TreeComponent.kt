@@ -303,7 +303,7 @@ fun TreeToolbar(
     val context = LocalContext.current
     val config = context.config
     var isFocused by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(currentQuery) }
+    var text by remember(currentQuery) { mutableStateOf(currentQuery) }
     val focusRequester = remember { FocusRequester() }
     val density = LocalDensity.current
     val textUnit = with(density) { config.settingFontSize.toDp().toSp() }

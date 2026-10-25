@@ -58,7 +58,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val currentQuery: String by viewModel.currentQuery.collectAsState()
+            val currentQuery: String by diaryViewModel.query.collectAsState()
             val items: List<DiaryDomain> by diaryViewModel.diaries.collectAsStateWithLifecycle()
             val modifier: Modifier = Modifier
 

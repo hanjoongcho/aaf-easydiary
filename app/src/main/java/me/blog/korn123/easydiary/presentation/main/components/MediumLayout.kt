@@ -1,5 +1,12 @@
 package me.blog.korn123.easydiary.presentation.main.components
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.speech.RecognizerIntent
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,6 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.util.Locale
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,7 +66,35 @@ fun MediumLayout(
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
 ) {
+    val activity = LocalActivity.current
     val coroutineScope = rememberCoroutineScope()
+    val speechLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let { results ->
+                    if (results.isNotEmpty()) {
+                        onQueryChange(results[0])
+                    }
+                }
+            }
+        }
+    val onMicrophoneClick: () -> Unit = {
+        try {
+            val intent =
+                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                    putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+                    )
+                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                }
+            speechLauncher.launch(intent)
+        } catch (_: ActivityNotFoundException) {
+            activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
+        }
+    }
 
     Row(
         modifier =
@@ -157,6 +196,7 @@ fun MediumLayout(
                         title = "[Total: ${items.size}] category or title",
                         currentQuery = currentQuery,
                         enableCardViewPolicy = enableCardViewPolicy,
+                        onMicrophoneClick = onMicrophoneClick,
                     ) { query ->
                         onQueryChange(query)
                     }
