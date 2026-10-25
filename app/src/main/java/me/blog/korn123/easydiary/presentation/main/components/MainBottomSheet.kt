@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +20,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -44,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -54,8 +56,12 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DashboardActivity
 import me.blog.korn123.easydiary.activities.DevActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.activities.GalleryActivity
+import me.blog.korn123.easydiary.activities.PostcardViewerActivity
+import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
@@ -65,6 +71,12 @@ import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.FontUtils
+
+private data class MenuOptionItem(
+    val iconRes: Int,
+    val titleRes: Int,
+    val onClick: () -> Unit,
+)
 
 @Composable
 fun MainBottomSheet(
@@ -90,6 +102,137 @@ fun MainBottomSheet(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
+    var showMenuDialog by remember { mutableStateOf(false) }
+
+    val menuOptionItems =
+        remember {
+            listOf(
+                MenuOptionItem(
+                    iconRes = R.drawable.ic_grid_three_up,
+                    titleRes = R.string.postcard_grid_option_title,
+                    onClick = {},
+                ),
+                MenuOptionItem(
+                    iconRes = R.drawable.ic_picture_w,
+                    titleRes = R.string.post_card,
+                    onClick = {
+                        activity?.let {
+                            TransitionHelper.startActivityWithTransition(
+                                it,
+                                Intent(it, PostcardViewerActivity::class.java),
+                            )
+                        }
+                    },
+                ),
+                MenuOptionItem(
+                    iconRes = R.drawable.ic_stack_of_photos,
+                    titleRes = R.string.attached_photo_gallery,
+                    onClick = {
+                        activity?.let {
+                            TransitionHelper.startActivityWithTransition(
+                                it,
+                                Intent(it, GalleryActivity::class.java),
+                            )
+                        }
+                    },
+                ),
+                MenuOptionItem(
+                    iconRes = R.drawable.ic_combo,
+                    titleRes = R.string.menu_chart,
+                    onClick = {
+                        activity?.let {
+                            TransitionHelper.startActivityWithTransition(
+                                it,
+                                Intent(it, DashboardActivity::class.java),
+                            )
+                        }
+                    },
+                ),
+                MenuOptionItem(
+                    iconRes = R.drawable.ic_settings_7,
+                    titleRes = R.string.settings,
+                    onClick = {
+                        activity?.let {
+                            TransitionHelper.startActivityWithTransition(
+                                it,
+                                Intent(it, SettingsActivity::class.java),
+                            )
+                        }
+                    },
+                ),
+            )
+        }
+
+    if (showMenuDialog) {
+        AlertDialog(
+            onDismissRequest = { showMenuDialog = false },
+            confirmButton = {
+                TextButton(
+                    onClick = { showMenuDialog = false },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.ok),
+                        style =
+                            TextStyle(
+                                fontFamily = fontFamily,
+                                color = Color(context.config.primaryColor),
+                            ),
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showMenuDialog = false },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.cancel),
+                        style =
+                            TextStyle(
+                                fontFamily = fontFamily,
+                                color = Color(context.config.primaryColor),
+                            ),
+                    )
+                }
+            },
+            containerColor = Color(context.config.backgroundColor),
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    menuOptionItems.forEach { item ->
+                        val itemTitle = stringResource(id = item.titleRes)
+                        Row(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        context.makeToast(itemTitle)
+                                        item.onClick.invoke()
+                                        showMenuDialog = false
+                                    }.padding(vertical = 12.dp, horizontal = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                painter = painterResource(id = item.iconRes),
+                                contentDescription = itemTitle,
+                                modifier = Modifier.size(24.dp),
+                                tint = Color(context.config.primaryColor),
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = itemTitle,
+                                style =
+                                    TextStyle(
+                                        fontFamily = fontFamily,
+                                        color = Color(context.config.textColor),
+                                    ),
+                            )
+                        }
+                    }
+                }
+            },
+        )
+    }
 
     Column {
         var isFocused by remember { mutableStateOf(false) }
@@ -136,10 +279,27 @@ fun MainBottomSheet(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(5.dp, 5.dp, 15.dp, 1.dp),
+                            .padding(20.dp, 5.dp, 20.dp, 1.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    IconButton(
+                        onClick = {
+                            onMicrophoneClick.invoke()
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_microphone),
+                            contentDescription = "Speech input",
+                            tint = Color(context.config.primaryColor),
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
                     IconButton(
                         onClick = {
                             activity?.let {
@@ -186,7 +346,7 @@ fun MainBottomSheet(
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = {
-                            onMicrophoneClick.invoke()
+                            showMenuDialog = true
                         },
                         modifier =
                             Modifier
@@ -195,8 +355,8 @@ fun MainBottomSheet(
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_microphone),
-                            contentDescription = "Speech input",
+                            painter = painterResource(id = R.drawable.ic_menu),
+                            contentDescription = "Statistics",
                             tint = Color(context.config.primaryColor),
                         )
                     }
@@ -345,13 +505,6 @@ fun MainBottomSheet(
                                     Intent(it, DevActivity::class.java),
                                 )
                             }
-                        }
-                        CustomElevatedSquareButton(
-                            text = "Menu",
-                            iconPadding = 2.dp,
-                            iconResourceId = R.drawable.ic_menu,
-                        ) {
-                            activity?.makeSnackBar("openCustomOptionMenu()")
                         }
                     }
                 }
