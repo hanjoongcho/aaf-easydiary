@@ -1,9 +1,12 @@
 package me.blog.korn123.easydiary.presentation.main.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -204,7 +207,12 @@ fun CompactLayout(
                 },
             )
 
-            Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+            androidx.compose.animation.AnimatedVisibility(
+                visible = !thumbVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.align(Alignment.BottomCenter),
+            ) {
                 MainBottomSheet(
                     title = "[Total: ${items.size}] category or title",
                     currentQuery = currentQuery,
@@ -371,7 +379,12 @@ fun CompactLayout2(
                 },
             )
 
-            Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+            androidx.compose.animation.AnimatedVisibility(
+                visible = !thumbVisible,
+                enter = fadeIn(animationSpec = tween(durationMillis)),
+                exit = fadeOut(animationSpec = tween(durationMillis)),
+                modifier = Modifier.align(Alignment.BottomCenter),
+            ) {
                 MainBottomSheet(
                     title = "[Total: ${items.size}] category or title",
                     currentQuery = currentQuery,

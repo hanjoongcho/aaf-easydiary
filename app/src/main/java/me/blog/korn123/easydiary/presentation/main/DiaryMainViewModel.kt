@@ -13,7 +13,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class DiaryMainViewModel : ViewModel() {
     init {
         viewModelScope.launch {
-            delay(500L.milliseconds)
+            delay(1000L.milliseconds)
             markAsReady()
         }
     }
