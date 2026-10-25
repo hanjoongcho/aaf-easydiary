@@ -58,6 +58,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
@@ -84,6 +85,7 @@ fun MainBottomSheet(
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     onMicrophoneClick: () -> Unit = {},
+    onMoveToday: () -> Unit = {},
     callbackQuery: (query: String) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -155,6 +157,28 @@ fun MainBottomSheet(
                         Icon(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_statistics),
+                            contentDescription = "Statistics",
+                            tint = Color(context.config.primaryColor),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(
+                        onClick = {
+                            activity?.let {
+                                TransitionHelper.startActivityWithTransition(
+                                    it,
+                                    Intent(it, CalendarActivity::class.java),
+                                )
+                            }
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_planner),
                             contentDescription = "Statistics",
                             tint = Color(context.config.primaryColor),
                         )
@@ -271,7 +295,7 @@ fun MainBottomSheet(
                         iconResourceId = R.drawable.ic_time_8_w,
                         iconSize = 16.dp,
                     ) {
-                        activity?.makeSnackBar("moveToday()")
+                        onMoveToday()
                     }
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_tree_view) ?: "",

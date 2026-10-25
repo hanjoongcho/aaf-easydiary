@@ -30,10 +30,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import java.util.Locale
-import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,11 +45,15 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -235,9 +235,28 @@ fun CompactLayout(
                     currentQuery = currentQuery,
                     enableCardViewPolicy = enableCardViewPolicy,
                     onMicrophoneClick = onMicrophoneClick,
-                ) { query ->
-                    onQueryChange(query)
-                }
+                    onMoveToday = {
+                        activity?.let { act ->
+                            val tomorrowTimeMillis =
+                                EasyDiaryUtils.getCalendarInstance(false, java.util.Calendar.DAY_OF_MONTH, 1).timeInMillis
+                            val filteredDiary =
+                                items.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+                            val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+                            target?.let {
+                                val position = items.indexOfFirst { item -> item.diaryId == target.diaryId }
+                                act.makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
+                                if (position != -1) {
+                                    coroutineScope.launch {
+                                        listState.scrollToItem(position)
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    callbackQuery = { query ->
+                        onQueryChange(query)
+                    },
+                )
             }
         }
     }
