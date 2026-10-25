@@ -283,11 +283,7 @@ fun CompactLayout2(
                         Box(
                             modifier =
                                 Modifier
-                                    .fillMaxWidth()
-                                    .height(photoHighlightScrollBehavior.currentHeight)
-                                    .graphicsLayer {
-                                        alpha = photoHighlightScrollBehavior.alpha
-                                    },
+                                    .fillMaxWidth(),
                         ) {
                             val currentTopPadding =
                                 if (photoHighlightMaxHeight > 0.dp) {

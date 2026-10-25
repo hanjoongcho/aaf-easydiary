@@ -8,11 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import kotlin.time.Duration.Companion.milliseconds
 
 class DiaryMainViewModel : ViewModel() {
     init {
         viewModelScope.launch {
-            delay(500L)
+            delay(500L.milliseconds)
             markAsReady()
         }
     }

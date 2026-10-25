@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,15 +29,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.presentation.main.components.CompactLayout
 import me.blog.korn123.easydiary.presentation.main.components.CompactLayout2
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
 class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
@@ -51,7 +48,6 @@ class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
      ***************************************************************************************************/
     @OptIn(
         ExperimentalLayoutApi::class,
-        ExperimentalMaterial3WindowSizeClassApi::class,
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeId())
@@ -64,8 +60,6 @@ class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
 
             val focusManager = LocalFocusManager.current
             val isKeyboardVisible = WindowInsets.isImeVisible
-
-            val windowSizeClass = calculateWindowSizeClass(this)
 
             LaunchedEffect(isKeyboardVisible) {
                 if (!isKeyboardVisible) {

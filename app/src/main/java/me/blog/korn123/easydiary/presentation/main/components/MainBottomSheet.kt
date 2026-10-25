@@ -48,7 +48,7 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.FontUtils
@@ -186,7 +186,7 @@ fun MainBottomSheet(
                 BottomToolBarContainer(
                     isAutoPadding = false,
                 ) {
-                    CustomElevatedButton(
+                    CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_new_entry) ?: "",
                         iconResourceId = R.drawable.ic_edit,
                         iconSize = 16.dp,
@@ -199,7 +199,7 @@ fun MainBottomSheet(
                             )
                         }
                     }
-                    CustomElevatedButton(
+                    CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_tree_view) ?: "",
                         iconResourceId = R.drawable.ic_tree_structure,
                         iconSize = 16.dp,
@@ -211,7 +211,7 @@ fun MainBottomSheet(
                             )
                         }
                     }
-                    CustomElevatedButton(
+                    CustomElevatedSquareButton(
                         text = "TODAY",
                         iconResourceId = R.drawable.ic_time_8_w,
                         iconSize = 16.dp,
@@ -220,7 +220,7 @@ fun MainBottomSheet(
                     }
 
                     if (context.config.enableDebugMode) {
-                        CustomElevatedButton(
+                        CustomElevatedSquareButton(
                             text = activity?.getString(R.string.button_quick_settings) ?: "",
                             iconResourceId = R.drawable.ic_running,
                             iconSize = 16.dp,
@@ -232,8 +232,9 @@ fun MainBottomSheet(
                                 )
                             }
                         }
-                        CustomElevatedButton(
+                        CustomElevatedSquareButton(
                             iconResourceId = R.drawable.ic_bug_2,
+                            text = "Debug",
                             iconSize = 16.dp,
                         ) {
                             activity?.let {
@@ -243,7 +244,7 @@ fun MainBottomSheet(
                                 )
                             }
                         }
-                        CustomElevatedButton(
+                        CustomElevatedSquareButton(
                             text = "MENU",
                             iconResourceId = R.drawable.ic_options_three_dots,
                             iconSize = 16.dp,
