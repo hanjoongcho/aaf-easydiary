@@ -5,7 +5,7 @@
     <data>
         <variable
             name="view_model"
-            type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel" />
+            type="me.blog.korn123.easydiary.presentation.main.DiaryMainViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

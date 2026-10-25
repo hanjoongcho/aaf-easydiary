@@ -58,9 +58,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
-import me.blog.korn123.commons.utils.BitmapUtils
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FlavorUtils.getDiarySymbolMap
 import me.blog.korn123.easydiary.BuildConfig
@@ -83,6 +80,8 @@ import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -839,7 +838,7 @@ fun Activity.photoToBase64(photoPath: String): String {
     var image64 = ""
     val bos = ByteArrayOutputStream()
     try {
-        val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
+        val bitmap = BitmapFactory.decodeFile(photoPath).cropCenter()
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
         image64 = bos.toByteArray().toBase64()

@@ -41,12 +41,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryReadingBinding
@@ -83,14 +78,19 @@ import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.diary.DiaryReadViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.LinkedDiaryViewModel
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiarySubItemCard
+import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
-import me.blog.korn123.easydiary.ui.components.LegacyDiarySubItemCard
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.LinkedDiaryViewModel
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
+import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.utils.JasyptUtils
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 

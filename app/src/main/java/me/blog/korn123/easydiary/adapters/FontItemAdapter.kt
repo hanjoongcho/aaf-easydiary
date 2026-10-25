@@ -11,8 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
@@ -20,6 +18,8 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.

@@ -73,7 +73,6 @@ import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.application
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -132,11 +131,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
-import me.blog.korn123.commons.utils.EasyDiaryUtils.jsonFileToHashMap
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -159,8 +153,6 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
-import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
-import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
@@ -185,7 +177,6 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_COARSE_LOCATION
 import me.blog.korn123.easydiary.helper.PERMISSION_ACCESS_FINE_LOCATION
-import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SETTING_BOLD_STYLE
 import me.blog.korn123.easydiary.helper.SETTING_CALENDAR_FONT_SCALE
@@ -202,6 +193,9 @@ import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import me.blog.korn123.easydiary.views.ItemCardView

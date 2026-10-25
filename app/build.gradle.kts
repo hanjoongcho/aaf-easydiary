@@ -39,7 +39,6 @@ configure<ApplicationExtension> {
         versionName = "1.4.353.202610xx0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        signingConfig = signingConfigs.getByName("config")
     }
 
     flavorDimensions += "mode"
@@ -96,6 +95,7 @@ configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("config")
         }
         getByName("debug") {
             isMinifyEnabled = false
@@ -103,6 +103,7 @@ configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("config")
         }
     }
 
@@ -280,7 +281,7 @@ tasks.register<JavaExec>("syncReleaseString") {
     dependsOn(compileKotlinTask)
     mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
     classpath = files(
-        compileKotlinTask.map { it.outputs.files }
+        compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
     workingDir = projectDir
     args("sync_release_string")
@@ -295,7 +296,7 @@ tasks.register<JavaExec>("syncNewString") {
     dependsOn(compileKotlinTask)
     mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
     classpath = files(
-        compileKotlinTask.map { it.outputs.files }
+        compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
     workingDir = projectDir
     args("sync_new_string")
@@ -310,7 +311,7 @@ tasks.register<JavaExec>("syncReleaseNote") {
     dependsOn(compileKotlinTask)
     mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
     classpath = files(
-        compileKotlinTask.map { it.outputs.files }
+        compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
     workingDir = projectDir
     args("sync_release_note")
@@ -325,7 +326,7 @@ tasks.register<JavaExec>("prepareRelease") {
     dependsOn(compileKotlinTask)
     mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
     classpath = files(
-        compileKotlinTask.map { it.outputs.files }
+        compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
     workingDir = projectDir
     standardOutput = System.out

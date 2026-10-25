@@ -19,12 +19,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
@@ -46,9 +41,10 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_
 import me.blog.korn123.easydiary.helper.NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
-import me.blog.korn123.easydiary.helper.RealmConstants
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingConstants
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.io.File
 import java.util.Collections
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain

@@ -38,9 +38,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
@@ -88,13 +85,16 @@ import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.ui.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.ui.components.CustomElevatedSquareButton
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import java.util.Calendar
 import java.util.Locale
@@ -214,7 +214,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             diaryViewModel.isLoading = false
-            viewModel.markAsReady()
         }
     }
 
@@ -878,6 +877,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
                     CustomElevatedSquareButton(
+                        text = "Move Today",
+                        iconResourceId = R.drawable.ic_time_8_w,
+                    ) {
+                        moveToday()
+                    }
+                    CustomElevatedSquareButton(
                         text = getString(R.string.button_tree_view),
                         iconResourceId = R.drawable.ic_tree_structure,
                     ) {
@@ -887,12 +892,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
                     CustomElevatedSquareButton(
-                        text = "Move Today",
-                        iconResourceId = R.drawable.ic_time_8_w,
+                        text = getString(R.string.menu_timeline),
+                        iconResourceId = R.drawable.ic_settings_11,
                     ) {
-                        moveToday()
+                        val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
+                        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
                     }
-
                     if (config.enableDebugMode) {
                         CustomElevatedSquareButton(
                             text = getString(R.string.button_quick_settings),
@@ -911,13 +916,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 this@DiaryMainActivity,
                                 Intent(this@DiaryMainActivity, DevActivity::class.java),
                             )
-                        }
-                        CustomElevatedSquareButton(
-                            text = getString(R.string.menu_timeline),
-                            iconResourceId = R.drawable.ic_settings_11,
-                        ) {
-                            val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
-                            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
                         }
                         CustomElevatedSquareButton(
                             text = "Menu",

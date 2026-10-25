@@ -5,24 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemCheatSheetBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.utils.FontUtils
 
 class CheatSheetAdapter(
-        val activity: Activity,
-        private val items: List<CheatSheet>,
-        private val onItemClickListener: AdapterView.OnItemClickListener?
+    val activity: Activity,
+    private val items: List<CheatSheet>,
+    private val onItemClickListener: AdapterView.OnItemClickListener?,
 ) : RecyclerView.Adapter<CheatSheetAdapter.CheatSheetViewHolder>() {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): CheatSheetViewHolder = CheatSheetViewHolder(activity, ItemCheatSheetBinding.inflate(activity.layoutInflater, parent, false), this)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheatSheetViewHolder {
-        return CheatSheetViewHolder(activity, ItemCheatSheetBinding.inflate(activity.layoutInflater, parent, false), this)
-    }
-
-    override fun onBindViewHolder(holder: CheatSheetViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: CheatSheetViewHolder,
+        position: Int,
+    ) {
         holder.bindTo(items[position])
     }
 
@@ -35,8 +38,11 @@ class CheatSheetAdapter(
     }
 
     class CheatSheetViewHolder(
-            activity: Activity, private val ItemCheatSheetBinding: ItemCheatSheetBinding, val adapter: CheatSheetAdapter
-    ) : RecyclerView.ViewHolder(ItemCheatSheetBinding.root), View.OnClickListener {
+        activity: Activity,
+        private val ItemCheatSheetBinding: ItemCheatSheetBinding,
+        val adapter: CheatSheetAdapter,
+    ) : RecyclerView.ViewHolder(ItemCheatSheetBinding.root),
+        View.OnClickListener {
         init {
             ItemCheatSheetBinding.run {
                 activity.initTextSize(root)
@@ -58,5 +64,10 @@ class CheatSheetAdapter(
         }
     }
 
-    data class CheatSheet(val title: String, val description: String, val url: String, val forceAppendCodeBlock: Boolean = false)
+    data class CheatSheet(
+        val title: String,
+        val description: String,
+        val url: String,
+        val forceAppendCodeBlock: Boolean = false,
+    )
 }

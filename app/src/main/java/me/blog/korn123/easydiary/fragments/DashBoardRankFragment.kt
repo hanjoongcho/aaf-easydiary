@@ -8,12 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardRankBinding
 import me.blog.korn123.easydiary.helper.DashboardConstants
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 

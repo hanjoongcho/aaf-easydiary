@@ -8,7 +8,7 @@
 
         <variable
             name="view_model"
-            type="me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel" />
+            type="me.blog.korn123.easydiary.presentation.diary.DiaryReadViewModel" />
     </data>
 
     <LinearLayout

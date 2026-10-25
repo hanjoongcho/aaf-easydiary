@@ -49,13 +49,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -76,12 +73,13 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.ui.components.EasyDiaryActionBar
-import me.blog.korn123.easydiary.ui.components.FastScroll
-import me.blog.korn123.easydiary.ui.components.LegacyDiaryItemCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryLargeActionBar
+import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
@@ -117,6 +115,10 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
 
                 6 -> {
                     FastScrollLazyColumnSample3()
+                }
+
+                7 -> {
+                    LargeTopAppBarSample()
                 }
             }
         }
@@ -317,7 +319,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -350,8 +351,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                         ) {
                             itemsIndexed(items) { index, item ->
                                 SimpleCard(
@@ -372,10 +372,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx = containerSize.height.toFloat(),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd),
@@ -418,7 +416,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -460,8 +457,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                         ) {
                             itemsIndexed(items) { index, diary ->
                                 Card(
@@ -492,10 +488,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx = containerSize.height.toFloat(),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd),
@@ -538,7 +532,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -580,8 +573,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                             contentPadding =
                                 PaddingValues(
                                     top =
@@ -623,26 +615,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx =
-                                containerSize.height.toFloat().minus(
-                                    with(
-                                        LocalDensity.current,
-                                    ) {
-                                        WindowInsets.navigationBars
-                                            .asPaddingValues()
-                                            .calculateBottomPadding()
-                                            .toPx()
-                                            .plus(
-                                                WindowInsets.statusBars
-                                                    .asPaddingValues()
-                                                    .calculateTopPadding()
-                                                    .toPx(),
-                                            )
-                                    },
-                                ),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd)
@@ -672,6 +646,89 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         )
                     }
                 },
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun LargeTopAppBarSample() {
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+        val bottomPadding =
+            if (isVanillaIceCreamPlus()) {
+                WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            } else {
+                0.dp
+            }
+
+        AppTheme {
+            updateStatusBarAppearance()
+            updateNavigationBarAppearance()
+            Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                topBar = {
+                    EasyDiaryLargeActionBar(
+                        title = "Large TopAppBar Sample",
+                        subTitle = "exitUntilCollapsedScrollBehavior",
+                        scrollBehavior = scrollBehavior,
+                    ) {
+                        finishActivityWithTransition()
+                    }
+                },
+                containerColor = Color(config.screenBackgroundColor),
+                content = { innerPadding ->
+                    val context = LocalContext.current
+                    val settingCardModifier = Modifier.fillMaxWidth()
+                    val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
+                    val maxItemsInEachRow =
+                        when {
+                            LocalInspectionMode.current -> 1
+                            isLandScape() -> 2
+                            else -> 1
+                        }
+                    val itemSize = 30
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(maxItemsInEachRow),
+                        modifier =
+                            Modifier
+                                .padding(innerPadding)
+                                .fillMaxWidth()
+                                .background(Color(context.config.screenBackgroundColor)),
+                        contentPadding = PaddingValues(bottom = 72.dp.plus(bottomPadding)),
+                        state = rememberLazyGridState(),
+                    ) {
+                        items(itemSize) { index ->
+                            SimpleCard(
+                                "Item #$index",
+                                "LargeTopAppBar scrollBehavior testing item description #$index",
+                                modifier = settingCardModifier,
+                                enableCardViewPolicy = enableCardViewPolicy,
+                            ) {}
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    Box(modifier = Modifier.padding(bottom = bottomPadding)) {
+                        FloatingActionButton(
+                            onClick = { finishActivityWithTransition() },
+                            containerColor = Color(config.primaryColor),
+                            contentColor = Color.White,
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                            modifier = Modifier.size(40.dp),
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cross),
+                                contentDescription = "Finish Activity",
+                            )
+                        }
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
             )
         }
     }

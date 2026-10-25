@@ -15,8 +15,8 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 
 open class EasyDiaryComposeBaseActivity :
     BaseSimpleActivity(),

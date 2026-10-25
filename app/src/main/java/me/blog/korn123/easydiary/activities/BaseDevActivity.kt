@@ -23,11 +23,19 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,10 +43,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -60,9 +72,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.dialogs.ActionLogDialog
@@ -86,6 +95,7 @@ import me.blog.korn123.easydiary.extensions.isLocationEnabled
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.navigationBarHeight
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -93,6 +103,7 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
+import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -101,20 +112,23 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.NotificationConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
 import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
+import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
+import me.blog.korn123.easydiary.presentation.settings.components.ScrollableCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWithImage
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardWithImage
+import me.blog.korn123.easydiary.presentation.settings.components.SymbolCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.services.NotificationService
-import me.blog.korn123.easydiary.ui.components.AlarmCard
-import me.blog.korn123.easydiary.ui.components.CategoryTitleCard
-import me.blog.korn123.easydiary.ui.components.ScrollableCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SimpleCardWithImage
-import me.blog.korn123.easydiary.ui.components.SwitchCard
-import me.blog.korn123.easydiary.ui.components.SwitchCardWithImage
-import me.blog.korn123.easydiary.ui.components.SymbolCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.utils.BiometricUtils.Companion.startListeningBiometric
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.net.HttpURLConnection
 import java.net.URL
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
@@ -191,6 +205,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
     private var mExportJsonOption = ExportOption.DIARY
+    private var mExportJsonSymbolSequence = 0
     private val mExportJsonLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
             uri?.let { targetUri ->
@@ -218,6 +233,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
                             ExportOption.DIARY -> {
                                 mutableMapOf("DIARY" to diaryRepository.getDiariesWithPhotos())
+                            }
+
+                            ExportOption.DIARY_WITH_SYMBOL_SEQUENCE -> {
+                                mutableMapOf(
+                                    "DIARY" to
+                                        diaryRepository.getDiariesWithPhotos(
+                                            symbolSequence = mExportJsonSymbolSequence,
+                                        ),
+                                )
                             }
                         }
 
@@ -302,6 +326,19 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     Intent(
                         currentContext,
                         me.blog.korn123.easydiary.presentation.main.DiaryMainActivity::class.java,
+                    ),
+                )
+            }
+            SimpleCard(
+                "Mig DiaryMain2",
+                "Migrated DiaryMain screen to Jetpack Compose",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(
+                        currentContext,
+                        me.blog.korn123.easydiary.presentation.main.DiaryMain2Activity::class.java,
                     ),
                 )
             }
@@ -466,87 +503,51 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     @Composable
-    protected fun Migration(
-        modifier: Modifier,
-        maxItemsInEachRow: Int,
-        viewModel: BaseDevViewModel = hiltViewModel(),
-        diaryViewModel: DiaryViewModel = hiltViewModel(),
-    ) {
-        CategoryTitleCard(title = "Migration Test")
-        val state = rememberScrollState()
-        val coroutineScope = rememberCoroutineScope()
-
-        suspend fun moveScroll() {
-            state.animateScrollBy(Float.MAX_VALUE)
-        }
-
-        suspend fun updateConsole(
-            message: String,
-            tag: String = Thread.currentThread().name,
-        ) {
-            mBaseDevViewModel.coroutine1Console =
-                viewModel.coroutine1Console.plus("$tag: $message\n")
-            moveScroll()
-        }
-
-        suspend fun updateMigInfo() {
-            if (config.enableJetpackRoomDatabase) {
-                updateConsole("🍕 room info")
-                updateConsole("room diary count: ${diaryViewModel.getDiaryCount()}")
-                updateConsole("room photo-uri count: ${diaryRepository.observePhotoUris().first().size}")
-                updateConsole("room alarm count: ${viewModel.getAlarmCount()}")
-                updateConsole("room action-log count: ${viewModel.getActionLogCount()}")
-                updateConsole("room d-day count: ${viewModel.getDDayCount()}")
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            mBaseDevViewModel.isLoading = true
-            updateMigInfo()
-            mBaseDevViewModel.isLoading = false
-        }
-
-        FlowRow(
-            modifier = Modifier,
-            maxItemsInEachRow = maxItemsInEachRow,
-        ) {
-            ScrollableCard(
-                "Migration Info",
-                mBaseDevViewModel.coroutine1Console,
-                Modifier
-                    .fillMaxWidth(),
-//                        .height(100.dp)
-//                        .verticalScroll(state)
-                state,
-            )
-            SwitchCard(
-                "Enable Jetpack Room",
-                "Turning this option on activates the Jetpack Room",
-                modifier = modifier,
-                viewModel.enableJetpackRoomDatabase,
-            ) {
-                viewModel.toggleEnableJetpackRoomDatabase()
-            }
-            SimpleCard(
-                "🔁 Refresh",
-                "Refresh migration info",
-                modifier = modifier,
-            ) {
-                coroutineScope.launch {
-                    mBaseDevViewModel.isLoading = true
-                    updateMigInfo()
-                    mBaseDevViewModel.isLoading = false
-                }
-            }
-        }
-    }
-
-    @Composable
     protected fun ExportRealmToJson(
         modifier: Modifier,
         maxItemsInEachRow: Int,
     ) {
         CategoryTitleCard(title = "Export Database To Json")
+        var symbolSequenceInput by remember { mutableStateOf("0") }
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(HORIZONTAL_PADDING.dp, 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OutlinedTextField(
+                value = symbolSequenceInput,
+                onValueChange = { symbolSequenceInput = it },
+                label = { Text("Symbol Sequence") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp),
+            )
+            IconButton(
+                onClick = {
+                    lifecycleScope.launch {
+                        openFeelingSymbolDialog(
+                            "Select Symbol Sequence",
+                            selectedSymbolSequence = symbolSequenceInput.toIntOrNull() ?: 0,
+                            diaryViewModel.getSymbolUsedCountMap(true),
+                        ) { selectedSequence: Int ->
+                            symbolSequenceInput = selectedSequence.toString()
+                        }
+                    }
+                },
+                modifier = Modifier.padding(start = 4.dp),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_select_symbol),
+                    contentDescription = "Select Symbol",
+                    modifier = Modifier.size(32.dp),
+                )
+            }
+        }
         FlowRow(
             modifier = Modifier,
             maxItemsInEachRow = maxItemsInEachRow,
@@ -559,6 +560,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 val fileName =
                     "diary_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                 mExportJsonOption = ExportOption.DIARY
+                mExportJsonLauncher.launch(fileName)
+            }
+            SimpleCard(
+                "export diary by symbol",
+                "지정된 symbolSequence 조건으로 필터링된 diary 데이터를 export 합니다.",
+                modifier = modifier,
+            ) {
+                val seq = symbolSequenceInput.toIntOrNull() ?: 0
+                val fileName =
+                    "diary_export_symbol_${seq}_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                mExportJsonSymbolSequence = seq
+                mExportJsonOption = ExportOption.DIARY_WITH_SYMBOL_SEQUENCE
                 mExportJsonLauncher.launch(fileName)
             }
             SimpleCard(
@@ -767,6 +780,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     currentActivity,
                     Intent(currentContext, Demo1Activity::class.java).apply {
                         putExtra("mode", 6)
+                    },
+                )
+            }
+            SimpleCard(
+                "LargeTopAppBar & scrollBehavior",
+                "LargeTopAppBar + exitUntilCollapsedScrollBehavior",
+                modifier = modifier,
+            ) {
+                TransitionHelper.startActivityWithTransition(
+                    currentActivity,
+                    Intent(currentContext, Demo1Activity::class.java).apply {
+                        putExtra("mode", 7)
                     },
                 )
             }

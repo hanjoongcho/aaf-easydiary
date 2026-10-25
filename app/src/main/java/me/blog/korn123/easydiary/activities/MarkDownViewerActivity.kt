@@ -11,7 +11,6 @@ import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
 import io.noties.markwon.utils.ColorUtils
 import io.noties.markwon.utils.Dip
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -24,6 +23,7 @@ import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
@@ -108,7 +108,11 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             // always check HTTP response code first
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // opens input stream from the HTTP connection
-                val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }.toMutableList()
+                val lines =
+                    httpConn.inputStream
+                        .bufferedReader(Charsets.UTF_8)
+                        .use { it.readLines() }
+                        .toMutableList()
                 if (mForceAppendCodeBlock) {
                     lines.add(0, "```java")
                     lines.add("```")

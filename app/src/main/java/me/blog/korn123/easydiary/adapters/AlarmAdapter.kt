@@ -26,8 +26,8 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.AlarmConstants
-import me.blog.korn123.easydiary.ui.components.AlarmCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 class AlarmAdapter(

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -13,6 +12,7 @@ import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.utils.JasyptUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**

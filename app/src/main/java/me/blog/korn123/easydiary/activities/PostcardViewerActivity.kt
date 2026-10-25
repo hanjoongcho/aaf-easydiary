@@ -8,13 +8,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.GridLayoutManager
-import me.blog.korn123.commons.utils.ColorUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.adjustAlpha
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.openGridSettingDialog
@@ -23,6 +21,8 @@ import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.GridItemDecorationPostcardViewer
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
 
 /**
@@ -77,7 +77,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
         }
 
         initPostCard()
-        mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
+        mBinding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
         mBinding.deletePostCard.setOnClickListener {
             val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
             mListPostcard.forEachIndexed { _, item ->

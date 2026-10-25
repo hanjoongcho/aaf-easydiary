@@ -24,8 +24,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
@@ -35,7 +33,9 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedTextView
 
 @AndroidEntryPoint

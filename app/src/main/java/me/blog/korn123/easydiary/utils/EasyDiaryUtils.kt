@@ -1,0 +1,766 @@
+package me.blog.korn123.easydiary.utils
+
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
+import android.database.Cursor
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.provider.OpenableColumns
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.PopupWindow
+import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import id.zelory.compressor.Compressor
+import me.blog.korn123.easydiary.BuildConfig
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.SecondItemAdapter
+import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.enums.Calculation
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CARD_CONTENT_PADDING_DP
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP
+import me.blog.korn123.easydiary.helper.ATTACH_PHOTO_MARGIN_DP
+import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
+import me.blog.korn123.easydiary.helper.BACKUP_EXCEL_DIRECTORY
+import me.blog.korn123.easydiary.helper.ColorConstants
+import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
+import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
+import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
+import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.views.FixedCardView
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.util.Calendar
+import java.util.Locale
+import java.util.UUID
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
+
+/**
+ * Created by hanjoong on 2017-04-30.
+ */
+object EasyDiaryUtils {
+    /***************************************************************************************************
+     *   Constants
+     *
+     ***************************************************************************************************/
+    val easyDiaryRoomMimeType: String = "room/zip"
+
+    /***************************************************************************************************
+     *   String Utils
+     *
+     ***************************************************************************************************/
+    fun summaryDiaryLabel(diary: DiaryDomain): String = if (diary.title.isNullOrEmpty()) diary.contents.lines()[0] else diary.title
+
+    fun searchWordIndexes(
+        contents: String,
+        searchWord: String,
+    ): List<Int> {
+        val indexes = arrayListOf<Int>()
+        if (searchWord.isNotEmpty()) {
+            var index = contents.indexOf(searchWord, 0, true)
+            while (index >= 0) {
+                indexes.add(index)
+                index = contents.indexOf(searchWord, index.plus(1), true)
+            }
+        }
+        return indexes
+    }
+
+    /***************************************************************************************************
+     *   Number Utils
+     *
+     ***************************************************************************************************/
+    fun isContainNumber(string: String?): Boolean = string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
+
+    fun isStockNumber(string: String?): Boolean = "$string,".matches("^(\\d+,)+$".toRegex())
+
+    fun findNumber(string: String?): Float {
+        var number = 0f
+        string?.let {
+            val intRange = "\\d+\\.?\\d+".toRegex().find(it)?.range ?: IntRange(0, 0)
+            number = string.substring(intRange).toFloat()
+        }
+        return number
+    }
+
+    /***************************************************************************************************
+     *   Date Utils
+     *
+     ***************************************************************************************************/
+    fun datePickerToTimeMillis(
+        dayOfMonth: Int,
+        month: Int,
+        year: Int,
+        isFullHour: Boolean = false,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+    ): Long {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal.timeInMillis
+    }
+
+    fun convDateToTimeMillis(
+        field: Int,
+        amount: Int,
+        isZeroHour: Boolean = true,
+        isZeroMinute: Boolean = true,
+        isZeroSecond: Boolean = true,
+        isZeroMilliSecond: Boolean = true,
+    ): Long {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        if (isZeroHour) calendar.set(Calendar.HOUR_OF_DAY, 0)
+        if (isZeroMinute) calendar.set(Calendar.MINUTE, 0)
+        if (isZeroSecond) calendar.set(Calendar.SECOND, 0)
+        if (isZeroMilliSecond) calendar.set(Calendar.MILLISECOND, 0)
+        if (amount != 0) {
+            calendar.add(field, amount)
+        }
+        return calendar.timeInMillis
+    }
+
+    fun getCalendarInstance(
+        isFullHour: Boolean = false,
+        field: Int,
+        amount: Int,
+    ): Calendar {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        cal.set(Calendar.MILLISECOND, if (isFullHour) 999 else 0)
+        if (amount != 0) cal.add(field, amount)
+        return cal
+    }
+
+    /***************************************************************************************************
+     *   Image Utils
+     *
+     ***************************************************************************************************/
+    fun createBackgroundGradientDrawable(
+        color: Int,
+        alpha: Int,
+        cornerRadius: Float,
+    ): Drawable {
+        val gradientDrawable =
+            GradientDrawable().apply {
+                setColor(ColorUtils.setAlphaComponent(color, alpha))
+                setCornerRadius(cornerRadius)
+            }
+        return gradientDrawable
+    }
+
+    fun createAttachedPhotoView(
+        context: Context,
+        photoUri: PhotoUriDomain,
+        marginLeft: Float = 0F,
+        marginTop: Float = 0F,
+        marginRight: Float = 3F,
+        marginBottom: Float = 0F,
+    ): ImageView {
+        val thumbnailSize = context.dpToPixel(context.config.settingThumbnailSize)
+        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+        val imageView = ImageView(context)
+        val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
+        layoutParams.setMargins(
+            context.dpToPixel(marginLeft),
+            context.dpToPixel(marginTop),
+            context.dpToPixel(marginRight),
+            context.dpToPixel(marginBottom),
+        )
+        imageView.layoutParams = layoutParams
+        imageView.background =
+            createBackgroundGradientDrawable(
+                context.config.primaryColor,
+                THUMBNAIL_BACKGROUND_ALPHA,
+                cornerRadius,
+            )
+        imageView.scaleType = ImageView.ScaleType.CENTER
+        val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
+        imageView.setPadding(padding, padding, padding, padding)
+        Glide
+            .with(context)
+            .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
+            .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
+            .into(imageView)
+        return imageView
+    }
+
+    fun createAttachedPhotoViewForFlexBox(
+        activity: Activity,
+        photoUri: PhotoUriDomain,
+        attachedCount: Int,
+    ): CardView {
+        val spanCount =
+            when {
+                !activity.isLandScape() && attachedCount == 1 -> 1
+                !activity.isLandScape() && attachedCount == 2 -> 2
+                !activity.isLandScape() && attachedCount > 2 -> 3
+                activity.isLandScape() -> 5
+                else -> 1
+            }
+        val attachCardContentPadding = ATTACH_PHOTO_CARD_CONTENT_PADDING_DP.div(spanCount)
+        val thumbnailSize =
+            (
+                activity.getDefaultDisplay().x -
+                    activity.dpToPixel(ATTACH_PHOTO_CONTAINER_CARD_PADDING_DP) -
+                    (activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP)).times(spanCount).times(2) -
+                    (activity.dpToPixel(attachCardContentPadding)).times(spanCount).times(2)
+            ).div(spanCount)
+        val cornerRadius = thumbnailSize.times(PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL)
+        val imageView = ImageView(activity)
+        val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
+//        layoutParams.setMargins(activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP), activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP))
+        imageView.layoutParams = layoutParams
+//        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA_HIGH, cornerRadius)
+        imageView.scaleType = ImageView.ScaleType.CENTER
+//        val padding = (activity.dpToPixel(1F, Calculation.FLOOR))
+//        imageView.setPadding(padding, padding, padding, padding)
+        Glide
+            .with(imageView)
+            .load(getApplicationDataDirectory(activity) + photoUri.getFilePath())
+            .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
+            .into(imageView)
+
+        val margin = activity.dpToPixel(ATTACH_PHOTO_MARGIN_DP, Calculation.FLOOR)
+        val contentPadding = activity.dpToPixel(attachCardContentPadding, Calculation.FLOOR)
+        return FixedCardView(activity).apply {
+            activity.updateDashboardInnerCard(this)
+            setLayoutParams(
+                ViewGroup
+                    .MarginLayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        setMargins(margin, margin, margin, margin)
+                    },
+            )
+
+            radius = cornerRadius
+            fixedAppcompatPadding = false
+            setContentPadding(contentPadding, contentPadding, contentPadding, contentPadding)
+            addView(imageView)
+        }
+//        return imageView
+    }
+
+    fun downSamplingImage(
+        context: Context,
+        uri: Uri,
+        destFile: File,
+    ): String {
+        val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
+        when (mimeType) {
+            "image/gif" -> {
+//                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
+                context.contentResolver.openInputStream(uri)?.use { input ->
+                    FileOutputStream(destFile).use { fos ->
+                        input.copyTo(fos)
+                    }
+                }
+            }
+
+            else -> {
+                val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
+                context.contentResolver.openInputStream(uri)?.use { input ->
+                    FileOutputStream(tempFile).use { fos ->
+                        input.copyTo(fos)
+                    }
+                }
+                val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+                compressedFile.copyTo(destFile, true)
+                tempFile.delete()
+            }
+        }
+        return mimeType
+    }
+
+    fun downSamplingImage(
+        context: Context,
+        srcFile: File,
+        destFile: File,
+    ) {
+        val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
+        compressedFile.copyTo(destFile, true)
+    }
+
+    fun createThumbnailGlideOptions(
+        radius: Float,
+        isEncrypt: Boolean = false,
+    ): RequestOptions = createThumbnailGlideOptions(radius.toInt(), isEncrypt)
+
+    fun createThumbnailGlideOptions(
+        radius: Int,
+        isEncrypt: Boolean = false,
+    ): RequestOptions =
+        RequestOptions()
+            // .error(R.drawable.error_7)
+            .placeholder(if (isEncrypt) R.drawable.ic_padlock else R.drawable.ic_error_7)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .priority(Priority.HIGH)
+            .transform(MultiTransformation(CenterCrop(), RoundedCorners(radius)))
+
+    /***************************************************************************************************
+     *   File Utils
+     *
+     ***************************************************************************************************/
+    private fun makeDirectory(path: String) {
+        val workingDirectory = File(path)
+        if (!workingDirectory.exists()) workingDirectory.mkdirs()
+    }
+
+    fun initWorkingDirectory(context: Context) {
+//        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+        makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + DIARY_POSTCARD_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + MARKDOWN_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + BACKUP_EXCEL_DIRECTORY)
+        makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
+//        }
+    }
+
+    fun getExternalStorageDirectory(): File = Environment.getExternalStorageDirectory()
+
+    fun getApplicationDataDirectory(context: Context): String {
+//        return Environment.getExternalStorageDirectory().absolutePath
+        return context.applicationInfo.dataDir
+    }
+
+    fun readFileWithSAF(
+        mimeType: String,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        val intent =
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = mimeType
+            }
+        activityResultLauncher.launch(intent)
+    }
+
+    fun readFileWithSAF(
+        mimeTypes: Array<String>,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        val intent =
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+            }
+        activityResultLauncher.launch(intent)
+    }
+
+    fun writeFileWithSAF(
+        fileName: String,
+        mimeType: String,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT)
+            .apply {
+                // Filter to only show results that can be "opened", such as
+                // a file (as opposed to a list of contacts or timezones).
+                addCategory(Intent.CATEGORY_OPENABLE)
+
+                type = mimeType
+                // Create a file with the requested MIME type.
+                putExtra(Intent.EXTRA_TITLE, fileName)
+            }.run {
+                activityResultLauncher.launch(this)
+            }
+    }
+
+    fun getExportMeta() =
+        mapOf(
+            "BuildConfig.FLAVOR" to BuildConfig.FLAVOR,
+            "BuildConfig.BUILD_TYPE" to BuildConfig.BUILD_TYPE,
+            "BuildConfig.VERSION_CODE" to BuildConfig.VERSION_CODE,
+            "BuildConfig.VERSION_NAME" to BuildConfig.VERSION_NAME,
+            "Build.MANUFACTURER" to Build.MANUFACTURER,
+            "Build.MODEL" to Build.MODEL,
+            "Build.VERSION.RELEASE" to Build.VERSION.RELEASE,
+            "Build.VERSION.SDK_INT" to Build.VERSION.SDK_INT,
+        )
+
+    /***************************************************************************************************
+     *   View Utils
+     *
+     ***************************************************************************************************/
+    fun boldString(
+        context: Context,
+        textView: TextView?,
+    ) {
+        if (context.config.boldStyleEnable) {
+            boldStringForce(textView)
+        }
+    }
+
+    fun boldStringForce(textView: TextView?) {
+        textView?.let { tv ->
+            val spannableString = SpannableString(tv.text)
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
+            tv.text = spannableString
+        }
+    }
+
+    fun warningString(textView: TextView) {
+        val spannableString = SpannableString(textView.text)
+        spannableString.setSpan(
+            UnderlineSpan(),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        spannableString.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        textView.text = spannableString
+    }
+
+    fun highlightString(textView: TextView) {
+        val spannableString = SpannableString(textView.text)
+        spannableString.setSpan(
+            BackgroundColorSpan(ColorConstants.HIGHLIGHT_COLOR),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.BLACK),
+            0,
+            textView.text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+//        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = spannableString
+    }
+
+    fun highlightStringIgnoreCase(
+        textView: TextView?,
+        input: String?,
+        highlightColor: Int = ColorConstants.HIGHLIGHT_COLOR,
+    ) {
+        textView?.let { tv ->
+            input?.let { targetString ->
+                val inputLower = targetString.lowercase()
+                val contentsLower = tv.text.toString().lowercase()
+                val spannableString = SpannableString(tv.text)
+                removeSpans(spannableString)
+
+                var indexOfKeyword = contentsLower.indexOf(inputLower)
+                while (indexOfKeyword >= 0) {
+                    spannableString.setSpan(
+                        BackgroundColorSpan(highlightColor),
+                        indexOfKeyword,
+                        indexOfKeyword + inputLower.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.BLACK),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+
+                    indexOfKeyword =
+                        contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
+                }
+                tv.text = spannableString
+            }
+        }
+    }
+
+    fun highlightString(
+        textView: TextView?,
+        input: String?,
+        highlightColor: Int = ColorConstants.HIGHLIGHT_COLOR,
+    ) {
+        textView?.let { tv ->
+            input?.let { targetString ->
+                // Get the text from text view and create a spannable string
+                val spannableString = SpannableString(tv.text)
+                removeSpans(spannableString)
+
+                // Search for all occurrences of the keyword in the string
+                var indexOfKeyword = spannableString.toString().indexOf(targetString)
+                while (indexOfKeyword >= 0) {
+                    // Create a background color span on the keyword
+                    spannableString.setSpan(
+                        BackgroundColorSpan(highlightColor),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.BLACK),
+                        indexOfKeyword,
+                        indexOfKeyword + targetString.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+
+                    // Get the next index of the keyword
+                    indexOfKeyword =
+                        spannableString
+                            .toString()
+                            .indexOf(targetString, indexOfKeyword + targetString.length)
+                }
+
+                // Set the final text on TextView
+                tv.text = spannableString
+            }
+        }
+    }
+
+    fun removeSpans(spannableString: SpannableString) {
+        spannableString
+            .getSpans(0, spannableString.length, BackgroundColorSpan::class.java)
+            ?.forEach { spannableString.removeSpan(it) }
+        spannableString
+            .getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
+            ?.forEach { spannableString.removeSpan(it) }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun disableTouchEvent(view: View) {
+        view.setOnTouchListener { _, _ -> true }
+    }
+
+    fun applyMarkDownEllipsize(
+        textContents: TextView,
+        sequence: Long,
+        delayMillis: Long = 0,
+    ) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (textContents.tag == sequence) {
+                val max = textContents.maxLines
+                val layout = textContents.layout
+                if ((layout?.lineCount ?: 0) > max) {
+                    val end = layout.getLineEnd(max - 1)
+                    textContents.setText(
+                        textContents.text.subSequence(0, end - 1),
+                        TextView.BufferType.SPANNABLE,
+                    )
+                    textContents.append("…")
+                }
+            }
+        }, delayMillis)
+    }
+
+    /***************************************************************************************************
+     *   Dialog Utils
+     *
+     ***************************************************************************************************/
+    fun createSecondsPickerBuilder(
+        context: Context,
+        itemClickListener: AdapterView.OnItemClickListener,
+        second: Int,
+    ): AlertDialog.Builder {
+        val builder = AlertDialog.Builder(context)
+        builder.setNegativeButton(context.getString(android.R.string.cancel), null)
+        builder.setTitle(context.getString(R.string.common_create_seconds))
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val secondsPicker = inflater.inflate(R.layout.dialog_seconds_picker, null)
+        val listView = secondsPicker.findViewById<ListView>(R.id.seconds)
+        val listSecond = ArrayList<Map<String, String>>()
+        for (i in 0..59) {
+            val map = hashMapOf<String, String>()
+            map["label"] = i.toString() + "s"
+            map["value"] = i.toString()
+            listSecond.add(map)
+        }
+        val adapter = SecondItemAdapter(context, R.layout.item_second, listSecond, second)
+        listView.adapter = adapter
+        listView.onItemClickListener = itemClickListener
+        builder.setView(secondsPicker)
+        return builder
+    }
+
+    fun openCustomOptionMenu(
+        content: View,
+        parent: View,
+    ): PopupWindow {
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popup: PopupWindow =
+            PopupWindow(content, width, height, true).apply {
+//            animationStyle = R.style.text_view_option_animation
+                setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+                showAtLocation(
+                    parent,
+                    Gravity.TOP or Gravity.END,
+                    0,
+                    parent.context.dpToPixel(24F),
+                )
+            }
+        content.x = 1000f
+        content.y = 0f
+        val animX = ObjectAnimator.ofFloat(content, "x", 0f)
+        val animY = ObjectAnimator.ofFloat(content, "y", 0f)
+        AnimatorSet().apply {
+            playTogether(animX, animY)
+            duration = 390
+            start()
+        }
+        return popup
+    }
+
+    /***************************************************************************************************
+     *   Conversion Utils
+     *
+     ***************************************************************************************************/
+    fun sequenceToPageIndex(
+        diaryList: List<DiaryDomain>,
+        sequence: Long,
+    ): Int {
+        var pageIndex = 0
+        if (sequence > -1) {
+            for (i in diaryList.indices) {
+                if (diaryList[i].diaryId == sequence) {
+                    pageIndex = i
+                    break
+                }
+            }
+        }
+        return pageIndex
+    }
+
+    fun queryName(
+        resolver: ContentResolver,
+        uri: Uri,
+    ): String {
+        val returnCursor: Cursor? = resolver.query(uri, null, null, null, null)
+        var name: String? = null
+        returnCursor?.let {
+            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            it.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name ?: UUID.randomUUID().toString()
+    }
+
+    fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
+        val reader = JsonReader(FileReader(filename))
+        val type = object : TypeToken<HashMap<String, Any>>() {}.type
+        val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
+        reader.close()
+        return map
+    }
+
+    fun hashMapToJsonString(map: HashMap<String, Any>): String {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        return gson.toJson(map)
+    }
+
+    fun resolveDiaryFilter(
+        diaries: List<Diary>,
+        context: Context,
+        startTimeMillis: Long = 0,
+        endTimeMillis: Long = 0,
+        symbolSequence: Int = 0,
+        checkFutureDiaryOption: Boolean = false,
+    ): List<Diary> {
+        // apply date filter & sorting (sync with EasyDiaryDbHelper)
+        var results = diaries
+
+        // apply future diary filter
+        if (checkFutureDiaryOption && context.config.disableFutureDiary) {
+            results =
+                results
+                    .filter { it.currentTimeMillis <= System.currentTimeMillis() }
+                    .sortedWith(compareByDescending<Diary> { it.currentTimeMillis }.thenByDescending { it.diaryId })
+        }
+
+        // apply temporary diary filter (originDiaryId == 0 is normal diary)
+        if (!context.config.enableDebugOptionVisibleTemporaryDiary) {
+            results =
+                results.filter { it.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
+        }
+
+        // apply task symbol top order logic
+        if (context.config.enableTaskSymbolTopOrder) {
+            val taskSymbols = listOf(80, 81)
+            val mergedList = mutableListOf<Diary>()
+            mergedList.addAll(results.filter { it.symbolSequence in taskSymbols })
+            mergedList.addAll(results.filter { it.symbolSequence !in taskSymbols })
+            results = mergedList
+        }
+
+        return results
+    }
+
+    /***************************************************************************************************
+     *   Chart Utils
+     *
+     ***************************************************************************************************/
+
+    /***************************************************************************************************
+     *   Legacy Utils
+     *
+     ***************************************************************************************************/
+
+    /***************************************************************************************************
+     *   ETC.
+     *
+     ***************************************************************************************************/
+}

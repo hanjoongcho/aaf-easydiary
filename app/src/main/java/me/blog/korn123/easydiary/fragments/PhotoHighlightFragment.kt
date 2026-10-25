@@ -29,7 +29,7 @@ import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.PhotoHighlightConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 
 @AndroidEntryPoint

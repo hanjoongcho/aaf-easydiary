@@ -37,7 +37,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
+import me.blog.korn123.easydiary.presentation.main.DiaryMainViewModel
 import kotlin.math.abs
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> :

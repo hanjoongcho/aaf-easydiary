@@ -5,4 +5,5 @@ enum class ExportOption {
     ALARM,
     D_DAY,
     DIARY,
+    DIARY_WITH_SYMBOL_SEQUENCE,
 }

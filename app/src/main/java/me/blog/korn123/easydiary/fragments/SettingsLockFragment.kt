@@ -3,12 +3,10 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
@@ -16,18 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
@@ -37,9 +31,9 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
-import me.blog.korn123.easydiary.ui.components.SwitchCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
 class SettingsLockFragment : androidx.fragment.app.Fragment() {
     /***************************************************************************************************

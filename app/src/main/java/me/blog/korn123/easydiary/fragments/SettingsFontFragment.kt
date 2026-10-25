@@ -29,8 +29,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
@@ -52,12 +50,14 @@ import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
-import me.blog.korn123.easydiary.ui.components.FontSize
-import me.blog.korn123.easydiary.ui.components.LineSpacing
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SwitchCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.FontSize
+import me.blog.korn123.easydiary.presentation.settings.components.LineSpacing
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {

@@ -15,9 +15,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.FileNode
-import me.blog.korn123.commons.utils.TreeUtils.buildFileTreeFromDomain
-import me.blog.korn123.commons.utils.TreeUtils.flattenTree
+import me.blog.korn123.easydiary.presentation.tree.TreeUtils.buildFileTreeFromDomain
+import me.blog.korn123.easydiary.presentation.tree.TreeUtils.flattenTree
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.helper.DEV_SYNC_SYMBOL_USER_CUSTOM_SYNC_DOCS

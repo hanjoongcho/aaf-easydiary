@@ -10,8 +10,8 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.viewmodels.AlarmViewModel
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import kotlin.getValue
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 

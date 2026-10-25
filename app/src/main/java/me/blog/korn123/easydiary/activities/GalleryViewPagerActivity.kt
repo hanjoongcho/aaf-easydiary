@@ -11,11 +11,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.github.chrisbanes.photoview.PhotoView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
@@ -26,6 +24,7 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.utils.FontUtils
 
 /**
  * Created by hanjoong on 2017-06-08.

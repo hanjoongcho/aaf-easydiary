@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +27,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
@@ -71,9 +69,12 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.workers.BackupOperations
 import java.io.File
 import java.util.Date
@@ -106,8 +107,26 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             }
 
                             REQUEST_CODE_SAF_READ_ROOM -> {
+                                fun getFileNameFromUri(uri: Uri): String {
+                                    if (uri.scheme == "content") {
+                                        applicationContext.contentResolver
+                                            .query(
+                                                uri,
+                                                arrayOf(OpenableColumns.DISPLAY_NAME),
+                                                null,
+                                                null,
+                                                null,
+                                            )?.use { cursor ->
+                                                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                                                if (nameIndex != -1 && cursor.moveToFirst()) {
+                                                    return cursor.getString(nameIndex)
+                                                }
+                                            }
+                                    }
+                                    return ""
+                                }
                                 it.data?.data?.let { uri ->
-                                    when (classifyUriByExtension(uri.toString())) {
+                                    when (classifyUriByExtension(getFileNameFromUri(uri))) {
                                         UriFileType.ROOM -> {
                                             lifecycleScope.launch {
                                                 importRoomDataWithSAF(

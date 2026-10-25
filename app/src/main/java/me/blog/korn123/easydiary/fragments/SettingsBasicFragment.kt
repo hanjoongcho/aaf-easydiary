@@ -20,21 +20,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
@@ -58,12 +53,13 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.ui.components.RadioGroupCard
-import me.blog.korn123.easydiary.ui.components.SimpleCard
-import me.blog.korn123.easydiary.ui.components.SwitchCard
-import me.blog.korn123.easydiary.ui.components.SwitchCardTodo
-import me.blog.korn123.easydiary.ui.theme.AppTheme
-import me.blog.korn123.easydiary.viewmodels.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.RadioGroupCard
+import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
+import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardTodo
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
@@ -357,6 +353,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 ),
                             ),
                         selectedKey = calendarStartDay,
+                        enableCardViewPolicy = enableCardViewPolicy,
                         fontFamily = fontFamily,
                     ) { key ->
                         calendarStartDay = key
@@ -380,6 +377,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                                 ),
                             ),
                         selectedKey = calendarSorting,
+                        enableCardViewPolicy = enableCardViewPolicy,
                         fontFamily = fontFamily,
                     ) { key ->
                         config.calendarSorting = key

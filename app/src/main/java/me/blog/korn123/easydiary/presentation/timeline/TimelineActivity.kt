@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.presentation.timeline
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -62,6 +63,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -76,10 +78,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -99,8 +98,11 @@ import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
-import me.blog.korn123.easydiary.ui.components.LoadingScreen
-import me.blog.korn123.easydiary.ui.theme.AppTheme
+import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import java.text.SimpleDateFormat
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -428,6 +430,8 @@ fun TimelineFilterPanel(
     val context = LocalContext.current
     val primaryColor = Color(context.config.primaryColor)
     val textColor = Color(context.config.textColor)
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Card(
         modifier =
@@ -446,177 +450,335 @@ fun TimelineFilterPanel(
                     .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            // Start Date Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.filter_start_date),
-                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
-                    modifier = Modifier.weight(3f),
-                )
+            if (isLandscape) {
+                // Landscape: Line 1: Start Date & End Date in 1 line
                 Row(
-                    modifier =
-                        Modifier
-                            .weight(7f)
-                            .clickable { onStartDateClick() },
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = startDateText.ifEmpty { stringResource(id = R.string.filter_start_date_hint) },
-                        style = TextStyle(color = if (startDateText.isEmpty()) Color.Gray else textColor),
+                    Row(
                         modifier = Modifier.weight(1f),
-                    )
-                    IconButton(onClick = onStartDateClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_calendar_4_w),
-                            contentDescription = "Start Date",
-                            tint = primaryColor,
-                        )
-                    }
-                }
-            }
-
-            // End Date Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.filter_end_date),
-                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
-                    modifier = Modifier.weight(3f),
-                )
-                Row(
-                    modifier =
-                        Modifier
-                            .weight(7f)
-                            .clickable { onEndDateClick() },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = endDateText.ifEmpty { stringResource(id = R.string.filter_end_date_hint) },
-                        style = TextStyle(color = if (endDateText.isEmpty()) Color.Gray else textColor),
-                        modifier = Modifier.weight(1f),
-                    )
-                    IconButton(onClick = onEndDateClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_calendar_4_w),
-                            contentDescription = "End Date",
-                            tint = primaryColor,
-                        )
-                    }
-                }
-            }
-
-            // Search Word Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.filter_search_word),
-                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
-                    modifier = Modifier.weight(3f),
-                )
-                OutlinedTextField(
-                    value = queryText,
-                    onValueChange = onQueryChange,
-                    modifier = Modifier.weight(7f),
-                    placeholder = {
-                        Text(
-                            text = stringResource(id = R.string.filter_search_word_hint),
-                            style = TextStyle(color = Color.Gray, fontSize = 14.sp),
-                        )
-                    },
-                    singleLine = true,
-                    colors =
-                        OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = primaryColor,
-                            unfocusedBorderColor = Color.LightGray,
-                        ),
-                )
-            }
-
-            // Diary Symbol Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.diary_symbol),
-                    style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
-                    modifier = Modifier.weight(3f),
-                )
-                Row(
-                    modifier =
-                        Modifier
-                            .weight(7f),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Box(
-                        modifier =
-                            Modifier
-                                .size(46.dp)
-                                .clip(CircleShape)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = ripple(bounded = true),
-                                    onClick = onSymbolClick,
-                                ),
-                        contentAlignment = Alignment.Center,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        AndroidView(
-                            modifier =
-                                Modifier
-                                    .size(32.dp),
-                            factory = { ctx ->
-                                ImageView(ctx).apply {
-                                    isClickable = false
-                                    isFocusable = false
-                                }
-                            },
-                            update = { imageView ->
-                                FlavorUtils.initWeatherView(
-                                    imageView.context,
-                                    imageView,
-                                    symbolSequence,
-                                    false,
-                                )
-                            },
+                        Text(
+                            text = stringResource(id = R.string.filter_start_date),
+                            style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                            modifier = Modifier.weight(3f),
+                        )
+                        StartDateInput(
+                            startDateText = startDateText,
+                            primaryColor = primaryColor,
+                            textColor = textColor,
+                            onStartDateClick = onStartDateClick,
+                            modifier = Modifier.weight(7f),
                         )
                     }
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.filter_end_date),
+                            style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                            modifier = Modifier.weight(3f),
+                        )
+                        EndDateInput(
+                            endDateText = endDateText,
+                            primaryColor = primaryColor,
+                            textColor = textColor,
+                            onEndDateClick = onEndDateClick,
+                            modifier = Modifier.weight(7f),
+                        )
+                    }
+                }
+
+                // Landscape: Line 2: Search Word & Diary Symbol in 1 line
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.filter_search_word),
+                            style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                            modifier = Modifier.weight(3f),
+                        )
+                        SearchQueryInput(
+                            queryText = queryText,
+                            primaryColor = primaryColor,
+                            onQueryChange = onQueryChange,
+                            modifier = Modifier.weight(7f),
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.diary_symbol),
+                            style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                            modifier = Modifier.weight(3f),
+                        )
+                        DiarySymbolInput(
+                            symbolSequence = symbolSequence,
+                            textColor = textColor,
+                            onSymbolClick = onSymbolClick,
+                            modifier = Modifier.weight(7f),
+                        )
+                    }
+                }
+            } else {
+                // Portrait: Keep current state (each item on its own row)
+                // Start Date Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
-                        text = "▼",
-                        style = TextStyle(color = textColor, fontSize = 12.sp),
+                        text = stringResource(id = R.string.filter_start_date),
+                        style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                        modifier = Modifier.weight(3f),
+                    )
+                    StartDateInput(
+                        startDateText = startDateText,
+                        primaryColor = primaryColor,
+                        textColor = textColor,
+                        onStartDateClick = onStartDateClick,
+                        modifier = Modifier.weight(7f),
+                    )
+                }
+
+                // End Date Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.filter_end_date),
+                        style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                        modifier = Modifier.weight(3f),
+                    )
+                    EndDateInput(
+                        endDateText = endDateText,
+                        primaryColor = primaryColor,
+                        textColor = textColor,
+                        onEndDateClick = onEndDateClick,
+                        modifier = Modifier.weight(7f),
+                    )
+                }
+
+                // Search Word Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.filter_search_word),
+                        style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                        modifier = Modifier.weight(3f),
+                    )
+                    SearchQueryInput(
+                        queryText = queryText,
+                        primaryColor = primaryColor,
+                        onQueryChange = onQueryChange,
+                        modifier = Modifier.weight(7f),
+                    )
+                }
+
+                // Diary Symbol Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.diary_symbol),
+                        style = TextStyle(fontWeight = FontWeight.Bold, color = textColor),
+                        modifier = Modifier.weight(3f),
+                    )
+                    DiarySymbolInput(
+                        symbolSequence = symbolSequence,
+                        textColor = textColor,
+                        onSymbolClick = onSymbolClick,
+                        modifier = Modifier.weight(7f),
                     )
                 }
             }
 
             // Action Buttons Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-            ) {
-                Button(
-                    onClick = onClearFilter,
-                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
-                    shape = RoundedCornerShape(4.dp),
-                ) {
-                    Text(text = stringResource(id = R.string.filter_clear), color = Color.White)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = onCloseFilter,
-                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
-                    shape = RoundedCornerShape(4.dp),
-                ) {
-                    Text(text = stringResource(id = R.string.filter_close), color = Color.White)
-                }
-            }
+            ActionButtons(
+                primaryColor = primaryColor,
+                onClearFilter = onClearFilter,
+                onCloseFilter = onCloseFilter,
+            )
+        }
+    }
+}
+
+@Composable
+private fun StartDateInput(
+    startDateText: String,
+    primaryColor: Color,
+    textColor: Color,
+    onStartDateClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier =
+            modifier
+                .clickable { onStartDateClick() },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = startDateText.ifEmpty { stringResource(id = R.string.filter_start_date_hint) },
+            style = TextStyle(color = if (startDateText.isEmpty()) Color.Gray else textColor),
+            modifier = Modifier.weight(1f),
+        )
+        IconButton(onClick = onStartDateClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_calendar_4_w),
+                contentDescription = "Start Date",
+                tint = primaryColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun EndDateInput(
+    endDateText: String,
+    primaryColor: Color,
+    textColor: Color,
+    onEndDateClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier =
+            modifier
+                .clickable { onEndDateClick() },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = endDateText.ifEmpty { stringResource(id = R.string.filter_end_date_hint) },
+            style = TextStyle(color = if (endDateText.isEmpty()) Color.Gray else textColor),
+            modifier = Modifier.weight(1f),
+        )
+        IconButton(onClick = onEndDateClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_calendar_4_w),
+                contentDescription = "End Date",
+                tint = primaryColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SearchQueryInput(
+    queryText: String,
+    primaryColor: Color,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = queryText,
+        onValueChange = onQueryChange,
+        modifier = modifier,
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.filter_search_word_hint),
+                style = TextStyle(color = Color.Gray, fontSize = 14.sp),
+            )
+        },
+        singleLine = true,
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = primaryColor,
+                unfocusedBorderColor = Color.LightGray,
+            ),
+    )
+}
+
+@Composable
+private fun DiarySymbolInput(
+    symbolSequence: Int,
+    textColor: Color,
+    onSymbolClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier =
+                Modifier
+                    .size(46.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(bounded = true),
+                        onClick = onSymbolClick,
+                    ),
+            contentAlignment = Alignment.Center,
+        ) {
+            AndroidView(
+                modifier =
+                    Modifier
+                        .size(32.dp),
+                factory = { ctx ->
+                    ImageView(ctx).apply {
+                        isClickable = false
+                        isFocusable = false
+                    }
+                },
+                update = { imageView ->
+                    FlavorUtils.initWeatherView(
+                        imageView.context,
+                        imageView,
+                        symbolSequence,
+                        false,
+                    )
+                },
+            )
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "▼",
+            style = TextStyle(color = textColor, fontSize = 12.sp),
+        )
+    }
+}
+
+@Composable
+private fun ActionButtons(
+    primaryColor: Color,
+    onClearFilter: () -> Unit,
+    onCloseFilter: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+    ) {
+        Button(
+            onClick = onClearFilter,
+            colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+            shape = RoundedCornerShape(4.dp),
+        ) {
+            Text(text = stringResource(id = R.string.filter_clear), color = Color.White)
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            onClick = onCloseFilter,
+            colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+            shape = RoundedCornerShape(4.dp),
+        ) {
+            Text(text = stringResource(id = R.string.filter_close), color = Color.White)
         }
     }
 }

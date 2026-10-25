@@ -7,27 +7,30 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.utils.FontUtils
 
 /**
  * Refactored code on 2019-12-25.
  *
  */
 class OptionItemAdapter(
-        val activity: Activity,
-        private val layoutResourceId: Int,
-        private val list: List<Map<String, String>>,
-        private val selectedValueFloat: Float?,
-        private val selectedValueString: String? = null,
-        private val visibleCheckIcon: Boolean = true
-) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
-    
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    val activity: Activity,
+    private val layoutResourceId: Int,
+    private val list: List<Map<String, String>>,
+    private val selectedValueFloat: Float?,
+    private val selectedValueString: String? = null,
+    private val visibleCheckIcon: Boolean = true,
+) : ArrayAdapter<Map<String, String>>(activity, layoutResourceId, list) {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View {
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
         if (itemView is ViewGroup) {
             activity.run {
@@ -38,7 +41,10 @@ class OptionItemAdapter(
         }
 
         when (itemView.tag is ViewHolder) {
-            true -> itemView.tag as ViewHolder
+            true -> {
+                itemView.tag as ViewHolder
+            }
+
             false -> {
                 val viewHolder = ViewHolder(itemView.findViewById(R.id.textView), itemView.findViewById(R.id.checkIcon))
                 itemView.tag = viewHolder
@@ -62,9 +68,11 @@ class OptionItemAdapter(
             textView.text = list[position]["optionTitle"]
         }
 
-
         return itemView
     }
 
-    private class ViewHolder(val textView: TextView, val imageView: ImageView)
+    private class ViewHolder(
+        val textView: TextView,
+        val imageView: ImageView,
+    )
 }

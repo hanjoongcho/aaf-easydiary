@@ -1,6 +1,6 @@
 package me.blog.korn123.easydiary.domain.model
 
-import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.MessageFormat
 import java.util.Calendar
 import java.util.Locale

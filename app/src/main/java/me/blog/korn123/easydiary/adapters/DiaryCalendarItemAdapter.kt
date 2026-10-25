@@ -8,9 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
@@ -18,6 +16,8 @@ import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /**
