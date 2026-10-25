@@ -32,7 +32,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -107,7 +106,6 @@ fun TreeContent(
 
     var bottomToolbarHeight by remember { mutableStateOf(0.dp) }
     var topToolbarHeight by remember { mutableStateOf(0.dp) }
-    var containerSize by remember { mutableStateOf(IntSize.Zero) }
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -159,8 +157,7 @@ fun TreeContent(
         modifier =
             Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
-                .onSizeChanged { containerSize = it },
+                .fillMaxSize(),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
@@ -276,10 +273,8 @@ fun TreeContent(
         FastScroll(
             items = filteredTreeData,
             listState = listState,
-            containerHeightPx = containerSize.height.toFloat(),
             isDraggingThumb = isDraggingThumb,
             thumbVisible = thumbVisible,
-            containerSize = containerSize,
             modifier = Modifier.align(Alignment.TopEnd),
             showDebugCard = showDebugCard,
             updateThumbVisible = { thumbVisible = it },

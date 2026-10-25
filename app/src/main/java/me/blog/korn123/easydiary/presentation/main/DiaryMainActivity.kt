@@ -25,14 +25,12 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.simplemobiletools.commons.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
@@ -41,6 +39,7 @@ import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.presentation.main.components.CompactLayout
 import me.blog.korn123.easydiary.presentation.main.components.MediumLayout
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
 class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
@@ -85,11 +84,9 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                         val listState = rememberLazyListState()
                         var thumbVisible by remember { mutableStateOf(false) }
-                        var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                         var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                         var hideJob: Job? by remember { mutableStateOf(null) }
                         val delayTimeMillis = 500L
-                        val durationMillis = 1200
 
                         // 스크롤 이벤트 감지
                         LaunchedEffect(listState) {
@@ -124,19 +121,16 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     innerPadding = innerPadding,
                                     modifier = modifier,
                                     listState = listState,
-                                    containerSize = containerSize,
                                     isDraggingThumb = isDraggingThumb,
                                     thumbVisible = thumbVisible,
                                     hideJob = hideJob,
                                     currentQuery = currentQuery,
                                     delayTimeMillis = delayTimeMillis,
-                                    durationMillis = durationMillis,
                                     enableCardViewPolicy = enableCardViewPolicy,
                                     items = items,
                                     thumbVisibleCallback = { value -> thumbVisible = value },
                                     isDraggingThumbCallback = { value -> isDraggingThumb = value },
                                     hideJobCallback = { value -> hideJob = value },
-                                    containerSizeCallback = { value -> containerSize = value },
                                     onQueryChange = { query -> diaryViewModel.query.value = query },
                                     itemClickCallback = { itemClickCallback(it) },
                                     itemLongClickCallback = { itemLongClickCallback() },
@@ -149,19 +143,16 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                     innerPadding = innerPadding,
                                     modifier = modifier,
                                     listState = listState,
-                                    containerSize = containerSize,
                                     isDraggingThumb = isDraggingThumb,
                                     thumbVisible = thumbVisible,
                                     hideJob = hideJob,
                                     currentQuery = currentQuery,
                                     delayTimeMillis = delayTimeMillis,
-                                    durationMillis = durationMillis,
                                     enableCardViewPolicy = enableCardViewPolicy,
                                     items = items,
                                     thumbVisibleCallback = { value -> thumbVisible = value },
                                     isDraggingThumbCallback = { value -> isDraggingThumb = value },
                                     hideJobCallback = { value -> hideJob = value },
-                                    containerSizeCallback = { value -> containerSize = value },
                                     onQueryChange = { query -> diaryViewModel.query.value = query },
                                     itemClickCallback = { itemClickCallback(it) },
                                     itemLongClickCallback = { itemLongClickCallback() },

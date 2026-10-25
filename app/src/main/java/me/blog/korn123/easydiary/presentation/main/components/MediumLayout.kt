@@ -24,39 +24,33 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
 fun MediumLayout(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     listState: LazyListState,
-    containerSize: IntSize,
     isDraggingThumb: Boolean,
     thumbVisible: Boolean,
     hideJob: Job?,
     currentQuery: String,
     delayTimeMillis: Long,
-    durationMillis: Int,
     enableCardViewPolicy: Boolean,
     items: List<DiaryDomain>,
     thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
     isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
     hideJobCallback: (job: Job) -> Unit,
-    containerSizeCallback: (containerSize: IntSize) -> Unit,
     onQueryChange: (query: String) -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
@@ -84,12 +78,7 @@ fun MediumLayout(
             ) {
                 LazyColumn(
                     state = listState,
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .onSizeChanged {
-                                containerSizeCallback(it)
-                            },
+                    modifier = Modifier.fillMaxSize(),
                     contentPadding =
                         PaddingValues(
                             bottom =
@@ -127,20 +116,8 @@ fun MediumLayout(
                 FastScroll(
                     items = items,
                     listState = listState,
-                    containerHeightPx =
-                        containerSize.height.toFloat().minus(
-                            with(
-                                LocalDensity.current,
-                            ) {
-                                WindowInsets.navigationBars
-                                    .asPaddingValues()
-                                    .calculateBottomPadding()
-                                    .toPx()
-                            },
-                        ),
                     isDraggingThumb = isDraggingThumb,
                     thumbVisible = thumbVisible,
-                    containerSize = containerSize,
                     modifier =
                         Modifier
                             .align(Alignment.TopEnd)
@@ -170,8 +147,8 @@ fun MediumLayout(
 
                 androidx.compose.animation.AnimatedVisibility(
                     visible = !thumbVisible,
-                    enter = fadeIn(animationSpec = tween(durationMillis)),
-                    exit = fadeOut(animationSpec = tween(durationMillis)),
+                    enter = fadeIn(),
+                    exit = fadeOut(),
                     modifier =
                         Modifier
                             .align(Alignment.BottomCenter),

@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.presentation.main.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,10 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -47,6 +43,7 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.FastScroll
+import kotlin.time.Duration.Companion.milliseconds
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
@@ -54,19 +51,16 @@ fun CompactLayout(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     listState: LazyListState,
-    containerSize: IntSize,
     isDraggingThumb: Boolean,
     thumbVisible: Boolean,
     hideJob: Job?,
     currentQuery: String,
     delayTimeMillis: Long,
-    durationMillis: Int,
     enableCardViewPolicy: Boolean,
     items: List<DiaryDomain>,
     thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
     isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
     hideJobCallback: (job: Job) -> Unit,
-    containerSizeCallback: (containerSize: IntSize) -> Unit,
     onQueryChange: (query: String) -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
@@ -128,12 +122,7 @@ fun CompactLayout(
         ) {
             LazyColumn(
                 state = listState,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .onSizeChanged {
-                            containerSizeCallback(it)
-                        },
+                modifier = Modifier.fillMaxSize(),
                 contentPadding =
                     PaddingValues(
                         top = if (enablePhotoHighlight) 0.dp else statusBarTop,
@@ -169,19 +158,8 @@ fun CompactLayout(
             FastScroll(
                 items = items,
                 listState = listState,
-                containerHeightPx =
-                    containerSize.height.toFloat().minus(
-                        with(
-                            LocalDensity.current,
-                        ) {
-                            bottomBarPadding.toPx().plus(
-                                if (enablePhotoHighlight) 0f else statusBarTop.toPx(),
-                            )
-                        },
-                    ),
                 isDraggingThumb = isDraggingThumb,
                 thumbVisible = thumbVisible,
-                containerSize = containerSize,
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)
@@ -197,7 +175,7 @@ fun CompactLayout(
                     coroutineScope.launch {
                         val job =
                             launch {
-                                delay(delayTimeMillis)
+                                delay(delayTimeMillis.milliseconds)
                                 if (!isDraggingThumb) {
                                     thumbVisibleCallback(false)
                                 }
@@ -230,7 +208,6 @@ fun CompactLayout2(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     listState: LazyListState,
-    containerSize: IntSize,
     isDraggingThumb: Boolean,
     thumbVisible: Boolean,
     hideJob: Job?,
@@ -242,7 +219,6 @@ fun CompactLayout2(
     thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
     isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
     hideJobCallback: (job: Job) -> Unit,
-    containerSizeCallback: (containerSize: IntSize) -> Unit,
     onQueryChange: (query: String) -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
@@ -274,12 +250,7 @@ fun CompactLayout2(
         ) {
             LazyColumn(
                 state = listState,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .onSizeChanged {
-                            containerSizeCallback(it)
-                        },
+                modifier = Modifier.fillMaxSize(),
                 contentPadding =
                     PaddingValues(
                         top = if (enablePhotoHighlight) 0.dp else statusBarTop,
@@ -341,19 +312,8 @@ fun CompactLayout2(
             FastScroll(
                 items = items,
                 listState = listState,
-                containerHeightPx =
-                    containerSize.height.toFloat().minus(
-                        with(
-                            LocalDensity.current,
-                        ) {
-                            bottomBarPadding.toPx().plus(
-                                if (enablePhotoHighlight) 0f else statusBarTop.toPx(),
-                            )
-                        },
-                    ),
                 isDraggingThumb = isDraggingThumb,
                 thumbVisible = thumbVisible,
-                containerSize = containerSize,
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)
@@ -369,7 +329,7 @@ fun CompactLayout2(
                     coroutineScope.launch {
                         val job =
                             launch {
-                                delay(delayTimeMillis)
+                                delay(delayTimeMillis.milliseconds)
                                 if (!isDraggingThumb) {
                                     thumbVisibleCallback(false)
                                 }

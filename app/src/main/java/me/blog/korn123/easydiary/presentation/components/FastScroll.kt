@@ -27,29 +27,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.presentation.tree.FileNode
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.summaryDiaryLabel
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
 fun FastScroll(
     items: List<Any>,
     listState: LazyListState,
-    containerHeightPx: Float,
     isDraggingThumb: Boolean,
-    containerSize: IntSize,
     thumbVisible: Boolean,
+    modifier: Modifier = Modifier,
     showDebugCard: Boolean = false,
-    modifier: Modifier,
     updateThumbVisible: (thumbVisible: Boolean) -> Unit,
     updateDraggingThumb: (isDraggingThumb: Boolean) -> Unit,
     dragEndCallback: () -> Unit,
@@ -57,6 +55,7 @@ fun FastScroll(
     // --- Fast Scroll 트랙 + 썸 + 버블 ---
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
+    var containerHeightPx by remember { mutableFloatStateOf(0f) }
     var thumbY by remember { mutableFloatStateOf(0f) } // 썸의 y-offset (픽셀)
     var dragY by remember { mutableFloatStateOf(0f) }
     var proportion by remember { mutableFloatStateOf(0f) }
@@ -82,10 +81,11 @@ fun FastScroll(
     val progress = (scrolledPx / scrollablePx).coerceIn(0f, 1f)
 
     val thumbHeightPx = with(density) { 30.dp.toPx() }
-    val baseThumbY = progress * (containerHeightPx - thumbHeightPx)
+    val maxScrollHeight = (containerHeightPx - thumbHeightPx).coerceAtLeast(1f)
+    val baseThumbY = progress * maxScrollHeight
     thumbY = if (isDraggingThumb) thumbY else baseThumbY
     val drawThumbY =
-        if (isDraggingThumb) thumbY.coerceIn(0f, containerHeightPx - thumbHeightPx) else baseThumbY
+        if (isDraggingThumb) thumbY.coerceIn(0f, maxScrollHeight) else baseThumbY
 
     // --- Fast Scroll 트랙 + 썸 ---
     fun parseBubbleText(item: Any): String =
@@ -100,6 +100,9 @@ fun FastScroll(
                 .fillMaxHeight()
                 .width(30.dp) // 트랙 + 터치 영역
                 .padding(end = 8.dp)
+                .onSizeChanged { size ->
+                    containerHeightPx = size.height.toFloat()
+                }
                 .pointerInput(totalItems) {
                     detectDragGestures(
                         onDragStart = {
@@ -117,10 +120,10 @@ fun FastScroll(
                                 thumbY =
                                     (thumbY + drag.y).coerceIn(
                                         0f,
-                                        containerHeightPx - thumbHeightPx,
+                                        maxScrollHeight,
                                     )
                                 proportion =
-                                    thumbY / (containerHeightPx - thumbHeightPx)
+                                    thumbY / maxScrollHeight
                                 val target =
                                     ((scrollablePx * proportion) / itemHeight)
                                         .toInt()
@@ -200,10 +203,8 @@ fun FastScroll(
                         "dragY: $dragY\n" +
                         "thumbY: $thumbY\n" +
                         "",
-                //                                    alpha = 0.8f,
                 modifier =
                     Modifier
-//                                        .align(Alignment.TopStart)
                         .padding(16.dp),
             )
         }
@@ -215,10 +216,11 @@ fun FastScroll(
             modifier =
                 modifier
                     .offset {
+                        val maxBubbleY = (containerHeightPx.toInt() - 48).coerceAtLeast(0)
                         val bubbleY =
                             (drawThumbY - 24f)
                                 .toInt()
-                                .coerceIn(0, containerSize.height - 48)
+                                .coerceIn(0, maxBubbleY)
                         IntOffset(0, bubbleY)
                     },
         ) {

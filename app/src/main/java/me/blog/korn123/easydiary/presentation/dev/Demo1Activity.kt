@@ -49,13 +49,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -322,7 +319,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -355,8 +351,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                         ) {
                             itemsIndexed(items) { index, item ->
                                 SimpleCard(
@@ -377,10 +372,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx = containerSize.height.toFloat(),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd),
@@ -423,7 +416,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -465,8 +457,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                         ) {
                             itemsIndexed(items) { index, diary ->
                                 Card(
@@ -497,10 +488,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx = containerSize.height.toFloat(),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd),
@@ -543,7 +532,6 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                     val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                     val listState = rememberLazyListState()
                     var thumbVisible by remember { mutableStateOf(false) }
-                    var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                     var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                     var hideJob: Job? by remember { mutableStateOf(null) }
                     val delayTimeMillis = 1500L
@@ -585,8 +573,7 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                             state = listState,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onSizeChanged { containerSize = it },
+                                    .fillMaxSize(),
                             contentPadding =
                                 PaddingValues(
                                     top =
@@ -628,26 +615,8 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                         FastScroll(
                             items = items,
                             listState = listState,
-                            containerHeightPx =
-                                containerSize.height.toFloat().minus(
-                                    with(
-                                        LocalDensity.current,
-                                    ) {
-                                        WindowInsets.navigationBars
-                                            .asPaddingValues()
-                                            .calculateBottomPadding()
-                                            .toPx()
-                                            .plus(
-                                                WindowInsets.statusBars
-                                                    .asPaddingValues()
-                                                    .calculateTopPadding()
-                                                    .toPx(),
-                                            )
-                                    },
-                                ),
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
-                            containerSize = containerSize,
                             modifier =
                                 Modifier
                                     .align(Alignment.TopEnd)

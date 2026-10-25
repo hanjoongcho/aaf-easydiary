@@ -22,7 +22,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.simplemobiletools.commons.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +77,6 @@ class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
                         val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
                         val listState = rememberLazyListState()
                         var thumbVisible by remember { mutableStateOf(false) }
-                        var containerSize by remember { mutableStateOf(IntSize.Zero) } // 컨테이너 높이(픽셀)
                         var isDraggingThumb by remember { mutableStateOf(false) } // 토글: 썸을 누르고 있는지
                         var hideJob: Job? by remember { mutableStateOf(null) }
                         val delayTimeMillis = 500L
@@ -114,7 +112,6 @@ class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
                             innerPadding = innerPadding,
                             modifier = modifier,
                             listState = listState,
-                            containerSize = containerSize,
                             isDraggingThumb = isDraggingThumb,
                             thumbVisible = thumbVisible,
                             hideJob = hideJob,
@@ -126,7 +123,6 @@ class DiaryMain2Activity : EasyDiaryComposeBaseActivity() {
                             thumbVisibleCallback = { value -> thumbVisible = value },
                             isDraggingThumbCallback = { value -> isDraggingThumb = value },
                             hideJobCallback = { value -> hideJob = value },
-                            containerSizeCallback = { value -> containerSize = value },
                             onQueryChange = { query -> diaryViewModel.query.value = query },
                             itemClickCallback = { itemClickCallback(it) },
                             itemLongClickCallback = { itemLongClickCallback() },
