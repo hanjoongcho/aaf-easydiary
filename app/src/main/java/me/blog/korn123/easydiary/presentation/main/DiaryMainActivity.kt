@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -31,14 +32,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.activities.DiaryReadingActivity
+import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.applyFullScreenStatusBarTheme
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
+import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.presentation.main.components.CompactLayout
 import me.blog.korn123.easydiary.presentation.main.components.MediumLayout
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import kotlin.time.Duration.Companion.milliseconds
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
@@ -99,7 +107,7 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                                         hideJob?.cancel()
                                         hideJob =
                                             launch {
-                                                delay(delayTimeMillis)
+                                                delay(delayTimeMillis.milliseconds)
                                                 if (!isDraggingThumb) thumbVisible = false
                                             }
                                     }
@@ -107,7 +115,11 @@ class DiaryMainActivity : EasyDiaryComposeBaseActivity() {
                         }
 
                         fun itemClickCallback(diary: DiaryDomain) {
-                            toast("itemClickCallback: ${diary.title}")
+                            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
+                            detailIntent.putExtra(DIARY_SEQUENCE, diary.diaryId)
+                            detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
+                            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
+                            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
                         }
 
                         fun itemLongClickCallback() {

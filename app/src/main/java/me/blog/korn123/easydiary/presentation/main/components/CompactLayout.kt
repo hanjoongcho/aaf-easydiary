@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -174,14 +175,17 @@ fun CompactLayout(
                         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                         modifier = (
                             if (enableCardViewPolicy) {
-                                modifier.padding(
+                                Modifier.padding(
                                     HORIZONTAL_PADDING.dp,
                                     VERTICAL_PADDING.dp,
                                 )
                             } else {
-                                modifier
+                                Modifier
                                     .padding(1.dp, 1.dp)
                             }
+                        ).combinedClickable(
+                            onClick = { itemClickCallback(diary) },
+                            onLongClick = { itemLongClickCallback() },
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                     ) {
@@ -376,14 +380,17 @@ fun CompactLayout2(
                         colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                         modifier = (
                             if (enableCardViewPolicy) {
-                                modifier.padding(
+                                Modifier.padding(
                                     HORIZONTAL_PADDING.dp,
                                     VERTICAL_PADDING.dp,
                                 )
                             } else {
-                                modifier
+                                Modifier
                                     .padding(1.dp, 1.dp)
                             }
+                        ).combinedClickable(
+                            onClick = { itemClickCallback(diary) },
+                            onLongClick = { itemLongClickCallback() },
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                     ) {

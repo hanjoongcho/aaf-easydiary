@@ -63,8 +63,8 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 @Composable
 fun LegacyDiaryItemCard(
     diary: DiaryDomain,
-    itemClickCallback: (diary: DiaryDomain) -> Unit,
-    itemLongClickCallback: () -> Unit,
+    @Suppress("UNUSED_PARAMETER") itemClickCallback: (diary: DiaryDomain) -> Unit = {},
+    @Suppress("UNUSED_PARAMETER") itemLongClickCallback: () -> Unit = {},
 ) {
     AndroidView(
         modifier =
@@ -89,11 +89,11 @@ fun LegacyDiaryItemCard(
 
             ctx.applicationContext.run {
                 binding.root.run {
-                    setOnClickListener { itemClickCallback(diary) }
-                    setOnLongClickListener {
-                        itemLongClickCallback()
-                        true
-                    }
+//                    setOnClickListener { itemClickCallback(diary) }
+//                    setOnLongClickListener {
+//                        itemLongClickCallback()
+//                        true
+//                    }
                     updateTextColors(this, 0, 0)
                     updateAppViews(this)
                     initTextSize(this)

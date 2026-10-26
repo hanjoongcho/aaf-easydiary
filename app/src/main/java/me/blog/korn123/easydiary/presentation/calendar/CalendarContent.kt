@@ -6,6 +6,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -347,6 +348,16 @@ internal fun SelectedDateEventsSection(
                                 Modifier
                                     .padding(1.dp, 1.dp)
                             }
+                        ).combinedClickable(
+                            onClick = {
+                                TransitionHelper.startActivityWithTransition(
+                                    activity,
+                                    Intent(context, DiaryReadingActivity::class.java).apply {
+                                        putExtra(DIARY_SEQUENCE, event.diaryId)
+                                    },
+                                )
+                            },
+                            onLongClick = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                     ) {
