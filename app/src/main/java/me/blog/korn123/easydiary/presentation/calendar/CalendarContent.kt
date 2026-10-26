@@ -281,17 +281,16 @@ fun CalendarContent(
                             day = day,
                             isSelected = selection == day.date,
                             events = events,
+                            enableScroll = enableScroll,
                         ) { clicked ->
-                            if (day.position == DayPosition.MonthDate) {
-                                if (enableScroll) {
-                                    calendarViewModel.setSelectedDate(clicked)
-                                } else {
-                                    val intent =
-                                        Intent(context, SelectedDateEventsActivity::class.java).apply {
-                                            putExtra("SELECTED_DATE", clicked.toString())
-                                        }
-                                    TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
-                                }
+                            if (enableScroll) {
+                                calendarViewModel.setSelectedDate(clicked)
+                            } else {
+                                val intent =
+                                    Intent(context, SelectedDateEventsActivity::class.java).apply {
+                                        putExtra("SELECTED_DATE", clicked.toString())
+                                    }
+                                TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
                             }
                         }
                     },
@@ -482,6 +481,7 @@ fun DayContent(
     day: CalendarDay,
     isSelected: Boolean,
     events: List<Diary>,
+    enableScroll: Boolean,
     onClick: (LocalDate) -> Unit,
 ) {
     val isCurrentMonth = day.position == DayPosition.MonthDate
@@ -495,7 +495,7 @@ fun DayContent(
                 .padding(0.dp)
                 .clip(RoundedCornerShape(1.dp))
                 .then(
-                    if (isSelected) {
+                    if (isSelected && enableScroll) {
                         Modifier.border(
                             1.dp,
                             MaterialTheme.colorScheme.primary,
@@ -504,7 +504,7 @@ fun DayContent(
                     } else {
                         Modifier.background(Color.Transparent)
                     },
-                ).clickable(enabled = isCurrentMonth) { onClick(day.date) }
+                ).clickable(enabled = true) { onClick(day.date) }
                 .padding(1.dp),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -559,7 +559,7 @@ fun DayContent(
                 }
 
                 val extraCount = events.size - 3
-                if (extraCount > 0 && isCurrentMonth) {
+                if (extraCount > 0) {
                     Text(
                         text = "+$extraCount",
                         color = MaterialTheme.colorScheme.primary,
@@ -571,7 +571,7 @@ fun DayContent(
                 }
             }
 
-            if (displayEvents.isNotEmpty() && isCurrentMonth) {
+            if (displayEvents.isNotEmpty()) {
                 displayEvents.forEach { diary ->
                     Box(
                         modifier =
