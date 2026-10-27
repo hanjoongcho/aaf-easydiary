@@ -36,6 +36,7 @@
             android:padding="@dimen/component_margin_small">
 
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
                 android:id="@+id/searchCard"
                 style="@style/AppCard"
                 app:contentPadding="10dp">
@@ -119,16 +120,6 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/modalContainer"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.3"
-            android:background="?attr/colorPrimary"
-            android:gravity="center"
-            android:orientation="vertical"/>
 
         <ProgressBar
             android:id="@+id/progress_coroutine"

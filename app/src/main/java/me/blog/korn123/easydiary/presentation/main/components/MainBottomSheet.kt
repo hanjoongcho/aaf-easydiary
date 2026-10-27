@@ -1,23 +1,31 @@
 package me.blog.korn123.easydiary.presentation.main.components
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
@@ -41,17 +49,24 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DashboardActivity
 import me.blog.korn123.easydiary.activities.DevActivity
@@ -62,7 +77,10 @@ import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
+import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
@@ -70,6 +88,7 @@ import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareBut
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 
 private data class MenuOptionItem(
@@ -78,10 +97,12 @@ private data class MenuOptionItem(
     val onClick: () -> Unit,
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainBottomSheet(
     title: String,
     currentQuery: String,
+    symbolSequence: Int = SYMBOL_SELECT_ALL,
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontColor: Color = Color(LocalContext.current.config.textColor),
@@ -98,6 +119,8 @@ fun MainBottomSheet(
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     onMicrophoneClick: () -> Unit = {},
     onMoveToday: () -> Unit = {},
+    onFeelingSymbolClick: () -> Unit = {},
+    clearFilter: () -> Unit = {},
     callbackQuery: (query: String) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -283,6 +306,54 @@ fun MainBottomSheet(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val symbolSize = 32.dp
+                    IconButton(
+                        onClick = {
+                            onFeelingSymbolClick.invoke()
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        if (symbolSequence < SYMBOL_USER_CUSTOM_START) {
+                            val symbolResourceId = FlavorUtils.sequenceToSymbolResourceId(symbolSequence)
+                            val symbolPainter = if (symbolResourceId > 0) painterResource(id = symbolResourceId) else painterResource(id = R.drawable.ic_select_symbol)
+                            Image(
+                                painter = symbolPainter,
+                                contentDescription = "Symbol",
+                                modifier = Modifier.size(symbolSize),
+                            )
+                        } else {
+                            val targetIndex = symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
+                            val filePath =
+                                if (context.config.customSymbolPaths.size > targetIndex) {
+                                    context.config.customSymbolPaths[targetIndex].getFilePath()
+                                } else {
+                                    ""
+                                }
+                            val fullPath = EasyDiaryUtils.getApplicationDataDirectory(context) + filePath
+                            val bitmap =
+                                remember(symbolSequence, fullPath) {
+                                    BitmapFactory.decodeFile(fullPath)
+                                }
+                            if (bitmap != null) {
+                                Image(
+                                    bitmap = bitmap.asImageBitmap(),
+                                    contentDescription = "Custom Symbol",
+                                    modifier = Modifier.size(symbolSize),
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_select_symbol),
+                                    contentDescription = "Symbol Fallback",
+                                    modifier = Modifier.size(symbolSize),
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
                     IconButton(
                         onClick = {
                             onMicrophoneClick.invoke()
@@ -299,7 +370,7 @@ fun MainBottomSheet(
                             tint = Color(context.config.primaryColor),
                         )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = {
                             activity?.let {
@@ -375,6 +446,15 @@ fun MainBottomSheet(
                         }
 
                     val focusRequester = remember { FocusRequester() }
+                    val focusManager = LocalFocusManager.current
+                    val keyboardController = LocalSoftwareKeyboardController.current
+                    val isKeyboardVisible = WindowInsets.isImeVisible
+
+                    LaunchedEffect(isKeyboardVisible) {
+                        if (!isKeyboardVisible) {
+                            focusManager.clearFocus()
+                        }
+                    }
 
                     TextField(
                         value = text,
@@ -410,16 +490,31 @@ fun MainBottomSheet(
                                 fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                             ),
                         singleLine = true,
+                        keyboardOptions =
+                            KeyboardOptions(
+                                imeAction = ImeAction.Done,
+                            ),
+                        keyboardActions =
+                            KeyboardActions(
+                                onDone = {
+                                    focusManager.clearFocus()
+                                    keyboardController?.hide()
+                                },
+                                onSearch = {
+                                    focusManager.clearFocus()
+                                    keyboardController?.hide()
+                                },
+                            ),
                         trailingIcon = {
-                            if (text.isNotEmpty()) {
+                            if (text.isNotEmpty() || symbolSequence != SYMBOL_SELECT_ALL) {
                                 IconButton(onClick = {
                                     text = ""
-                                    callbackQuery.invoke(text)
+                                    clearFilter.invoke()
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "Clear text",
-                                        tint = Color.White,
+                                        contentDescription = "Clear filter",
+                                        tint = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(context.config.textColor),
                                     )
                                 }
                             }

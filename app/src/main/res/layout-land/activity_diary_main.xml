@@ -35,6 +35,7 @@
             android:padding="@dimen/component_margin_small">
 
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
                 android:id="@+id/searchCard"
                 style="@style/AppCard"
                 app:contentPadding="10dp">
@@ -124,15 +125,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/modalContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.3"
-            android:background="?attr/colorPrimary"
-            android:gravity="center"
-            android:orientation="vertical"/>
-
         <ProgressBar
             android:id="@+id/progress_coroutine"
             android:layout_width="20dp"
@@ -142,7 +134,7 @@
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose_view"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

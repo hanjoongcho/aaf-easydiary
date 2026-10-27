@@ -23,14 +23,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -90,6 +93,7 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.main.components.MainBottomSheet
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
@@ -500,16 +504,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     val historyWidth = (point.x / 2.5).toInt()
                     mBinding.layoutBannerContainer.layoutParams.width = historyWidth
 
-                    if (isVanillaIceCreamPlus()) {
-                        val rootWindowInsets = window.decorView.rootWindowInsets
-                        val insets = rootWindowInsets?.getInsets(WindowInsets.Type.systemBars())
-                        mBinding.diaryListView.layoutParams.width =
-                            point.x
-                                .minus(historyWidth)
-                                .minus(insets?.left ?: 0)
-                                .minus(insets?.right ?: 0)
-                    } else {
-                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+                    // 1. Android 15(Vanilla Ice Cream) 이상일 때만 좌우 인셋 합산
+                    val horizontalInsets =
+                        if (isVanillaIceCreamPlus()) {
+                            val insets =
+                                window.decorView.rootWindowInsets?.getInsets(WindowInsets.Type.systemBars())
+                            (insets?.left ?: 0) + (insets?.right ?: 0)
+                        } else {
+                            0
+                        }
+
+                    // 2. 최종 너비 계산
+                    val calculatedWidth = point.x - historyWidth - horizontalInsets
+
+                    // 3. 중복되는 layoutParams 설정 단일화
+                    listOf(mBinding.diaryListView, mBinding.composeView).forEach { view ->
+                        view.layoutParams = view.layoutParams.apply { width = calculatedWidth }
                     }
                 }
             }
@@ -675,7 +685,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             mBinding.query.text = null
         }
 
-        EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
         mBinding.feelingSymbolButton.setOnClickListener {
             lifecycleScope.launch {
                 openFeelingSymbolDialog(
@@ -861,71 +870,36 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun setupComposeView() {
         mBinding.composeView.setContent {
-            Column(
-                modifier = Modifier,
-            ) {
-                BottomToolBarContainer {
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.button_new_entry),
-                        iconResourceId = R.drawable.ic_edit,
-                    ) {
-                        val createDiary =
-                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            createDiary,
-                        )
-                    }
-                    CustomElevatedSquareButton(
-                        text = "Move Today",
-                        iconResourceId = R.drawable.ic_time_8_w,
-                    ) {
-                        moveToday()
-                    }
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.button_tree_view),
-                        iconResourceId = R.drawable.ic_tree_structure,
-                    ) {
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                        )
-                    }
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.menu_timeline),
-                        iconResourceId = R.drawable.ic_settings_11,
-                    ) {
-                        val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
-                    }
-                    if (config.enableDebugMode) {
-                        CustomElevatedSquareButton(
-                            text = getString(R.string.button_quick_settings),
-                            iconResourceId = R.drawable.ic_running,
-                        ) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                            )
+            val currentQuery by diaryViewModel.query.collectAsState()
+            val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
+            val currentSymbol by viewModel.symbol.collectAsState()
+
+            AppTheme {
+                MainBottomSheet(
+                    title = "[Total: ${getString(R.string.diary_count_format, items.size)}] ${stringResource(id = R.string.guide_message_2)}",
+                    currentQuery = currentQuery,
+                    symbolSequence = currentSymbol,
+                    onMicrophoneClick = { showSpeechDialog() },
+                    onMoveToday = { moveToday() },
+                    onFeelingSymbolClick = {
+                        lifecycleScope.launch {
+                            openFeelingSymbolDialog(
+                                getString(R.string.diary_symbol_search_message),
+                                viewModel.symbol.value,
+                                diaryViewModel.getSymbolUsedCountMap(true),
+                            ) { symbolSequence ->
+                                selectFeelingSymbol(symbolSequence)
+                            }
                         }
-                        CustomElevatedSquareButton(
-                            text = "Debug",
-                            iconResourceId = R.drawable.ic_bug_2,
-                        ) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, DevActivity::class.java),
-                            )
-                        }
-                        CustomElevatedSquareButton(
-                            text = "Menu",
-                            iconPadding = 2.dp,
-                            iconResourceId = R.drawable.ic_menu,
-                        ) {
-                            openCustomOptionMenu()
-                        }
-                    }
-                }
+                    },
+                    clearFilter = {
+                        selectFeelingSymbol()
+                        diaryViewModel.query.value = ""
+                    },
+                    callbackQuery = { query ->
+                        diaryViewModel.query.value = query
+                    },
+                )
             }
         }
 

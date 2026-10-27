@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -66,10 +67,12 @@ fun MediumLayout(
     delayTimeMillis: Long,
     enableCardViewPolicy: Boolean,
     items: List<DiaryDomain>,
+    symbolSequence: Int = 0,
     thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
     isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
     hideJobCallback: (job: Job) -> Unit,
     onQueryChange: (query: String) -> Unit = {},
+    clearFilter: () -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
 ) {
@@ -149,20 +152,21 @@ fun MediumLayout(
                         Card(
                             shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                             colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                            modifier = (
-                                if (enableCardViewPolicy) {
-                                    Modifier.padding(
-                                        HORIZONTAL_PADDING.dp,
-                                        VERTICAL_PADDING.dp,
-                                    )
-                                } else {
-                                    Modifier
-                                        .padding(1.dp, 1.dp)
-                                }
-                            ).combinedClickable(
-                                onClick = { itemClickCallback(diary) },
-                                onLongClick = { itemLongClickCallback() },
-                            ),
+                            modifier =
+                                (
+                                    if (enableCardViewPolicy) {
+                                        Modifier.padding(
+                                            HORIZONTAL_PADDING.dp,
+                                            VERTICAL_PADDING.dp,
+                                        )
+                                    } else {
+                                        Modifier
+                                            .padding(1.dp, 1.dp)
+                                    }
+                                ).combinedClickable(
+                                    onClick = { itemClickCallback(diary) },
+                                    onLongClick = { itemLongClickCallback() },
+                                ),
                             elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                         ) {
                             LegacyDiaryItemCard(
@@ -215,10 +219,12 @@ fun MediumLayout(
                             .align(Alignment.BottomCenter),
                 ) {
                     MainBottomSheet(
-                        title = "[Total: ${items.size}] category or title",
+                        title = "[Total: ${items.size}] ${stringResource(id = R.string.guide_message_2)}",
                         currentQuery = currentQuery,
+                        symbolSequence = symbolSequence,
                         enableCardViewPolicy = enableCardViewPolicy,
                         onMicrophoneClick = onMicrophoneClick,
+                        clearFilter = clearFilter,
                         onMoveToday = {
                             activity?.let { act ->
                                 val tomorrowTimeMillis =
