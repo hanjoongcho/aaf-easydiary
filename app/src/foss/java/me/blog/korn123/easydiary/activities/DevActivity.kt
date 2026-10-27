@@ -24,15 +24,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.unit.dp
+import androidx.room.migration.Migration
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************
@@ -85,7 +86,6 @@ class DevActivity : BaseDevActivity() {
                                             .weight(1f)
 
                                     RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
-                                    Migration(settingCardModifier, maxItemsInEachRow)
                                     ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
                                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
 

@@ -184,7 +184,7 @@ class DiaryViewModel
         val startTimeMillis = MutableStateFlow(0L)
         val endTimeMillis = MutableStateFlow(0L)
         val symbolSequence = MutableStateFlow(0)
-        val checkFutureDiaryOption = MutableStateFlow(false)
+        val checkFutureDiaryOption = MutableStateFlow(true)
 
         data class FindDiaryParams(
             val query: String?,
@@ -215,6 +215,7 @@ class DiaryViewModel
                     startTimeMillis,
                     endTimeMillis,
                     symbolSequence,
+                    checkFutureDiaryOption.value,
                 )
             }
 

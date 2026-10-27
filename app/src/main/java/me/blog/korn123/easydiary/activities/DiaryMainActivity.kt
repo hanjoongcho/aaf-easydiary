@@ -30,7 +30,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
@@ -215,6 +217,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             diaryViewModel.isLoading = false
         }
+        observeDataStreams()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -225,7 +228,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     override fun onResume() {
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-        refreshList()
         invalidateOptionsMenu()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
@@ -331,7 +333,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                         forEach {
                                             diaryRepository.deleteDiaryById(it.diaryId)
                                         }
-                                        refreshList()
                                     }
                                 },
                                 { _, _ -> },
@@ -364,7 +365,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                             it.isSelected = false
                                             diaryRepository.duplicateDiary(it)
                                         }
-                                        refreshList()
                                         Handler(Looper.getMainLooper()).post {
                                             mBinding.diaryListView.layoutManager?.scrollToPosition(
                                                 0,
@@ -660,7 +660,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     i1: Int,
                     i2: Int,
                 ) {
-                    refreshList(charSequence.toString())
+                    val newQuery = charSequence.toString()
+                    if (diaryViewModel.query.value != newQuery) {
+                        diaryViewModel.query.value = newQuery
+                    }
                 }
 
                 override fun afterTextChanged(editable: Editable) {}
@@ -681,7 +684,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     diaryViewModel.getSymbolUsedCountMap(true),
                 ) { symbolSequence ->
                     selectFeelingSymbol(symbolSequence)
-                    refreshList()
                 }
             }
         }
@@ -718,7 +720,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
-        updateSymbolSequence(if (index == 0) SYMBOL_SELECT_ALL else index)
+        val targetSymbol = if (index == 0) SYMBOL_SELECT_ALL else index
+        updateSymbolSequence(targetSymbol)
+        diaryViewModel.symbolSequence.value = targetSymbol
     }
 
     private fun showSpeechDialog() {
@@ -736,48 +740,45 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    private fun refreshList() {
-        var queryString = ""
-        if (mBinding.query.text?.isNotEmpty() == true) {
-            queryString =
-                mBinding.query.text.toString()
-        }
-        refreshList(queryString)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
-    private fun refreshList(query: String) {
+    private fun observeDataStreams() {
         lifecycleScope.launch {
-            val result =
-                diaryViewModel.findDiary(
-                    query,
-                    config.diarySearchQueryCaseSensitive,
-                    0,
-                    0,
-                    viewModel.symbol.value,
-                    true,
-                )
-            mDiaryList.clear()
-            mDiaryList.addAll(result)
-            mDiaryMainItemAdapter?.currentQuery = query
-            mDiaryMainItemAdapter?.notifyDataSetChanged()
-            mBinding.run {
-                when (mDiaryList.isEmpty()) {
-                    true -> {
-                        diaryListView.visibility = View.GONE
-                        textNoDiary.visibility = View.VISIBLE
-                    }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    diaryViewModel.diaries.collect { items ->
+                        mDiaryList.clear()
+                        mDiaryList.addAll(items)
+                        mDiaryMainItemAdapter?.currentQuery = diaryViewModel.query.value
+                        mDiaryMainItemAdapter?.notifyDataSetChanged()
 
-                    false -> {
-                        diaryListView.visibility = View.VISIBLE
-                        textNoDiary.visibility = View.GONE
+                        mBinding.run {
+                            if (mDiaryList.isEmpty()) {
+                                diaryListView.visibility = View.GONE
+                                textNoDiary.visibility = View.VISIBLE
+                            } else {
+                                diaryListView.visibility = View.VISIBLE
+                                textNoDiary.visibility = View.GONE
+                            }
+                        }
+
+                        supportActionBar?.run {
+                            title = ""
+                            subtitle = getString(R.string.diary_count_format, mDiaryList.size)
+                        }
                     }
                 }
-            }
 
-            supportActionBar?.run {
-                title = ""
-                subtitle = getString(R.string.diary_count_format, mDiaryList.size)
+                launch {
+                    diaryViewModel.query.collect { query ->
+                        if (mBinding.query.text?.toString() != query) {
+                            mBinding.query.setText(query)
+                            if (query.isNotEmpty()) {
+                                mBinding.query.setSelection(query.length)
+                            }
+                        }
+                        mDiaryMainItemAdapter?.currentQuery = query
+                    }
+                }
             }
         }
     }
@@ -831,7 +832,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             DiaryMainItemAdapter(this, lifecycleScope, mDiaryList, {
                 val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
                 detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
-                detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+                detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
                 detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
@@ -839,8 +840,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     diaryRepository.clearSelectedStatus()
                     mDiaryMode = DiaryMode.DELETE
                     invalidateOptionsMenu()
-                    refreshList()
-                    //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                    mDiaryMainItemAdapter?.notifyDataSetChanged()
                 }
             }
 
