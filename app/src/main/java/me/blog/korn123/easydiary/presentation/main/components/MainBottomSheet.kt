@@ -259,6 +259,8 @@ fun MainBottomSheet(
 
     Column {
         var isFocused by remember { mutableStateOf(false) }
+        val isHighlighted = isFocused || currentQuery.isNotEmpty()
+        val contentColor = if (isHighlighted) Color.White else Color(context.config.textColor)
         Box(
             modifier =
                 Modifier
@@ -270,7 +272,7 @@ fun MainBottomSheet(
                         clip = false,
                     ).background(
                         color =
-                            if (isFocused || currentQuery.isNotEmpty()) {
+                            if (isHighlighted) {
                                 Color(context.config.primaryColor).copy(alpha = 0.9f)
                             } else {
                                 Color(
@@ -367,7 +369,7 @@ fun MainBottomSheet(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_microphone),
                             contentDescription = "Speech input",
-                            tint = Color(context.config.primaryColor),
+                            tint = contentColor,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -389,7 +391,7 @@ fun MainBottomSheet(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_statistics),
                             contentDescription = "Statistics",
-                            tint = Color(context.config.primaryColor),
+                            tint = contentColor,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -411,7 +413,7 @@ fun MainBottomSheet(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_planner),
                             contentDescription = "Statistics",
-                            tint = Color(context.config.primaryColor),
+                            tint = contentColor,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -428,7 +430,7 @@ fun MainBottomSheet(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_menu),
                             contentDescription = "Statistics",
-                            tint = Color(context.config.primaryColor),
+                            tint = contentColor,
                         )
                     }
                 }
@@ -469,7 +471,7 @@ fun MainBottomSheet(
                                     TextStyle(
                                         fontFamily = fontFamily,
                                         fontWeight = fontWeight,
-                                        color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(context.config.textColor),
+                                        color = contentColor,
                                         fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                                     ),
                             )
@@ -486,7 +488,7 @@ fun MainBottomSheet(
                             TextStyle(
                                 fontFamily = fontFamily,
                                 fontWeight = fontWeight,
-                                color = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(context.config.textColor),
+                                color = contentColor,
                                 fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
                             ),
                         singleLine = true,
@@ -514,7 +516,7 @@ fun MainBottomSheet(
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Clear filter",
-                                        tint = if (isFocused || currentQuery.isNotEmpty()) Color.White else Color(context.config.textColor),
+                                        tint = contentColor,
                                     )
                                 }
                             }
