@@ -75,6 +75,7 @@ fun MediumLayout(
     clearFilter: () -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
+    onMenuClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -225,6 +226,7 @@ fun MediumLayout(
                         enableCardViewPolicy = enableCardViewPolicy,
                         onMicrophoneClick = onMicrophoneClick,
                         clearFilter = clearFilter,
+                        onMenuClick = onMenuClick,
                         onMoveToday = {
                             activity?.let { act ->
                                 val tomorrowTimeMillis =

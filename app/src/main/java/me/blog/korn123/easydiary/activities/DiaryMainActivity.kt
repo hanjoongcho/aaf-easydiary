@@ -635,7 +635,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupWindow =
             EasyDiaryUtils.openCustomOptionMenu(
                 mPopupMenuBinding.root,
-                findViewById(R.id.popupMenu),
+                findViewById(R.id.compose_view),
             )
         mPopupMenuBinding.run {
             updateDrawableColorInnerCardView(imgDevConsole)
@@ -898,6 +898,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     },
                     callbackQuery = { query ->
                         diaryViewModel.query.value = query
+                    },
+                    onMenuClick = {
+                        openCustomOptionMenu()
                     },
                 )
             }

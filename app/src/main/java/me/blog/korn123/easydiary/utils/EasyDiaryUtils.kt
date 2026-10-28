@@ -641,16 +641,38 @@ object EasyDiaryUtils {
     ): PopupWindow {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
+
+        content.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        )
+        val contentHeight = content.measuredHeight
+
+        val location = IntArray(2)
+        parent.getLocationOnScreen(location)
+        val parentTop = location[1]
+        val screenHeight = parent.context.resources.displayMetrics.heightPixels
+
         val popup: PopupWindow =
             PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
                 setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-                showAtLocation(
-                    parent,
-                    Gravity.TOP or Gravity.END,
-                    0,
-                    parent.context.dpToPixel(24F),
-                )
+                if (parentTop > screenHeight / 2) {
+                    val yPos = parentTop - contentHeight - parent.context.dpToPixel(0f)
+                    showAtLocation(
+                        parent,
+                        Gravity.TOP or Gravity.END,
+                        parent.context.dpToPixel(0f),
+                        yPos,
+                    )
+                } else {
+                    showAtLocation(
+                        parent,
+                        Gravity.TOP or Gravity.END,
+                        0,
+                        parent.context.dpToPixel(24F),
+                    )
+                }
             }
         content.x = 1000f
         content.y = 0f

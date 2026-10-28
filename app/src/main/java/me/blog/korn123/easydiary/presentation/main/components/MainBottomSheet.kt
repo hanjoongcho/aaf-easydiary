@@ -122,6 +122,7 @@ fun MainBottomSheet(
     onFeelingSymbolClick: () -> Unit = {},
     clearFilter: () -> Unit = {},
     callbackQuery: (query: String) -> Unit = {},
+    onMenuClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -419,7 +420,11 @@ fun MainBottomSheet(
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = {
-                            showMenuDialog = true
+                            if (onMenuClick != null) {
+                                onMenuClick.invoke()
+                            } else {
+                                showMenuDialog = true
+                            }
                         },
                         modifier =
                             Modifier

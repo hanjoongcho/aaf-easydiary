@@ -79,6 +79,7 @@ fun CompactLayout(
     clearFilter: () -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
+    onMenuClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -245,6 +246,7 @@ fun CompactLayout(
                     enableCardViewPolicy = enableCardViewPolicy,
                     onMicrophoneClick = onMicrophoneClick,
                     clearFilter = clearFilter,
+                    onMenuClick = onMenuClick,
                     onMoveToday = {
                         activity?.let { act ->
                             val tomorrowTimeMillis =
@@ -293,6 +295,7 @@ fun CompactLayout2(
     clearFilter: () -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
+    onMenuClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -455,9 +458,11 @@ fun CompactLayout2(
                     enableCardViewPolicy = enableCardViewPolicy,
                     onMicrophoneClick = onMicrophoneClick,
                     clearFilter = clearFilter,
-                ) { query ->
-                    onQueryChange(query)
-                }
+                    onMenuClick = onMenuClick,
+                    callbackQuery = { query ->
+                        onQueryChange(query)
+                    },
+                )
             }
         }
     }
