@@ -593,7 +593,7 @@ fun BottomToolBar(
         ) {
             Spacer(modifier = Modifier.width(5.dp))
             CustomElevatedSquareButton("Close", R.drawable.ic_cross) { closeCallback() }
-            CustomElevatedSquareButton("New Entry", R.drawable.ic_edit) { writeDiaryCallback() }
+            CustomElevatedSquareButton("New Entry", R.drawable.ic_outline_list_alt_add) { writeDiaryCallback() }
             CustomElevatedSquareButton("TODAY", R.drawable.ic_time_8_w) { moveToTodayEntry() }
             CustomElevatedSquareButton("Expand All", R.drawable.ic_expand) { expandTreeCallback() }
             CustomElevatedSquareButton("Collapse All", R.drawable.ic_collapse) { collapseTreeCallback() }

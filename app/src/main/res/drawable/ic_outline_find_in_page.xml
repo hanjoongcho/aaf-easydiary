@@ -1,0 +1,20 @@
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#FFFFFF" android:viewportHeight="960" android:viewportWidth="960" android:width="24dp">
+      
+    <path android:fillColor="@android:color/white" android:pathData="M590,800L670,880L240,880Q207,880 183.5,856.5Q160,833 160,800L160,160Q160,127 183.5,103.5Q207,80 240,80L600,80L800,320L800,800Q800,820 791.5,836.5Q783,853 768,864L560,658Q543,669 523,674.5Q503,680 480,680Q414,680 367,633Q320,586 320,520Q320,454 367,407Q414,360 480,360Q546,360 593,407Q640,454 640,520Q640,543 634.5,563Q629,583 618,600L720,704L720,348L562,160L240,160Q240,160 240,160Q240,160 240,160L240,800Q240,800 240,800Q240,800 240,800L590,800ZM536.5,576.5Q560,553 560,520Q560,487 536.5,463.5Q513,440 480,440Q447,440 423.5,463.5Q400,487 400,520Q400,553 423.5,576.5Q447,600 480,600Q513,600 536.5,576.5ZM480,520L480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520L480,520Q480,520 480,520Q480,520 480,520ZM480,520L480,520Q480,520 480,520Q480,520 480,520L480,520Q480,520 480,520Q480,520 480,520L480,520L480,520L480,520L480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520Q480,520 480,520L480,520Q480,520 480,520Q480,520 480,520Z"/>
+    
+</vector>

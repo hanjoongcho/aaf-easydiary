@@ -86,6 +86,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
+import me.blog.korn123.easydiary.presentation.components.CustomCircleIconButton
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
@@ -308,7 +309,7 @@ fun MainBottomSheet(
             Column(
                 modifier =
                     Modifier
-                        .padding(0.dp, 5.dp, 0.dp, 5.dp)
+                        .padding(0.dp, 10.dp, 0.dp, 5.dp)
                         .navigationBarsPadding(),
             ) {
                 Row(
@@ -368,65 +369,25 @@ fun MainBottomSheet(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    IconButton(
-                        onClick = {
-                            onMoveTop.invoke()
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .background(
-                                    color = Color(context.config.primaryColor),
-                                    shape = CircleShape,
-                                ).clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_move_top),
-                            contentDescription = "Move top",
-                            tint = Color.White,
-                        )
-                    }
+                    CustomCircleIconButton(
+                        iconResourceId = R.drawable.ic_move_top,
+                        contentDescription = "Move top",
+                        iconPadding = 1.dp,
+                        onClick = { onMoveTop() },
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            onMoveBottom.invoke()
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .background(
-                                    color = Color(context.config.primaryColor),
-                                    shape = CircleShape,
-                                ).clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_move_bottom),
-                            contentDescription = "Move bottom",
-                            tint = Color.White,
-                        )
-                    }
+                    CustomCircleIconButton(
+                        iconResourceId = R.drawable.ic_move_bottom,
+                        contentDescription = "Move bottom",
+                        iconPadding = 1.dp,
+                        onClick = { onMoveBottom() },
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            onMicrophoneClick.invoke()
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .background(
-                                    color = Color(context.config.primaryColor),
-                                    shape = CircleShape,
-                                ).clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_outline_mic),
-                            contentDescription = "Speech input",
-                            tint = Color.White,
-                        )
-                    }
+                    CustomCircleIconButton(
+                        iconResourceId = R.drawable.ic_outline_mic,
+                        contentDescription = "Speech input",
+                        onClick = { onMicrophoneClick() },
+                    )
                 }
 
                 Row(
@@ -530,7 +491,7 @@ fun MainBottomSheet(
                 ) {
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_new_entry) ?: "",
-                        iconResourceId = R.drawable.ic_edit,
+                        iconResourceId = R.drawable.ic_outline_list_alt_add,
                         iconSize = 16.dp,
                     ) {
                         activity?.let {
@@ -543,14 +504,14 @@ fun MainBottomSheet(
                     }
                     CustomElevatedSquareButton(
                         text = "TODAY",
-                        iconResourceId = R.drawable.ic_time_8_w,
+                        iconResourceId = R.drawable.ic_outline_today,
                         iconSize = 16.dp,
                     ) {
                         onMoveToday()
                     }
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_tree_view) ?: "",
-                        iconResourceId = R.drawable.ic_tree_structure,
+                        iconResourceId = R.drawable.ic_outline_tree,
                         iconSize = 16.dp,
                     ) {
                         activity?.let {
@@ -562,7 +523,7 @@ fun MainBottomSheet(
                     }
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.menu_timeline) ?: "",
-                        iconResourceId = R.drawable.ic_settings_11,
+                        iconResourceId = R.drawable.ic_outline_view_timeline,
                     ) {
                         activity?.let {
                             TransitionHelper.startActivityWithTransition(
@@ -601,7 +562,7 @@ fun MainBottomSheet(
                         }
                         CustomElevatedSquareButton(
                             text = "Calendar",
-                            iconResourceId = R.drawable.ic_planner,
+                            iconResourceId = R.drawable.ic_outline_calendar_month,
                             iconSize = 16.dp,
                             tint = debugColor,
                         ) {

@@ -327,7 +327,7 @@ fun TimelineScreen(
                 shape = CircleShape,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
+                    painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
                     contentDescription = stringResource(id = R.string.write_diary),
                 )
             }

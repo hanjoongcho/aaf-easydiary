@@ -338,27 +338,28 @@ internal fun SelectedDateEventsSection(
                     Card(
                         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                        modifier = (
-                            if (context.config.enableCardViewPolicy) {
-                                Modifier.padding(
-                                    HORIZONTAL_PADDING.dp,
-                                    VERTICAL_PADDING.dp,
-                                )
-                            } else {
-                                Modifier
-                                    .padding(1.dp, 1.dp)
-                            }
-                        ).combinedClickable(
-                            onClick = {
-                                TransitionHelper.startActivityWithTransition(
-                                    activity,
-                                    Intent(context, DiaryReadingActivity::class.java).apply {
-                                        putExtra(DIARY_SEQUENCE, event.diaryId)
-                                    },
-                                )
-                            },
-                            onLongClick = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
-                        ),
+                        modifier =
+                            (
+                                if (context.config.enableCardViewPolicy) {
+                                    Modifier.padding(
+                                        HORIZONTAL_PADDING.dp,
+                                        VERTICAL_PADDING.dp,
+                                    )
+                                } else {
+                                    Modifier
+                                        .padding(1.dp, 1.dp)
+                                }
+                            ).combinedClickable(
+                                onClick = {
+                                    TransitionHelper.startActivityWithTransition(
+                                        activity,
+                                        Intent(context, DiaryReadingActivity::class.java).apply {
+                                            putExtra(DIARY_SEQUENCE, event.diaryId)
+                                        },
+                                    )
+                                },
+                                onLongClick = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
+                            ),
                         elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                     ) {
                         LegacyDiaryItemCard(
@@ -476,7 +477,7 @@ fun MonthHeader(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
+                    painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
                     contentDescription = "Write Diary",
                     tint = Color.White,
                     modifier = Modifier.size(14.dp),
