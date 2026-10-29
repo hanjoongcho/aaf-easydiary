@@ -246,6 +246,23 @@ class DiaryViewModel
                     initialValue = emptyList(),
                 )
 
+        val taskTodoCount: StateFlow<Int> =
+            diaryRepository
+                .observeDiariesWithPhotos()
+                .map { list ->
+                    list.count { it.symbolSequence in 80..81 }
+                }.stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = 0,
+                )
+
+        suspend fun getTaskTodoCount(): Int =
+            withContext(Dispatchers.IO) {
+                findDiary(query = null)
+                    .count { it.symbolSequence in 80..81 }
+            }
+
         suspend fun findDiary(
             query: String?,
             isSensitive: Boolean = false,

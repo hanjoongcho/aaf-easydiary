@@ -1173,4 +1173,6 @@
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
     <string name="menu_speech_to_text">Speech To Text</string>
+    <string name="diary_count_format">%d entries</string>
+    <string name="task_todo_count_format">(Incomplete Tasks: %d)</string>
 </resources>

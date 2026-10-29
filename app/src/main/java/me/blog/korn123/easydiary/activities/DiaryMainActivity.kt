@@ -81,6 +81,7 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
 import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
@@ -395,14 +396,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
 
-            R.id.saveAsHtml -> {
-                EasyDiaryUtils.writeFileWithSAF(
-                    "${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
-                    MIME_TYPE_HTML,
-                    mRequestSAFForHtmlBookLauncher,
-                )
-            }
-
             R.id.planner -> {
                 val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
@@ -435,6 +428,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cross)
                 menuInflater.inflate(R.menu.activity_diary_main_delete, menu)
                 applyFontToMenuItem(menu.findItem(R.id.delete))
             }
@@ -777,7 +771,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                         supportActionBar?.run {
                             title = ""
-//                            subtitle = getString(R.string.diary_count_format, mDiaryList.size)
+                        }
+                    }
+                }
+
+                launch {
+                    diaryViewModel.taskTodoCount.collect { count ->
+                        supportActionBar?.run {
+                            subtitle = getString(R.string.task_todo_count_format, count)
                         }
                     }
                 }

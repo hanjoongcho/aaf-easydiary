@@ -1174,4 +1174,5 @@
     <string name="link_entry_later">다음에</string>
     <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d건</string>
+    <string name="task_todo_count_format">미완료작업: %d건</string>
 </resources>

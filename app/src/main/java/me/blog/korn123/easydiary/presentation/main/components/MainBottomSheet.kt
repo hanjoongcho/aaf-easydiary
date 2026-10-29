@@ -59,10 +59,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -375,13 +375,16 @@ fun MainBottomSheet(
                         modifier =
                             Modifier
                                 .size(32.dp)
-                                .clip(CircleShape),
+                                .background(
+                                    color = Color(context.config.primaryColor),
+                                    shape = CircleShape,
+                                ).clip(CircleShape),
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_move_top),
                             contentDescription = "Move top",
-                            tint = contentColor,
+                            tint = Color.White,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -392,13 +395,16 @@ fun MainBottomSheet(
                         modifier =
                             Modifier
                                 .size(32.dp)
-                                .clip(CircleShape),
+                                .background(
+                                    color = Color(context.config.primaryColor),
+                                    shape = CircleShape,
+                                ).clip(CircleShape),
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_move_bottom),
                             contentDescription = "Move bottom",
-                            tint = contentColor,
+                            tint = Color.White,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -409,13 +415,16 @@ fun MainBottomSheet(
                         modifier =
                             Modifier
                                 .size(32.dp)
-                                .clip(CircleShape),
+                                .background(
+                                    color = Color(context.config.primaryColor),
+                                    shape = CircleShape,
+                                ).clip(CircleShape),
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_microphone),
+                            painter = painterResource(id = R.drawable.ic_outline_mic),
                             contentDescription = "Speech input",
-                            tint = contentColor,
+                            tint = Color.White,
                         )
                     }
                 }

@@ -1174,4 +1174,5 @@
     <string name="link_entry_later">बाद में</string>
     <string name="menu_speech_to_text">स्पीच टू टेक्स्ट</string>
     <string name="diary_count_format">%d प्रविष्टियाँ</string>
+    <string name="task_todo_count_format">(अपूर्ण कार्य: %d)</string>
 </resources>

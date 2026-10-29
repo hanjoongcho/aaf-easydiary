@@ -1174,4 +1174,5 @@
     <string name="link_entry_later">Later</string>
     <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d entrées</string>
+    <string name="task_todo_count_format">(Tâches non terminées: %d)</string>
 </resources>
