@@ -24,7 +24,7 @@ class SettingsActivity : BaseSettingsActivity() {
         mDotIndicatorPager2Adapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
         mBinding.run {
             viewPager.adapter = mDotIndicatorPager2Adapter
-            viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+            val pageChangeListener = object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
                 override fun onPageSelected(position: Int) {
@@ -69,7 +69,9 @@ class SettingsActivity : BaseSettingsActivity() {
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {}
-            })
+            }
+            viewPager.addOnPageChangeListener(pageChangeListener)
+            pageChangeListener.onPageSelected(viewPager.currentItem)
             dotsIndicator.setViewPager(viewPager)
             getProgressContainer().setOnTouchListener { _, _ -> true }
         }
