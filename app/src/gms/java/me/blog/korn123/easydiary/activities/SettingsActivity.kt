@@ -55,16 +55,20 @@ class SettingsActivity : BaseSettingsActivity() {
                                 }
 
                                 3 -> {
-                                    title = getString(R.string.preferences_category_backup_restore)
-                                    subtitle = getString(R.string.preferences_category_backup_restore_sub)
+                                    title = ""
+                                    subtitle = "${getString(R.string.preferences_category_backup_restore)} (${
+                                        getString(
+                                            R.string.preferences_category_backup_restore_sub,
+                                        )
+                                    })"
                                     pauseLock()
                                     updateUI()
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
                                 4 -> {
-                                    title = getString(R.string.preferences_category_backup_restore_device)
-                                    subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                                    title = ""
+                                    subtitle = "${getString(R.string.preferences_category_backup_restore_device)} (${getString(R.string.preferences_category_backup_restore_device_sub)})"
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
