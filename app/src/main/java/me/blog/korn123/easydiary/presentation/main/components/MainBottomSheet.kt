@@ -50,6 +50,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -58,6 +59,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -123,9 +125,13 @@ fun MainBottomSheet(
     clearFilter: () -> Unit = {},
     callbackQuery: (query: String) -> Unit = {},
     onMenuClick: (() -> Unit)? = null,
+    onMoveTop: () -> Unit = {},
+    onMoveBottom: () -> Unit = {},
+    onHeightChanged: (Dp) -> Unit = {},
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
+    val density = LocalDensity.current
     var showMenuDialog by remember { mutableStateOf(false) }
 
     val menuOptionItems =
@@ -262,6 +268,7 @@ fun MainBottomSheet(
         var isFocused by remember { mutableStateOf(false) }
         val isHighlighted = isFocused || currentQuery.isNotEmpty()
         val contentColor = if (isHighlighted) Color.White else Color(context.config.textColor)
+        val debugColor = Color.Red
         Box(
             modifier =
                 Modifier
@@ -293,7 +300,10 @@ fun MainBottomSheet(
                             context.config.primaryColor,
                         ),
                         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-                    ),
+                    ).onGloballyPositioned { coordinates ->
+                        val heightDp = with(density) { coordinates.size.height.toDp() }
+                        onHeightChanged(heightDp)
+                    },
         ) {
             Column(
                 modifier =
@@ -357,6 +367,41 @@ fun MainBottomSheet(
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
+
+                    IconButton(
+                        onClick = {
+                            onMoveTop.invoke()
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_move_top),
+                            contentDescription = "Move top",
+                            tint = contentColor,
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(
+                        onClick = {
+                            onMoveBottom.invoke()
+                        },
+                        modifier =
+                            Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_move_bottom),
+                            contentDescription = "Move bottom",
+                            tint = contentColor,
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = {
                             onMicrophoneClick.invoke()
@@ -370,71 +415,6 @@ fun MainBottomSheet(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_microphone),
                             contentDescription = "Speech input",
-                            tint = contentColor,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            activity?.let {
-                                TransitionHelper.startActivityWithTransition(
-                                    it,
-                                    Intent(it, DashboardActivity::class.java),
-                                )
-                            }
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_statistics),
-                            contentDescription = "Statistics",
-                            tint = contentColor,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            activity?.let {
-                                TransitionHelper.startActivityWithTransition(
-                                    it,
-                                    Intent(it, CalendarActivity::class.java),
-                                )
-                            }
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_planner),
-                            contentDescription = "Statistics",
-                            tint = contentColor,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            if (onMenuClick != null) {
-                                onMenuClick.invoke()
-                            } else {
-                                showMenuDialog = true
-                            }
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .clip(CircleShape),
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_menu),
-                            contentDescription = "Statistics",
                             tint = contentColor,
                         )
                     }
@@ -585,9 +565,23 @@ fun MainBottomSheet(
 
                     if (context.config.enableDebugMode) {
                         CustomElevatedSquareButton(
+                            iconResourceId = R.drawable.ic_bug_2,
+                            text = "Debug",
+                            iconSize = 16.dp,
+                            tint = debugColor,
+                        ) {
+                            activity?.let {
+                                TransitionHelper.startActivityWithTransition(
+                                    it,
+                                    Intent(it, DevActivity::class.java),
+                                )
+                            }
+                        }
+                        CustomElevatedSquareButton(
                             text = activity?.getString(R.string.button_quick_settings) ?: "",
                             iconResourceId = R.drawable.ic_running,
                             iconSize = 16.dp,
+                            tint = debugColor,
                         ) {
                             activity?.let {
                                 TransitionHelper.startActivityWithTransition(
@@ -597,14 +591,15 @@ fun MainBottomSheet(
                             }
                         }
                         CustomElevatedSquareButton(
-                            iconResourceId = R.drawable.ic_bug_2,
-                            text = "Debug",
+                            text = "Calendar",
+                            iconResourceId = R.drawable.ic_planner,
                             iconSize = 16.dp,
+                            tint = debugColor,
                         ) {
                             activity?.let {
                                 TransitionHelper.startActivityWithTransition(
                                     it,
-                                    Intent(it, DevActivity::class.java),
+                                    Intent(it, CalendarActivity::class.java),
                                 )
                             }
                         }

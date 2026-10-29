@@ -23,9 +23,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -121,6 +126,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
     private var mPopupWindow: PopupWindow? = null
     private var mLastHistoryCheckMillis = System.currentTimeMillis()
+    private var bottomSheetHeightPx = 0
     private val mRequestSpeechInputLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -249,9 +255,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mBinding.composeView.visibility = View.VISIBLE
 
         if (isVanillaIceCreamPlus()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { v, insets ->
-                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-                v.updatePadding(bottom = navigationBars.bottom)
+            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { _, insets ->
+//                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+//                v.updatePadding(bottom = navigationBars.bottom)
                 insets
             }
 
@@ -707,7 +713,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
         target?.let {
             position = getIndexBySequence(target.diaryId)
-            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
             if (position != -1) {
                 (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
                     position,
@@ -772,7 +777,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                         supportActionBar?.run {
                             title = ""
-                            subtitle = getString(R.string.diary_count_format, mDiaryList.size)
+//                            subtitle = getString(R.string.diary_count_format, mDiaryList.size)
                         }
                     }
                 }
@@ -862,7 +867,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 GridItemDecorationDiaryMain(
                     resources.getDimensionPixelSize(R.dimen.component_margin_small),
                     this@DiaryMainActivity,
-                ),
+                ) { bottomSheetHeightPx },
             )
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
@@ -873,6 +878,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             val currentQuery by diaryViewModel.query.collectAsState()
             val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
             val currentSymbol by viewModel.symbol.collectAsState()
+            val density = LocalDensity.current
 
             AppTheme {
                 MainBottomSheet(
@@ -901,6 +907,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     },
                     onMenuClick = {
                         openCustomOptionMenu()
+                    },
+                    onMoveTop = {
+                        mBinding.diaryListView.layoutManager?.scrollToPosition(0)
+                    },
+                    onMoveBottom = {
+                        mBinding.diaryListView.adapter?.itemCount?.let { count ->
+                            if (count > 0) {
+                                mBinding.diaryListView.layoutManager?.scrollToPosition(count - 1)
+                            }
+                        }
+                    },
+                    onHeightChanged = { height ->
+                        bottomSheetHeightPx = with(density) { height.roundToPx() }
+                        mBinding.diaryListView.invalidateItemDecorations()
                     },
                 )
             }

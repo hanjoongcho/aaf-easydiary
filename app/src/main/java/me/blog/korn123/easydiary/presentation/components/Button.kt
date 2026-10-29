@@ -68,6 +68,7 @@ fun CustomElevatedSquareButton(
     iconPadding: Dp = 0.dp,
     fontColor: Color = Color.White,
     enabled: Boolean = true,
+    tint: Color = Color.White,
     onClick: () -> Unit,
 ) {
     ElevatedButton(
@@ -89,6 +90,7 @@ fun CustomElevatedSquareButton(
                 modifier = Modifier.size(iconSize).padding(iconPadding),
                 painter = painterResource(id = iconResourceId),
                 contentDescription = text,
+                tint = tint,
             )
             Spacer(modifier = Modifier.height(5.dp))
             SimpleText(text = text, fontColor = fontColor, fontSize = 10.dp.dpToPx())

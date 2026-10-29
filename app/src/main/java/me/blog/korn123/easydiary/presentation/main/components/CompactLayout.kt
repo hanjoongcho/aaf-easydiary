@@ -116,6 +116,7 @@ fun CompactLayout(
         enablePhotoHighlight = context.config.enablePhotoHighlight
     }
 
+    var bottomSheetHeight by remember { mutableStateOf(0.dp) }
     val statusBarTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val photoHighlightMaxHeight = 160.dp + statusBarTop
     val photoHighlightScrollBehavior = rememberPhotoHighlightScrollBehavior(photoHighlightMaxHeight)
@@ -170,7 +171,7 @@ fun CompactLayout(
                 contentPadding =
                     PaddingValues(
                         top = if (enablePhotoHighlight) 0.dp else statusBarTop,
-                        bottom = bottomBarPadding,
+                        bottom = bottomSheetHeight,
                     ),
             ) {
                 itemsIndexed(items) { _, diary ->
@@ -247,6 +248,20 @@ fun CompactLayout(
                     onMicrophoneClick = onMicrophoneClick,
                     clearFilter = clearFilter,
                     onMenuClick = onMenuClick,
+                    onMoveTop = {
+                        coroutineScope.launch {
+                            if (items.isNotEmpty()) {
+                                listState.scrollToItem(0)
+                            }
+                        }
+                    },
+                    onMoveBottom = {
+                        coroutineScope.launch {
+                            if (items.isNotEmpty()) {
+                                listState.scrollToItem(items.size - 1)
+                            }
+                        }
+                    },
                     onMoveToday = {
                         activity?.let { act ->
                             val tomorrowTimeMillis =
@@ -256,7 +271,6 @@ fun CompactLayout(
                             val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
                             target?.let {
                                 val position = items.indexOfFirst { item -> item.diaryId == target.diaryId }
-                                act.makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
                                 if (position != -1) {
                                     coroutineScope.launch {
                                         listState.scrollToItem(position)
@@ -268,6 +282,7 @@ fun CompactLayout(
                     callbackQuery = { query ->
                         onQueryChange(query)
                     },
+                    onHeightChanged = { bottomSheetHeight = it },
                 )
             }
         }
@@ -332,6 +347,7 @@ fun CompactLayout2(
         enablePhotoHighlight = context.config.enablePhotoHighlight
     }
 
+    var bottomSheetHeight by remember { mutableStateOf(0.dp) }
     val statusBarTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val photoHighlightMaxHeight = 160.dp + statusBarTop
     val photoHighlightScrollBehavior = rememberPhotoHighlightScrollBehavior(photoHighlightMaxHeight)
@@ -356,7 +372,7 @@ fun CompactLayout2(
                 contentPadding =
                     PaddingValues(
                         top = if (enablePhotoHighlight) 0.dp else statusBarTop,
-                        bottom = bottomBarPadding,
+                        bottom = bottomSheetHeight,
                     ),
             ) {
                 itemsIndexed(items) { index, diary ->
@@ -459,9 +475,24 @@ fun CompactLayout2(
                     onMicrophoneClick = onMicrophoneClick,
                     clearFilter = clearFilter,
                     onMenuClick = onMenuClick,
+                    onMoveTop = {
+                        coroutineScope.launch {
+                            if (items.isNotEmpty()) {
+                                listState.scrollToItem(0)
+                            }
+                        }
+                    },
+                    onMoveBottom = {
+                        coroutineScope.launch {
+                            if (items.isNotEmpty()) {
+                                listState.scrollToItem(items.size - 1)
+                            }
+                        }
+                    },
                     callbackQuery = { query ->
                         onQueryChange(query)
                     },
+                    onHeightChanged = { bottomSheetHeight = it },
                 )
             }
         }

@@ -107,6 +107,7 @@ fun MediumLayout(
             activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
         }
     }
+    var bottomSheetHeight by remember { mutableStateOf(0.dp) }
     var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         enablePhotoHighlight = context.config.enablePhotoHighlight
@@ -143,10 +144,7 @@ fun MediumLayout(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding =
                         PaddingValues(
-                            bottom =
-                                WindowInsets.navigationBars
-                                    .asPaddingValues()
-                                    .calculateBottomPadding(),
+                            bottom = bottomSheetHeight,
                         ),
                 ) {
                     itemsIndexed(items) { _, diary ->
@@ -227,6 +225,20 @@ fun MediumLayout(
                         onMicrophoneClick = onMicrophoneClick,
                         clearFilter = clearFilter,
                         onMenuClick = onMenuClick,
+                        onMoveTop = {
+                            coroutineScope.launch {
+                                if (items.isNotEmpty()) {
+                                    listState.scrollToItem(0)
+                                }
+                            }
+                        },
+                        onMoveBottom = {
+                            coroutineScope.launch {
+                                if (items.isNotEmpty()) {
+                                    listState.scrollToItem(items.size - 1)
+                                }
+                            }
+                        },
                         onMoveToday = {
                             activity?.let { act ->
                                 val tomorrowTimeMillis =
@@ -236,7 +248,6 @@ fun MediumLayout(
                                 val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
                                 target?.let {
                                     val position = items.indexOfFirst { item -> item.diaryId == target.diaryId }
-                                    act.makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
                                     if (position != -1) {
                                         coroutineScope.launch {
                                             listState.scrollToItem(position)
@@ -248,6 +259,7 @@ fun MediumLayout(
                         callbackQuery = { query ->
                             onQueryChange(query)
                         },
+                        onHeightChanged = { bottomSheetHeight = it },
                     )
                 }
             }

@@ -8,19 +8,7 @@
         android:title="@string/menu_timeline"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/ic_planner"
-        android:id="@+id/planner"
-        android:orderInCategory="100"
-        android:title="@string/menu_calendar"
-        app:showAsAction="always" />
-    <item
-        android:icon="@drawable/ic_microphone"
-        android:id="@+id/microphone"
-        android:orderInCategory="100"
-        android:title="@string/menu_speech_to_text"
-        app:showAsAction="always" />
-    <item
-        android:icon="@drawable/ic_options_three_dots"
+        android:icon="@drawable/ic_menu"
         android:id="@+id/popupMenu"
         android:orderInCategory="100"
         android:title="Popup Menu"

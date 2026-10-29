@@ -657,22 +657,22 @@ object EasyDiaryUtils {
             PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
                 setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-                if (parentTop > screenHeight / 2) {
-                    val yPos = parentTop - contentHeight - parent.context.dpToPixel(0f)
-                    showAtLocation(
-                        parent,
-                        Gravity.TOP or Gravity.END,
-                        parent.context.dpToPixel(0f),
-                        yPos,
-                    )
-                } else {
-                    showAtLocation(
-                        parent,
-                        Gravity.TOP or Gravity.END,
-                        0,
-                        parent.context.dpToPixel(24F),
-                    )
-                }
+//                if (parentTop > screenHeight / 2) {
+//                    val yPos = parentTop - contentHeight - parent.context.dpToPixel(0f)
+//                    showAtLocation(
+//                        parent,
+//                        Gravity.TOP or Gravity.END,
+//                        parent.context.dpToPixel(0f),
+//                        yPos,
+//                    )
+//                } else {
+                showAtLocation(
+                    parent,
+                    Gravity.TOP or Gravity.END,
+                    0,
+                    parent.context.dpToPixel(24F),
+                )
+//                }
             }
         content.x = 1000f
         content.y = 0f
