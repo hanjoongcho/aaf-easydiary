@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -60,6 +62,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.diaryRepository
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.exportHtmlBook
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.isLandScape
@@ -240,6 +243,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         invalidateOptionsMenu()
+        applyBannerContainerMargin()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             lifecycleScope.launch {
@@ -532,6 +536,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     }
                 }
             }
+        }
+    }
+
+    private fun applyBannerContainerMargin() {
+        mBinding.layoutBannerContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = if (config.enableCardViewPolicy) dpToPixel(3f) else dpToPixel(1f)
         }
     }
 
