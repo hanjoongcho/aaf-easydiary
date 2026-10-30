@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -42,6 +43,7 @@ fun EasyDiaryActionBar(
     subTitle: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     useCloseIcon: Boolean = false,
+    actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
     close: () -> Unit,
 ) {
     val isDarkMode = isSystemInDarkTheme()
@@ -57,11 +59,6 @@ fun EasyDiaryActionBar(
 
     TopAppBar(
         scrollBehavior = scrollBehavior,
-        modifier =
-            Modifier
-                .padding(
-                    WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues(),
-                ),
         title = {
             Column(
                 modifier =
@@ -84,7 +81,7 @@ fun EasyDiaryActionBar(
                                 color = Color.White,
                                 fontSize =
                                     TextUnit(
-                                        currentTextUnit.value.times(if (subTitle != null) 1.2F else 1.3F),
+                                        currentTextUnit.value.times(1.1f),
                                         TextUnitType.Sp,
                                     ),
                             ),
@@ -130,6 +127,7 @@ fun EasyDiaryActionBar(
                 }
             }
         },
+        actions = actions,
         colors =
             TopAppBarColors(
                 containerColor = Color(LocalContext.current.config.primaryColor),
@@ -149,6 +147,7 @@ fun EasyDiaryLargeActionBar(
     subTitle: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     useCloseIcon: Boolean = false,
+    actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
     close: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -235,6 +234,7 @@ fun EasyDiaryLargeActionBar(
                 }
             }
         },
+        actions = actions,
         colors =
             TopAppBarDefaults.topAppBarColors(
                 containerColor = Color(LocalContext.current.config.primaryColor),

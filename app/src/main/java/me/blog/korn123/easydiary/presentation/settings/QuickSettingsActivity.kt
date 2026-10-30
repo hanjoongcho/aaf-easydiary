@@ -85,8 +85,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                     topBar = {
                         EasyDiaryActionBar(
-                            title = "QuickSettings",
-                            subTitle = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open",
+                            title = "\uD83D\uDCF1\uD83D\uDC4B Shake the device to open",
                             scrollBehavior = scrollBehavior,
                             useCloseIcon = true,
                         ) {
