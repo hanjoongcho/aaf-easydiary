@@ -90,7 +90,6 @@
                     android:contentDescription="@string/write_diary"
                     android:visibility="visible"
                     app:fabSize="mini"
-                    app:maxImageSize="15dp"
                     app:srcCompat="@drawable/ic_outline_list_alt_add" />
 
                 <LinearLayout

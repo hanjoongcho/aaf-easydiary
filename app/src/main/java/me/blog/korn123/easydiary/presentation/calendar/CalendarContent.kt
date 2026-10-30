@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.presentation.calendar
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.widget.ImageView
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,11 +59,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -522,7 +526,7 @@ fun DayContent(
                     .padding(horizontal = 1.dp),
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 1.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp),
             ) {
                 Box(
                     modifier = Modifier.align(Alignment.Center),
@@ -584,13 +588,23 @@ fun DayContent(
                             Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(Color.Yellow.copy(alpha = 0.4f))
-                                .padding(horizontal = 2.dp, vertical = 2.dp),
+//                                .background(Color.Yellow.copy(alpha = 0.4f))
+                                .padding(horizontal = 1.dp, vertical = 2.dp),
                         contentAlignment = Alignment.CenterStart,
                     ) {
                         val density = LocalDensity.current
                         val pxValue = with(density) { 10.sp.toPx() }
-                        SimpleText(text = EasyDiaryUtils.summaryDiaryLabel(diary), maxLines = 1, fontSize = pxValue)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            AndroidView(
+                                modifier = Modifier.size(10.dp),
+                                factory = { ctx -> ImageView(ctx) },
+                                update = { FlavorUtils.initWeatherView(it.context, it, diary.symbolSequence) },
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            SimpleText(text = EasyDiaryUtils.summaryDiaryLabel(diary), maxLines = 1, fontSize = pxValue)
+                        }
                     }
                 }
             }
