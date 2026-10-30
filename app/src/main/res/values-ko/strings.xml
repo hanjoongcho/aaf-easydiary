@@ -1,37 +1,11 @@
 <resources>
     <string name="app_name">이지 다이어리</string>
     <string name="common_create_seconds">Creation Seconds</string>
-    <string name="create_diary_title">다이어리 쓰기</string>
-    <string name="write_date">작성일</string>
-    <string name="request_title_message">제목을 입력하세요.</string>
     <string name="request_content_message">내용을 입력하세요.</string>
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
     <string name="contents_text_hint">내용을 입력하거나 말하세요.</string>
     <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>
     <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
-    <string name="create_diary_showcase_button_1">다음</string>
-    <string name="create_diary_showcase_button_2">닫기</string>
-    <string name="create_diary_showcase_title_1">날씨</string>
-    <string name="create_diary_showcase_title_2">제목</string>
-    <string name="create_diary_showcase_title_3">내용</string>
-    <string name="create_diary_showcase_title_4">사진첨부</string>
-    <string name="create_diary_showcase_title_5">글씨확대</string>
-    <string name="create_diary_showcase_title_6">글씨축소</string>
-    <string name="create_diary_showcase_title_7">날짜선택</string>
-    <string name="create_diary_showcase_title_8">시간선택</string>
-    <string name="create_diary_showcase_title_9">저장</string>
-    <string name="create_diary_showcase_message_1">다이어리 작성 시간의 날씨를 선택합니다. 날씨 선택은 필수가 아닙니다.</string>
-    <string name="create_diary_showcase_message_2">다이어리의 제목을 입력합니다. 제목 입력은 필수가 아닙니다.</string>
-    <string name="create_diary_showcase_message_3">일기, 메모, 요약노트등의 내용을 입력합니다.</string>
-    <string name="create_diary_showcase_message_4">다이어리에 사진을 첨부합니다.</string>
-    <string name="create_diary_showcase_message_5">다이어리의 텍스트크기를 확대합니다.</string>
-    <string name="create_diary_showcase_message_6">다이어리의 텍스트크기를 축소합니다.</string>
-    <string name="create_diary_showcase_message_7">다이어리 작성날짜를 선택합니다. 지난일자의 다이어리 작성을 원할경우 날짜를 변경할 수 있습니다.</string>
-    <string name="create_diary_showcase_message_8">다이어리 작성시간을 선택합니다. 지난시간의 다이어리 작성을 원할경우 시간을 변경할 수 있습니다.</string>
-    <string name="create_diary_showcase_message_9">작성이 완료된 다이어리를 저장합니다.</string>
-    <string name="read_diary_title">검색</string>
-    <string name="input_mode_a">스피치 모드</string>
-    <string name="input_mode_c">키패드 모드</string>
     <string name="guide_message_2">검색어를 입력하거나 말하세요.</string>
     <string name="recognizer_intent_not_found_message">음성인식 모듈이 설치되지 않았거나 비활성화 상태입니다.</string>
     <string name="sample_diary_title_1">조심하기 보다는 위험해져라.</string>
@@ -42,71 +16,24 @@
     <string name="sample_diary_2">당신이 말할 때는 아는 것만 반복한다.\n하지만 들으면 새로운 것을 배우게 된다.\n- 달라이 라마</string>
     <string name="sample_diary_3">여러분이 지도자로서 가장 들을 필요가 있는 것이 바로 나쁜 소식이다.\n좋은 소식은 내일도 좋은 것이지만 나쁜 소식은 내일이면 더 나빠질 것이다.\n바로 이것이 비록 사실이 가슴 아프더라도 언제나 까다로운 질문을 하고 사실을 말하는 것이 안전한 이유다.\n- 에릭 슈미트 구글 회장, ‘구글은 어떻게 일하는가?’에서</string>
     <string name="sample_diary_4">제약이 창의성을 가두는 게 아니라, 제약을 극복하기 위해 창의성이 발휘된다.\n모든 위대한 작품이나 창의적인 솔루션은 시간적인 제약, 물리적인 제약, 자원의 제약들이 엄청 많았던 것들이었다.\n뭐가 됐든 어렵고 제약된 환경에서 창의성이 태어나곤 한다.\n- 김봉진 대표, ‘배민다움’에서</string>
-    <string name="read_diary_showcase_button_1">다음</string>
-    <string name="read_diary_showcase_button_2">닫기</string>
-    <string name="read_diary_showcase_title_1">다이어리 쓰기</string>
-    <string name="read_diary_showcase_title_2">검색</string>
-    <string name="read_diary_showcase_title_3">음성인식</string>
-    <string name="read_diary_showcase_title_4">캘린더</string>
-    <string name="read_diary_showcase_title_5">타임라인</string>
-    <string name="read_diary_showcase_title_6">차트</string>
-    <string name="read_diary_showcase_title_7">고급설정</string>
-    <string name="read_diary_showcase_title_8">다이어리 보기</string>
-    <string name="read_diary_showcase_message_1">일기, 메모, 요약노트등 여러가지 형태의 다이어리를 시간의 흐름에 따라 다양하게 작성할 수 있습니다.</string>
-    <string name="read_diary_showcase_message_2">키워드를 이용하여 다이어리를 검색할 수 있습니다. 키워드가 입력되면 키워드가 일치하는 다이어리가 검색되고 해당 키워드는 하이라이트 됩니다.</string>
-    <string name="read_diary_showcase_message_3">음성인식 기능을 이용하여 키패드 없이 검색 키워드를 입력할 수 있습니다.</string>
-    <string name="read_diary_showcase_message_4">작성된 일기는 캘린더를 이용하여 날짜별로 모아서 볼 수 있습니다.</string>
-    <string name="read_diary_showcase_message_5">작성된 일기는 타임라인으로 제공됩니다.</string>
-    <string name="read_diary_showcase_message_6">전체기간 동안의 일기작성 현황을 차트로 볼 수 있습니다.</string>
-    <string name="read_diary_showcase_message_7">고급설정을 이용하여 폰트변경, 잠금번호설정, 다이어리 백업 및 복구 작업을 할 수 있습니다.</string>
-    <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
-    <string name="diary_photo_migration_message">이지다이어리의 사진첨부 방식이 변경되어 기존 링크정보를 이지다이어리 폴더에 압축하여 저장합니다.\n작업이 완료될때까지 잠시 기다려 주시기 바랍니다.</string>
-    <string name="read_diary_detail_title">다이어리 열람</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>
-    <string name="read_diary_detail_showcase_button_1">다음</string>
-    <string name="read_diary_detail_showcase_button_2">닫기</string>
-    <string name="read_diary_detail_showcase_title_0">다이어리 보기</string>
-    <string name="read_diary_detail_showcase_title_1">페이지이동</string>
-    <string name="read_diary_detail_showcase_title_2">다이어리 수정</string>
-    <string name="read_diary_detail_showcase_title_3">TTS</string>
-    <string name="read_diary_detail_showcase_title_4">포스트카드</string>
-    <string name="read_diary_detail_showcase_title_5">다이어리 삭제</string>
-    <string name="read_diary_detail_showcase_message_0">저장된 다이어리를 열람합니다. 저장된 다이어리를 수정하거나 사용자정의 컬러를 지정하여 다이어리 카드를 만들 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_1">화면을 좌우로 드래그 하면 이전 또는 이후에 작성된 다이어리를 열람 할 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_2">열람중인 다이어리 편집을 위해 다이어리 수정화면으로 이동 할 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_3">다이어리 본문을 구글 TTS 기능을 이용하여 음성으로 들을 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_4">다이어리를 이용하여 포스트카드를 만들고 다른 사람과 공유 할 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_5">현재 열람중인 다이어리를 삭제하고 검색화면으로 이동 할 수 있습니다.</string>
-    <string name="update_diary_title">다이어리 수정</string>
     <string name="back_pressed_confirm">\'확인\' 버튼을 누르시면 현재 다이어리를 저장하지 않고 이전 화면으로 이동합니다.</string>
     <string name="rate_app">앱 평가하기</string>
     <string name="guide_message_3">요청작업에 대한 권한이 충분하지 않습니다.</string>
     <string name="restore_diary">다이어리 복구하기</string>
     <string name="restore_diary_summary">구글 드라이브에 백업된 데이터를 이용하여 첨부사진을 제외한 모든 콘텐츠를 복구합니다.</string>
-    <string name="restore_photo">다이어리 첨부사진 복구하기(수동)</string>
-    <string name="restore_photo_summary">다이어리에 첨부된 사진을 사용자가 직접 복구합니다.</string>
     <string name="backup_diary">다이어리 백업하기</string>
     <string name="backup_diary_summary">첨부사진을 제외한 모든 콘텐츠를 구글 드라이브에 백업합니다.</string>
     <string name="font_setting">폰트설정</string>
     <string name="add_ttf_fonts_title">TTF 폰트추가</string>
     <string name="add_ttf_fonts_summary">사용자가 소유하고 있는 TTF 폰트를 이지다이어리에 추가하여 사용합니다.\n폰트가 추가되면 기본제공 폰트와 함께 사용자가 추가한 폰트를 사용할 수 있습니다.\n파일 탐색기를 이용하여 TTF 파일을 선택하면 해당 폰트가 이지 다이어리에 자동으로 등록되고 폰트설정 메뉴에서 활성화됩니다.</string>
-    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_ko.md</string>
     <string name="diary_search_keyword_case_sensitive_title">영문 대소문자 구분</string>
     <string name="diary_search_keyword_case_sensitive_summary">옵션이 활성화되면 다이어리 검색 시 대소문자 일치여부를 체크합니다.</string>
     <string name="setting_primary_color_title">테마변경</string>
     <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
-    <string name="pick_text_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n텍스트색상 변경은 추후 제공 예정입니다.</string>
-    <string name="pick_background_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n배경색상 변경은 추후 제공 예정입니다.</string>
-    <string name="easy_photo_map_title">이지 포토맵</string>
-    <string name="easy_photo_map_summary">이지 포토맵은 사진에 포함된 위치정보를 이용하여 사진이 촬영된 위치를 지도 위에 표시해주는 포토맵 애플리케이션입니다.</string>
-    <string name="easy_password_title">이지 패스워드</string>
-    <string name="easy_password_summary">이지 패스워드는 로그인, 문서보안, 도어락, 자물쇠, 신용카드, 계좌관리등에 사용하는 비밀번호를 사용자가 설정한 하나의 잠금번호를 이용하여 관리 할 수 있도록 도와주는 애플리케이션입니다.</string>
     <string name="font_line_spacing">폰트 줄간격</string>
     <string name="font_line_spacing_summary">설정된 비율에 맞춰 폰트의 줄간격을 변경합니다.</string>
-    <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
-    <string name="bar_chart_title">차트</string>
-    <string name="bar_chart_status">시간대별 일기작성 현황</string>
     <string name="range_a">1시~3시</string>
     <string name="range_b">4시~6시</string>
     <string name="range_c">7시~9시</string>
@@ -115,32 +42,13 @@
     <string name="range_f">16시~18시</string>
     <string name="range_g">19시~21시</string>
     <string name="range_h">22시~24시</string>
-    <string name="write_time">작성시간</string>
     <string name="write_count">작성건수</string>
-    <string name="unlock_guide_message">잠금번호를 입력하세요</string>
     <string name="photo_view_error_info">사진을 찾을 수 없습니다.\n갤러리에서 첨부한 사진이 삭제되었거나 위치가 변경되었을 수 있습니다.</string>
-    <string name="diary_card_export_info">다이어리카드 저장경로</string>
     <string name="diary_card_share_info">다이어리카드 공유</string>
     <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
-    <string name="post_card_showcase_button_1">다음</string>
-    <string name="post_card_showcase_button_2">닫기</string>
-    <string name="post_card_showcase_title_0">다이어리 포스트카드</string>
-    <string name="post_card_showcase_title_1">텍스트색</string>
-    <string name="post_card_showcase_title_2">배경색</string>
-    <string name="post_card_showcase_title_3">포스트카드 생성</string>
-    <string name="post_card_showcase_title_4">포스트카드 공유</string>
-    <string name="post_card_showcase_title_5">편집종료</string>
-    <string name="post_card_showcase_message_0">저장된 다이어리를 이용하여 사용자정의 포스트카드를 생성하고 저장 할 수 있습니다.</string>
-    <string name="post_card_showcase_message_1">포스트카드 텍스트색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
-    <string name="post_card_showcase_message_2">포스트카드 배경색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
-    <string name="post_card_showcase_message_3">만들어진 포스트카드는 이미지 파일로 저장 할 수 있습니다.</string>
-    <string name="post_card_showcase_message_4">만들어진 포스트카드는 친구들과 공유 할 수 있습니다. 이메일, 문자, 메신저등을 이용해 포스트카드를 공유해 보세요.</string>
-    <string name="post_card_showcase_message_5">포스트카드 편집화면을 종료하고 이전 화면으로 돌아갑니다.</string>
     <string name="timeline_title">타임라인</string>
     <string name="postcard_viewer_title">다이어리 포스트카드</string>
     <string name="postcard_viewer_no_cards_saved">저장된 다이어리 포스트카드가 없습니다.</string>
-    <string name="google_drive_connect_message">Google Drive 연동중…</string>
-    <string name="menu_calendar">캘린더</string>
     <string name="menu_chart">통계</string>
     <string name="menu_timeline">타임라인</string>
     <string name="post_card">다이어리 포스트카드</string>
@@ -153,7 +61,6 @@
     <string name="preferences_category_information">애플리케이션 정보</string>
     <string name="preferences_information_licenses">오픈소스 라이선스</string>
     <string name="preferences_information_licenses_summary">오픈소스 소프트웨어 라이선스를 공지합니다.</string>
-    <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">친구에게 공유</string>
     <string name="invite_friends_summary">%s 애플리케이션을 친구에게 공유합니다.</string>
 
@@ -414,10 +321,6 @@
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
         테마 컬러와 카드뷰 배경컬러를 동일한 색상으로 설정하는 경우 카드뷰 내부에 포함된 버튼을 식별할 수 없던 문제 해결
-    </string>
-    <string name="release_199">
-        v1.4.133 / 2020.06.02\n
-        스크린백그라운드 컬러를 흰색으로 설정하는 경우 잠금화면 아이콘을 식별할 수 없던 문제 해결
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
@@ -883,30 +786,18 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="speech_to_text">음성입력</string>
     <string name="write_diary">일기쓰기</string>
-    <string name="date_picker">날짜선택</string>
-    <string name="time_picker">시간선택</string>
-    <string name="seconds_picker">초선택</string>
-    <string name="save_diary">일기저장</string>
     <string name="photo_registration">사진 등록</string>
-    <string name="zoom_in">확대</string>
-    <string name="zoom_out">축소</string>
     <string name="edit_diary">일기 수정</string>
     <string name="text_to_speech">다이어리 스피치</string>
-    <string name="diary_postcard">다이어리 포스트카드</string>
     <string name="thumbnail_setting_title">섬네일 이미지 크기 설정</string>
     <string name="thumbnail_setting_summary">다이어리에 첨부된 사진의 섬네일 이미지 크기를 설정합니다. 설정된 크기는 다이어리 작성, 수정 화면에만 적용되며 검색 화면에는 적용되지 않습니다.</string>
-    <string name="collapse_attached_photo">첨부사진 접기</string>
-    <string name="expand_attached_photo">첨부사진 펼치기</string>
     <string name="release_notes_title">릴리즈 노트</string>
     <string name="release_notes_summary">버전별 새로운 기능을 확인합니다.</string>
     <string name="attached_photo_count">첨부된 사진 %d장</string>
     <string name="all_day">하루 종일</string>
     <string name="bold_style_option_title">볼드체 설정</string>
     <string name="bold_style_option_summary">다이어리 제목 및 타임라인 시간정보에 볼드체를 적용합니다.</string>
-    <string name="multi_picker_option_title">멀티피커 설정</string>
-    <string name="multi_picker_option_summary">다이어리 사진 첨부시 갤러리앱을 이용하지 않고 이지 다이어리에서 제공하는 멀티피커를 사용합니다. 멀티피커 사용이 설정되면 한번에 여러장의 사진을 첨부할 수 있습니다.</string>
     <string name="preferences_category_backup_restore">백업 및 복구</string>
     <string name="preferences_category_backup_restore_sub">Google Drive &amp; Calendar</string>
     <string name="backup_attach_photo_title">다이어리 첨부사진 백업하기</string>
@@ -914,17 +805,13 @@
     <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기</string>
     <string name="recover_attach_photo_summary">구글 드라이브에 백업된 데이터를 이용하여 첨부사진을 복구합니다.</string>
     <string name="notification_msg_device_file_count">%s 백업대상 파일: %d%s</string>
-    <string name="notification_msg_upload_file_count">업로드 대상 파일</string>
     <string name="notification_msg_upload_invalid">백업 대상 파일이 드라이브에 모두 존재합니다.</string>
-    <string name="notification_msg_upload_empty">백업 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_upload_progress">파일 업로드 진행중…</string>
     <string name="notification_msg_upload_complete">파일 업로드 완료</string>
     <string name="notification_msg_upload_success">%s 업로드 성공: %d%s</string>
     <string name="notification_msg_upload_fail">%s 업로드 실패: %d%s</string>
     <string name="notification_msg_google_drive_file_count">%s 복구대상 파일: %d%s</string>
-    <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
     <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
-    <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
     <string name="notification_msg_download_success">%s 다운로드 성공: %d%s</string>
@@ -933,7 +820,6 @@
     <string name="preferences_category_lock">잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금</string>
     <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
-    <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
     <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
     <string name="fingerprint_setting_release">지문인식 잠금설정이 해제되었습니다.</string>
     <string name="fingerprint_lock_need_pin_setting">지문인식 잠금을 이용하려면 PIN 설정을 먼저해야 합니다.</string>
@@ -948,7 +834,6 @@
     <string name="pin_unlock_guide_message">설정된 핀을 입력하세요.</string>
     <string name="pin_verification_fail">PIN 검증에 실패했습니다.</string>
     <string name="change_pin_lock_mode">PIN 잠금모드로 변경</string>
-    <string name="diary_creation_time_disable_message">시간정보 없음</string>
     <string name="enable_card_view_policy_title">카드뷰 디자인 최적화</string>
     <string name="enable_card_view_policy_summary">카드뷰 디자인을 디바이스에 맞춰 최적화합니다.</string>
     <string name="font_size_title">전역 폰트크기 설정</string>
@@ -956,19 +841,6 @@
     <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
     <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
     <string name="init_cipher_error_guide_message">디바이스의 지문정보가 변경되었습니다. 핀 잠금 모드로 변경하여 잠금을 해제하시고 지문인식 잠금을 해제 후 다시 설정하여 사용하세요.</string>
-    <string name="export_excel_title">엑셀파일로 내보내기</string>
-    <string name="export_excel_description">첨부사진을 제외한 모든 콘텐츠를 엑셀파일로 저장합니다.</string>
-    <string name="export_excel_xls_location">저장위치</string>
-    <string name="export_excel_header_seq">다이어리 시퀀스</string>
-    <string name="export_excel_header_write_date">작성일자</string>
-    <string name="export_excel_header_title">다이어리 제목</string>
-    <string name="export_excel_header_contents">다이어리 내용</string>
-    <string name="export_excel_header_attach_photo_path">첨부사진 경로\n(사진명에 JPG 확장자 없이 저장되어 있음)</string>
-    <string name="export_excel_header_attach_photo_size">첨부사진 크기(KB)</string>
-    <string name="export_excel_header_write_time_millis">작성일자\n(Since January 1st 1970 in milliseconds.)</string>
-    <string name="export_excel_header_weather">날씨</string>
-    <string name="export_excel_header_symbol">다이어리 심벌</string>
-    <string name="export_excel_header_is_all_day">AllDay\n(작성일자 시간표기 유무)</string>
     <string name="faq_title">자주 묻는 질문</string>
     <string name="faq_description">이지 다이어리 사용자들이 자주 묻는 질문과 그에 대한 답변 내용을 확인할 수 있습니다.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs_ko.md</string>
@@ -986,7 +858,6 @@
     <string name="rotate_photo">Rotate</string>
     <string name="task_progress_message">요청작업 진행중…</string>
     <string name="open_realm_file_title">다이어리 복구</string>
-    <string name="open_realm_file_message">복구대상 파일을 선택하세요.</string>
     <string name="backup_completed_message">다이어리 백업작업이 완료되었습니다.</string>
     <string name="backup_confirm_message">다이어리 첨부사진 백업 작업을 시작하시겠습니까?</string>
     <string name="recover_confirm_attached_photo">다이어리 첨부사진 복구 작업을 시작하시겠습니까?</string>
@@ -999,17 +870,13 @@
     <string name="preferences_category_backup_restore_device_sub">디바이스 저장소</string>
     <string name="export_realm_title">다이어리 백업하기</string>
     <string name="export_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업합니다.\n내부 저장소에 백업된 파일은 애플리케이션 삭제 시 같이 삭제되기 때문에 작성된 데이터를 영구적으로 보관하시려면 외부 공용저장소 또는 구글드라이브 백업 기능을 이용하시기 바랍니다.</string>
-    <string name="export_realm_guide_message">데이터베이스 파일이 아래 경로의 디바이스 저장소에 저장되었습니다.</string>
     <string name="import_realm_title">다이어리 복구하기</string>
     <string name="import_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소로부터 복구합니다.</string>
-    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">캘린더 시작 요일</string>
     <string name="calendar_start_day_summary">한 주의 시작요일을 설정합니다.</string>
     <string name="calendar_start_day_sunday">일요일</string>
     <string name="calendar_start_day_monday">월요일</string>
     <string name="calendar_start_day_saturday">토요일</string>
-    <string name="calendar_menu_previous">Previous</string>
-    <string name="calendar_menu_next">Next</string>
     <string name="filter_start_date">시작일</string>
     <string name="filter_start_date_hint">시작일을 입력하세요.</string>
     <string name="filter_end_date">종료일</string>
@@ -1018,13 +885,9 @@
     <string name="filter_search_word_hint">검색어를 입력하세요.</string>
     <string name="filter_clear">필터 초기화</string>
     <string name="filter_close">닫기</string>
-    <string name="copy_diary_item">선택된 다이어리를 복사하시겠습니까?</string>
     <string name="diary_contents_length">글자수: %d</string>
     <string name="count_characters_title">본문 글자수 세기</string>
     <string name="count_characters_summary">다이어리 본문의 글자수를 카운팅합니다.</string>
-    <string name="send_email_attach_excel_title">엑셀파일 생성 및 이메일 전송</string>
-    <string name="send_email_attach_excel_description">첨부 사진을 제외한 모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
-    <string name="storage_migration_message">Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다.</string>
     <string name="google_drive_account_sign_out_title">구글 연동계정 초기화</string>
     <string name="google_drive_account_sign_out_description">구글계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다.</string>
     <string name="calendar_font_scale_title">캘린더 폰트 스케일 설정</string>
@@ -1037,7 +900,6 @@
     <string name="dashboard_guide_message">랭킹 데이터를 생성하기 위한 데이터가 충분하지 않습니다. 랭킹이 활성화되려면 4종류 이상의 심벌을 사용하여 일기를 작성해야 합니다.</string>
     <string name="delete_realm_title">다이어리 백업파일 삭제</string>
     <string name="delete_realm_description">디바이스에 저장된 백업파일을 삭제합니다.</string>
-    <string name="menu_dashboard">대시보드</string>
     <string name="dashboard_title_backup_drive">구글드라이브 백업 히스토리</string>
     <string name="dashboard_title_backup_local">디바이스 저장소 백업 히스토리</string>
     <string name="dashboard_backup_guide_message">백업정보 없음</string>
@@ -1124,7 +986,6 @@
     <string name="user_custom_setting">사용자 정의 설정</string>
     <string name="automation_settings">테마를 이용한 자동설정</string>
     <string name="place_finger_description">지문 센서에 손가락을 올려주세요.</string>
-    <string name="enable_photo_highlight_title">첨부사진 하이라이트</string>
     <string name="enable_photo_highlight_diary_main_title">첨부사진 하이라이트 (메인화면)</string>
     <string name="enable_photo_highlight_dashboard_title">첨부사진 하이라이트 (대시보드)</string>
     <string name="enable_photo_highlight_description">오늘날짜를 기준으로 년단위, 월단위로 과거에 첨부한 사진을 하이라이트 영역에 보여줍니다. 오늘날짜에 해당하는 년단위, 월단위 첨부사진이 존재하지 않으면 하이라이트영역은 활성화되지 않습니다.</string>
@@ -1135,8 +996,6 @@
     <string name="notification_channel_name_upload">구글드라이브 업로드</string>
     <string name="notification_channel_name_download">구글드라이브 다운로드</string>
     <string name="notification_channel_name_zip_helper">ZIP 백업 관리</string>
-    <string name="enable_welcome_dashboard_popup_title">웰컴 대시보드</string>
-    <string name="enable_welcome_dashboard_popup_description">이 옵션을 활성화하면 앱을 닫은 후 다시 시작할 때 대시보드가 팝업으로 열립니다.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">최근사용</string>
@@ -1147,7 +1006,6 @@
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/69c9fc594c86469494d604c9f41f3317?v=5aeeea3563ca46d28b03f6b94e6cd3cf</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/860989cc1abe400585edfcf2476095ba?v=38502455c10848d7a45f9a6773395cdc</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/a83b8d7711b74535bd867564f4bc96e6?v=3a75330322074292a8e9758396f503a8</string>
-    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/85e42eedb673470e88b7363253f17451?v=854ebf884dc04c31b73f941116e8a39a</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/c457dab45b7d406f99d9a37f4a7be5a3?v=6f76b62475a04004aabc69b584457540</string>
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/0563cf22eb764a14b1164a567cb99769?v=2b9c5ac07885447fae98e7ed4407fafc</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/702ca8510d3740d79ac2427181e8f6de?v=6c5b9ed6edf341d2a545679b3f1c07d6</string>
@@ -1174,7 +1032,6 @@
     <string name="link_entry_as_parent">상위항목으로</string>
     <string name="link_entry_as_child">하위항목으로</string>
     <string name="link_entry_later">다음에</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d건</string>
     <string name="task_todo_count_format">미완료작업: %d건</string>
 </resources>

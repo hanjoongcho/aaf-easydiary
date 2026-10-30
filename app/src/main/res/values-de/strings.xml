@@ -1,37 +1,11 @@
 <resources>
     <string name="app_name">Easy Diary</string>
     <string name="common_create_seconds">Sekunden</string>
-    <string name="create_diary_title">Eintrag schreiben</string>
-    <string name="write_date">Datum</string>
-    <string name="request_title_message">Bitte gib einen Titel ein.</string>
     <string name="request_content_message">Bitte gib deinen Inhalt ein.</string>
     <string name="guide_message">Tippe oder sprich den Titel.</string>
     <string name="contents_text_hint">Tippe oder sprich den Inhalt.</string>
     <string name="delete_photo_confirm_message">Bist du sicher, dass du dieses Foto löschen willst?</string>
     <string name="gallery_intent_not_found_message">Die Galerie-App ist nicht installiert oder ist deaktiviert.</string>
-    <string name="create_diary_showcase_button_1">Weiter</string>
-    <string name="create_diary_showcase_button_2">Schließen</string>
-    <string name="create_diary_showcase_title_1">Wetter</string>
-    <string name="create_diary_showcase_title_2">Titel</string>
-    <string name="create_diary_showcase_title_3">Inhalt</string>
-    <string name="create_diary_showcase_title_4">Foto anhängen</string>
-    <string name="create_diary_showcase_title_5">Schrift vergrößern</string>
-    <string name="create_diary_showcase_title_6">Schrift verkleinern</string>
-    <string name="create_diary_showcase_title_7">Datum auswählen</string>
-    <string name="create_diary_showcase_title_8">Zeit auswählen</string>
-    <string name="create_diary_showcase_title_9">Speichern</string>
-    <string name="create_diary_showcase_message_1">Wähle das Wetter zum Zeitpunkt des Eintrages. Eine Auswahl des Wetters ist keine Pflicht.</string>
-    <string name="create_diary_showcase_message_2">Gib den Titel des Eintrages ein. Die Eingabe eines Titels ist keine Pflicht.</string>
-    <string name="create_diary_showcase_message_3">Gib Tagebuch-Einträge, Notizen, Zusammenfassungen und mehr ein.</string>
-    <string name="create_diary_showcase_message_4">Füge dem Eintrag ein Foto hinzu.</string>
-    <string name="create_diary_showcase_message_5">Vergrößere die Schrift im Eintrag.</string>
-    <string name="create_diary_showcase_message_6">Verkleine die Schrift im Eintrag.</string>
-    <string name="create_diary_showcase_message_7">Wähle das Datum des Eintrages. Wenn du einen Eintrag in der Vergangenheit anlegen möchtest, kannst du das Datum ändern.</string>
-    <string name="create_diary_showcase_message_8">Wähle die Uhrzeit des Eintrages. Du kannst die Uhrzeit ändern, wenn du einen Eintrag für eine andere Zeit erstellen möchtest.</string>
-    <string name="create_diary_showcase_message_9">Speichere den fertigen Tagebuch-Eintrag.</string>
-    <string name="read_diary_title">Suchen</string>
-    <string name="input_mode_a">Sprachmodus</string>
-    <string name="input_mode_c">Tastaturmodus</string>
     <string name="guide_message_2">Tippe oder sage den Suchbegriff.</string>
     <string name="recognizer_intent_not_found_message">Das Spracherkennungs-Modul ist nicht installiert oder ist deaktiviert.</string>
     <string name="sample_diary_title_1">Sei gefährlich und nicht vorsichtig.</string>
@@ -42,71 +16,24 @@
     <string name="sample_diary_2">Wenn du sprichst, wiederholst du, was du weißt. Aber wenn du zuhörst, wirst du etwas Neues lernen. - Der Dalai Lama</string>
     <string name="sample_diary_3">Es sind die schlechten Nachrichten, die Sie am meisten als Anführer hören müssen. Die guten Nachrichten sind morgen gut, aber die schlechten Nachrichten werden morgen schlechter sein. Deshalb ist es sicher, immer schwierige Fragen zu stellen und die Wahrheit zu sagen, auch wenn die Fakten herzzerreißend sind. - Eric Schmidt, Vorsitzender von Google, sagt: \"Wie funktioniert Google?\"</string>
     <string name="sample_diary_4">Beschränkungen haben keine Kreativität, aber Kreativität wird ausgeübt, um Beschränkungen zu überwinden. Jede großartige Arbeit oder kreative Lösung war eine Menge Zeitbeschränkungen, physische Einschränkungen und Ressourcenbeschränkungen. Was auch immer es ist, Kreativität wird in einer schwierigen und eingeschränkten Umgebung geboren. - 김봉진 대표, ‘배민다움’에서</string>
-    <string name="read_diary_showcase_button_1">Weiter</string>
-    <string name="read_diary_showcase_button_2">Schließen</string>
-    <string name="read_diary_showcase_title_1">Tagebuch schreiben</string>
-    <string name="read_diary_showcase_title_2">Suchen</string>
-    <string name="read_diary_showcase_title_3">Spracherkennung</string>
-    <string name="read_diary_showcase_title_4">Kalender</string>
-    <string name="read_diary_showcase_title_5">Zeitleiste</string>
-    <string name="read_diary_showcase_title_6">Diagram</string>
-    <string name="read_diary_showcase_title_7">Erweiterte Einstellungen</string>
-    <string name="read_diary_showcase_title_8">Tagebuch lesen</string>
-    <string name="read_diary_showcase_message_1">Du kannst verschiedene Einträge schreiben, wie ein Tagebuch, Notiz, Zusammenfassung, usw., entsprechend dem Verlauf der Zeit.</string>
-    <string name="read_diary_showcase_message_2">Du kannst mit Suchbegriffen nach Einträgen suchen. Wenn ein Begriff eingegeben wurde, werden passende Einträge mit dem hervorgehobenen Suchbegriff angezeigt.</string>
-    <string name="read_diary_showcase_message_3">Du kannst die Spracherkennung nutzen, um Suchbegriffe ohne Tastatur einzugeben.</string>
-    <string name="read_diary_showcase_message_4">Die Tagebuch-Einträge können mit dem Kalender nach Datum gefiltert werden.</string>
-    <string name="read_diary_showcase_message_5">Die Tagebuch-Einträge werden als Zeitleiste zur Verfügung gestellt.</string>
-    <string name="read_diary_showcase_message_6">Du kannst dir Diagramme von Tagebuch-Einträgen für den gesamten Zeitraum anschauen.</string>
-    <string name="read_diary_showcase_message_7">Du kannst in den erweiterten Einstellungen Schriften ändern, einen Sperrcode hinterlegen, und das Tagebuch sichern und wiederherstellen.</string>
-    <string name="read_diary_showcase_message_8">Klicke auf den Eintrag in der Liste, um ihn zu sehen.</string>
-    <string name="diary_photo_migration_message">Die Methode zum Anhängen der Bilder wurde geändert, sodass die vorhandenen Verknpfungen komprimiert und im EasyDiary-Ordner abgelegt werden. Bitte warte bis die Operation abgeschlossen wurde.</string>
-    <string name="read_diary_detail_title">Tagebuch lesen</string>
     <string name="delete_confirm">Bist du sicher, dass du dies löschen willst?</string>
-    <string name="read_diary_detail_showcase_button_1">Weiter</string>
-    <string name="read_diary_detail_showcase_button_2">Schließen</string>
-    <string name="read_diary_detail_showcase_title_0">Eintrag ansehen</string>
-    <string name="read_diary_detail_showcase_title_1">Seite verschieben</string>
-    <string name="read_diary_detail_showcase_title_2">Eintrag bearbeiten</string>
-    <string name="read_diary_detail_showcase_title_3">TTS</string>
-    <string name="read_diary_detail_showcase_title_4">Postkarte</string>
-    <string name="read_diary_detail_showcase_title_5">Eintrag löschen</string>
-    <string name="read_diary_detail_showcase_message_0">Durchsuche die gespeicherten Einträge. Du kannst einen gespeicherten Eintrag bearbeiten oder einen Eintrag erstellen, indem du eine Farbe festlegst.</string>
-    <string name="read_diary_detail_showcase_message_1">Schiebe die Ansicht nach links oder rechts, um Einträge davor oder danach zu sehen.</string>
-    <string name="read_diary_detail_showcase_message_2">Du kannst zur Bearbeiten-Ansicht wechseln, um den angezeigten Eintrag zu bearbeiten.</string>
-    <string name="read_diary_detail_showcase_message_3">Du kannst dir den Text des Eintrages mit Google TTS vorlesen lassen.</string>
-    <string name="read_diary_detail_showcase_message_4">Verwende den Eintrag, um Postkarten zu erstellen und sie mit anderen zu teilen.</string>
-    <string name="read_diary_detail_showcase_message_5">Du kannst den aktuellen Eintrag löschen und zur Suchansicht wechseln.</string>
-    <string name="update_diary_title">Eintrag bearbeiten</string>
     <string name="back_pressed_confirm">Klicke auf OK, um zur vorherigen Ansicht zu wechseln ohne zu speichern.</string>
     <string name="rate_app">App bewerten</string>
     <string name="guide_message_3">Fehlende Berechtigung für das angeforderte Feature.</string>
     <string name="restore_diary">Tagebuch wiederherstellen</string>
     <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
-    <string name="restore_photo">Tagebuch-Fotos wiederherstellen</string>
-    <string name="restore_photo_summary">Wenn Fotos dem Tagebuch angehängt wurden, stelle sie wieder her.</string>
     <string name="backup_diary">Tagebuch sichern</string>
     <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
     <string name="font_setting">Schrift-Einstellungen</string>
     <string name="add_ttf_fonts_title">TTF-Schrift hinzufügen</string>
     <string name="add_ttf_fonts_summary">Füge deine eigene TTF-Schriften dem Easy Diary hinzu. Wenn die Schriften hinzugefügt wurden, kannst du sie zusammen mit den mitgelieferten Schriften verwenden.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
-    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_de.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Groß-/Kleinschreibung beachten</string>
     <string name="diary_search_keyword_case_sensitive_summary">Wenn diese Option aktiviert ist, wird Groß- und Kleinschreibung unterschieden.</string>
     <string name="setting_primary_color_title">Theme</string>
     <string name="setting_primary_color_summary">Lege die Farben der Anwendung fest.</string>
-    <string name="pick_text_color_guide_message">Die aktuelle Version unterstützt nur Farbänderungen am Theme. Änderung der Textfarbe wird erst in zukünftigen Versionen verfügbar sein.</string>
-    <string name="pick_background_color_guide_message">Die aktuelle Version unterstützt nur Farbänderungen am Theme. Änderung der Hintergrundfarbe wird erst in zukünftigen Versionen verfügbar sein.</string>
-    <string name="easy_photo_map_title">Easy PhotoMap</string>
-    <string name="easy_photo_map_summary">Easy Photo Map ist eine Fotokarten-Anwendung, die das Foto an der Position auf der Karte anzeigt, die als Standort im Foto eingebunden ist.</string>
-    <string name="easy_password_title">Easy Password</string>
-    <string name="easy_password_summary">Easy Password ist eine Anwendung, mit der du Passwörter verwalten kannst, die für Login, Dokumentensicherheit, Türschlösser, Sicherheitsschlösser, Kreditkarten, Kontoverwaltung usw. verwendet werden, indem du ein selbst festgelegtes Sperrmuster verwendest.</string>
     <string name="font_line_spacing">Zeilenabstand</string>
     <string name="font_line_spacing_summary">Lege den Zeilenabstand der Schrift fest.</string>
-    <string name="calendar_title">Kalender</string>
     <string name="guide_message_4">Für diesen Tag gibt es keinen Eintrag.</string>
-    <string name="bar_chart_title">Diagram</string>
-    <string name="bar_chart_status">Erstellte Einträge nach Zeit</string>
     <string name="range_a">1–3 Uhr</string>
     <string name="range_b">4–6 Uhr</string>
     <string name="range_c">7–9 Uhr</string>
@@ -115,32 +42,13 @@
     <string name="range_f">16–18 Uhr</string>
     <string name="range_g">19–21 Uhr</string>
     <string name="range_h">22–24 Uhr</string>
-    <string name="write_time">Uhrzeit</string>
     <string name="write_count">Anzahl</string>
-    <string name="unlock_guide_message">Bitte gib deinen Sperrcode ein</string>
     <string name="photo_view_error_info">Keine Fotos gefunden. Die angehängten Fotos aus der Galerie wurden entfernt oder verschoben.</string>
-    <string name="diary_card_export_info">Tagebuch-Speicherort</string>
     <string name="diary_card_share_info">Eintrag teilen</string>
     <string name="diary_card_export_error_message">Beim Generieren des Eintrages ist ein Fehler aufgetreten. Bitte versuche es erneut.</string>
-    <string name="post_card_showcase_button_1">Weiter</string>
-    <string name="post_card_showcase_button_2">Schließen</string>
-    <string name="post_card_showcase_title_0">Tagebuch-Postkarten</string>
-    <string name="post_card_showcase_title_1">Textfarbe</string>
-    <string name="post_card_showcase_title_2">Hintergrundfarbe</string>
-    <string name="post_card_showcase_title_3">Postkarte erstellen</string>
-    <string name="post_card_showcase_title_4">Postkarte teilen</string>
-    <string name="post_card_showcase_title_5">Bearbeitung verlassen</string>
-    <string name="post_card_showcase_message_0">Du kannst den gespeicherten Eintrag verwenden und als eigene Postkarte speichern.</string>
-    <string name="post_card_showcase_message_1">Ändere die Postkarten-Textfarbe. Du kannst die gewünschte Farbe mit dem Farbwähler wählen.</string>
-    <string name="post_card_showcase_message_2">Ändere die Postkarten-Hintergrundfarbe. Du kannst die gewünschte Farbe mit dem Farbwähler wählen.</string>
-    <string name="post_card_showcase_message_3">Erstellte Postkarten können als Bild gespeichert werden.</string>
-    <string name="post_card_showcase_message_4">Erstellte Postkarten können mit Freunden geteilt werden. Teile deine Postkarten per E-Mail, MMS, Messenger, und mehr.</string>
-    <string name="post_card_showcase_message_5">Verlasse die Postkarten-Bearbeitung und kehre zur vorherigen Ansicht zurück.</string>
     <string name="timeline_title">Zeitleiste</string>
     <string name="postcard_viewer_title">Tagebuch-Postkarten</string>
     <string name="postcard_viewer_no_cards_saved">Keine gespeicherten Postkarten vorhanden.</string>
-    <string name="google_drive_connect_message">Synchronisiere mit Google Drive …</string>
-    <string name="menu_calendar">Kalender</string>
     <string name="menu_chart">Statistik</string>
     <string name="menu_timeline">Zeitleiste</string>
     <string name="post_card">Tagebuch-Postkarten</string>
@@ -153,7 +61,6 @@
     <string name="preferences_category_information">App-Informationen</string>
     <string name="preferences_information_licenses">Open-Source-Lizenzen</string>
     <string name="preferences_information_licenses_summary">Hinweise zur Open-Source-Software</string>
-    <string name="preferences_category_aaf">AAF Easy-Serie</string>
     <string name="invite_friends">Freunde einladen</string>
     <string name="invite_friends_summary">Teile die %s-App mit deinen Freunden.</string>
 
@@ -414,10 +321,6 @@
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
         Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
-    </string>
-    <string name="release_199">
-        v1.4.133 / 2020.06.02\n
-        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
@@ -883,30 +786,18 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="speech_to_text">Spracheingabe</string>
     <string name="write_diary">Tagebuch schreiben</string>
-    <string name="date_picker">Datum auswählen</string>
-    <string name="time_picker">Zeit auswählen</string>
-    <string name="seconds_picker">Sekunden auswählen</string>
-    <string name="save_diary">Tagebuch speichern</string>
     <string name="photo_registration">Foto-Registrierung</string>
-    <string name="zoom_in">Vergrößern</string>
-    <string name="zoom_out">Verkleinern</string>
     <string name="edit_diary">Tagebuch bearbeiten</string>
     <string name="text_to_speech">Tagebuch zur Rede</string>
-    <string name="diary_postcard">Tagebuch-Postkarte</string>
     <string name="thumbnail_setting_title">Größe der Miniaturansicht</string>
     <string name="thumbnail_setting_summary">Legt die Miniaturbildgröße des an das Tagebuch angehängten Fotos fest. Die eingestellte Größe gilt nur für den Erstellungs- und Änderungsbildschirm des Tagebuchs, nicht für den Suchbildschirm.</string>
-    <string name="collapse_attached_photo">Angehängtes Foto zusammenklappen</string>
-    <string name="expand_attached_photo">Angehängtes Foto vergrößern</string>
     <string name="release_notes_title">Anmerkungen zur Veröffentlichung</string>
     <string name="release_notes_summary">Suche nach neuen Funktionen nach Release-Version.</string>
     <string name="attached_photo_count">%d Angehängte Fotos</string>
     <string name="all_day">Ganztägig</string>
     <string name="bold_style_option_title">Fettschrift-Konfiguration</string>
     <string name="bold_style_option_summary">Titel, Datum und Zeitangabe des Tagebucheintrags werden in Fettdruck angezeigt.</string>
-    <string name="multi_picker_option_title">Einstellung für mehrere Picker</string>
-    <string name="multi_picker_option_summary">Beim Anhängen von Bildern wird die vom Tagebuch vorgesehene Mehrfachauswahl verwendet, ohne eine Galerie-App zu öffnen. Wenn die Mehrfachauswahl aktiviert ist, können mehrere Bilder auf einmal angehängt werden.</string>
     <string name="preferences_category_backup_restore">Sicherung und Wiederherstellung von Anwendungen</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">Angehängte Fotos sichern</string>
@@ -914,17 +805,13 @@
     <string name="recover_attach_photo_title">Angehängte Fotos wiederherstellen</string>
     <string name="recover_attach_photo_summary">Stellen Sie angehängte, auf Google Drive gesicherte Fotos wieder her. Diese Funktion funktioniert möglicherweise aufgrund des Betaservices auf einigen Geräten nicht.</string>
     <string name="notification_msg_device_file_count">%s Anzahl der Sicherungsdateien: %d%s</string>
-    <string name="notification_msg_upload_file_count">Anzahl der hochzuladenden Dateien</string>
     <string name="notification_msg_upload_invalid">Alle Sicherungszieldateien sind bereits vorhanden.</string>
-    <string name="notification_msg_upload_empty">Die zu sichernde Datei existiert nicht.</string>
     <string name="notification_msg_upload_progress">Hochladen von…</string>
     <string name="notification_msg_upload_complete">Upload abgeschlossen</string>
     <string name="notification_msg_upload_success">%s Upload-Erfolg: %d%s</string>
     <string name="notification_msg_upload_fail">%s Upload fehlgeschlagen: %d%s</string>
     <string name="notification_msg_google_drive_file_count">%s Anzahl der Wiederherstellungsdateien: %d%s</string>
-    <string name="notification_msg_download_file_count">Anzahl der herunterzuladenden Dateien</string>
     <string name="notification_msg_download_invalid">Alle Wiederherstellungszieldateien sind bereits vorhanden.</string>
-    <string name="notification_msg_download_empty">Die wiederherzustellende Datei existiert nicht.</string>
     <string name="notification_msg_download_progress">Herunterladen von…</string>
     <string name="notification_msg_download_complete">Download abgeschlossen</string>
     <string name="notification_msg_download_success">%s Download Erfolg: %d%s</string>
@@ -933,7 +820,6 @@
     <string name="preferences_category_lock">Einstellung der Anwendungssperre</string>
     <string name="fingerprint_lock_title">Fingerabdruck-Sperre</string>
     <string name="fingerprint_lock_summary">Wenn das Gerät die Fingerabdruckerkennung unterstützt und über einen registrierten Fingerabdruck verfügt, sperren Sie die Anwendung mit dem registrierten Fingerabdruck.</string>
-    <string name="fingerprint_not_available">Das auf dem Gerät installierte Betriebssystem unterstützt keine Fingerabdruckerkennung.</string>
     <string name="fingerprint_setting_complete">Die Einstellung der Fingerabdrucksperre ist abgeschlossen.</string>
     <string name="fingerprint_setting_release">Die Fingerabdrucksperre ist ausgeschaltet.</string>
     <string name="fingerprint_lock_need_pin_setting">Um die Fingerabdrucksperre zu verwenden, müssen Sie zuerst die PIN einstellen.</string>
@@ -948,7 +834,6 @@
     <string name="pin_unlock_guide_message">Bitte geben Sie die PIN ein.</string>
     <string name="pin_verification_fail">PIN-Verifizierung fehlgeschlagen.</string>
     <string name="change_pin_lock_mode">Wechseln in den PIN-Sperrmodus</string>
-    <string name="diary_creation_time_disable_message">Keine Zeitangaben</string>
     <string name="enable_card_view_policy_title">Optimieren der Kartenansicht</string>
     <string name="enable_card_view_policy_summary">Optimieren Sie das Design der Kartenansicht für das Gerät.</string>
     <string name="font_size_title">Schriftgröße einstellen</string>
@@ -956,19 +841,6 @@
     <string name="contents_summary_title">Zusammenfassung des Tagebuchinhalts</string>
     <string name="contents_summary_description">Fassen Sie den Inhalt des Tagebuchs zusammen, das im Kalender, auf der Zeitachse, in der Suchmaske usw. zur Verfügung gestellt wird.</string>
     <string name="init_cipher_error_guide_message">Die Fingerabdruckinformationen des Geräts wurden geändert. Ändern Sie den PIN-Sperrmodus zum Entsperren, entsperren Sie dann die Fingerabdrucksperre und stellen Sie sie erneut ein.</string>
-    <string name="export_excel_title">Excel exportieren</string>
-    <string name="export_excel_description">Speichern Sie den gesamten Inhalt mit Ausnahme der angehängten Fotos als Excel-Datei.</string>
-    <string name="export_excel_xls_location">Standort</string>
-    <string name="export_excel_header_seq">Sequenz</string>
-    <string name="export_excel_header_write_date">Datum schreiben</string>
-    <string name="export_excel_header_title">Titel des Tagebuchs</string>
-    <string name="export_excel_header_contents">Inhalt des Tagebuchs</string>
-    <string name="export_excel_header_attach_photo_path">Angehängter Fotopfad</string>
-    <string name="export_excel_header_attach_photo_size">Größe des beigefügten Fotos</string>
-    <string name="export_excel_header_write_time_millis">Datum schreiben\n(Seit 1. Januar 1970 in Millisekunden.)</string>
-    <string name="export_excel_header_weather">Wetter</string>
-    <string name="export_excel_header_symbol">Symbol</string>
-    <string name="export_excel_header_is_all_day">AllDay</string>
     <string name="faq_title">FAQs</string>
     <string name="faq_description">Sie können häufig gestellte Fragen und Antworten einsehen.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
@@ -986,7 +858,6 @@
     <string name="rotate_photo">Rotieren</string>
     <string name="task_progress_message">Anforderung Ware in Arbeit…</string>
     <string name="open_realm_file_title">Wiederherstellung des Tagebuchs</string>
-    <string name="open_realm_file_message">Bitte wählen Sie eine Wiederherstellungs-Zieldatei aus.</string>
     <string name="backup_completed_message">Die Sicherung des Tagebuchs ist abgeschlossen.</string>
     <string name="backup_confirm_message">Möchten Sie eine angehängte Fotosicherungsaufgabe starten?</string>
     <string name="recover_confirm_attached_photo">Möchten Sie eine angehängte Fotowiederherstellungsaufgabe starten?</string>
@@ -999,17 +870,13 @@
     <string name="preferences_category_backup_restore_device_sub">Gerätespeicherung</string>
     <string name="export_realm_title">Tagebuch sichern</string>
     <string name="export_realm_description">Sichern Sie Datenbankdateien mit Ausnahme der angehängten Fotos auf dem Gerätespeicher.\nDa die im internen Speicher gesicherten Dateien beim Löschen der Anwendung gelöscht werden, verwenden Sie den externen öffentlichen Speicher oder die Sicherungsfunktion von Google Drive, um die erstellten Daten dauerhaft zu speichern.</string>
-    <string name="export_realm_guide_message">Die Datenbankdatei wurde im Gerätespeicher unter dem unten angegebenen Pfad gespeichert.</string>
     <string name="import_realm_title">Tagebuch wiederherstellen</string>
     <string name="import_realm_description">Stellt Datenbankdateien aus dem Gerätespeicher mit Ausnahme von Anhängen wieder her.</string>
-    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">Starttag des Kalenders</string>
     <string name="calendar_start_day_summary">Legen Sie den Starttag der Woche fest.</string>
     <string name="calendar_start_day_sunday">Sonntag</string>
     <string name="calendar_start_day_monday">Montag</string>
     <string name="calendar_start_day_saturday">Samstag</string>
-    <string name="calendar_menu_previous">Vorherige</string>
-    <string name="calendar_menu_next">Nächste</string>
     <string name="filter_start_date">Startdatum</string>
     <string name="filter_start_date_hint">Bitte geben Sie ein Startdatum ein.</string>
     <string name="filter_end_date">Enddatum</string>
@@ -1018,13 +885,9 @@
     <string name="filter_search_word_hint">Bitte geben Sie Ihren Suchbegriff ein.</string>
     <string name="filter_clear">Filter zurücksetzen</string>
     <string name="filter_close">schließen</string>
-    <string name="copy_diary_item">Möchten Sie das ausgewählte Tagebuch kopieren?</string>
     <string name="diary_contents_length">Zeichen: %d</string>
     <string name="count_characters_title">Zählen von Text</string>
     <string name="count_characters_summary">Die Anschläge im Textfeld des Tagebuchs werden angezeigt.</string>
-    <string name="send_email_attach_excel_title">Erstellung von Excel-Dateien und E-Mail-Versand</string>
-    <string name="send_email_attach_excel_description">Alle Inhalte mit Ausnahme der angehängten Fotos werden als Excel-Datei erstellt und an die E-Mail angehängt.</string>
-    <string name="storage_migration_message">Änderungen des Speicherorts werden in Übereinstimmung mit der Richtlinie für Android 10 Scoped Storage vorgenommen. Dieser Job wird nur einmal ausgeführt.</string>
     <string name="google_drive_account_sign_out_title">Verknüpftes Google Drive-Konto zurücksetzen</string>
     <string name="google_drive_account_sign_out_description">Entfernen von Token-Informationen, die von Easy Diary über ein verlinktes Google Drive-Konto veröffentlicht wurden.</string>
     <string name="calendar_font_scale_title">Kalender-Schriftgröße einstellen</string>
@@ -1037,7 +900,6 @@
     <string name="dashboard_guide_message">Es gibt nicht genügend Daten, um Ranglistendaten zu generieren. Sie müssen ein Tagebuch mit mindestens 4 Symbolen schreiben, um das Dashboard-Ranking zu aktivieren.</string>
     <string name="delete_realm_title">Sicherungsdatei löschen</string>
     <string name="delete_realm_description">Löschen Sie die im Speicher gespeicherte Sicherungsdatei.</string>
-    <string name="menu_dashboard">Dashboard</string>
     <string name="dashboard_title_backup_drive">Google Drive-Sicherungsverlauf</string>
     <string name="dashboard_title_backup_local">Sicherungshistorie für lokale Geräte</string>
     <string name="dashboard_backup_guide_message">Keine Sicherungsinformationen</string>
@@ -1124,7 +986,6 @@
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
     <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
     <string name="enable_photo_highlight_diary_main_title">Attached photo highlights (Main Screen)</string>
     <string name="enable_photo_highlight_dashboard_title">Attached photo highlights (Dashboard)</string>
     <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
@@ -1135,8 +996,6 @@
     <string name="notification_channel_name_upload">Google Drive Upload</string>
     <string name="notification_channel_name_download">Google Drive Download</string>
     <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">Recently Used</string>
@@ -1147,7 +1006,6 @@
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
-    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/211eb91805ea439dbb51ab4049a62496?v=c7b9af3abbf94271ba082d79a3f958e0</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/d188abcfdaaa47a186875a52876f5b3e?v=b4c3f9a2624d4a6a8b9b658d5d58679b</string>
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
@@ -1174,7 +1032,6 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d Einträge</string>
     <string name="task_todo_count_format">(Offene Aufgaben: %d)</string>
 </resources>

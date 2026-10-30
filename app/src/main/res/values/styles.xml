@@ -5,14 +5,6 @@
     <!--<color name="colorAccent">@color/colorPrimary</color>-->
 
     <!-- App Theme -->
-    <style name="AppTheme.FullScreen">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -22,10 +14,7 @@
     <style name="AppCard.Timeline">
         <item name="android:layout_width">wrap_content</item>
     </style>
-    <style name="AppCard.EditTitle">
-        <item name="contentPaddingTop">5dp</item>
-        <item name="contentPaddingBottom">5dp</item>
-    </style>
+
     <style name="SettingsTitle">
         <item name="android:layout_marginBottom">@dimen/component_margin_small</item>
         <item name="android:textStyle">bold</item>
@@ -81,14 +70,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="linear_floating_icon_container">
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/bg_circle_button</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_gravity">end|bottom</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
+
     <style name="relative_theme_container">
         <item name="layout_goneMarginTop">@dimen/medium_margin</item>
         <item name="android:layout_width">match_parent</item>
@@ -148,12 +130,7 @@
         <item name="android:padding">8dp</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
-    <style name="image_floating_icon_medium">
-        <item name="android:padding">14dp</item>
-        <item name="android:layout_width">46dp</item>
-        <item name="android:layout_height">46dp</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-    </style>
+
     <style name="image_popup_menu_icon">
         <item name="android:layout_width">26dp</item>
         <item name="android:layout_height">26dp</item>
@@ -267,23 +244,7 @@
         <item name="applyGlobalColor">true</item>
         <item name="applyGlobalSize">false</item>
     </style>
-    <style name="text_option_animation">
-        <item name="android:windowEnterAnimation">@anim/none</item>
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
-    </style>
-    <style name="text_notification_h1">
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="text_notification_contents">
-        <item name="android:gravity">right</item>
-        <item name="android:layout_marginBottom">3dp</item>
-        <item name="android:layout_weight">5</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
+
     <style name="text_dashboard_summary_sub_title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -301,46 +262,6 @@
     </style>
 
     <!--Caldroid theme-->
-    <style name="CaldroidDefaultGridView">
-        <item name="android:adjustViewBounds">true</item>
-        <item name="android:gravity">center_horizontal</item>
-        <!--<item name="android:listSelector">@null</item>-->
-        <!--<item name="android:background">@color/calendarBackground</item>-->
-        <item name="android:horizontalSpacing">1dp</item>
-        <item name="android:padding">1dp</item>
-        <item name="android:verticalSpacing">1dp</item>
-    </style>
-    <style name="CaldroidDefaultCalendarViewLayout">
-        <item name="android:padding">5dp</item>
-        <item name="android:background">@drawable/bg_card_diary</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-    <style name="CaldroidDefaultArrowButton">
-        <item name="android:layout_width">42dp</item>
-        <item name="android:layout_height">42dp</item>
-    </style>
-    <style name="CaldroidDefaultLeftButton" parent="CaldroidDefaultArrowButton">
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:background">@drawable/ic_arrow_94_b</item>
-    </style>
-    <style name="CaldroidDefaultRightButton" parent="CaldroidDefaultArrowButton">
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:background">@drawable/ic_arrow_3_b</item>
-    </style>
-    <style name="CaldroidDefaultMonthNameLand">
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">3dp</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:textSize">17sp</item>
-    </style>
 
     <!-- Animations for Dialogs-->
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/fade_in_medium</item>
-        <item name="android:windowExitAnimation">@anim/fade_out_medium</item>
-    </style>
 </resources>

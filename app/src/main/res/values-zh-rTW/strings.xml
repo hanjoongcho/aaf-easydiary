@@ -1,37 +1,11 @@
 <resources>
     <string name="app_name">Easy Diary</string>
     <string name="common_create_seconds">創作時間</string>
-    <string name="create_diary_title">寫日記</string>
-    <string name="write_date">日期</string>
-    <string name="request_title_message">請輸入標題</string>
     <string name="request_content_message">請輸入您的內容</string>
     <string name="guide_message">打字或說出標題</string>
     <string name="contents_text_hint">打字或說出內容</string>
     <string name="delete_photo_confirm_message">您確定要刪除這張照片嗎？</string>
     <string name="gallery_intent_not_found_message">相簿程式未安裝或已停用</string>
-    <string name="create_diary_showcase_button_1">下一步</string>
-    <string name="create_diary_showcase_button_2">關閉</string>
-    <string name="create_diary_showcase_title_1">天氣</string>
-    <string name="create_diary_showcase_title_2">標題</string>
-    <string name="create_diary_showcase_title_3">內容</string>
-    <string name="create_diary_showcase_title_4">附加照片</string>
-    <string name="create_diary_showcase_title_5">放大字體</string>
-    <string name="create_diary_showcase_title_6">縮小字體</string>
-    <string name="create_diary_showcase_title_7">選擇日期</string>
-    <string name="create_diary_showcase_title_8">選擇時間</string>
-    <string name="create_diary_showcase_title_9">儲存</string>
-    <string name="create_diary_showcase_message_1">為日記裡的這天選擇天氣（可選）</string>
-    <string name="create_diary_showcase_message_2">輸入標題（可選）</string>
-    <string name="create_diary_showcase_message_3">寫日記、作筆記、摘要紀錄等</string>
-    <string name="create_diary_showcase_message_4">為日記增加照片</string>
-    <string name="create_diary_showcase_message_5">增大日記的字體</string>
-    <string name="create_diary_showcase_message_6">縮小日記的字體</string>
-    <string name="create_diary_showcase_message_7">選擇日記的日期。 如果想紀錄從前的日子，您可以更改日期。</string>
-    <string name="create_diary_showcase_message_8">選擇日記創作的時間。 如果這件事發生在從前，您可以更改時間。</string>
-    <string name="create_diary_showcase_message_9">保存完成的日記</string>
-    <string name="read_diary_title">搜尋</string>
-    <string name="input_mode_a">語音模式</string>
-    <string name="input_mode_c">鍵盤模式</string>
     <string name="guide_message_2">輸入或說出主題</string>
     <string name="recognizer_intent_not_found_message">語音輸入模組未安裝或已停用</string>
     <string name="sample_diary_title_1">勇於冒險而非過於小心</string>
@@ -42,71 +16,24 @@
     <string name="sample_diary_2">當你開口說話，你只是在重複你所知道的。 但如果仔細傾聽，也許你會學到什麼不一樣的。 —達賴喇嘛</string>
     <string name="sample_diary_3">作為一個領導者，你需要聽到的是壞消息。 因為好消息到明天還是好消息，但是壞消息到明天可能變得更糟糕。 這就是為什麼即使事實令人心碎，說出來依然安全。 — 艾立克·史密特，Google總裁，《Google模式：挑戰瘋狂變化世界的經營思維與工作邏輯》</string>
     <string name="sample_diary_4">限制不是創造力的阻礙，創造力是用來克服限制的。 所有傑作或有創意的方案都有很多時間限制、物理限制、以及資源限制。 創造力是在充滿限制的環境中誕生的。 — 金奉珍</string>
-    <string name="read_diary_showcase_button_1">下一個</string>
-    <string name="read_diary_showcase_button_2">關閉</string>
-    <string name="read_diary_showcase_title_1">寫日記</string>
-    <string name="read_diary_showcase_title_2">搜尋</string>
-    <string name="read_diary_showcase_title_3">語音辨識</string>
-    <string name="read_diary_showcase_title_4">日曆</string>
-    <string name="read_diary_showcase_title_5">時間軸</string>
-    <string name="read_diary_showcase_title_6">圖表</string>
-    <string name="read_diary_showcase_title_7">進階設定</string>
-    <string name="read_diary_showcase_title_8">看日記</string>
-    <string name="read_diary_showcase_message_1">您可以根據時間順序創建不同的文本，像是日記、備忘錄、摘要紀錄等。</string>
-    <string name="read_diary_showcase_message_2">您可以用關鍵字搜尋日記。 當輸入關鍵字，被搜尋到的日記裡的關鍵字會以明亮的方式顯示。</string>
-    <string name="read_diary_showcase_message_3">您可以用語音辨識的功能輸入搜尋的關鍵子。</string>
-    <string name="read_diary_showcase_message_4">可以用日曆按日期查看已有的日記。</string>
-    <string name="read_diary_showcase_message_5">將已創建的日記作為時間軸。</string>
-    <string name="read_diary_showcase_message_6">You can view charts of diary entries for the entire period.</string>
-    <string name="read_diary_showcase_message_7">您可以使用進階設定更改字型、設定密碼、備份及還原日記。</string>
-    <string name="read_diary_showcase_message_8">點擊清單裡的日記卡查看日記</string>
-    <string name="diary_photo_migration_message">The image attachment method of the EasyDiary is changed so that the existing link information is compressed and stored in the EasyDiary folder.\nPlease wait for the operation to finish.</string>
-    <string name="read_diary_detail_title">閱讀日記</string>
     <string name="delete_confirm">您確定要刪除嗎？</string>
-    <string name="read_diary_detail_showcase_button_1">下一個</string>
-    <string name="read_diary_detail_showcase_button_2">關閉</string>
-    <string name="read_diary_detail_showcase_title_0">Diary View</string>
-    <string name="read_diary_detail_showcase_title_1">Move page</string>
-    <string name="read_diary_detail_showcase_title_2">編輯日記</string>
-    <string name="read_diary_detail_showcase_title_3">文字轉語音</string>
-    <string name="read_diary_detail_showcase_title_4">Postcard</string>
-    <string name="read_diary_detail_showcase_title_5">刪除日記</string>
-    <string name="read_diary_detail_showcase_message_0">Browse the saved diary. You can modify a saved diary or create a diary card by specifying a custom color.</string>
-    <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
-    <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
-    <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>
-    <string name="read_diary_detail_showcase_message_4">Use the diary to create post cards and share them with others.</string>
-    <string name="read_diary_detail_showcase_message_5">You can delete the current diary and go to the search screen.</string>
-    <string name="update_diary_title">編輯日記</string>
     <string name="back_pressed_confirm">點選 \'OK\' 按鈕回到上一個畫面並放棄儲存目前日記。</string>
     <string name="rate_app">為我們評分</string>
     <string name="guide_message_3">對要求的功能權限不足</string>
     <string name="restore_diary">還原日記</string>
     <string name="restore_diary_summary">從Google Drive的備份中復原所有附加內容以外的資料。</string>
-    <string name="restore_photo">還原日記照片（手動）</string>
-    <string name="restore_photo_summary">使用者直接復原附加在日記裡的照片</string>
     <string name="backup_diary">備份日記</string>
     <string name="backup_diary_summary">將附加內容以外的資料備份到Google Drive。</string>
     <string name="font_setting">字體設定</string>
     <string name="add_ttf_fonts_title">增加TTF字體</string>
     <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
-    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">區分大小寫</string>
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
     <string name="setting_primary_color_title">佈景主體</string>
     <string name="setting_primary_color_summary">設定應用程式主體顏色</string>
-    <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
-    <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
-    <string name="easy_photo_map_title">Easy PhotoMap</string>
-    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
-    <string name="easy_password_title">Easy Password</string>
-    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
     <string name="font_line_spacing">字體行距</string>
     <string name="font_line_spacing_summary">Change the line spacing of the font to the set ratio.</string>
-    <string name="calendar_title">日曆</string>
     <string name="guide_message_4">沒有這天的日記</string>
-    <string name="bar_chart_title">圖表</string>
-    <string name="bar_chart_status">Time Diary Creation Status</string>
     <string name="range_a">1h~3h</string>
     <string name="range_b">4h~6h</string>
     <string name="range_c">7h~9h</string>
@@ -115,32 +42,13 @@
     <string name="range_f">16h~18h</string>
     <string name="range_g">19h~21h</string>
     <string name="range_h">22h~24h</string>
-    <string name="write_time">寫作時間</string>
     <string name="write_count">寫作數量</string>
-    <string name="unlock_guide_message">請輸入您的鎖定密碼</string>
     <string name="photo_view_error_info">No photos found.\nAttached photos from Gallery may have been deleted or moved.</string>
-    <string name="diary_card_export_info">日記卡儲存路徑</string>
     <string name="diary_card_share_info">分享日記卡</string>
     <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
-    <string name="post_card_showcase_button_1">下一個</string>
-    <string name="post_card_showcase_button_2">關閉</string>
-    <string name="post_card_showcase_title_0">日記卡</string>
-    <string name="post_card_showcase_title_1">文字顏色</string>
-    <string name="post_card_showcase_title_2">背景顏色</string>
-    <string name="post_card_showcase_title_3">Create postcard</string>
-    <string name="post_card_showcase_title_4">Share postcard</string>
-    <string name="post_card_showcase_title_5">退出編輯</string>
-    <string name="post_card_showcase_message_0">您可以使用已儲存的日記創建並儲存自訂明信片</string>
-    <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
-    <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
-    <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>
-    <string name="post_card_showcase_message_4">Postcard created can be shared with friends. Share your postcard with email, mms, messenger, and more.</string>
-    <string name="post_card_showcase_message_5">Exit the postcard editing screen and return to the previous screen.</string>
     <string name="timeline_title">時間軸</string>
     <string name="postcard_viewer_title">Diary Postcard</string>
     <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
-    <string name="google_drive_connect_message">Google Drive同步中…</string>
-    <string name="menu_calendar">日曆</string>
     <string name="menu_chart">統計</string>
     <string name="menu_timeline">時間軸</string>
     <string name="post_card">Diary Postcard</string>
@@ -153,7 +61,6 @@
     <string name="preferences_category_information">應用程式資訊</string>
     <string name="preferences_information_licenses">開放原始碼授權</string>
     <string name="preferences_information_licenses_summary">開源軟體注意事項</string>
-    <string name="preferences_category_aaf">AAF Easy系列</string>
     <string name="invite_friends">邀請好友</string>
     <string name="invite_friends_summary">與你的朋友分享%s</string>
 
@@ -414,10 +321,6 @@
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
         Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
-    </string>
-    <string name="release_199">
-        v1.4.133 / 2020.06.02\n
-        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
@@ -883,30 +786,18 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="speech_to_text">語音輸入</string>
     <string name="write_diary">寫日記</string>
-    <string name="date_picker">選擇日期</string>
-    <string name="time_picker">選擇時間</string>
-    <string name="seconds_picker">Select seconds</string>
-    <string name="save_diary">儲存日記</string>
     <string name="photo_registration">Photo registration</string>
-    <string name="zoom_in">放大</string>
-    <string name="zoom_out">縮小</string>
     <string name="edit_diary">編輯日記</string>
     <string name="text_to_speech">Diary to speech</string>
-    <string name="diary_postcard">Diary Postcard</string>
     <string name="thumbnail_setting_title">縮略圖大小</string>
     <string name="thumbnail_setting_summary">Sets the thumbnail size of the photo attached to the diary. The set size only applies to the diary creation and modification screen, not to the search screen.</string>
-    <string name="collapse_attached_photo">Collapse attached photo</string>
-    <string name="expand_attached_photo">Expand attached photo</string>
     <string name="release_notes_title">發行紀錄</string>
     <string name="release_notes_summary">按發行版本查看新功能</string>
     <string name="attached_photo_count">%d Attached Photos</string>
     <string name="all_day">全天</string>
     <string name="bold_style_option_title">粗體字設定</string>
     <string name="bold_style_option_summary">設定日記標題與時間軸時間以粗體字顯示</string>
-    <string name="multi_picker_option_title">Multi picker setting</string>
-    <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
     <string name="preferences_category_backup_restore">備份與還原</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">備份附加照片</string>
@@ -914,17 +805,13 @@
     <string name="recover_attach_photo_title">還原附加照片</string>
     <string name="recover_attach_photo_summary">從Google Drive還原已備份的附加照片。 由於測試版服務，此功能可能無法在某些裝置上使用。</string>
     <string name="notification_msg_device_file_count">%s 備份文件數量： %d%s</string>
-    <string name="notification_msg_upload_file_count">Number of files to upload</string>
     <string name="notification_msg_upload_invalid">All backup target files already exist.</string>
-    <string name="notification_msg_upload_empty">The file to be backed up does not exist.</string>
     <string name="notification_msg_upload_progress">上傳中…</string>
     <string name="notification_msg_upload_complete">上傳完成</string>
     <string name="notification_msg_upload_success">%s 上傳成功： %d%s</string>
     <string name="notification_msg_upload_fail">%s 上傳失敗： %d%s</string>
     <string name="notification_msg_google_drive_file_count">%s Number of recover files: %d%s</string>
-    <string name="notification_msg_download_file_count">Number of files to download</string>
     <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
-    <string name="notification_msg_download_empty">The file to be recovered does not exist.</string>
     <string name="notification_msg_download_progress">下載中…</string>
     <string name="notification_msg_download_complete">下載完成</string>
     <string name="notification_msg_download_success">%s 下載成功 %d%s</string>
@@ -933,7 +820,6 @@
     <string name="preferences_category_lock">上鎖設定</string>
     <string name="fingerprint_lock_title">指紋鎖定</string>
     <string name="fingerprint_lock_summary">如果裝置支援指紋辨識並註冊指紋，用已註冊的指紋鎖定應用程式。</string>
-    <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
     <string name="fingerprint_setting_complete">指紋鎖設定完成</string>
     <string name="fingerprint_setting_release">指紋鎖定已關閉</string>
     <string name="fingerprint_lock_need_pin_setting">使用指紋鎖定之前，您需要先設定PIN碼</string>
@@ -948,7 +834,6 @@
     <string name="pin_unlock_guide_message">請輸入PIN碼</string>
     <string name="pin_verification_fail">PIN碼驗證失敗</string>
     <string name="change_pin_lock_mode">更改為PIN碼鎖定模式</string>
-    <string name="diary_creation_time_disable_message">No time information</string>
     <string name="enable_card_view_policy_title">優化卡片圖示設計</string>
     <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
     <string name="font_size_title">設定字體大小</string>
@@ -956,19 +841,6 @@
     <string name="contents_summary_title">日記內容摘要</string>
     <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
     <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
-    <string name="export_excel_title">匯出為Excel</string>
-    <string name="export_excel_description">Save all content except the attached photo as an Excel file.</string>
-    <string name="export_excel_xls_location">地點</string>
-    <string name="export_excel_header_seq">Sequence</string>
-    <string name="export_excel_header_write_date">寫作日期</string>
-    <string name="export_excel_header_title">日記標題</string>
-    <string name="export_excel_header_contents">日記內容</string>
-    <string name="export_excel_header_attach_photo_path">Attached photo path</string>
-    <string name="export_excel_header_attach_photo_size">Attached photo size</string>
-    <string name="export_excel_header_write_time_millis">Write date\n(Since January 1st 1970 in milliseconds.)</string>
-    <string name="export_excel_header_weather">天氣</string>
-    <string name="export_excel_header_symbol">圖標</string>
-    <string name="export_excel_header_is_all_day">全天</string>
     <string name="faq_title">常見問題</string>
     <string name="faq_description">您可以查看常見問題及解決方法。</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
@@ -986,7 +858,6 @@
     <string name="rotate_photo">旋轉</string>
     <string name="task_progress_message">Request work in process…</string>
     <string name="open_realm_file_title">日記還原</string>
-    <string name="open_realm_file_message">Please choose a recovery target file.</string>
     <string name="backup_completed_message">日記備份工作已完成</string>
     <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
@@ -999,17 +870,13 @@
     <string name="preferences_category_backup_restore_device_sub">裝置儲存空間</string>
     <string name="export_realm_title">備份日記</string>
     <string name="export_realm_description">Back up database files except the attached photo to the device storage.\nSince files backed up in the internal storage are deleted when the application is deleted, use the external public storage or Google Drive backup function to permanently store the created data.</string>
-    <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
     <string name="import_realm_title">還原日記</string>
     <string name="import_realm_description">Recovers database files from device storage except attachments.</string>
-    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">日曆開始日</string>
     <string name="calendar_start_day_summary">設定一週的開始日</string>
     <string name="calendar_start_day_sunday">週日</string>
     <string name="calendar_start_day_monday">週一</string>
     <string name="calendar_start_day_saturday">週六</string>
-    <string name="calendar_menu_previous">Previous</string>
-    <string name="calendar_menu_next">Next</string>
     <string name="filter_start_date">開始日期</string>
     <string name="filter_start_date_hint">請輸入開始日期</string>
     <string name="filter_end_date">結束日期</string>
@@ -1018,13 +885,9 @@
     <string name="filter_search_word_hint">請輸入您要找的詞句</string>
     <string name="filter_clear">重置篩選條件</string>
     <string name="filter_close">關閉</string>
-    <string name="copy_diary_item">您想要複製選擇的日記嗎？</string>
     <string name="diary_contents_length">字元: %d</string>
     <string name="count_characters_title">字數</string>
     <string name="count_characters_summary">計算日記中的字數</string>
-    <string name="send_email_attach_excel_title">建立Excel文件並以電子郵件傳送</string>
-    <string name="send_email_attach_excel_description">All content except the attached photo is created as an Excel file and attached to the email.</string>
-    <string name="storage_migration_message">Storage location changes will be made in accordance with the Android 10 Scoped Storage policy. This job runs only once.</string>
     <string name="google_drive_account_sign_out_title">Reset Google Drive linked account</string>
     <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
     <string name="calendar_font_scale_title">設定日曆字體大小</string>
@@ -1037,7 +900,6 @@
     <string name="dashboard_guide_message">There is not enough data to generate ranking data. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
     <string name="delete_realm_title">刪除備份文件</string>
     <string name="delete_realm_description">刪除儲存空間中的備份檔案</string>
-    <string name="menu_dashboard">Dashboard</string>
     <string name="dashboard_title_backup_drive">Google Drive備份歷程</string>
     <string name="dashboard_title_backup_local">本地裝置備份歷程</string>
     <string name="dashboard_backup_guide_message">沒有備份資訊</string>
@@ -1124,7 +986,6 @@
     <string name="user_custom_setting">使用者自訂設定</string>
     <string name="automation_settings">使用佈景主題自動設定</string>
     <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
     <string name="enable_photo_highlight_diary_main_title">Attached photo highlights (Main Screen)</string>
     <string name="enable_photo_highlight_dashboard_title">Attached photo highlights (Dashboard)</string>
     <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
@@ -1135,8 +996,6 @@
     <string name="notification_channel_name_upload">Google Drive上傳</string>
     <string name="notification_channel_name_download">Google Drive下載</string>
     <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">Recently Used</string>
@@ -1147,7 +1006,6 @@
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
-    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/211eb91805ea439dbb51ab4049a62496?v=c7b9af3abbf94271ba082d79a3f958e0</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/d188abcfdaaa47a186875a52876f5b3e?v=b4c3f9a2624d4a6a8b9b658d5d58679b</string>
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
@@ -1174,7 +1032,6 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d 筆記錄</string>
     <string name="task_todo_count_format">(未完成任務: %d)</string>
 </resources>

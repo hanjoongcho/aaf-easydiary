@@ -1,37 +1,11 @@
 <resources>
     <string name="app_name">Easy Diary</string>
     <string name="common_create_seconds">Secondi</string>
-    <string name="create_diary_title">Scrivi diario</string>
-    <string name="write_date">Data</string>
-    <string name="request_title_message">Inserire titolo.</string>
     <string name="request_content_message">Inserire contenuti.</string>
     <string name="guide_message">Scrivi o pronuncia il titolo.</string>
     <string name="contents_text_hint">Scrivi o pronuncia i contenuti.</string>
     <string name="delete_photo_confirm_message">Eliminare questa foto?</string>
     <string name="gallery_intent_not_found_message">L\'app Galleria non è installata o è disabilitata.</string>
-    <string name="create_diary_showcase_button_1">Prossimo</string>
-    <string name="create_diary_showcase_button_2">Chiudi</string>
-    <string name="create_diary_showcase_title_1">Meteo</string>
-    <string name="create_diary_showcase_title_2">Titolo</string>
-    <string name="create_diary_showcase_title_3">Contenuti</string>
-    <string name="create_diary_showcase_title_4">Allega foto</string>
-    <string name="create_diary_showcase_title_5">Aumenta dimensioni carattere</string>
-    <string name="create_diary_showcase_title_6">Diminuisci dimensioni carattere</string>
-    <string name="create_diary_showcase_title_7">Imposta data</string>
-    <string name="create_diary_showcase_title_8">Imposta orario</string>
-    <string name="create_diary_showcase_title_9">Salva</string>
-    <string name="create_diary_showcase_message_1">Seleziona il simbolo del meteo in base all\'orario di creazione del diario. Selezionare il meteo non è obbligatorio.</string>
-    <string name="create_diary_showcase_message_2">Inserisci il titolo del diario. Inserire un titolo non è obbligatorio.</string>
-    <string name="create_diary_showcase_message_3">Inserisci diari, note, note riassuntive e altro.</string>
-    <string name="create_diary_showcase_message_4">Allega foto al diario.</string>
-    <string name="create_diary_showcase_message_5">Ingrandisci il testo del diario.</string>
-    <string name="create_diary_showcase_message_6">Riduci dimensioni carattere del diario.</string>
-    <string name="create_diary_showcase_message_7">Imposta la data di creazione del diario. Per creare un diario per la data precedente è possibile cambiare la data.</string>
-    <string name="create_diary_showcase_message_8">Imposta l\'orario di creazione del diario. È possibile inserire un orario precedente a quello attuale</string>
-    <string name="create_diary_showcase_message_9">Salva il diario completato.</string>
-    <string name="read_diary_title">Cerca</string>
-    <string name="input_mode_a">Modalità vocale</string>
-    <string name="input_mode_c">Modalità tastiera</string>
     <string name="guide_message_2">Scrivi o pronuncia l\'argomento.</string>
     <string name="recognizer_intent_not_found_message">Il modulo di riconoscimento vocale non è installato o è disabilitato.</string>
     <string name="sample_diary_title_1">La perseveranza è una grande componente del successo.</string>
@@ -42,71 +16,24 @@
     <string name="sample_diary_2">Per avere successo e spiccare in qualcosa, non abbiamo bisogno di tirar fuori qualcosa di nuovo, abbiamo solo bisogno di modi per farlo meglio. - Earl Nightingale</string>
     <string name="sample_diary_3">Ci sono solo due giorni all\'anno in cui non puoi fare niente: uno si chiama ieri, l\'altro si chiama domani, perciò oggi è il giorno giusto per amare, credere, fare e, principalmente, vivere. - Dalai Lama</string>
     <string name="sample_diary_4">Tra vent\'anni sarai più dispiaciuto per le cose che non hai fatto che per quelle che hai fatto. Quindi sciogli gli ormeggi, naviga lontano dal porto sicuro. Cattura i venti dell\'opportunità nelle tue vele. Esplora. Sogna. Scopri. - Mark Twain</string>
-    <string name="read_diary_showcase_button_1">Prossimo</string>
-    <string name="read_diary_showcase_button_2">Chiudi</string>
-    <string name="read_diary_showcase_title_1">Scrivi diario</string>
-    <string name="read_diary_showcase_title_2">Cerca</string>
-    <string name="read_diary_showcase_title_3">Riconoscimento vocale</string>
-    <string name="read_diary_showcase_title_4">Calendario</string>
-    <string name="read_diary_showcase_title_5">Cronologia</string>
-    <string name="read_diary_showcase_title_6">Grafico</string>
-    <string name="read_diary_showcase_title_7">Impostazioni avanzate</string>
-    <string name="read_diary_showcase_title_8">Visualizza diario</string>
-    <string name="read_diary_showcase_message_1">Si possono creare diversi diari, come il diario, promemoria, nota riassuntiva, ecc. in base alle preferenze del momento.</string>
-    <string name="read_diary_showcase_message_2">È possibile cercare i diari usando parole chiave. Inserendo una parola chiave, la parola chiave del diario corrispondente viene evidenziata.</string>
-    <string name="read_diary_showcase_message_3">Si può utilizzare il riconoscimento vocale per inserire parole chiave senza la tastiera.</string>
-    <string name="read_diary_showcase_message_4">Il diario creato può essere organizzato per data usando il calendario.</string>
-    <string name="read_diary_showcase_message_5">Il diario creato viene mostrato come cronologia.</string>
-    <string name="read_diary_showcase_message_6">È possibile visualizzare i grafici dei diari per l\'intero periodo.</string>
-    <string name="read_diary_showcase_message_7">Utilizzare le impostazioni avanzate per cambiare il carattere, impostare il numero di blocco, il backup e il ripristino del diario.</string>
-    <string name="read_diary_showcase_message_8">Tocca sulla scheda del diario nella lista per visualizzarlo.</string>
-    <string name="diary_photo_migration_message">La funzione Allega immagine di EasyDiary è stata modificata per comprimere l\'informazione esistente del link e archiviarla nella cartella di EasyDiary.\nAttendere il termine dell\'operazione.</string>
-    <string name="read_diary_detail_title">Leggi diario</string>
     <string name="delete_confirm">Eliminare?</string>
-    <string name="read_diary_detail_showcase_button_1">Prossimo</string>
-    <string name="read_diary_detail_showcase_button_2">Chiudi</string>
-    <string name="read_diary_detail_showcase_title_0">Vista diario</string>
-    <string name="read_diary_detail_showcase_title_1">Volta pagina</string>
-    <string name="read_diary_detail_showcase_title_2">Modifica diario</string>
-    <string name="read_diary_detail_showcase_title_3">Sintesi vocale</string>
-    <string name="read_diary_detail_showcase_title_4">Cartolina</string>
-    <string name="read_diary_detail_showcase_title_5">Elimina diario</string>
-    <string name="read_diary_detail_showcase_message_0">Sfoglia il diario salvato. È possibile modificare un diario salvato, creare una scheda di diario e specificare un colore personalizzato.</string>
-    <string name="read_diary_detail_showcase_message_1">Per visualizzare i diari precedenti o successivi trascinare lo schermo a sinistra o a destra.</string>
-    <string name="read_diary_detail_showcase_message_2">Per modificare il diario visualizzato passare alla schermata di modifica del diario.</string>
-    <string name="read_diary_detail_showcase_message_3">È possibile ascoltare il contenuto del diario con la sintesi vocale di Google.</string>
-    <string name="read_diary_detail_showcase_message_4">Con il diario si possono creare cartoline e condividerle con altre persone.</string>
-    <string name="read_diary_detail_showcase_message_5">È possibile eliminare il diario corrente e passare alla schermata di ricerca.</string>
-    <string name="update_diary_title">Modifica diario</string>
     <string name="back_pressed_confirm">Tocca il pulsante \'OK\' per tornare alla schermata precedente senza salvare il diario corrente.</string>
     <string name="rate_app">Valuta l\'app</string>
     <string name="guide_message_3">Autorizzazione insufficiente per la funzione richiesta.</string>
     <string name="restore_diary">Ripristina diario</string>
     <string name="restore_diary_summary">Ripristina tutti i contenuti usando i dati di backup su Google Drive, esclusi gli allegati.</string>
-    <string name="restore_photo">Ripristina foto del diario (manuale)</string>
-    <string name="restore_photo_summary">Gli utenti ripristinano direttamente le foto allegate al diario.</string>
     <string name="backup_diary">Backup diario</string>
     <string name="backup_diary_summary">Esegui il backup dei contenuti su Google Drive, esclusi gli allegati.</string>
     <string name="font_setting">Stile carattere</string>
     <string name="add_ttf_fonts_title">Aggiungere carattere TT</string>
     <string name="add_ttf_fonts_summary">Aggiungi i tuoi caratteri TT a Easy Diary.\nUna volta aggiunti i caratteri, si possono usare con i font predefiniti.\nSelezionando un file TTF usando Esplora file, il carattere viene registrato automaticamente in Easy Diary e attivato nel menu stile carattere.</string>
-    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Maiuscole/minuscole</string>
     <string name="diary_search_keyword_case_sensitive_summary">Attivando questa opzione l\'app trova le maiuscole e minuscole corrispondenti.</string>
     <string name="setting_primary_color_title">Tema</string>
     <string name="setting_primary_color_summary">Imposta i colori primari dell\'applicazione.</string>
-    <string name="pick_text_color_guide_message">La versione attuale supporta solo i cambi di colore del tema.\nModifiche al colore del testo saranno disponibili in futuro.</string>
-    <string name="pick_background_color_guide_message">La versione attuale supporta solo i cambi di colore del tema.\nModifiche al colore dello sfondo saranno disponibili in futuro.</string>
-    <string name="easy_photo_map_title">Easy PhotoMap</string>
-    <string name="easy_photo_map_summary">Easy Photo Map è un\'applicazione photo map che mostra la posizione della foto sulla mappa usando le informazioni incluse nella foto.</string>
-    <string name="easy_password_title">Easy Password</string>
-    <string name="easy_password_summary">Easy Password è un\'applicazione che aiuta a gestire le password per il login, la sicurezza dei documenti, il blocco, le carte di credito, la gestione dell\'account, ecc. usando il pattern di blocco impostato dall\'utente.</string>
     <string name="font_line_spacing">Interlinea</string>
     <string name="font_line_spacing_summary">Imposta l\'interlinea alla proporzione desiderata.</string>
-    <string name="calendar_title">Calendario</string>
     <string name="guide_message_4">Nessun diario in questo giorno.</string>
-    <string name="bar_chart_title">Grafico</string>
-    <string name="bar_chart_status">Fasce orarie di scrittura del diario</string>
     <string name="range_a">1h~3h</string>
     <string name="range_b">4h~6h</string>
     <string name="range_c">7h~9h</string>
@@ -115,32 +42,13 @@
     <string name="range_f">16h~18h</string>
     <string name="range_g">19h~21h</string>
     <string name="range_h">22h~24h</string>
-    <string name="write_time">Orario di scrittura</string>
     <string name="write_count">Conteggio </string>
-    <string name="unlock_guide_message">Inserire il numero di sblocco</string>
     <string name="photo_view_error_info">Foto non trovate.\nLe foto allegate dalla Galleria sono state rimosse o spostate.</string>
-    <string name="diary_card_export_info">Percorso della scheda diario </string>
     <string name="diary_card_share_info">Condividi scheda diario</string>
     <string name="diary_card_export_error_message">Si è verificato un errore creando la scheda diario. Riprovare.</string>
-    <string name="post_card_showcase_button_1">Prossimo</string>
-    <string name="post_card_showcase_button_2">Chiudi</string>
-    <string name="post_card_showcase_title_0">Cartolina diario</string>
-    <string name="post_card_showcase_title_1">Colore testo</string>
-    <string name="post_card_showcase_title_2">Colore sfondo</string>
-    <string name="post_card_showcase_title_3">Crea cartolina</string>
-    <string name="post_card_showcase_title_4">Condividi cartolina</string>
-    <string name="post_card_showcase_title_5">Esci dalla schermata di modifica</string>
-    <string name="post_card_showcase_message_0">È possibile usare il diario salvato per creare e salvare cartoline personalizzate.</string>
-    <string name="post_card_showcase_message_1">Cambia il colore del testo della cartolina. È possibile selezionare il colore desiderato con selezione colori.</string>
-    <string name="post_card_showcase_message_2">Cambia il colore di sfondo della cartolina. È possibile selezionare il colore con selezione colori.</string>
-    <string name="post_card_showcase_message_3">Le cartoline si possono salvare come file immagine.</string>
-    <string name="post_card_showcase_message_4">Le caroline si possono condividere con gli amici. Condividi la cartolina tramite e-mail, mms, Messenger e altro.</string>
-    <string name="post_card_showcase_message_5">Esci dalla schermata di modifica cartolina e ritorna alla schermata precedente.</string>
     <string name="timeline_title">Cronologia</string>
     <string name="postcard_viewer_title">Cartolina del diario</string>
     <string name="postcard_viewer_no_cards_saved">Nessuna cartolina salvata.</string>
-    <string name="google_drive_connect_message">Sincronizzazione di Google Drive...</string>
-    <string name="menu_calendar">Calendario</string>
     <string name="menu_chart">Statistiche</string>
     <string name="menu_timeline">Cronologia</string>
     <string name="post_card">Cartolina del diario</string>
@@ -153,7 +61,6 @@
     <string name="preferences_category_information">Informazioni applicazione</string>
     <string name="preferences_information_licenses">Licenze Open Source</string>
     <string name="preferences_information_licenses_summary">Informazioni sul software Open Source</string>
-    <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">Invita amici</string>
     <string name="invite_friends_summary">Condividi l\'applicazione %s con i tuoi amici.</string>
 
@@ -414,10 +321,6 @@
     <string name="release_198">
         v1.4.132 / 31/05/2020\n
         Risolto un problema per cui i pulsanti della visualizzazione scheda non potevano essere visualizzati quando il tema e lo sfondo della visualizzazione scheda erano impostati sullo stesso colore
-    </string>
-    <string name="release_199">
-        v1.4.133 / 02/06/2020\n
-        Risolto un problema per cui l\'icona della schermata di blocco non veniva identificata quando il colore dello sfondo dello schermo era impostato su bianco
     </string>
     <string name="release_200">
         v1.4.134 / 14/06/2020\n
@@ -883,30 +786,18 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="speech_to_text">Input vocale</string>
     <string name="write_diary">Scrivi diario</string>
-    <string name="date_picker">Imposta data</string>
-    <string name="time_picker">Imposta orario</string>
-    <string name="seconds_picker">Imposta secondi</string>
-    <string name="save_diary">Salva diario</string>
     <string name="photo_registration">Foto</string>
-    <string name="zoom_in">Ingrandisci</string>
-    <string name="zoom_out">Riduci</string>
     <string name="edit_diary">Modifica diario</string>
     <string name="text_to_speech">Ascolta diario</string>
-    <string name="diary_postcard">Cartolina</string>
     <string name="thumbnail_setting_title">Dimensioni anteprima</string>
     <string name="thumbnail_setting_summary">Imposta le dimensioni dell\'anteprima della foto allegata. Questa impostazione si applica solo alla schermata di creazione e modifica e non alla schermata di ricerca.</string>
-    <string name="collapse_attached_photo">Comprimi foto allegata</string>
-    <string name="expand_attached_photo">Espandi foto allegata</string>
     <string name="release_notes_title">Note di rilascio</string>
     <string name="release_notes_summary">Scopri le nuove funzionalità di ogni versione.</string>
     <string name="attached_photo_count">%d foto allegate</string>
     <string name="all_day">Giorno intero</string>
     <string name="bold_style_option_title">Grassetto</string>
     <string name="bold_style_option_summary">Il titolo del diario e dell\'orario della cronologia verranno visualizzati in grassetto.</string>
-    <string name="multi_picker_option_title">Selezione multipla</string>
-    <string name="multi_picker_option_summary">Allegando una foto, è possibile effettuare la selezione multipla all\'interno del diario senza l\'app Galleria. Se l\'opzione è attiva, si possono allegare più immagini contemporaneamente.</string>
     <string name="preferences_category_backup_restore">Backup e ripristino applicazione</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">Backup foto allegate</string>
@@ -914,17 +805,13 @@
     <string name="recover_attach_photo_title">Ripristina foto allegate</string>
     <string name="recover_attach_photo_summary">Ripristina le foto allegate di cui è stato eseguito un backup su Google Drive. Questa funzione è in beta e potrebbe non funzionare su alcuni dispositivi.</string>
     <string name="notification_msg_device_file_count">%s Numero di file di backup %d%s</string>
-    <string name="notification_msg_upload_file_count">Numero di file da caricare</string>
     <string name="notification_msg_upload_invalid">File di destinazione del backup sono già esistenti.</string>
-    <string name="notification_msg_upload_empty">Il file da includere nel backup non esiste.</string>
     <string name="notification_msg_upload_progress">Caricamento...</string>
     <string name="notification_msg_upload_complete">Caricamento completato</string>
     <string name="notification_msg_upload_success">%s Caricamento riuscito: %d%s</string>
     <string name="notification_msg_upload_fail">%s Caricamento non riuscito: %d%s</string>
     <string name="notification_msg_google_drive_file_count">%s Numero file ripristinati: %d%s</string>
-    <string name="notification_msg_download_file_count">Numero file da scaricare</string>
     <string name="notification_msg_download_invalid">File di destinazione del ripristino già esistenti.</string>
-    <string name="notification_msg_download_empty">Il file da ripristinare non esiste.</string>
     <string name="notification_msg_download_progress">Download in corso...</string>
     <string name="notification_msg_download_complete">Download completato</string>
     <string name="notification_msg_download_success">%s Download riuscito: %d%s</string>
@@ -933,7 +820,6 @@
     <string name="preferences_category_lock">Impostazioni di blocco</string>
     <string name="fingerprint_lock_title">Blocco con impronta digitale</string>
     <string name="fingerprint_lock_summary">Se il dispositivo supporta il riconoscimento dell\'impronta digitale, blocca l\'applicazione con l\'impronta registrata nel dispositivo.</string>
-    <string name="fingerprint_not_available">Il sistema operativo installato nel dispositivo non supporta il riconoscimento dell\'impronta digitale.</string>
     <string name="fingerprint_setting_complete">Blocco con impronta digitale impostato.</string>
     <string name="fingerprint_setting_release">Blocco con impronta digitale disabilitato.</string>
     <string name="fingerprint_lock_need_pin_setting">Per usare il blocco con impronta digitale, è necessario impostare un codice PIN.</string>
@@ -948,7 +834,6 @@
     <string name="pin_unlock_guide_message">Inserire il PIN.</string>
     <string name="pin_verification_fail">Verifica PIN non riuscita.</string>
     <string name="change_pin_lock_mode">Passaggio a modalità blocco PIN</string>
-    <string name="diary_creation_time_disable_message">Nessuna informazione sull\'orario</string>
     <string name="enable_card_view_policy_title">Ottimizza visualizzazione schede</string>
     <string name="enable_card_view_policy_summary">Adatta la visualizzazione schede al dispositivo.</string>
     <string name="font_size_title">Imposta dimensioni carattere</string>
@@ -956,19 +841,6 @@
     <string name="contents_summary_title">Riassunto contenuti del diario</string>
     <string name="contents_summary_description">Riassumi i contenuti del diario presenti nel calendario, nella cronologia, nella schermata di ricerca e così via.</string>
     <string name="init_cipher_error_guide_message">Le informazioni dell\'impronta digitale del dispositivo sono state modificate. Disattivare la modalità di blocco PIN, poi disattivare il blocco con impronte digitali e riattivarlo.</string>
-    <string name="export_excel_title">Esporta Excel</string>
-    <string name="export_excel_description">Salva tutti i contenuti in Excel, esclusa la foto allegata.</string>
-    <string name="export_excel_xls_location">Posizione</string>
-    <string name="export_excel_header_seq">Sequenza</string>
-    <string name="export_excel_header_write_date">Data di scrittura</string>
-    <string name="export_excel_header_title">Titolo del diario</string>
-    <string name="export_excel_header_contents">Contenuti del diario</string>
-    <string name="export_excel_header_attach_photo_path">Percorso foto allegata</string>
-    <string name="export_excel_header_attach_photo_size">Dimensioni foto allegata</string>
-    <string name="export_excel_header_write_time_millis">Data di scrittura\n(dal 1° gennaio 1970 in millisecondi)</string>
-    <string name="export_excel_header_weather">Meteo</string>
-    <string name="export_excel_header_symbol">Simbolo</string>
-    <string name="export_excel_header_is_all_day">Giorno intero</string>
     <string name="faq_title">FAQ</string>
     <string name="faq_description">È possibile consultare le risposte alle domande più frequenti.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
@@ -986,7 +858,6 @@
     <string name="rotate_photo">Ruota</string>
     <string name="task_progress_message">Richiesta in corso...</string>
     <string name="open_realm_file_title">Ripristina diario</string>
-    <string name="open_realm_file_message">Scegliere un file di ripristino.</string>
     <string name="backup_completed_message">Backup del diario completato.</string>
     <string name="backup_confirm_message">Avviare il backup delle foto allegate?</string>
     <string name="recover_confirm_attached_photo">Avviare il ripristino delle foto allegate?</string>
@@ -999,17 +870,13 @@
     <string name="preferences_category_backup_restore_device_sub">Memoria del dispositivo</string>
     <string name="export_realm_title">Backup del diario</string>
     <string name="export_realm_description">Esegui il backup dei file di database, escluse le foto allegate, nella memoria del dispositivo.\nDisinstallando l\'applicazione il backup dei file nella memoria interna viene eliminato. Utilizzare una memoria esterna o la funzione backup di Google Drive per salvare i dati in maniera permanente.</string>
-    <string name="export_realm_guide_message">Il file di database è stato salvato nella memoria del dispositivo al percorso seguente.</string>
     <string name="import_realm_title">Ripristina diario</string>
     <string name="import_realm_description">Ripristina i file di database dalla memoria del dispositivo, allegati esclusi.</string>
-    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">Giorno di inizio calendario</string>
     <string name="calendar_start_day_summary">Seleziona il giorno di inizio della settimana.</string>
     <string name="calendar_start_day_sunday">Domenica</string>
     <string name="calendar_start_day_monday">Lunedì</string>
     <string name="calendar_start_day_saturday">Sabato</string>
-    <string name="calendar_menu_previous">Precedente</string>
-    <string name="calendar_menu_next">Successivo</string>
     <string name="filter_start_date">Data di inizio</string>
     <string name="filter_start_date_hint">Immettere una data di inizio.</string>
     <string name="filter_end_date">Data di fine</string>
@@ -1018,13 +885,9 @@
     <string name="filter_search_word_hint">Scrivere il termine da cercare.</string>
     <string name="filter_clear">Reimposta filtro</string>
     <string name="filter_close">Chiudi</string>
-    <string name="copy_diary_item">Copiare il diario selezionato?</string>
     <string name="diary_contents_length">Caratteri: %d</string>
     <string name="count_characters_title">Conteggio parole</string>
     <string name="count_characters_summary">Calcola il numero di caratteri nel testo del diario.</string>
-    <string name="send_email_attach_excel_title">Creazione file Excel e invio e-mail</string>
-    <string name="send_email_attach_excel_description">Tutti i contenuti, esclusa la foto allegata, vengono salvati in un file Excel e allegati all\'e-mail.</string>
-    <string name="storage_migration_message">Verranno apportate modifiche al percorso di archiviazione come previsto dalla funzionalità Scoped Storage di Android 10. Questa operazione verrà eseguita una sola volta.</string>
     <string name="google_drive_account_sign_out_title">Reimposta account Google Drive associato</string>
     <string name="google_drive_account_sign_out_description">Rimuovi informazioni sul token pubblicato da Easy Diary con l\'account Google Drive associato.</string>
     <string name="calendar_font_scale_title">Imposta dimensioni carattere del calendario</string>
@@ -1037,7 +900,6 @@
     <string name="dashboard_guide_message">Dati insufficienti per generare una classifica. È necessario utilizzare almeno 4 simboli nel diario per attivare la classifica.</string>
     <string name="delete_realm_title">Elimina file di backup</string>
     <string name="delete_realm_description">Elimina il file di backup presente in memoria.</string>
-    <string name="menu_dashboard">Dashboard</string>
     <string name="dashboard_title_backup_drive">Cronologia backup di Google Drive</string>
     <string name="dashboard_title_backup_local">Cronologia backup sul dispositivo</string>
     <string name="dashboard_backup_guide_message">Nessuna informazione di backup</string>
@@ -1124,7 +986,6 @@
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
     <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
     <string name="enable_photo_highlight_diary_main_title">Attached photo highlights (Main Screen)</string>
     <string name="enable_photo_highlight_dashboard_title">Attached photo highlights (Dashboard)</string>
     <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
@@ -1135,8 +996,6 @@
     <string name="notification_channel_name_upload">Google Drive Upload</string>
     <string name="notification_channel_name_download">Google Drive Download</string>
     <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
     <string name="recently_used_symbol">Recently Used</string>
@@ -1147,7 +1006,6 @@
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
-    <string name="user_manual_url_debug_mode">https://spiced-skirt-15c.notion.site/211eb91805ea439dbb51ab4049a62496?v=c7b9af3abbf94271ba082d79a3f958e0</string>
     <string name="user_manual_url_font">https://spiced-skirt-15c.notion.site/d188abcfdaaa47a186875a52876f5b3e?v=b4c3f9a2624d4a6a8b9b658d5d58679b</string>
     <string name="user_manual_url_backup_restore_google_drive">https://spiced-skirt-15c.notion.site/5979e1ab2edf4e008c6ac0aa83e203df?v=db369d5ac4a9492189f46462493fbb84</string>
     <string name="user_manual_url_backup_restore_device">https://spiced-skirt-15c.notion.site/31d40d9db9164dbcb617d2ee3a2463e2?v=288dbb7de0984d469159fb0387415dbf</string>
@@ -1174,7 +1032,6 @@
     <string name="link_entry_as_parent">As Parent</string>
     <string name="link_entry_as_child">As Child</string>
     <string name="link_entry_later">Later</string>
-    <string name="menu_speech_to_text">Speech To Text</string>
     <string name="diary_count_format">%d voci</string>
     <string name="task_todo_count_format">(Attività incomplete: %d)</string>
 </resources>
