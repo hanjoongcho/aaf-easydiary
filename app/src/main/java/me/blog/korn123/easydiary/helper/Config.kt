@@ -247,6 +247,22 @@ class Config(
         get() = prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, false)
         set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight).apply()
 
+    var enablePhotoHighlightInDiaryMain: Boolean
+        get() = if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN)) {
+            prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, false)
+        } else {
+            enablePhotoHighlight
+        }
+        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, enablePhotoHighlight).apply()
+
+    var enablePhotoHighlightInDashboard: Boolean
+        get() = if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD)) {
+            prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, false)
+        } else {
+            enablePhotoHighlight
+        }
+        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, enablePhotoHighlight).apply()
+
     var enableStatusBarDarkenColor: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, true)
         set(enableStatusBarDarkenColor) = prefs.edit().putBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, enableStatusBarDarkenColor).apply()

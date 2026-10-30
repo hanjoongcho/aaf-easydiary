@@ -111,9 +111,9 @@ fun CompactLayout(
             activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
         }
     }
-    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlightInDiaryMain) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        enablePhotoHighlight = context.config.enablePhotoHighlight
+        enablePhotoHighlight = context.config.enablePhotoHighlightInDiaryMain
     }
 
     var bottomSheetHeight by remember { mutableStateOf(0.dp) }
@@ -342,9 +342,9 @@ fun CompactLayout2(
             activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
         }
     }
-    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlightInDiaryMain) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        enablePhotoHighlight = context.config.enablePhotoHighlight
+        enablePhotoHighlight = context.config.enablePhotoHighlightInDiaryMain
     }
 
     var bottomSheetHeight by remember { mutableStateOf(0.dp) }

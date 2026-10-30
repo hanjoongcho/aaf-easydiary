@@ -1125,6 +1125,8 @@
     <string name="automation_settings">थीम का उपयोग करके स्वचालित सेटिंग</string>
     <string name="place_finger_description">कृपया अपनी अंगुली फ़िंगरप्रिंट सेंसर पर रखें</string>
     <string name="enable_photo_highlight_title">फोटो हाइलाइट लग गया</string>
+    <string name="enable_photo_highlight_diary_main_title">फोटो हाइलाइट (मुख्य स्क्रीन)</string>
+    <string name="enable_photo_highlight_dashboard_title">फोटो हाइलाइट (डैशबोर्ड)</string>
     <string name="enable_photo_highlight_description">आज की तारीख के आधार पर, अतीत में संलग्न तस्वीरें हाइलाइट क्षेत्र में वर्षों और महीनों की इकाइयों में प्रदर्शित की जाती हैं। यदि आज की तारीख के लिए कोई वार्षिक या मासिक अनुलग्नक नहीं हैं, तो हाइलाइट क्षेत्र सक्रिय नहीं है।</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
     <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>

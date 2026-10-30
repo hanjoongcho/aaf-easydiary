@@ -108,9 +108,9 @@ fun MediumLayout(
         }
     }
     var bottomSheetHeight by remember { mutableStateOf(0.dp) }
-    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlightInDiaryMain) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        enablePhotoHighlight = context.config.enablePhotoHighlight
+        enablePhotoHighlight = context.config.enablePhotoHighlightInDiaryMain
     }
 
     Row(

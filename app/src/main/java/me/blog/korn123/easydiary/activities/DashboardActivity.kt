@@ -89,6 +89,7 @@ class DashboardActivity : EasyDiaryActivity() {
                             putInt(PhotoHighlightConstants.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
                             putFloat(PhotoHighlightConstants.REVEAL_WIDTH, 20F)
                             putFloat(PhotoHighlightConstants.PAGE_MARGIN, 5F)
+                            putBoolean(PhotoHighlightConstants.IS_DASHBOARD, true)
                         }
                     togglePhotoHighlightCallback = { isVisible: Boolean ->
                         mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE

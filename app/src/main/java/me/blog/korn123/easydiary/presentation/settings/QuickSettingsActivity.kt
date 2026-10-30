@@ -124,7 +124,6 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 )
             }
         }
-        showBetaFeatureMessage()
     }
 
     /***************************************************************************************************
@@ -169,16 +168,29 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                 }
             }
             item {
-                var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+                var enablePhotoHighlightInDiaryMain by remember { mutableStateOf(context.config.enablePhotoHighlightInDiaryMain) }
                 SwitchCard(
-                    stringResource(R.string.enable_photo_highlight_title),
+                    stringResource(R.string.enable_photo_highlight_diary_main_title),
                     stringResource(R.string.enable_photo_highlight_description),
                     settingCardModifier,
-                    isOn = enablePhotoHighlight,
+                    isOn = enablePhotoHighlightInDiaryMain,
                     enableCardViewPolicy = enableCardViewPolicy,
                 ) {
-                    enablePhotoHighlight = enablePhotoHighlight.not()
-                    context.config.enablePhotoHighlight = enablePhotoHighlight
+                    enablePhotoHighlightInDiaryMain = enablePhotoHighlightInDiaryMain.not()
+                    context.config.enablePhotoHighlightInDiaryMain = enablePhotoHighlightInDiaryMain
+                }
+            }
+            item {
+                var enablePhotoHighlightInDashboard by remember { mutableStateOf(context.config.enablePhotoHighlightInDashboard) }
+                SwitchCard(
+                    stringResource(R.string.enable_photo_highlight_dashboard_title),
+                    stringResource(R.string.enable_photo_highlight_description),
+                    settingCardModifier,
+                    isOn = enablePhotoHighlightInDashboard,
+                    enableCardViewPolicy = enableCardViewPolicy,
+                ) {
+                    enablePhotoHighlightInDashboard = enablePhotoHighlightInDashboard.not()
+                    context.config.enablePhotoHighlightInDashboard = enablePhotoHighlightInDashboard
                 }
             }
             item {

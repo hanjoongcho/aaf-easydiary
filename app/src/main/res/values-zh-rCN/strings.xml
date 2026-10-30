@@ -1125,6 +1125,8 @@
     <string name="automation_settings">使用主题进行自动设置</string>
     <string name="place_finger_description">请将手指放在指纹传感器上</string>
     <string name="enable_photo_highlight_title">高亮附件照片</string>
+    <string name="enable_photo_highlight_diary_main_title">高亮附件照片 (主界面)</string>
+    <string name="enable_photo_highlight_dashboard_title">高亮附件照片 (仪表板)</string>
     <string name="enable_photo_highlight_description">根据今天的日期，将过去附加的照片以年和月为单位显示在高亮区域。如果今天的日期没有年度或月度附件，则不会激活高亮区域。</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#年前|1&lt;年前}</string>
     <string name="monthly_highlight_tag">{0,number} {0,choice,1#月前|1&lt;月前}</string>
