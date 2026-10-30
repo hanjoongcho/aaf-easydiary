@@ -70,7 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_edit" />
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_outline_list_alt_add" />
     </LinearLayout>
 
     <include android:id="@+id/partial_compose_loading_screen" layout="@layout/partial_compose_loading_screen" />

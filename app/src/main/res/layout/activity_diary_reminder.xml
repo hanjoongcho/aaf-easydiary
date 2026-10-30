@@ -36,7 +36,7 @@
         android:layout_height="70dp"
         android:clickable="false"
         android:padding="@dimen/activity_margin"
-        app:srcCompat="@drawable/ic_edit"
+        app:srcCompat="@drawable/ic_outline_list_alt_add"
         app:layout_constraintBottom_toBottomOf="@+id/reminder_draggable"
         app:layout_constraintEnd_toStartOf="@+id/reminder_draggable"
         app:layout_constraintHorizontal_bias="0.5"

@@ -24,7 +24,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentEnd="true"
             android:id="@+id/openWritePage"
-            android:src="@drawable/ic_edit"
+            android:src="@drawable/ic_outline_list_alt_add"
             android:padding="3dp"
             android:layout_width="33dp"
             android:layout_height="33dp" />

@@ -22,7 +22,7 @@
             android:layout_alignParentEnd="true"
             android:padding="3dp"
             android:id="@+id/openWritePage"
-            android:src="@drawable/ic_edit"
+            android:src="@drawable/ic_outline_list_alt_add"
             android:layout_width="32dp"
             android:layout_height="32dp" />
     </RelativeLayout>

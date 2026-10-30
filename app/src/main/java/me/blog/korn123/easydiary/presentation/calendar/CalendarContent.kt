@@ -78,6 +78,7 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.CustomCircleIconButton
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
@@ -254,20 +255,20 @@ fun CalendarContent(
                     ).show()
                 },
             ) {
-                val millis =
-                    selection
-                        ?.atStartOfDay(ZoneId.systemDefault())
-                        ?.toInstant()
-                        ?.toEpochMilli()
-                        ?: visibleMonth
-                            .atDay(1)
-                            .atStartOfDay(ZoneId.systemDefault())
-                            .toInstant()
-                            .toEpochMilli()
+//                val millis =
+//                    selection
+//                        ?.atStartOfDay(ZoneId.systemDefault())
+//                        ?.toInstant()
+//                        ?.toEpochMilli()
+//                        ?: visibleMonth
+//                            .atDay(1)
+//                            .atStartOfDay(ZoneId.systemDefault())
+//                            .toInstant()
+//                            .toEpochMilli()
                 TransitionHelper.startActivityWithTransition(
                     context.findActivity(),
                     Intent(context, DiaryWritingActivity::class.java).apply {
-                        putExtra(SettingConstants.INITIALIZE_TIME_MILLIS, millis)
+//                        putExtra(SettingConstants.INITIALIZE_TIME_MILLIS, millis)
                     },
                 )
             }
@@ -466,23 +467,16 @@ fun MonthHeader(
                 )
             }
 
-            Box(
+            CustomCircleIconButton(
                 modifier =
                     Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(30.dp)
-                        .clip(CircleShape)
-                        .background(Color(context.config.primaryColor))
-                        .clickable(onClick = onWriteClick),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
-                    contentDescription = "Write Diary",
-                    tint = Color.White,
-                    modifier = Modifier.size(14.dp),
-                )
-            }
+                        .align(Alignment.CenterEnd),
+                iconResourceId = R.drawable.ic_outline_list_alt_add,
+                contentDescription = "Write Diary",
+                iconPadding = 1.dp,
+                elevation = 3.dp,
+                onClick = { onWriteClick() },
+            )
         }
         DaysOfWeekTitle(daysOfWeek = daysOfWeek)
     }

@@ -91,7 +91,7 @@
                     android:visibility="visible"
                     app:fabSize="mini"
                     app:maxImageSize="15dp"
-                    app:srcCompat="@drawable/ic_edit" />
+                    app:srcCompat="@drawable/ic_outline_list_alt_add" />
 
                 <LinearLayout
                     android:id="@+id/fragment_diary_previous100"

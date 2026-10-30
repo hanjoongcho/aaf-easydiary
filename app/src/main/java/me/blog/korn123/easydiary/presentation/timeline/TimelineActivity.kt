@@ -51,6 +51,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -278,6 +279,7 @@ fun TimelineScreen(
         contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         containerColor = Color(context.config.screenBackgroundColor),
         topBar = {
+            // TODO: EasyDiaryActionBar 컴포저블 적용가능한 구조로 수정
             TopAppBar(
                 title = {
                     Text(
@@ -320,7 +322,7 @@ fun TimelineScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+            SmallFloatingActionButton(
                 onClick = onWriteDiaryClick,
                 containerColor = primaryColor,
                 contentColor = Color.White,
