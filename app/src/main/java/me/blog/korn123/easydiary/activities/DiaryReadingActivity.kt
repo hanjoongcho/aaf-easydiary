@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextWatcher
@@ -101,21 +100,13 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
  */
 @AndroidEntryPoint
 class DiaryReadingActivity : EasyDiaryActivity() {
-    /**
-     * The [android.support.v4.view.PagerAdapter] that will provide
-     * fragments for each of the sections. We use a
-     * [FragmentPagerAdapter] derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * [android.support.v4.app.FragmentStatePagerAdapter].
-     */
-    private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
-    private lateinit var mBinding: ActivityDiaryReadingBinding
-    private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
-    private lateinit var mDialogHighlightKeywordBinding: DialogHighlightKeywordBinding
-    private var mTextToSpeech: TextToSpeech? = null
-    private var mIsTtsInitialized = false
-    private var mPendingSpeechText: String? = null
+    private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
+    private lateinit var binding: ActivityDiaryReadingBinding
+    private lateinit var popupEncryptionBinding: PopupEncryptionBinding
+    private lateinit var dialogHighlightKeywordBinding: DialogHighlightKeywordBinding
+    private var textToSpeech: TextToSpeech? = null
+    private var isTtsInitialized = false
+    private var pendingSpeechText: String? = null
     private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
 
     private val selectValueLauncher =
@@ -124,9 +115,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val fragment =
-                    mSectionsPagerAdapter.instantiateItem(
-                        mBinding.diaryViewPager,
-                        mBinding.diaryViewPager.currentItem,
+                    sectionsPagerAdapter.instantiateItem(
+                        binding.diaryViewPager,
+                        binding.diaryViewPager.currentItem,
                     ) as PlaceholderFragment
                 val selectedValue = result.data?.getLongExtra("sequence", 0)
 
@@ -176,9 +167,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
-        mDialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
-        mBinding =
+        popupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
+        dialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
+        binding =
             ActivityDiaryReadingBinding.inflate(layoutInflater).apply {
                 setContentView(root)
                 setSupportActionBar(toolbar)
@@ -201,7 +192,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
+        sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         setupViewPager()
 
         lifecycleScope.launch {
@@ -231,20 +222,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 )
             }
 
-            mSectionsPagerAdapter.notifyDataSetChanged()
+            sectionsPagerAdapter.notifyDataSetChanged()
 
-            // savedInstanceState가 있을 때와 없을 때 모두 처리
             val targetIndex =
                 if (savedInstanceState == null) {
-                    mSectionsPagerAdapter.sequenceToPageIndex(
+                    sectionsPagerAdapter.sequenceToPageIndex(
                         intent.getLongExtra(
                             DIARY_SEQUENCE,
                             -1,
                         ),
                     )
                 } else {
-                    // 복원된 시퀀스를 사용하여 인덱스를 다시 계산
-                    mSectionsPagerAdapter.sequenceToPageIndex(
+                    sectionsPagerAdapter.sequenceToPageIndex(
                         savedInstanceState.getLong(
                             DIARY_SEQUENCE,
                             -1,
@@ -253,8 +242,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
 
             if (targetIndex >= 0) {
-                mBinding.diaryViewPager.post {
-                    mBinding.diaryViewPager.setCurrentItem(targetIndex, false)
+                binding.diaryViewPager.post {
+                    binding.diaryViewPager.setCurrentItem(targetIndex, false)
                 }
             }
 
@@ -265,11 +254,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         if (diaryList.isNotEmpty()) {
-            mSectionsPagerAdapter.notifyDataSetChanged()
-            mSectionsPagerAdapter
+            sectionsPagerAdapter.notifyDataSetChanged()
+            sectionsPagerAdapter
                 .instantiateItem(
-                    mBinding.diaryViewPager,
-                    mBinding.diaryViewPager.currentItem,
+                    binding.diaryViewPager,
+                    binding.diaryViewPager.currentItem,
                 ).run {
                     if (this is PlaceholderFragment) {
                         if (this.isAdded) this.initContents()
@@ -289,9 +278,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         val fragment =
-            mSectionsPagerAdapter.instantiateItem(
-                mBinding.diaryViewPager,
-                mBinding.diaryViewPager.currentItem,
+            sectionsPagerAdapter.instantiateItem(
+                binding.diaryViewPager,
+                binding.diaryViewPager.currentItem,
             )
         if (fragment is PlaceholderFragment) {
             outState.putLong(DIARY_SEQUENCE, fragment.getSequence())
@@ -299,18 +288,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    var mDialogSearch: AlertDialog? = null
-    var mSearchIndexes = arrayListOf<Int>()
-    var mCurrentIndexesSequence = 0
+    var dialogSearch: AlertDialog? = null
+    var searchIndexes = arrayListOf<Int>()
+    var currentIndexesSequence = 0
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment =
-            mSectionsPagerAdapter.instantiateItem(
-                mBinding.diaryViewPager,
-                mBinding.diaryViewPager.currentItem,
+            sectionsPagerAdapter.instantiateItem(
+                binding.diaryViewPager,
+                binding.diaryViewPager.currentItem,
             )
-//        val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
                 android.R.id.home -> {
@@ -337,18 +324,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     initModule(fragment.getDiaryContents())
                 }
 
-                //                R.id.postCard -> {
-//                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
-//                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-//                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-//                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
-//                }
-//                R.id.encryptData -> {
-//                    showEncryptPagePopup(fragment, ENCRYPTION)
-//                }
-//                R.id.decryptData -> {
-//                    showEncryptPagePopup(fragment, DECRYPTION)
-//                }
                 R.id.popupMenu -> {
                     createCustomOptionMenu()
                 }
@@ -382,7 +357,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         workMode: String,
         callback: ((inputPass: String) -> Unit)? = null,
     ) {
-        mPopupEncryptionBinding.run {
+        popupEncryptionBinding.run {
             updateDrawableColorInnerCardView(closePopup)
             var inputPass = ""
             var confirmPass = ""
@@ -584,7 +559,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             buttonDel.setOnClickListener(onclickListener)
 
             run {
-//            initTextSize(this, context)
                 updateTextColors(this.root)
                 updateAppViews(this.root)
                 updateCardViewPolicy(this.root)
@@ -594,9 +568,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     private fun setupViewPager() {
-        // Set up the ViewPager with the sections adapter.
-        mBinding.diaryViewPager.adapter = mSectionsPagerAdapter
-        mBinding.diaryViewPager.addOnPageChangeListener(
+        binding.diaryViewPager.adapter = sectionsPagerAdapter
+        binding.diaryViewPager.addOnPageChangeListener(
             object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(
                     position: Int,
@@ -607,13 +580,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                 override fun onPageSelected(position: Int) {
                     val fragment =
-                        mSectionsPagerAdapter.instantiateItem(
-                            mBinding.diaryViewPager,
-                            mBinding.diaryViewPager.currentItem,
+                        sectionsPagerAdapter.instantiateItem(
+                            binding.diaryViewPager,
+                            binding.diaryViewPager.currentItem,
                         )
                     fragment.let {
-//                    it.setFontsTypeface()
-//                    it.setFontsSize()
                     }
                 }
 
@@ -624,67 +595,51 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     private fun initModule(textToSpeak: String? = null) {
         textToSpeak?.let {
-            mPendingSpeechText = it
+            pendingSpeechText = it
         }
-        if (mTextToSpeech == null) {
-            mTextToSpeech =
+        if (textToSpeech == null) {
+            textToSpeech =
                 TextToSpeech(this@DiaryReadingActivity) { status ->
                     if (status == TextToSpeech.SUCCESS) {
-                        mTextToSpeech?.run {
+                        textToSpeech?.run {
                             language = Locale.getDefault()
                             setPitch(1.3f)
                             setSpeechRate(1f)
                         }
-                        mIsTtsInitialized = true
-                        mPendingSpeechText?.let { text ->
+                        isTtsInitialized = true
+                        pendingSpeechText?.let { text ->
                             textToSpeech(text)
-                            mPendingSpeechText = null
+                            pendingSpeechText = null
                         }
                     } else {
-                        mIsTtsInitialized = false
+                        isTtsInitialized = false
                     }
                 }
-        } else if (mIsTtsInitialized) {
-            mPendingSpeechText?.let { text ->
+        } else if (isTtsInitialized) {
+            pendingSpeechText?.let { text ->
                 textToSpeech(text)
-                mPendingSpeechText = null
+                pendingSpeechText = null
             }
         }
     }
 
     private fun destroyModule() {
-        mTextToSpeech?.run {
+        textToSpeech?.run {
             stop()
             shutdown()
-            mTextToSpeech = null
+            textToSpeech = null
         }
-        mIsTtsInitialized = false
-        mPendingSpeechText = null
+        isTtsInitialized = false
+        pendingSpeechText = null
     }
 
     private fun textToSpeech(text: String) {
         ttsGreater21(text)
     }
 
-    @Suppress("DEPRECATION")
-    private fun ttsUnder20(text: String) {
-        val map = HashMap<String, String>()
-        map[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "MessageId"
-        mTextToSpeech?.setOnUtteranceProgressListener(
-            object : UtteranceProgressListener() {
-                override fun onStart(utteranceId: String) {}
-
-                override fun onError(utteranceId: String) {}
-
-                override fun onDone(utteranceId: String) {}
-            },
-        )
-        mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, map)
-    }
-
     private fun ttsGreater21(text: String) {
         val utteranceId = this.hashCode().toString() + ""
-        mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
     }
 
     private fun createCustomOptionMenu() {
@@ -696,9 +651,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 updateTextColors(this)
                 FontUtils.setFontsTypeface(applicationContext, null, this, true)
                 val fragment =
-                    mSectionsPagerAdapter.instantiateItem(
-                        mBinding.diaryViewPager,
-                        mBinding.diaryViewPager.currentItem,
+                    sectionsPagerAdapter.instantiateItem(
+                        binding.diaryViewPager,
+                        binding.diaryViewPager.currentItem,
                     ) as PlaceholderFragment
                 pmrBinding.run {
                     lifecycleScope.launch {
@@ -772,15 +727,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                                 R.id.find -> {
                                     fun highLight() {
-                                        // Dialog for search keyword
                                         when (
-                                            mDialogHighlightKeywordBinding.searchKeywordQuery.text
+                                            dialogHighlightKeywordBinding.searchKeywordQuery.text
                                                 .toString()
                                                 .isNotEmpty()
                                         ) {
                                             true -> {
                                                 fragment.highlightDiary(
-                                                    mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
+                                                    dialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
                                                     true,
                                                 )
                                             }
@@ -789,37 +743,36 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                 fragment.clearHighLight()
                                             }
                                         }
-//                        mDialogSearch?.dismiss()
                                     }
 
                                     fun updateLabel() {
-                                        mDialogHighlightKeywordBinding.indexes.text =
-                                            "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
+                                        dialogHighlightKeywordBinding.indexes.text =
+                                            "$currentIndexesSequence / ${searchIndexes.size}"
                                     }
-                                    mDialogSearch?.show() ?: run {
+                                    dialogSearch?.show() ?: run {
                                         val builder =
                                             AlertDialog.Builder(this@DiaryReadingActivity).apply {
                                                 setPositiveButton(getString(android.R.string.ok)) { _, _ ->
                                                 }
                                             }
-                                        mDialogSearch = builder.create()
-                                        mDialogHighlightKeywordBinding.run {
+                                        dialogSearch = builder.create()
+                                        dialogHighlightKeywordBinding.run {
                                             next.setOnClickListener {
-                                                if (mCurrentIndexesSequence < mSearchIndexes.size) {
-                                                    mCurrentIndexesSequence = mCurrentIndexesSequence.plus(1)
+                                                if (currentIndexesSequence < searchIndexes.size) {
+                                                    currentIndexesSequence = currentIndexesSequence.plus(1)
                                                     fragment.moveScroll(
                                                         searchKeywordQuery.text.toString(),
-                                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                                        searchIndexes[currentIndexesSequence.minus(1)],
                                                     )
                                                     updateLabel()
                                                 }
                                             }
                                             previous.setOnClickListener {
-                                                if (mCurrentIndexesSequence > 1) {
-                                                    mCurrentIndexesSequence = mCurrentIndexesSequence.minus(1)
+                                                if (currentIndexesSequence > 1) {
+                                                    currentIndexesSequence = currentIndexesSequence.minus(1)
                                                     fragment.moveScroll(
                                                         searchKeywordQuery.text.toString(),
-                                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                                        searchIndexes[currentIndexesSequence.minus(1)],
                                                     )
                                                     updateLabel()
                                                 }
@@ -840,17 +793,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                         i1: Int,
                                                         i2: Int,
                                                     ) {
-//                                    makeToast(charSequence.toString())
-                                                        mCurrentIndexesSequence = 0
-                                                        mSearchIndexes.clear()
-                                                        mSearchIndexes.addAll(
+                                                        currentIndexesSequence = 0
+                                                        searchIndexes.clear()
+                                                        searchIndexes.addAll(
                                                             EasyDiaryUtils.searchWordIndexes(
                                                                 fragment.getContents(),
                                                                 charSequence.toString(),
                                                             ),
                                                         )
                                                         highLight()
-                                                        if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
+                                                        if (searchIndexes.isNotEmpty()) currentIndexesSequence = 1
                                                         updateLabel()
                                                     }
 
@@ -865,10 +817,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                     this,
                                                     mCustomLineSpacing,
                                                 )
-//                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
                                                 updateAlertDialogWithIcon(
                                                     DialogMode.INFO,
-                                                    mDialogSearch!!,
+                                                    dialogSearch!!,
                                                     null,
                                                     this,
                                                     null,
@@ -914,11 +865,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
      */
     @AndroidEntryPoint
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
-        private lateinit var mRootView: ViewGroup
-        private lateinit var mBinding: FragmentDiaryReadBinding
-        private val mViewModel: DiaryReadViewModel by viewModels()
-        private var mPrimaryColor = 0
-        private var mStoredContents: String? = null
+        private lateinit var rootView: ViewGroup
+        private lateinit var binding: FragmentDiaryReadBinding
+        private val viewModel: DiaryReadViewModel by viewModels()
+        private var primaryColor = 0
+        private var storedContents: String? = null
 
         private var linkedDiaryViewModel: LinkedDiaryViewModel = LinkedDiaryViewModel()
         private val diaryViewModel: DiaryViewModel by viewModels()
@@ -928,14 +879,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             container: ViewGroup?,
             savedInstanceState: Bundle?,
         ): View {
-            mBinding =
+            binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
-            mBinding.lifecycleOwner = this
-            mBinding.viewModel = mViewModel
-            mRootView = mBinding.mainHolder
-            return mRootView
-//            mRootView = inflater.inflate(R.layout.fragment_diary_read, container, false) as ViewGroup
-//            return mRootView
+            binding.lifecycleOwner = this
+            binding.viewModel = viewModel
+            rootView = binding.mainHolder
+            return rootView
         }
 
         override fun onViewCreated(
@@ -947,7 +896,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 config.primaryColor,
                 R.drawable.ic_map_marker_2,
             )
-            mRootView.let {
+            rootView.let {
                 context?.run {
                     updateTextColors(it, 0, 0)
                     updateAppViews(it)
@@ -960,7 +909,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             setFontsSize()
             initContents()
 
-            mBinding.composeView.setContent {
+            binding.composeView.setContent {
                 AppTheme {
                     Column(
                         modifier =
@@ -969,7 +918,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 .navigationBarsPadding(),
                     ) {
                         val parentDiaries by linkedDiaryViewModel.parentDiaries.collectAsState()
-                        // diary parents items
                         if (parentDiaries.isNotEmpty()) {
                             CategoryTitleCard(
                                 title = getString(R.string.link_entry_category_parent),
@@ -1024,7 +972,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
 
                         val childDiaries by linkedDiaryViewModel.childDiaries.collectAsState()
-                        // diary child items
                         if (childDiaries.isNotEmpty()) {
                             CategoryTitleCard(
                                 title = getString(R.string.link_entry_category_child),
@@ -1084,7 +1031,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun getSequence() = arguments?.getLong(DIARY_SEQUENCE) ?: -1L
 
-        fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
+        fun getDiaryContents(): String = binding.diaryContents.text.toString()
 
         suspend fun isEncryptContents() = diaryViewModel.findDiaryById(getSequence())?.isEncrypt ?: false
 
@@ -1096,11 +1043,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         ) {
             context?.config?.run {
                 if (diarySearchQueryCaseSensitive) {
-                    EasyDiaryUtils.highlightString(mBinding.diaryTitle, query)
-                    EasyDiaryUtils.highlightString(mBinding.diaryContents, query)
+                    EasyDiaryUtils.highlightString(binding.diaryTitle, query)
+                    EasyDiaryUtils.highlightString(binding.diaryContents, query)
                 } else {
-                    EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryTitle, query)
-                    EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryContents, query)
+                    EasyDiaryUtils.highlightStringIgnoreCase(binding.diaryTitle, query)
+                    EasyDiaryUtils.highlightStringIgnoreCase(binding.diaryContents, query)
                 }
             }
 
@@ -1114,25 +1061,25 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             startIndex: Int = 0,
         ) {
             val index =
-                mBinding.diaryContents.text
+                binding.diaryContents.text
                     .toString()
                     .indexOf(query, startIndex, true)
             if (index > 0) {
-                val layout = mBinding.diaryContents.layout
-                mBinding.scrollDiaryContents.scrollTo(
+                val layout = binding.diaryContents.layout
+                binding.scrollDiaryContents.scrollTo(
                     0,
                     layout.getLineTop(layout.getLineForOffset(index)),
                 )
             }
         }
 
-        fun getContents() = mBinding.diaryContents.text.toString()
+        fun getContents() = binding.diaryContents.text.toString()
 
         fun clearHighLight() {
-            mBinding.diaryTitle.run {
+            binding.diaryTitle.run {
                 this.text = SpannableString(this.text).apply { EasyDiaryUtils.removeSpans(this) }
             }
-            mBinding.diaryContents.run {
+            binding.diaryContents.run {
                 this.text = SpannableString(this.text).apply { EasyDiaryUtils.removeSpans(this) }
             }
         }
@@ -1140,15 +1087,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         fun initContents() {
             lifecycleScope.launch {
                 val diaryDto = diaryViewModel.findDiaryById(getSequence())!!
-                mBinding.run {
+                binding.run {
                     diaryTitle.visibility =
                         if (diaryDto.title.isNullOrEmpty()) View.GONE else View.VISIBLE
                     diaryTitle.text = diaryDto.title
 
                     EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-                    if (mStoredContents != diaryDto.contents) {
-                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
-                        mStoredContents = diaryDto.contents
+                    if (storedContents != diaryDto.contents) {
+                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents ?: "")
+                        storedContents = diaryDto.contents
                         Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
                     }
                     date.text =
@@ -1167,7 +1114,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     initBottomContainer()
 
                     arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
-                        if (query?.isNotEmpty() == true) {
+                        if (query.isNotEmpty()) {
                             highlightDiary(query)
                         }
                     }
@@ -1175,26 +1122,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     val weatherFlag = diaryDto.symbolSequence
                     FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
 
-                    // TODO fixme elegance
                     val photoCount = diaryDto.photoUris?.size ?: 0
-                    mBinding.run {
+                    binding.run {
                         if (photoCount > 0) {
                             photoContainerFlexBox.visibility = View.VISIBLE
                             if (photoContainerFlexBox.isNotEmpty()) photoContainerFlexBox.removeAllViews()
 
                             context?.let { appContext ->
-//                        val thumbnailSize = appContext.config.settingThumbnailSize
                                 diaryDto
                                     .photoUrisWithEncryptionPolicy()
                                     ?.forEachIndexed { index, item ->
-//                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
-//                                val imageView = when (requireActivity().isLandScape()) {
-//                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
-//                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)
-//                                }
-//                                photoContainer.addView(imageView)
-//                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
-
                                         photoContainerFlexBox.addView(
                                             createAttachedPhotoViewForFlexBox(
                                                 requireActivity(),
@@ -1219,16 +1156,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     context?.run {
                         if (config.enableLocationInfo) {
                             diaryDto.location?.let {
-//                        locationLabel.setTextColor(config.textColor)
-//                        locationContainer.background = getLabelBackground()
                                 locationLabel.text = it.address
                             }
                         }
 
                         if (config.enableCountCharacters) {
                             contentsLength.run {
-//                        setTextColor(config.textColor)
-//                        background = getLabelBackground()
                                 text =
                                     getString(
                                         R.string.diary_contents_length,
@@ -1247,7 +1180,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
                     }
                 }
-                linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it -> it.currentTimeMillis })
+                linkedDiaryViewModel.updateChildDiaries(linkedDiaries.sortedBy { it.currentTimeMillis })
                 linkedDiaryViewModel.updateParentDiaries(
                     diaryViewModel.findParentDiariesOf(
                         diaryDto.diaryId,
@@ -1258,18 +1191,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         private fun initBottomContainer() {
             context?.let {
-                mPrimaryColor = it.config.primaryColor
+                primaryColor = it.config.primaryColor
             }
         }
 
         private fun setFontsTypeface() {
             activity?.let { it ->
-                FontUtils.setFontsTypeface(it, "", mRootView)
+                FontUtils.setFontsTypeface(it, "", rootView)
             }
         }
 
         private fun setFontsSize() {
-            requireContext().initTextSize(mRootView)
+            requireContext().initTextSize(rootView)
         }
 
         fun encryptData(inputPass: String) {
@@ -1291,9 +1224,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         suspend fun decryptDataOnce(inputPass: String) {
             diaryViewModel.findDiaryById(getSequence())?.let { diaryDto ->
-                mBinding.run {
+                binding.run {
                     diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
-//                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
                     requireActivity().applyMarkDownPolicy(
                         diaryContents,
                         JasyptUtils.decrypt(diaryDto.contents!!, inputPass),
@@ -1325,13 +1257,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             return result
         }
 
-        fun getContentsPositionY(): Int = (mBinding.diaryContents.parent.parent.parent as ScrollView).scrollY
+        fun getContentsPositionY(): Int = (binding.diaryContents.parent.parent.parent as ScrollView).scrollY
 
         companion object {
-            /**
-             * Returns a new instance of this fragment for the given section
-             * number.
-             */
             fun newInstance(
                 sequence: Long,
                 query: String?,
@@ -1362,18 +1290,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
     }
 
-    /**
-     * A [FragmentPagerAdapter] that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    inner class SectionsPagerAdapter(
+    class SectionsPagerAdapter(
         fm: androidx.fragment.app.FragmentManager,
         private val diaryList: List<DiaryDomain>,
         private val query: String?,
     ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getItem(position: Int): androidx.fragment.app.Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
         }
 

@@ -176,7 +176,7 @@ class DiaryMainItemAdapter(
                     }
                 }
 
-                when ((activity as DiaryMainActivity).mDiaryMode) {
+                when ((activity as DiaryMainActivity).diaryMode) {
                     DiaryMode.READ -> {
                         selection.visibility = View.GONE
                     }

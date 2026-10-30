@@ -21,13 +21,11 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
@@ -47,11 +45,11 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main)
-        mBinding.lifecycleOwner = this
-        mBinding.viewModel = viewModel
-
-        setSupportActionBar(mBinding.toolBar)
+        mBinding =
+            ActivityDiaryMainBinding.inflate(layoutInflater).apply {
+                setContentView(root)
+                setSupportActionBar(toolBar)
+            }
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
     }

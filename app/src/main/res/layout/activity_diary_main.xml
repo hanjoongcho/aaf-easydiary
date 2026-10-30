@@ -2,13 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="view_model"
-            type="me.blog.korn123.easydiary.presentation.main.DiaryMainViewModel" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,13 +21,13 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/main_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:padding="@dimen/component_margin_small"
             android:paddingTop="0dp"
-            android:padding="@dimen/component_margin_small">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/layout_banner_container"
@@ -50,8 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/component_margin_small"
-                android:visibility="visible"
                 android:clipToPadding="false"
+                android:visibility="visible"
                 tools:visibility="gone" />
 
             <com.simplemobiletools.commons.views.MyTextView
@@ -73,10 +66,12 @@
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose_view"
-            android:layout_gravity="bottom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
 
-        <include android:id="@+id/partial_compose_loading_screen" layout="@layout/partial_compose_loading_screen" />
+        <include
+            android:id="@+id/partial_compose_loading_screen"
+            layout="@layout/partial_compose_loading_screen" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
