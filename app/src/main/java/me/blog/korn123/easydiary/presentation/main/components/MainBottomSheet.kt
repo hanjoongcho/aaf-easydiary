@@ -373,18 +373,21 @@ fun MainBottomSheet(
                         iconResourceId = R.drawable.ic_move_top,
                         contentDescription = "Move top",
                         iconPadding = 1.dp,
+                        elevation = 3.dp,
                         onClick = { onMoveTop() },
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     CustomCircleIconButton(
                         iconResourceId = R.drawable.ic_move_bottom,
                         contentDescription = "Move bottom",
                         iconPadding = 1.dp,
+                        elevation = 3.dp,
                         onClick = { onMoveBottom() },
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     CustomCircleIconButton(
                         iconResourceId = R.drawable.ic_outline_mic,
+                        elevation = 3.dp,
                         contentDescription = "Speech input",
                         onClick = { onMicrophoneClick() },
                     )

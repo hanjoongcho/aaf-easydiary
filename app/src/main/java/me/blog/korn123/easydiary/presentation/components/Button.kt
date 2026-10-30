@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -109,6 +110,7 @@ fun CustomElevatedSquareButton(
 @Composable
 fun CustomCircleIconButton(
     iconResourceId: Int,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     buttonSize: Dp = 32.dp,
     iconSize: Dp = 20.dp,
@@ -116,12 +118,14 @@ fun CustomCircleIconButton(
     containerColor: Color = Color(LocalContext.current.config.primaryColor),
     tint: Color = Color.White,
     rippleColor: Color = Color.White,
+    elevation: Dp = 0.dp,
     onClick: () -> Unit,
 ) {
     Box(
         modifier =
-            Modifier
+            modifier
                 .size(buttonSize)
+                .shadow(elevation = elevation, shape = CircleShape)
                 .clip(CircleShape)
                 .background(containerColor)
                 .clickable(
