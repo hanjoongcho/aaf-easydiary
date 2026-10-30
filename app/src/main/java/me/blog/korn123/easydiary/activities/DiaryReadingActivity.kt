@@ -32,6 +32,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isNotEmpty
@@ -350,116 +352,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 R.id.popupMenu -> {
                     createCustomOptionMenu()
                 }
-
-                R.id.highlightText -> {
-                    fun highLight() {
-                        // Dialog for search keyword
-                        when (
-                            mDialogHighlightKeywordBinding.searchKeywordQuery.text
-                                .toString()
-                                .isNotEmpty()
-                        ) {
-                            true -> {
-                                fragment.highlightDiary(
-                                    mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
-                                    true,
-                                )
-                            }
-
-                            false -> {
-                                fragment.clearHighLight()
-                            }
-                        }
-//                        mDialogSearch?.dismiss()
-                    }
-
-                    fun updateLabel() {
-                        mDialogHighlightKeywordBinding.indexes.text =
-                            "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
-                    }
-                    mDialogSearch?.show() ?: run {
-                        val builder =
-                            AlertDialog.Builder(this).apply {
-                                setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                                }
-                            }
-                        mDialogSearch = builder.create()
-                        mDialogHighlightKeywordBinding.run {
-                            next.setOnClickListener {
-                                if (mCurrentIndexesSequence < mSearchIndexes.size) {
-                                    mCurrentIndexesSequence = mCurrentIndexesSequence.plus(1)
-                                    fragment.moveScroll(
-                                        searchKeywordQuery.text.toString(),
-                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
-                                    )
-                                    updateLabel()
-                                }
-                            }
-                            previous.setOnClickListener {
-                                if (mCurrentIndexesSequence > 1) {
-                                    mCurrentIndexesSequence = mCurrentIndexesSequence.minus(1)
-                                    fragment.moveScroll(
-                                        searchKeywordQuery.text.toString(),
-                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
-                                    )
-                                    updateLabel()
-                                }
-                            }
-                            searchKeywordQuery.addTextChangedListener(
-                                object : TextWatcher {
-                                    override fun beforeTextChanged(
-                                        charSequence: CharSequence,
-                                        i: Int,
-                                        i1: Int,
-                                        i2: Int,
-                                    ) {
-                                    }
-
-                                    override fun onTextChanged(
-                                        charSequence: CharSequence,
-                                        i: Int,
-                                        i1: Int,
-                                        i2: Int,
-                                    ) {
-//                                    makeToast(charSequence.toString())
-                                        mCurrentIndexesSequence = 0
-                                        mSearchIndexes.clear()
-                                        mSearchIndexes.addAll(
-                                            EasyDiaryUtils.searchWordIndexes(
-                                                fragment.getContents(),
-                                                charSequence.toString(),
-                                            ),
-                                        )
-                                        highLight()
-                                        if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
-                                        updateLabel()
-                                    }
-
-                                    override fun afterTextChanged(editable: Editable) {}
-                                },
-                            )
-                            root.run {
-                                updateTextColors(this)
-                                FontUtils.setFontsTypeface(
-                                    applicationContext,
-                                    null,
-                                    this,
-                                    mCustomLineSpacing,
-                                )
-//                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
-                                updateAlertDialogWithIcon(
-                                    DialogMode.INFO,
-                                    mDialogSearch!!,
-                                    null,
-                                    this,
-                                    null,
-                                    200,
-                                )
-                            }
-                            updateLabel()
-                        }
-                    }
-                }
             }
         }
         return true
@@ -467,10 +359,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_diary_reading, menu)
-        when (config.enableDebugMode) {
-            true -> menu.findItem(R.id.highlightText).isVisible = true
-            false -> menu.findItem(R.id.highlightText).isVisible = false
-        }
         return true
     }
 
@@ -881,25 +769,140 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         selectValueLauncher.launch(this)
                                     }
                                 }
+
+                                R.id.find -> {
+                                    fun highLight() {
+                                        // Dialog for search keyword
+                                        when (
+                                            mDialogHighlightKeywordBinding.searchKeywordQuery.text
+                                                .toString()
+                                                .isNotEmpty()
+                                        ) {
+                                            true -> {
+                                                fragment.highlightDiary(
+                                                    mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
+                                                    true,
+                                                )
+                                            }
+
+                                            false -> {
+                                                fragment.clearHighLight()
+                                            }
+                                        }
+//                        mDialogSearch?.dismiss()
+                                    }
+
+                                    fun updateLabel() {
+                                        mDialogHighlightKeywordBinding.indexes.text =
+                                            "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
+                                    }
+                                    mDialogSearch?.show() ?: run {
+                                        val builder =
+                                            AlertDialog.Builder(this@DiaryReadingActivity).apply {
+                                                setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                                                }
+                                            }
+                                        mDialogSearch = builder.create()
+                                        mDialogHighlightKeywordBinding.run {
+                                            next.setOnClickListener {
+                                                if (mCurrentIndexesSequence < mSearchIndexes.size) {
+                                                    mCurrentIndexesSequence = mCurrentIndexesSequence.plus(1)
+                                                    fragment.moveScroll(
+                                                        searchKeywordQuery.text.toString(),
+                                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                                    )
+                                                    updateLabel()
+                                                }
+                                            }
+                                            previous.setOnClickListener {
+                                                if (mCurrentIndexesSequence > 1) {
+                                                    mCurrentIndexesSequence = mCurrentIndexesSequence.minus(1)
+                                                    fragment.moveScroll(
+                                                        searchKeywordQuery.text.toString(),
+                                                        mSearchIndexes[mCurrentIndexesSequence.minus(1)],
+                                                    )
+                                                    updateLabel()
+                                                }
+                                            }
+                                            searchKeywordQuery.addTextChangedListener(
+                                                object : TextWatcher {
+                                                    override fun beforeTextChanged(
+                                                        charSequence: CharSequence,
+                                                        i: Int,
+                                                        i1: Int,
+                                                        i2: Int,
+                                                    ) {
+                                                    }
+
+                                                    override fun onTextChanged(
+                                                        charSequence: CharSequence,
+                                                        i: Int,
+                                                        i1: Int,
+                                                        i2: Int,
+                                                    ) {
+//                                    makeToast(charSequence.toString())
+                                                        mCurrentIndexesSequence = 0
+                                                        mSearchIndexes.clear()
+                                                        mSearchIndexes.addAll(
+                                                            EasyDiaryUtils.searchWordIndexes(
+                                                                fragment.getContents(),
+                                                                charSequence.toString(),
+                                                            ),
+                                                        )
+                                                        highLight()
+                                                        if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
+                                                        updateLabel()
+                                                    }
+
+                                                    override fun afterTextChanged(editable: Editable) {}
+                                                },
+                                            )
+                                            root.run {
+                                                updateTextColors(this)
+                                                FontUtils.setFontsTypeface(
+                                                    applicationContext,
+                                                    null,
+                                                    this,
+                                                    mCustomLineSpacing,
+                                                )
+//                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
+                                                updateAlertDialogWithIcon(
+                                                    DialogMode.INFO,
+                                                    mDialogSearch!!,
+                                                    null,
+                                                    this,
+                                                    null,
+                                                    200,
+                                                )
+                                            }
+                                            updateLabel()
+                                        }
+                                    }
+                                }
                             }
                             popupWindow?.dismiss()
                         }
-                    delete.setOnClickListener(itemClickListener)
+
                     postcard.setOnClickListener(itemClickListener)
                     encryptData.setOnClickListener(itemClickListener)
                     decryptData.setOnClickListener(itemClickListener)
+                    delete.setOnClickListener(itemClickListener)
                     linkEntry.setOnClickListener(itemClickListener)
 
                     updateDrawableColorInnerCardView(imgPostcard)
                     updateDrawableColorInnerCardView(imgEncryptData)
                     updateDrawableColorInnerCardView(imgDecryptData)
                     updateDrawableColorInnerCardView(imgDelete)
-                    updateDrawableColorInnerCardView(imgContains)
+                    updateDrawableColorInnerCardView(imgLinkEntry)
 
                     if (BuildConfig.FLAVOR == "lab") {
                         push.visibility = View.VISIBLE
                         push.setOnClickListener(itemClickListener)
-                        updateDrawableColorInnerCardView(imgPush)
+                        updateDrawableColorInnerCardView(imgPush, Color.Red.toArgb())
+
+                        find.visibility = View.VISIBLE
+                        find.setOnClickListener(itemClickListener)
+                        updateDrawableColorInnerCardView(imgFind, Color.Red.toArgb())
                     }
                 }
             }

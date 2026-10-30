@@ -24,6 +24,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_picture_w"
                     android:id="@+id/img_postcard"
+                    android:padding="2dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -37,6 +38,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_padlock"
                     android:id="@+id/img_encrypt_data"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -50,6 +52,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_unlock"
                     android:id="@+id/img_decrypt_data"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -57,10 +60,23 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/linkEntry">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/ic_delete_link"
+                    android:id="@+id/img_link_entry"
+                    android:padding="3dp"
+                    style="@style/image_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/link_entry" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:id="@+id/delete">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_delete_w"
                     android:id="@+id/img_delete"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -68,14 +84,15 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
-                android:id="@+id/linkEntry">
+                android:visibility="gone"
+                android:id="@+id/find">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_delete_link"
-                    android:id="@+id/img_contains"
+                    android:src="@drawable/ic_outline_find_in_page_64"
+                    android:id="@+id/img_find"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
-                    android:text="@string/link_entry" />
+                    android:text="Find Word" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
@@ -84,6 +101,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_github_11"
                     android:id="@+id/img_push"
+                    android:padding="1dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"

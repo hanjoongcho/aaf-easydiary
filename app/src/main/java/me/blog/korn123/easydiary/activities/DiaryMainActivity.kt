@@ -587,20 +587,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
 
-                    R.id.quickSettings -> {
-                        TransitionHelper.startActivityWithTransition(
-                            this,
-                            Intent(this, QuickSettingsActivity::class.java),
-                        )
-                    }
-
-                    R.id.devConsole -> {
-                        TransitionHelper.startActivityWithTransition(
-                            this,
-                            Intent(this, DevActivity::class.java),
-                        )
-                    }
-
                     R.id.gridLayout -> {
                         openGridSettingDialog(
                             mBinding.mainHolder,
@@ -622,8 +608,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             attachedPhotoGallery.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
-            quickSettings.setOnClickListener(customItemClickListener)
-            devConsole.setOnClickListener(customItemClickListener)
             gridLayout.setOnClickListener(customItemClickListener)
         }
     }
@@ -648,13 +632,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 findViewById(R.id.compose_view),
             )
         mPopupMenuBinding.run {
-            updateDrawableColorInnerCardView(imgDevConsole)
             updateDrawableColorInnerCardView(imgPostcard)
             updateDrawableColorInnerCardView(imgAttachedPhotoGallery)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgGridLayout)
             updateDrawableColorInnerCardView(imgSettings)
-            updateDrawableColorInnerCardView(imgQuickSettings)
         }
     }
 

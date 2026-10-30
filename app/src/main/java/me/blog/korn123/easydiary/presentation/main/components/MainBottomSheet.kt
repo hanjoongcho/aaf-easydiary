@@ -492,7 +492,7 @@ fun MainBottomSheet(
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_new_entry) ?: "",
                         iconResourceId = R.drawable.ic_outline_list_alt_add,
-                        iconSize = 16.dp,
+                        iconSize = 18.dp,
                     ) {
                         activity?.let {
                             val createDiary = Intent(it, DiaryWritingActivity::class.java)
@@ -505,14 +505,14 @@ fun MainBottomSheet(
                     CustomElevatedSquareButton(
                         text = "TODAY",
                         iconResourceId = R.drawable.ic_outline_today,
-                        iconSize = 16.dp,
+                        iconSize = 18.dp,
                     ) {
                         onMoveToday()
                     }
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.button_tree_view) ?: "",
                         iconResourceId = R.drawable.ic_outline_tree,
-                        iconSize = 16.dp,
+                        iconSize = 18.dp,
                     ) {
                         activity?.let {
                             TransitionHelper.startActivityWithTransition(
@@ -524,6 +524,7 @@ fun MainBottomSheet(
                     CustomElevatedSquareButton(
                         text = activity?.getString(R.string.menu_timeline) ?: "",
                         iconResourceId = R.drawable.ic_outline_view_timeline,
+                        iconSize = 18.dp,
                     ) {
                         activity?.let {
                             TransitionHelper.startActivityWithTransition(
@@ -537,7 +538,7 @@ fun MainBottomSheet(
                         CustomElevatedSquareButton(
                             iconResourceId = R.drawable.ic_bug_2,
                             text = "Debug",
-                            iconSize = 16.dp,
+                            iconSize = 18.dp,
                             tint = debugColor,
                         ) {
                             activity?.let {
@@ -550,7 +551,7 @@ fun MainBottomSheet(
                         CustomElevatedSquareButton(
                             text = activity?.getString(R.string.button_quick_settings) ?: "",
                             iconResourceId = R.drawable.ic_running,
-                            iconSize = 16.dp,
+                            iconSize = 18.dp,
                             tint = debugColor,
                         ) {
                             activity?.let {
@@ -563,7 +564,7 @@ fun MainBottomSheet(
                         CustomElevatedSquareButton(
                             text = "Calendar",
                             iconResourceId = R.drawable.ic_outline_calendar_month,
-                            iconSize = 16.dp,
+                            iconSize = 18.dp,
                             tint = debugColor,
                         ) {
                             activity?.let {

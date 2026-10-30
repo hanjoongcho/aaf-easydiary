@@ -14,12 +14,6 @@
         android:title="@string/text_to_speech"
         app:showAsAction="always" />
     <item
-        android:id="@+id/highlightText"
-        android:icon="@drawable/ic_outline_find_in_page"
-        android:orderInCategory="100"
-        android:title="Highlight"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/ic_outline_menu"
         android:id="@+id/popupMenu"
         android:orderInCategory="100"
