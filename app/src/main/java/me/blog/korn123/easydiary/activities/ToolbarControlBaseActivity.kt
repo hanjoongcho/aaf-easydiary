@@ -59,12 +59,6 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
         setSupportActionBar(mBinding.toolBar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
-
-        lifecycleScope.launch {
-            viewModel.symbol.collect { symbolSequence ->
-                FlavorUtils.initWeatherView(this@ToolbarControlBaseActivity, mBinding.symbolImageView, symbolSequence)
-            }
-        }
     }
 
     protected abstract fun createScrollable(): S
@@ -137,7 +131,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
     }
 
     private fun hideToolbar() {
-        val translationY = -(mBinding.appBar.height + mBinding.searchCard.height).toFloat()
+        val translationY = -(mBinding.appBar.height).toFloat()
         moveToolbar(translationY)
 //        mBinding.searchCard.useCompatPadding = false
         updateStatusBarAppearance(android.graphics.Color.WHITE)
@@ -150,18 +144,19 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
         mValueAnimator?.cancel()
 
-        mValueAnimator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).apply {
-            duration = 500
-            addUpdateListener { animation ->
-                val translationY = animation.animatedValue as Float
-                ViewHelper.setTranslationY(mBinding.appBar, translationY)
-                ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
-                val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
-                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
-                (mBinding.mainHolder as View).requestLayout()
+        mValueAnimator =
+            ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).apply {
+                duration = 500
+                addUpdateListener { animation ->
+                    val translationY = animation.animatedValue as Float
+                    ViewHelper.setTranslationY(mBinding.appBar, translationY)
+                    ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
+                    val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
+                    lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
+                    (mBinding.mainHolder as View).requestLayout()
+                }
+                start()
             }
-            start()
-        }
     }
 
     private fun getScreenHeight(): Int = (findViewById<View>(android.R.id.content).height).minus(navigationBarHeight)

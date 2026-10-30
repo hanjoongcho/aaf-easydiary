@@ -135,8 +135,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                    mBinding.query.setText(it[0])
-                    mBinding.query.setSelection(it[0].length)
+                    diaryViewModel.query.value = it[0]
+//                    mBinding.query.setText(it[0])
+//                    mBinding.query.setSelection(it[0].length)
                 }
             }
             pauseLock()
@@ -204,8 +205,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             FontUtils.checkFontSetting(this@DiaryMainActivity)
             initDiaryGrid()
             initDummyData()
-            updateDrawableColorInnerCardView(mBinding.imgClearQuery)
-            bindEvent()
             confirmPrePermissions()
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
             setupPopupMenu()
@@ -645,51 +644,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
-    private fun bindEvent() {
-        mBinding.query.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int,
-                ) {
-                }
-
-                override fun onTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int,
-                ) {
-                    val newQuery = charSequence.toString()
-                    if (diaryViewModel.query.value != newQuery) {
-                        diaryViewModel.query.value = newQuery
-                    }
-                }
-
-                override fun afterTextChanged(editable: Editable) {}
-            },
-        )
-
-        mBinding.imgClearQuery.setOnClickListener {
-            selectFeelingSymbol()
-            mBinding.query.text = null
-        }
-
-        mBinding.feelingSymbolButton.setOnClickListener {
-            lifecycleScope.launch {
-                openFeelingSymbolDialog(
-                    getString(R.string.diary_symbol_search_message),
-                    viewModel.symbol.value,
-                    diaryViewModel.getSymbolUsedCountMap(true),
-                ) { symbolSequence ->
-                    selectFeelingSymbol(symbolSequence)
-                }
-            }
-        }
-    }
-
     private fun moveToday() {
         var position: Int
         val tomorrowTimeMillis =
@@ -777,12 +731,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                 launch {
                     diaryViewModel.query.collect { query ->
-                        if (mBinding.query.text?.toString() != query) {
-                            mBinding.query.setText(query)
-                            if (query.isNotEmpty()) {
-                                mBinding.query.setSelection(query.length)
-                            }
-                        }
                         mDiaryMainItemAdapter?.currentQuery = query
                     }
                 }
