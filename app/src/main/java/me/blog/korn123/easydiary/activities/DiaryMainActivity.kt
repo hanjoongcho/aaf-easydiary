@@ -9,12 +9,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognizerIntent
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -23,14 +22,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
@@ -50,7 +54,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.diaryMainSpanCount
 import me.blog.korn123.easydiary.extensions.diaryRepository
-import me.blog.korn123.easydiary.extensions.exportHtmlBook
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
@@ -70,10 +74,8 @@ import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.GridItemDecorationDiaryMain
-import me.blog.korn123.easydiary.helper.MIME_TYPE_HTML
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
@@ -85,14 +87,9 @@ import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
-import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
-import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
+import me.blog.korn123.easydiary.presentation.main.components.MainBottomSheet
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
-import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
@@ -109,49 +106,24 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mPopupMenuBinding: PopupMenuMainBinding
-    private lateinit var mGridLayoutManager: GridLayoutManager
-    private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDomain> = arrayListOf()
-    private var mPopupWindow: PopupWindow? = null
-    private var mLastHistoryCheckMillis = System.currentTimeMillis()
-    private val mRequestSpeechInputLauncher =
+    private lateinit var popupMenuBinding: PopupMenuMainBinding
+    private lateinit var gridLayoutManager: GridLayoutManager
+    private var diaryMainItemAdapter: DiaryMainItemAdapter? = null
+    private var diaryList: ArrayList<DiaryDomain> = arrayListOf()
+    private var popupWindow: PopupWindow? = null
+    private var lastHistoryCheckMillis = System.currentTimeMillis()
+    private var bottomSheetHeightPx = 0
+    private val requestSpeechInputLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                    mBinding.query.setText(it[0])
-                    mBinding.query.setSelection(it[0].length)
+                    diaryViewModel.query.value = it[0]
                 }
             }
             pauseLock()
         }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private val mRequestSAFForHtmlBookLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-
-                result.data?.let {
-                    mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                        val diaryDomains = this
-                        mBinding.progressCoroutine.visibility = View.VISIBLE
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            exportHtmlBook(it.data, diaryDomains)
-                            withContext(Dispatchers.Main) {
-                                mBinding.progressCoroutine.visibility = View.GONE
-                                diaryDomains.forEach { diaryDomain ->
-                                    diaryDomain.isSelected = false
-                                    diaryRepository.updateDiaryWithPhotos(diaryDomain)
-                                }
-                                mDiaryMainItemAdapter?.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                }
-            }
-            pauseLock()
-        }
-    var mDiaryMode = DiaryMode.READ
+    var diaryMode = DiaryMode.READ
 
     /***************************************************************************************************
      *   override functions
@@ -183,20 +155,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         lifecycleScope.launch {
             diaryViewModel.isLoading = true
             setupComposeView()
-            mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
+            popupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
             rescheduleEnabledAlarms()
             FontUtils.checkFontSetting(this@DiaryMainActivity)
             initDiaryGrid()
             initDummyData()
-            updateDrawableColorInnerCardView(mBinding.imgClearQuery)
-            bindEvent()
             confirmPrePermissions()
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
             setupPopupMenu()
             checkBundle(savedInstanceState)
             setupReviewFlow()
             setupPhotoHighlight()
-//        clearLockSettingsTemporary()
             showDebugNotificationInfo()
             setupDiaryListScrollListener()
 
@@ -215,18 +184,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             diaryViewModel.isLoading = false
         }
+        observeDataStreams()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        outState.putSerializable(DIARY_MODE, diaryMode)
         super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-        refreshList()
         invalidateOptionsMenu()
+        applyBannerContainerMargin()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             lifecycleScope.launch {
@@ -243,9 +213,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mBinding.composeView.visibility = View.VISIBLE
 
         if (isVanillaIceCreamPlus()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { v, insets ->
-                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-                v.updatePadding(bottom = navigationBars.bottom)
+            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { _, insets ->
+//                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+//                v.updatePadding(bottom = navigationBars.bottom)
                 insets
             }
 
@@ -299,125 +269,124 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                mDiaryMode = DiaryMode.READ
-                invalidateOptionsMenu()
-                mDiaryMainItemAdapter?.notifyDataSetChanged()
-                return true
-            }
-
-            R.id.checkAll -> {
-                lifecycleScope.launch {
-                    diaryViewModel.isLoading = true
-                    withContext(Dispatchers.Default) {
-                        mDiaryMainItemAdapter?.toggleCheckBoxALl()
-                    }
-                    mDiaryMainItemAdapter?.notifyDataSetChanged()
-                    diaryViewModel.isLoading = false
-                }
-            }
-
-            R.id.delete -> {
-                mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                    when (this.isNotEmpty()) {
-                        true -> {
-                            showAlertDialog(
-                                getString(
-                                    R.string.delete_selected_items_confirm,
-                                    size,
-                                ),
-                                { _, _ ->
-                                    lifecycleScope.launch {
-                                        forEach {
-                                            diaryRepository.deleteDiaryById(it.diaryId)
-                                        }
-                                        refreshList()
-                                    }
-                                },
-                                { _, _ -> },
-                                DialogMode.WARNING,
-                                true,
-                                getString(R.string.delete),
-                                getString(R.string.delete),
-                            )
-                        }
-
-                        false -> {
-                            showAlertDialog(getString(R.string.no_items_warning))
-                        }
-                    }
-                }
-            }
-
-            R.id.duplication -> {
-                mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                    when (this.isNotEmpty()) {
-                        true -> {
-                            showAlertDialog(
-                                getString(
-                                    R.string.duplicate_selected_items_confirm,
-                                    size,
-                                ),
-                                { _, _ ->
-                                    lifecycleScope.launch {
-                                        reversed().forEach {
-                                            it.isSelected = false
-                                            diaryRepository.duplicateDiary(it)
-                                        }
-                                        refreshList()
-                                        Handler(Looper.getMainLooper()).post {
-                                            mBinding.diaryListView.layoutManager?.scrollToPosition(
-                                                0,
-                                            )
-                                        }
-                                    }
-                                },
-                                { _, _ -> },
-                                DialogMode.INFO,
-                                true,
-                            )
-                        }
-
-                        false -> {
-                            showAlertDialog(getString(R.string.no_items_warning))
-                        }
-                    }
-                }
-            }
-
-            R.id.saveAsHtml -> {
-                EasyDiaryUtils.writeFileWithSAF(
-                    "${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
-                    MIME_TYPE_HTML,
-                    mRequestSAFForHtmlBookLauncher,
-                )
-            }
-
-            R.id.planner -> {
-                val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
-            }
-
-            R.id.microphone -> {
-                showSpeechDialog()
-            }
-
-            R.id.openDashboard -> {
-                TransitionHelper.startActivityWithTransition(
-                    this@DiaryMainActivity,
-                    Intent(this@DiaryMainActivity, DashboardActivity::class.java),
-                )
-            }
-
-            R.id.popupMenu -> {
-                openCustomOptionMenu()
-            }
+            android.R.id.home -> return handleHomeSelected()
+            R.id.checkAll -> handleCheckAllSelected()
+            R.id.delete -> handleDeleteSelected()
+            R.id.duplication -> handleDuplicationSelected()
+            R.id.planner -> handlePlannerSelected()
+            R.id.microphone -> handleMicrophoneSelected()
+            R.id.openDashboard -> handleOpenDashboardSelected()
+            R.id.popupMenu -> handlePopupMenuSelected()
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun handleHomeSelected(): Boolean {
+        diaryMode = DiaryMode.READ
+        invalidateOptionsMenu()
+        diaryMainItemAdapter?.notifyDataSetChanged()
+        return true
+    }
+
+    private fun handleCheckAllSelected() {
+        lifecycleScope.launch {
+            diaryViewModel.isLoading = true
+            withContext(Dispatchers.Default) {
+                diaryMainItemAdapter?.toggleCheckBoxALl()
+            }
+            diaryMainItemAdapter?.notifyDataSetChanged()
+            diaryViewModel.isLoading = false
+        }
+    }
+
+    private fun handleDeleteSelected() {
+        diaryMainItemAdapter?.getSelectedItems()?.run {
+            when (this.isNotEmpty()) {
+                true -> {
+                    showAlertDialog(
+                        getString(
+                            R.string.delete_selected_items_confirm,
+                            size,
+                        ),
+                        { _, _ ->
+                            lifecycleScope.launch {
+                                forEach {
+                                    diaryRepository.deleteDiaryById(it.diaryId)
+                                }
+                            }
+                        },
+                        { _, _ -> },
+                        DialogMode.WARNING,
+                        true,
+                        getString(R.string.delete),
+                        getString(R.string.delete),
+                    )
+                }
+
+                false -> {
+                    showAlertDialog(getString(R.string.no_items_warning))
+                }
+            }
+        }
+    }
+
+    private fun handleDuplicationSelected() {
+        diaryMainItemAdapter?.getSelectedItems()?.run {
+            when (this.isNotEmpty()) {
+                true -> {
+                    showAlertDialog(
+                        getString(
+                            R.string.duplicate_selected_items_confirm,
+                            size,
+                        ),
+                        { _, _ ->
+                            lifecycleScope.launch {
+                                reversed().forEach {
+                                    it.isSelected = false
+                                    diaryRepository.duplicateDiary(it)
+                                }
+                                Handler(Looper.getMainLooper()).post {
+                                    mBinding.diaryListView.layoutManager?.scrollToPosition(
+                                        0,
+                                    )
+                                }
+                            }
+                        },
+                        { _, _ -> },
+                        DialogMode.INFO,
+                        true,
+                    )
+                }
+
+                false -> {
+                    showAlertDialog(getString(R.string.no_items_warning))
+                }
+            }
+        }
+    }
+
+    private fun handlePlannerSelected() {
+        val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
+        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
+    }
+
+    private fun handleMicrophoneSelected() {
+        showSpeechDialog()
+    }
+
+    private fun handleOpenDashboardSelected() {
+        TransitionHelper.startActivityWithTransition(
+            this@DiaryMainActivity,
+            Intent(this@DiaryMainActivity, DashboardActivity::class.java),
+        )
+    }
+
+    private fun handlePopupMenuSelected() {
+        openCustomOptionMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        when (mDiaryMode) {
+        when (diaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.activity_diary_main, menu)
@@ -425,6 +394,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cross)
                 menuInflater.inflate(R.menu.activity_diary_main_delete, menu)
                 applyFontToMenuItem(menu.findItem(R.id.delete))
             }
@@ -443,7 +413,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             false -> {
-                mDiaryMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                diaryMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     // API 33 이상: Class를 직접 넘겨서 타입 안전하게 꺼냄
                     savedInstanceState.getSerializable(DIARY_MODE, DiaryMode::class.java)
                 } else {
@@ -457,7 +427,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private suspend fun setupReviewFlow() {
         if (config.enableReviewFlow) {
-            config.appExecutionCount = config.appExecutionCount.plus(1)
+            config.appExecutionCount += 1
             if (config.appExecutionCount > 30 && diaryViewModel.getDiaryCount() > 300) startReviewFlow()
             if (config.enableDebugOptionToastReviewFlowInfo) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
@@ -487,7 +457,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (config.enableDebugOptionToastPhotoHighlightUpdateTime) {
             makeToast(
                 "History Highlight Last updated time: ${
-                    System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000
+                    System.currentTimeMillis().minus(lastHistoryCheckMillis) / 1000
                 }seconds ago",
             )
         }
@@ -500,16 +470,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     val historyWidth = (point.x / 2.5).toInt()
                     mBinding.layoutBannerContainer.layoutParams.width = historyWidth
 
-                    if (isVanillaIceCreamPlus()) {
-                        val rootWindowInsets = window.decorView.rootWindowInsets
-                        val insets = rootWindowInsets?.getInsets(WindowInsets.Type.systemBars())
-                        mBinding.diaryListView.layoutParams.width =
-                            point.x
-                                .minus(historyWidth)
-                                .minus(insets?.left ?: 0)
-                                .minus(insets?.right ?: 0)
-                    } else {
-                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+                    // 1. Android 15(Vanilla Ice Cream) 이상일 때만 좌우 인셋 합산
+                    val horizontalInsets =
+                        if (isVanillaIceCreamPlus()) {
+                            val insets =
+                                window.decorView.rootWindowInsets?.getInsets(WindowInsets.Type.systemBars())
+                            (insets?.left ?: 0) + (insets?.right ?: 0)
+                        } else {
+                            0
+                        }
+
+                    // 2. 최종 너비 계산
+                    val calculatedWidth = point.x - historyWidth - horizontalInsets
+
+                    // 3. 중복되는 layoutParams 설정 단일화
+                    listOf(mBinding.diaryListView, mBinding.composeView).forEach { view ->
+                        view.layoutParams = view.layoutParams.apply { width = calculatedWidth }
                     }
                 }
             }
@@ -522,6 +498,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     }
                 }
             }
+        }
+    }
+
+    private fun applyBannerContainerMargin() {
+        mBinding.layoutBannerContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = if (config.enableCardViewPolicy) dpToPixel(3f) else dpToPixel(1f)
         }
     }
 
@@ -567,34 +549,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         )
                     }
 
-                    R.id.quickSettings -> {
-                        TransitionHelper.startActivityWithTransition(
-                            this,
-                            Intent(this, QuickSettingsActivity::class.java),
-                        )
-                    }
-
-                    R.id.devConsole -> {
-                        TransitionHelper.startActivityWithTransition(
-                            this,
-                            Intent(this, DevActivity::class.java),
-                        )
-                    }
-
                     R.id.gridLayout -> {
                         openGridSettingDialog(
                             mBinding.mainHolder,
                             GridSpanMode.DIARY_MAIN,
                         ) { spanCount ->
-                            mGridLayoutManager.spanCount = spanCount
+                            gridLayoutManager.spanCount = spanCount
                             mBinding.diaryListView.invalidateItemDecorations()
                         }
                     }
                 }
-                Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
+                Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
             }
 
-        mPopupMenuBinding.run {
+        popupMenuBinding.run {
             updateAppViews(this.root)
             updateTextColors(this.root)
             FontUtils.setFontsTypeface(this@DiaryMainActivity, null, this.root, true)
@@ -602,8 +570,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             attachedPhotoGallery.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
-            quickSettings.setOnClickListener(customItemClickListener)
-            devConsole.setOnClickListener(customItemClickListener)
             gridLayout.setOnClickListener(customItemClickListener)
         }
     }
@@ -620,21 +586,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun openCustomOptionMenu() {
-        FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
+        FontUtils.setFontsTypeface(this@DiaryMainActivity, null, popupMenuBinding.root, true)
 
-        mPopupWindow =
+        popupWindow =
             EasyDiaryUtils.openCustomOptionMenu(
-                mPopupMenuBinding.root,
-                findViewById(R.id.popupMenu),
+                popupMenuBinding.root,
+                findViewById(R.id.compose_view),
             )
-        mPopupMenuBinding.run {
-            updateDrawableColorInnerCardView(imgDevConsole)
+        popupMenuBinding.run {
             updateDrawableColorInnerCardView(imgPostcard)
             updateDrawableColorInnerCardView(imgAttachedPhotoGallery)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgGridLayout)
             updateDrawableColorInnerCardView(imgSettings)
-            updateDrawableColorInnerCardView(imgQuickSettings)
         }
     }
 
@@ -643,60 +607,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
-    private fun bindEvent() {
-        mBinding.query.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int,
-                ) {
-                }
-
-                override fun onTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int,
-                ) {
-                    refreshList(charSequence.toString())
-                }
-
-                override fun afterTextChanged(editable: Editable) {}
-            },
-        )
-
-        mBinding.imgClearQuery.setOnClickListener {
-            selectFeelingSymbol()
-            mBinding.query.text = null
-        }
-
-        EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
-        mBinding.feelingSymbolButton.setOnClickListener {
-            lifecycleScope.launch {
-                openFeelingSymbolDialog(
-                    getString(R.string.diary_symbol_search_message),
-                    viewModel.symbol.value,
-                    diaryViewModel.getSymbolUsedCountMap(true),
-                ) { symbolSequence ->
-                    selectFeelingSymbol(symbolSequence)
-                    refreshList()
-                }
-            }
-        }
-    }
-
     private fun moveToday() {
         var position: Int
         val tomorrowTimeMillis =
             EasyDiaryUtils.getCalendarInstance(false, Calendar.DAY_OF_MONTH, 1).timeInMillis
         val filteredDiary =
-            mDiaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+            diaryList.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
         val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
         target?.let {
             position = getIndexBySequence(target.diaryId)
-            makeSnackBar("\uD83D\uDE80 Moved to today's date or previous date.")
             if (position != -1) {
                 (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
                     position,
@@ -708,7 +627,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun getIndexBySequence(sequence: Long): Int {
         var targetIndex = -1
-        mDiaryList.forEachIndexed { index, diary ->
+        diaryList.forEachIndexed { index, diary ->
             if (diary.diaryId == sequence) {
                 targetIndex = index
                 return@forEachIndexed
@@ -718,7 +637,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
-        updateSymbolSequence(if (index == 0) SYMBOL_SELECT_ALL else index)
+        val targetSymbol = if (index == 0) SYMBOL_SELECT_ALL else index
+        updateSymbolSequence(targetSymbol)
+        diaryViewModel.symbolSequence.value = targetSymbol
     }
 
     private fun showSpeechDialog() {
@@ -730,54 +651,52 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
                     )
                     putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                }.run { mRequestSpeechInputLauncher.launch(this) }
+                }.run { requestSpeechInputLauncher.launch(this) }
         } catch (_: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.recognizer_intent_not_found_message))
         }
     }
 
-    private fun refreshList() {
-        var queryString = ""
-        if (mBinding.query.text?.isNotEmpty() == true) {
-            queryString =
-                mBinding.query.text.toString()
-        }
-        refreshList(queryString)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
-    private fun refreshList(query: String) {
+    private fun observeDataStreams() {
         lifecycleScope.launch {
-            val result =
-                diaryViewModel.findDiary(
-                    query,
-                    config.diarySearchQueryCaseSensitive,
-                    0,
-                    0,
-                    viewModel.symbol.value,
-                    true,
-                )
-            mDiaryList.clear()
-            mDiaryList.addAll(result)
-            mDiaryMainItemAdapter?.currentQuery = query
-            mDiaryMainItemAdapter?.notifyDataSetChanged()
-            mBinding.run {
-                when (mDiaryList.isEmpty()) {
-                    true -> {
-                        diaryListView.visibility = View.GONE
-                        textNoDiary.visibility = View.VISIBLE
-                    }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    diaryViewModel.diaries.collect { items ->
+                        diaryList.clear()
+                        diaryList.addAll(items)
+                        diaryMainItemAdapter?.currentQuery = diaryViewModel.query.value
+                        diaryMainItemAdapter?.notifyDataSetChanged()
 
-                    false -> {
-                        diaryListView.visibility = View.VISIBLE
-                        textNoDiary.visibility = View.GONE
+                        mBinding.run {
+                            if (diaryList.isEmpty()) {
+                                diaryListView.visibility = View.GONE
+                                textNoDiary.visibility = View.VISIBLE
+                            } else {
+                                diaryListView.visibility = View.VISIBLE
+                                textNoDiary.visibility = View.GONE
+                            }
+                        }
+
+                        supportActionBar?.run {
+                            title = ""
+                        }
                     }
                 }
-            }
 
-            supportActionBar?.run {
-                title = ""
-                subtitle = getString(R.string.diary_count_format, mDiaryList.size)
+                launch {
+                    diaryViewModel.taskTodoCount.collect { count ->
+                        supportActionBar?.run {
+                            subtitle = getString(R.string.task_todo_count_format, count)
+                        }
+                    }
+                }
+
+                launch {
+                    diaryViewModel.query.collect { query ->
+                        diaryMainItemAdapter?.currentQuery = query
+                    }
+                }
             }
         }
     }
@@ -827,33 +746,31 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun initDiaryGrid() {
-        mDiaryMainItemAdapter =
-            DiaryMainItemAdapter(this, lifecycleScope, mDiaryList, {
+        diaryMainItemAdapter =
+            DiaryMainItemAdapter(this, lifecycleScope, diaryList, {
                 val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
                 detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
-                detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+                detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
                 detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
                 lifecycleScope.launch {
                     diaryRepository.clearSelectedStatus()
-                    mDiaryMode = DiaryMode.DELETE
+                    diaryMode = DiaryMode.DELETE
                     invalidateOptionsMenu()
-                    refreshList()
-                    //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                    diaryMainItemAdapter?.notifyDataSetChanged()
                 }
             }
 
-        mGridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
+        gridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
         mBinding.diaryListView.run {
-            adapter = mDiaryMainItemAdapter
-            //            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
-            layoutManager = mGridLayoutManager
+            adapter = diaryMainItemAdapter
+            layoutManager = gridLayoutManager
             addItemDecoration(
                 GridItemDecorationDiaryMain(
                     resources.getDimensionPixelSize(R.dimen.component_margin_small),
                     this@DiaryMainActivity,
-                ),
+                ) { bottomSheetHeightPx },
             )
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
@@ -861,71 +778,54 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun setupComposeView() {
         mBinding.composeView.setContent {
-            Column(
-                modifier = Modifier,
-            ) {
-                BottomToolBarContainer {
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.button_new_entry),
-                        iconResourceId = R.drawable.ic_edit,
-                    ) {
-                        val createDiary =
-                            Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            createDiary,
-                        )
-                    }
-                    CustomElevatedSquareButton(
-                        text = "Move Today",
-                        iconResourceId = R.drawable.ic_time_8_w,
-                    ) {
-                        moveToday()
-                    }
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.button_tree_view),
-                        iconResourceId = R.drawable.ic_tree_structure,
-                    ) {
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, TreeTimelineActivity::class.java),
-                        )
-                    }
-                    CustomElevatedSquareButton(
-                        text = getString(R.string.menu_timeline),
-                        iconResourceId = R.drawable.ic_settings_11,
-                    ) {
-                        val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, timelineIntent)
-                    }
-                    if (config.enableDebugMode) {
-                        CustomElevatedSquareButton(
-                            text = getString(R.string.button_quick_settings),
-                            iconResourceId = R.drawable.ic_running,
-                        ) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, QuickSettingsActivity::class.java),
-                            )
+            val currentQuery by diaryViewModel.query.collectAsState()
+            val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
+            val currentSymbol by viewModel.symbol.collectAsState()
+            val density = LocalDensity.current
+
+            AppTheme {
+                MainBottomSheet(
+                    title = "[Total: ${getString(R.string.diary_count_format, items.size)}] ${stringResource(id = R.string.guide_message_2)}",
+                    currentQuery = currentQuery,
+                    symbolSequence = currentSymbol,
+                    onMicrophoneClick = { showSpeechDialog() },
+                    onMoveToday = { moveToday() },
+                    onFeelingSymbolClick = {
+                        lifecycleScope.launch {
+                            openFeelingSymbolDialog(
+                                getString(R.string.diary_symbol_search_message),
+                                viewModel.symbol.value,
+                                diaryViewModel.getSymbolUsedCountMap(true),
+                            ) { symbolSequence ->
+                                selectFeelingSymbol(symbolSequence)
+                            }
                         }
-                        CustomElevatedSquareButton(
-                            text = "Debug",
-                            iconResourceId = R.drawable.ic_bug_2,
-                        ) {
-                            TransitionHelper.startActivityWithTransition(
-                                this@DiaryMainActivity,
-                                Intent(this@DiaryMainActivity, DevActivity::class.java),
-                            )
+                    },
+                    clearFilter = {
+                        selectFeelingSymbol()
+                        diaryViewModel.query.value = ""
+                    },
+                    callbackQuery = { query ->
+                        diaryViewModel.query.value = query
+                    },
+                    onMenuClick = {
+                        openCustomOptionMenu()
+                    },
+                    onMoveTop = {
+                        mBinding.diaryListView.layoutManager?.scrollToPosition(0)
+                    },
+                    onMoveBottom = {
+                        mBinding.diaryListView.adapter?.itemCount?.let { count ->
+                            if (count > 0) {
+                                mBinding.diaryListView.layoutManager?.scrollToPosition(count - 1)
+                            }
                         }
-                        CustomElevatedSquareButton(
-                            text = "Menu",
-                            iconPadding = 2.dp,
-                            iconResourceId = R.drawable.ic_menu,
-                        ) {
-                            openCustomOptionMenu()
-                        }
-                    }
-                }
+                    },
+                    onHeightChanged = { height ->
+                        bottomSheetHeightPx = with(density) { height.roundToPx() }
+                        mBinding.diaryListView.invalidateItemDecorations()
+                    },
+                )
             }
         }
 

@@ -1125,6 +1125,8 @@
     <string name="automation_settings">ᱛᱷᱤᱢᱥ ᱨᱮ ᱟᱡ ᱛᱮ ᱥᱟᱡᱟᱣ</string>
     <string name="place_finger_description">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱥᱮᱱᱥᱚᱨ ᱨᱮ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱫᱚᱦᱚᱭ ᱛᱟᱢ</string>
     <string name="enable_photo_highlight_title">ᱪᱤᱛᱟᱹᱨ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱠᱚ ᱞᱟᱴᱷᱟ ᱮᱱᱟ</string>
+    <string name="enable_photo_highlight_diary_main_title">Attached photo highlights (Main Screen)</string>
+    <string name="enable_photo_highlight_dashboard_title">Attached photo highlights (Dashboard)</string>
     <string name="enable_photo_highlight_description">ᱛᱮᱦᱮᱸᱧᱟᱜ ᱢᱟᱦᱟᱸ ᱦᱤᱥᱟᱹᱵ ᱛᱮ, ᱟᱹᱰᱤ ᱢᱟᱲᱟᱝ ᱡᱷᱚᱜ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱴᱷᱟᱼᱟᱜ ᱠᱚ ᱫᱚ ᱥᱮᱨᱢᱟ ᱟᱨ ᱪᱟᱸᱫᱚ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱛᱟᱦᱮᱸᱱᱟ ᱛᱮᱦᱮᱸᱧ ᱞᱟᱹᱜᱤᱫ, ᱦᱟᱭᱞᱟᱭᱤᱴ ᱡᱟᱭᱜᱟ ᱫᱚ ᱵᱟᱝ ᱮᱢ ᱪᱷᱚ ᱠᱟᱱᱟ ᱾</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
     <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>
@@ -1174,4 +1176,5 @@
     <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ</string>
     <string name="menu_speech_to_text">ᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱚᱱᱚᱞ</string>
     <string name="diary_count_format">%d ᱚᱞᱠᱚ</string>
+    <string name="task_todo_count_format">(Incomplete Tasks: %d)</string>
 </resources>

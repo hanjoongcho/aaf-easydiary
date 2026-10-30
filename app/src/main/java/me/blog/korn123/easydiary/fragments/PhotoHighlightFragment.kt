@@ -67,9 +67,15 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         observePhotoHighlight()
     }
 
+    private val isEnabledPhotoHighlight: Boolean
+        get() {
+            val isDashboard = arguments?.getBoolean(PhotoHighlightConstants.IS_DASHBOARD) ?: false
+            return if (isDashboard) config.enablePhotoHighlightInDashboard else config.enablePhotoHighlightInDiaryMain
+        }
+
     override fun onResume() {
         super.onResume()
-        if (config.enablePhotoHighlight) {
+        if (isEnabledPhotoHighlight) {
             diaryViewModel.updatePhotoHighlightIfNeeded()
         } else {
             initDefaultSettings()
@@ -105,7 +111,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 diaryViewModel.photoHighlightList.collect { historyItems ->
-                    if (!config.enablePhotoHighlight) {
+                    if (!isEnabledPhotoHighlight) {
                         initDefaultSettings()
                         return@collect
                     }

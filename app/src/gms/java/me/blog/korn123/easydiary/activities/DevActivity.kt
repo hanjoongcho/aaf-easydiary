@@ -47,15 +47,15 @@ import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
-import me.blog.korn123.easydiary.services.FullBackupService
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWithImage
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
-import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
+import me.blog.korn123.easydiary.services.FullBackupService
 
 class DevActivity : BaseDevActivity() {
     /***************************************************************************************************
@@ -92,8 +92,7 @@ class DevActivity : BaseDevActivity() {
                         contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                         topBar = {
                             EasyDiaryActionBar(
-                                title = "Easy-Diary Dev Mode",
-                                subTitle = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
+                                title = String.format(LocalLocale.current.platformLocale, "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE),
                             ) {
                                 finishActivityWithPauseLock()
                             }

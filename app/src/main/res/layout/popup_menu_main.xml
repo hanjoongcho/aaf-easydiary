@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="5dp"
         app:cardUseCompatPadding="true"
-        app:cardElevation="2dp"
+        app:cardElevation="1dp"
         app:contentPadding="0dp"
         style="@style/AppCard">
         <LinearLayout
@@ -20,23 +20,11 @@
             android:orientation="vertical">
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
-                tools:visibility="visible"
-                android:visibility="gone"
-                android:id="@+id/devConsole">
-                <androidx.appcompat.widget.AppCompatImageView
-                    style="@style/image_popup_menu_icon"
-                    android:id="@+id/img_dev_console"
-                    android:src="@drawable/ic_bug_2" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="Dev Console" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
                 android:id="@+id/gridLayout">
                 <androidx.appcompat.widget.AppCompatImageView
                     style="@style/image_popup_menu_icon"
                     android:id="@+id/img_grid_layout"
+                    android:padding="4dp"
                     android:src="@drawable/ic_grid_three_up" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -48,6 +36,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_picture_w"
                     android:id="@+id/img_postcard"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -59,6 +48,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_stack_of_photos"
                     android:id="@+id/imgAttachedPhotoGallery"
+                    android:padding="2dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -70,6 +60,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_combo"
                     android:id="@+id/img_statistics"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
@@ -81,22 +72,11 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_settings_7"
                     android:id="@+id/img_settings"
+                    android:padding="3dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"
                     android:text="@string/settings" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:visibility="gone"
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/quickSettings">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_running"
-                    android:id="@+id/img_quick_settings"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="Quick Settings" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

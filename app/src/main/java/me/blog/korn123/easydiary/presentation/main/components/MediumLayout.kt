@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,22 +37,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import java.util.Locale
-import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-
-import androidx.compose.runtime.remember
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.FastScroll
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @Composable
@@ -66,12 +67,15 @@ fun MediumLayout(
     delayTimeMillis: Long,
     enableCardViewPolicy: Boolean,
     items: List<DiaryDomain>,
+    symbolSequence: Int = 0,
     thumbVisibleCallback: (thumbVisible: Boolean) -> Unit,
     isDraggingThumbCallback: (isDraggingThumb: Boolean) -> Unit,
     hideJobCallback: (job: Job) -> Unit,
     onQueryChange: (query: String) -> Unit = {},
+    clearFilter: () -> Unit = {},
     itemClickCallback: (diary: DiaryDomain) -> Unit = {},
     itemLongClickCallback: () -> Unit = {},
+    onMenuClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -103,9 +107,10 @@ fun MediumLayout(
             activity?.makeSnackBar(activity.getString(R.string.recognizer_intent_not_found_message))
         }
     }
-    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlight) }
+    var bottomSheetHeight by remember { mutableStateOf(0.dp) }
+    var enablePhotoHighlight by remember { mutableStateOf(context.config.enablePhotoHighlightInDiaryMain) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        enablePhotoHighlight = context.config.enablePhotoHighlight
+        enablePhotoHighlight = context.config.enablePhotoHighlightInDiaryMain
     }
 
     Row(
@@ -125,7 +130,8 @@ fun MediumLayout(
                     isVisible = enablePhotoHighlight,
                     onVisibilityChanged = { isVisible ->
                         enablePhotoHighlight = isVisible
-                    })
+                    },
+                )
             }
         }
 
@@ -138,27 +144,28 @@ fun MediumLayout(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding =
                         PaddingValues(
-                            bottom =
-                                WindowInsets.navigationBars
-                                    .asPaddingValues()
-                                    .calculateBottomPadding(),
+                            bottom = bottomSheetHeight,
                         ),
                 ) {
                     itemsIndexed(items) { _, diary ->
                         Card(
                             shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                             colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
-                            modifier = (
-                                if (enableCardViewPolicy) {
-                                    modifier.padding(
-                                        HORIZONTAL_PADDING.dp,
-                                        VERTICAL_PADDING.dp,
-                                    )
-                                } else {
-                                    modifier
-                                        .padding(1.dp, 1.dp)
-                                }
-                            ),
+                            modifier =
+                                (
+                                    if (enableCardViewPolicy) {
+                                        Modifier.padding(
+                                            HORIZONTAL_PADDING.dp,
+                                            VERTICAL_PADDING.dp,
+                                        )
+                                    } else {
+                                        Modifier
+                                            .padding(1.dp, 1.dp)
+                                    }
+                                ).combinedClickable(
+                                    onClick = { itemClickCallback(diary) },
+                                    onLongClick = { itemLongClickCallback() },
+                                ),
                             elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                         ) {
                             LegacyDiaryItemCard(
@@ -211,13 +218,49 @@ fun MediumLayout(
                             .align(Alignment.BottomCenter),
                 ) {
                     MainBottomSheet(
-                        title = "[Total: ${items.size}] category or title",
+                        title = "[Total: ${items.size}] ${stringResource(id = R.string.guide_message_2)}",
                         currentQuery = currentQuery,
+                        symbolSequence = symbolSequence,
                         enableCardViewPolicy = enableCardViewPolicy,
                         onMicrophoneClick = onMicrophoneClick,
-                    ) { query ->
-                        onQueryChange(query)
-                    }
+                        clearFilter = clearFilter,
+                        onMenuClick = onMenuClick,
+                        onMoveTop = {
+                            coroutineScope.launch {
+                                if (items.isNotEmpty()) {
+                                    listState.scrollToItem(0)
+                                }
+                            }
+                        },
+                        onMoveBottom = {
+                            coroutineScope.launch {
+                                if (items.isNotEmpty()) {
+                                    listState.scrollToItem(items.size - 1)
+                                }
+                            }
+                        },
+                        onMoveToday = {
+                            activity?.let { act ->
+                                val tomorrowTimeMillis =
+                                    EasyDiaryUtils.getCalendarInstance(false, java.util.Calendar.DAY_OF_MONTH, 1).timeInMillis
+                                val filteredDiary =
+                                    items.filter { diary -> diary.currentTimeMillis < tomorrowTimeMillis }
+                                val target = filteredDiary.maxByOrNull { diary -> diary.currentTimeMillis }
+                                target?.let {
+                                    val position = items.indexOfFirst { item -> item.diaryId == target.diaryId }
+                                    if (position != -1) {
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(position)
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        callbackQuery = { query ->
+                            onQueryChange(query)
+                        },
+                        onHeightChanged = { bottomSheetHeight = it },
+                    )
                 }
             }
         }

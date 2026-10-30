@@ -184,7 +184,7 @@ class DiaryViewModel
         val startTimeMillis = MutableStateFlow(0L)
         val endTimeMillis = MutableStateFlow(0L)
         val symbolSequence = MutableStateFlow(0)
-        val checkFutureDiaryOption = MutableStateFlow(false)
+        val checkFutureDiaryOption = MutableStateFlow(true)
 
         data class FindDiaryParams(
             val query: String?,
@@ -215,6 +215,7 @@ class DiaryViewModel
                     startTimeMillis,
                     endTimeMillis,
                     symbolSequence,
+                    checkFutureDiaryOption.value,
                 )
             }
 
@@ -244,6 +245,23 @@ class DiaryViewModel
                     started = SharingStarted.WhileSubscribed(5000),
                     initialValue = emptyList(),
                 )
+
+        val taskTodoCount: StateFlow<Int> =
+            diaryRepository
+                .observeDiariesWithPhotos()
+                .map { list ->
+                    list.count { it.symbolSequence in 80..81 }
+                }.stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = 0,
+                )
+
+        suspend fun getTaskTodoCount(): Int =
+            withContext(Dispatchers.IO) {
+                findDiary(query = null)
+                    .count { it.symbolSequence in 80..81 }
+            }
 
         suspend fun findDiary(
             query: String?,

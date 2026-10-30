@@ -16,24 +16,17 @@
 
 package me.blog.korn123.easydiary.activities
 
-import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
-import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -52,19 +45,13 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main)
-        mBinding.lifecycleOwner = this
-        mBinding.viewModel = viewModel
-
-        setSupportActionBar(mBinding.toolBar)
+        mBinding =
+            ActivityDiaryMainBinding.inflate(layoutInflater).apply {
+                setContentView(root)
+                setSupportActionBar(toolBar)
+            }
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
-
-        lifecycleScope.launch {
-            viewModel.symbol.collect { symbolSequence ->
-                FlavorUtils.initWeatherView(this@ToolbarControlBaseActivity, mBinding.symbolImageView, symbolSequence)
-            }
-        }
     }
 
     protected abstract fun createScrollable(): S
@@ -137,7 +124,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
     }
 
     private fun hideToolbar() {
-        val translationY = -(mBinding.appBar.height + mBinding.searchCard.height).toFloat()
+        val translationY = -(mBinding.appBar.height).toFloat()
         moveToolbar(translationY)
 //        mBinding.searchCard.useCompatPadding = false
         updateStatusBarAppearance(android.graphics.Color.WHITE)
@@ -150,18 +137,19 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> :
 
         mValueAnimator?.cancel()
 
-        mValueAnimator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).apply {
-            duration = 500
-            addUpdateListener { animation ->
-                val translationY = animation.animatedValue as Float
-                ViewHelper.setTranslationY(mBinding.appBar, translationY)
-                ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
-                val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
-                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
-                (mBinding.mainHolder as View).requestLayout()
+        mValueAnimator =
+            ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).apply {
+                duration = 500
+                addUpdateListener { animation ->
+                    val translationY = animation.animatedValue as Float
+                    ViewHelper.setTranslationY(mBinding.appBar, translationY)
+                    ViewHelper.setTranslationY(mBinding.mainHolder, translationY)
+                    val lp = (mBinding.mainHolder as View).layoutParams as CoordinatorLayout.LayoutParams
+                    lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin - mBinding.appBar.height
+                    (mBinding.mainHolder as View).requestLayout()
+                }
+                start()
             }
-            start()
-        }
     }
 
     private fun getScreenHeight(): Int = (findViewById<View>(android.R.id.content).height).minus(navigationBarHeight)

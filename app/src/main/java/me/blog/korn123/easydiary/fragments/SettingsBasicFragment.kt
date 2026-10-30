@@ -176,18 +176,33 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    var enablePhotoHighlight by remember { mutableStateOf(requireContext().config.enablePhotoHighlight) }
+                    var enablePhotoHighlightInDiaryMain by remember { mutableStateOf(requireContext().config.enablePhotoHighlightInDiaryMain) }
                     SwitchCard(
-                        title = getString(R.string.enable_photo_highlight_title),
+                        title = getString(R.string.enable_photo_highlight_diary_main_title),
                         description = getString(R.string.enable_photo_highlight_description),
                         modifier = settingCardModifier,
-                        isOn = enablePhotoHighlight,
+                        isOn = enablePhotoHighlightInDiaryMain,
                         enableCardViewPolicy = enableCardViewPolicy,
                         fontFamily = fontFamily,
                     ) {
                         requireActivity().run {
-                            enablePhotoHighlight = enablePhotoHighlight.not()
-                            config.enablePhotoHighlight = enablePhotoHighlight
+                            enablePhotoHighlightInDiaryMain = enablePhotoHighlightInDiaryMain.not()
+                            config.enablePhotoHighlightInDiaryMain = enablePhotoHighlightInDiaryMain
+                        }
+                    }
+
+                    var enablePhotoHighlightInDashboard by remember { mutableStateOf(requireContext().config.enablePhotoHighlightInDashboard) }
+                    SwitchCard(
+                        title = getString(R.string.enable_photo_highlight_dashboard_title),
+                        description = getString(R.string.enable_photo_highlight_description),
+                        modifier = settingCardModifier,
+                        isOn = enablePhotoHighlightInDashboard,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        requireActivity().run {
+                            enablePhotoHighlightInDashboard = enablePhotoHighlightInDashboard.not()
+                            config.enablePhotoHighlightInDashboard = enablePhotoHighlightInDashboard
                         }
                     }
 

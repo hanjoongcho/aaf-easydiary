@@ -2,10 +2,12 @@ package me.blog.korn123.easydiary.presentation.calendar
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.widget.ImageView
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,11 +59,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -77,6 +82,7 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.CustomCircleIconButton
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiaryItemCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
@@ -253,20 +259,20 @@ fun CalendarContent(
                     ).show()
                 },
             ) {
-                val millis =
-                    selection
-                        ?.atStartOfDay(ZoneId.systemDefault())
-                        ?.toInstant()
-                        ?.toEpochMilli()
-                        ?: visibleMonth
-                            .atDay(1)
-                            .atStartOfDay(ZoneId.systemDefault())
-                            .toInstant()
-                            .toEpochMilli()
+//                val millis =
+//                    selection
+//                        ?.atStartOfDay(ZoneId.systemDefault())
+//                        ?.toInstant()
+//                        ?.toEpochMilli()
+//                        ?: visibleMonth
+//                            .atDay(1)
+//                            .atStartOfDay(ZoneId.systemDefault())
+//                            .toInstant()
+//                            .toEpochMilli()
                 TransitionHelper.startActivityWithTransition(
                     context.findActivity(),
                     Intent(context, DiaryWritingActivity::class.java).apply {
-                        putExtra(SettingConstants.INITIALIZE_TIME_MILLIS, millis)
+//                        putExtra(SettingConstants.INITIALIZE_TIME_MILLIS, millis)
                     },
                 )
             }
@@ -281,17 +287,16 @@ fun CalendarContent(
                             day = day,
                             isSelected = selection == day.date,
                             events = events,
+                            enableScroll = enableScroll,
                         ) { clicked ->
-                            if (day.position == DayPosition.MonthDate) {
-                                if (enableScroll) {
-                                    calendarViewModel.setSelectedDate(clicked)
-                                } else {
-                                    val intent =
-                                        Intent(context, SelectedDateEventsActivity::class.java).apply {
-                                            putExtra("SELECTED_DATE", clicked.toString())
-                                        }
-                                    TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
-                                }
+                            if (enableScroll) {
+                                calendarViewModel.setSelectedDate(clicked)
+                            } else {
+                                val intent =
+                                    Intent(context, SelectedDateEventsActivity::class.java).apply {
+                                        putExtra("SELECTED_DATE", clicked.toString())
+                                    }
+                                TransitionHelper.startActivityWithTransition(context.findActivity(), intent)
                             }
                         }
                     },
@@ -338,17 +343,28 @@ internal fun SelectedDateEventsSection(
                     Card(
                         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
                         colors = CardDefaults.cardColors(Color(context.config.backgroundColor)),
-                        modifier = (
-                            if (context.config.enableCardViewPolicy) {
-                                Modifier.padding(
-                                    HORIZONTAL_PADDING.dp,
-                                    VERTICAL_PADDING.dp,
-                                )
-                            } else {
-                                Modifier
-                                    .padding(1.dp, 1.dp)
-                            }
-                        ),
+                        modifier =
+                            (
+                                if (context.config.enableCardViewPolicy) {
+                                    Modifier.padding(
+                                        HORIZONTAL_PADDING.dp,
+                                        VERTICAL_PADDING.dp,
+                                    )
+                                } else {
+                                    Modifier
+                                        .padding(1.dp, 1.dp)
+                                }
+                            ).combinedClickable(
+                                onClick = {
+                                    TransitionHelper.startActivityWithTransition(
+                                        activity,
+                                        Intent(context, DiaryReadingActivity::class.java).apply {
+                                            putExtra(DIARY_SEQUENCE, event.diaryId)
+                                        },
+                                    )
+                                },
+                                onLongClick = { context.makeToast(EasyDiaryUtils.summaryDiaryLabel(event)) },
+                            ),
                         elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                     ) {
                         LegacyDiaryItemCard(
@@ -455,23 +471,16 @@ fun MonthHeader(
                 )
             }
 
-            Box(
+            CustomCircleIconButton(
                 modifier =
                     Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(30.dp)
-                        .clip(CircleShape)
-                        .background(Color(context.config.primaryColor))
-                        .clickable(onClick = onWriteClick),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = "Write Diary",
-                    tint = Color.White,
-                    modifier = Modifier.size(14.dp),
-                )
-            }
+                        .align(Alignment.CenterEnd),
+                iconResourceId = R.drawable.ic_outline_list_alt_add,
+                contentDescription = "Write Diary",
+                iconPadding = 1.dp,
+                elevation = 3.dp,
+                onClick = { onWriteClick() },
+            )
         }
         DaysOfWeekTitle(daysOfWeek = daysOfWeek)
     }
@@ -482,6 +491,7 @@ fun DayContent(
     day: CalendarDay,
     isSelected: Boolean,
     events: List<Diary>,
+    enableScroll: Boolean,
     onClick: (LocalDate) -> Unit,
 ) {
     val isCurrentMonth = day.position == DayPosition.MonthDate
@@ -495,7 +505,7 @@ fun DayContent(
                 .padding(0.dp)
                 .clip(RoundedCornerShape(1.dp))
                 .then(
-                    if (isSelected) {
+                    if (isSelected && enableScroll) {
                         Modifier.border(
                             1.dp,
                             MaterialTheme.colorScheme.primary,
@@ -504,7 +514,7 @@ fun DayContent(
                     } else {
                         Modifier.background(Color.Transparent)
                     },
-                ).clickable(enabled = isCurrentMonth) { onClick(day.date) }
+                ).clickable(enabled = true) { onClick(day.date) }
                 .padding(1.dp),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -516,7 +526,7 @@ fun DayContent(
                     .padding(horizontal = 1.dp),
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 1.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp),
             ) {
                 Box(
                     modifier = Modifier.align(Alignment.Center),
@@ -559,7 +569,7 @@ fun DayContent(
                 }
 
                 val extraCount = events.size - 3
-                if (extraCount > 0 && isCurrentMonth) {
+                if (extraCount > 0) {
                     Text(
                         text = "+$extraCount",
                         color = MaterialTheme.colorScheme.primary,
@@ -571,20 +581,30 @@ fun DayContent(
                 }
             }
 
-            if (displayEvents.isNotEmpty() && isCurrentMonth) {
+            if (displayEvents.isNotEmpty()) {
                 displayEvents.forEach { diary ->
                     Box(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(Color.Yellow.copy(alpha = 0.4f))
-                                .padding(horizontal = 2.dp, vertical = 2.dp),
+//                                .background(Color.Yellow.copy(alpha = 0.4f))
+                                .padding(horizontal = 1.dp, vertical = 2.dp),
                         contentAlignment = Alignment.CenterStart,
                     ) {
                         val density = LocalDensity.current
                         val pxValue = with(density) { 10.sp.toPx() }
-                        SimpleText(text = EasyDiaryUtils.summaryDiaryLabel(diary), maxLines = 1, fontSize = pxValue)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            AndroidView(
+                                modifier = Modifier.size(10.dp),
+                                factory = { ctx -> ImageView(ctx) },
+                                update = { FlavorUtils.initWeatherView(it.context, it, diary.symbolSequence) },
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            SimpleText(text = EasyDiaryUtils.summaryDiaryLabel(diary), maxLines = 1, fontSize = pxValue)
+                        }
                     }
                 }
             }

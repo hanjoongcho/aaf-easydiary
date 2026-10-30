@@ -155,8 +155,8 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
     <style name="image_popup_menu_icon">
-        <item name="android:layout_width">20dp</item>
-        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">26dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
     <style name="text_lock_number_input">

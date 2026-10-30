@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -465,14 +466,17 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                     colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                                     modifier = (
                                         if (enableCardViewPolicy) {
-                                            modifier.padding(
+                                            Modifier.padding(
                                                 HORIZONTAL_PADDING.dp,
                                                 VERTICAL_PADDING.dp,
                                             )
                                         } else {
-                                            modifier
+                                            Modifier
                                                 .padding(1.dp, 1.dp)
                                         }
+                                    ).combinedClickable(
+                                        onClick = { itemClickCallback(diary) },
+                                        onLongClick = { itemLongClickCallback() },
                                     ),
                                     elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                                 ) {
@@ -592,14 +596,17 @@ class Demo1Activity : EasyDiaryComposeBaseActivity() {
                                     colors = CardDefaults.cardColors(Color(LocalContext.current.config.backgroundColor)),
                                     modifier = (
                                         if (enableCardViewPolicy) {
-                                            modifier.padding(
+                                            Modifier.padding(
                                                 HORIZONTAL_PADDING.dp,
                                                 VERTICAL_PADDING.dp,
                                             )
                                         } else {
-                                            modifier
+                                            Modifier
                                                 .padding(1.dp, 1.dp)
                                         }
+                                    ).combinedClickable(
+                                        onClick = { itemClickCallback(diary) },
+                                        onLongClick = { itemLongClickCallback() },
                                     ),
                                     elevation = CardDefaults.cardElevation(defaultElevation = ROUNDED_CORNER_SHAPE_SIZE.dp),
                                 ) {

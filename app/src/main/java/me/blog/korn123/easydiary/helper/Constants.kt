@@ -593,6 +593,8 @@ const val SETTING_TASK_SYMBOL_TOP_ORDER = "setting_task_symbol_top_order"
 const val SETTING_SELECTED_SYMBOLS = "setting_selected_symbols"
 const val SETTING_ENABLE_REVIEW_FLOW = "setting_enable_review_flow"
 const val SETTING_ENABLE_PHOTO_HIGHLIGHT = "setting_enable_photo_highlight"
+const val SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN = "setting_enable_photo_highlight_diary_main"
+const val SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD = "setting_enable_photo_highlight_dashboard"
 const val SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE = "setting_postcard_span_count_landscape"
 const val SETTING_POSTCARD_SPAN_COUNT_PORTRAIT = "setting_postcard_span_count_portrait"
 const val SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE = "setting_diary_main_span_count_landscape"
@@ -846,6 +848,7 @@ object PhotoHighlightConstants {
     const val PAGE_MARGIN = "page_margin"
     const val REVEAL_WIDTH = "reveal_width"
     const val AUTO_PLAY = "auto_play"
+    const val IS_DASHBOARD = "is_dashboard"
 }
 
 object PrepareReleaseConstants {

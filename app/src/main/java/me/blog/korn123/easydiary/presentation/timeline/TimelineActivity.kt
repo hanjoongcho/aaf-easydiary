@@ -51,12 +51,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -278,28 +280,8 @@ fun TimelineScreen(
         contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         containerColor = Color(context.config.screenBackgroundColor),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.timeline_title),
-                        style =
-                            TextStyle(
-                                fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(context),
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                            ),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White,
-                        )
-                    }
-                },
+            EasyDiaryActionBar(
+                title = stringResource(id = R.string.timeline_title),
                 actions = {
                     IconButton(onClick = onToggleFilter) {
                         Icon(
@@ -309,25 +291,18 @@ fun TimelineScreen(
                         )
                     }
                 },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = primaryColor,
-                        scrolledContainerColor = primaryColor,
-                        navigationIconContentColor = Color.White,
-                        titleContentColor = Color.White,
-                        actionIconContentColor = Color.White,
-                    ),
+                close = onBackClick,
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+            SmallFloatingActionButton(
                 onClick = onWriteDiaryClick,
                 containerColor = primaryColor,
                 contentColor = Color.White,
                 shape = CircleShape,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
+                    painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
                     contentDescription = stringResource(id = R.string.write_diary),
                 )
             }
