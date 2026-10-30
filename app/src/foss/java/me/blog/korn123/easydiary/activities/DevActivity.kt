@@ -56,7 +56,7 @@ class DevActivity : BaseDevActivity() {
         // Transparent can lead to inconsistent behavior across different OS versions (like the "scrim" appearing on older versions).
         enableEdgeToEdge()
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 updateStatusBarAppearance()
                 updateNavigationBarAppearance()
@@ -109,7 +109,7 @@ class DevActivity : BaseDevActivity() {
                         },
                     )
                     AnimatedVisibility(
-                        visible = mBaseDevViewModel.isLoading,
+                        visible = baseDevViewModel.isLoading,
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {

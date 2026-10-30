@@ -37,7 +37,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +55,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -68,7 +66,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -115,7 +112,6 @@ import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
 import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
-import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.settings.components.ScrollableCard
@@ -139,16 +135,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    protected lateinit var mBinding: ActivityBaseDevBinding
-    private var mNotificationCount = 9000
-    private var mCoroutineJob: Job? = null
-    protected val mBaseDevViewModel: BaseDevViewModel by viewModels()
-    private val mLocationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
-    private val mNetworkLocationListener =
+    protected lateinit var binding: ActivityBaseDevBinding
+    private var notificationCount = 9000
+    private var coroutineJob: Job? = null
+    protected val baseDevViewModel: BaseDevViewModel by viewModels()
+    private val locationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
+    private val networkLocationListener =
         object : LocationListener {
             override fun onLocationChanged(p0: Location) {
                 if (config.enableDebugOptionToastLocation) makeToast("Network location has been updated")
-                mLocationManager.removeUpdates(this)
+                locationManager.removeUpdates(this)
             }
 
             @Deprecated("Deprecated in Java")
@@ -163,11 +159,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
             override fun onProviderDisabled(p0: String) {}
         }
-    private val mGPSLocationListener =
+    private val gpsLocationListener =
         object : LocationListener {
             override fun onLocationChanged(p0: Location) {
                 if (config.enableDebugOptionToastLocation) makeToast("GPS location has been updated")
-                mLocationManager.removeUpdates(this)
+                locationManager.removeUpdates(this)
             }
 
             @Deprecated("Deprecated in Java")
@@ -182,14 +178,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
             override fun onProviderDisabled(p0: String) {}
         }
-    private val mRequestLocationSourceLauncher =
+    private val requestLocationSourceLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             makeSnackBar(
                 if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.",
             )
         }
 
-    private val mPickMultipleMedia =
+    private val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
             if (uris.isNotEmpty()) {
                 showAlertDialog(
@@ -204,15 +200,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-    private var mExportJsonOption = ExportOption.DIARY
-    private var mExportJsonSymbolSequence = 0
-    private val mExportJsonLauncher =
+    private var exportJsonOption = ExportOption.DIARY
+    private var exportJsonSymbolSequence = 0
+    private val exportJsonLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
             uri?.let { targetUri ->
-                mBaseDevViewModel.isLoading = true
+                baseDevViewModel.isLoading = true
                 lifecycleScope.launch {
                     var mapOfItems: MutableMap<String, Any> =
-                        when (mExportJsonOption) {
+                        when (exportJsonOption) {
                             ExportOption.ACTION_LOG -> {
                                 mutableMapOf(
                                     "ACTION_LOG" to
@@ -239,7 +235,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                 mutableMapOf(
                                     "DIARY" to
                                         diaryRepository.getDiariesWithPhotos(
-                                            symbolSequence = mExportJsonSymbolSequence,
+                                            symbolSequence = exportJsonSymbolSequence,
                                         ),
                                 )
                             }
@@ -259,7 +255,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     } catch (e: Exception) {
                         makeToast("Export failed: ${e.message}")
                     } finally {
-                        mBaseDevViewModel.isLoading = false
+                        baseDevViewModel.isLoading = false
                     }
                 }
             }
@@ -271,21 +267,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityBaseDevBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-//        setSupportActionBar(mBinding.partialAppbarLayout.toolbar)
-//        supportActionBar?.run {
-//            title = "Easy-Diary Dev Mode"
-//            subtitle = String.format(Locale.getDefault(), "v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
-//            setDisplayHomeAsUpEnabled(true)
-//        }
+        binding = ActivityBaseDevBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mLocationManager.run {
-            removeUpdates(mGPSLocationListener)
-            removeUpdates(mNetworkLocationListener)
+        locationManager.run {
+            removeUpdates(gpsLocationListener)
+            removeUpdates(networkLocationListener)
         }
     }
 
@@ -367,13 +357,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             ) { updateStatusBarAppearance(android.graphics.Color.BLACK) }
             SimpleCard(
                 "Check Build Info",
-                "android.os.Build 패키지로 확인이 가능한 디바이스 정보",
+                "Device information checkable via android.os.Build package",
                 modifier = modifier,
             ) {
                 showAlertDialog(
                     "" +
-                        "제조사: ${Build.MANUFACTURER}\n" +
-                        "모델: ${Build.MODEL}\n" +
+                        "Manufacturer: ${Build.MANUFACTURER}\n" +
+                        "Model: ${Build.MODEL}\n" +
                         "OS: ${Build.VERSION.RELEASE}\n" +
                         "SDK: ${Build.VERSION.SDK_INT}\n" +
                         "",
@@ -435,15 +425,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         makeToast("Response Code: $responseCode")
                     }
                     if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // opens input stream from the HTTP connection
                         val lines = httpConn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readLines() }
                         withContext(Dispatchers.Main) {
                             makeToast(lines[0])
-//                            if (lines[0].contains("true")) {
-//                                config.aafPinLockEnable = false
-//                                config.fingerprintLockEnable = false
-//                                finish()
-//                            }
                         }
                     }
                     httpConn.disconnect()
@@ -471,7 +455,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 null,
                 modifier = modifier,
             ) {
-                mPickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
             SimpleCard(
                 "Check Next Alarm",
@@ -554,55 +538,55 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 "export diary data",
-                "diary 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "Export diary data to external storage using SAF in domain model json format.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "diary_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonOption = ExportOption.DIARY
-                mExportJsonLauncher.launch(fileName)
+                exportJsonOption = ExportOption.DIARY
+                exportJsonLauncher.launch(fileName)
             }
             SimpleCard(
                 "export diary by symbol",
-                "지정된 symbolSequence 조건으로 필터링된 diary 데이터를 export 합니다.",
+                "Export diary data filtered by the specified symbolSequence condition.",
                 modifier = modifier,
             ) {
                 val seq = symbolSequenceInput.toIntOrNull() ?: 0
                 val fileName =
                     "diary_export_symbol_${seq}_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonSymbolSequence = seq
-                mExportJsonOption = ExportOption.DIARY_WITH_SYMBOL_SEQUENCE
-                mExportJsonLauncher.launch(fileName)
+                exportJsonSymbolSequence = seq
+                exportJsonOption = ExportOption.DIARY_WITH_SYMBOL_SEQUENCE
+                exportJsonLauncher.launch(fileName)
             }
             SimpleCard(
                 "export alarm data",
-                "alarm 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "Export alarm data to external storage using SAF in domain model json format.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "alarm_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonOption = ExportOption.ALARM
-                mExportJsonLauncher.launch(fileName)
+                exportJsonOption = ExportOption.ALARM
+                exportJsonLauncher.launch(fileName)
             }
             SimpleCard(
                 "export action log data",
-                "action log 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "Export action log data to external storage using SAF in domain model json format.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "action_log_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonOption = ExportOption.ACTION_LOG
-                mExportJsonLauncher.launch(fileName)
+                exportJsonOption = ExportOption.ACTION_LOG
+                exportJsonLauncher.launch(fileName)
             }
             SimpleCard(
                 "export d-day data",
-                "d-day 데이터를 domain model json 포멧으로 SAF를 이용해 외부 저장소에 export 합니다.",
+                "Export d-day data to external storage using SAF in domain model json format.",
                 modifier = modifier,
             ) {
                 val fileName =
                     "d-day_export_${DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
-                mExportJsonOption = ExportOption.D_DAY
-                mExportJsonLauncher.launch(fileName)
+                exportJsonOption = ExportOption.D_DAY
+                exportJsonLauncher.launch(fileName)
             }
         }
     }
@@ -1078,7 +1062,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             message: String,
             tag: String = Thread.currentThread().name,
         ) {
-            mBaseDevViewModel.coroutine1Console =
+            baseDevViewModel.coroutine1Console =
                 viewModel.coroutine1Console.plus("$tag: $message\n")
             coroutineScope.launch {
                 state.animateScrollBy(Float.MAX_VALUE)
@@ -1086,11 +1070,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
         ScrollableCard(
             "Coroutine Info",
-            mBaseDevViewModel.coroutine1Console,
+            baseDevViewModel.coroutine1Console,
             Modifier
                 .fillMaxWidth(),
-//                        .height(100.dp)
-//                        .verticalScroll(state)
             state,
         )
         FlowRow(
@@ -1098,15 +1080,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
         ) {
             SimpleCard(
                 title = "[T1] Start",
-                description = "0.5초 간격으로 Dispatchers.Default Scope로 Thread.currentThread().name을 참조한 후 Dispatchers.Main Scope에서 결과를 업데이트합니다.",
+                description = "References Thread.currentThread().name every 0.5 seconds with Dispatchers.Default Scope and then updates the result in Dispatchers.Main Scope.",
                 modifier = modifier,
             ) {
-                if (mCoroutineJob?.isActive == true) {
+                if (coroutineJob?.isActive == true) {
                     updateConsole("Job has already started.")
                 } else {
-                    mCoroutineJob =
+                    coroutineJob =
                         lifecycleScope.launch(Dispatchers.Default) {
-                            // launch a new coroutine and keep a reference to its Job
                             for (i in 1..50) {
                                 if (isActive) {
                                     val currentThreadName = Thread.currentThread().name
@@ -1124,22 +1105,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 title = "[T1] Stop",
-                description = "Coroutine Job을 취소합니다.",
+                description = "Cancels the Coroutine Job.",
                 modifier = modifier,
             ) {
-                if (mCoroutineJob?.isActive == true) {
-                    lifecycleScope.launch { mCoroutineJob?.cancelAndJoin() }
+                if (coroutineJob?.isActive == true) {
+                    lifecycleScope.launch { coroutineJob?.cancelAndJoin() }
                 } else {
                     updateConsole("The job has been canceled")
                 }
             }
             SimpleCard(
                 title = "[T1] Job Status",
-                description = "Coroutine Job의 상태를 확인합니다.",
+                description = "Checks the status of the Coroutine Job.",
                 null,
                 modifier = modifier,
             ) {
-                mCoroutineJob?.let {
+                coroutineJob?.let {
                     when (it.isActive) {
                         true -> updateConsole("On")
                         false -> updateConsole("Off")
@@ -1150,14 +1131,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 title = "[T2] Multiple",
-                description = "3개의 Coroutine을 대기없이 실행합니다.",
+                description = "Executes 3 Coroutines without waiting.",
                 modifier = modifier,
             ) {
                 repeat(3) {
                     lifecycleScope.launch(Dispatchers.IO) {
                         for (i in 1..10) {
                             val currentThreadName = Thread.currentThread().name
-                            // runOnUiThread 대신 Main thread로 컨텍스트 스위칭
                             withContext(Dispatchers.Main) {
                                 updateConsole(i.toString(), currentThreadName)
                             }
@@ -1168,7 +1148,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             SimpleCard(
                 "[T3] CoroutineScope Sync or Async",
-                "CoroutineScope 이전, 이후로 로그를 출력합니다.",
+                "Outputs logs before and after the CoroutineScope.",
                 modifier = modifier,
             ) {
                 updateConsole("scope before launch")
@@ -1221,9 +1201,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun updateGPSProvider() {
-        when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        when (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             true -> {
-                // hasGPSPermissions is replaceable, but check directly due to lint error
                 if (ActivityCompat.checkSelfPermission(
                         this@BaseDevActivity,
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -1233,11 +1212,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    mLocationManager.requestLocationUpdates(
+                    locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         0,
                         0F,
-                        mGPSLocationListener,
+                        gpsLocationListener,
                     )
                 }
             }
@@ -1249,7 +1228,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun updateNetWorkProvider() {
-        when (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             true -> {
                 if (checkPermission(
                         arrayOf(
@@ -1258,11 +1237,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         ),
                     )
                 ) {
-                    mLocationManager.requestLocationUpdates(
+                    locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
                         0,
                         0F,
-                        mNetworkLocationListener,
+                        networkLocationListener,
                     )
                 }
             }
@@ -1278,7 +1257,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             NotificationInfo(
                 R.drawable.ic_done,
                 useActionButton = true,
-                mNotificationCount,
+                notificationCount,
             )
         if (ActivityCompat.checkSelfPermission(
                 this@BaseDevActivity,
@@ -1316,7 +1295,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             NotificationInfo(
                 R.drawable.ic_diary_backup_local,
                 useActionButton = true,
-                mNotificationCount++,
+                notificationCount++,
             )
         lifecycleScope.launch(Dispatchers.IO) {
             val bitmap =
@@ -1368,15 +1347,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                             )
                                         },
                                     )
-                                    //                                        setColor(config.primaryColor)
-                                    //                                        setColorized(true)
-                                    //                                        setLargeIcon(BitmapFactory.decodeResource(resources, notification.largeIconResourceId))
                                     addAction(
                                         R.drawable.ic_easydiary,
                                         "Toast",
                                         PendingIntent.getService(
                                             this@BaseDevActivity,
-                                            notification.id, // Private request code for the sender
+                                            notification.id,
                                             Intent(
                                                 this@BaseDevActivity,
                                                 NotificationService::class.java,
@@ -1384,7 +1360,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                                                 action = NotificationConstants.ACTION_DEV_TOAST
                                                 putExtra(
                                                     NOTIFICATION_ID,
-                                                    notification.id, // An identifier for this notification unique within your application.
+                                                    notification.id,
                                                 )
                                             },
                                             pendingIntentFlag(),
@@ -1402,7 +1378,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             NotificationInfo(
                 R.drawable.ic_diary_writing,
                 useActionButton = true,
-                id = mNotificationCount++,
+                id = notificationCount++,
             )
         lifecycleScope.launch(Dispatchers.IO) {
             val bitmap =
@@ -1445,7 +1421,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             NotificationInfo(
                 R.drawable.ic_diary_writing,
                 useActionButton = true,
-                id = mNotificationCount++,
+                id = notificationCount++,
             )
         if (ActivityCompat.checkSelfPermission(
                 this@BaseDevActivity,
@@ -1489,8 +1465,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         info += fullAddress(address[0])
                     }
                 }
-//                mBinding.root.findViewWithTag<MyTextView>(TAG_LOCATION_MANAGER).text = info
-//                makeSnackBar(info)
                 viewModel.locationInfo = info
             }
         }
@@ -1500,7 +1474,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
 
             false -> {
-                acquireGPSPermissions(mRequestLocationSourceLauncher) {
+                acquireGPSPermissions(requestLocationSourceLauncher) {
                     setLocationInfo()
                 }
             }
@@ -1512,7 +1486,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         notificationInfo: NotificationInfo,
     ): NotificationCompat.Builder {
         if (isOreoPlus()) {
-            // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel =
                 NotificationChannel(
@@ -1522,8 +1495,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 )
             channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
 
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
@@ -1539,13 +1510,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 setContentIntent(
                     PendingIntent.getActivity(
                         this@BaseDevActivity,
-                        notificationInfo.id, // Private request code for the sender
+                        notificationInfo.id,
                         Intent(this@BaseDevActivity, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             putExtra(NOTIFICATION_ID, notificationInfo.id)
                             putExtra(
                                 NOTIFICATION_INFO,
-                                "Test Notification Count: $mNotificationCount",
+                                "Test Notification Count: $notificationCount",
                             )
                         },
                         pendingIntentFlag(),
@@ -1559,12 +1530,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 getString(R.string.dismiss),
                 PendingIntent.getService(
                     this,
-                    notificationInfo.id, // Private request code for the sender
+                    notificationInfo.id,
                     Intent(this, NotificationService::class.java).apply {
                         action = NotificationConstants.ACTION_DEV_DISMISS
                         putExtra(
                             NOTIFICATION_ID,
-                            notificationInfo.id, // An identifier for this notification unique within your application.
+                            notificationInfo.id,
                         )
                     },
                     pendingIntentFlag(),
@@ -1579,7 +1550,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 /***************************************************************************************************
  *   classes
  *
- ***************************************************************************************************/
+ ****************************************************************************************************/
 data class NotificationInfo(
     var largeIconResourceId: Int,
     var useActionButton: Boolean = false,
@@ -1589,4 +1560,4 @@ data class NotificationInfo(
 /***************************************************************************************************
  *   extensions
  *
- ***************************************************************************************************/
+ ****************************************************************************************************/

@@ -79,7 +79,7 @@ class DevActivity : BaseDevActivity() {
         // Transparent can lead to inconsistent behavior across different OS versions (like the "scrim" appearing on older versions).
         enableEdgeToEdge()
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 updateStatusBarAppearance()
                 updateNavigationBarAppearance()
@@ -132,7 +132,7 @@ class DevActivity : BaseDevActivity() {
                         },
                     )
                     AnimatedVisibility(
-                        visible = mBaseDevViewModel.isLoading,
+                        visible = baseDevViewModel.isLoading,
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
@@ -146,7 +146,7 @@ class DevActivity : BaseDevActivity() {
     override fun onResume() {
         super.onResume()
         authManager.getProfileUri()?.let {
-            mBaseDevViewModel.profilePicUri = if (authManager.isLoggedInLocal()) it else null
+            baseDevViewModel.profilePicUri = if (authManager.isLoggedInLocal()) it else null
         }
     }
 
@@ -169,12 +169,12 @@ class DevActivity : BaseDevActivity() {
                 title = "CredentialManager",
                 description = "signIn",
                 imageResourceId = R.drawable.logo_google_oauth2,
-                imageUrl = mBaseDevViewModel.profilePicUri?.toUri(),
+                imageUrl = baseDevViewModel.profilePicUri?.toUri(),
                 modifier = modifier,
             ) {
                 lifecycleScope.launch {
                     authManager.signIn().onSuccess { user ->
-                        mBaseDevViewModel.profilePicUri = user.profilePicUri
+                        baseDevViewModel.profilePicUri = user.profilePicUri
                     }
                 }
             }
@@ -183,11 +183,11 @@ class DevActivity : BaseDevActivity() {
                 "signOut",
                 modifier = modifier,
             ) {
-                mBaseDevViewModel.isLoading = true
+                baseDevViewModel.isLoading = true
                 lifecycleScope.launch {
                     authManager.signOut()
-                    mBaseDevViewModel.isLoading = false
-                    mBaseDevViewModel.profilePicUri = null
+                    baseDevViewModel.isLoading = false
+                    baseDevViewModel.profilePicUri = null
                 }
             }
             SimpleCard(
