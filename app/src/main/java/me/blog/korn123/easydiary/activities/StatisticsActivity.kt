@@ -15,13 +15,42 @@ import me.blog.korn123.easydiary.helper.StatisticsConstants
  */
 
 class StatisticsActivity : ChartBase() {
-    private lateinit var mBinding: ActivityStatisticsBinding
+    private lateinit var binding: ActivityStatisticsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityStatisticsBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityStatisticsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        setupActionBar()
+        displayDefaultChart()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (!isSingleChart()) {
+            menuInflater.inflate(R.menu.activity_statistics, menu)
+            val targetItems = mutableListOf<MenuItem>()
+            targetItems.add(menu.findItem(R.id.barChart))
+            targetItems.add(menu.findItem(R.id.barChart2))
+            targetItems.add(menu.findItem(R.id.barChart3))
+            targetItems.forEach { item ->
+                applyFontToMenuItem(item)
+            }
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            R.id.barChart -> switchChart(WritingBarChartFragment(), R.string.statistics_creation_time)
+            R.id.barChart2 -> switchChart(SymbolBarChartFragment(), R.string.statistics_symbol_all)
+            R.id.barChart3 -> switchChart(SymbolHorizontalBarChartFragment(), R.string.statistics_symbol_top_ten)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupActionBar() {
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
@@ -34,7 +63,9 @@ class StatisticsActivity : ChartBase() {
                     else -> getString(R.string.statistics_creation_time)
                 }
         }
+    }
 
+    private fun displayDefaultChart() {
         val defaultChart =
             when (intent.getStringExtra(StatisticsConstants.CHART_MODE)) {
                 StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
@@ -52,51 +83,12 @@ class StatisticsActivity : ChartBase() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (!isSingleChart()) {
-            menuInflater.inflate(R.menu.activity_statistics, menu)
-            val targetItems = mutableListOf<MenuItem>()
-            targetItems.add(menu.findItem(R.id.barChart))
-            targetItems.add(menu.findItem(R.id.barChart2))
-            targetItems.add(menu.findItem(R.id.barChart3))
-            targetItems.map { item ->
-                applyFontToMenuItem(item)
-            }
+    private fun switchChart(fragment: androidx.fragment.app.Fragment, titleResId: Int) {
+        supportActionBar?.title = getString(titleResId)
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.chartView, fragment)
+            commit()
         }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-
-            R.id.barChart -> {
-                supportActionBar?.title = getString(R.string.statistics_creation_time)
-                supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, WritingBarChartFragment())
-                    commit()
-                }
-            }
-
-            R.id.barChart2 -> {
-                supportActionBar?.title = getString(R.string.statistics_symbol_all)
-                supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, SymbolBarChartFragment())
-                    commit()
-                }
-            }
-
-            R.id.barChart3 -> {
-                supportActionBar?.title = getString(R.string.statistics_symbol_top_ten)
-                supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, SymbolHorizontalBarChartFragment())
-                    commit()
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun isSingleChart(): Boolean = intent.getStringExtra(StatisticsConstants.CHART_MODE) != null

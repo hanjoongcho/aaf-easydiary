@@ -21,48 +21,28 @@ import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.utils.FontUtils
 
 class PinLockActivity : BaseSimpleActivity() {
-    private lateinit var mBinding: ActivityPinLockBinding
-    private var mPassword = arrayOfNulls<String>(4)
-    private var mPasswordView = arrayOfNulls<TextView>(4)
-    private var mCursorIndex = 0
+    private lateinit var binding: ActivityPinLockBinding
+    private var password = arrayOfNulls<String>(4)
+    private var passwordView = arrayOfNulls<TextView>(4)
+    private var cursorIndex = 0
     private var activityMode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPinLockBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        binding = ActivityPinLockBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         activityMode = intent.getStringExtra(PinLockConstants.LAUNCHING_MODE)
 
-        mBinding.run {
-            mPasswordView[0] = pass1
-            mPasswordView[1] = pass2
-            mPasswordView[2] = pass3
-            mPasswordView[3] = pass4
-            num0.setOnClickListener(keyPadClickListener)
-            num1.setOnClickListener(keyPadClickListener)
-            num2.setOnClickListener(keyPadClickListener)
-            num3.setOnClickListener(keyPadClickListener)
-            num4.setOnClickListener(keyPadClickListener)
-            num5.setOnClickListener(keyPadClickListener)
-            num6.setOnClickListener(keyPadClickListener)
-            num7.setOnClickListener(keyPadClickListener)
-            num8.setOnClickListener(keyPadClickListener)
-            num9.setOnClickListener(keyPadClickListener)
-            delete.setOnClickListener(keyPadClickListener)
-            if (config.fingerprintLockEnable) {
-                fingerprint.visibility = View.VISIBLE
-                changeFingerprintLock.setOnClickListener {
-                    startActivity(
-                        Intent(this@PinLockActivity, FingerprintLockActivity::class.java).apply {
-                            putExtra(FingerprintLockConstants.LAUNCHING_MODE, FingerprintLockConstants.ACTIVITY_UNLOCK)
-                        },
-                    )
-                    finish()
-                }
-            }
+        binding.run {
+            passwordView[0] = pass1
+            passwordView[1] = pass2
+            passwordView[2] = pass3
+            passwordView[3] = pass4
+            setupKeypadClickListeners()
+            setupFingerprintLock()
         }
 
-        applyBottomNavigationInsets(mBinding.rightContainer)
+        applyBottomNavigationInsets(binding.rightContainer)
         if (isLandScape()) hideSystemBars()
 
         onBackPressedDispatcher.addCallback(
@@ -77,92 +57,114 @@ class PinLockActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
-        mBinding.infoMessage.text = if (activityMode == PinLockConstants.ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
+        FontUtils.setFontsTypeface(applicationContext, null, binding.container)
+        binding.infoMessage.text = if (activityMode == PinLockConstants.ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
     }
 
-    private val keyPadClickListener: View.OnClickListener =
-        View.OnClickListener { view ->
-            val inputPass =
-                when (view?.id) {
-                    R.id.num0 -> "0"
-                    R.id.num1 -> "1"
-                    R.id.num2 -> "2"
-                    R.id.num3 -> "3"
-                    R.id.num4 -> "4"
-                    R.id.num5 -> "5"
-                    R.id.num6 -> "6"
-                    R.id.num7 -> "7"
-                    R.id.num8 -> "8"
-                    R.id.num9 -> "9"
-                    R.id.delete -> "delete"
-                    else -> ""
-                }
+    private fun ActivityPinLockBinding.setupKeypadClickListeners() {
+        val clickListener = View.OnClickListener { view -> handleKeyPadInput(view) }
+        listOf(
+            num0, num1, num2, num3, num4,
+            num5, num6, num7, num8, num9, delete
+        ).forEach { it.setOnClickListener(clickListener) }
+    }
 
-            when (inputPass) {
-                "delete" -> {
-                    if (mCursorIndex > 0) mCursorIndex--
-                    mPasswordView[mCursorIndex]?.text = ""
-                    return@OnClickListener
-                }
-
-                else -> {
-                    mPassword[mCursorIndex] = inputPass
-                    val displayPass = if (activityMode == PinLockConstants.ACTIVITY_SETTING) inputPass else "-"
-                    mPasswordView[mCursorIndex]?.text = displayPass
-
-                    if (mCursorIndex == 3) {
-                        var fullPassword = ""
-                        mPassword.map {
-                            fullPassword += it
-                        }
-
-                        when (activityMode) {
-                            PinLockConstants.ACTIVITY_SETTING -> {
-                                holdCurrentOrientation()
-                                showAlertDialog(
-                                    getString(R.string.pin_setting_complete, fullPassword),
-                                    { _, _ ->
-                                        config.aafPinLockEnable = true
-                                        config.aafPinLockSavedPassword = fullPassword
-                                        pauseLock()
-                                        finish()
-                                    },
-                                    { _, _ ->
-                                        finish()
-                                    },
-                                    DialogMode.INFO,
-                                    false,
-                                )
-                            }
-
-                            PinLockConstants.ACTIVITY_UNLOCK -> {
-                                when (config.aafPinLockSavedPassword == fullPassword) {
-                                    true -> {
-                                        pauseLock()
-                                        finish()
-                                    }
-
-                                    false -> {
-                                        holdCurrentOrientation()
-                                        showAlertDialog(
-                                            message = getString(R.string.pin_verification_fail),
-                                            positiveListener =
-                                                { _, _ ->
-                                                    ActivityCompat.finishAffinity(this@PinLockActivity)
-                                                },
-                                            negativeListener = null,
-                                            dialogMode = DialogMode.DEFAULT,
-                                            cancelable = false,
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        mCursorIndex++
-                    }
-                }
+    private fun ActivityPinLockBinding.setupFingerprintLock() {
+        if (config.fingerprintLockEnable) {
+            fingerprint.visibility = View.VISIBLE
+            changeFingerprintLock.setOnClickListener {
+                startActivity(
+                    Intent(this@PinLockActivity, FingerprintLockActivity::class.java).apply {
+                        putExtra(FingerprintLockConstants.LAUNCHING_MODE, FingerprintLockConstants.ACTIVITY_UNLOCK)
+                    },
+                )
+                finish()
             }
         }
+    }
+
+    private fun handleKeyPadInput(view: View?) {
+        val inputPass = when (view?.id) {
+            R.id.num0 -> "0"
+            R.id.num1 -> "1"
+            R.id.num2 -> "2"
+            R.id.num3 -> "3"
+            R.id.num4 -> "4"
+            R.id.num5 -> "5"
+            R.id.num6 -> "6"
+            R.id.num7 -> "7"
+            R.id.num8 -> "8"
+            R.id.num9 -> "9"
+            R.id.delete -> "delete"
+            else -> ""
+        }
+
+        if (inputPass == "delete") {
+            handleDeleteInput()
+        } else if (inputPass.isNotEmpty()) {
+            handleDigitInput(inputPass)
+        }
+    }
+
+    private fun handleDeleteInput() {
+        if (cursorIndex > 0) cursorIndex--
+        passwordView[cursorIndex]?.text = ""
+    }
+
+    private fun handleDigitInput(inputPass: String) {
+        password[cursorIndex] = inputPass
+        val displayPass = if (activityMode == PinLockConstants.ACTIVITY_SETTING) inputPass else "-"
+        passwordView[cursorIndex]?.text = displayPass
+
+        if (cursorIndex == 3) {
+            processCompletedPassword()
+        } else {
+            cursorIndex++
+        }
+    }
+
+    private fun processCompletedPassword() {
+        val fullPassword = password.joinToString(separator = "") { it ?: "" }
+
+        when (activityMode) {
+            PinLockConstants.ACTIVITY_SETTING -> handleSettingMode(fullPassword)
+            PinLockConstants.ACTIVITY_UNLOCK -> handleUnlockMode(fullPassword)
+        }
+    }
+
+    private fun handleSettingMode(fullPassword: String) {
+        holdCurrentOrientation()
+        showAlertDialog(
+            getString(R.string.pin_setting_complete, fullPassword),
+            { _, _ ->
+                config.aafPinLockEnable = true
+                config.aafPinLockSavedPassword = fullPassword
+                pauseLock()
+                finish()
+            },
+            { _, _ ->
+                finish()
+            },
+            DialogMode.INFO,
+            false,
+        )
+    }
+
+    private fun handleUnlockMode(fullPassword: String) {
+        if (config.aafPinLockSavedPassword == fullPassword) {
+            pauseLock()
+            finish()
+        } else {
+            holdCurrentOrientation()
+            showAlertDialog(
+                message = getString(R.string.pin_verification_fail),
+                positiveListener = { _, _ ->
+                    ActivityCompat.finishAffinity(this@PinLockActivity)
+                },
+                negativeListener = null,
+                dialogMode = DialogMode.DEFAULT,
+                cancelable = false,
+            )
+        }
+    }
 }

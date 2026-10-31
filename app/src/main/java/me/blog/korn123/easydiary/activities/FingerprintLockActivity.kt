@@ -32,34 +32,30 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
 class FingerprintLockActivity : BaseSimpleActivity() {
-    private lateinit var mBinding: ActivityFingerprintLockBinding
-    private lateinit var mKeyStore: KeyStore
-    private lateinit var mKeyGenerator: KeyGenerator
+    private lateinit var binding: ActivityFingerprintLockBinding
+    private lateinit var keyStore: KeyStore
+    private lateinit var keyGenerator: KeyGenerator
 
-    // Biometric 전용 변수
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private var mActivityMode: String? = null
-    private var mSettingComplete = false
+    private var activityMode: String? = null
+    private var settingComplete = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityFingerprintLockBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        binding = ActivityFingerprintLockBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        mActivityMode = intent.getStringExtra(FingerprintLockConstants.LAUNCHING_MODE)
+        activityMode = intent.getStringExtra(FingerprintLockConstants.LAUNCHING_MODE)
 
-        // 1. BiometricPrompt 및 공통 UI 설정
         setupBiometricComponents()
         setupUI()
 
-        // 2. 뒤로가기 마이그레이션 (OnBackPressedDispatcher)
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // 앱 전체 종료 (기존 finishAffinity 유지)
                     ActivityCompat.finishAffinity(this@FingerprintLockActivity)
                 }
             },
@@ -67,7 +63,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
 
     private fun setupUI() {
-        mBinding.changePinLock.run {
+        binding.changePinLock.run {
             setOnClickListener {
                 startActivity(
                     Intent(this@FingerprintLockActivity, PinLockActivity::class.java).apply {
@@ -84,7 +80,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private fun setupBiometricComponents() {
         val executor = ContextCompat.getMainExecutor(this)
 
-        // 인증 콜백 정의
         biometricPrompt =
             BiometricPrompt(
                 this,
@@ -95,11 +90,11 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         config.fingerprintAuthenticationFailCount = 0
                         val cipher = result.cryptoObject?.cipher
 
-                        when (mActivityMode) {
+                        when (activityMode) {
                             FingerprintLockConstants.ACTIVITY_SETTING -> {
                                 tryEncrypt(cipher)
                                 holdCurrentOrientation()
-                                mSettingComplete = true
+                                settingComplete = true
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()
@@ -121,7 +116,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         errString: CharSequence,
                     ) {
                         super.onAuthenticationError(errorCode, errString)
-                        // 사용자가 취소한 게 아니라면 에러 메시지 표시
                         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
                             updateErrorMessage(errString.toString())
                         }
@@ -134,24 +128,22 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 },
             )
 
-        // 시스템 팝업 정보 설정
         promptInfo =
             BiometricPrompt.PromptInfo
                 .Builder()
                 .setTitle(getString(R.string.app_name))
                 .setSubtitle(getString(R.string.place_finger_description))
                 .setNegativeButtonText(getString(R.string.cancel))
-                // 강력한 생체 인증(지문 등)만 허용
                 .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
                 .build()
     }
 
     override fun onResume() {
         super.onResume()
-        if (!mSettingComplete) {
-            mBinding.guideMessage.text = getString(R.string.place_finger_description)
-            FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
-            mBinding.changePinLock.visibility = if (mActivityMode == FingerprintLockConstants.ACTIVITY_SETTING) View.GONE else View.VISIBLE
+        if (!settingComplete) {
+            binding.guideMessage.text = getString(R.string.place_finger_description)
+            FontUtils.setFontsTypeface(applicationContext, null, binding.container)
+            binding.changePinLock.visibility = if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) View.GONE else View.VISIBLE
 
             startBiometricAuth()
         }
@@ -159,28 +151,24 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
     private fun startBiometricAuth() {
         try {
-            // KeyStore 및 Cipher 초기화 (기존 로직 유지)
-            mKeyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-            mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
 
             val defaultCipher = Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/${KeyProperties.BLOCK_MODE_CBC}/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
             val keyguardManager = getSystemService(KeyguardManager::class.java)
 
-            // 보안 상태 확인
             if (!keyguardManager.isKeyguardSecure) {
                 updateErrorMessage("Secure lock screen hasn't set up.")
                 return
             }
 
-            // 인증 가능 여부 확인
             val biometricManager = BiometricManager.from(this)
             if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
-                if (mActivityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
+                if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
                     createKey(FingerprintLockConstants.KEY_NAME, true)
                 }
 
                 if (initCipher(defaultCipher, FingerprintLockConstants.KEY_NAME)) {
-                    // 핵심: BiometricPrompt 실행 (CryptoObject 전달)
                     biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(defaultCipher))
                 }
             } else {
@@ -191,14 +179,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
     }
 
-    // --- 암호화 관련 기존 로직 (유지) ---
-
     private fun createKey(
         keyName: String,
         invalidatedByBiometricEnrollment: Boolean,
     ) {
         try {
-            mKeyStore.load(null)
+            keyStore.load(null)
             val builder =
                 KeyGenParameterSpec
                     .Builder(keyName, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
@@ -209,8 +195,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 builder.setInvalidatedByBiometricEnrollment(invalidatedByBiometricEnrollment)
             }
-            mKeyGenerator.init(builder.build())
-            mKeyGenerator.generateKey()
+            keyGenerator.init(builder.build())
+            keyGenerator.generateKey()
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -221,9 +207,9 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         keyName: String,
     ): Boolean {
         try {
-            mKeyStore.load(null)
-            val key = mKeyStore.getKey(keyName, null) as SecretKey
-            if (mActivityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
+            keyStore.load(null)
+            val key = keyStore.getKey(keyName, null) as SecretKey
+            if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
                 cipher.init(Cipher.ENCRYPT_MODE, key)
             } else {
                 val iv = Base64.decode(config.fingerprintEncryptDataIV, Base64.DEFAULT)
@@ -253,8 +239,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         try {
             cipher?.let {
                 val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
-                val data = it.doFinal(encodedData)
-//                makeToast(String(data, Charsets.UTF_8))
+                it.doFinal(encodedData)
                 true
             } ?: false
         } catch (e: Exception) {
@@ -263,6 +248,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
 
     private fun updateErrorMessage(errorMessage: String) {
-        mBinding.guideMessage.text = errorMessage
+        binding.guideMessage.text = errorMessage
     }
 }

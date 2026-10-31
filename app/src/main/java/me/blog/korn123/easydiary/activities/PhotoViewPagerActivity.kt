@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -28,30 +28,30 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
  */
 
 class PhotoViewPagerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPhotoViewPagerBinding
-    private var mPhotoCount: Int = 0
+    private lateinit var binding: ActivityPhotoViewPagerBinding
+    private var photoCount: Int = 0
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val intent = intent
         val sequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
         lifecycleScope.launch {
-            diaryViewModel.findDiaryById(sequence)?.let {
-                mPhotoCount = it.photoUris.size
+            diaryViewModel.findDiaryById(sequence)?.let { diary ->
+                photoCount = diary.photoUris.size
 
                 supportActionBar?.run {
                     setDisplayHomeAsUpEnabled(true)
                     setHomeAsUpIndicator(R.drawable.ic_cross)
-                    title = "1 / $mPhotoCount"
+                    title = "1 / $photoCount"
                 }
 
-                mBinding.run {
-                    viewPager.adapter = PhotoPagerAdapter(it)
+                binding.run {
+                    viewPager.adapter = PhotoPagerAdapter(diary)
                     viewPager.addOnPageChangeListener(
                         object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                             override fun onPageScrolled(
@@ -61,20 +61,20 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                             ) {}
 
                             override fun onPageSelected(position: Int) {
-                                toolbar.title = "${position + 1} / $mPhotoCount"
+                                toolbar.title = "${position + 1} / $photoCount"
                             }
 
                             override fun onPageScrollStateChanged(state: Int) {}
                         },
                     )
-                    if (photoIndex > 0) Handler().post { viewPager.setCurrentItem(photoIndex, false) }
+                    if (photoIndex > 0) android.os.Handler(Looper.getMainLooper()).post { viewPager.setCurrentItem(photoIndex, false) }
                 }
             }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        mBinding.run {
+        binding.run {
             when (item.itemId) {
                 android.R.id.home -> {
                     TransitionHelper.finishActivityWithTransition(this@PhotoViewPagerActivity, TransitionConstants.TOP_TO_BOTTOM)
@@ -88,15 +88,14 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 
                 R.id.share -> {
                     val diary = (viewPager.adapter as PhotoPagerAdapter).diary
-                    diary.photoUris?.let {
-                        it[viewPager.currentItem]?.let { photoUri ->
-                            when (diary.isEncrypt) {
-                                true -> {}
+                    if (diary.photoUris.isNotEmpty() && viewPager.currentItem in diary.photoUris.indices) {
+                        val photoUri = diary.photoUris[viewPager.currentItem]
+                        when (diary.isEncrypt) {
+                            true -> {}
 
-                                false -> {
-                                    val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
-                                    shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
-                                }
+                            false -> {
+                                val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
+                                shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
                             }
                         }
                     }
@@ -116,7 +115,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
     internal class PhotoPagerAdapter(
         var diary: DiaryDomain,
     ) : androidx.viewpager.widget.PagerAdapter() {
-        override fun getCount(): Int = diary.photoUris?.size ?: 0
+        override fun getCount(): Int = diary.photoUris.size
 
         override fun instantiateItem(
             container: ViewGroup,
@@ -127,8 +126,6 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diary.photoUrisWithEncryptionPolicy()!![position].getFilePath()
             when {
                 File(imageFilePath).isFile -> {
-                    // Now just add PhotoView to ViewPager and return it
-//                    photoView.setImageBitmap(bitmap)
                     val options =
                         RequestOptions()
                             .error(R.drawable.ic_error_7)

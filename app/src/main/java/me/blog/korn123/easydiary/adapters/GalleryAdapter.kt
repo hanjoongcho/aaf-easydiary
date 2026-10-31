@@ -70,13 +70,13 @@ class GalleryAdapter(
 
     inner class GalleryViewHolder(
         val activity: Activity,
-        private val itemGalleryBinding: ItemGalleryBinding,
+        private val binding: ItemGalleryBinding,
         val adapter: GalleryAdapter,
-    ) : RecyclerView.ViewHolder(itemGalleryBinding.root),
+    ) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
         init {
-            itemGalleryBinding.run {
+            binding.run {
                 activity.updateAppViews(root)
                 FontUtils.setFontsTypeface(activity, null, imageContainer)
                 root.setOnClickListener(this@GalleryViewHolder)
@@ -87,9 +87,9 @@ class GalleryAdapter(
         @SuppressLint("SetTextI18n")
         fun bindTo(position: Int) {
             val attachedPhoto = listPostcard[position]
-            val timeStampView = itemGalleryBinding.createdDate
+            val timeStampView = binding.createdDate
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, activity.dpToPixelFloatValue(10F))
-            itemGalleryBinding.checkItem.isChecked = attachedPhoto.isItemChecked
+            binding.checkItem.isChecked = attachedPhoto.isItemChecked
             timeStampView.text = attachedPhoto.diary?.let {
                 DateUtils.getDateTimeStringForceFormatting(it.currentTimeMillis, activity)
             } ?: run { GalleryConstants.GUIDE_MESSAGE }
@@ -98,31 +98,31 @@ class GalleryAdapter(
                 val point = getDefaultDisplay()
                 val spanCount = if (activity.isLandScape()) config.gallerySpanCountLandscape else config.gallerySpanCountPortrait
                 val targetX = point.x / spanCount
-                itemGalleryBinding.imageContainer.layoutParams.height = targetX
-                itemGalleryBinding.imageview.layoutParams.height = targetX
-                itemGalleryBinding.imageview.layoutParams.width = targetX
-                itemGalleryBinding.imageview.scaleType = ImageView.ScaleType.CENTER
+                binding.imageContainer.layoutParams.height = targetX
+                binding.imageview.layoutParams.height = targetX
+                binding.imageview.layoutParams.width = targetX
+                binding.imageview.scaleType = ImageView.ScaleType.CENTER
                 Glide
-                    .with(itemGalleryBinding.imageview.context)
+                    .with(binding.imageview.context)
                     .load(if (attachedPhoto.diary?.isEncrypt == true) null else attachedPhoto.file)
                     .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL, attachedPhoto.diary?.isEncrypt ?: false))
-                    .into(itemGalleryBinding.imageview)
+                    .into(binding.imageview)
             }
         }
 
         fun recycle() {
-            Glide.with(itemGalleryBinding.imageview.context).clear(itemGalleryBinding.imageview)
+            Glide.with(binding.imageview.context).clear(binding.imageview)
         }
 
-        override fun onClick(p0: View?) {
+        override fun onClick(v: View?) {
             adapter.onItemHolderClick(this)
         }
 
         override fun onCheckedChanged(
-            p0: CompoundButton,
-            p1: Boolean,
+            buttonView: CompoundButton,
+            isChecked: Boolean,
         ) {
-            adapter.onItemCheckedChange(this.adapterPosition, p1)
+            adapter.onItemCheckedChange(this.adapterPosition, isChecked)
         }
     }
 

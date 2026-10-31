@@ -129,7 +129,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *   override functions
      *
      ***************************************************************************************************/
-    override fun createScrollable(): FastScrollObservableRecyclerView = mBinding.diaryListView
+    override fun createScrollable(): FastScrollObservableRecyclerView = binding.diaryListView
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -139,12 +139,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             setDisplayShowTitleEnabled(true)
         }
 
-        mBinding.root.viewTreeObserver.addOnPreDrawListener(
+        binding.root.viewTreeObserver.addOnPreDrawListener(
             object :
                 ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean =
                     if (viewModel.isReady.value) {
-                        mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
+                        binding.root.viewTreeObserver.removeOnPreDrawListener(this)
                         true
                     } else {
                         false
@@ -201,7 +201,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             lifecycleScope.launch {
                 val maxSequence = diaryViewModel.getMaxDiarySequence()
-                mBinding.diaryListView.layoutManager?.scrollToPosition(
+                binding.diaryListView.layoutManager?.scrollToPosition(
                     getIndexBySequence(
                         maxSequence,
                     ),
@@ -210,16 +210,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
         }
 
-        mBinding.composeView.visibility = View.VISIBLE
+        binding.composeView.visibility = View.VISIBLE
 
         if (isVanillaIceCreamPlus()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mBinding.diaryListView) { _, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(binding.diaryListView) { _, insets ->
 //                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
 //                v.updatePadding(bottom = navigationBars.bottom)
                 insets
             }
 
-            ViewCompat.setOnApplyWindowInsetsListener(mBinding.appBar) { v, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { v, insets ->
                 val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
                 v.updatePadding(top = statusBars.top)
                 insets
@@ -346,7 +346,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                     diaryRepository.duplicateDiary(it)
                                 }
                                 Handler(Looper.getMainLooper()).post {
-                                    mBinding.diaryListView.layoutManager?.scrollToPosition(
+                                    binding.diaryListView.layoutManager?.scrollToPosition(
                                         0,
                                     )
                                 }
@@ -464,11 +464,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         when (isVisible) {
             true -> {
-                mBinding.layoutBannerContainer.visibility = View.VISIBLE
+                binding.layoutBannerContainer.visibility = View.VISIBLE
                 if (isLandScape()) {
                     val point = getDefaultDisplay()
                     val historyWidth = (point.x / 2.5).toInt()
-                    mBinding.layoutBannerContainer.layoutParams.width = historyWidth
+                    binding.layoutBannerContainer.layoutParams.width = historyWidth
 
                     // 1. Android 15(Vanilla Ice Cream) 이상일 때만 좌우 인셋 합산
                     val horizontalInsets =
@@ -484,14 +484,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     val calculatedWidth = point.x - historyWidth - horizontalInsets
 
                     // 3. 중복되는 layoutParams 설정 단일화
-                    listOf(mBinding.diaryListView, mBinding.composeView).forEach { view ->
+                    listOf(binding.diaryListView, binding.composeView).forEach { view ->
                         view.layoutParams = view.layoutParams.apply { width = calculatedWidth }
                     }
                 }
             }
 
             false -> {
-                mBinding.run {
+                binding.run {
                     layoutBannerContainer.visibility = View.GONE
                     if (isLandScape()) {
                         diaryListView.layoutParams.width = RecyclerView.LayoutParams.MATCH_PARENT
@@ -502,7 +502,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun applyBannerContainerMargin() {
-        mBinding.layoutBannerContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        binding.layoutBannerContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = if (config.enableCardViewPolicy) dpToPixel(3f) else dpToPixel(1f)
         }
     }
@@ -551,11 +551,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                     R.id.gridLayout -> {
                         openGridSettingDialog(
-                            mBinding.mainHolder,
+                            binding.mainHolder,
                             GridSpanMode.DIARY_MAIN,
                         ) { spanCount ->
                             gridLayoutManager.spanCount = spanCount
-                            mBinding.diaryListView.invalidateItemDecorations()
+                            binding.diaryListView.invalidateItemDecorations()
                         }
                     }
                 }
@@ -617,7 +617,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         target?.let {
             position = getIndexBySequence(target.diaryId)
             if (position != -1) {
-                (mBinding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
+                (binding.diaryListView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
                     position,
                     0,
                 )
@@ -668,7 +668,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         diaryMainItemAdapter?.currentQuery = diaryViewModel.query.value
                         diaryMainItemAdapter?.notifyDataSetChanged()
 
-                        mBinding.run {
+                        binding.run {
                             if (diaryList.isEmpty()) {
                                 diaryListView.visibility = View.GONE
                                 textNoDiary.visibility = View.VISIBLE
@@ -763,7 +763,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
         gridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
-        mBinding.diaryListView.run {
+        binding.diaryListView.run {
             adapter = diaryMainItemAdapter
             layoutManager = gridLayoutManager
             addItemDecoration(
@@ -777,7 +777,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun setupComposeView() {
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             val currentQuery by diaryViewModel.query.collectAsState()
             val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
             val currentSymbol by viewModel.symbol.collectAsState()
@@ -812,24 +812,24 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         openCustomOptionMenu()
                     },
                     onMoveTop = {
-                        mBinding.diaryListView.layoutManager?.scrollToPosition(0)
+                        binding.diaryListView.layoutManager?.scrollToPosition(0)
                     },
                     onMoveBottom = {
-                        mBinding.diaryListView.adapter?.itemCount?.let { count ->
+                        binding.diaryListView.adapter?.itemCount?.let { count ->
                             if (count > 0) {
-                                mBinding.diaryListView.layoutManager?.scrollToPosition(count - 1)
+                                binding.diaryListView.layoutManager?.scrollToPosition(count - 1)
                             }
                         }
                     },
                     onHeightChanged = { height ->
                         bottomSheetHeightPx = with(density) { height.roundToPx() }
-                        mBinding.diaryListView.invalidateItemDecorations()
+                        binding.diaryListView.invalidateItemDecorations()
                     },
                 )
             }
         }
 
-        mBinding.partialComposeLoadingScreen.composeView.setContent {
+        binding.partialComposeLoadingScreen.composeView.setContent {
             AppTheme {
                 AnimatedVisibility(
                     visible = diaryViewModel.isLoading,
@@ -857,7 +857,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun setupDiaryListScrollListener() {
-        mBinding.diaryListView.addOnScrollListener(
+        binding.diaryListView.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(
                     recyclerView: RecyclerView,

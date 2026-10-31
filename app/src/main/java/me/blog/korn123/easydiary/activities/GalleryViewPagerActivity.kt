@@ -31,33 +31,32 @@ import me.blog.korn123.easydiary.utils.FontUtils
  */
 
 class GalleryViewPagerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPhotoViewPagerBinding
-    private var mAttachedPhotoCount: Int = 0
-    private var mAttachedPhotos: ArrayList<GalleryAdapter.AttachedPhoto> = arrayListOf()
+    private lateinit var binding: ActivityPhotoViewPagerBinding
+    private var attachedPhotoCount: Int = 0
+    private val attachedPhotos: ArrayList<GalleryAdapter.AttachedPhoto> = arrayListOf()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
         lifecycleScope.launch(Dispatchers.IO) {
-            val attachedPhotos = diaryViewModel.getAttachedPhotos(this@GalleryViewPagerActivity)
+            val fetchedPhotos = diaryViewModel.getAttachedPhotos(this@GalleryViewPagerActivity)
             withContext(Dispatchers.Main) {
-                mAttachedPhotos.clear()
-                attachedPhotos?.let { mAttachedPhotos.addAll(it) }
+                attachedPhotos.clear()
+                fetchedPhotos?.let { attachedPhotos.addAll(it) }
 
-                mAttachedPhotoCount = mAttachedPhotos.size
+                attachedPhotoCount = attachedPhotos.size
 
                 supportActionBar?.run {
                     setDisplayHomeAsUpEnabled(true)
                     setHomeAsUpIndicator(R.drawable.ic_cross)
-                    title = "1 / $mAttachedPhotoCount"
+                    title = "1 / $attachedPhotoCount"
                 }
 
-                mBinding.run {
+                binding.run {
                     viewPager.adapter = GalleryPagerAdapter()
                     viewPager.addOnPageChangeListener(
                         object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
@@ -68,7 +67,7 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
                             ) {}
 
                             override fun onPageSelected(position: Int) {
-                                toolbar.title = "${position + 1} / $mAttachedPhotoCount"
+                                toolbar.title = "${position + 1} / $attachedPhotoCount"
                             }
 
                             override fun onPageScrollStateChanged(state: Int) {}
@@ -86,38 +85,33 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        mBinding.run {
-            val attachedPhoto = mAttachedPhotos[viewPager.currentItem]
+        binding.run {
+            val attachedPhoto = attachedPhotos[viewPager.currentItem]
             when (item.itemId) {
                 R.id.share -> {
-                    when (attachedPhoto.diary == null) {
-                        true -> {
-                            // FIXME: Check mimetype from PhotoUri Model
-                            shareFile(attachedPhoto.file, MIME_TYPE_JPEG)
-                        }
-
-                        false -> {
-                            if (attachedPhoto.diary.isEncrypt) {
-                                makeToast("Encrypted files cannot be shared.")
-                            } else {
-                                shareFile(
-                                    attachedPhoto.file,
-                                    MIME_TYPE_JPEG,
-                                )
-                            }
+                    if (attachedPhoto.diary == null) {
+                        shareFile(attachedPhoto.file, MIME_TYPE_JPEG)
+                    } else {
+                        if (attachedPhoto.diary.isEncrypt) {
+                            makeToast("Encrypted files cannot be shared.")
+                        } else {
+                            shareFile(
+                                attachedPhoto.file,
+                                MIME_TYPE_JPEG,
+                            )
                         }
                     }
                 }
 
                 R.id.diary -> {
-                    attachedPhoto.diary?.let {
+                    attachedPhoto.diary?.let { diary ->
                         TransitionHelper.startActivityWithTransition(
                             this@GalleryViewPagerActivity,
                             Intent(
                                 this@GalleryViewPagerActivity,
                                 DiaryReadingActivity::class.java,
                             ).apply {
-                                putExtra(DIARY_SEQUENCE, it.diaryId)
+                                putExtra(DIARY_SEQUENCE, diary.diaryId)
                             },
                         )
                     } ?: run { makeToast("There is no linked diary information.") }
@@ -130,34 +124,34 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
     }
 
     inner class GalleryPagerAdapter : androidx.viewpager.widget.PagerAdapter() {
-        override fun getCount(): Int = mAttachedPhotos.size
+        override fun getCount(): Int = attachedPhotos.size
 
         override fun instantiateItem(
             container: ViewGroup,
             position: Int,
         ): View {
             val photoView = PhotoView(container.context)
-            val attachedPhoto = mAttachedPhotos[position]
+            val attachedPhoto = attachedPhotos[position]
             val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) "" else attachedPhoto.file.path)
 
-            when (bitmap == null) {
-                true -> {
-                    val textView = TextView(container.context)
-                    textView.gravity = Gravity.CENTER
+            return if (bitmap == null) {
+                val textView = TextView(container.context).apply {
+                    gravity = Gravity.CENTER
                     val padding = container.context.dpToPixel(10F)
-                    textView.setPadding(padding, padding, padding, padding)
-                    textView.typeface = FontUtils.getCommonTypeface(container.context)
-                    textView.text = if (attachedPhoto.diary?.isEncrypt == true) "The diary is encrypted. You will need to decrypt the diary to see the attached photos." else container.context.getString(R.string.photo_view_error_info)
-                    container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return textView
+                    setPadding(padding, padding, padding, padding)
+                    typeface = FontUtils.getCommonTypeface(container.context)
+                    text = if (attachedPhoto.diary?.isEncrypt == true) {
+                        "The diary is encrypted. You will need to decrypt the diary to see the attached photos."
+                    } else {
+                        container.context.getString(R.string.photo_view_error_info)
+                    }
                 }
-
-                false -> {
-                    // Now just add PhotoView to ViewPager and return it
-                    photoView.setImageBitmap(bitmap)
-                    container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return photoView
-                }
+                container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                textView
+            } else {
+                photoView.setImageBitmap(bitmap)
+                container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                photoView
             }
         }
 

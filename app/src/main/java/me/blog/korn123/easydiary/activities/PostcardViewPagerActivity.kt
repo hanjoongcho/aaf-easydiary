@@ -2,7 +2,11 @@ package me.blog.korn123.easydiary.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import me.blog.korn123.easydiary.R
@@ -16,40 +20,35 @@ import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
 
-/**
- * Created by hanjoong on 2017-06-08.
- */
+class PostcardViewPagerActivity : EasyDiaryActivity() {
+    private lateinit var binding: ActivityPhotoViewPagerBinding
+    private var postcardCount: Int = 0
+    private lateinit var listPostcard: List<File>
 
-class
-PostcardViewPagerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPhotoViewPagerBinding
-    private var mPostcardCount: Int = 0
-    private lateinit var mListPostcard: List<File>
-
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityPhotoViewPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
 
-        mListPostcard =
+        listPostcard =
             File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
-                .filter { it.extension.equals("jpg", true) }
-                .sortedDescending()
-        mPostcardCount = mListPostcard.size
+                ?.filter { it.extension.equals("jpg", true) }
+                ?.sortedDescending()
+                ?: emptyList()
+        postcardCount = listPostcard.size
 
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
-            title = "1 / $mPostcardCount"
+            title = "1 / $postcardCount"
         }
 
-        mBinding.run {
-            viewPager.adapter = PostcardPagerAdapter(mListPostcard)
+        binding.run {
+            viewPager.adapter = PostcardPagerAdapter(listPostcard)
             viewPager.addOnPageChangeListener(
                 object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                     override fun onPageScrolled(
@@ -59,18 +58,12 @@ PostcardViewPagerActivity : EasyDiaryActivity() {
                     ) {}
 
                     override fun onPageSelected(position: Int) {
-                        toolbar.title = "${position + 1} / $mPostcardCount"
+                        toolbar.title = "${position + 1} / $postcardCount"
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {}
                 },
             )
-
-//        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
-//        closeIcon?.let {
-//            it.setColorFilter(this.config.primaryColor, PorterDuff.Mode.SRC_IN)
-//            close.setImageDrawable(closeIcon)
-//        }
 
             viewPager.setCurrentItem(sequence, false)
         }
@@ -83,54 +76,50 @@ PostcardViewPagerActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.share -> shareFile(mListPostcard[mBinding.viewPager.currentItem], MIME_TYPE_JPEG)
+            R.id.share -> shareFile(listPostcard[binding.viewPager.currentItem], MIME_TYPE_JPEG)
         }
         return super.onOptionsItemSelected(item)
     }
 
     internal class PostcardPagerAdapter(
-        var listPostcard: List<File>,
+        private var listPostcard: List<File>,
     ) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int = listPostcard.size
 
         override fun instantiateItem(
             container: ViewGroup,
             position: Int,
-        ): View {
+        ): Any {
             val photoView = PhotoView(container.context)
             val bitmap = BitmapFactory.decodeFile(listPostcard[position].path)
-            when (bitmap == null) {
-                true -> {
-                    val textView = TextView(container.context)
-                    textView.gravity = Gravity.CENTER
+            return if (bitmap == null) {
+                val textView = TextView(container.context).apply {
+                    gravity = Gravity.CENTER
                     val padding = container.context.dpToPixel(10F)
-                    textView.setPadding(padding, padding, padding, padding)
-                    FontUtils.setTypefaceDefault(textView)
-                    textView.text = container.context.getString(R.string.photo_view_error_info)
-                    container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return textView
+                    setPadding(padding, padding, padding, padding)
+                    FontUtils.setTypefaceDefault(this)
+                    text = container.context.getString(R.string.photo_view_error_info)
                 }
-
-                false -> {
-                    // Now just add PhotoView to ViewPager and return it
-                    photoView.setImageBitmap(bitmap)
-                    container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return photoView
-                }
+                container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                textView
+            } else {
+                photoView.setImageBitmap(bitmap)
+                container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                photoView
             }
         }
 
         override fun destroyItem(
             container: ViewGroup,
             position: Int,
-            `object`: Any,
+            objectName: Any,
         ) {
-            container.removeView(`object` as View)
+            container.removeView(objectName as View)
         }
 
         override fun isViewFromObject(
             view: View,
-            `object`: Any,
-        ): Boolean = view === `object`
+            objectName: Any,
+        ): Boolean = view === objectName
     }
 }
