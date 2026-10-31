@@ -1,5 +1,6 @@
 package me.blog.korn123.commons.utils
 
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import org.junit.Assert.assertTrue
 import org.junit.Test
 

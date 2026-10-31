@@ -111,7 +111,7 @@
             android:theme="@style/SplashScreenTheme"
             />
         <activity
-            android:name=".activities.DevActivity"
+            android:name=".presentation.dev.DevActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SettingsActivity"
@@ -182,11 +182,6 @@
             android:theme="@style/Theme.MaterialComponents" />
         <activity
             android:name=".presentation.main.DiaryMainActivity"
-            android:label=""
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.MaterialComponents" />
-        <activity
-            android:name=".presentation.main.DiaryMain2Activity"
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents" />

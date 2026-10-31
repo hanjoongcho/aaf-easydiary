@@ -1,10 +1,13 @@
-package me.blog.korn123.easydiary.activities
+package me.blog.korn123.easydiary.presentation.dev
 
 import GoogleAuthManager
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -25,6 +28,10 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -36,12 +43,15 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.calendar.CalendarScopes
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateNavigationBarAppearance
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
@@ -49,7 +59,7 @@ import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GDriveConstants
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
-import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
+import me.blog.korn123.easydiary.presentation.dev.components.*
 import me.blog.korn123.easydiary.presentation.settings.components.CardContainer
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
@@ -108,20 +118,104 @@ class DevActivity : BaseDevActivity() {
                                             .weight(1f)
 
                                     RefactoringBacklog(settingCardModifier, maxItemsInEachRow)
-                                    ExportRealmToJson(settingCardModifier, maxItemsInEachRow)
+                                    ExportRealmToJson(
+                                        settingCardModifier,
+                                        maxItemsInEachRow,
+                                        diaryViewModel,
+                                        lifecycleScope,
+                                        onExportDiary = {
+                                            val fileName = "diary_export_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                                            exportJsonLauncher.launch(fileName)
+                                        },
+                                        onExportDiaryBySymbol = { seq ->
+                                            val fileName = "diary_export_symbol_${seq}_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                                            exportJsonLauncher.launch(fileName)
+                                        },
+                                        onExportAlarm = {
+                                            val fileName = "alarm_export_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                                            exportJsonLauncher.launch(fileName)
+                                        },
+                                        onExportActionLog = {
+                                            val fileName = "action_log_export_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                                            exportJsonLauncher.launch(fileName)
+                                        },
+                                        onExportDDay = {
+                                            val fileName = "d-day_export_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
+                                            exportJsonLauncher.launch(fileName)
+                                        }
+                                    )
                                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                                     GoogleMobileService(settingCardModifier, maxItemsInEachRow)
 
                                     DevModeSettings(settingCardModifier, maxItemsInEachRow, viewModel)
                                     DebugToast(settingCardModifier, maxItemsInEachRow)
 
-                                    Etc(settingCardModifier, maxItemsInEachRow)
+                                    Etc(
+                                        settingCardModifier,
+                                        maxItemsInEachRow,
+                                        lifecycleScope,
+                                        actionLogHandler = {
+                                            lifecycleScope.launch {
+                                                val actionLogs = actionLogRepository.getAllActionLogs()
+                                                me.blog.korn123.easydiary.dialogs.ActionLogDialog(
+                                                    this@DevActivity,
+                                                    actionLogs,
+                                                ) {
+                                                    lifecycleScope.launch {
+                                                        actionLogRepository.deleteAllActionLogs()
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        pickMediaLauncher = {
+                                            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                                        }
+                                    )
                                     ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
-                                    Notification(settingCardModifier, maxItemsInEachRow)
+                                    Notification(
+                                        settingCardModifier,
+                                        maxItemsInEachRow,
+                                        onCreateBasicNotification = { createNotificationBasic() },
+                                        onCreateBitmapNotification = { createNotificationBasicWithBitmapIcon(this@DevActivity) },
+                                        onCreateCustomNotification = { createNotificationCustomView(this@DevActivity) },
+                                        onCreateBigTextNotification = { createNotificationBigTextStyle() },
+                                        onOpenOverDueNotification = {
+                                            lifecycleScope.launch {
+                                                openOverDueNotification(
+                                                    diaryViewModel
+                                                        .findDiary(
+                                                            null,
+                                                            false,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                        ).filter { item -> item.symbolSequence in 80..81 },
+                                                )
+                                            }
+                                        },
+                                        onCancelAllNotifications = {
+                                            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
+                                        }
+                                    )
                                     AlertDialog(settingCardModifier, maxItemsInEachRow)
 
-                                    LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                                    Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
+                                    LocationManager(
+                                        settingCardModifier,
+                                        maxItemsInEachRow,
+                                        viewModel,
+                                        onUpdateLocation = { updateLocation(viewModel) },
+                                        onUpdateGps = { updateGPSProvider() },
+                                        onUpdateNetwork = { updateNetWorkProvider() }
+                                    )
+                                    var jobState by remember { mutableStateOf<Job?>(null) }
+                                    Coroutine(
+                                        settingCardModifier,
+                                        maxItemsInEachRow,
+                                        viewModel,
+                                        lifecycleScope,
+                                        jobState,
+                                        onJobChanged = { jobState = it }
+                                    )
                                     FingerPrint(settingCardModifier, maxItemsInEachRow)
 
                                     Spacer(
@@ -250,31 +344,6 @@ class DevActivity : BaseDevActivity() {
                         ContextCompat.startForegroundService(this@DevActivity, this)
                     }
                 }
-            }
-        }
-    }
-
-    @Composable
-    @Preview(heightDp = 1100)
-    private fun DevActivityPreview() {
-        AppTheme {
-            val configuration = LocalConfiguration.current
-            val maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 3
-
-            CardContainer {
-                val settingCardModifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                CustomLauncher(settingCardModifier, maxItemsInEachRow)
-                Notification(settingCardModifier, maxItemsInEachRow)
-                AlertDialog(settingCardModifier, maxItemsInEachRow)
-//                Etc(settingCardModifier, maxItemsInEachRow, viewModel)
-//                LocationManager(settingCardModifier, maxItemsInEachRow, viewModel)
-                DebugToast(settingCardModifier, maxItemsInEachRow)
-//                Coroutine(settingCardModifier, maxItemsInEachRow, viewModel)
-                FingerPrint(settingCardModifier, maxItemsInEachRow)
-                GoogleMobileService(settingCardModifier, maxItemsInEachRow)
             }
         }
     }
