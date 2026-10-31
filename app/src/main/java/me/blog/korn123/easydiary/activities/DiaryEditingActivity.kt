@@ -15,43 +15,29 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.utils.JasyptUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
-/**
- * Created by CHO HANJOONG on 2017-03-16.
- */
 @AndroidEntryPoint
 class DiaryEditingActivity : BaseDiaryEditingActivity() {
-    /***************************************************************************************************
-     *   global properties
-     *
-     ***************************************************************************************************/
-    private var mSequence: Long = 0
+    private var diarySequence: Long = 0
 
-    /***************************************************************************************************
-     *   override functions
-     *
-     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSupportActionBar(mBinding.toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.run {
-//            title = getString(R.string.update_diary_title)
             setDisplayShowTitleEnabled(false)
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
-//        mCustomLineSpacing = false
 
         lifecycleScope.launch {
             addTextWatcher()
             setupRecognizer()
-//        setupSpinner()
             initData()
             initDateTime()
             setupDialog()
             setupPhotoView()
             setDateTime()
             bindEvent()
-            savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
+            savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(diarySequence) }
             initBottomToolbar()
             toggleSimpleLayout()
         }
@@ -59,33 +45,28 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
-            true -> mBinding.photoProgress.visibility = View.VISIBLE
-            false -> mBinding.photoProgress.visibility = View.GONE
+            true -> binding.photoProgress.visibility = View.VISIBLE
+            false -> binding.photoProgress.visibility = View.GONE
         }
     }
 
     override fun onPause() {
         super.onPause()
         lifecycleScope.launch {
-            if (mIsDiarySaved) {
-                diaryRepository.deleteTemporaryDiaryByOriginId(mSequence)
+            if (isDiarySaved) {
+                diaryRepository.deleteTemporaryDiaryByOriginId(diarySequence)
             } else {
-                saveTemporaryDiary(mSequence)
+                saveTemporaryDiary(diarySequence)
             }
         }
     }
 
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     private suspend fun initData() {
-        val intent = intent
-        mSequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
-        diaryViewModel.findDiaryById(mSequence)?.let {
-            mSymbolSequence = it.symbolSequence
-            mLinkedDiaries = it.linkedDiaries
-            initData(it)
+        diarySequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
+        diaryViewModel.findDiaryById(diarySequence)?.let { diary ->
+            symbolSequence = diary.symbolSequence
+            linkedDiaries = diary.linkedDiaries
+            initData(diary)
         }
     }
 
@@ -95,10 +76,8 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                 duplicatedEasterEggWarning()
             } else {
                 hideSoftInputFromWindow()
-                if (mBinding.partialEditContents.diaryContents.text
-                        .isNullOrEmpty()
-                ) {
-                    mBinding.partialEditContents.diaryContents.requestFocus()
+                if (binding.partialEditContents.diaryContents.text.isNullOrEmpty()) {
+                    binding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
                     applyRemoveIndex()
@@ -107,86 +86,76 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                         when (encryptionPass == null) {
                             true -> {
                                 DiaryDomain(
-                                    diaryId = mSequence,
-                                    currentTimeMillis = mCurrentTimeMillis,
-                                    title =
-                                        mBinding.partialEditContents.diaryTitle.text
-                                            .toString(),
-                                    contents =
-                                        mBinding.partialEditContents.diaryContents.text
-                                            .toString(),
-                                    symbolSequence = mSelectedItemPosition,
-                                    isAllDay = mBinding.partialEditContents.allDay.isChecked,
-                                    photoUris = mPhotoUris.map { it },
-                                    location = mLocation,
-                                    linkedDiaries = ArrayList(mLinkedDiaries),
+                                    diaryId = diarySequence,
+                                    currentTimeMillis = currentTimeMillis,
+                                    title = binding.partialEditContents.diaryTitle.text.toString(),
+                                    contents = binding.partialEditContents.diaryContents.text.toString(),
+                                    symbolSequence = selectedItemPosition,
+                                    isAllDay = binding.partialEditContents.allDay.isChecked,
+                                    photoUris = photoUris.map { it },
+                                    location = location,
+                                    linkedDiaries = ArrayList(linkedDiaries),
                                 )
                             }
 
                             false -> {
                                 DiaryDomain(
-                                    diaryId = mSequence,
-                                    currentTimeMillis = mCurrentTimeMillis,
-                                    title =
-                                        JasyptUtils.encrypt(
-                                            mBinding.partialEditContents.diaryTitle.text
-                                                .toString(),
-                                            encryptionPass,
-                                        ),
-                                    contents =
-                                        JasyptUtils.encrypt(
-                                            mBinding.partialEditContents.diaryContents.text
-                                                .toString(),
-                                            encryptionPass,
-                                        ),
+                                    diaryId = diarySequence,
+                                    currentTimeMillis = currentTimeMillis,
+                                    title = JasyptUtils.encrypt(
+                                        binding.partialEditContents.diaryTitle.text.toString(),
+                                        encryptionPass,
+                                    ),
+                                    contents = JasyptUtils.encrypt(
+                                        binding.partialEditContents.diaryContents.text.toString(),
+                                        encryptionPass,
+                                    ),
                                     isEncrypt = true,
                                     encryptKeyHash = JasyptUtils.sha256(encryptionPass),
-                                    symbolSequence = mSelectedItemPosition,
-                                    isAllDay = mBinding.partialEditContents.allDay.isChecked,
-                                    photoUris = mPhotoUris.map { it },
-                                    location = mLocation,
-                                    linkedDiaries = ArrayList(mLinkedDiaries),
+                                    symbolSequence = selectedItemPosition,
+                                    isAllDay = binding.partialEditContents.allDay.isChecked,
+                                    photoUris = photoUris.map { it },
+                                    location = location,
+                                    linkedDiaries = ArrayList(linkedDiaries),
                                 )
                             }
                         }
 
                     diaryRepository.updateDiaryWithPhotos(diary)
                     TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
-                    mIsDiarySaved = true
+                    isDiarySaved = true
                 }
             }
         }
     }
 
     private fun bindEvent() {
-        mBinding.partialEditContents.partialEditPhotoContainer.photoView
-            .setOnClickListener(mClickListener)
-        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera
-            .setOnClickListener(mClickListener)
-        mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
-        mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
-        mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
+        binding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(clickListener)
+        binding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(clickListener)
+        binding.partialEditContents.locationContainer.setOnClickListener(clickListener)
+        binding.partialEditContents.diaryTitle.setOnTouchListener(touchListener)
+        binding.partialEditContents.diaryContents.setOnTouchListener(touchListener)
 
-        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
+        binding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
-        mBinding.partialEditContents.run {
+        binding.partialEditContents.run {
             allDayContainer.setOnClickListener {
                 allDay.isChecked = allDay.isChecked.not()
                 toggleTimePickerTool()
             }
         }
 
-        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener {
-            mBinding.partialEditContents.diaryContents.clearFocus()
+        binding.partialEditContents.feelingSymbolButton.setOnClickListener {
+            binding.partialEditContents.diaryContents.clearFocus()
             lifecycleScope.launch {
                 openFeelingSymbolDialog(
                     getString(R.string.diary_symbol_guide_message),
-                    mSelectedItemPosition,
+                    selectedItemPosition,
                     diaryViewModel.getSymbolUsedCountMap(true),
-                ) { symbolSequence ->
-                    selectFeelingSymbol(symbolSequence)
+                ) { sequence ->
+                    selectFeelingSymbol(sequence)
                 }
             }
         }

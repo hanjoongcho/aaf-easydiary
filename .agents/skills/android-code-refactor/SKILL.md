@@ -30,6 +30,10 @@ Use this skill whenever requested to refactor, clean up, review, or modernize An
 
 5. **Decompose Complex Functions**
     - Break down long or complex functions into smaller, single-responsibility helper functions with clear, descriptive names.
+    - 
+6. **Type Safety & Safe Casts (Type Safety & Nullability)**
+    - Avoid forced casting (`as`) and overuse of `@Suppress("UNCHECKED_CAST")`. Prefer safe casting (`as?`), safe calls (`?.`), smart casts, or sealed hierarchies.
+    - Eliminate non-null assertion operators (`!!`). Replace them with Elvis operators (`?:`), `checkNotNull`, or `requireNotNull` for explicit exception handling. 
 
 ## Refactoring Checklist & Output Format
 
