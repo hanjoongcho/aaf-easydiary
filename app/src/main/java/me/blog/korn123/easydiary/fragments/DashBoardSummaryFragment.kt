@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardSummaryBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -11,8 +12,8 @@ import me.blog.korn123.easydiary.extensions.getDashboardCardWidth
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 
-class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
-    private lateinit var mBinding: FragmentDashboardSummaryBinding
+class DashBoardSummaryFragment : Fragment() {
+    private lateinit var binding: FragmentDashboardSummaryBinding
 
     /***************************************************************************************************
      *   override functions
@@ -22,9 +23,9 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentDashboardSummaryBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentDashboardSummaryBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -33,7 +34,7 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         context?.let { ctx ->
-            mBinding.run {
+            binding.run {
                 requireActivity().getDashboardCardWidth(0.8F).also {
                     cardDriveBackup.layoutParams.width = it
                     cardLocalBackup.layoutParams.width = it

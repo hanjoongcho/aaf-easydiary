@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,8 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @AndroidEntryPoint
-class DashBoardRankFragment : androidx.fragment.app.Fragment() {
-    private lateinit var mBinding: FragmentDashboardRankBinding
+class DashBoardRankFragment : Fragment() {
+    private lateinit var binding: FragmentDashboardRankBinding
     private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
@@ -30,9 +31,9 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentDashboardRankBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentDashboardRankBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -40,7 +41,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.run {
+        binding.run {
             val symbolMap = FlavorUtils.getDiarySymbolMap(requireContext())
             lifecycleScope.launch {
                 val sortedMap =

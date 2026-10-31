@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -62,14 +63,14 @@ import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 
-class SettingsBasicFragment : androidx.fragment.app.Fragment() {
+class SettingsBasicFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentSettingsBasicBinding
-    private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
-    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
+    private lateinit var binding: FragmentSettingsBasicBinding
+    private lateinit var requestLocationSourceLauncher: ActivityResultLauncher<Intent>
+    private val settingsViewModel: SettingsViewModel by activityViewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -78,14 +79,14 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRequestLocationSourceLauncher =
+        requestLocationSourceLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 requireActivity().run {
                     pauseLock()
                     when (isLocationEnabled()) {
                         true -> {
                             config.enableLocationInfo = true
-                            mSettingsViewModel.setEnableLocationInfo(true)
+                            settingsViewModel.setEnableLocationInfo(true)
                             makeSnackBar("GPS provider setting is activated!!!")
                         }
 
@@ -102,8 +103,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinding = FragmentSettingsBasicBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = FragmentSettingsBasicBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     @OptIn(ExperimentalLayoutApi::class)
@@ -112,12 +113,12 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        if (BuildConfig.FLAVOR == "foss") mSettingsViewModel.setEnableReviewFlowVisible(false)
+        if (BuildConfig.FLAVOR == "foss") settingsViewModel.setEnableReviewFlowVisible(false)
 
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
         initPreference()
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 val configuration = LocalConfiguration.current
                 FlowRow(
@@ -129,9 +130,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                             .fillMaxWidth()
                             .weight(1f)
 
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
-                    val enableReviewFlowVisible: Boolean by mSettingsViewModel.enableReviewFlowVisible.collectAsState()
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
+                    val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
+                    val enableReviewFlowVisible: Boolean by settingsViewModel.enableReviewFlowVisible.collectAsState()
+                    val fontFamily: FontFamily? by settingsViewModel.fontFamily.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.setting_primary_color_title),
@@ -161,7 +162,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val enableShakeDetector: Boolean by mSettingsViewModel.enableShakeDetector.collectAsState()
+                    val enableShakeDetector: Boolean by settingsViewModel.enableShakeDetector.collectAsState()
                     SwitchCard(
                         title = getString(R.string.quick_setting_title),
                         description = getString(R.string.quick_setting_summary),
@@ -172,7 +173,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
                             config.enableShakeDetector = enableShakeDetector.not()
-                            mSettingsViewModel.setEnableShakeDetector(config.enableShakeDetector)
+                            settingsViewModel.setEnableShakeDetector(config.enableShakeDetector)
                         }
                     }
 
@@ -219,7 +220,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
                     }
 
-                    val enableLocationInfo: Boolean by mSettingsViewModel.enableLocationInfo.collectAsState()
+                    val enableLocationInfo: Boolean by settingsViewModel.enableLocationInfo.collectAsState()
                     SwitchCard(
                         title = getString(R.string.location_info_title),
                         description = getString(R.string.location_info_description),
@@ -229,8 +230,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         fontFamily = fontFamily,
                     ) {
                         requireActivity().run {
-                            mSettingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
-                            when (mSettingsViewModel.enableLocationInfo.value) {
+                            settingsViewModel.setEnableLocationInfo(enableLocationInfo.not())
+                            when (settingsViewModel.enableLocationInfo.value) {
                                 true -> {
                                     when (hasGPSPermissions()) {
                                         true -> {
@@ -239,14 +240,14 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
                                         false -> {
                                             config.enableLocationInfo = false
-                                            mSettingsViewModel.setEnableLocationInfo(false)
+                                            settingsViewModel.setEnableLocationInfo(false)
                                             requireActivity().run {
                                                 if (this is EasyDiaryActivity) {
                                                     acquireGPSPermissions(
-                                                        mRequestLocationSourceLauncher,
+                                                        requestLocationSourceLauncher,
                                                     ) {
                                                         config.enableLocationInfo = true
-                                                        mSettingsViewModel.setEnableLocationInfo(
+                                                        settingsViewModel.setEnableLocationInfo(
                                                             true,
                                                         )
                                                         makeSnackBar("GPS provider setting is activated!!!")
@@ -264,7 +265,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val settingThumbnailSize: String by mSettingsViewModel.thumbnailSizeSubDescription.collectAsState()
+                    val settingThumbnailSize: String by settingsViewModel.thumbnailSizeSubDescription.collectAsState()
                     SimpleCard(
                         title = getString(R.string.thumbnail_setting_title),
                         description = getString(R.string.thumbnail_setting_summary),
@@ -276,7 +277,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         openThumbnailSettingDialog()
                     }
 
-                    val settingDatetimeFormat: String by mSettingsViewModel.datetimeFormatSubDescription.collectAsState()
+                    val settingDatetimeFormat: String by settingsViewModel.datetimeFormatSubDescription.collectAsState()
                     SimpleCard(
                         title = getString(R.string.datetime_setting_title),
                         description = getString(R.string.datetime_setting_summary),
@@ -305,7 +306,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     }
 
                     if (enableContentsSummary) {
-                        val summaryMaxLines: String by mSettingsViewModel.summaryMaxLinesSubDescription.collectAsState()
+                        val summaryMaxLines: String by settingsViewModel.summaryMaxLinesSubDescription.collectAsState()
                         SimpleCard(
                             title = getString(R.string.max_lines_title),
                             description = getString(R.string.max_lines_summary),
@@ -328,7 +329,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     ) {
                         requireActivity().run {
                             config.enableCardViewPolicy = enableCardViewPolicy.not()
-                            mSettingsViewModel.setEnableCardViewPolicy(config.enableCardViewPolicy)
+                            settingsViewModel.setEnableCardViewPolicy(config.enableCardViewPolicy)
                         }
                     }
 
@@ -454,7 +455,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
         initPreference()
         requireActivity().run {
             if (config.isThemeChanged) {
@@ -471,10 +472,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     @SuppressLint("SetTextI18n")
     private fun initPreference() {
         requireActivity().run {
-            mBinding.run {
+            binding.run {
                 if (!hasGPSPermissions()) {
                     config.enableLocationInfo = false
-                    mSettingsViewModel.setEnableLocationInfo(false)
+                    settingsViewModel.setEnableLocationInfo(false)
                 }
             }
         }
@@ -486,7 +487,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val builder = AlertDialog.Builder(this)
             builder.setNegativeButton(getString(android.R.string.cancel), null)
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+            val containerView = inflater.inflate(R.layout.dialog_option_item, binding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
             var selectedIndex = 0
@@ -504,9 +505,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             listView.adapter = arrayAdapter
             listView.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, _, position, _ ->
-                    @Suppress("UNCHECKED_CAST")
-                    val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                    fontInfo["optionValue"]?.let {
+                    val fontInfo = parent.adapter.getItem(position) as? Map<*, *>
+                    (fontInfo?.get("optionValue") as? String)?.let {
                         config.settingThumbnailSize = it.toFloat()
                         initPreference()
                     }
@@ -527,7 +527,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val builder = AlertDialog.Builder(this)
             builder.setNegativeButton(getString(android.R.string.cancel), null)
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+            val containerView = inflater.inflate(R.layout.dialog_option_item, binding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
             val listThumbnailSize = ArrayList<Map<String, String>>()
@@ -602,9 +602,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             listView.adapter = arrayAdapter
             listView.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, _, position, _ ->
-                    @Suppress("UNCHECKED_CAST")
-                    val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                    fontInfo["optionValue"]?.let {
+                    val fontInfo = parent.adapter.getItem(position) as? Map<*, *>
+                    (fontInfo?.get("optionValue") as? String)?.let {
                         config.settingDatetimeFormat = it
                         initPreference()
                     }
@@ -630,7 +629,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val builder = AlertDialog.Builder(this)
             builder.setNegativeButton(getString(android.R.string.cancel), null)
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+            val containerView = inflater.inflate(R.layout.dialog_option_item, binding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
             var selectedIndex = 0
@@ -640,7 +639,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             }
 
             listMaxLines.mapIndexed { index, map ->
-                val size = map["optionValue"] ?: 0
+                val size = (map["optionValue"] ?: "0").toIntOrNull() ?: 0
                 if (config.summaryMaxLines == size) selectedIndex = index
             }
 
@@ -648,9 +647,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             listView.adapter = arrayAdapter
             listView.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, _, position, _ ->
-                    @Suppress("UNCHECKED_CAST")
-                    val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                    optionInfo["optionValue"]?.let {
+                    val optionInfo = parent.adapter.getItem(position) as? Map<*, *>
+                    (optionInfo?.get("optionValue") as? String)?.let {
                         config.summaryMaxLines = it.toInt()
                         initPreference()
                     }

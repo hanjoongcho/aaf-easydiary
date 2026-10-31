@@ -21,9 +21,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.applyColorFilter
@@ -60,28 +60,21 @@ import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
 import me.blog.korn123.easydiary.utils.FontUtils
-import kotlin.getValue
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 @AndroidEntryPoint
-class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
+class SettingsScheduleFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentSettingsScheduleBinding
-    private lateinit var mAlarmAdapter: AlarmAdapter
-    private var mAlarmList: ArrayList<AlarmDomain> = arrayListOf()
+    private lateinit var binding: FragmentSettingsScheduleBinding
+    private lateinit var alarmAdapter: AlarmAdapter
+    private var alarmList: ArrayList<AlarmDomain> = arrayListOf()
     private val alarmViewModel: AlarmViewModel by viewModels()
-    private val mActivity: Activity
+    private val currentActivity: Activity
         get() = requireActivity()
-    private val mRequestPermissionScheduleExactAlarmLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                openAlarmDialog(mTemporaryAlarm)
-            }
-        }
 
     /***************************************************************************************************
      *   override functions
@@ -92,8 +85,8 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinding = FragmentSettingsScheduleBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = FragmentSettingsScheduleBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -101,21 +94,20 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        updateFragmentUI(mBinding.root)
-        mAlarmAdapter =
+        updateFragmentUI(binding.root)
+        alarmAdapter =
             AlarmAdapter(
-                mActivity,
-                mAlarmList,
+                currentActivity,
+                alarmList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    openAlarmDialog(mAlarmList[position].copy(), mAlarmList[position])
+                    openAlarmDialog(alarmList[position].copy(), alarmList[position])
                 },
             )
 
-        mBinding.alarmRecyclerView.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, if (requireActivity().isLandScape()) 2 else 1)
-//            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
+        binding.alarmRecyclerView.apply {
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(currentActivity, if (requireActivity().isLandScape()) 2 else 1)
             addItemDecoration(SpacesItemDecoration(0))
-            adapter = mAlarmAdapter
+            adapter = alarmAdapter
         }
 
         initProperties()
@@ -124,8 +116,8 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mBinding.root)
-        mActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
+        updateFragmentUI(binding.root)
+        currentActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
     }
 
     override fun onRequestPermissionsResult(
@@ -137,7 +129,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
             when (requestCode) {
                 REQUEST_CODE_SCHEDULE_EXACT_ALARM -> {
                     if (checkPermission(arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM))) {
-                        openAlarmDialog(mTemporaryAlarm)
+                        openAlarmDialog(temporaryAlarm)
                     } else {
                         makeSnackBar(
                             findViewById(android.R.id.content),
@@ -155,15 +147,15 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private lateinit var mTemporaryAlarm: AlarmDomain
+    private lateinit var temporaryAlarm: AlarmDomain
 
     fun openAlarmDialog(
-        temporaryAlarm: AlarmDomain,
+        targetAlarm: AlarmDomain,
         storedAlarm: AlarmDomain? = null,
     ) {
-        mTemporaryAlarm = temporaryAlarm
+        temporaryAlarm = targetAlarm
 
-        mActivity.run activity@{
+        currentActivity.run activity@{
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
                 startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
@@ -188,43 +180,43 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                         val day = layoutInflater.inflate(R.layout.partial_alarm_day, linearAlarmDaysHolder, false) as TextView
                         day.text = dayLetters[it]
 
-                        val isDayChecked = temporaryAlarm.days and pow != 0
+                        val isDayChecked = targetAlarm.days and pow != 0
                         day.background = getProperDayDrawable(isDayChecked)
 
                         day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
                         day.setOnClickListener {
-                            val selectDay = temporaryAlarm.days and pow == 0
-                            temporaryAlarm.days =
+                            val selectDay = targetAlarm.days and pow == 0
+                            targetAlarm.days =
                                 if (selectDay) {
-                                    temporaryAlarm.days.addBit(pow)
+                                    targetAlarm.days.addBit(pow)
                                 } else {
-                                    temporaryAlarm.days.removeBit(pow)
+                                    targetAlarm.days.removeBit(pow)
                                 }
                             day.background = getProperDayDrawable(selectDay)
                             day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                            textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
+                            textAlarmDays.text = getSelectedDaysString(targetAlarm.days)
                         }
                         linearAlarmDaysHolder.addView(day)
                     }
-                    textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
+                    textAlarmDays.text = getSelectedDaysString(targetAlarm.days)
                     textAlarmDays.setTextColor(config.textColor)
-                    switchAlarm.isChecked = temporaryAlarm.isEnabled
-                    editAlarmDescription.setText(temporaryAlarm.label)
-                    textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                    switchAlarm.isChecked = targetAlarm.isEnabled
+                    editAlarmDescription.setText(targetAlarm.label)
+                    textAlarmTime.text = getFormattedTime(targetAlarm.timeInMinutes * 60, false, true)
                     textAlarmTime.setOnClickListener {
                         TimePickerDialog(
                             this@activity,
-                            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                                temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
-                                textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                                targetAlarm.timeInMinutes = hourOfDay * 60 + minute
+                                textAlarmTime.text = getFormattedTime(targetAlarm.timeInMinutes * 60, false, true)
                             },
-                            temporaryAlarm.timeInMinutes / 60,
-                            temporaryAlarm.timeInMinutes % 60,
+                            targetAlarm.timeInMinutes / 60,
+                            targetAlarm.timeInMinutes % 60,
                             DateFormat.is24HourFormat(this@activity),
                         ).show()
                     }
                     switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-                        temporaryAlarm.isEnabled = isChecked
+                        targetAlarm.isEnabled = isChecked
                     }
                     when (storedAlarm == null) {
                         true -> {
@@ -237,7 +229,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                                     "Are you sure you want to delete the selected schedule?",
                                     DialogInterface.OnClickListener { _, _ ->
                                         lifecycleScope.launch {
-                                            cancelAlarmClock(temporaryAlarm)
+                                            cancelAlarmClock(targetAlarm)
                                             alertDialog?.dismiss()
                                             alarmRepository.deleteAlarmById(storedAlarm.alarmId)
                                             updateAlarmList()
@@ -249,7 +241,7 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                     }
-                    when (temporaryAlarm.workMode) {
+                    when (targetAlarm.workMode) {
                         AlarmConstants.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
                         AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
                         AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
@@ -257,10 +249,10 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
                     }
                     radioGroupWorkMode.setOnCheckedChangeListener { _, i ->
                         when (i) {
-                            R.id.radio_diary_writing -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_WRITING
-                            R.id.radio_diary_backup_local -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL
-                            R.id.radio_diary_backup_gms -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS
-                            R.id.radio_calendar_schedule_sync -> temporaryAlarm.workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
+                            R.id.radio_diary_writing -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_WRITING
+                            R.id.radio_diary_backup_local -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL
+                            R.id.radio_diary_backup_gms -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS
+                            R.id.radio_calendar_schedule_sync -> targetAlarm.workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                         }
                     }
 
@@ -293,16 +285,16 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
 
                                     else -> {
                                         // update alarm schedule
-                                        if (temporaryAlarm.isEnabled) {
-                                            scheduleNextAlarm(temporaryAlarm, true)
+                                        if (targetAlarm.isEnabled) {
+                                            scheduleNextAlarm(targetAlarm, true)
                                         } else {
-                                            cancelAlarmClock(temporaryAlarm)
+                                            cancelAlarmClock(targetAlarm)
                                         }
 
                                         // save alarm
                                         lifecycleScope.launch {
-                                            temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
-                                            alarmRepository.updateAlarm(temporaryAlarm)
+                                            targetAlarm.label = dialogAlarmBinding.editAlarmDescription.text.toString()
+                                            alarmRepository.updateAlarm(targetAlarm)
                                             alertDialog?.dismiss()
                                             updateAlarmList()
                                             alertDialog?.dismiss()
@@ -319,25 +311,25 @@ class SettingsScheduleFragment : androidx.fragment.app.Fragment() {
     private fun updateAlarmList() {
         Log.i(AAF_TEST, "updateAlarmList")
         lifecycleScope.launch {
-            mAlarmList.run {
+            alarmList.run {
                 clear()
                 addAll(alarmViewModel.findAllAlarms())
-                mBinding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+                binding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
                 Log.i(AAF_TEST, this.toString())
             }
-            mAlarmAdapter.notifyDataSetChanged()
+            alarmAdapter.notifyDataSetChanged()
         }
     }
 
     private fun getProperDayDrawable(selected: Boolean): Drawable {
         val drawableId = if (selected) R.drawable.bg_circle_filled else R.drawable.bg_circle_stroke
-        val drawable = ContextCompat.getDrawable(mActivity, drawableId)
-        drawable!!.applyColorFilter(mActivity.config.textColor)
-        return drawable
+        val drawable = ContextCompat.getDrawable(currentActivity, drawableId)
+        drawable?.applyColorFilter(currentActivity.config.textColor)
+        return requireNotNull(drawable)
     }
 
     private fun initProperties() {
-        mActivity.config.use24HourFormat = false
+        currentActivity.config.use24HourFormat = false
     }
 
     class SpacesItemDecoration(

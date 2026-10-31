@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
@@ -23,7 +24,10 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
@@ -39,11 +43,11 @@ import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedTextView
 
 @AndroidEntryPoint
-class WritingBarChartFragment : androidx.fragment.app.Fragment() {
-    private lateinit var mBarChart: BarChart
-    private lateinit var mChartTitle: FixedTextView
-    private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
-    private var mCoroutineJob: Job? = null
+class WritingBarChartFragment : Fragment() {
+    private lateinit var barChart: BarChart
+    private lateinit var chartTitle: FixedTextView
+    private lateinit var barChartProgressBar: ContentLoadingProgressBar
+    private var coroutineJob: Job? = null
     private val diaryViewModel: DiaryViewModel by viewModels()
 
     override fun onCreateView(
@@ -57,59 +61,50 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        mBarChart = view.findViewById(R.id.barChart)
-        mChartTitle = view.findViewById(R.id.chartTitle)
-        mBarChartProgressBar = view.findViewById(R.id.barChartProgressBar)
+        barChart = view.findViewById(R.id.barChart)
+        chartTitle = view.findViewById(R.id.chartTitle)
+        barChartProgressBar = view.findViewById(R.id.barChartProgressBar)
 
-        mBarChart.setDrawBarShadow(false)
-        mBarChart.setDrawValueAboveBar(true)
-        mBarChart.description.isEnabled = false
+        barChart.setDrawBarShadow(false)
+        barChart.setDrawValueAboveBar(true)
+        barChart.description.isEnabled = false
+        barChart.setMaxVisibleValueCount(60)
+        barChart.setPinchZoom(false)
 
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        mBarChart.setMaxVisibleValueCount(60)
-
-        // scaling can now only be done on x- and y-axis separately
-        mBarChart.setPinchZoom(false)
-
-//        barChart.setDrawGridBackground(true)
-        // mChart.setDrawYLabels(false);
-//        barChart.zoom(1.5F, 0F, 0F, 0F)
-
-        val xAxisFormatter = DayAxisValueFormatter(context, mBarChart)
-        mBarChart.xAxis.run {
+        val xAxisFormatter = DayAxisValueFormatter(context, barChart)
+        barChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
-            granularity = 1f // only intervals of 1 day
+            granularity = 1f
             labelCount = 7
             valueFormatter = xAxisFormatter
         }
 
         val diaryCountingAxisValueFormatter = DiaryCountingAxisValueFormatter(context)
-        mBarChart.axisLeft.run {
+        barChart.axisLeft.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = diaryCountingAxisValueFormatter
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
             spaceTop = 15f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
+            axisMinimum = 0f
         }
 
-        mBarChart.axisRight.run {
+        barChart.axisRight.run {
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = diaryCountingAxisValueFormatter
             spaceTop = 15f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
+            axisMinimum = 0f
         }
 
-        mBarChart.legend.run {
+        barChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -123,15 +118,14 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         }
 
         val mv = XYMarkerView(requireContext(), xAxisFormatter)
-        mv.chartView = mBarChart // For bounds control
-        mBarChart.marker = mv // Set the marker to the chart
+        mv.chartView = barChart
+        barChart.marker = mv
 
-        // determine title parameter
         arguments?.let { bundle ->
             val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
-                mChartTitle.text = title
-                mChartTitle.visibility = View.VISIBLE
+                chartTitle.text = title
+                chartTitle.visibility = View.VISIBLE
 
                 view.findViewById<ImageView>(R.id.image_expend_chart)?.let {
                     it.visibility = View.VISIBLE
@@ -151,7 +145,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        mCoroutineJob =
+        coroutineJob =
             lifecycleScope.launch(Dispatchers.IO) {
                 val barEntries = setData()
                 withContext(Dispatchers.Main) {
@@ -180,17 +174,17 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                         barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                         barData.setValueTextColor(requireContext().config.textColor)
                         barData.barWidth = 0.9f
-                        mBarChart.data = barData
-                        mBarChart.animateY(2000)
+                        barChart.data = barData
+                        barChart.animateY(2000)
                     }
-                    mBarChartProgressBar.visibility = View.GONE
+                    barChartProgressBar.visibility = View.GONE
                 }
             }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mCoroutineJob?.run { if (isActive) cancel() }
+        coroutineJob?.run { if (isActive) cancel() }
     }
 
     private suspend fun setData(count: Int = 8): ArrayList<BarEntry> {
@@ -202,9 +196,9 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                 val writeHour = DateUtils.timeMillisToDate(diaryDto.currentTimeMillis, "HH")
                 val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
                 if (map[itemNumber] == null) {
-                    map.put(itemNumber, 1)
+                    map[itemNumber] = 1
                 } else {
-                    map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
+                    map[itemNumber] = (map[itemNumber] ?: 0) + 1
                 }
             }
             for (i in 1..count) {
@@ -237,14 +231,14 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             axis: AxisBase?,
         ): String =
             when (value.toInt()) {
-                1 -> context!!.getString(R.string.range_a)
-                2 -> context!!.getString(R.string.range_b)
-                3 -> context!!.getString(R.string.range_c)
-                4 -> context!!.getString(R.string.range_d)
-                5 -> context!!.getString(R.string.range_e)
-                6 -> context!!.getString(R.string.range_f)
-                7 -> context!!.getString(R.string.range_g)
-                else -> context!!.getString(R.string.range_h)
+                1 -> context?.getString(R.string.range_a) ?: ""
+                2 -> context?.getString(R.string.range_b) ?: ""
+                3 -> context?.getString(R.string.range_c) ?: ""
+                4 -> context?.getString(R.string.range_d) ?: ""
+                5 -> context?.getString(R.string.range_e) ?: ""
+                6 -> context?.getString(R.string.range_f) ?: ""
+                7 -> context?.getString(R.string.range_g) ?: ""
+                else -> context?.getString(R.string.range_h) ?: ""
             }
     }
 }

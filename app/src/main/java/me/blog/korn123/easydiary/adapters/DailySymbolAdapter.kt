@@ -74,7 +74,7 @@ class DailySymbolAdapter(
             }
 
             binding.symbolFlexbox.removeAllViews()
-            pair.first.map { diary ->
+            pair.first.forEach { diary ->
                 val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(activity.layoutInflater)
                 FlavorUtils.initWeatherView(activity, partialDailySymbolBinding.dailySymbol, diary.symbolSequence)
                 binding.symbolFlexbox.addView(partialDailySymbolBinding.root)

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.LineChart
@@ -52,22 +53,22 @@ import kotlin.random.Random
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @AndroidEntryPoint
-class WeightLineChartFragment : androidx.fragment.app.Fragment() {
-    private lateinit var mBinding: FragmentWeightLineChartBinding
-    private lateinit var mLineChart: LineChart
-    private val mTimeMillisMap = hashMapOf<Int, Long>()
-    private var mCoroutineJob: Job? = null
-    private var mChartMode = "A"
-    private val mDataSets = ArrayList<ILineDataSet>()
+class WeightLineChartFragment : Fragment() {
+    private lateinit var binding: FragmentWeightLineChartBinding
+    private lateinit var lineChart: LineChart
+    private val timeMillisMap = hashMapOf<Int, Long>()
+    private var coroutineJob: Job? = null
+    private var chartMode = "A"
+    private val dataSets = ArrayList<ILineDataSet>()
     private val diaryViewModel: DiaryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentWeightLineChartBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentWeightLineChartBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -76,60 +77,50 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
-        mBinding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        mBinding.root.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        binding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        binding.root.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
 
-        mLineChart = mBinding.lineChart
-        mLineChart.description.isEnabled = false
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        mLineChart.setMaxVisibleValueCount(10)
-
-        // scaling can now only be done on x- and y-axis separately
-        mLineChart.setPinchZoom(false)
-
-//        barChart.setDrawGridBackground(true)
-        // mChart.setDrawYLabels(false);
-//        barChart.zoom(1.5F, 0F, 0F, 0F)
+        lineChart = binding.lineChart
+        lineChart.description.isEnabled = false
+        lineChart.setMaxVisibleValueCount(10)
+        lineChart.setPinchZoom(false)
 
         val xAxisFormatter = WeightXAxisValueFormatter(context)
-        mLineChart.xAxis.run {
+        lineChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
-            granularity = 1f // only intervals of 1 day
+            granularity = 1f
             labelCount = 7
             valueFormatter = xAxisFormatter
         }
 
         val yAxisFormatter = WeightYAxisValueFormatter(context)
-        mLineChart.axisLeft.run {
+        lineChart.axisLeft.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
             spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
+            axisMinimum = 0f
             labelCount = 8
         }
 
-        mLineChart.axisRight.run {
+        lineChart.axisRight.run {
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
             spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
+            axisMinimum = 0f
             labelCount = 8
         }
 
-        mLineChart.legend.run {
+        lineChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -143,15 +134,14 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         val mv = WeightMarkerView(requireContext(), xAxisFormatter)
-        mv.chartView = mLineChart // For bounds control
-        mLineChart.marker = mv // Set the marker to the chart
+        mv.chartView = lineChart
+        lineChart.marker = mv
 
-        // determine title parameter
         arguments?.let { bundle ->
             val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
-                mBinding.chartTitle.text = title
-                mBinding.chartTitle.visibility = View.VISIBLE
+                binding.chartTitle.text = title
+                binding.chartTitle.visibility = View.VISIBLE
                 getView()?.findViewById<ImageView>(R.id.image_weight_symbol)?.let {
                     it.visibility = View.VISIBLE
                     FlavorUtils.initWeatherView(requireActivity(), it, DAILY_SCALE)
@@ -159,8 +149,8 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                 getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
                     it.visibility = View.VISIBLE
                     requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
-                    it.setOnClickListener { view ->
-                        view.postDelayed({
+                    it.setOnClickListener { v ->
+                        v.postDelayed({
                             TransitionHelper.startActivityWithTransition(
                                 requireActivity(),
                                 Intent(
@@ -176,36 +166,35 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
         drawChart()
 
-        mBinding.run {
+        binding.run {
             radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {
                     R.id.radio_button_option_a -> {
-                        mChartMode = "A"
+                        chartMode = "A"
                         drawChart()
                     }
 
                     R.id.radio_button_option_b -> {
-                        mChartMode = "B"
+                        chartMode = "B"
                         drawChart()
                     }
                 }
             }
             checkOptionsFill.setTextColor(requireContext().config.textColor)
             checkOptionsFill.setOnCheckedChangeListener { _, isChecked ->
-                mDataSets.forEach {
+                dataSets.forEach {
                     it.setDrawFilled(isChecked)
                 }
-//                mLineChart.notifyDataSetChanged()
-                mLineChart.invalidate()
+                lineChart.invalidate()
             }
         }
     }
 
     private fun drawChart() {
-        mCoroutineJob =
+        coroutineJob =
             lifecycleScope.launch(Dispatchers.IO) {
-                mDataSets.clear()
-                if (mChartMode == "A") {
+                dataSets.clear()
+                if (chartMode == "A") {
                     val barEntries = setData()
                     if (barEntries.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
@@ -215,31 +204,22 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                             lineDataSet.setDrawIcons(false)
                             lineDataSet.setDrawValues(true)
                             lineDataSet.setDrawFilled(true)
-                            mDataSets.add(lineDataSet)
-                            val lineData = LineData(mDataSets)
+                            dataSets.add(lineDataSet)
+                            val lineData = LineData(dataSets)
                             lineData.setValueTextSize(10f)
                             lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-//                        Color.rgb(
-//                            Random.nextInt(0, 255),
-//                            Random.nextInt(0, 255),
-//                            Random.nextInt(0, 255)
-//                        ).also {
-//                            lineDataSet.circleColors = arrayListOf(it)
-//                            lineDataSet.color = it
-//                            lineDataSet.fillColor = it
-//                        }
                             requireContext().config.primaryColor.also { color ->
                                 lineDataSet.circleColors = arrayListOf(color)
                                 lineDataSet.color = color
                                 lineDataSet.fillColor = color
                             }
-                            mLineChart.data = lineData
-                            mLineChart.animateY(600)
-                            mBinding.barChartProgressBar.visibility = View.GONE
+                            lineChart.data = lineData
+                            lineChart.animateY(600)
+                            binding.barChartProgressBar.visibility = View.GONE
                         }
                     } else {
                         withContext(Dispatchers.Main) {
-                            mBinding.barChartProgressBar.visibility = View.GONE
+                            binding.barChartProgressBar.visibility = View.GONE
                         }
                     }
                 } else {
@@ -266,7 +246,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
                     val yearlyMap = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }
                     val iterator = yearlyMap.iterator()
-//                    val color = requireContext().config.primaryColor
                     var itemIndex = yearlyMap.count()
                     while (iterator.hasNext()) {
                         val element = iterator.next()
@@ -314,28 +293,24 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                                 lineDataSet.color = color
                                 lineDataSet.fillColor = color
                             }
-//                        val darkenColor = color.darkenColor(itemIndex.times(-5))
-//                        lineDataSet.circleColors = arrayListOf(color)
-//                        lineDataSet.color = darkenColor
-//                        lineDataSet.fillColor = darkenColor
-                        mDataSets.add(lineDataSet)
+                        dataSets.add(lineDataSet)
                         itemIndex--
                     }
                     withContext(Dispatchers.Main) {
                         if (sumWeight > 0) {
                             val average = sumWeight.div(filteredItems.size)
-                            mLineChart.axisLeft.axisMinimum = average.minus(10)
-                            mLineChart.axisLeft.axisMaximum = average.plus(10)
-                            mLineChart.axisRight.axisMinimum = average.minus(10)
-                            mLineChart.axisRight.axisMaximum = average.plus(10)
+                            lineChart.axisLeft.axisMinimum = average.minus(10)
+                            lineChart.axisLeft.axisMaximum = average.plus(10)
+                            lineChart.axisRight.axisMinimum = average.minus(10)
+                            lineChart.axisRight.axisMaximum = average.plus(10)
                         }
 
-                        val lineData = LineData(mDataSets)
+                        val lineData = LineData(dataSets)
                         lineData.setValueTextSize(10f)
                         lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                        mLineChart.data = lineData
-                        mLineChart.animateY(600)
-                        mBinding.barChartProgressBar.visibility = View.GONE
+                        lineChart.data = lineData
+                        lineChart.animateY(600)
+                        binding.barChartProgressBar.visibility = View.GONE
                     }
                 }
             }
@@ -343,7 +318,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mCoroutineJob?.run { if (isActive) cancel() }
+        coroutineJob?.run { if (isActive) cancel() }
     }
 
     private suspend fun setData(): ArrayList<Entry> {
@@ -357,17 +332,17 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     val weight = EasyDiaryUtils.findNumber(it)
                     sumWeight += weight
                     barEntries.add(Entry(index.toFloat(), weight))
-                    mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                    timeMillisMap[index] = diaryDto.currentTimeMillis
                     index++
                 }
             }
         }
         if (index > 0) {
             val average = sumWeight.div(index)
-            mLineChart.axisLeft.axisMinimum = average.minus(10)
-            mLineChart.axisLeft.axisMaximum = average.plus(10)
-            mLineChart.axisRight.axisMinimum = average.minus(10)
-            mLineChart.axisRight.axisMaximum = average.plus(10)
+            lineChart.axisLeft.axisMinimum = average.minus(10)
+            lineChart.axisLeft.axisMaximum = average.plus(10)
+            lineChart.axisRight.axisMinimum = average.minus(10)
+            lineChart.axisRight.axisMaximum = average.plus(10)
         }
         return barEntries
     }
@@ -375,7 +350,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private fun xAxisTimeMillisToDate(timeMillis: Long): String = if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.MEDIUM) else "N/A"
 
     private fun fillValueForward(averageInfo: ArrayList<Float>) {
-        Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
+        Log.i(AAF_TEST, "Original ${averageInfo.joinToString(",")}")
         averageInfo.forEachIndexed { index, fl ->
             if (fl == 0f) {
                 up@ for (seq in index..averageInfo.size.minus(1)) {
@@ -386,7 +361,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-        Log.i(AAF_TEST, "앞 ${averageInfo.joinToString(",")}")
+        Log.i(AAF_TEST, "Forward ${averageInfo.joinToString(",")}")
     }
 
     private fun fillValueBackward(averageInfo: ArrayList<Float>) {
@@ -400,7 +375,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-        Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
+        Log.i(AAF_TEST, "Backward ${averageInfo.joinToString(",")}")
     }
 
     inner class WeightXAxisValueFormatter(
@@ -411,9 +386,9 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             axis: AxisBase,
         ): String {
             val label =
-                when (mChartMode == "A") {
+                when (chartMode == "A") {
                     true -> {
-                        val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
+                        val timeMillis: Long = timeMillisMap[value.toInt()] ?: 0
                         xAxisTimeMillisToDate(timeMillis)
                     }
 
@@ -437,17 +412,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     inner class WeightIValueFormatter(
         private var context: Context?,
     ) : IValueFormatter {
-        /**
-         * Called when a value (from labels inside the chart) is formatted
-         * before being drawn. For performance reasons, avoid excessive calculations
-         * and memory allocations inside this method.
-         *
-         * @param value           the value to be formatted
-         * @param entry           the entry the value belongs to - in e.g. BarChart, this is of class BarEntry
-         * @param dataSetIndex    the index of the DataSet the entry in focus belongs to
-         * @param viewPortHandler provides information about the current chart state (scale, translation, ...)
-         * @return the formatted label ready for being drawn
-         */
         override fun getFormattedValue(
             value: Float,
             entry: Entry,
@@ -462,8 +426,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     ) : MarkerView(context, R.layout.partial_custom_marker_view) {
         private val tvContent: TextView = findViewById(R.id.tvContent)
 
-        // callbacks everytime the MarkerView is redrawn, can be used to update the
-        // content (user-interface)
         override fun refreshContent(
             e: Entry?,
             highlight: Highlight?,
@@ -471,7 +433,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             e?.let { entry ->
 
                 tvContent.run {
-                    text = "${xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)}: ${entry.y}kg"
+                    text = "${xAxisValueFormatter.getFormattedValue(entry.x, lineChart.xAxis)}: ${entry.y}kg"
                     typeface = FontUtils.getCommonTypeface(context)
                 }
                 super.refreshContent(entry, highlight)
