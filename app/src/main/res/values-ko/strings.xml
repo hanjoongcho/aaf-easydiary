@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">이지 다이어리</string>
-    <string name="common_create_seconds">Creation Seconds</string>
+    <string name="common_create_seconds">생성 시간(초)</string>
     <string name="request_content_message">내용을 입력하세요.</string>
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
     <string name="contents_text_hint">내용을 입력하거나 말하세요.</string>
@@ -736,7 +736,7 @@
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
-        GlideImage cache 충돌문제 해결
+        GlideImage 캐시 충돌 문제 해결
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
@@ -776,11 +776,11 @@
     </string>
     <string name="release_351">
         v1.4.351.202609300 / 2026.09.30\n
-        로컬 데이터베이스를 realm에서 room으로 변경
+        로컬 데이터베이스를 Realm에서 Room으로 변경
     </string>
     <string name="release_352">
         v1.4.352.202610020 / 2026.10.02\n
-        로컬 데이터베이스를 realm에서 room으로 변경
+        로컬 데이터베이스를 Realm에서 Room으로 변경
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -855,17 +855,17 @@
     <string name="category_food">음식&amp;음료</string>
     <string name="category_leisure">여가생활</string>
     <string name="category_landscape">풍경&amp;건물</string>
-    <string name="rotate_photo">Rotate</string>
+    <string name="rotate_photo">회전</string>
     <string name="task_progress_message">요청작업 진행중…</string>
     <string name="open_realm_file_title">다이어리 복구</string>
     <string name="backup_completed_message">다이어리 백업작업이 완료되었습니다.</string>
     <string name="backup_confirm_message">다이어리 첨부사진 백업 작업을 시작하시겠습니까?</string>
     <string name="recover_confirm_attached_photo">다이어리 첨부사진 복구 작업을 시작하시겠습니까?</string>
-    <string name="category_symbol">Symbol</string>
+    <string name="category_symbol">심벌</string>
     <string name="statistics_creation_time">작성 시간별 통계</string>
     <string name="statistics_symbol_all">심벌별 통계 전체</string>
     <string name="statistics_symbol_top_ten">심벌별 통계 TOP10</string>
-    <string name="category_flag">FLAG</string>
+    <string name="category_flag">플래그</string>
     <string name="preferences_category_backup_restore_device">백업 및 복구</string>
     <string name="preferences_category_backup_restore_device_sub">디바이스 저장소</string>
     <string name="export_realm_title">다이어리 백업하기</string>
@@ -973,13 +973,13 @@
     <string name="dashboard_title_daily_symbol_tile">1년기준 일별 심벌사용 현황 필터링</string>
     <string name="symbol_filter_picker_remove_guide_message">적어도 1개 이상의 심벌을 선택해야 합니다.</string>
     <string name="title_dialog_postcard_photo_option">사진 크롭 및 필터 설정</string>
-    <string name="msg_check_force_single_photo">포스트 카드 사진 영영에 1개의 사진만 노출합니다.\n2개 이상의 사진이 등록되어 있는경우 스와이프 하여 다른 사진을 볼 수 있습니다.</string>
+    <string name="msg_check_force_single_photo">포스트카드 사진 영역에 사진을 1장만 표시합니다.\n2개 이상의 사진이 등록되어 있는 경우 스와이프하여 다른 사진을 볼 수 있습니다.</string>
     <string name="load_auto_save_diary_title">임시저장 다이어리 불러오기</string>
     <string name="load_auto_save_diary_description">임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?</string>
     <string name="enable_review_flow_title">구글플레이 인앱 리뷰</string>
     <string name="enable_review_flow_summary">특정기간동안 이지다이어리를 사용하는 경우 구글플레이 리뷰등록 다이얼로그가 활성화됩니다. 리뷰등록 기능을 사용하고 싶지 않거나 리뷰등록 이후에도 구글플레이 다이얼로그가 열리는 경우 이 옵션을 비활성화 시켜 다이얼로그가 열리지 않도록 할 수 있습니다.</string>
     <string name="postcard_grid_option_title">그리드 옵션</string>
-    <string name="postcard_grid_option_column_number">로우당 컬럼 %d개</string>
+    <string name="postcard_grid_option_column_number">1행당 %d열</string>
     <string name="encrypt_diary">다이어리 암호화</string>
     <string name="decrypt_diary">다이어리 복호화</string>
     <string name="postcard_making">포스트카드 만들기</string>
@@ -990,14 +990,14 @@
     <string name="enable_photo_highlight_dashboard_title">첨부사진 하이라이트 (대시보드)</string>
     <string name="enable_photo_highlight_description">오늘날짜를 기준으로 년단위, 월단위로 과거에 첨부한 사진을 하이라이트 영역에 보여줍니다. 오늘날짜에 해당하는 년단위, 월단위 첨부사진이 존재하지 않으면 하이라이트영역은 활성화되지 않습니다.</string>
     <string name="yearly_highlight_tag">{0,number} 년 전</string>
-    <string name="monthly_highlight_tag">{0,number} 달 전</string>
+    <string name="monthly_highlight_tag">{0,number}개월 전</string>
     <string name="notification_channel_name_dev">알림 테스트</string>
     <string name="notification_channel_name_alarm">다이어리 스케줄</string>
     <string name="notification_channel_name_upload">구글드라이브 업로드</string>
     <string name="notification_channel_name_download">구글드라이브 다운로드</string>
     <string name="notification_channel_name_zip_helper">ZIP 백업 관리</string>
-    <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
-    <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
+    <string name="year_message_format">{0,number}년</string>
+    <string name="day_message_format">{0,number}일</string>
     <string name="recently_used_symbol">최근사용</string>
     <string name="datetime_setting_title">날짜 표시형식 설정</string>
     <string name="datetime_setting_summary">다이어리에 표시되는 날짜와 시간 표시형식을 설정합니다. (타임라인과 다이어리 작성화면을 제외한 대부분의 화면에 설정된 표시형식이 적용됩니다.)</string>
@@ -1033,5 +1033,5 @@
     <string name="link_entry_as_child">하위항목으로</string>
     <string name="link_entry_later">다음에</string>
     <string name="diary_count_format">%d건</string>
-    <string name="task_todo_count_format">미완료작업: %d건</string>
+    <string name="task_todo_count_format">미완료 작업: %d건</string>
 </resources>

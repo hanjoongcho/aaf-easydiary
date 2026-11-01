@@ -6,7 +6,7 @@
     <string name="contents_text_hint">内容を入力するか、話してください。</string>
     <string name="delete_photo_confirm_message">この写真を削除しますか？</string>
     <string name="gallery_intent_not_found_message">ギャラリーアプリがインストールされていないか、無効になっています。</string>
-    <string name="guide_message_2">検索用語を入力するか、話す。</string>
+    <string name="guide_message_2">検索ワードを入力するか、話してください。</string>
     <string name="recognizer_intent_not_found_message">音声認識モジュールがインストールされていないか、無効になっています。</string>
     <string name="sample_diary_title_1">注意するより危険なれ。</string>
     <string name="sample_diary_title_2">言うときを知っているだけ繰り返す。</string>
@@ -30,8 +30,8 @@
     <string name="diary_search_keyword_case_sensitive_title">大文字と小文字を区別</string>
     <string name="diary_search_keyword_case_sensitive_summary">このオプションを有効にすると、日記の検索時にキーワードの大文字と小文字を区別するようになります。</string>
     <string name="setting_primary_color_title">テーマ</string>
-    <string name="setting_primary_color_summary">アプリの原色を設定する。</string>
-    <string name="font_line_spacing">フォント、行間隔</string>
+    <string name="setting_primary_color_summary">アプリのメインカラーを設定します。</string>
+    <string name="font_line_spacing">フォントの行間隔</string>
     <string name="font_line_spacing_summary">設定された割合に合わせてフォントの行間を変更します。</string>
     <string name="guide_message_4">その日に作成された日記はありません。</string>
     <string name="range_a">1H~3H</string>
@@ -192,7 +192,7 @@
     <string name="release_159">
         v1.4.93 / 2019.08.29\n
         ユーザーエクスペリエンス（UX）の最適化\n
-        Bug fixes that crash abnormally when entering the configuration screen on older OS
+        古いOSで設定画面を開いた際にアプリが異常終了するバグを修正
     </string>
     <string name="release_160">
         v1.4.94 / 2019.09.03\n
@@ -728,11 +728,11 @@
     </string>
     <string name="release_337">
         v1.4.337.202510090 / 2025.10.09\n
-        XMLレイアウトをJetpack Composeに移行"
+        XMLレイアウトをJetpack Composeに移行
     </string>
     <string name="release_338">
         v1.4.338.202510250 / 2025.10.25\n
-        XMLレイアウトをJetpack Composeに移行"
+        XMLレイアウトをJetpack Composeに移行
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
@@ -810,8 +810,8 @@
     <string name="notification_msg_upload_complete">アップロード完了</string>
     <string name="notification_msg_upload_success">%s アップロード成功: %d%s</string>
     <string name="notification_msg_upload_fail">%s アップロード失敗: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">%s 回復ファイルの数: %d%s</string>
-    <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
+    <string name="notification_msg_google_drive_file_count">%s 復元ファイルの数: %d%s</string>
+    <string name="notification_msg_download_invalid">すべての復元先ファイルがすでに存在しています。</string>
     <string name="notification_msg_download_progress">ダウンロード…</string>
     <string name="notification_msg_download_complete">ダウンロード完了</string>
     <string name="notification_msg_download_success">%s ダウンロード成功: %d%s</string>
@@ -871,7 +871,7 @@
     <string name="export_realm_title">日記をバックアップする</string>
     <string name="export_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージにバックアップします。\n内部ストレージにバックアップされたファイルは、アプリケーションの削除時に削除されるため作成されたデータを完全に保持する場合は、外部のパブリックストアやGoogleドライブのバックアップ機能をご利用ください。</string>
     <string name="import_realm_title">日記を復元する</string>
-    <string name="import_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージから回復します。</string>
+    <string name="import_realm_description">添付写真を除くデータベースファイルをデバイスのストレージから復元します。</string>
     <string name="calendar_start_day_title">カレンダー開始日</string>
     <string name="calendar_start_day_summary">週の開始日を設定します。</string>
     <string name="calendar_start_day_sunday">日曜日</string>
@@ -892,7 +892,7 @@
     <string name="google_drive_account_sign_out_description">Googleアカウントを利用してイージー日記で発行されたトークン情報をクリアします。</string>
     <string name="calendar_font_scale_title">カレンダーフォントサイズの設定</string>
     <string name="calendar_font_scale_description">設定されたグローバルなフォントサイズを基準にカレンダー内のフォント・サイズのスケールを設定します。</string>
-    <string name="calendar_font_scale_disable">使ってはいけません</string>
+    <string name="calendar_font_scale_disable">使用しない</string>
     <string name="calendar_font_scale_factor">グローバルフォントサイズ x %.1f</string>
     <string name="dashboard_title_lifetime">全期間</string>
     <string name="dashboard_title_last_month">過去30日</string>
@@ -917,7 +917,7 @@
     <string name="preferences_category_font">フォント設定</string>
     <string name="hold_position_title">スクロール位置設定</string>
     <string name="hold_position_summary">編集画面が起動したとき、閲覧モードでのスクロール位置を保持します。無効にすると、スクロールは本文の末尾に移動します。</string>
-    <string name="max_lines_title">最大線</string>
+    <string name="max_lines_title">最大行数</string>
     <string name="max_lines_summary">コンテンツサマリーオプションがアクティブになったときに表示される最大行数を設定します。</string>
     <string name="max_lines_value">%d行</string>
     <string name="diary_encryption_title">日記の暗号化</string>
@@ -945,7 +945,7 @@
     <string name="schedule_time">日時</string>
     <string name="schedule_type">スケジュールタイプ</string>
     <string name="schedule_description">スケジュールの説明</string>
-    <string name="schedule_description_hint">通知メッセージに使用されたラベル情報を入力してください。</string>
+    <string name="schedule_description_hint">アラームの説明</string>
     <string name="schedule_diary_writing_description">日記を書く\n日記作成スケジュールを登録します。\nスケジュールが登録されると、設定された日時に応じて通知メッセージが表示されます。</string>
     <string name="schedule_backup_local_description">日記のバックアップ (デバイスストレージ)\nスケジュールを登録すると、添付された画像を除くデータベースファイルが、設定された日時に従ってデバイスのローカルストレージにバックアップされ、操作の結果が通知メッセージとして提供されます。</string>
     <string name="schedule_empty_message">設定されているスケジュール情報はありません。\n右上のプラスボタンをクリックして、新しいスケジュールを追加します。</string>
@@ -969,8 +969,8 @@
     <string name="location_info_error_message">位置情報を受信できません。</string>
     <string name="category_tasks">タスク</string>
     <string name="task_symbol_top_order_title">タスクシンボル最上段の並べ替え</string>
-    <string name="task_symbol_top_order_description">タスクシンボルのタイプがタスクシンボルが適用される日記の中でTODOまたはDOINGの場合、リストの上部に配置されます。</string>
-    <string name="dashboard_title_daily_symbol_tile">1年あたり一日シンボルの使用状況のフィルタリング</string>
+    <string name="task_symbol_top_order_description">タスクシンボルが適用された日記のうち、タイプが TODO または DOING のものをリストの最上部に配置します。</string>
+    <string name="dashboard_title_daily_symbol_tile">1年間における日別シンボル使用状況のフィルタリング</string>
     <string name="symbol_filter_picker_remove_guide_message">少なくとも1つのシンボルを選択する必要があります。</string>
     <string name="title_dialog_postcard_photo_option">写真のトリミングとフィルターの設定</string>
     <string name="msg_check_force_single_photo">はがきの写真領域に写真を1枚だけ表示するように変更します。\n複数の写真が登録されている場合は、スワイプして他の写真を表示できます。</string>
@@ -982,7 +982,7 @@
     <string name="postcard_grid_option_column_number">1行あたり %d 列</string>
     <string name="encrypt_diary">日記を暗号化する</string>
     <string name="decrypt_diary">日記を解読する</string>
-    <string name="postcard_making">はがき作り</string>
+    <string name="postcard_making">ポストカード作成</string>
     <string name="user_custom_setting">ユーザーカスタム設定</string>
     <string name="automation_settings">テーマを使用した自動設定</string>
     <string name="place_finger_description">指を指紋センサーに当ててください。</string>

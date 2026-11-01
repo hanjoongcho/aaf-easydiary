@@ -19,7 +19,7 @@
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
     <string name="rate_app">Rate App</string>
-    <string name="guide_message_3">Insufficient permission for the request feature.</string>
+    <string name="guide_message_3">Insufficient permission for the requested feature.</string>
     <string name="restore_diary">Recover diary</string>
     <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
     <string name="backup_diary">Backup diary</string>
@@ -48,7 +48,7 @@
     <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
     <string name="timeline_title">Timeline</string>
     <string name="postcard_viewer_title">Diary Postcard</string>
-    <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
+    <string name="postcard_viewer_no_cards_saved">No saved diary postcards.</string>
     <string name="menu_chart">Statistics</string>
     <string name="menu_timeline">Timeline</string>
     <string name="post_card">Diary Postcard</string>
@@ -112,14 +112,14 @@
     </string>
     <string name="release_131">
         v1.4.68 / 2019.01.06\n
-        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
-        Add Postcard font size adjustment function
+        Resolved security considerations for some items reported with low confidence in Sophos (Notification listener, Trigger installation)\n
+        Added postcard font size adjustment function
     </string>
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
         User Experience (UX) Optimization\n
-        Fixed an error that screen transition is not normal in Android 9 Pie version\n
-        Add timeline diary creation button
+        Fixed an error where screen transitions were abnormal on Android 9 Pie\n
+        Added timeline diary creation button
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
@@ -140,20 +140,20 @@
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
-        Add application-specific information pages, including FAQs and privacy policies\n
-        Improved pin and fingerprint unlock toggle
+        Added application-specific information pages, including FAQs and privacy policies\n
+        Improved PIN and fingerprint unlock toggle
     </string>
     <string name="release_139">
         v1.4.76 / 2019.04.24\n
-        Add 50 kinds of diary symbol icons
+        Added 50 types of diary symbol icons
     </string>
     <string name="release_140">
         v1.4.77 / 2019.05.11\n
-        Add diary symbols and apply categories
+        Added diary symbols and categories
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+        Fixed an error where the app terminated abnormally if certain settings screen functions lacked access to device storage
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
@@ -161,7 +161,7 @@
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
-        Apply Android App Bundle to reduce and optimize installation file size
+        Applied Android App Bundle to reduce and optimize installation file size
     </string>
     <string name="release_149">
         v1.4.84 / 2019.06.15\n
@@ -173,16 +173,16 @@
     </string>
     <string name="release_151">
         v1.4.86 / 2019.06.19\n
-        Google Drive(REST API) Recovering photos with diary Fixing errors
+        Fixed errors when recovering photos with diaries using Google Drive (REST API)
     </string>
     <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+        Fixed an authentication token error for users who authenticated with Google Drive in v1.4.80 or earlier
     </string>
     <string name="release_154">
         v1.4.88 / 2019.07.16\n
         Migrated Android support library to AndroidX version\n
-        Add diary symbol icon
+        Added diary symbol icons
     </string>
     <string name="release_157">
         v1.4.91 / 2019.08.12\n
@@ -214,7 +214,7 @@
     </string>
     <string name="release_169">
         v1.4.103 / 2019.10.09\n
-        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+        Changed storage location and migrated to comply with Android 10 Scoped Storage policies
     </string>
     <string name="release_170">
         v1.4.104 / 2019.10.19\n
@@ -223,8 +223,8 @@
     </string>
     <string name="release_171">
         v1.4.105 / 2019.10.20\n
-        Fixed an error that occurred when using the Excel file device saving function\n
-        Fixed error when deleting diary from timeline
+        Fixed an error that occurred when saving Excel files to the device\n
+        Fixed an error when deleting a diary from the timeline
     </string>
     <string name="release_172">
         v1.4.106 / 2019.10.25\n
@@ -246,7 +246,7 @@
     </string>
     <string name="release_178">
         v1.4.112 / 2019.12.31\n
-        Add photo attachment function through camera app integration\n
+        Added photo attachment via camera app integration\n
         Diary Dashboard Improvements
     </string>
     <string name="release_179">
@@ -320,7 +320,7 @@
     </string>
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+        Fixed an issue where buttons inside the card view were invisible when the theme color and card view background color matched
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
@@ -345,7 +345,7 @@
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        Fixed an error that the scheduler did not work in the application termination state
+        Fixed an error where the scheduler did not work when the app was closed
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
@@ -389,17 +389,17 @@
     </string>
     <string name="release_220">
         v1.4.154 / 2020.11.28\n
-        Add diary symbols\n
+        Added diary symbols\n
         Added daily symbol usage filtering function to dashboard
     </string>
     <string name="release_221">
         v1.4.155 / 2020.12.14\n
-        Add diary symbols\n
-        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+        Added diary symbols\n
+        Improved postcard creation so attached photos can be cropped or filters applied
     </string>
     <string name="release_222">
         v1.4.156 / 2021.01.11\n
-        Add diary symbols\n
+        Added diary symbols\n
         Improved calendar screen UX
     </string>
     <string name="release_225">
@@ -463,7 +463,7 @@
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        Change the initial font setting policy
+        Changed the initial font setting policy
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
@@ -500,8 +500,8 @@
     </string>
     <string name="release_262">
         v1.4.173.1 / 2022.02.09\n
-        Fixed an error where all yearly labels in the attached photo highlights were displayed as one year\n
-        Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+        Fixed an error where all yearly labels in attached photo highlights were displayed as the same year\n
+        Fixed a crash when using a filter on the diary postcard creation screen
     </string>
     <string name="release_263">
         v1.4.173.2 / 2022.02.12\n
@@ -526,11 +526,11 @@
     </string>
     <string name="release_268">
         v1.4.268.202204040 / 2022.04.04\n
-        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+        Updated policy to hide diary list in widgets when app lock is enabled
     </string>
     <string name="release_269">
         v1.4.269.202204110 / 2022.04.11\n
-        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+        Updated policy to hide content in recent apps list when app lock is enabled
     </string>
     <string name="release_271">
         v1.4.271.202204150 / 2022.04.15\n
@@ -610,7 +610,7 @@
     </string>
     <string name="release_297">
         v1.4.297.202304260 / 2023.04.26\n
-        Improve to support markdown in widget
+        Added Markdown support for widgets
     </string>
     <string name="release_298">
         v1.4.298.202306010 / 2023.06.01\n
@@ -650,13 +650,13 @@
     </string>
     <string name="release_307">
         v1.4.307.202406020 / 2024.06.02\n
-        Discontinuation of support for devices prior to API 5.0 (Android Lollipop)\n
-        Apply Jetpack Compose to some screens to improve functionality\n
-        Add option to use quick settings
+        Discontinued support for devices prior to API 5.0 (Android Lollipop)\n
+        Applied Jetpack Compose to some screens to improve functionality\n
+        Added option to use quick settings
     </string>
     <string name="release_308">
         v1.4.308.202406030 / 2024.06.03\n
-        Applying the detailed consent guide policy for OAuth
+        Applied detailed consent guide policy for OAuth
     </string>
     <string name="release_309">
         v1.4.309.202406100 / 2024.06.10\n
@@ -688,7 +688,7 @@
     </string>
     <string name="release_325">
         v1.4.325.202501250 / 2025.01.25\n
-        Change the layout of attached photos in viewing mode
+        Changed the layout of attached photos in view mode
     </string>
     <string name="release_326">
         v1.4.326.202502030 / 2025.02.03\n
@@ -740,7 +740,7 @@
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
-        Add linking between diary entries
+        Added linking between diary entries
     </string>
     <string name="release_341">
         v1.4.341.202602050 / 2026.02.05\n
@@ -816,7 +816,7 @@
     <string name="notification_msg_download_complete">Download Complete</string>
     <string name="notification_msg_download_success">%s Download Success: %d%s</string>
     <string name="notification_msg_download_fail">%s Download Fail: %d%s</string>
-    <string name="notification_msg_duplicate_file_count">%s Number of exist files: %d%s</string>
+    <string name="notification_msg_duplicate_file_count">%s Number of existing files: %d%s</string>
     <string name="preferences_category_lock">Lock setting</string>
     <string name="fingerprint_lock_title">Fingerprint lock</string>
     <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
@@ -824,7 +824,7 @@
     <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
     <string name="fingerprint_lock_need_pin_setting">To use fingerprint lock, you need to set PIN first.</string>
     <string name="fingerprint_authentication_fail_try_again">Fingerprint authentication failed. Please try again.</string>
-    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
+    <string name="fingerprint_authentication_info_changed">The device\'s fingerprint authentication information has changed, and the previously set authentication cannot be used.</string>
     <string name="pin_lock_title">PIN lock setting</string>
     <string name="pin_lock_summary">Set the PIN to lock the application.</string>
     <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
@@ -840,7 +840,7 @@
     <string name="font_size_summary">Reduce or enlarge font size.</string>
     <string name="contents_summary_title">Diary content summary</string>
     <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
-    <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
+    <string name="init_cipher_error_guide_message">The device\'s fingerprint information has changed. Change the PIN lock mode to unlock, then disable and re-enable the fingerprint lock.</string>
     <string name="faq_title">FAQs</string>
     <string name="faq_description">You can check frequently asked questions and answers.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
@@ -856,7 +856,7 @@
     <string name="category_leisure">Leisure life</string>
     <string name="category_landscape">Landscape&amp;Building</string>
     <string name="rotate_photo">Rotate</string>
-    <string name="task_progress_message">Request work in process…</string>
+    <string name="task_progress_message">Processing request…</string>
     <string name="open_realm_file_title">Diary Recovery</string>
     <string name="backup_completed_message">Diary backup job is complete.</string>
     <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
@@ -889,7 +889,7 @@
     <string name="count_characters_title">Text counting</string>
     <string name="count_characters_summary">Count the number of characters in the diary body.</string>
     <string name="google_drive_account_sign_out_title">Reset Google linked account</string>
-    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google linked account.</string>
+    <string name="google_drive_account_sign_out_description">Remove token information issued by Easy Diary using your linked Google account.</string>
     <string name="calendar_font_scale_title">Set calendar font size</string>
     <string name="calendar_font_scale_description">Scales the font size inside the calendar based on the set global font size.</string>
     <string name="calendar_font_scale_disable">Do not use</string>
@@ -906,10 +906,10 @@
     <string name="last_diary_backup_time">Diary last backup time:</string>
     <string name="last_photo_backup_time">Attached photo last backup time:</string>
     <string name="export_full_backup_title">[BETA] Backup full data</string>
-    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="export_full_backup_description">Compress and back up all data related to the diary, such as the database, attached photos, postcards, fonts, etc., into a single file.\nThis is a beta feature, so it may not work properly on some devices.</string>
     <string name="diary_symbol_search_message">Select the diary symbol you want to filter.</string>
     <string name="import_full_backup_title">[BETA] Recover full data</string>
-    <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="import_full_backup_description">Decompress and restore all data related to the diary, such as the database, attached photos, postcards, fonts, etc.\nThis is a beta feature, so it may not work properly on some devices.</string>
     <string name="calendar_sort_ascending">Ascending</string>
     <string name="calendar_sort_descending">Descending</string>
     <string name="calendar_sort_title">Calendar sort option</string>
@@ -947,12 +947,12 @@
     <string name="schedule_description">Schedule description</string>
     <string name="schedule_description_hint">Alarm description</string>
     <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached photos to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_backup_local_description">Diary backup (Device storage)\nBacks up database files (excluding attached photos) to device local storage according to the scheduled day and time, and provides the operation result as a notification message.</string>
     <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
     <string name="permission_confirmation_dialog_title">Request authorization</string>
     <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
     <string name="google_drive_account_information_title">Linked Google account information</string>
-    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nBacks up database files and attached photos to Google Drive according to the scheduled day and time, and provides the operation result as a notification message.</string>
     <string name="google_drive_account_sign_in_title">Sign in with Google</string>
     <string name="google_drive_account_sign_in_description">Sign in to your Google account to back up and restore your diary using Google Drive or automatically create a diary using Google Calendar events.</string>
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>
@@ -969,8 +969,8 @@
     <string name="location_info_error_message">Location information cannot be received.</string>
     <string name="category_tasks">Task</string>
     <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
-    <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
-    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
+    <string name="task_symbol_top_order_description">Diaries with a Task Symbol of TODO or DOING are placed at the top of the list.</string>
+    <string name="dashboard_title_daily_symbol_tile">Symbol usage filtering by day over a year</string>
     <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
     <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
     <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
@@ -979,10 +979,10 @@
     <string name="enable_review_flow_title">Google Play In-App Review</string>
     <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
     <string name="postcard_grid_option_title">Grid options</string>
-    <string name="postcard_grid_option_column_number">%d column per row</string>
+    <string name="postcard_grid_option_column_number">%d columns per row</string>
     <string name="encrypt_diary">Encrypt Diary</string>
     <string name="decrypt_diary">Decrypt Diary</string>
-    <string name="postcard_making">Postcard Making</string>
+    <string name="postcard_making">Postcard Creation</string>
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
     <string name="place_finger_description">Please place your finger on the fingerprint sensor.</string>
