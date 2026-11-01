@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -37,11 +38,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
 import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,6 +105,7 @@ fun TimelineScreen(
                 shape = CircleShape,
             ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
                     contentDescription = stringResource(id = R.string.write_diary),
                 )
