@@ -213,12 +213,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         binding.composeView.visibility = View.VISIBLE
 
         if (isVanillaIceCreamPlus()) {
-            ViewCompat.setOnApplyWindowInsetsListener(binding.diaryListView) { _, insets ->
-//                val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-//                v.updatePadding(bottom = navigationBars.bottom)
-                insets
-            }
-
             ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { v, insets ->
                 val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
                 v.updatePadding(top = statusBars.top)
