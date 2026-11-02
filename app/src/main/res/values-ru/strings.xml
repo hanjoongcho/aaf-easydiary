@@ -69,7 +69,7 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        Исправлена ​​ошибка, которая аварийно завершала работу в режиме просмотра открытки, при отсутствии рабочего каталога
+        Исправлена ошибка, которая аварийно завершала работу в режиме просмотра открытки, при отсутствии рабочего каталога
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
@@ -77,7 +77,7 @@
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
-        Добавлена ​​функция удаления открытки
+        Добавлена функция удаления открытки
     </string>
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
@@ -86,25 +86,25 @@
     </string>
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
-        Добавлена ​​функция настройки размера фото для предварительного просмотра\n
-        Добавлена ​​функция переключения предварительного просмотра фотографий (складывание или развёртывание)
+        Добавлена функция настройки размера фото для предварительного просмотра\n
+        Добавлена функция переключения предварительного просмотра фотографий (складывание или развёртывание)
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
         Улучшение выражения времени при написании дневника\n
-        Добавлена ​​функция настройки жирным шрифтом в заголовок дневника и информацию о времени на временной шкале
+        Добавлена функция настройки жирным шрифтом в заголовок дневника и информацию о времени на временной шкале
     </string>
     <string name="release_120">
         v1.4.57 / 2018.11.12\n
-        Добавлена ​​функция настройки множественного выбора для одновременного прикрепления нескольких изображений
+        Добавлена функция настройки множественного выбора для одновременного прикрепления нескольких изображений
     </string>
     <string name="release_126">
         v1.4.63 / 2018.11.25\n
-        Добавлена ​​функция настройки множественного выбора для одновременного прикрепления нескольких изображений
+        Добавлена функция настройки множественного выбора для одновременного прикрепления нескольких изображений
     </string>
     <string name="release_128">
         v1.4.65 / 2018.12.19\n
-        Добавлена ​​функция блокировки с помощью датчика отпечатков пальцев
+        Добавлена функция блокировки с помощью датчика отпечатков пальцев
     </string>
     <string name="release_130">
         v1.4.67 / 2019.01.01\n
@@ -118,16 +118,16 @@
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
         Оптимизация взаимодействия с пользователем (UX)\n
-        Исправлена ​​ошибка, из-за которой переход экрана не работал нормально в версии Android 9 Pie\n
+        Исправлена ошибка, из-за которой переход экрана не работал нормально в версии Android 9 Pie\n
         Добавлена кнопка создания дневника на временной шкале
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
-        Добавлена ​​возможность просмотра сводки дневника
+        Добавлена возможность просмотра сводки дневника
     </string>
     <string name="release_134">
         v1.4.71 / 2019.01.26\n
-        Исправлена ​​ошибка, из-за которой приложение аварийно завершало работу при изменении информации об отпечатке пальца устройства
+        Исправлена ошибка, из-за которой приложение аварийно завершало работу при изменении информации об отпечатке пальца устройства
     </string>
     <string name="release_136">
         v1.4.73 / 2019.02.11\n
@@ -136,7 +136,7 @@
     <string name="release_137">
         v1.4.74 / 2019.03.06\n
         Улучшена возможность применения фильтров к изображениям открыток\n
-        Добавлена ​​возможность экспорта дневника в файл Excel
+        Добавлена возможность экспорта дневника в файл Excel
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
@@ -153,7 +153,7 @@
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        Исправлена ​​ошибка, которая приводила к завершению, если какая-либо функция экрана настроек не имела доступа к хранилищу устройства
+        Исправлена ошибка, которая приводила к завершению, если какая-либо функция экрана настроек не имела доступа к хранилищу устройства
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
@@ -177,7 +177,7 @@
     </string>
     <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        Исправлена ​​ошибка токена аутентификации для пользователей, прошедших аутентификацию для использования Google Диска в версии 1.4.80 и ранее
+        Исправлена ошибка токена аутентификации для пользователей, прошедших аутентификацию для использования Google Диска в версии 1.4.80 и ранее
     </string>
     <string name="release_154">
         v1.4.88 / 2019.07.16\n
@@ -186,8 +186,8 @@
     </string>
     <string name="release_157">
         v1.4.91 / 2019.08.12\n
-        Добавлена ​​функция резервного копирования и восстановления с использованием хранилища устройства\n
-        Исправлена ​​проблема, из-за которой на некоторых устройствах в календарях обрезался текст
+        Добавлена функция резервного копирования и восстановления с использованием хранилища устройства\n
+        Исправлена проблема, из-за которой на некоторых устройствах в календарях обрезался текст
     </string>
     <string name="release_159">
         v1.4.93 / 2019.08.29\n
@@ -196,17 +196,17 @@
     </string>
     <string name="release_160">
         v1.4.94 / 2019.09.03\n
-        Добавлена ​​настройка начала дня недели календаря\n
-        Исправлена ​​проблема, из-за которой календарь не отображался в горизонтальной ориентации планшета
+        Добавлена настройка начала дня недели календаря\n
+        Исправлена проблема, из-за которой календарь не отображался в горизонтальной ориентации планшета
     </string>
     <string name="release_163">
         v1.4.97 / 2019.09.17\n
         Улучшенный фильтр поиска по временной шкале\n
-        Добавлена ​​функция копирования дневника
+        Добавлена функция копирования дневника
     </string>
     <string name="release_165">
         v1.4.99 / 2019.09.26\n
-        Добавлена ​​функция подсчёта текста дневника
+        Добавлена функция подсчёта текста дневника
     </string>
     <string name="release_167">
         v1.4.101 / 2019.10.03\n
@@ -218,17 +218,17 @@
     </string>
     <string name="release_170">
         v1.4.104 / 2019.10.19\n
-        Добавлена ​​настройка масштаба шрифта календаря\n
+        Добавлена настройка масштаба шрифта календаря\n
         Применена скользящая страница к экрану настроек
     </string>
     <string name="release_171">
         v1.4.105 / 2019.10.20\n
-        Исправлена ​​ошибка, возникавшая при использовании функции сохранения файлов Excel на устройстве\n
-        Исправлена ​​ошибка при удалении дневника с шкалы времени
+        Исправлена ошибка, возникавшая при использовании функции сохранения файлов Excel на устройстве\n
+        Исправлена ошибка при удалении дневника с шкалы времени
     </string>
     <string name="release_172">
         v1.4.106 / 2019.10.25\n
-        Исправлена ​​ошибка, из-за которой измененное содержимое не было видно сразу после редактирования дневника\n
+        Исправлена ошибка, из-за которой измененное содержимое не было видно сразу после редактирования дневника\n
         Исправление уязвимых библиотек с известными проблемами безопасности
     </string>
     <string name="release_173">
@@ -237,12 +237,12 @@
     </string>
     <string name="release_174">
         v1.4.108 / 2019.11.18\n
-        Исправлена ​​ошибка, возникавшая при установке шкалы шрифта календаря на устройстве с французским языком.
+        Исправлена ошибка, возникавшая при установке шкалы шрифта календаря на устройстве с французским языком.
     </string>
     <string name="release_176">
         v1.4.110 / 2019.12.13\n
-        Добавлена ​​функция панели управления дневником\n
-        Добавлена ​​возможность удалить файл резервной копии дневника, хранящийся на устройстве
+        Добавлена функция панели управления дневником\n
+        Добавлена возможность удалить файл резервной копии дневника, хранящийся на устройстве
     </string>
     <string name="release_178">
         v1.4.112 / 2019.12.31\n
@@ -251,12 +251,12 @@
     </string>
     <string name="release_179">
         v1.4.113 / 2020.01.04\n
-        Добавлена ​​функция перемещения даты с помощью выбора даты на экране календаря
+        Добавлена функция перемещения даты с помощью выбора даты на экране календаря
     </string>
     <string name="release_180">
         v1.4.114 / 2020.01.15\n
         Добавлен значок символа дневника\n
-        Добавлена ​​поддержка французского языка
+        Добавлена поддержка французского языка
     </string>
     <string name="release_182">
         v1.4.116 / 2020.01.21\n
@@ -264,7 +264,7 @@
     </string>
     <string name="release_184">
         v1.4.118 / 2020.02.11\n
-        [BETA] Добавлена ​​функция полного резервного копирования данных
+        [BETA] Добавлена функция полного резервного копирования данных
     </string>
     <string name="release_185">
         v1.4.119 / 2020.02.15\n
@@ -273,7 +273,7 @@
     <string name="release_186">
         v1.4.120 / 2020.02.19\n
         Добавлен значок символа дневника\n
-        Добавлена ​​функция поиска по символу дневника
+        Добавлена функция поиска по символу дневника
     </string>
 	<string name="release_187">
         v1.4.121 / 2020.03.02\n
@@ -281,9 +281,9 @@
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.09\n
-        [BETA] Добавлена ​​функция полного восстановления данных\n
+        [BETA] Добавлена функция полного восстановления данных\n
         Некоторые символы в статистике панели инструментов выглядят необычно большими\n
-        Добавлена ​​опция сортировки списка дневников на экране календаря
+        Добавлена опция сортировки списка дневников на экране календаря
     </string>
     <string name="release_190">
         v1.4.124 / 2020.03.15\n
@@ -291,13 +291,13 @@
     </string>
     <string name="release_191">
         v1.4.125 / 2020.03.23\n
-        Добавлена ​​опция настройки положения курсора при входе в экран редактирования дневника\n
-        Добавлена ​​функция для установки максимального количества строк в опции просмотра сводки содержимого\n
-        Исправлена ​​ошибка, из-за которой день недели был обрезан на экране календаря
+        Добавлена опция настройки положения курсора при входе в экран редактирования дневника\n
+        Добавлена функция для установки максимального количества строк в опции просмотра сводки содержимого\n
+        Исправлена ошибка, из-за которой день недели был обрезан на экране календаря
     </string>
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
-        Добавлена ​​функция шифрования дневника с использованием пин-кода\n
+        Добавлена функция шифрования дневника с использованием пин-кода\n
         Временно применён параметр requestLegacyExternalStorage для ответа на проблемы с хранилищем с несколькими средствами выбора в Android 10
     </string>
     <string name="release_193">
@@ -307,20 +307,20 @@
     </string>
     <string name="release_195">
         v1.4.129 / 2020.04.21\n
-        Добавлена ​​возможность прикреплять анимированные файлы GIF\n
-        Добавлена ​​функция многократного копирования и удаления дневника
+        Добавлена возможность прикреплять анимированные файлы GIF\n
+        Добавлена функция многократного копирования и удаления дневника
     </string>
     <string name="release_196">
         v1.4.130 / 2020.05.20\n
-        Добавлена ​​функция настройки расписания дневника
+        Добавлена функция настройки расписания дневника
     </string>
     <string name="release_197">
         v1.4.131 / 2020.05.26\n
-        Исправлена ​​ошибка, приводившая к аварийному завершению работы некоторых экранов в версии Android 4.4.
+        Исправлена ошибка, приводившая к аварийному завершению работы некоторых экранов в версии Android 4.4.
     </string>
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        Исправлена ​​проблема, когда кнопки, включённые в представление карты, не могли быть идентифицированы, когда цвет темы и цвет фона представления карты были установлены на один и тот же цвет
+        Исправлена проблема, когда кнопки, включённые в представление карты, не могли быть идентифицированы, когда цвет темы и цвет фона представления карты были установлены на один и тот же цвет
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
@@ -328,11 +328,11 @@
     </string>
     <string name="release_201">
         v1.4.135 / 2020.06.18\n
-        Добавлена ​​поддержка языка RTL
+        Добавлена поддержка языка RTL
     </string>
     <string name="release_202">
         v1.4.136 / 2020.06.29\n
-        Добавлена ​​функция виджета списка дневников
+        Добавлена функция виджета списка дневников
     </string>
     <string name="release_203">
         v1.4.137 / 2020.07.05\n
@@ -340,12 +340,12 @@
     </string>
     <string name="release_205">
         v1.4.139 / 2020.07.11\n
-        Добавлена ​​возможность отображения информации о подключённой учётной записи Google\n
-        Добавлена ​​функция резервного копирования в Google Диск с использованием планировщика
+        Добавлена возможность отображения информации о подключённой учётной записи Google\n
+        Добавлена функция резервного копирования в Google Диск с использованием планировщика
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        Исправлена ​​ошибка, из-за которой планировщик не работал в состоянии завершённого приложения
+        Исправлена ошибка, из-за которой планировщик не работал в состоянии завершённого приложения
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
@@ -354,7 +354,7 @@
     </string>
     <string name="release_209">
         v1.4.143 / 2020.08.26\n
-        Исправлена ​​ошибка, из-за которой некоторые устройства аварийно завершали работу на экране настроек
+        Исправлена ошибка, из-за которой некоторые устройства аварийно завершали работу на экране настроек
     </string>
     <string name="release_211">
         v1.4.145 / 2020.09.04\n
@@ -363,11 +363,11 @@
     <string name="release_212">
         v1.4.146 / 2020.09.10\n
         Обновление немецкого перевода\n
-        Добавлена ​​опция отображения информации о местоположении
+        Добавлена опция отображения информации о местоположении
     </string>
     <string name="release_214">
         v1.4.148 / 2020.09.15\n
-        Добавлена ​​опция сортировки символов задач
+        Добавлена опция сортировки символов задач
     </string>
     <string name="release_216">
         v1.4.150 / 2020.09.22\n
@@ -379,408 +379,408 @@
     </string>
     <string name="release_218">
         v1.4.152 / 2020.10.19\n
-        Russian translation updates\n
-        User Experience (UX) Optimization
+        Обновление русского перевода\n
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_219">
         v1.4.153 / 2020.11.10\n
-        Hindi translation added\n
-        User Experience (UX) Optimization
+        Добавлен перевод на хинди\n
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_220">
         v1.4.154 / 2020.11.28\n
-        Add diary symbols\n
-        Added daily symbol usage filtering function to dashboard
+        Добавление символов дневника\n
+        Добавлена функция фильтрации использования символов по дням на дашборде
     </string>
     <string name="release_221">
         v1.4.155 / 2020.12.14\n
-        Add diary symbols\n
-        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+        Добавление символов дневника\n
+        При создании открытки функция была улучшена: теперь можно обрезать прикрепленную фотографию или применить к ней фильтр
     </string>
     <string name="release_222">
         v1.4.156 / 2021.01.11\n
-        Add diary symbols\n
-        Improved calendar screen UX
+        Добавление символов дневника\n
+        Оптимизация взаимодействия с пользователем (UX) на экране календаря
     </string>
     <string name="release_225">
         v1.4.159 / 2021.01.30\n
-        Chinese translation added
+        Добавлен китайский перевод
     </string>
     <string name="release_227">
         v1.4.161 / 2021.02.12\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_229">
         v1.4.163 / 2021.03.23\n
-        Added function to save diary as HTML
+        Добавлена функция сохранения дневника в формате HTML
     </string>
     <string name="release_230">
         v1.4.164 / 2021.04.26\n
-        Fixed an issue where the date on the calendar was not visible when the card view color was black
+        Исправлена ошибка, из-за которой дата в календаре не отображалась, когда цвет карточки был черным
     </string>
     <string name="release_232">
         v1.4.166 / 2021.05.11\n
-        Italian translation added\n
-        Improved landscape screen UX
+        Добавлен итальянский перевод\n
+        Оптимизация взаимодействия с пользователем (UX) в альбомной ориентации
     </string>
     <string name="release_233">
         v1.4.167 / 2021.05.18\n
-        Fixed a bug that abnormally terminated on some devices when rotating the device
+        Исправлена ошибка, приводившая к аварийному завершению работы на некоторых устройствах при повороте экрана
     </string>
     <string name="release_234">
         v1.4.168 / 2021.06.10\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_235">
         v1.4.169.0 / 2021.06.19\n
-        Spanish translation added
+        Добавлен испанский перевод
     </string>
     <string name="release_237">
         v1.4.170.1 / 2021.07.04\n
-        Added temporary save and recovery function\n
-        Added the option to disable In-App Review
+        Добавлена функция временного сохранения и восстановления\n
+        Добавлена опция отключения отзывов в приложении (In-App Review)
     </string>
     <string name="release_238">
         v1.4.171.0 / 2021.07.21\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_242">
         v1.4.172.3 / 2021.08.28\n
-        Improved custom app theme and color settings\n
-        Fixed Showcase View error related to toolbar menu change
+        Улучшены пользовательские настройки темы и цвета приложения\n
+        Исправлена ошибка Showcase View, связанная с изменением меню панели инструментов
     </string>
     <string name="release_243">
         v1.4.172.4 / 2021.08.29\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_244">
         v1.4.172.5 / 2021.09.04\n
-        Multilingual translation updated
+        Обновлен многоязычный перевод
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        Change the initial font setting policy
+        Изменена политика начальной настройки шрифтов
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        Improved diary list screen fast scrolling
+        Улучшена быстрая прокрутка экрана списка дневников
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+        Исправлена ошибка, приводившая к аварийному завершению работы при входе на главный экран после очистки памяти
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        Added grid setting option to main screen
+        Добавлена опция настройки сетки на главном экране
     </string>
     <string name="release_258">
         v1.4.172.19 / 2022.01.12\n
-        Diary detail screen UX improvement
+        Оптимизация взаимодействия с пользователем (UX) на экране просмотра дневника
     </string>
     <string name="release_259">
         v1.4.172.20 / 2022.01.19\n
-        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
-        Fixed some errors that caused abnormal termination in Android 12 version
+        Исправлена ошибка, приводившая к аварийному завершению работы в Android 7.1 и ниже при прикреплении фотографии\n
+        Исправлены некоторые ошибки, приводившие к аварийному завершению работы в Android 12
     </string>
     <string name="release_260">
         v1.4.172.21 / 2022.01.22\n
-        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+        Исправлена ошибка, приводившая к аварийному завершению работы при настройке функции расписания в Android 12
     </string>
     <string name="release_261">
         v1.4.173.0 / 2022.02.03\n
-        Added attached photo highlight function
+        Добавлена функция основных моментов с прикрепленными фотографиями
     </string>
     <string name="release_262">
         v1.4.173.1 / 2022.02.09\n
-        Fixed an error where all yearly labels in the attached photo highlights were displayed as one year\n
-        Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+        Исправлена ошибка, из-за которой все годовые метки в основных моментах фотографий отображались как один и тот же год\n
+        Исправлена ошибка, приводившая к аварийному завершению работы при использовании фильтра на экране создания открытки
     </string>
     <string name="release_263">
         v1.4.173.2 / 2022.02.12\n
-        Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
+        Исправлена ошибка, из-за которой список дневников не загружался при использовании виджетов в Android 12
     </string>
     <string name="release_264">
         v1.4.173.3 / 2022.03.08\n
-        Added welcome dashboard feature\n
-        Added DDay setting feature to dashboard screen (Beta)
+        Добавлена функция приветственного дашборда\n
+        Добавлена функция настройки D-Day на экране дашборда (бета)
     </string>
     <string name="release_265">
         v1.4.173.4 / 2022.03.09\n
-        Improved dashboard DDay setting feature
+        Улучшена функция настройки D-Day на дашборде
     </string>
     <string name="release_266">
         v1.4.266.202203210 / 2022.03.21\n
-        Improved dashboard DDay setting feature
+        Улучшена функция настройки D-Day на дашборде
     </string>
     <string name="release_267">
         v1.4.267.202203300 / 2022.03.30\n
-        Improved dashboard chart feature
+        Улучшена функция диаграмм на дашборде
     </string>
     <string name="release_268">
         v1.4.268.202204040 / 2022.04.04\n
-        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+        Изменена политика: список дневников не отображается в виджете при использовании функции блокировки
     </string>
     <string name="release_269">
         v1.4.269.202204110 / 2022.04.11\n
-        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+        Изменена политика: содержимое не отображается в списке недавних приложений при использовании функции блокировки
     </string>
     <string name="release_271">
         v1.4.271.202204150 / 2022.04.15\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_272">
         v1.4.272.202204220 / 2022.04.22\n
-        Fixed abnormal termination error when exporting excel
+        Исправлена ошибка аварийного завершения работы при экспорте в Excel
     </string>
     <string name="release_273">
         v1.4.273.202205070 / 2022.05.07\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_274">
         v1.4.274.202206010 / 2022.06.01\n
-        Added the recently used symbol selection function to the symbol dialog
+        Добавлена функция выбора недавно использованных символов в диалоге символов
     </string>
     <string name="release_275">
         v1.4.275.202207150 / 2022.07.15\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_277">
         v1.4.277.202208170 / 2022.08.17\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_279">
         v1.4.279.202208250 / 2022.08.25\n
-        Improved main screen and dashboard screen UX
+        Оптимизация взаимодействия с пользователем (UX) на главном экране и дашборде
     </string>
     <string name="release_280">
         v1.4.280.202209160 / 2022.09.16\n
-        Improved Dashboard UX
+        Оптимизация взаимодействия с пользователем (UX) на дашборде
     </string>
     <string name="release_284">
         v1.4.284.202210260 / 2022.10.26\n
-        Improved Dashboard UX
+        Оптимизация взаимодействия с пользователем (UX) на дашборде
     </string>
     <string name="release_285">
         v1.4.285.202211170 / 2022.11.17\n
-        Changed not to check storage access permission in TIRAMISU (Android 13) version
+        Изменено поведение: проверка разрешения на доступ к хранилищу отменена в версии TIRAMISU (Android 13)
     </string>
     <string name="release_286">
         v1.4.286.202212110 / 2022.12.11\n
-        Fixed an error in which the timeline filter was activated abnormally
+        Исправлена ошибка, из-за которой фильтр временной шкалы активировался некорректно
     </string>
     <string name="release_287">
         v1.4.287.202301140 / 2023.01.14\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_288">
         v1.4.288.202302030 / 2023.02.03\n
-        Fixed an error where Photo Multi-Picker did not work in TIRAMISU (Android 13) version
+        Исправлена ошибка, из-за которой выбор нескольких фотографий (Photo Multi-Picker) не работал в версии TIRAMISU (Android 13)
     </string>
     <string name="release_289">
         v1.4.289.202302031 / 2023.02.03\n
-        Fixed an error where diary notifications did not work in TIRAMISU (Android 13) version
+        Исправлена ошибка, из-за которой уведомления дневника не работали в версии TIRAMISU (Android 13)
     </string>
     <string name="release_291">
         v1.4.291.202302260 / 2023.02.26\n
-        Added date and time formatting settings
+        Добавлена настройка форматирования даты и времени
     </string>
     <string name="release_292">
         v1.4.292.202303100 / 2023.03.10\n
-        Added support for Markdown syntax
+        Добавлена поддержка синтаксиса Markdown
     </string>
     <string name="release_293">
         v1.4.293.202303240 / 2023.03.24\n
-        Improved markdown mode style
+        Улучшен стиль режима Markdown
     </string>
     <string name="release_294">
         v1.4.294.202304080 / 2023.04.08\n
-        Added user manual link
+        Добавлена ссылка на руководство пользователя
     </string>
     <string name="release_295">
         v1.4.295.202304180 / 2023.04.18\n
-        Added attached photo gallery
+        Добавлена галерея прикрепленных фотографий
     </string>
     <string name="release_297">
         v1.4.297.202304260 / 2023.04.26\n
-        Improve to support markdown in widget
+        Улучшена поддержка Markdown в виджетах
     </string>
     <string name="release_298">
         v1.4.298.202306010 / 2023.06.01\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_299">
         v1.4.299.202306100 / 2023.06.10\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_300">
         v1.4.300.202307110 / 2023.07.11\n
-        Added Dashboard Calendar Component
+        Добавлен компонент календаря на дашборде
     </string>
     <string name="release_301">
         v1.4.301.202308250 / 2023.08.25\n
-        Dashboard UX Improvements
+        Оптимизация взаимодействия с пользователем (UX) на дашборде
     </string>
     <string name="release_302">
         v1.4.302.202309180 / 2023.09.18\n
-        Added automatic diary creation function using Google Calendar events
+        Добавлена функция автоматического создания дневника на основе событий Календаря Google
     </string>
     <string name="release_303">
         v1.4.303.202310160 / 2023.10.16\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_304">
         v1.4.304.202312270 / 2023.12.27\n
-        Dashboard UX Improvements
+        Оптимизация взаимодействия с пользователем (UX) на дашборде
     </string>
     <string name="release_305">
         v1.4.305.202402230 / 2024.02.23\n
-        Added scheduler option to create diaries with Google Calendar events
+        Добавлена опция планировщика для создания дневников по событиям Календаря Google
     </string>
     <string name="release_306">
         v1.4.306.202402250 / 2024.02.25\n
-        Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+        Обработка разрешения SCHEDULE_EXACT_ALARM в Android 14
     </string>
     <string name="release_307">
         v1.4.307.202406020 / 2024.06.02\n
-        Discontinuation of support for devices prior to Android Version 5.0 (Android Lollipop)\n
-        Apply Jetpack Compose to some screens to improve functionality\n
-        Add option to use quick settings
+        Прекращена поддержка устройств с версией Android ниже 5.0 (Android Lollipop)\n
+        Применен Jetpack Compose на некоторых экранах для улучшения функциональности\n
+        Добавлена опция использования быстрых настроек
     </string>
     <string name="release_308">
         v1.4.308.202406030 / 2024.06.03\n
-        Applying the detailed consent guide policy for OAuth
+        Применена политика подробного руководства по согласию для OAuth
     </string>
     <string name="release_309">
         v1.4.309.202406100 / 2024.06.10\n
-        Fixed Android 14 Foreground Service permission issue
+        Исправлена проблема с разрешением Foreground Service в Android 14
     </string>
     <string name="release_312">
         v1.4.312.202406200 / 2024.06.20\n
-        Applied Android 12 Splash API
+        Применен Splash API из Android 12
     </string>
     <string name="release_313">
         v1.4.313.202410010 / 2024.10.01\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_317">
         v1.4.317.202410240 / 2024.10.24\n
-        Changed multi-picker support policy
+        Изменена политика поддержки мультивыбора
     </string>
     <string name="release_318">
         v1.4.318.202412220 / 2024.12.22\n
-        Fixed an error where custom fonts were not applied on some screens
+        Исправлена ошибка, из-за которой пользовательские шрифты не применялись на некоторых экранах
     </string>
     <string name="release_319">
         v1.4.319.202501050 / 2025.01.05\n
-        Fixed app bar area overlapping issue in Android 15
+        Исправлена проблема перекрытия области панели приложения в Android 15
     </string>
     <string name="release_324">
         v1.4.324.202501190 / 2025.01.19\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_325">
         v1.4.325.202501250 / 2025.01.25\n
-        Change the layout of attached photos in viewing mode
+        Изменен макет прикрепленных фотографий в режиме просмотра
     </string>
     <string name="release_326">
         v1.4.326.202502030 / 2025.02.03\n
-        Fixed an issue where the main search bar was hidden in Android version 15
+        Исправлена проблема, из-за которой главная строка поиска скрывалась в Android 15
     </string>
     <string name="release_327">
         v1.4.327.202502140 / 2025.02.14\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_328">
         v1.4.328.202502160 / 2025.02.16\n
-        System Bar Area and Toolbar UI/UX Improvements
+        Улучшение UI/UX системной панели и панели инструментов
     </string>
     <string name="release_329">
         v1.4.329.202503170 / 2025.03.17\n
-        Applied Jetpack Compose components to some settings screens
+        Применены компоненты Jetpack Compose на некоторых экранах настроек
     </string>
     <string name="release_330">
         v1.4.330.202504120 / 2025.04.12\n
-        Improve UI/UX for Android 15
+        Улучшение UI/UX для Android 15
     </string>
     <string name="release_331">
         v1.4.331.202505030 / 2025.05.03\n
-        Improve UI/UX for Android 15
+        Улучшение UI/UX для Android 15
     </string>
     <string name="release_332">
         v1.4.332.202505290 / 2025.05.29\n
-        Improve UI/UX for Android 15
+        Улучшение UI/UX для Android 15
     </string>
     <string name="release_333">
         v1.4.333.202507260 / 2025.07.26\n
-        Improve UI/UX for Android 15
+        Улучшение UI/UX для Android 15
     </string>
     <string name="release_334">
         v1.4.334.202509110 / 2025.09.11\n
-        Improve UI/UX for Android 15
+        Улучшение UI/UX для Android 15
     </string>
     <string name="release_337">
         v1.4.337.202510090 / 2025.10.09\n
-        Migrate layout from XML to Jetpack Compose
+        Миграция макета из XML в Jetpack Compose
     </string>
     <string name="release_338">
         v1.4.338.202510250 / 2025.10.25\n
-        Migrate layout from XML to Jetpack Compose
+        Миграция макета из XML в Jetpack Compose
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
-        Fixed GlideImage cache conflict
+        Исправлен конфликт кэша GlideImage
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
-        Add linking between diary entries
+        Добавлено связывание записей дневника
     </string>
     <string name="release_341">
         v1.4.341.202602050 / 2026.02.05\n
-        Improve UI/UX for Android 16
+        Улучшение UI/UX для Android 16
     </string>
     <string name="release_343">
         v1.4.343.202603010 / 2026.03.01\n
-        Updated GMS login handling
+        Обновлена обработка входа через GMS
     </string>
     <string name="release_344">
         v1.4.344.202604070 / 2026.04.07\n
-        Improve UI/UX for Android 16
+        Улучшение UI/UX для Android 16
     </string>
     <string name="release_346">
         v1.4.346.202604090 / 2026.04.09\n
-        Improve UI/UX for Android 16
+        Улучшение UI/UX для Android 16
     </string>
     <string name="release_347">
         v1.4.347.202608100 / 2026.08.10\n
-        Improve UI/UX for Android 16
+        Улучшение UI/UX для Android 16
     </string>
     <string name="release_348">
         v1.4.348.202608120 / 2026.08.12\n
-        Improve UI/UX for Android 16
+        Улучшение UI/UX для Android 16
     </string>
     <string name="release_349">
         v1.4.349.202608150 / 2026.08.15\n
-        Update image picker permission checks
+        Обновлены проверки разрешений для выбора изображений
     </string>
     <string name="release_350">
         v1.4.350.202608190 / 2026.08.19\n
-        External storage permission policy changes (pre-Tiramisu)
+        Изменения в политике разрешений на внешнее хранилище (до Tiramisu)
     </string>
     <string name="release_351">
         v1.4.351.202609300 / 2026.09.30\n
-        Migrate local database from Realm to Room
+        Миграция локальной базы данных с Realm на Room
     </string>
     <string name="release_352">
         v1.4.352.202610020 / 2026.10.02\n
-        Migrate local database from Realm to Room
+        Миграция локальной базы данных с Realm на Room
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
