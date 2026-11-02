@@ -404,7 +404,7 @@
     </string>
     <string name="release_225">
         v1.4.159 / 2021.01.30\n
-        Chinese translation added
+        添加中文翻译
     </string>
     <string name="release_227">
         v1.4.161 / 2021.02.12\n
@@ -412,20 +412,20 @@
     </string>
     <string name="release_229">
         v1.4.163 / 2021.03.23\n
-        Added function to save diary as HTML
+        添加将日记保存为 HTML 的功能
     </string>
     <string name="release_230">
         v1.4.164 / 2021.04.26\n
-        Fixed an issue where the date on the calendar was not visible when the card view color was black
+        修复了卡片视图颜色为黑色时日历上的日期不可见的问题
     </string>
     <string name="release_232">
         v1.4.166 / 2021.05.11\n
-        Italian translation added\n
-        Improved landscape screen UX
+        添加意大利语翻译\n
+        改进横屏界面 UX
     </string>
     <string name="release_233">
         v1.4.167 / 2021.05.18\n
-        Fixed a bug that abnormally terminated on some devices when rotating the device
+        修复了旋转设备时在某些设备上异常终止的错误
     </string>
     <string name="release_234">
         v1.4.168 / 2021.06.10\n
@@ -433,354 +433,354 @@
     </string>
     <string name="release_235">
         v1.4.169.0 / 2021.06.19\n
-        Spanish translation added
+        添加西班牙语翻译
     </string>
     <string name="release_237">
         v1.4.170.1 / 2021.07.04\n
-        Added temporary save and recovery function\n
-        Added the option to disable In-App Review
+        添加临时保存和恢复功能\n
+        添加禁用应用内评价的选项
     </string>
     <string name="release_238">
         v1.4.171.0 / 2021.07.21\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_242">
         v1.4.172.3 / 2021.08.28\n
-        Improved custom app theme and color settings\n
-        Fixed Showcase View error related to toolbar menu change
+        改进自定义应用主题和颜色设置\n
+        修复与工具栏菜单更改相关的 Showcase View 错误
     </string>
     <string name="release_243">
         v1.4.172.4 / 2021.08.29\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_244">
         v1.4.172.5 / 2021.09.04\n
-        Multilingual translation updated
+        多语言翻译更新
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        Change the initial font setting policy
+        更改初始字体设置策略
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        Improved diary list screen fast scrolling
+        改进日记列表界面的快速滚动功能
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+        修复了清理内存后进入主界面时导致异常终止的错误
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        Added grid setting option to main screen
+        在主界面添加网格设置选项
     </string>
     <string name="release_258">
         v1.4.172.19 / 2022.01.12\n
-        Diary detail screen UX improvement
+        日记详情界面 UX 改进
     </string>
     <string name="release_259">
         v1.4.172.20 / 2022.01.19\n
-        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
-        Fixed some errors that caused abnormal termination in Android 12 version
+        修复了在 Android 7.1 或更低版本中添加照片时导致异常终止的错误\n
+        修复了在 Android 12 版本中导致异常终止的一些错误
     </string>
     <string name="release_260">
         v1.4.172.21 / 2022.01.22\n
-        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+        修复了在 Android 12 版本中设置日程功能时导致异常终止的错误
     </string>
     <string name="release_261">
         v1.4.173.0 / 2022.02.03\n
-        Added attached photo highlight function
+        添加附件照片高亮显示功能
     </string>
     <string name="release_262">
         v1.4.173.1 / 2022.02.09\n
-        Fixed an error where all yearly labels in the attached photo highlights were displayed as one year\n
-        Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+        修复了附件照片高亮中的年度标签全显示为同一年份的错误\n
+        修复了在日记明信片创建界面使用滤镜时导致异常终止的错误
     </string>
     <string name="release_263">
         v1.4.173.2 / 2022.02.12\n
-        Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
+        修复了在 Android 12 版本中使用小部件时无法加载日记列表的错误
     </string>
     <string name="release_264">
         v1.4.173.3 / 2022.03.08\n
-        Added welcome dashboard feature\n
-        Added DDay setting feature to dashboard screen (Beta)
+        添加欢迎仪表板功能\n
+        在仪表板界面添加倒计时(D-Day)设置功能 (Beta)
     </string>
     <string name="release_265">
         v1.4.173.4 / 2022.03.09\n
-        Improved dashboard DDay setting feature
+        改进仪表板倒计时(D-Day)设置功能
     </string>
     <string name="release_266">
         v1.4.266.202203210 / 2022.03.21\n
-        Improved dashboard DDay setting feature
+        改进仪表板倒计时(D-Day)设置功能
     </string>
     <string name="release_267">
         v1.4.267.202203300 / 2022.03.30\n
-        Improved dashboard chart feature
+        改进仪表板图表功能
     </string>
     <string name="release_268">
         v1.4.268.202204040 / 2022.04.04\n
-        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+        更改策略，在使用锁定功能时小部件中不显示日记列表
     </string>
     <string name="release_269">
         v1.4.269.202204110 / 2022.04.11\n
-        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+        更改策略，在使用锁定功能时在最近使用应用列表中不显示内容
     </string>
     <string name="release_271">
         v1.4.271.202204150 / 2022.04.15\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_272">
         v1.4.272.202204220 / 2022.04.22\n
-        Fixed abnormal termination error when exporting excel
+        修复导出 Excel 时发生的异常终止错误
     </string>
     <string name="release_273">
         v1.4.273.202205070 / 2022.05.07\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_274">
         v1.4.274.202206010 / 2022.06.01\n
-        Added the recently used symbol selection function to the symbol dialog
+        在符号对话框中添加最近使用符号选择功能
     </string>
     <string name="release_275">
         v1.4.275.202207150 / 2022.07.15\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_277">
         v1.4.277.202208170 / 2022.08.17\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_279">
         v1.4.279.202208250 / 2022.08.25\n
-        Improved main screen and dashboard screen UX
+        改进主界面和仪表板界面的 UX
     </string>
     <string name="release_280">
         v1.4.280.202209160 / 2022.09.16\n
-        Improved Dashboard UX
+        改进仪表板 UX
     </string>
     <string name="release_284">
         v1.4.284.202210260 / 2022.10.26\n
-        Improved Dashboard UX
+        改进仪表板 UX
     </string>
     <string name="release_285">
         v1.4.285.202211170 / 2022.11.17\n
-        Changed not to check storage access permission in TIRAMISU (Android 13) version
+        更改为在 TIRAMISU (Android 13) 版本中不检查存储权限
     </string>
     <string name="release_286">
         v1.4.286.202212110 / 2022.12.11\n
-        Fixed an error in which the timeline filter was activated abnormally
+        修复了时间线筛选器异常激活的错误
     </string>
     <string name="release_287">
         v1.4.287.202301140 / 2023.01.14\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_288">
         v1.4.288.202302030 / 2023.02.03\n
-        Fixed an error where Photo Multi-Picker did not work in TIRAMISU (Android 13) version
+        修复了在 TIRAMISU (Android 13) 版本中照片多选器无法正常工作的错误
     </string>
     <string name="release_289">
         v1.4.289.202302031 / 2023.02.03\n
-        Fixed an error where diary notifications did not work in TIRAMISU (Android 13) version
+        修复了在 TIRAMISU (Android 13) 版本中日记通知无法正常工作的错误
     </string>
     <string name="release_291">
         v1.4.291.202302260 / 2023.02.26\n
-        Added date and time formatting settings
+        添加日期和时间格式设置
     </string>
     <string name="release_292">
         v1.4.292.202303100 / 2023.03.10\n
-        Added support for Markdown syntax
+        添加对 Markdown 语法的支持
     </string>
     <string name="release_293">
         v1.4.293.202303240 / 2023.03.24\n
-        Improved markdown mode style
+        改进 Markdown 模式样式
     </string>
     <string name="release_294">
         v1.4.294.202304080 / 2023.04.08\n
-        Added user manual link
+        添加用户手册链接
     </string>
     <string name="release_295">
         v1.4.295.202304180 / 2023.04.18\n
-        Added attached photo gallery
+        添加附件照片图库
     </string>
     <string name="release_297">
         v1.4.297.202304260 / 2023.04.26\n
-        Improve to support markdown in widget
+        改进为在小部件中支持 Markdown 语法
     </string>
     <string name="release_298">
         v1.4.298.202306010 / 2023.06.01\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_299">
         v1.4.299.202306100 / 2023.06.10\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_300">
         v1.4.300.202307110 / 2023.07.11\n
-        Added Dashboard Calendar Component
+        添加仪表板日历组件
     </string>
     <string name="release_301">
         v1.4.301.202308250 / 2023.08.25\n
-        Dashboard UX Improvements
+        仪表板 UX 改进
     </string>
     <string name="release_302">
         v1.4.302.202309180 / 2023.09.18\n
-        Added automatic diary creation function using Google Calendar events
+        添加使用 Google 日历活动自动创建日记的功能
     </string>
     <string name="release_303">
         v1.4.303.202310160 / 2023.10.16\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_304">
         v1.4.304.202312270 / 2023.12.27\n
-        Dashboard UX Improvements
+        仪表板 UX 改进
     </string>
     <string name="release_305">
         v1.4.305.202402230 / 2024.02.23\n
-        Added scheduler option to create diaries with Google Calendar events
+        添加通过 Google 日历活动创建日记的调度器选项
     </string>
     <string name="release_306">
         v1.4.306.202402250 / 2024.02.25\n
-        Android 14 SCHEDULE_EXACT_ALARM permission acquisition
+        添加 Android 14 SCHEDULE_EXACT_ALARM 权限处理
     </string>
     <string name="release_307">
         v1.4.307.202406020 / 2024.06.02\n
-        Discontinuation of support for devices prior to Android Version 5.0 (Android Lollipop)\n
-        Apply Jetpack Compose to some screens to improve functionality\n
-        Add option to use quick settings
+        停止支持 Android 5.0 (Android Lollipop) 之前的设备\n
+        在部分界面应用 Jetpack Compose 以改进功能\n
+        添加使用快速设置的选项
     </string>
     <string name="release_308">
         v1.4.308.202406030 / 2024.06.03\n
-        Applying the detailed consent guide policy for OAuth
+        应用 OAuth 详细同意指南策略
     </string>
     <string name="release_309">
         v1.4.309.202406100 / 2024.06.10\n
-        Fixed Android 14 Foreground Service permission issue
+        修复了 Android 14 前台服务 (Foreground Service) 权限问题
     </string>
     <string name="release_312">
         v1.4.312.202406200 / 2024.06.20\n
-        Applied Android 12 Splash API
+        应用 Android 12 Splash API
     </string>
     <string name="release_313">
         v1.4.313.202410010 / 2024.10.01\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_317">
         v1.4.317.202410240 / 2024.10.24\n
-        Changed multi-picker support policy
+        更改多选器支持策略
     </string>
     <string name="release_318">
         v1.4.318.202412220 / 2024.12.22\n
-        Fixed an error where custom fonts were not applied on some screens
+        修复了在某些界面上未应用自定义字体的错误
     </string>
     <string name="release_319">
         v1.4.319.202501050 / 2025.01.05\n
-        Fixed app bar area overlapping issue in Android 15
+        修复了 Android 15 中应用栏区域重叠的问题
     </string>
     <string name="release_324">
         v1.4.324.202501190 / 2025.01.19\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_325">
         v1.4.325.202501250 / 2025.01.25\n
-        Change the layout of attached photos in viewing mode
+        更改查看模式下附件照片的布局
     </string>
     <string name="release_326">
         v1.4.326.202502030 / 2025.02.03\n
-        Fixed an issue where the main search bar was hidden in Android version 15
+        修复了在 Android 15 版本中主搜索栏被遮挡的问题
     </string>
     <string name="release_327">
         v1.4.327.202502140 / 2025.02.14\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_328">
         v1.4.328.202502160 / 2025.02.16\n
-        System Bar Area and Toolbar UI/UX Improvements
+        系统栏区域和工具栏 UI/UX 改进
     </string>
     <string name="release_329">
         v1.4.329.202503170 / 2025.03.17\n
-        Applied Jetpack Compose components to some settings screens
+        在部分设置界面中应用 Jetpack Compose 组件
     </string>
     <string name="release_330">
         v1.4.330.202504120 / 2025.04.12\n
-        Improve UI/UX for Android 15
+        针对 Android 15 改进 UI/UX
     </string>
     <string name="release_331">
         v1.4.331.202505030 / 2025.05.03\n
-        Improve UI/UX for Android 15
+        针对 Android 15 改进 UI/UX
     </string>
     <string name="release_332">
         v1.4.332.202505290 / 2025.05.29\n
-        Improve UI/UX for Android 15
+        针对 Android 15 改进 UI/UX
     </string>
     <string name="release_333">
         v1.4.333.202507260 / 2025.07.26\n
-        Improve UI/UX for Android 15
+        针对 Android 15 改进 UI/UX
     </string>
     <string name="release_334">
         v1.4.334.202509110 / 2025.09.11\n
-        Improve UI/UX for Android 15
+        针对 Android 15 改进 UI/UX
     </string>
     <string name="release_337">
         v1.4.337.202510090 / 2025.10.09\n
-        Migrate layout from XML to Jetpack Compose
+        将布局从 XML 迁移到 Jetpack Compose
     </string>
     <string name="release_338">
         v1.4.338.202510250 / 2025.10.25\n
-        Migrate layout from XML to Jetpack Compose
+        将布局从 XML 迁移到 Jetpack Compose
     </string>
     <string name="release_339">
         v1.4.339.202510260 / 2025.10.26\n
-        Fixed GlideImage cache conflict
+        修复 GlideImage 缓存冲突
     </string>
     <string name="release_340">
         v1.4.340.202512250 / 2025.12.25\n
-        Add linking between diary entries
+        添加日记条目之间的链接
     </string>
     <string name="release_341">
         v1.4.341.202602050 / 2026.02.05\n
-        Improve UI/UX for Android 16
+        针对 Android 16 改进 UI/UX
     </string>
     <string name="release_343">
         v1.4.343.202603010 / 2026.03.01\n
-        Updated GMS login handling
+        更新 GMS 登录处理
     </string>
     <string name="release_344">
         v1.4.344.202604070 / 2026.04.07\n
-        Improve UI/UX for Android 16
+        针对 Android 16 改进 UI/UX
     </string>
     <string name="release_346">
         v1.4.346.202604090 / 2026.04.09\n
-        Improve UI/UX for Android 16
+        针对 Android 16 改进 UI/UX
     </string>
     <string name="release_347">
         v1.4.347.202608100 / 2026.08.10\n
-        Improve UI/UX for Android 16
+        针对 Android 16 改进 UI/UX
     </string>
     <string name="release_348">
         v1.4.348.202608120 / 2026.08.12\n
-        Improve UI/UX for Android 16
+        针对 Android 16 改进 UI/UX
     </string>
     <string name="release_349">
         v1.4.349.202608150 / 2026.08.15\n
-        Update image picker permission checks
+        更新图片选择器权限检查
     </string>
     <string name="release_350">
         v1.4.350.202608190 / 2026.08.19\n
-        External storage permission policy changes (pre-Tiramisu)
+        外部存储权限策略更改 (Tiramisu 之前)
     </string>
     <string name="release_351">
         v1.4.351.202609300 / 2026.09.30\n
-        Migrate local database from Realm to Room
+        将本地数据库从 Realm 迁移到 Room
     </string>
     <string name="release_352">
         v1.4.352.202610020 / 2026.10.02\n
-        Migrate local database from Realm to Room
+        将本地数据库从 Realm 迁移到 Room
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -799,7 +799,7 @@
     <string name="bold_style_option_title">黑体字配置</string>
     <string name="bold_style_option_summary">设置日记标题和时间线时间以粗体显示</string>
     <string name="preferences_category_backup_restore">应用备份及还原</string>
-    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="preferences_category_backup_restore_sub">Google Drive &amp; 日历</string>
     <string name="backup_attach_photo_title">备份附加照片</string>
     <string name="backup_attach_photo_summary">将附件中的照片备份到Google Drive。由于测试版服务，此功能可能无法在某些设备上使用</string>
     <string name="recover_attach_photo_title">恢复附加照片</string>
@@ -954,7 +954,7 @@
     <string name="google_drive_account_information_title">链接的Google帐户资料</string>
     <string name="schedule_backup_gms_description">日记备份(Google Drive)\n根据时间表设定的日期和时间，备份数据库文件和附加照片到Google Drive，并以通知消息的形式提供操作结果。</string>
     <string name="google_drive_account_sign_in_title">链接Google Drive帐户</string>
-    <string name="google_drive_account_sign_in_description">将您的帐户连接到Google Drive，以方便日记数据备份。</string>
+    <string name="google_drive_account_sign_in_description">登录您的 Google 账号，使用 Google Drive 备份和恢复日记，或使用 Google 日历活动自动创建日记。</string>
     <string name="schedule_gms_error_title">等待预定的工作</string>
     <string name="schedule_gms_error_message">应用进入后台，使用网络的备份操作失败。如果您触摸通知窗口，备份操作将恢复。</string>
     <string name="schedule_pending_guide_message">等候时间开始</string>
