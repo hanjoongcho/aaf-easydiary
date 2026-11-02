@@ -201,13 +201,13 @@ class SettingsFontFragment : Fragment() {
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                         callbackMinus = {
                             requireActivity().run {
-                                config.settingFontSize = config.settingFontSize.minus(5)
+                                config.settingFontSize = config.settingFontSize.minus(3)
                                 settingsViewModel.setFontSize(config.settingFontSize)
                             }
                         },
                         callbackPlus = {
                             requireActivity().run {
-                                config.settingFontSize = config.settingFontSize.plus(5)
+                                config.settingFontSize = config.settingFontSize.plus(3)
                                 settingsViewModel.setFontSize(config.settingFontSize)
                             }
                         },
@@ -302,6 +302,7 @@ class SettingsFontFragment : Fragment() {
         binding.run {
             settingsViewModel.setLineSpacingScaleFactor(requireActivity().config.lineSpacingScaleFactor)
             settingsViewModel.setFontFamily(FontUtils.getComposeFontFamily(requireContext()))
+            settingsViewModel.updateFontSettingDescription()
         }
     }
 
