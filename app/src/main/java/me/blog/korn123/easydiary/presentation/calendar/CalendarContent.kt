@@ -413,7 +413,7 @@ fun DaysOfWeekTitle(daysOfWeek: Array<DayOfWeek>) {
                         when (dayOfWeek) {
                             DayOfWeek.SUNDAY -> Color.Red
                             DayOfWeek.SATURDAY -> Color.Blue
-                            else -> MaterialTheme.colorScheme.onSurface
+                            else -> Color(context.config.textColor)
                         },
                 )
             }
@@ -496,6 +496,7 @@ fun DayContent(
 ) {
     val isCurrentMonth = day.position == DayPosition.MonthDate
     val displayEvents = events.take(3)
+    val context = LocalContext.current
 
     Box(
         modifier =
@@ -533,6 +534,13 @@ fun DayContent(
                     contentAlignment = Alignment.Center,
                 ) {
                     val isToday = day.date == LocalDate.now()
+                    val dayColor =
+                        when {
+                            events.any { it.isHoliday } -> Color.Red
+                            day.date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red
+                            day.date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue
+                            else -> Color(context.config.textColor)
+                        }
                     Box(
                         modifier =
                             Modifier
@@ -553,14 +561,7 @@ fun DayContent(
                         Text(
                             text = day.date.dayOfMonth.toString(),
                             modifier = Modifier.offset(y = (-1).dp),
-                            color =
-                                when {
-                                    isToday -> MaterialTheme.colorScheme.primary
-                                    !isCurrentMonth -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                                    day.date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red
-                                    day.date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue
-                                    else -> MaterialTheme.colorScheme.onSurface
-                                },
+                            color = if (isCurrentMonth) dayColor else dayColor.copy(alpha = 0.3f),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Normal,
                             fontSize = 11.sp,
