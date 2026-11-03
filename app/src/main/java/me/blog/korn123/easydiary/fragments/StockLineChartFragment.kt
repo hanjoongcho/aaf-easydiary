@@ -11,12 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.*
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.CombinedData
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
@@ -24,86 +35,101 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.ChartConstants
+import me.blog.korn123.easydiary.helper.CHART_LABEL_FONT_SIZE_DEFAULT_DP
+import me.blog.korn123.easydiary.helper.DAILY_STOCK
+import me.blog.korn123.easydiary.helper.StatisticsConstants
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
-class StockLineChartFragment : androidx.fragment.app.Fragment() {
+class StockLineChartFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mSDatePickerDialog: DatePickerDialog
-    private lateinit var mEDatePickerDialog: DatePickerDialog
-    private val mEndCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mEndMillis = 0L
-    private var mStartDateListener: DatePickerDialog.OnDateSetListener =
+    private lateinit var sDatePickerDialog: DatePickerDialog
+    private lateinit var eDatePickerDialog: DatePickerDialog
+    private val endCalendar = Calendar.getInstance(Locale.getDefault())
+    private var endMillis = 0L
+    private var startDateListener: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             requireContext().config.devStockChartOptionFromMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
             drawChart()
         }
 
-    private var mEndDateListener: DatePickerDialog.OnDateSetListener =
+    private var endDateListener: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            mEndMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+            endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
             drawChart()
         }
-    private lateinit var mBinding: FragmentStockLineChartBinding
-    private lateinit var mCombineChart: CombinedChart
-    private lateinit var mKospiChart: LineChart
+    private lateinit var binding: FragmentStockLineChartBinding
+    private lateinit var combineChart: CombinedChart
+    private lateinit var kospiChart: LineChart
 
     // KR & JP
-    private lateinit var mKrPrincipalDataSet: BarDataSet
-    private lateinit var mKrEvaluatedPriceDataSet: LineDataSet
-    private lateinit var mKrTradingProfitDataSet: LineDataSet
-    private lateinit var mKrTradingProfitNegativeDataSet: LineDataSet
-    private lateinit var mKrTradingProfitPositiveDataSet: LineDataSet
+    private lateinit var krPrincipalDataSet: BarDataSet
+    private lateinit var krEvaluatedPriceDataSet: LineDataSet
+    private lateinit var krTradingProfitDataSet: LineDataSet
+    private lateinit var krTradingProfitNegativeDataSet: LineDataSet
+    private lateinit var krTradingProfitPositiveDataSet: LineDataSet
 
     // US
-    private lateinit var mUsPrincipalDataSet: BarDataSet
-    private lateinit var mUsEvaluatedPriceDataSet: LineDataSet
-    private lateinit var mUsTradingProfitDataSet: LineDataSet
-    private lateinit var mUsTradingProfitNegativeDataSet: LineDataSet
-    private lateinit var mUsTradingProfitPositiveDataSet: LineDataSet
+    private lateinit var usPrincipalDataSet: BarDataSet
+    private lateinit var usEvaluatedPriceDataSet: LineDataSet
+    private lateinit var usTradingProfitDataSet: LineDataSet
+    private lateinit var usTradingProfitNegativeDataSet: LineDataSet
+    private lateinit var usTradingProfitPositiveDataSet: LineDataSet
 
     // KR & JP & US
-    private lateinit var mTotalPrincipalDataSet: BarDataSet
-    private lateinit var mTotalEvaluatedPriceDataSet: LineDataSet
-    private lateinit var mTotalTradingProfitDataSet: LineDataSet
-    private lateinit var mTotalTradingProfitNegativeDataSet: LineDataSet
-    private lateinit var mTotalTradingProfitPositiveDataSet: LineDataSet
+    private lateinit var totalPrincipalDataSet: BarDataSet
+    private lateinit var totalEvaluatedPriceDataSet: LineDataSet
+    private lateinit var totalTradingProfitDataSet: LineDataSet
+    private lateinit var totalTradingProfitNegativeDataSet: LineDataSet
+    private lateinit var totalTradingProfitPositiveDataSet: LineDataSet
 
-    private val mTimeMillisMap = hashMapOf<Int, Long>()
-    private var mCoroutineJob: Job? = null
-    private val mStockLineDataSets = ArrayList<ILineDataSet>()
-    private val mStockBarDataSets = ArrayList<IBarDataSet>()
-    private val mKospiDataSets = ArrayList<ILineDataSet>()
-    private var mTotalDataSetCnt = 0
-    private val mColorPlus = Color.rgb(204, 31, 8)
-    private val mColorMinus = Color.rgb(6, 57, 112)
+    private val timeMillisMap = hashMapOf<Int, Long>()
+    private var coroutineJob: Job? = null
+    private val stockLineDataSets = ArrayList<ILineDataSet>()
+    private val stockBarDataSets = ArrayList<IBarDataSet>()
+    private val kospiDataSets = ArrayList<ILineDataSet>()
+    private var totalDataSetCnt = 0
+    private val colorPlus = Color.rgb(204, 31, 8)
+    private val colorMinus = Color.rgb(6, 57, 112)
     private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
      *   chart options
      *
      ***************************************************************************************************/
-    private var mChartMode = R.id.radio_button_option_a
-    private var mCheckedSyncMarker = true
-    private var mCheckedDrawCircle = true
-    private var mCheckedDrawMarker = true
+    private var chartMode = R.id.radio_button_option_a
+    private var checkedSyncMarker = true
+    private var checkedDrawCircle = true
+    private var checkedDrawMarker = true
 
     /***************************************************************************************************
      *   override functions
@@ -114,8 +140,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinding = FragmentStockLineChartBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = FragmentStockLineChartBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -124,17 +150,16 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
-        mBinding.root.layoutParams.run {
+        binding.root.layoutParams.run {
             height = ViewGroup.LayoutParams.MATCH_PARENT
             width = ViewGroup.LayoutParams.MATCH_PARENT
         }
 
         // Default setting Combine chart
-        mCombineChart =
-            mBinding.lineChart.apply {
-                setMaxVisibleValueCount(60) // if more than 60 entries are displayed in the chart, no values will be drawn
-                setPinchZoom(false) // scaling can now only be done on x- and y-axis separately
+        combineChart =
+            binding.lineChart.apply {
+                setMaxVisibleValueCount(60)
+                setPinchZoom(false)
                 description.isEnabled = false
                 extraBottomOffset = 10f
 
@@ -153,13 +178,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         ) {
                             Log.i(AAF_TEST, h.toString())
                             h?.run {
-                                mCombineChart.setDrawMarkers(mCheckedDrawMarker)
+                                combineChart.setDrawMarkers(checkedDrawMarker)
 
                                 // Sync Marker
-                                if (mKospiChart.visibility == View.VISIBLE &&
-                                    mCheckedSyncMarker
+                                if (kospiChart.visibility == View.VISIBLE &&
+                                    checkedSyncMarker
                                 ) {
-                                    mKospiChart.highlightValue(Highlight(x, y, 0))
+                                    kospiChart.highlightValue(Highlight(x, y, 0))
                                 }
                             }
                         }
@@ -170,8 +195,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
 
         // Default setting KOSPI chart
-        mKospiChart =
-            mBinding.chartKospi.apply {
+        kospiChart =
+            binding.chartKospi.apply {
                 description.isEnabled = false
                 legend.isEnabled = false
                 extraBottomOffset = 10f
@@ -188,9 +213,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             h: Highlight?,
                         ) {
                             h?.run {
-                                // dataSetIndex: 0-TradingProfitDataSet
-                                // dataIndex: 0-LineData, 1-BarData
-                                if (mCheckedSyncMarker) mCombineChart.highlightValue(Highlight(x, 0, 0).apply { dataIndex = 0 })
+                                if (checkedSyncMarker) combineChart.highlightValue(Highlight(x, 0, 0).apply { dataIndex = 0 })
                             }
                         }
 
@@ -199,7 +222,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 )
             }
 
-        setupTitle() // determine title parameter
+        setupTitle()
         setupChartOptions()
         drawChart()
 
@@ -209,31 +232,31 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     requireContext().config.devStockChartOptionFromMillis
             }
 
-        mSDatePickerDialog =
+        sDatePickerDialog =
             DatePickerDialog(
                 requireContext(),
-                mStartDateListener,
+                startDateListener,
                 startCalendar.get(Calendar.YEAR),
                 startCalendar.get(Calendar.MONTH),
                 startCalendar.get(Calendar.DAY_OF_MONTH),
             )
-        mEDatePickerDialog =
+        eDatePickerDialog =
             DatePickerDialog(
                 requireContext(),
-                mEndDateListener,
-                mEndCalendar.get(Calendar.YEAR),
-                mEndCalendar.get(Calendar.MONTH),
-                mEndCalendar.get(Calendar.DAY_OF_MONTH),
+                endDateListener,
+                endCalendar.get(Calendar.YEAR),
+                endCalendar.get(Calendar.MONTH),
+                endCalendar.get(Calendar.DAY_OF_MONTH),
             )
-        mBinding.run {
-            cardFromDate.setOnClickListener { mSDatePickerDialog.show() }
-            cardToDate.setOnClickListener { mEDatePickerDialog.show() }
+        binding.run {
+            cardFromDate.setOnClickListener { sDatePickerDialog.show() }
+            cardToDate.setOnClickListener { eDatePickerDialog.show() }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mCoroutineJob?.run { if (isActive) cancel() }
+        coroutineJob?.run { if (isActive) cancel() }
     }
 
     /***************************************************************************************************
@@ -241,75 +264,75 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private fun initDataSet() {
-        mKrEvaluatedPriceDataSet =
+        krEvaluatedPriceDataSet =
             LineDataSet(null, "KR/JP Evaluated Price").apply {
                 setDefaultLineChartColor(this)
                 isVisible = requireContext().config.devStockEnableEvaluatePrice
                 isHighlightEnabled = requireContext().config.devStockEnableEvaluatePrice
             }
-        mUsEvaluatedPriceDataSet =
+        usEvaluatedPriceDataSet =
             LineDataSet(null, "US Evaluated Price").apply {
                 setDefaultLineChartColor(this)
             }
-        mTotalEvaluatedPriceDataSet =
+        totalEvaluatedPriceDataSet =
             LineDataSet(null, "Total Evaluated Price").apply {
                 setDefaultLineChartColor(this)
             }
-        mKrPrincipalDataSet =
+        krPrincipalDataSet =
             BarDataSet(listOf(), "KR/JP Principal").apply {
                 setColor(requireContext().config.textColor, 100)
                 isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
             }
-        mKrTradingProfitDataSet =
+        krTradingProfitDataSet =
             LineDataSet(null, "KR/JP Trading Profit").apply {
                 setGhostLineChartColor(this)
             }
-        mKrTradingProfitNegativeDataSet =
+        krTradingProfitNegativeDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorMinus)
+                setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
-        mKrTradingProfitPositiveDataSet =
+        krTradingProfitPositiveDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorPlus)
+                setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
-        mUsPrincipalDataSet =
+        usPrincipalDataSet =
             BarDataSet(listOf(), "US Principal").apply {
                 setColor(requireContext().config.textColor, 100)
                 isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
             }
-        mUsTradingProfitDataSet =
+        usTradingProfitDataSet =
             LineDataSet(null, "US Trading Profit").apply {
                 setGhostLineChartColor(this)
             }
-        mUsTradingProfitNegativeDataSet =
+        usTradingProfitNegativeDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorMinus)
+                setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
-        mUsTradingProfitPositiveDataSet =
+        usTradingProfitPositiveDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorPlus)
+                setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
-        mTotalPrincipalDataSet =
+        totalPrincipalDataSet =
             BarDataSet(listOf(), "Total Principal").apply {
                 setColor(requireContext().config.textColor, 100)
                 isHighlightEnabled = requireContext().config.devStockEnablePrincipalHighlight
             }
-        mTotalTradingProfitDataSet =
+        totalTradingProfitDataSet =
             LineDataSet(null, "Total Trading Profit").apply {
                 setGhostLineChartColor(this)
             }
-        mTotalTradingProfitNegativeDataSet =
+        totalTradingProfitNegativeDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorMinus)
+                setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
-        mTotalTradingProfitPositiveDataSet =
+        totalTradingProfitPositiveDataSet =
             LineDataSet(null, "").apply {
-                setDefaultFillChartColor(this, mColorPlus)
+                setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
     }
@@ -318,7 +341,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         arguments?.let { bundle ->
             val title = bundle.getString(ChartConstants.CHART_TITLE)
             if (title != null) {
-                mBinding.run {
+                binding.run {
                     chartTitle.text = title
                     chartTitle.visibility = View.VISIBLE
                     imageStockSymbol.run {
@@ -349,10 +372,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setupChartOptions() {
-        mBinding.run {
+        binding.run {
             cardMultiChartMode.setOnClickListener {
                 requireActivity().run {
-                    var alertDialog: AlertDialog? = null
                     val builder = AlertDialog.Builder(this)
                     builder.setPositiveButton(getString(android.R.string.ok), null)
                     builder.setCancelable(false)
@@ -367,23 +389,23 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     }
 
                     dialogStockChartOptionBinding.run {
-                        radioGroupChartOption.check(mChartMode)
-                        checkSyncMarker.isChecked = mCheckedSyncMarker
-                        checkDrawCircle.isChecked = mCheckedDrawCircle
-                        checkMarker.isChecked = mCheckedDrawMarker
+                        radioGroupChartOption.check(chartMode)
+                        checkSyncMarker.isChecked = checkedSyncMarker
+                        checkDrawCircle.isChecked = checkedDrawCircle
+                        checkMarker.isChecked = checkedDrawMarker
                         checkEvaluatePrice.isChecked = requireContext().config.devStockEnableEvaluatePrice
                         checkPrincipalHighlight.isChecked = requireContext().config.devStockEnablePrincipalHighlight
 
                         radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
-                            mChartMode = checkedId
+                            chartMode = checkedId
                             drawChart()
                         }
                         checkSyncMarker.setOnCheckedChangeListener { _, isChecked ->
-                            mCheckedSyncMarker = isChecked
+                            checkedSyncMarker = isChecked
                         }
                         checkDrawCircle.setOnCheckedChangeListener { _, isChecked ->
-                            mCheckedDrawCircle = isChecked
-                            mCombineChart.run {
+                            checkedDrawCircle = isChecked
+                            combineChart.run {
                                 if (combinedData.lineData.dataSets.size == 4) {
                                     combinedData.lineData.dataSets[3].also {
                                         if (it is LineDataSet) it.setDrawCircles(isChecked)
@@ -391,7 +413,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                                     invalidate()
                                 }
                             }
-                            mKospiChart.run {
+                            kospiChart.run {
                                 if (visibility == View.VISIBLE) {
                                     lineData.dataSets[0]?.also {
                                         if (it is LineDataSet) it.setDrawCircles(isChecked)
@@ -401,70 +423,50 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             }
                         }
                         checkMarker.setOnCheckedChangeListener { _, isChecked ->
-                            mCheckedDrawMarker = isChecked
-                            mCombineChart.run {
+                            checkedDrawMarker = isChecked
+                            combineChart.run {
                                 setDrawMarkers(isChecked)
                                 invalidate()
                             }
-                            mKospiChart.run {
+                            kospiChart.run {
                                 setDrawMarkers(isChecked)
                                 invalidate()
                             }
                         }
                         checkEvaluatePrice.setOnCheckedChangeListener { _, isChecked ->
                             requireContext().config.devStockEnableEvaluatePrice = isChecked
-                            when (mChartMode) {
+                            when (chartMode) {
                                 R.id.radio_button_option_a, R.id.radio_button_option_a_1 -> {
-                                    mKrEvaluatedPriceDataSet.run {
+                                    krEvaluatedPriceDataSet.run {
                                         isVisible = isChecked
                                         isHighlightEnabled = isChecked
                                     }
                                 }
 
                                 R.id.radio_button_option_b -> {
-                                    mUsEvaluatedPriceDataSet.run {
+                                    usEvaluatedPriceDataSet.run {
                                         isVisible = isChecked
                                         isHighlightEnabled = isChecked
                                     }
                                 }
 
                                 R.id.radio_button_option_c -> {
-                                    mTotalEvaluatedPriceDataSet.run {
+                                    totalEvaluatedPriceDataSet.run {
                                         isVisible = isChecked
                                         isHighlightEnabled = isChecked
                                     }
                                 }
                             }
-                            mCombineChart.invalidate()
+                            combineChart.invalidate()
                         }
                         checkPrincipalHighlight.setOnCheckedChangeListener { _, isChecked ->
                             requireContext().config.devStockEnableEvaluatePrice = isChecked
-                            mKrPrincipalDataSet.isHighlightEnabled = isChecked
-                            mUsPrincipalDataSet.isHighlightEnabled = isChecked
-                            mTotalPrincipalDataSet.isHighlightEnabled = isChecked
+                            krPrincipalDataSet.isHighlightEnabled = isChecked
+                            usPrincipalDataSet.isHighlightEnabled = isChecked
+                            totalPrincipalDataSet.isHighlightEnabled = isChecked
                         }
                     }
 
-//                    val listMultiChartMode = ArrayList<Map<String, String>>()
-//                    listMultiChartMode.add(mapOf("optionTitle" to "ALL", "optionValue" to "1"))
-//                    listMultiChartMode.add(mapOf("optionTitle" to "KR/JP", "optionValue" to "2"))
-//                    listMultiChartMode.add(mapOf("optionTitle" to "KOSPI", "optionValue" to "3"))
-
-//                    listMultiChartMode.mapIndexed { index, map ->
-//                        val size = map["optionValue"] ?: "0"
-//                        if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
-//                    }
-
-//                    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMultiChartMode, mMultiChartModeSelectedValue)
-//                    listView.adapter = arrayAdapter
-//                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-//                        @Suppress("UNCHECKED_CAST") val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-//                        itemInfo["optionValue"]?.let {
-//                            mMultiChartModeSelectedValue = it.toFloat()
-//                            drawChart()
-//                        }
-//                        alertDialog?.cancel()
-//                    }
                     builder.create().apply {
                         updateAlertDialog(
                             this,
@@ -473,60 +475,58 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             "Chart Options",
                         )
                     }
-
-//                    listView.setSelection(multiChartModeIndex)
                 }
             }
         }
     }
 
     private fun drawChart() {
-        when (mChartMode) {
+        when (chartMode) {
             R.id.radio_button_option_a -> {
-                mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = View.VISIBLE
+                combineChart.visibility = View.VISIBLE
+                kospiChart.visibility = View.VISIBLE
             }
 
             R.id.radio_button_option_a_1 -> {
-                mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = View.GONE
+                combineChart.visibility = View.VISIBLE
+                kospiChart.visibility = View.GONE
             }
 
             R.id.radio_button_option_a_2 -> {
-                mCombineChart.visibility = View.GONE
-                mKospiChart.visibility = View.VISIBLE
+                combineChart.visibility = View.GONE
+                kospiChart.visibility = View.VISIBLE
             }
 
             R.id.radio_button_option_b -> {
-                mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = View.GONE
+                combineChart.visibility = View.VISIBLE
+                kospiChart.visibility = View.GONE
             }
 
             R.id.radio_button_option_c -> {
-                mCombineChart.visibility = View.VISIBLE
-                mKospiChart.visibility = View.GONE
+                combineChart.visibility = View.VISIBLE
+                kospiChart.visibility = View.GONE
             }
         }
 
-        mCoroutineJob?.run { if (isActive) cancel() }
-        mCoroutineJob =
+        coroutineJob?.run { if (isActive) cancel() }
+        coroutineJob =
             lifecycleScope.launch(Dispatchers.IO) {
                 initDataSet()
                 clearChart()
                 setData()
-                if (mTotalDataSetCnt > 0) {
+                if (totalDataSetCnt > 0) {
                     withContext(Dispatchers.Main) {
-                        mCombineChart.run {
+                        combineChart.run {
                             data =
                                 CombinedData().apply {
-                                    setData(LineData(mStockLineDataSets).apply { setDrawValues(false) })
-                                    setData(BarData(mStockBarDataSets).apply { setDrawValues(false) })
+                                    setData(LineData(stockLineDataSets).apply { setDrawValues(false) })
+                                    setData(BarData(stockBarDataSets).apply { setDrawValues(false) })
                                 }
                             animateY(600)
                         }
-                        mKospiChart.run {
+                        kospiChart.run {
                             data =
-                                LineData(mKospiDataSets).apply {
+                                LineData(kospiDataSets).apply {
                                     setValueTextSize(10f)
                                     setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                                     setDrawValues(false)
@@ -537,18 +537,18 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
 
                 withContext(Dispatchers.Main) {
-                    mBinding.barChartProgressBar.visibility = View.GONE
+                    binding.barChartProgressBar.visibility = View.GONE
                 }
             }
     }
 
     private fun clearChart() {
-        mCombineChart.clear()
-        mKospiChart.clear()
-        mCombineChart.highlightValue(null)
-        mStockLineDataSets.clear()
-        mStockBarDataSets.clear()
-        mKospiDataSets.clear()
+        combineChart.clear()
+        kospiChart.clear()
+        combineChart.highlightValue(null)
+        stockLineDataSets.clear()
+        stockBarDataSets.clear()
+        kospiDataSets.clear()
     }
 
     private suspend fun setData() {
@@ -557,7 +557,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val krTradingProfitEntries = arrayListOf<Entry>()
         val krTradingProfitPositiveEntries = arrayListOf<Entry>()
         val krTradingProfitNegativeEntries = arrayListOf<Entry>()
-//        val krColors = arrayListOf<Int>()
 
         val usPrincipalEntries = arrayListOf<BarEntry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
@@ -580,7 +579,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 null,
                 false,
                 requireContext().config.devStockChartOptionFromMillis,
-                mEndMillis,
+                endMillis,
                 DAILY_STOCK,
             )
         var index = 0
@@ -601,12 +600,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         krPrincipalEntries.add(BarEntry(index.toFloat(), krPrincipal))
                         krEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), krEvaluatedPrice, StockDataType.KR_EVALUATE_PRICE))
                         krTradingProfitEntries.add(Entry(index.toFloat(), diff))
-//                            if (diff >= 0) krColors.add(mColorPlus) else krColors.add(mColorMinus)
 
                         usPrincipalEntries.add(BarEntry(index.toFloat(), usPrincipal))
                         usEvaluatedPriceEntries.add(StockLineEntry(index.toFloat(), usEvaluatedPrice, StockDataType.US_EVALUATE_PRICE))
                         diff = usEvaluatedPrice.minus(usPrincipal)
-                        if (diff >= 0) usColors.add(mColorPlus) else usColors.add(mColorMinus)
+                        if (diff >= 0) usColors.add(colorPlus) else usColors.add(colorMinus)
                         usTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                         totalPrincipalEntries.add(
@@ -621,10 +619,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                                 .plus(usEvaluatedPrice)
                                 .minus(krPrincipal.plus(usPrincipal))
                         if (diff >= 0) {
-                            totalColors.add(mColorPlus)
+                            totalColors.add(colorPlus)
                         } else {
                             totalColors.add(
-                                mColorMinus,
+                                colorMinus,
                             )
                         }
                         totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
@@ -635,7 +633,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             ),
                         )
 
-                        mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                        timeMillisMap[index] = diaryDto.currentTimeMillis
                         index++
                     } catch (e: Exception) {
                         Log.i(AAF_TEST, e.message ?: "")
@@ -644,7 +642,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
         if (index > 0) {
-            mTotalDataSetCnt = totalEvaluatedPriceEntries.size
+            totalDataSetCnt = totalEvaluatedPriceEntries.size
 
             fun splitEntry(
                 originEntry: ArrayList<Entry>,
@@ -654,10 +652,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 var start = 0F
                 var splitIndex = 0f
                 val splitCnt = 10
-                originEntry.forEachIndexed { index, entry ->
-                    if (index > 0 && index < originEntry.size) {
+                originEntry.forEachIndexed { idx, entry ->
+                    if (idx > 0 && idx < originEntry.size) {
                         val offset = entry.y.minus(start).div(splitCnt)
-                        for (i in 0..splitCnt.minus(if (originEntry.size.minus(1) == index) 0 else 1)) {
+                        for (i in 0..splitCnt.minus(if (originEntry.size.minus(1) == idx) 0 else 1)) {
                             val y = offset.times(i).plus(start)
                             negative.add(Entry(splitIndex, if (y > 0) 0f else y))
                             positive.add(Entry(splitIndex, if (y < 0) 0f else y))
@@ -669,30 +667,30 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
 
             // START KR Data
-            mKrPrincipalDataSet.values = krPrincipalEntries
-            mKrEvaluatedPriceDataSet.values = krEvaluatedPriceEntries
-            mKrTradingProfitDataSet.values = krTradingProfitEntries
+            krPrincipalDataSet.values = krPrincipalEntries
+            krEvaluatedPriceDataSet.values = krEvaluatedPriceEntries
+            krTradingProfitDataSet.values = krTradingProfitEntries
             splitEntry(krTradingProfitEntries, krTradingProfitPositiveEntries, krTradingProfitNegativeEntries)
-            mKrTradingProfitNegativeDataSet.values = krTradingProfitNegativeEntries
-            mKrTradingProfitPositiveDataSet.values = krTradingProfitPositiveEntries
+            krTradingProfitNegativeDataSet.values = krTradingProfitNegativeEntries
+            krTradingProfitPositiveDataSet.values = krTradingProfitPositiveEntries
             // END KR Data
 
             // START US Data
-            mUsPrincipalDataSet.values = usPrincipalEntries
-            mUsEvaluatedPriceDataSet.values = usEvaluatedPriceEntries
-            mUsTradingProfitDataSet.values = usTradingProfitEntries
+            usPrincipalDataSet.values = usPrincipalEntries
+            usEvaluatedPriceDataSet.values = usEvaluatedPriceEntries
+            usTradingProfitDataSet.values = usTradingProfitEntries
             splitEntry(usTradingProfitEntries, usTradingProfitPositiveEntries, usTradingProfitNegativeEntries)
-            mUsTradingProfitNegativeDataSet.values = usTradingProfitNegativeEntries
-            mUsTradingProfitPositiveDataSet.values = usTradingProfitPositiveEntries
+            usTradingProfitNegativeDataSet.values = usTradingProfitNegativeEntries
+            usTradingProfitPositiveDataSet.values = usTradingProfitPositiveEntries
             // END US Data
 
             // START Total Data
-            mTotalEvaluatedPriceDataSet.values = totalEvaluatedPriceEntries
-            mTotalPrincipalDataSet.values = totalPrincipalEntries
-            mTotalTradingProfitDataSet.values = totalTradingProfitEntries
+            totalEvaluatedPriceDataSet.values = totalEvaluatedPriceEntries
+            totalPrincipalDataSet.values = totalPrincipalEntries
+            totalTradingProfitDataSet.values = totalTradingProfitEntries
             splitEntry(totalTradingProfitEntries, totalTradingProfitPositiveEntries, totalTradingProfitNegativeEntries)
-            mTotalTradingProfitNegativeDataSet.values = totalTradingProfitNegativeEntries
-            mTotalTradingProfitPositiveDataSet.values = totalTradingProfitPositiveEntries
+            totalTradingProfitNegativeDataSet.values = totalTradingProfitNegativeEntries
+            totalTradingProfitPositiveDataSet.values = totalTradingProfitPositiveEntries
             // END Total Data
 
             val kospiDataSet =
@@ -700,64 +698,64 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     setDefaultLineChartColor(this)
                 }
 
-            when (mChartMode) {
+            when (chartMode) {
                 R.id.radio_button_option_a, R.id.radio_button_option_a_1, R.id.radio_button_option_a_2 -> {
-                    mStockBarDataSets.add(mKrPrincipalDataSet)
-                    mStockLineDataSets.add(mKrTradingProfitDataSet)
-                    mStockLineDataSets.add(mKrTradingProfitPositiveDataSet)
-                    mStockLineDataSets.add(mKrTradingProfitNegativeDataSet)
-                    mStockLineDataSets.add(mKrEvaluatedPriceDataSet)
-                    mKospiDataSets.add(kospiDataSet)
-                    mCombineChart.run {
+                    stockBarDataSets.add(krPrincipalDataSet)
+                    stockLineDataSets.add(krTradingProfitDataSet)
+                    stockLineDataSets.add(krTradingProfitPositiveDataSet)
+                    stockLineDataSets.add(krTradingProfitNegativeDataSet)
+                    stockLineDataSets.add(krEvaluatedPriceDataSet)
+                    kospiDataSets.add(kospiDataSet)
+                    combineChart.run {
                         axisLeft.run {
-                            axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
+                            axisMinimum = krTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = krPrincipalDataSet.yMax.plus(krTradingProfitDataSet.yMax).plus(300000)
                         }
                         axisRight.run {
-                            axisMinimum = mKrTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mKrPrincipalDataSet.yMax.plus(mKrTradingProfitDataSet.yMax).plus(300000)
+                            axisMinimum = krTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = krPrincipalDataSet.yMax.plus(krTradingProfitDataSet.yMax).plus(300000)
                         }
                     }
                 }
 
                 R.id.radio_button_option_b -> {
-                    mStockBarDataSets.add(mUsPrincipalDataSet)
-                    mStockLineDataSets.add(mUsTradingProfitDataSet)
-                    mStockLineDataSets.add(mUsTradingProfitNegativeDataSet)
-                    mStockLineDataSets.add(mUsTradingProfitPositiveDataSet)
-                    mStockLineDataSets.add(mUsEvaluatedPriceDataSet)
-                    mCombineChart.run {
+                    stockBarDataSets.add(usPrincipalDataSet)
+                    stockLineDataSets.add(usTradingProfitDataSet)
+                    stockLineDataSets.add(usTradingProfitNegativeDataSet)
+                    stockLineDataSets.add(usTradingProfitPositiveDataSet)
+                    stockLineDataSets.add(usEvaluatedPriceDataSet)
+                    combineChart.run {
                         axisLeft.run {
-                            axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
+                            axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
                         }
                         axisRight.run {
-                            axisMinimum = mUsTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mUsPrincipalDataSet.yMax.plus(2000000)
+                            axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
                         }
                     }
                 }
 
                 R.id.radio_button_option_c -> {
-                    mStockBarDataSets.add(mTotalPrincipalDataSet)
-                    mStockLineDataSets.add(mTotalTradingProfitDataSet)
-                    mStockLineDataSets.add(mTotalTradingProfitPositiveDataSet)
-                    mStockLineDataSets.add(mTotalTradingProfitNegativeDataSet)
-                    mStockLineDataSets.add(mTotalEvaluatedPriceDataSet)
-                    mCombineChart.run {
+                    stockBarDataSets.add(totalPrincipalDataSet)
+                    stockLineDataSets.add(totalTradingProfitDataSet)
+                    stockLineDataSets.add(totalTradingProfitPositiveDataSet)
+                    stockLineDataSets.add(totalTradingProfitNegativeDataSet)
+                    stockLineDataSets.add(totalEvaluatedPriceDataSet)
+                    combineChart.run {
                         axisLeft.run {
-                            axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
+                            axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                         }
                         axisRight.run {
-                            axisMinimum = mTotalTradingProfitDataSet.yMin.minus(100000)
-                            axisMaximum = mTotalPrincipalDataSet.yMax.plus(2000000)
+                            axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
+                            axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                         }
                     }
                 }
             }
 
-            mKospiChart.run {
+            kospiChart.run {
                 axisLeft.run {
                     axisMinimum = kospiDataSet.yMin.minus(500)
                     axisMaximum = kospiDataSet.yMax.plus(500)
@@ -787,7 +785,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setLabelCount(labelCount, true)
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
             spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
+            axisMinimum = 0f
             setDrawGridLines(true)
             minWidth = 65F
             maxWidth = 65F
@@ -807,7 +805,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             labelRotationAngle = -65F
-            granularity = 1f // only intervals of 1 day
+            granularity = 1f
             setLabelCount(6, true)
             stockXAxisValueFormatter?.let { valueFormatter = it }
         }
@@ -823,14 +821,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.TOP
-//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.HORIZONTAL
-//            setDrawInside(false)
             form = Legend.LegendForm.CIRCLE
-//            formSize = 9f
-//            xEntrySpace = 4f
             isWordWrapEnabled = true
-//            xOffset = 5F
         }
     }
 
@@ -839,9 +832,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             color = requireContext().config.primaryColor
             highLightColor = requireContext().config.textColor
             setCircleColor(requireContext().config.primaryColor)
-//            setCircleColorHole(requireContext().config.textColor)
             circleRadius = 1f
-            setDrawCircles(mCheckedDrawCircle)
+            setDrawCircles(checkedDrawCircle)
         }
     }
 
@@ -860,7 +852,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         lineDataSet.run {
             fillColor = color
             this.color = color
-//            enableDashedLine(3f, 1f, 0f)
             setDrawFilled(true)
             setDrawCircleHole(false)
             setDrawCircles(false)
@@ -881,7 +872,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             value: Float,
             axis: AxisBase,
         ): String {
-            val timeMillis = if (mTimeMillisMap.size > value) mTimeMillisMap[value.toInt()] ?: 0 else 0
+            val timeMillis = if (timeMillisMap.size > value) timeMillisMap[value.toInt()] ?: 0 else 0
             return xAxisTimeMillisToDate(timeMillis, dateFormat)
         }
     }
@@ -902,15 +893,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         private val textLabelX: TextView = findViewById(R.id.textLabelX)
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
 
-        // callbacks everytime the MarkerView is redrawn, can be used to update the
-        // content (user-interface)
         override fun refreshContent(
             e: Entry?,
             highlight: Highlight?,
         ) {
             e?.let { entry ->
                 textLabelX.run {
-                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombineChart.xAxis)
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, combineChart.xAxis)
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
@@ -927,9 +916,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             posX: Float,
             posY: Float,
         ): MPPointF {
-            val pointX = if (mKospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
+            val pointX = if (kospiChart.width.div(2) > posX) 10F else width.plus(10F).unaryMinus()
             val pointY =
-                if (mKospiChart.height.div(2) > posY) 20F else height.plus(20F).unaryMinus()
+                if (kospiChart.height.div(2) > posY) 20F else height.plus(20F).unaryMinus()
             return MPPointF(pointX, pointY)
         }
     }
@@ -942,15 +931,13 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         private val textLabelY: TextView = findViewById(R.id.textLabelY)
         private val markerOffset = 20f
 
-        // callbacks everytime the MarkerView is redrawn, can be used to update the
-        // content (user-interface)
         override fun refreshContent(
             e: Entry?,
             highlight: Highlight?,
         ) {
             e?.let { entry ->
                 textLabelX.run {
-                    text = xAxisValueFormatter.getFormattedValue(entry.x, mCombineChart.xAxis)
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, combineChart.xAxis)
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
@@ -967,9 +954,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             posX: Float,
             posY: Float,
         ): MPPointF {
-            val pointX = if (mKospiChart.width.div(2) > posX) markerOffset else width.plus(markerOffset).unaryMinus()
+            val pointX = if (kospiChart.width.div(2) > posX) markerOffset else width.plus(markerOffset).unaryMinus()
             val pointY =
-                if (mKospiChart.height.div(2) > posY) markerOffset else height.plus(markerOffset).unaryMinus()
+                if (kospiChart.height.div(2) > posY) markerOffset else height.plus(markerOffset).unaryMinus()
             return MPPointF(pointX, pointY)
         }
     }

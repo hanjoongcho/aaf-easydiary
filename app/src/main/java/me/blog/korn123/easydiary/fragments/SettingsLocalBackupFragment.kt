@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -80,26 +81,26 @@ import java.io.File
 import java.util.Date
 
 @AndroidEntryPoint
-class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
+class SettingsLocalBackupFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentSettingsBackupLocalBinding
-    private lateinit var mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var mRequestWriteFileWithSAF: ActivityResultLauncher<Intent>
-    private lateinit var mRequestReadFileWithSAF: ActivityResultLauncher<Intent>
-    private var mTaskFlag = 0
+    private lateinit var binding: FragmentSettingsBackupLocalBinding
+    private lateinit var requestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var requestWriteFileWithSAF: ActivityResultLauncher<Intent>
+    private lateinit var requestReadFileWithSAF: ActivityResultLauncher<Intent>
+    private var taskFlag = 0
     private val diaryViewModel: DiaryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mRequestReadFileWithSAF =
+        requestReadFileWithSAF =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 requireActivity().run {
                     pauseLock()
                     if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                        when (mTaskFlag) {
+                        when (taskFlag) {
                             REQUEST_CODE_SAF_READ_ZIP -> {
                                 it.data?.data?.let { uri ->
                                     importFullBackupFile(uri)
@@ -154,7 +155,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 }
             }
 
-        mRequestWriteFileWithSAF =
+        requestWriteFileWithSAF =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 requireActivity().run {
                     pauseLock()
@@ -163,7 +164,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             EXTERNAL_STORAGE_PERMISSIONS,
                         )
                     ) {
-                        when (mTaskFlag) {
+                        when (taskFlag) {
                             REQUEST_CODE_SAF_WRITE_ZIP -> {
                                 it.data?.data?.let { uri ->
                                     exportFullBackupFile(uri)
@@ -183,12 +184,12 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 }
             }
 
-        mRequestExternalStoragePermissionLauncher =
+        requestExternalStoragePermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
                 requireActivity().run {
                     pauseLock()
                     if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        when (mTaskFlag) {
+                        when (taskFlag) {
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> {
                                 showLocationSelectionPopup(
                                     SettingLocalConstants.MODE_BACKUP,
@@ -220,7 +221,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                             DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
                                         ) + ".zip",
                                         MIME_TYPE_ZIP,
-                                        mRequestWriteFileWithSAF,
+                                        requestWriteFileWithSAF,
                                     )
                                 }
                             }
@@ -240,8 +241,8 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinding = FragmentSettingsBackupLocalBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = FragmentSettingsBackupLocalBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -249,9 +250,9 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 val configuration = LocalConfiguration.current
                 FlowRow(
@@ -283,7 +284,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM) {
                                     requireActivity().confirmExternalStoragePermission(
                                         EXTERNAL_STORAGE_PERMISSIONS,
-                                        mRequestExternalStoragePermissionLauncher,
+                                        requestExternalStoragePermissionLauncher,
                                     )
                                 }
                             }
@@ -310,7 +311,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM) {
                                     requireActivity().confirmExternalStoragePermission(
                                         EXTERNAL_STORAGE_PERMISSIONS,
-                                        mRequestExternalStoragePermissionLauncher,
+                                        requestExternalStoragePermissionLauncher,
                                     )
                                 }
                             }
@@ -331,7 +332,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM) {
                                     requireActivity().confirmExternalStoragePermission(
                                         EXTERNAL_STORAGE_PERMISSIONS,
-                                        mRequestExternalStoragePermissionLauncher,
+                                        requestExternalStoragePermissionLauncher,
                                     )
                                 }
                             }
@@ -351,7 +352,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                             DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
                                         ) + ".zip",
                                         MIME_TYPE_ZIP,
-                                        mRequestWriteFileWithSAF,
+                                        requestWriteFileWithSAF,
                                     )
                                 }
                             }
@@ -360,7 +361,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                 setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
                                     requireActivity().confirmExternalStoragePermission(
                                         EXTERNAL_STORAGE_PERMISSIONS,
-                                        mRequestExternalStoragePermissionLauncher,
+                                        requestExternalStoragePermissionLauncher,
                                     )
                                 }
                             }
@@ -373,7 +374,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         modifier = settingCardModifier,
                     ) {
                         setupLauncher(REQUEST_CODE_SAF_READ_ZIP) {
-                            EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
+                            EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, requestReadFileWithSAF)
                         }
                     }
 
@@ -385,7 +386,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
     }
 
     /***************************************************************************************************
@@ -408,13 +409,12 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     var alertDialog: AlertDialog? = null
                     val builder = AlertDialog.Builder(requireActivity())
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
-//                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                     it.sortDescending()
                     it.forEach { file ->
                         val itemInfo =
-                            hashMapOf<String, String>(
+                            hashMapOf(
                                 "name" to file.name,
                                 "createdTime" to Date(file.lastModified()).toString(),
                             )
@@ -435,17 +435,17 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     listView.onItemClickListener =
                         AdapterView.OnItemClickListener { parent, _, position, _ ->
                             val itemInfo =
-                                parent.adapter.getItem(position) as HashMap<*, *>
+                                parent.adapter.getItem(position) as? Map<*, *>
 
-                            // check file name
-                            when (classifyUriByExtension((itemInfo["name"] ?: "") as String)) {
+                            val fileName = (itemInfo?.get("name") as? String) ?: ""
+                            when (classifyUriByExtension(fileName)) {
                                 UriFileType.ROOM -> {
                                     lifecycleScope.launch {
                                         val srcFile =
                                             File(
                                                 EasyDiaryUtils.getApplicationDataDirectory(
                                                     requireActivity(),
-                                                ) + BACKUP_DB_DIRECTORY + (itemInfo["name"] ?: ""),
+                                                ) + BACKUP_DB_DIRECTORY + fileName,
                                             )
                                         requireActivity().run {
                                             lifecycleScope.launch {
@@ -519,14 +519,12 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     val rootView = inflater.inflate(R.layout.dialog_delete_realm_files, null)
                     val recyclerView = rootView.findViewById<RecyclerView>(R.id.files)
 
-//                    val spacesItemDecoration = PostCardViewerActivity.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
                     val gridLayoutManager =
                         androidx.recyclerview.widget.GridLayoutManager(requireActivity(), 1)
 
                     recyclerView.apply {
                         adapter = SimpleCheckboxAdapter(requireActivity(), realmInfoList)
                         layoutManager = gridLayoutManager
-//                        addItemDecoration(spacesItemDecoration)
                     }
 
                     builder.create().apply {
@@ -573,7 +571,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             EasyDiaryUtils.writeFileWithSAF(
                 DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".xls",
                 MIME_TYPE_XLS,
-                mRequestWriteFileWithSAF,
+                requestWriteFileWithSAF,
             )
         }
     }
@@ -609,7 +607,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         taskFlag: Int,
         callback: () -> Unit,
     ) {
-        mTaskFlag = taskFlag
+        this.taskFlag = taskFlag
         callback()
     }
 
@@ -662,7 +660,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                                             "yyyyMMdd_HHmmss",
                                         ),
                                     MIME_TYPE_ZIP,
-                                    mRequestWriteFileWithSAF,
+                                    requestWriteFileWithSAF,
                                 )
                             }
                         }
@@ -671,7 +669,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                             setupLauncher(REQUEST_CODE_SAF_READ_ROOM) {
                                 EasyDiaryUtils.readFileWithSAF(
                                     arrayOf(MIME_TYPE_ZIP),
-                                    mRequestReadFileWithSAF,
+                                    requestReadFileWithSAF,
                                 )
                             }
                         }

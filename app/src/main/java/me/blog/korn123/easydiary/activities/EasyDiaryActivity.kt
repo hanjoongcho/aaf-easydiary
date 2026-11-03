@@ -43,7 +43,7 @@ import kotlin.jvm.java
 open class EasyDiaryActivity :
     BaseSimpleActivity(),
     ShakeDetector.Listener {
-    var mCustomLineSpacing = true
+    var customLineSpacing = true
     protected val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
@@ -106,7 +106,7 @@ open class EasyDiaryActivity :
                 applicationContext,
                 null,
                 findViewById(android.R.id.content),
-                mCustomLineSpacing,
+                customLineSpacing,
             )
         }
         updateNavigationBarAppearance()

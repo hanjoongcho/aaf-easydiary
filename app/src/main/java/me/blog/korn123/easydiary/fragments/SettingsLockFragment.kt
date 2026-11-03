@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
@@ -35,15 +36,15 @@ import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
-class SettingsLockFragment : androidx.fragment.app.Fragment() {
+class SettingsLockFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentSettingsLockBinding
-    private val mActivity: Activity
+    private lateinit var binding: FragmentSettingsLockBinding
+    private val currentActivity: Activity
         get() = requireActivity()
-    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
+    private val settingsViewModel: SettingsViewModel by activityViewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -53,9 +54,9 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentSettingsLockBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentSettingsLockBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     @OptIn(ExperimentalLayoutApi::class)
@@ -65,7 +66,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 val configuration = LocalConfiguration.current
                 FlowRow(
@@ -77,8 +78,8 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                             .fillMaxWidth()
                             .weight(1f)
 
-                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
+                    val fontSize: Float by settingsViewModel.fontSize.collectAsState()
+                    val fontFamily: FontFamily? by settingsViewModel.fontFamily.collectAsState()
                     var aafPinLockEnable by remember { mutableStateOf(requireContext().config.aafPinLockEnable) }
                     SwitchCard(
                         title = getString(R.string.pin_lock_title),
@@ -88,7 +89,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         isOn = aafPinLockEnable,
                         fontFamily = fontFamily,
                     ) {
-                        mActivity.run {
+                        currentActivity.run {
                             when (config.aafPinLockEnable) {
                                 true -> {
                                     if (config.fingerprintLockEnable) {
@@ -126,7 +127,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                         isOn = fingerprintLockEnable,
                         fontFamily = fontFamily,
                     ) {
-                        mActivity.run {
+                        currentActivity.run {
                             when (config.fingerprintLockEnable) {
                                 true -> {
                                     fingerprintLockEnable = false
@@ -154,7 +155,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                         }
 
                                         false -> {
-                                            mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting))
+                                            currentActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting))
                                         }
                                     }
                                 }
@@ -167,9 +168,4 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
             }
         }
     }
-
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
 }

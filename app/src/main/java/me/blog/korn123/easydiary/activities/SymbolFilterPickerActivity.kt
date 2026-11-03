@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.Activity
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
@@ -11,52 +10,37 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SymbolFilterAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivitySymbolFilterPickerBinding
-import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.addCategory
 import me.blog.korn123.easydiary.extensions.addUserCustomSymbols
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isAccessFromOutside
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import java.util.*
 
-/**
- * Created by CHO HANJOONG on 2020-11-23.
- */
-
 class SymbolFilterPickerActivity : EasyDiaryActivity() {
-    /***************************************************************************************************
-     *   global properties
-     *
-     ***************************************************************************************************/
-    private lateinit var mBinding: ActivitySymbolFilterPickerBinding
-    private lateinit var mSymbolFilterAdapter: SymbolFilterAdapter
-    private var mSymbolFilterList: ArrayList<SymbolFilterAdapter.SymbolFilter> = arrayListOf()
+    private lateinit var binding: ActivitySymbolFilterPickerBinding
+    private lateinit var symbolFilterAdapter: SymbolFilterAdapter
+    private var symbolFilterList: ArrayList<SymbolFilterAdapter.SymbolFilter> = arrayListOf()
 
-    /***************************************************************************************************
-     *   override functions
-     *
-     ***************************************************************************************************/
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivitySymbolFilterPickerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivitySymbolFilterPickerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.run {
             title = "Symbol Picker"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        mSymbolFilterAdapter =
+        symbolFilterAdapter =
             SymbolFilterAdapter(
                 this,
-                mSymbolFilterList,
+                symbolFilterList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     val filteredList =
                         config.selectedSymbols
                             .split(",")
-                            .filter { sequence -> sequence.toInt() != mSymbolFilterList[position].sequence }
+                            .filter { sequence -> sequence.toInt() != symbolFilterList[position].sequence }
                     if (filteredList.isNotEmpty()) {
                         config.selectedSymbols = filteredList.joinToString(",")
                         updateSymbolFilter()
@@ -66,10 +50,10 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                 },
             )
 
-        mBinding.recyclerView.apply {
+        binding.recyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@SymbolFilterPickerActivity, 4)
             addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
-            adapter = mSymbolFilterAdapter
+            adapter = symbolFilterAdapter
         }
         updateSymbolFilter()
 
@@ -97,7 +81,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                     }
                 }
             }
-        mBinding.run {
+        binding.run {
             viewpager.run {
                 setBackgroundColor(config.backgroundColor)
                 adapter = symbolPagerAdapter
@@ -126,17 +110,13 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         return true
     }
 
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     private fun updateSymbolFilter(scrollToBottom: Boolean = false) {
-        mSymbolFilterList.clear()
+        symbolFilterList.clear()
         config.selectedSymbols.split(",").map { sequence ->
-            mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
+            symbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
         }
-        mSymbolFilterAdapter.notifyDataSetChanged()
-        if (scrollToBottom) mBinding.recyclerView.smoothScrollToPosition(mSymbolFilterList.size.minus(1))
+        symbolFilterAdapter.notifyDataSetChanged()
+        if (scrollToBottom) binding.recyclerView.smoothScrollToPosition(symbolFilterList.size.minus(1))
     }
 
     class SpacesItemDecoration(
@@ -148,17 +128,6 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
             parent: androidx.recyclerview.widget.RecyclerView,
             state: androidx.recyclerview.widget.RecyclerView.State,
         ) {
-//            val position = parent.getChildAdapterPosition(view)
-//            when (position % 4) {
-//                3  -> {
-//                    outRect.right = 0
-//                }
-//                else -> outRect.right = 50
-//            }
-//            when (position < 4) {
-//                true -> outRect.top = 0
-//                false -> outRect.top = 50
-//            }
             outRect.top = space
             outRect.bottom = space
             outRect.left = space

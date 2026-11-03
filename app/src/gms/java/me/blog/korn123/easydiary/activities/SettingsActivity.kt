@@ -21,9 +21,9 @@ class SettingsActivity : BaseSettingsActivity() {
                 SettingsScheduleFragment(),
                 SettingsAppInfoFragment(),
             )
-        mDotIndicatorPager2Adapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
-        mBinding.run {
-            viewPager.adapter = mDotIndicatorPager2Adapter
+        dotIndicatorPager2Adapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
+        binding.run {
+            viewPager.adapter = dotIndicatorPager2Adapter
             val pageChangeListener =
                 object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                     override fun onPageScrolled(
@@ -33,7 +33,7 @@ class SettingsActivity : BaseSettingsActivity() {
                     ) {}
 
                     override fun onPageSelected(position: Int) {
-                        mCurrentPosition = position
+                        currentPosition = position
                         supportActionBar?.run {
                             when (position) {
                                 0 -> {
@@ -100,7 +100,7 @@ class SettingsActivity : BaseSettingsActivity() {
     }
 
     override fun manualUrl(): String =
-        when (mCurrentPosition) {
+        when (currentPosition) {
             0 -> {
                 getString(R.string.user_manual_url_basic)
             }

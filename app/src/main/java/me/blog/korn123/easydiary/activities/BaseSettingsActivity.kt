@@ -11,38 +11,27 @@ import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
-import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
-import kotlin.getValue
-import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 
 abstract class BaseSettingsActivity : EasyDiaryActivity() {
-    /***************************************************************************************************
-     *   global properties
-     *
-     ***************************************************************************************************/
-    protected lateinit var mBinding: ActivityBaseSettingsBinding
+    protected lateinit var binding: ActivityBaseSettingsBinding
     protected val alarmViewModel: AlarmViewModel by viewModels()
-    lateinit var mDotIndicatorPager2Adapter: DotIndicatorPager2Adapter
+    lateinit var dotIndicatorPager2Adapter: DotIndicatorPager2Adapter
 
-    var mCurrentPosition = 0
+    var currentPosition = 0
 
-    /***************************************************************************************************
-     *   override functions
-     *
-     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityBaseSettingsBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityBaseSettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.run {
             setTitle(R.string.preferences_category_settings)
             setDisplayHomeAsUpEnabled(true)
         }
 
-        mBinding.run {
+        binding.run {
             buttonAddSchedule.setOnClickListener {
-                mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem).run {
+                dotIndicatorPager2Adapter.instantiateItem(binding.viewPager, binding.viewPager.currentItem).run {
                     if (this is SettingsScheduleFragment) openAlarmDialog(alarmViewModel.makeTemporaryAlarm())
                 }
             }
@@ -68,15 +57,12 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     abstract fun manualUrl(): String
 
     fun updateUI() {
         super.onResume()
     }
 
-    fun getProgressContainer() = mBinding.partialSettingsProgress.progressContainer
+    fun getProgressContainer() = binding.partialSettingsProgress.progressContainer
 }
+

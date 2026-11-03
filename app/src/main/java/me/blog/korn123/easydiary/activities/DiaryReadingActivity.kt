@@ -815,7 +815,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                                     applicationContext,
                                                     null,
                                                     this,
-                                                    mCustomLineSpacing,
+                                                    customLineSpacing,
                                                 )
                                                 updateAlertDialogWithIcon(
                                                     DialogMode.INFO,
@@ -1295,9 +1295,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private val diaryList: List<DiaryDomain>,
         private val query: String?,
     ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int): androidx.fragment.app.Fragment {
-            return PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
-        }
+        override fun getItem(position: Int): androidx.fragment.app.Fragment = PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
 
         fun sequenceToPageIndex(sequence: Long): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
 

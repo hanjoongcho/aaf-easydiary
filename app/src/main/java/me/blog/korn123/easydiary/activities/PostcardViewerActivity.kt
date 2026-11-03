@@ -25,41 +25,30 @@ import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
 
-/**
- * Created by CHO HANJOONG on 2018-05-18.
- */
-
 class PostcardViewerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPostcardViewerBinding
-    private lateinit var mPostcardAdapter: PostcardAdapter
-    private lateinit var mGridLayoutManager: GridLayoutManager
-    private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
+    private lateinit var binding: ActivityPostcardViewerBinding
+    private lateinit var postcardAdapter: PostcardAdapter
+    private lateinit var gridLayoutManager: GridLayoutManager
+    private val listPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPostcardViewerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityPostcardViewerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
-            mBinding.toolbarLayout.setCollapsedTitleTypeface(it)
-            mBinding.toolbarLayout.setExpandedTitleTypeface(it)
+            binding.toolbarLayout.setCollapsedTitleTypeface(it)
+            binding.toolbarLayout.setExpandedTitleTypeface(it)
         }
 
-//        val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
-//            flexWrap = FlexWrap.WRAP
-//            flexDirection = FlexDirection.ROW
-// //            alignItems = AlignItems.FLEX_START
-//            justifyContent = JustifyContent.FLEX_START
-//        }
-
         val spacesItemDecoration = GridItemDecorationPostcardViewer(resources.getDimensionPixelSize(R.dimen.component_margin_small), this)
-        mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
+        gridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
-        mPostcardAdapter =
+        postcardAdapter =
             PostcardAdapter(
                 this@PostcardViewerActivity,
-                mListPostcard,
+                listPostcard,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     val intent = Intent(this@PostcardViewerActivity, PostcardViewPagerActivity::class.java)
                     intent.putExtra(POSTCARD_SEQUENCE, position)
@@ -67,26 +56,24 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                 },
             )
 
-        mBinding.contentPostCardViewer.root.apply {
-            layoutManager = mGridLayoutManager
+        binding.contentPostCardViewer.root.apply {
+            layoutManager = gridLayoutManager
             addItemDecoration(spacesItemDecoration)
-            adapter = mPostcardAdapter
-//            setHasFixedSize(true)
-//            clipToPadding = false
+            adapter = postcardAdapter
             setPopUpTypeface(FontUtils.getCommonTypeface(this@PostcardViewerActivity))
         }
 
         initPostCard()
-        mBinding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
-        mBinding.deletePostCard.setOnClickListener {
+        binding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
+        binding.deletePostCard.setOnClickListener {
             val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
-            mListPostcard.forEachIndexed { _, item ->
+            listPostcard.forEachIndexed { _, item ->
                 if (item.isItemChecked) selectedItems.add(item)
             }
 
             when (selectedItems.size) {
                 0 -> {
-                    showAlertDialog("No post card selected.", null)
+                    showAlertDialog("No postcard selected.", null)
                 }
 
                 else -> {
@@ -117,9 +104,9 @@ class PostcardViewerActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.layout -> {
-                openGridSettingDialog(mBinding.root, GridSpanMode.POSTCARD) {
-                    mGridLayoutManager.spanCount = it.toInt()
-                    mPostcardAdapter.notifyDataSetChanged()
+                openGridSettingDialog(binding.root, GridSpanMode.POSTCARD) {
+                    gridLayoutManager.spanCount = it.toInt()
+                    postcardAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -127,20 +114,21 @@ class PostcardViewerActivity : EasyDiaryActivity() {
     }
 
     private fun initPostCard() {
-        val listPostcard =
+        val postcards =
             File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
-                .filter { it.extension.equals("jpg", true) }
-                .sortedDescending()
-                .map { file -> PostcardAdapter.PostCard(file, false) }
+                ?.filter { it.extension.equals("jpg", true) }
+                ?.sortedDescending()
+                ?.map { file -> PostcardAdapter.PostCard(file, false) }
+                ?: emptyList()
 
-        mListPostcard.clear()
-        mListPostcard.addAll(listPostcard)
-        mPostcardAdapter.notifyDataSetChanged()
-        if (mListPostcard.isEmpty()) {
-            mBinding.infoMessage.visibility = View.VISIBLE
-            mBinding.contentPostCardViewer.root.visibility = View.GONE
-            mBinding.appBar.setExpanded(false)
+        listPostcard.clear()
+        listPostcard.addAll(postcards)
+        postcardAdapter.notifyDataSetChanged()
+        if (listPostcard.isEmpty()) {
+            binding.infoMessage.visibility = View.VISIBLE
+            binding.contentPostCardViewer.root.visibility = View.GONE
+            binding.appBar.setExpanded(false)
         }
     }
 }

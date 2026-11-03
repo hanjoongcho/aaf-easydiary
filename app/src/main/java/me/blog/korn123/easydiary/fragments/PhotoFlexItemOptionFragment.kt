@@ -15,7 +15,7 @@ import me.blog.korn123.easydiary.databinding.DialogPostcardPhotoOptionBinding
 import me.blog.korn123.easydiary.helper.PhotoFlexItemOptionConstants
 
 class PhotoFlexItemOptionFragment : DialogFragment() {
-    private lateinit var mBinding: DialogPostcardPhotoOptionBinding
+    private lateinit var binding: DialogPostcardPhotoOptionBinding
     private var itemIndex: Int = -1
     private var viewMode = 0
     private var filterMode = 0
@@ -43,10 +43,10 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         dialog?.setTitle(getString(R.string.title_dialog_postcard_photo_option))
-        mBinding = DialogPostcardPhotoOptionBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = DialogPostcardPhotoOptionBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -54,7 +54,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.run {
+        binding.run {
             spinnerViewMode.run {
                 val arrayAdapter =
                     ArrayAdapter.createFromResource(
@@ -74,14 +74,18 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
                             p3: Long,
                         ) {
                             viewMode = position
-                            applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
+                            photoUri?.let { uri ->
+                                applyOption(requireContext(), uri, viewMode, filterMode, imagePreview)
+                            }
                         }
 
                         override fun onNothingSelected(p0: AdapterView<*>?) {}
                     }
             }
 
-            applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
+            photoUri?.let { uri ->
+                applyOption(requireContext(), uri, viewMode, filterMode, imagePreview)
+            }
 
             spinnerFilterMode.run {
                 val arrayAdapter =
@@ -102,7 +106,9 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
                             p3: Long,
                         ) {
                             filterMode = position
-                            applyOption(requireContext(), photoUri!!, viewMode, filterMode, imagePreview)
+                            photoUri?.let { uri ->
+                                applyOption(requireContext(), uri, viewMode, filterMode, imagePreview)
+                            }
                         }
 
                         override fun onNothingSelected(p0: AdapterView<*>?) {}

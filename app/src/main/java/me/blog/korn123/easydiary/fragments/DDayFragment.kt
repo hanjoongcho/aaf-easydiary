@@ -26,11 +26,11 @@ class DDayFragment : Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinging: FragmentDdayBinding
-    private lateinit var mDDayAdapter: DDayAdapter
-    private lateinit var mLinearLayoutManager: LinearLayoutManager
-    private lateinit var mSafeFlexboxLayoutManager: FlexboxLayoutManager
-    private var mDDayItems: MutableList<DDayDomain> = mutableListOf()
+    private lateinit var binding: FragmentDdayBinding
+    private lateinit var dDayAdapter: DDayAdapter
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var safeFlexboxLayoutManager: FlexboxLayoutManager
+    private var dDayItems: MutableList<DDayDomain> = mutableListOf()
     private var isReverseOrder = true
 
     /***************************************************************************************************
@@ -42,8 +42,8 @@ class DDayFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinging = FragmentDdayBinding.inflate(layoutInflater)
-        return mBinging.root
+        binding = FragmentDdayBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -52,17 +52,17 @@ class DDayFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList(isReverseOrder) }
-        mLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        mSafeFlexboxLayoutManager =
+        dDayAdapter = DDayAdapter(requireActivity(), dDayItems) { updateDDayList(isReverseOrder) }
+        linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        safeFlexboxLayoutManager =
             SafeFlexboxLayoutManager(requireContext()).apply {
                 flexDirection = FlexDirection.ROW
                 flexWrap = FlexWrap.WRAP
             }
-        mBinging.run {
+        binding.run {
             recyclerDays.apply {
                 layoutManager = getDDayLayoutManager()
-                adapter = mDDayAdapter
+                adapter = dDayAdapter
             }
             flexboxOptionSwitcher.setOnCheckedChangeListener { _, isChecked ->
                 config.enableDDayFlexboxLayout = isChecked
@@ -93,18 +93,18 @@ class DDayFragment : Fragment() {
         updateDDayList(isReverseOrder)
     }
 
-    private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
+    private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) safeFlexboxLayoutManager else linearLayoutManager
 
     private fun updateDDayList(isAsc: Boolean) {
         lifecycleScope.launch {
-            mDDayItems.run {
+            dDayItems.run {
                 clear()
-                val dDayItems = requireContext().dDayRepository.getAllDDays(isAsc)
-                if (dDayItems.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
-                addAll(dDayItems)
+                val items = requireContext().dDayRepository.getAllDDays(isAsc)
+                if (items.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
+                addAll(items)
                 add(DDayDomain(title = "New D-Day!!!"))
             }
-            mDDayAdapter.notifyDataSetChanged()
+            dDayAdapter.notifyDataSetChanged()
         }
     }
 }

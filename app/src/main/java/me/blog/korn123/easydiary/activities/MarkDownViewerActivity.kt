@@ -30,18 +30,18 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MarkDownViewerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityMarkdownViewerBinding
+    private lateinit var binding: ActivityMarkdownViewerBinding
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
-    private var mForceAppendCodeBlock = false
+    private var forceAppendCodeBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityMarkdownViewerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
+        binding = ActivityMarkdownViewerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         val pageTitle = intent.getStringExtra(MarkdownConstants.OPEN_URL_DESCRIPTION)
-        mForceAppendCodeBlock = intent.getBooleanExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, true)
+        forceAppendCodeBlock = intent.getBooleanExtra(MarkdownConstants.FORCE_APPEND_CODE_BLOCK, true)
 
         supportActionBar?.run {
             title = pageTitle
@@ -50,14 +50,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         }
 
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
-        markdownUrl = intent.getStringExtra(MarkdownConstants.OPEN_URL_INFO)!!
-//        markdownView.run {
-//            webViewClient =  object : WebViewClient() {
-//                override fun onPageFinished(view: WebView, url: String) {
-//                    progressBar.visibility = View.GONE
-//                }
-//            }
-//        }
+        markdownUrl = intent.getStringExtra(MarkdownConstants.OPEN_URL_INFO) ?: ""
 
         if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             openMarkdownFile()
@@ -67,15 +60,11 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     }
 
     private fun openMarkdownFile() {
-        when (File(savedFilePath).exists()) {
-            true -> {
-                runOnUiThread { mBinding.progressBar.visibility = View.GONE }
-                initMarkdown()
-            }
-
-            false -> {
-                Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
-            }
+        if (File(savedFilePath).exists()) {
+            runOnUiThread { binding.progressBar.visibility = View.GONE }
+            initMarkdown()
+        } else {
+            Thread { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }.start()
         }
     }
 
@@ -90,11 +79,9 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
                         .tableBorderColor(Color.BLACK)
                         .tableCellPadding(dip.toPx(4))
                         .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
-//                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
-//                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
                 },
             ).build()
-            .apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
+            .apply { setMarkdown(binding.markdownView, readSavedFile()) }
     }
 
     private fun openMarkdownFileAfterDownload(
@@ -105,15 +92,15 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             val url = URL(fileURL)
             val httpConn = url.openConnection() as HttpURLConnection
             val responseCode = httpConn.responseCode
-            // always check HTTP response code first
+            // Always check HTTP response code first
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                // opens input stream from the HTTP connection
+                // Open input stream from the HTTP connection
                 val lines =
                     httpConn.inputStream
                         .bufferedReader(Charsets.UTF_8)
                         .use { it.readLines() }
                         .toMutableList()
-                if (mForceAppendCodeBlock) {
+                if (forceAppendCodeBlock) {
                     lines.add(0, "```java")
                     lines.add("```")
                 }
@@ -124,12 +111,12 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
             httpConn.disconnect()
 
             runOnUiThread {
-                mBinding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
                 initMarkdown()
             }
         } else {
             runOnUiThread {
-                mBinding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
                 makeToast("Network is not available.")
             }
         }
@@ -141,10 +128,10 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.update -> {
-                Thread.sleep(200) // wait ripple animation
-                mBinding.progressBar.visibility = View.VISIBLE
+                Thread.sleep(200) // Wait for ripple animation
+                binding.progressBar.visibility = View.VISIBLE
 
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     File(savedFilePath).delete()
@@ -152,12 +139,9 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
                 } else {
                     confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN)
                 }
-                return true
+                true
             }
-
-            else -> {
-                return super.onOptionsItemSelected(item)
-            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -180,17 +164,18 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     }
 
     private fun readSavedFile(): String {
-        val sb = StringBuilder()
-        try {
+        return try {
             val lines = File(savedFilePath).readLines(Charsets.UTF_8)
-            lines.map {
-                sb.append(it)
-                sb.append(System.lineSeparator())
+            buildString {
+                for (line in lines) {
+                    append(line)
+                    append(System.lineSeparator())
+                }
+            }.also {
+                Log.i("aaf-t", it)
             }
-            Log.i("aaf-t", sb.toString())
         } catch (e: FileNotFoundException) {
-            sb.append(e.message)
+            e.message ?: "File not found"
         }
-        return sb.toString()
     }
 }

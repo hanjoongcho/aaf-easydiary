@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -72,6 +73,10 @@ class SettingsViewModel(
 
     private val _fontSettingDescription: MutableStateFlow<String> = MutableStateFlow(FontUtils.fontFileNameToDisplayName(application, config.settingFontName))
     val fontSettingDescription: StateFlow<String> get() = _fontSettingDescription.asStateFlow()
+
+    fun updateFontSettingDescription() {
+        _fontSettingDescription.value = FontUtils.fontFileNameToDisplayName(application, config.settingFontName)
+    }
 
     private val _calendarFontScaleDescription: MutableStateFlow<String> =
         MutableStateFlow(

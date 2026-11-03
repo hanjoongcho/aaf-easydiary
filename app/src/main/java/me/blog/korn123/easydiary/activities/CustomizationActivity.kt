@@ -26,7 +26,7 @@ import me.blog.korn123.easydiary.utils.FontUtils
  */
 
 class CustomizationActivity : BaseSimpleActivity() {
-    private lateinit var mActivityCustomizationBinding: ActivityCustomizationBinding
+    private lateinit var activityCustomizationBinding: ActivityCustomizationBinding
     private var curTextColor = 0
     private var curBackgroundColor = 0
     private var curScreenBackgroundColor = 0
@@ -38,8 +38,8 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityCustomizationBinding = ActivityCustomizationBinding.inflate(layoutInflater)
-        mActivityCustomizationBinding.run {
+        activityCustomizationBinding = ActivityCustomizationBinding.inflate(layoutInflater)
+        activityCustomizationBinding.run {
             setContentView(this.root)
 
             setSupportActionBar(toolbar)
@@ -148,7 +148,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
 
     private fun updateCustomThemeIcon(color: Int) {
-        mActivityCustomizationBinding.run {
+        activityCustomizationBinding.run {
             updateDrawableColorInnerCardView(imageAutoSetupEasyDiaryTheme, color)
             updateDrawableColorInnerCardView(imageAutoSetupDarkTheme, color)
             updateDrawableColorInnerCardView(imageAutoSetupGreenTheme, color)
@@ -175,7 +175,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun setupColorsPickers() {
-        mActivityCustomizationBinding.run {
+        activityCustomizationBinding.run {
             customizationTextColor.setBackgroundWithStroke(curTextColor, curBackgroundColor)
             customizationPrimaryColor.setBackgroundWithStroke(curPrimaryColor, curBackgroundColor)
             customizationBackgroundColor.setBackgroundWithStroke(curBackgroundColor, curBackgroundColor)
@@ -196,13 +196,13 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun setCurrentTextColor(color: Int) {
         curTextColor = color
-        updateTextColors(mActivityCustomizationBinding.mainHolder, curTextColor)
+        updateTextColors(activityCustomizationBinding.mainHolder, curTextColor)
         updateCustomThemeIcon(curTextColor)
     }
 
     private fun setCurrentBackgroundColor(color: Int) {
         curBackgroundColor = color
-        updateAppViews(mActivityCustomizationBinding.mainHolder, curBackgroundColor)
+        updateAppViews(activityCustomizationBinding.mainHolder, curBackgroundColor)
     }
 
     private fun setCurrentScreenBackgroundColor(color: Int) {

@@ -37,8 +37,8 @@ class DashboardActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityDashboardBinding
-    private lateinit var mDailySymbolFragment: DailySymbolFragment
+    private lateinit var binding: ActivityDashboardBinding
+    private lateinit var dailySymbolFragment: DailySymbolFragment
     private var isHighLightCallbackDone = false
 
     /***************************************************************************************************
@@ -46,11 +46,9 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
-        // FIXME: Fixed a background thread processing error inside fragment when rotating the screen
-//        setTheme(getThemeId())
         super.onCreate(null)
 
-        mBinding =
+        binding =
             ActivityDashboardBinding.inflate(layoutInflater).apply {
                 setContentView(root)
                 setSupportActionBar(toolbar)
@@ -72,8 +70,8 @@ class DashboardActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        mDailySymbolFragment = DailySymbolFragment()
-        mBinding.close.setOnClickListener { view ->
+        dailySymbolFragment = DailySymbolFragment()
+        binding.close.setOnClickListener { view ->
             view.postDelayed({
                 TransitionHelper.finishActivityWithTransition(this)
             }, 300)
@@ -92,10 +90,9 @@ class DashboardActivity : EasyDiaryActivity() {
                             putBoolean(PhotoHighlightConstants.IS_DASHBOARD, true)
                         }
                     togglePhotoHighlightCallback = { isVisible: Boolean ->
-                        mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+                        binding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
                         isHighLightCallbackDone = true
                         hideProgressContainer()
-//                    if (!isLandScape()) mBinding.cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
                     }
                 },
             )
@@ -151,7 +148,7 @@ class DashboardActivity : EasyDiaryActivity() {
             replace(R.id.summary, DashBoardSummaryFragment())
 
             // 08. Daily Symbol
-            replace(R.id.dashboard_daily_symbol, mDailySymbolFragment)
+            replace(R.id.dashboard_daily_symbol, dailySymbolFragment)
 
             // 09. DashBoardRank-Lifetime
             replace(
@@ -227,7 +224,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
             // 15. Chart Weight
             if (config.enableDebugOptionVisibleChartWeight) {
-                mBinding.statistics4.visibility = View.VISIBLE
+                binding.statistics4.visibility = View.VISIBLE
                 replace(
                     R.id.statistics4,
                     WeightLineChartFragment().apply {
@@ -240,7 +237,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
             // 16. Chart Stock
             if (config.enableDebugOptionVisibleChartStock) {
-                mBinding.statistics5.visibility = View.VISIBLE
+                binding.statistics5.visibility = View.VISIBLE
                 replace(
                     R.id.statistics5,
                     StockLineChartFragment().apply {
@@ -254,7 +251,7 @@ class DashboardActivity : EasyDiaryActivity() {
             commit()
         }
 
-        mBinding.run {
+        binding.run {
             getDashboardCardWidth(0.9F).also {
                 lifetime.layoutParams.width = it
                 lastMonth.layoutParams.width = it
@@ -285,47 +282,17 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         supportFragmentManager.executePendingTransactions()
-
-//        EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
-//        object: Handler(this.mainLooper) {
-//            override fun handleMessage(msg: Message) {
-//                super.handleMessage(msg)
-//                when (msg.what) {
-//                    1547 -> {
-//                        mBinding.dashboardDimmer.visibility = View.GONE
-//                        mBinding.dashboardProgress.visibility = View.GONE
-//                    }
-//                    else -> {}
-//                }
-//            }
-//        }.apply { sendEmptyMessageDelayed(1547, 1000) }
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
-//        mBinding.mainHolder.setBackgroundColor(config.screenBackgroundColor.darkenColor())
-
-//        mBinding.also {
-//            FontUtils.setFontsTypeface(this, null, it.root, true)
-//            it.close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
-//        }
-//    }
 
     override fun onResume() {
         super.onResume()
-        mBinding.run {
-//            root.setBackgroundColor(getDashboardBackgroundColor())
-//            requireActivity().updateTextColors(root)
-//            requireActivity().updateAppViews(root)
-//            FontUtils.setFontsTypeface(requireContext(), null, root, true)
+        binding.run {
         }
 
         lifecycleScope.launch {
             showProgressContainer()
-            mBinding.run {
-                // Diary Update
-                mDailySymbolFragment.updateDailySymbol()
+            binding.run {
+                dailySymbolFragment.updateDailySymbol()
 
                 if (isHighLightCallbackDone) hideProgressContainer()
             }
@@ -335,7 +302,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         if (isVanillaIceCreamPlus()) {
             if (!isLandScape()) {
-                ViewCompat.setOnApplyWindowInsetsListener(mBinding.contentsContainer) { v, insets ->
+                ViewCompat.setOnApplyWindowInsetsListener(binding.contentsContainer) { v, insets ->
                     val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
                     val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val layoutParams = v.layoutParams
@@ -347,7 +314,7 @@ class DashboardActivity : EasyDiaryActivity() {
                     insets
                 }
 
-                ViewCompat.setOnApplyWindowInsetsListener(mBinding.close as View) { v, insets ->
+                ViewCompat.setOnApplyWindowInsetsListener(binding.close as View) { v, insets ->
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
                     val layoutParams = v.layoutParams
                     if (layoutParams is ViewGroup.MarginLayoutParams) {
@@ -359,17 +326,15 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         } else {
             if (!isLandScape()) {
-//                @Suppress("DEPRECATION")
-//                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                WindowCompat.setDecorFitsSystemWindows(window, false) // 시스템 창(상태바, 내비게이션바) 위로 그리기
-                mBinding.contentsContainer.run {
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+                binding.contentsContainer.run {
                     val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
                     tempLayoutParams.topMargin = statusBarHeight()
                     tempLayoutParams.bottomMargin = navigationBarHeight()
                     layoutParams = tempLayoutParams
                 }
 
-                mBinding.close.run {
+                binding.close.run {
                     val tempLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
                     tempLayoutParams.bottomMargin = dpToPixel(16F).plus(navigationBarHeight())
                     layoutParams = tempLayoutParams

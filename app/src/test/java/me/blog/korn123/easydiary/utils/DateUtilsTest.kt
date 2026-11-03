@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.utils
 
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

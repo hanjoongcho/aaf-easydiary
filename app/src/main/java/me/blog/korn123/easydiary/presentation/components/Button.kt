@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.presentation.components
 
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -26,12 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tbuonomo.viewpagerdotsindicator.dpToPx
+import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
+import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 
 @Composable
 fun CustomElevatedButton(
@@ -141,5 +149,58 @@ fun CustomCircleIconButton(
             contentDescription = contentDescription,
             tint = tint,
         )
+    }
+}
+
+@Composable
+fun SymbolIconButton(
+    symbolSequence: Int,
+    modifier: Modifier = Modifier,
+    symbolSize: Dp = 32.dp,
+    onClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    IconButton(
+        onClick = onClick,
+        modifier =
+            modifier
+                .size(symbolSize)
+                .clip(CircleShape),
+    ) {
+        if (symbolSequence < SYMBOL_USER_CUSTOM_START) {
+            val symbolResourceId = FlavorUtils.sequenceToSymbolResourceId(symbolSequence)
+            val symbolPainter = if (symbolResourceId > 0) painterResource(id = symbolResourceId) else painterResource(id = R.drawable.ic_select_symbol)
+            Image(
+                painter = symbolPainter,
+                contentDescription = "Symbol",
+                modifier = Modifier.size(symbolSize),
+            )
+        } else {
+            val targetIndex = symbolSequence - SYMBOL_USER_CUSTOM_START
+            val filePath =
+                if (context.config.customSymbolPaths.size > targetIndex) {
+                    context.config.customSymbolPaths[targetIndex].getFilePath()
+                } else {
+                    ""
+                }
+            val fullPath = EasyDiaryUtils.getApplicationDataDirectory(context) + filePath
+            val bitmap =
+                remember(symbolSequence, fullPath) {
+                    BitmapFactory.decodeFile(fullPath)
+                }
+            if (bitmap != null) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "Custom Symbol",
+                    modifier = Modifier.size(symbolSize),
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_select_symbol),
+                    contentDescription = "Symbol Fallback",
+                    modifier = Modifier.size(symbolSize),
+                )
+            }
+        }
     }
 }

@@ -1,106 +1,54 @@
 package me.blog.korn123.easydiary.presentation.main.components
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DashboardActivity
-import me.blog.korn123.easydiary.activities.DevActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
-import me.blog.korn123.easydiary.activities.GalleryActivity
-import me.blog.korn123.easydiary.activities.PostcardViewerActivity
-import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.makeToast
-import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
-import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.calendar.CalendarActivity
 import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomCircleIconButton
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.presentation.components.SymbolIconButton
+import me.blog.korn123.easydiary.presentation.dev.DevActivity
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
-import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 
-private data class MenuOptionItem(
-    val iconRes: Int,
-    val titleRes: Int,
-    val onClick: () -> Unit,
-)
-
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainBottomSheet(
     title: String,
@@ -135,135 +83,11 @@ fun MainBottomSheet(
     val density = LocalDensity.current
     var showMenuDialog by remember { mutableStateOf(false) }
 
-    val menuOptionItems =
-        remember {
-            listOf(
-                MenuOptionItem(
-                    iconRes = R.drawable.ic_grid_three_up,
-                    titleRes = R.string.postcard_grid_option_title,
-                    onClick = {},
-                ),
-                MenuOptionItem(
-                    iconRes = R.drawable.ic_picture_w,
-                    titleRes = R.string.post_card,
-                    onClick = {
-                        activity?.let {
-                            TransitionHelper.startActivityWithTransition(
-                                it,
-                                Intent(it, PostcardViewerActivity::class.java),
-                            )
-                        }
-                    },
-                ),
-                MenuOptionItem(
-                    iconRes = R.drawable.ic_stack_of_photos,
-                    titleRes = R.string.attached_photo_gallery,
-                    onClick = {
-                        activity?.let {
-                            TransitionHelper.startActivityWithTransition(
-                                it,
-                                Intent(it, GalleryActivity::class.java),
-                            )
-                        }
-                    },
-                ),
-                MenuOptionItem(
-                    iconRes = R.drawable.ic_combo,
-                    titleRes = R.string.menu_chart,
-                    onClick = {
-                        activity?.let {
-                            TransitionHelper.startActivityWithTransition(
-                                it,
-                                Intent(it, DashboardActivity::class.java),
-                            )
-                        }
-                    },
-                ),
-                MenuOptionItem(
-                    iconRes = R.drawable.ic_settings_7,
-                    titleRes = R.string.settings,
-                    onClick = {
-                        activity?.let {
-                            TransitionHelper.startActivityWithTransition(
-                                it,
-                                Intent(it, SettingsActivity::class.java),
-                            )
-                        }
-                    },
-                ),
-            )
-        }
-
-    if (showMenuDialog) {
-        AlertDialog(
-            onDismissRequest = { showMenuDialog = false },
-            confirmButton = {
-                TextButton(
-                    onClick = { showMenuDialog = false },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.ok),
-                        style =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                color = Color(context.config.primaryColor),
-                            ),
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { showMenuDialog = false },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.cancel),
-                        style =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                color = Color(context.config.primaryColor),
-                            ),
-                    )
-                }
-            },
-            containerColor = Color(context.config.backgroundColor),
-            text = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    menuOptionItems.forEach { item ->
-                        val itemTitle = stringResource(id = item.titleRes)
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        context.makeToast(itemTitle)
-                                        item.onClick.invoke()
-                                        showMenuDialog = false
-                                    }.padding(vertical = 12.dp, horizontal = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                painter = painterResource(id = item.iconRes),
-                                contentDescription = itemTitle,
-                                modifier = Modifier.size(24.dp),
-                                tint = Color(context.config.primaryColor),
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = itemTitle,
-                                style =
-                                    TextStyle(
-                                        fontFamily = fontFamily,
-                                        color = Color(context.config.textColor),
-                                    ),
-                            )
-                        }
-                    }
-                }
-            },
-        )
-    }
+    MainOptionDialog(
+        showDialog = showMenuDialog,
+        fontFamily = fontFamily,
+        onDismiss = { showMenuDialog = false },
+    )
 
     Column {
         var isFocused by remember { mutableStateOf(false) }
@@ -320,52 +144,10 @@ fun MainBottomSheet(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    val symbolSize = 32.dp
-                    IconButton(
-                        onClick = {
-                            onFeelingSymbolClick.invoke()
-                        },
-                        modifier =
-                            Modifier
-                                .size(32.dp)
-                                .clip(CircleShape),
-                    ) {
-                        if (symbolSequence < SYMBOL_USER_CUSTOM_START) {
-                            val symbolResourceId = FlavorUtils.sequenceToSymbolResourceId(symbolSequence)
-                            val symbolPainter = if (symbolResourceId > 0) painterResource(id = symbolResourceId) else painterResource(id = R.drawable.ic_select_symbol)
-                            Image(
-                                painter = symbolPainter,
-                                contentDescription = "Symbol",
-                                modifier = Modifier.size(symbolSize),
-                            )
-                        } else {
-                            val targetIndex = symbolSequence.minus(SYMBOL_USER_CUSTOM_START)
-                            val filePath =
-                                if (context.config.customSymbolPaths.size > targetIndex) {
-                                    context.config.customSymbolPaths[targetIndex].getFilePath()
-                                } else {
-                                    ""
-                                }
-                            val fullPath = EasyDiaryUtils.getApplicationDataDirectory(context) + filePath
-                            val bitmap =
-                                remember(symbolSequence, fullPath) {
-                                    BitmapFactory.decodeFile(fullPath)
-                                }
-                            if (bitmap != null) {
-                                Image(
-                                    bitmap = bitmap.asImageBitmap(),
-                                    contentDescription = "Custom Symbol",
-                                    modifier = Modifier.size(symbolSize),
-                                )
-                            } else {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_select_symbol),
-                                    contentDescription = "Symbol Fallback",
-                                    modifier = Modifier.size(symbolSize),
-                                )
-                            }
-                        }
-                    }
+                    SymbolIconButton(
+                        symbolSequence = symbolSequence,
+                        onClick = { onFeelingSymbolClick.invoke() },
+                    )
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -393,102 +175,18 @@ fun MainBottomSheet(
                     )
                 }
 
-                Row(
-                    modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    var text by remember(currentQuery) { mutableStateOf(currentQuery) }
-                    val density = LocalDensity.current
-                    val textUnit =
-                        with(density) {
-                            val temp = fontSize.toDp()
-                            temp.toSp()
-                        }
-
-                    val focusRequester = remember { FocusRequester() }
-                    val focusManager = LocalFocusManager.current
-                    val keyboardController = LocalSoftwareKeyboardController.current
-                    val isKeyboardVisible = WindowInsets.isImeVisible
-
-                    LaunchedEffect(isKeyboardVisible) {
-                        if (!isKeyboardVisible) {
-                            focusManager.clearFocus()
-                        }
-                    }
-
-                    TextField(
-                        value = text,
-                        onValueChange = {
-                            text = it
-                            callbackQuery.invoke(text)
-                        },
-                        label = {
-                            Text(
-                                text = title,
-                                style =
-                                    TextStyle(
-                                        fontFamily = fontFamily,
-                                        fontWeight = fontWeight,
-                                        color = contentColor,
-                                        fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                                    ),
-                            )
-                        },
-                        colors =
-                            TextFieldDefaults.colors(
-                                cursorColor = Color.White,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                            ),
-                        textStyle =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                fontWeight = fontWeight,
-                                color = contentColor,
-                                fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
-                            ),
-                        singleLine = true,
-                        keyboardOptions =
-                            KeyboardOptions(
-                                imeAction = ImeAction.Done,
-                            ),
-                        keyboardActions =
-                            KeyboardActions(
-                                onDone = {
-                                    focusManager.clearFocus()
-                                    keyboardController?.hide()
-                                },
-                                onSearch = {
-                                    focusManager.clearFocus()
-                                    keyboardController?.hide()
-                                },
-                            ),
-                        trailingIcon = {
-                            if (text.isNotEmpty() || symbolSequence != SYMBOL_SELECT_ALL) {
-                                IconButton(onClick = {
-                                    text = ""
-                                    clearFilter.invoke()
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = "Clear filter",
-                                        tint = contentColor,
-                                    )
-                                }
-                            }
-                        },
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(0.dp)
-                                .focusRequester(focusRequester)
-                                .onFocusChanged { focusState ->
-                                    isFocused = focusState.isFocused
-                                },
-                    )
-                }
+                MainSearchInput(
+                    title = title,
+                    currentQuery = currentQuery,
+                    symbolSequence = symbolSequence,
+                    fontSize = fontSize,
+                    fontColor = contentColor,
+                    fontWeight = fontWeight,
+                    fontFamily = fontFamily,
+                    onFocusChanged = { isFocused = it },
+                    callbackQuery = callbackQuery,
+                    clearFilter = clearFilter,
+                )
                 BottomToolBarContainer(
                     isAutoPadding = false,
                 ) {

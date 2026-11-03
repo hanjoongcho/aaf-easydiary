@@ -2,12 +2,10 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -33,16 +31,16 @@ import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 
 @AndroidEntryPoint
-class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
+class PhotoHighlightFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentPhotoHighlightBinding
-    private lateinit var mBannerHistory: BannerViewPager<History>
+    private lateinit var binding: FragmentPhotoHighlightBinding
+    private lateinit var bannerHistory: BannerViewPager<History>
     var togglePhotoHighlightCallback: ((isVisible: Boolean) -> Unit)? = null
 
-    // 여러 Activity 및 Fragment 간 ViewModel 스코프를 유지하고 싱글톤 매니저와 연동되도록 activityViewModels() 사용
+    // Use viewModels() to scoping ViewModel for diary operations
     private val diaryViewModel: DiaryViewModel by viewModels()
 
     /***************************************************************************************************
@@ -53,9 +51,9 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentPhotoHighlightBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentPhotoHighlightBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -87,8 +85,8 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private fun setupHistory() {
-        mBannerHistory =
-            (mBinding.bannerHistory as BannerViewPager<History>).apply {
+        bannerHistory =
+            (binding.bannerHistory as BannerViewPager<History>).apply {
                 setLifecycleRegistry(lifecycle)
                 adapter = HistoryAdapter()
                 setAutoPlay(arguments?.getBoolean(PhotoHighlightConstants.AUTO_PLAY) ?: false)
@@ -118,8 +116,8 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
 
                     if (historyItems.isNotEmpty()) {
                         togglePhotoHighlightCallback?.invoke(true)
-                        mBinding.layoutBannerContainer.visibility = View.VISIBLE
-                        mBannerHistory.run {
+                        binding.layoutBannerContainer.visibility = View.VISIBLE
+                        bannerHistory.run {
                             setOnPageClickListener { _, position ->
                                 TransitionHelper.startActivityWithTransition(
                                     requireActivity(),
@@ -132,13 +130,13 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                 object : ViewPager2.OnPageChangeCallback() {
                                     override fun onPageSelected(position: Int) {
                                         super.onPageSelected(position)
-                                        mBinding.textDescription.text = historyItems[position].historyTag
+                                        binding.textDescription.text = historyItems[position].historyTag
                                     }
                                 },
                             )
                             create(historyItems)
                         }
-                        mBinding.textDescription.text = historyItems[0].historyTag
+                        binding.textDescription.text = historyItems[0].historyTag
                     }
                 }
             }
@@ -147,9 +145,9 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
 
     private fun initDefaultSettings() {
         togglePhotoHighlightCallback?.invoke(false)
-        mBinding.run {
+        binding.run {
             layoutBannerContainer.visibility = View.GONE
-            mBannerHistory.refreshData(mutableListOf())
+            bannerHistory.refreshData(mutableListOf<History>())
         }
     }
 }

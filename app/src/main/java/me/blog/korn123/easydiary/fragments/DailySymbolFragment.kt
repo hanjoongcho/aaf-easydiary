@@ -48,17 +48,15 @@ class DailySymbolFragment : Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentDailySymbolBinding
-    private lateinit var mDailySymbolAdapter: DailySymbolAdapter
+    private lateinit var binding: FragmentDailySymbolBinding
+    private lateinit var dailySymbolAdapter: DailySymbolAdapter
     private val diaryViewModel: DiaryViewModel by viewModels()
     private val calendarViewModel: CalendarViewModel by viewModels()
-    private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
-    private val mRequestUpdateDailySymbol =
+    private var dailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
+    private val requestUpdateDailySymbol =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
         }
-    private var selectedYear = 0
-    private var selectedMonth = 0
 
     /***************************************************************************************************
      *   override functions
@@ -69,8 +67,8 @@ class DailySymbolFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mBinding = FragmentDailySymbolBinding.inflate(layoutInflater)
-        return mBinding.root
+        binding = FragmentDailySymbolBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -81,10 +79,10 @@ class DailySymbolFragment : Fragment() {
 
         lifecycleScope.launch {
             initializeDailySymbol()
-            mBinding.run {
+            binding.run {
                 editSymbolFilter.setOnClickListener {
                     Intent(requireContext(), SymbolFilterPickerActivity::class.java).apply {
-                        mRequestUpdateDailySymbol.launch(this)
+                        requestUpdateDailySymbol.launch(this)
                     }
                 }
                 switchCalendar.setOnCheckedChangeListener { _, isChecked ->
@@ -113,42 +111,39 @@ class DailySymbolFragment : Fragment() {
     val map: MutableMap<String, Pair<List<Diary>, List<Diary>>> = mutableMapOf()
 
     private fun initializeDailySymbol() {
-        mDailySymbolAdapter =
+        dailySymbolAdapter =
             DailySymbolAdapter(
                 requireActivity(),
-                mDailySymbolList,
+                dailySymbolList,
             )
-        mBinding.dailyCardRecyclerView.apply {
-//            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DashboardActivity, 1)
+        binding.dailyCardRecyclerView.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter = mDailySymbolAdapter
+            adapter = dailySymbolAdapter
             addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(
                         recyclerView: RecyclerView,
                         newState: Int,
                     ) {
-                        mBinding.month.text =
-                            mDailySymbolList[(mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
-                        mBinding.dailyCardRecyclerView.minimumHeight = 0
+                        binding.month.text =
+                            dailySymbolList[(binding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
+                        binding.dailyCardRecyclerView.minimumHeight = 0
                         val position =
-                            (mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                    mDailySymbolAdapter.notifyItemChanged(position)
+                            (binding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                         Log.i(
                             AAF_TEST,
-                            "pos: $position, newState: $newState, ${mBinding.dailyCardRecyclerView.minimumHeight}/${mBinding.dailyCardRecyclerView.height}",
+                            "pos: $position, newState: $newState, ${binding.dailyCardRecyclerView.minimumHeight}/${binding.dailyCardRecyclerView.height}",
                         )
                         if (newState == SCROLL_STATE_IDLE) {
                             requireActivity().run {
                                 if (this is DashboardActivity) {
                                     this.showProgressContainer()
                                 }
-                                mBinding.dailyCardRecyclerView.minimumHeight =
-                                    mBinding.dailyCardRecyclerView.height
+                                binding.dailyCardRecyclerView.minimumHeight =
+                                    binding.dailyCardRecyclerView.height
                                 Handler(Looper.getMainLooper()).postDelayed(
-                                    { mDailySymbolAdapter.notifyDataSetChanged() },
+                                    { dailySymbolAdapter.notifyDataSetChanged() },
                                     200,
                                 )
                                 if (this is DashboardActivity) {
@@ -160,7 +155,6 @@ class DailySymbolFragment : Fragment() {
                 },
             )
         }
-//        init365Day()
         updateDailyCard()
     }
 
@@ -178,9 +172,9 @@ class DailySymbolFragment : Fragment() {
                 DailySymbolAdapter.DailySymbol(
                     dateFormat.format(cal.time),
                     cal.get(Calendar.DAY_OF_WEEK),
-                    cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!,
+                    cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) ?: "",
                     dayOfMonth.format(cal.time),
-                    cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!.uppercase(),
+                    cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.uppercase() ?: "",
                 ),
             )
             cal.add(Calendar.DATE, -1)
@@ -218,16 +212,16 @@ class DailySymbolFragment : Fragment() {
 
         // 3. Update the shared member variables and UI on the Main thread
         withContext(Dispatchers.Main) {
-            if (mBinding.month.text.isEmpty()) {
+            if (binding.month.text.isEmpty()) {
                 val currentCal = Calendar.getInstance()
-                mBinding.month.text = currentCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.uppercase()
+                binding.month.text = currentCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.uppercase()
             }
 
-            mDailySymbolList.clear()
-            mDailySymbolList.addAll(localDailyList)
+            dailySymbolList.clear()
+            dailySymbolList.addAll(localDailyList)
 
-            mDailySymbolAdapter.map.clear()
-            mDailySymbolAdapter.map.putAll(localMap)
+            dailySymbolAdapter.map.clear()
+            dailySymbolAdapter.map.putAll(localMap)
         }
     }
 
@@ -236,15 +230,12 @@ class DailySymbolFragment : Fragment() {
         withContext(Dispatchers.Default) {
             init365Day()
         }
-        mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
-        mDailySymbolAdapter.notifyDataSetChanged()
+        binding.dailyCardRecyclerView.minimumHeight = binding.dailyCardRecyclerView.height
+        dailySymbolAdapter.notifyDataSetChanged()
     }
 
     private fun updateDailyCard() {
-        mBinding.run {
-//            month.visibility = View.GONE
-//            dailyCardRecyclerView.visibility = View.GONE
-//            dailyCardProgressBar.visibility = View.VISIBLE
+        binding.run {
             selectedSymbolFlexBox.removeAllViews()
 
             config.selectedSymbols.split(",").map { sequence ->
@@ -258,19 +249,9 @@ class DailySymbolFragment : Fragment() {
                 selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
             }
 
-            mBinding.dailyCardRecyclerView.minimumHeight = mBinding.dailyCardRecyclerView.height
-            mDailySymbolAdapter.notifyDataSetChanged()
-//                    month.visibility = View.VISIBLE
+            dailyCardRecyclerView.minimumHeight = dailyCardRecyclerView.height
+            dailySymbolAdapter.notifyDataSetChanged()
             dailyCardRecyclerView.visibility = View.VISIBLE
-//                    dailyCardProgressBar.visibility = View.GONE
-//                    requireActivity().updateAppViews(selectedSymbolFlexBox)
-//                requireActivity().runOnUiThread {
-//                    mDailySymbolAdapter.notifyDataSetChanged()
-//                    month.visibility = View.VISIBLE
-//                    dailyCardRecyclerView.visibility = View.VISIBLE
-//                    dailyCardProgressBar.visibility = View.GONE
-//                    requireActivity().updateAppViews(selectedSymbolFlexBox)
-//                }
         }
     }
 }

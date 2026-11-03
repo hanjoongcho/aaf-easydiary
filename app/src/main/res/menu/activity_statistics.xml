@@ -2,18 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/barChart"
-        android:orderInCategory="1"
-        android:title="@string/statistics_creation_time"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/barChart2"
-        android:orderInCategory="2"
-        android:title="@string/statistics_symbol_all"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/barChart3"
-        android:orderInCategory="3"
-        android:title="@string/statistics_symbol_top_ten"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_outline_menu"
+        android:id="@+id/popupMenu"
+        android:orderInCategory="100"
+        android:title="Popup Menu"
+        app:showAsAction="always" />
 </menu>

@@ -1,14 +1,8 @@
 <resources>
     <!-- Margin -->
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="toolbar_icon_margin_right">10dp</dimen>
-    <dimen name="toolbar_icon_margin_side">15dp</dimen>
     <dimen name="component_margin_small">1dp</dimen>
     <dimen name="dashboard_description_margin">10dp</dimen>
-    <dimen name="dashboard_card_margin">10dp</dimen>
-    <dimen name="settings_summary_margin_top">5dp</dimen>
-    <dimen name="card_layout_margin">1dp</dimen>
-    <dimen name="layout_margin_medium">10dp</dimen>
     <dimen name="layout_margin_large">15dp</dimen>
 
     <!-- Padding -->
@@ -25,31 +19,21 @@
     <dimen name="basic_text_small">13sp</dimen>
     <dimen name="basic_text_medium">15sp</dimen>
     <dimen name="basic_text_large">17sp</dimen>
-    <dimen name="calendar_item_text_large">10sp</dimen>
-    <dimen name="calendar_item_text_medium">8sp</dimen>
     <dimen name="widget_text_medium">15sp</dimen>
 
     <!-- Component Size -->
-    <dimen name="app_bar_height">180dp</dimen>
     <dimen name="dashboard_card_radius">@dimen/card_radius</dimen>
     <dimen name="dashboard_card_radius_inner">10dp</dimen>
     <dimen name="dashboard_symbol_small">20dp</dimen>
-    <dimen name="dashboard_symbol_medium">25dp</dimen>
     <dimen name="dashboard_symbol_large">40dp</dimen>
-    <dimen name="calendar_item_symbol_xlarge">15dp</dimen>
-    <dimen name="calendar_item_height_xlarge">22dp</dimen>
-    <dimen name="calendar_item_symbol_default">8dp</dimen>
-    <dimen name="calendar_item_height_default">13dp</dimen>
     <dimen name="diary_symbol_width">32dp</dimen>
     <dimen name="diary_symbol_height">32dp</dimen>
     <dimen name="diary_symbol_width_s">20dp</dimen>
     <dimen name="diary_symbol_height_s">20dp</dimen>
 
     <!-- Image Size -->
-    <dimen name="settings_google_account_icon">32dp</dimen>
 
     <!-- ETC. -->
     <dimen name="dp_18">18dp</dimen>
-    <dimen name="sp_13">13sp</dimen>
     <dimen name="card_radius">8dp</dimen>
 </resources>

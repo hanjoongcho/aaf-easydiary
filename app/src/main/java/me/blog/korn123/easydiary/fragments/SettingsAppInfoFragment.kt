@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -36,13 +37,13 @@ import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
-class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
+class SettingsAppInfoFragment : Fragment() {
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: FragmentSettingsAppInfoBinding
-    private val mSettingsViewModel: SettingsViewModel by activityViewModels()
+    private lateinit var binding: FragmentSettingsAppInfoBinding
+    private val settingsViewModel: SettingsViewModel by activityViewModels()
 
     /***************************************************************************************************
      *   override functions
@@ -52,9 +53,9 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        mBinding = FragmentSettingsAppInfoBinding.inflate(layoutInflater)
-        return mBinding.root
+    ): View {
+        binding = FragmentSettingsAppInfoBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(
@@ -63,10 +64,10 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         bindEvent()
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
         initPreference()
 
-        mBinding.composeView.setContent {
+        binding.composeView.setContent {
             AppTheme {
                 val configuration = LocalConfiguration.current
                 FlowRow(
@@ -77,12 +78,12 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
                         Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                    val enableCardViewPolicy: Boolean by mSettingsViewModel.enableCardViewPolicy.collectAsState()
-                    val fontSize: Float by mSettingsViewModel.fontSize.collectAsState()
-                    val lineSpacingScaleFactor: Float by mSettingsViewModel.lineSpacingScaleFactor.collectAsState()
-                    val fontFamily: FontFamily? by mSettingsViewModel.fontFamily.collectAsState()
-                    val rateAppSettingSummary: String by mSettingsViewModel.rateAppSettingSummary.collectAsState()
-                    val inviteSummary: String by mSettingsViewModel.inviteSummary.collectAsState()
+                    val enableCardViewPolicy: Boolean by settingsViewModel.enableCardViewPolicy.collectAsState()
+                    val fontSize: Float by settingsViewModel.fontSize.collectAsState()
+                    val lineSpacingScaleFactor: Float by settingsViewModel.lineSpacingScaleFactor.collectAsState()
+                    val fontFamily: FontFamily? by settingsViewModel.fontFamily.collectAsState()
+                    val rateAppSettingSummary: String by settingsViewModel.rateAppSettingSummary.collectAsState()
+                    val inviteSummary: String by settingsViewModel.inviteSummary.collectAsState()
 
                     SimpleCard(
                         title = getString(R.string.rate_app),
@@ -208,7 +209,7 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mBinding.root)
+        updateFragmentUI(binding.root)
         initPreference()
     }
 
@@ -224,7 +225,7 @@ class SettingsAppInfoFragment : androidx.fragment.app.Fragment() {
 
     @SuppressLint("StringFormatInvalid")
     private fun setupInvite() {
-        mSettingsViewModel.setInviteSummary(String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name)))
+        settingsViewModel.setInviteSummary(String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name)))
     }
 
     private fun getStoreUrl(): String =
