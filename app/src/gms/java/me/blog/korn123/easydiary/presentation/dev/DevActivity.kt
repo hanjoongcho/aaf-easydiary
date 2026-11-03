@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -142,7 +144,7 @@ class DevActivity : BaseDevActivity() {
                                         onExportDDay = {
                                             val fileName = "d-day_export_${me.blog.korn123.easydiary.utils.DateUtils.getCurrentDateTime(me.blog.korn123.easydiary.helper.DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH)}.json"
                                             exportJsonLauncher.launch(fileName)
-                                        }
+                                        },
                                     )
                                     CustomLauncher(settingCardModifier, maxItemsInEachRow)
                                     GoogleMobileService(settingCardModifier, maxItemsInEachRow)
@@ -169,7 +171,7 @@ class DevActivity : BaseDevActivity() {
                                         },
                                         pickMediaLauncher = {
                                             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                                        }
+                                        },
                                     )
                                     ComposeDemo(settingCardModifier, maxItemsInEachRow, viewModel)
                                     Notification(
@@ -195,7 +197,7 @@ class DevActivity : BaseDevActivity() {
                                         },
                                         onCancelAllNotifications = {
                                             (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
-                                        }
+                                        },
                                     )
                                     AlertDialog(settingCardModifier, maxItemsInEachRow)
 
@@ -205,7 +207,7 @@ class DevActivity : BaseDevActivity() {
                                         viewModel,
                                         onUpdateLocation = { updateLocation(viewModel) },
                                         onUpdateGps = { updateGPSProvider() },
-                                        onUpdateNetwork = { updateNetWorkProvider() }
+                                        onUpdateNetwork = { updateNetWorkProvider() },
                                     )
                                     var jobState by remember { mutableStateOf<Job?>(null) }
                                     Coroutine(
@@ -214,7 +216,7 @@ class DevActivity : BaseDevActivity() {
                                         viewModel,
                                         lifecycleScope,
                                         jobState,
-                                        onJobChanged = { jobState = it }
+                                        onJobChanged = { jobState = it },
                                     )
                                     FingerPrint(settingCardModifier, maxItemsInEachRow)
 
@@ -254,6 +256,7 @@ class DevActivity : BaseDevActivity() {
         modifier: Modifier,
         maxItemsInEachRow: Int,
     ) {
+        val activity = LocalActivity.current
         CategoryTitleCard(title = "Google Mobile Service")
         FlowRow(
             modifier = Modifier,
@@ -333,15 +336,21 @@ class DevActivity : BaseDevActivity() {
                 modifier = modifier,
             ) {
                 lifecycleScope.launch {
-                    val googleAccount = authManager.getGoogleAccount()
-                    val driveServiceHelper = DriveServiceHelper(this@DevActivity, googleAccount)
-                    val photoFolderId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME)
-                    Intent(this@DevActivity, FullBackupService::class.java).apply {
-                        putExtra(
-                            GDriveConstants.WORKING_FOLDER_ID,
-                            photoFolderId,
-                        )
-                        ContextCompat.startForegroundService(this@DevActivity, this)
+                    runCatching {
+                        val googleAccount = authManager.getGoogleAccount()
+                        val driveServiceHelper = DriveServiceHelper(this@DevActivity, googleAccount)
+                        val photoFolderId = driveServiceHelper.initDriveWorkingDirectory(GDriveConstants.AAF_EASY_DIARY_PHOTO_FOLDER_NAME)
+                        Intent(this@DevActivity, FullBackupService::class.java).apply {
+                            putExtra(
+                                GDriveConstants.WORKING_FOLDER_ID,
+                                photoFolderId,
+                            )
+                            ContextCompat.startForegroundService(this@DevActivity, this)
+                        }
+                    }.apply {
+                        onFailure { e ->
+                            activity?.makeSnackBar(e.message ?: "An error occurred")
+                        }
                     }
                 }
             }
