@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="1dp"
+        app:contentPadding="0dp"
+        style="@style/AppCard">
+        <LinearLayout
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                android:id="@+id/barChart">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/image_popup_menu_icon"
+                    android:id="@+id/img_bar_chart"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/statistics_creation_time" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                android:id="@+id/barChart2">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/image_popup_menu_icon"
+                    android:id="@+id/img_bar_chart2"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/statistics_symbol_all" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                android:id="@+id/barChart3">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/image_popup_menu_icon"
+                    android:id="@+id/img_bar_chart3"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/statistics_symbol_top_ten" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
+
+
