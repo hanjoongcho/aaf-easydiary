@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -191,7 +192,7 @@ fun MainBottomSheet(
                     isAutoPadding = false,
                 ) {
                     CustomElevatedSquareButton(
-                        text = activity?.getString(R.string.button_new_entry) ?: "",
+                        text = stringResource(R.string.button_new_entry),
                         iconResourceId = R.drawable.ic_outline_list_alt_add,
                         iconSize = 18.dp,
                     ) {
@@ -211,7 +212,7 @@ fun MainBottomSheet(
                         onMoveToday()
                     }
                     CustomElevatedSquareButton(
-                        text = activity?.getString(R.string.button_tree_view) ?: "",
+                        text = stringResource(R.string.button_tree_view),
                         iconResourceId = R.drawable.ic_outline_tree,
                         iconSize = 18.dp,
                     ) {
@@ -223,7 +224,7 @@ fun MainBottomSheet(
                         }
                     }
                     CustomElevatedSquareButton(
-                        text = activity?.getString(R.string.menu_timeline) ?: "",
+                        text = stringResource(R.string.menu_timeline),
                         iconResourceId = R.drawable.ic_outline_view_timeline,
                         iconSize = 18.dp,
                     ) {
@@ -250,7 +251,7 @@ fun MainBottomSheet(
                             }
                         }
                         CustomElevatedSquareButton(
-                            text = activity?.getString(R.string.button_quick_settings) ?: "",
+                            text = stringResource(R.string.button_quick_settings),
                             iconResourceId = R.drawable.ic_running,
                             iconSize = 18.dp,
                             tint = debugColor,

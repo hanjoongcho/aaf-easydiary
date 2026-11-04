@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.presentation.timeline.components
 
+import android.content.Intent
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,8 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -69,6 +75,7 @@ fun TimelineScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current
     val primaryColor = Color(context.config.primaryColor)
     val listState = rememberLazyListState()
 
@@ -98,17 +105,12 @@ fun TimelineScreen(
             )
         },
         floatingActionButton = {
-            SmallFloatingActionButton(
-                onClick = onWriteDiaryClick,
-                containerColor = primaryColor,
-                contentColor = Color.White,
-                shape = CircleShape,
+            CustomElevatedButton(
+                text = stringResource(R.string.button_new_entry),
+                iconResourceId = R.drawable.ic_outline_list_alt_add,
+                iconSize = 18.dp,
             ) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_outline_list_alt_add),
-                    contentDescription = stringResource(id = R.string.write_diary),
-                )
+                onWriteDiaryClick()
             }
         },
     ) { innerPadding ->
