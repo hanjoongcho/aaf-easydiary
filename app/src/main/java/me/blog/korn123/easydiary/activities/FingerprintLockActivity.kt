@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
+import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.security.KeyStore
 import javax.crypto.Cipher

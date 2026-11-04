@@ -149,7 +149,7 @@
             android:name=".activities.FingerprintLockActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.PinLockActivity"
+            android:name=".presentation.pinlock.PinLockActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MarkDownViewerActivity"
