@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,6 +33,7 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.helper.GridItemDecoration
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
@@ -85,10 +88,8 @@ class GalleryActivity : EasyDiaryActivity() {
         }
 
         initPostCard()
+        setupComposeView()
         binding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
-        binding.imgOpenGalleryOptions.setOnClickListener {
-            showGalleryOptionsDialog()
-        }
     }
 
     override fun onResume() {
@@ -146,7 +147,6 @@ class GalleryActivity : EasyDiaryActivity() {
                     )
                 }
                 updateAppViews(root)
-                changeDrawableIconColor(config.textColor, imgDeleteUnlinkedPhoto)
                 FontUtils.setFontsTypeface(applicationContext, null, root, true)
 
                 val unlinkedPhotos = arrayListOf<File>()
@@ -185,24 +185,30 @@ class GalleryActivity : EasyDiaryActivity() {
                     reloadPhotos()
                 }
 
-                imgDeleteUnlinkedPhoto.setOnClickListener {
-                    showAlertDialog(
-                        getString(R.string.delete_unlinked_photo_confirm_message),
-                        { _, _ ->
-                            binding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                unlinkedPhotos.forEach { item -> item.delete() }
-                                withContext(Dispatchers.Main) {
-                                    updateInfo()
-                                    reloadPhotos()
-                                    binding.progressLoadingContainer.progressLoading.visibility = View.GONE
+                composeView.setContent {
+                    CustomElevatedButton(
+                        text = stringResource(R.string.menu_delete),
+                        iconResourceId = R.drawable.ic_outline_delete_24,
+                        iconSize = 18.dp,
+                    ) {
+                        showAlertDialog(
+                            getString(R.string.delete_unlinked_photo_confirm_message),
+                            { _, _ ->
+                                binding.progressLoadingContainer.progressLoading.visibility = View.VISIBLE
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    unlinkedPhotos.forEach { item -> item.delete() }
+                                    withContext(Dispatchers.Main) {
+                                        updateInfo()
+                                        reloadPhotos()
+                                        binding.progressLoadingContainer.progressLoading.visibility = View.GONE
+                                    }
                                 }
-                            }
-                        },
-                        { _, _ -> },
-                        DialogMode.WARNING,
-                        false,
-                    )
+                            },
+                            { _, _ -> },
+                            DialogMode.WARNING,
+                            false,
+                        )
+                    }
                 }
                 updateInfo()
             }
@@ -215,5 +221,17 @@ class GalleryActivity : EasyDiaryActivity() {
                 show()
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
+    }
+
+    private fun setupComposeView() {
+        binding.composeView.setContent {
+            CustomElevatedButton(
+                text = "Manage Links",
+                iconResourceId = R.drawable.ic_delete_link,
+                iconSize = 18.dp,
+            ) {
+                showGalleryOptionsDialog()
+            }
+        }
     }
 }

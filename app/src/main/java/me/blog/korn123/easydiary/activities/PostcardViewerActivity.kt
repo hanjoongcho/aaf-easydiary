@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.GridLayoutManager
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
@@ -21,6 +23,7 @@ import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.GridItemDecorationPostcardViewer
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import java.io.File
@@ -64,31 +67,8 @@ class PostcardViewerActivity : EasyDiaryActivity() {
         }
 
         initPostCard()
+        setupComposeView()
         binding.toolbarImage.setColorFilter(config.primaryColor.adjustAlpha(0.5F))
-        binding.deletePostCard.setOnClickListener {
-            val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
-            listPostcard.forEachIndexed { _, item ->
-                if (item.isItemChecked) selectedItems.add(item)
-            }
-
-            when (selectedItems.size) {
-                0 -> {
-                    showAlertDialog("No postcard selected.", null)
-                }
-
-                else -> {
-                    showAlertDialog(
-                        getString(R.string.delete_confirm),
-                        DialogInterface.OnClickListener { _, _ ->
-                            selectedItems.forEachIndexed { _, item ->
-                                if (item.file.exists()) item.file.delete()
-                            }
-                            initPostCard()
-                        },
-                    )
-                }
-            }
-        }
     }
 
     override fun onResume() {
@@ -129,6 +109,40 @@ class PostcardViewerActivity : EasyDiaryActivity() {
             binding.infoMessage.visibility = View.VISIBLE
             binding.contentPostCardViewer.root.visibility = View.GONE
             binding.appBar.setExpanded(false)
+        }
+    }
+
+    private fun setupComposeView() {
+        binding.composeView.setContent {
+            CustomElevatedButton(
+                text = stringResource(R.string.menu_delete),
+                iconResourceId = R.drawable.ic_outline_delete_24,
+                iconSize = 18.dp,
+            ) {
+                val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
+                listPostcard.forEachIndexed { _, item ->
+                    if (item.isItemChecked) selectedItems.add(item)
+                }
+
+                when (selectedItems.size) {
+                    0 -> {
+                        showAlertDialog("No postcard selected.", null, null)
+                    }
+
+                    else -> {
+                        showAlertDialog(
+                            getString(R.string.delete_confirm),
+                            { _, _ ->
+                                selectedItems.forEachIndexed { _, item ->
+                                    if (item.file.exists()) item.file.delete()
+                                }
+                                initPostCard()
+                            },
+                            { _, _ -> },
+                        )
+                    }
+                }
+            }
         }
     }
 }

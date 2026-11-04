@@ -66,15 +66,13 @@
         android:gravity="bottom|end"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.simplemobiletools.commons.views.MyFloatingActionButton
-            android:id="@+id/img_open_gallery_options"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:maxImageSize="18dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_delete_link" />
+            />
     </LinearLayout>
 
     <include android:id="@+id/progress_loading_container" layout="@layout/partial_progress_bar" />
