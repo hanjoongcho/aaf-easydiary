@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.activities
+package me.blog.korn123.easydiary.presentation.fingerprintlock
 
 import android.app.KeyguardManager
 import android.content.Intent
@@ -7,51 +7,53 @@ import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityFingerprintLockBinding
-import me.blog.korn123.easydiary.extensions.applyBottomNavigationInsets
+import me.blog.korn123.easydiary.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.hideSystemBars
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
-import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
 import me.blog.korn123.easydiary.helper.PinLockConstants
+import me.blog.korn123.easydiary.presentation.fingerprintlock.components.FingerprintLockScreen
 import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
-import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
+@AndroidEntryPoint
 class FingerprintLockActivity : BaseSimpleActivity() {
-    private lateinit var binding: ActivityFingerprintLockBinding
+    private val viewModel: FingerprintLockViewModel by viewModels()
+
     private lateinit var keyStore: KeyStore
     private lateinit var keyGenerator: KeyGenerator
 
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private var activityMode: String? = null
     private var settingComplete = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFingerprintLockBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        activityMode = intent.getStringExtra(FingerprintLockConstants.LAUNCHING_MODE)
+        val activityMode = intent.getStringExtra(FingerprintLockConstants.LAUNCHING_MODE)
+        viewModel.initActivityMode(activityMode)
 
         setupBiometricComponents()
-        setupUI()
 
         onBackPressedDispatcher.addCallback(
             this,
@@ -61,20 +63,37 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 }
             },
         )
-    }
 
-    private fun setupUI() {
-        binding.changePinLock.run {
-            setOnClickListener {
-                startActivity(
-                    Intent(this@FingerprintLockActivity, PinLockActivity::class.java).apply {
-                        putExtra(PinLockConstants.LAUNCHING_MODE, PinLockConstants.ACTIVITY_UNLOCK)
-                    },
+        setContent {
+            AppTheme {
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                FingerprintLockScreen(
+                    guideMessage = uiState.guideMessage,
+                    isChangePinLockVisible = uiState.isChangePinLockVisible,
+                    onChangePinLock = { openPinLock() },
                 )
-                finish()
+
+                val dialogState = uiState.dialogState
+                LaunchedEffect(dialogState) {
+                    dialogState?.let { state ->
+                        when (state) {
+                            is FingerprintLockDialogState.SettingComplete -> {
+                                holdCurrentOrientation()
+                                showAlertDialog(
+                                    getString(R.string.fingerprint_setting_complete),
+                                    { _, _ ->
+                                        config.fingerprintLockEnable = true
+                                        pauseLock()
+                                        finish()
+                                    },
+                                    false,
+                                )
+                            }
+                        }
+                    }
+                }
             }
-            applyBottomNavigationInsets(this)
-            if (isLandScape()) hideSystemBars()
         }
     }
 
@@ -90,17 +109,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         super.onAuthenticationSucceeded(result)
                         config.fingerprintAuthenticationFailCount = 0
                         val cipher = result.cryptoObject?.cipher
+                        val activityMode = viewModel.uiState.value.activityMode
 
                         when (activityMode) {
                             FingerprintLockConstants.ACTIVITY_SETTING -> {
                                 tryEncrypt(cipher)
-                                holdCurrentOrientation()
                                 settingComplete = true
-                                showAlertDialog(getString(R.string.fingerprint_setting_complete), { _, _ ->
-                                    config.fingerprintLockEnable = true
-                                    pauseLock()
-                                    finish()
-                                }, false)
+                                viewModel.showSettingCompleteDialog()
                             }
 
                             FingerprintLockConstants.ACTIVITY_UNLOCK -> {
@@ -118,13 +133,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     ) {
                         super.onAuthenticationError(errorCode, errString)
                         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
-                            updateErrorMessage(errString.toString())
+                            viewModel.updateGuideMessage(errString.toString())
                         }
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-                        updateErrorMessage(getString(R.string.fingerprint_authentication_fail_try_again))
+                        viewModel.updateGuideMessage(getString(R.string.fingerprint_authentication_fail_try_again))
                     }
                 },
             )
@@ -142,12 +157,18 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     override fun onResume() {
         super.onResume()
         if (!settingComplete) {
-            binding.guideMessage.text = getString(R.string.place_finger_description)
-            FontUtils.setFontsTypeface(applicationContext, null, binding.container)
-            binding.changePinLock.visibility = if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) View.GONE else View.VISIBLE
-
+            viewModel.updateGuideMessage(getString(R.string.place_finger_description))
             startBiometricAuth()
         }
+    }
+
+    private fun openPinLock() {
+        startActivity(
+            Intent(this@FingerprintLockActivity, PinLockActivity::class.java).apply {
+                putExtra(PinLockConstants.LAUNCHING_MODE, PinLockConstants.ACTIVITY_UNLOCK)
+            },
+        )
+        finish()
     }
 
     private fun startBiometricAuth() {
@@ -159,12 +180,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             val keyguardManager = getSystemService(KeyguardManager::class.java)
 
             if (!keyguardManager.isKeyguardSecure) {
-                updateErrorMessage("Secure lock screen hasn't set up.")
+                viewModel.updateGuideMessage("Secure lock screen hasn't set up.")
                 return
             }
 
             val biometricManager = BiometricManager.from(this)
             if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
+                val activityMode = viewModel.uiState.value.activityMode
                 if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
                     createKey(FingerprintLockConstants.KEY_NAME, true)
                 }
@@ -173,10 +195,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(defaultCipher))
                 }
             } else {
-                updateErrorMessage("Fingerprint not registered or hardware not available.")
+                viewModel.updateGuideMessage("Fingerprint not registered or hardware not available.")
             }
         } catch (e: Exception) {
-            updateErrorMessage("Initialization error: ${e.message}")
+            viewModel.updateGuideMessage("Initialization error: ${e.message}")
         }
     }
 
@@ -210,6 +232,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         try {
             keyStore.load(null)
             val key = keyStore.getKey(keyName, null) as SecretKey
+            val activityMode = viewModel.uiState.value.activityMode
             if (activityMode == FingerprintLockConstants.ACTIVITY_SETTING) {
                 cipher.init(Cipher.ENCRYPT_MODE, key)
             } else {
@@ -218,7 +241,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             }
             return true
         } catch (e: Exception) {
-            updateErrorMessage(getString(R.string.init_cipher_error_guide_message))
+            viewModel.updateGuideMessage(getString(R.string.init_cipher_error_guide_message))
             return false
         }
     }
@@ -243,12 +266,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 it.doFinal(encodedData)
                 true
             } ?: false
-        } catch (e: Exception) {
-            updateErrorMessage(getString(R.string.fingerprint_authentication_info_changed))
+        } catch (_: Exception) {
+            viewModel.updateGuideMessage(getString(R.string.fingerprint_authentication_info_changed))
             false
         }
-
-    private fun updateErrorMessage(errorMessage: String) {
-        binding.guideMessage.text = errorMessage
-    }
 }

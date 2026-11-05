@@ -14,6 +14,14 @@ open class ChartBase : EasyDiaryActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mTfLight = Typeface.createFromAsset(assets, "fonts/OpenSans-Light.ttf")
+        mTfLight = try {
+            Typeface.createFromAsset(assets, "fonts/OpenSans-Light.ttf")
+        } catch (_: Throwable) {
+            try {
+                Typeface.createFromAsset(applicationContext.assets, "fonts/OpenSans-Light.ttf")
+            } catch (_: Throwable) {
+                Typeface.DEFAULT
+            }
+        }
     }
 }

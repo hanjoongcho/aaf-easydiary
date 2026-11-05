@@ -64,7 +64,7 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
-import me.blog.korn123.easydiary.activities.FingerprintLockActivity
+import me.blog.korn123.easydiary.presentation.fingerprintlock.FingerprintLockActivity
 import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter

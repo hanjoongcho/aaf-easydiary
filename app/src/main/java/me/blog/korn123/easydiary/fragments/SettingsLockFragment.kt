@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.FingerprintLockActivity
+import me.blog.korn123.easydiary.presentation.fingerprintlock.FingerprintLockActivity
 import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps

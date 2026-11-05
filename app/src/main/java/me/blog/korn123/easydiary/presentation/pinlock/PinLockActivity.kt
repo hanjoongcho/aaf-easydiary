@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSimpleActivity
-import me.blog.korn123.easydiary.activities.FingerprintLockActivity
+import me.blog.korn123.easydiary.presentation.fingerprintlock.FingerprintLockActivity
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hideSystemBars
