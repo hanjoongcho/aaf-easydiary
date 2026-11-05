@@ -27,7 +27,6 @@ import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
 @AndroidEntryPoint
 class PinLockActivity : BaseSimpleActivity() {
-
     private val pinLockViewModel: PinLockViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class PinLockActivity : BaseSimpleActivity() {
         val activityMode = intent.getStringExtra(PinLockConstants.LAUNCHING_MODE)
         pinLockViewModel.initActivityMode(activityMode)
 
-        if (isLandScape()) hideSystemBars()
+//        if (isLandScape()) hideSystemBars()
 
         onBackPressedDispatcher.addCallback(
             this,

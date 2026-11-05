@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -30,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tbuonomo.viewpagerdotsindicator.dpToPx
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.PinLockConstants
@@ -90,6 +93,7 @@ fun PinLockScreen(
                     modifier =
                         Modifier
                             .fillMaxWidth()
+                            .statusBarsPadding()
                             .padding(10.dp),
                 )
 
@@ -97,7 +101,10 @@ fun PinLockScreen(
                     isFingerprintEnabled = isFingerprintEnabled,
                     onKeyClick = onKeyClick,
                     onFingerprintClick = onFingerprintClick,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .navigationBarsPadding(),
                 )
             }
         }
@@ -106,8 +113,7 @@ fun PinLockScreen(
             modifier =
                 modifier
                     .fillMaxSize()
-                    .background(backgroundColor)
-                    .padding(bottom = 20.dp),
+                    .background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             PinBoxesRow(
@@ -116,6 +122,7 @@ fun PinLockScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
+                        .statusBarsPadding()
                         .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
             )
 
@@ -133,7 +140,11 @@ fun PinLockScreen(
                 isFingerprintEnabled = isFingerprintEnabled,
                 onKeyClick = onKeyClick,
                 onFingerprintClick = onFingerprintClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .padding(bottom = 10.dp),
             )
         }
     }
@@ -157,9 +168,8 @@ private fun LauncherInfoMessage(
         Spacer(modifier = Modifier.height(10.dp))
         SimpleText(
             text = infoMessageText,
-            fontWeight = FontWeight.Bold,
             fontColor = Color.White,
-            fontSize = 16f,
+            fontSize = 16.dp.dpToPx(),
             modifier = Modifier.padding(10.dp),
         )
     }
@@ -183,7 +193,7 @@ private fun PinBoxesRow(
                     if (activityMode == PinLockConstants.ACTIVITY_SETTING) {
                         digit.toString()
                     } else {
-                        "-"
+                        "*"
                     }
                 } else {
                     ""
@@ -202,7 +212,7 @@ private fun PinBoxesRow(
                     text = text,
                     fontWeight = FontWeight.Bold,
                     fontColor = PinLockTextColor,
-                    fontSize = 20f,
+                    fontSize = 16.dp.dpToPx(),
                 )
             }
 
@@ -351,7 +361,7 @@ private fun KeypadButton(
             text = label,
             fontWeight = FontWeight.Bold,
             fontColor = PinLockTextColor,
-            fontSize = 18f,
+            fontSize = 16.dp.dpToPx(),
         )
     }
 }
