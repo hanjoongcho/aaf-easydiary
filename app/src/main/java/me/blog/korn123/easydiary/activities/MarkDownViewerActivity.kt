@@ -13,6 +13,7 @@ import io.noties.markwon.utils.ColorUtils
 import io.noties.markwon.utils.Dip
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.isConnectedOrConnecting
@@ -50,7 +51,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         }
 
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
-        markdownUrl = intent.getStringExtra(MarkdownConstants.OPEN_URL_INFO) ?: ""
+        markdownUrl = intent.getStringExtra(MarkdownConstants.OPEN_URL_INFO) ?: String.EMPTY
 
         if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             openMarkdownFile()
@@ -127,8 +128,8 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.update -> {
                 Thread.sleep(200) // Wait for ripple animation
                 binding.progressBar.visibility = View.VISIBLE
@@ -141,9 +142,11 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
                 }
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -163,8 +166,8 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun readSavedFile(): String {
-        return try {
+    private fun readSavedFile(): String =
+        try {
             val lines = File(savedFilePath).readLines(Charsets.UTF_8)
             buildString {
                 for (line in lines) {
@@ -177,5 +180,4 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
         } catch (e: FileNotFoundException) {
             e.message ?: "File not found"
         }
-    }
 }

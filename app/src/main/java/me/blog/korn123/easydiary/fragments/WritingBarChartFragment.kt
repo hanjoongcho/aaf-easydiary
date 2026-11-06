@@ -33,6 +33,7 @@ import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.ChartConstants
@@ -231,14 +232,14 @@ class WritingBarChartFragment : Fragment() {
             axis: AxisBase?,
         ): String =
             when (value.toInt()) {
-                1 -> context?.getString(R.string.range_a) ?: ""
-                2 -> context?.getString(R.string.range_b) ?: ""
-                3 -> context?.getString(R.string.range_c) ?: ""
-                4 -> context?.getString(R.string.range_d) ?: ""
-                5 -> context?.getString(R.string.range_e) ?: ""
-                6 -> context?.getString(R.string.range_f) ?: ""
-                7 -> context?.getString(R.string.range_g) ?: ""
-                else -> context?.getString(R.string.range_h) ?: ""
+                1 -> context?.getString(R.string.range_a) ?: String.EMPTY
+                2 -> context?.getString(R.string.range_b) ?: String.EMPTY
+                3 -> context?.getString(R.string.range_c) ?: String.EMPTY
+                4 -> context?.getString(R.string.range_d) ?: String.EMPTY
+                5 -> context?.getString(R.string.range_e) ?: String.EMPTY
+                6 -> context?.getString(R.string.range_f) ?: String.EMPTY
+                7 -> context?.getString(R.string.range_g) ?: String.EMPTY
+                else -> context?.getString(R.string.range_h) ?: String.EMPTY
             }
     }
 }

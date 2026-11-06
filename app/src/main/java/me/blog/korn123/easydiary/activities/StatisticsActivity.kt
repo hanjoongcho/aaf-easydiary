@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.databinding.PopupMenuStatisticsBinding
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
@@ -113,7 +114,7 @@ class StatisticsActivity : ChartBase() {
 
     private fun setupActionBar() {
         supportActionBar?.run {
-            title = ""
+            title = String.EMPTY
             setDisplayHomeAsUpEnabled(true)
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
             subtitle =

@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">माता-पिता के तौर पर</string>
     <string name="link_entry_as_child">बच्चों के रूप में</string>
     <string name="link_entry_later">बाद में</string>
+    <string name="link_entry_already_linked">आइटम पहले से ही लिंक है.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d प्रविष्टियाँ</string>
     <string name="task_todo_count_format">(अपूर्ण कार्य: %d)</string>
     <string name="no_written_diary">कोई लिखी हुई डायरी नहीं है।</string>

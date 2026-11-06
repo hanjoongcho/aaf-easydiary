@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.shareFile
@@ -132,20 +133,22 @@ class GalleryViewPagerActivity : EasyDiaryActivity() {
         ): View {
             val photoView = PhotoView(container.context)
             val attachedPhoto = attachedPhotos[position]
-            val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) "" else attachedPhoto.file.path)
+            val bitmap = BitmapFactory.decodeFile(if (attachedPhoto.diary?.isEncrypt == true) String.EMPTY else attachedPhoto.file.path)
 
             return if (bitmap == null) {
-                val textView = TextView(container.context).apply {
-                    gravity = Gravity.CENTER
-                    val padding = container.context.dpToPixel(10F)
-                    setPadding(padding, padding, padding, padding)
-                    typeface = FontUtils.getCommonTypeface(container.context)
-                    text = if (attachedPhoto.diary?.isEncrypt == true) {
-                        "The diary is encrypted. You will need to decrypt the diary to see the attached photos."
-                    } else {
-                        container.context.getString(R.string.photo_view_error_info)
+                val textView =
+                    TextView(container.context).apply {
+                        gravity = Gravity.CENTER
+                        val padding = container.context.dpToPixel(10F)
+                        setPadding(padding, padding, padding, padding)
+                        typeface = FontUtils.getCommonTypeface(container.context)
+                        text =
+                            if (attachedPhoto.diary?.isEncrypt == true) {
+                                "The diary is encrypted. You will need to decrypt the diary to see the attached photos."
+                            } else {
+                                container.context.getString(R.string.photo_view_error_info)
+                            }
                     }
-                }
                 container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 textView
             } else {

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.domain.model
 
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.MessageFormat
 import java.util.Calendar
@@ -13,8 +14,8 @@ data class DDay(
 ) {
     fun getDayRemaining(
         onlyDays: Boolean = true,
-        yearFormat: String = "",
-        dayFormat: String = "",
+        yearFormat: String = String.EMPTY,
+        dayFormat: String = String.EMPTY,
     ): String {
         val oneDayMillis: Long = 1000 * 60 * 60 * 24
         val todayTimeStamp = System.currentTimeMillis()
@@ -52,8 +53,8 @@ data class DDay(
 
     fun getOnlyDayRemaining(
         onlyDays: Boolean = true,
-        yearFormat: String = "",
-        dayFormat: String = "",
+        yearFormat: String = String.EMPTY,
+        dayFormat: String = String.EMPTY,
     ): String = DateUtils.getOnlyDayRemaining(targetTimeStamp, onlyDays, yearFormat, dayFormat)
 
     fun getTimeRemaining(): String {

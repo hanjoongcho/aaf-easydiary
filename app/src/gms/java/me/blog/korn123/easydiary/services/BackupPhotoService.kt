@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
@@ -105,7 +106,7 @@ class BackupPhotoService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: ""
+        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: String.EMPTY
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)
     }

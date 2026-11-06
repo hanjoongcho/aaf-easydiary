@@ -1,6 +1,9 @@
 package me.blog.korn123.easydiary.extensions
 import java.util.Base64
 
+val String.Companion.EMPTY: String
+    get() = ""
+
 // String -> Base64 String
 fun String.toBase64(): String = Base64.getEncoder().encodeToString(this.toByteArray(Charsets.UTF_8))
 
@@ -12,5 +15,5 @@ fun String.getBaseName(): String =
 
 fun String.getExtension(): String {
     val fileName = this.substringAfterLast('/').substringAfterLast('\\')
-    return if (fileName.contains('.')) fileName.substringAfterLast('.') else ""
+    return if (fileName.contains('.')) fileName.substringAfterLast('.') else String.EMPTY
 }

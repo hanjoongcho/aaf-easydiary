@@ -11,6 +11,7 @@ import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import java.util.*
 import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
@@ -140,11 +141,11 @@ class Config(
         set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
 
     var fingerprintEncryptData: String
-        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, "") ?: ""
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, String.EMPTY) ?: String.EMPTY
         set(fingerprintEncryptData) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData).apply()
 
     var fingerprintEncryptDataIV: String
-        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "") ?: ""
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, String.EMPTY) ?: String.EMPTY
         set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
 
     var fingerprintAuthenticationFailCount: Int
@@ -248,19 +249,21 @@ class Config(
         set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight).apply()
 
     var enablePhotoHighlightInDiaryMain: Boolean
-        get() = if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN)) {
-            prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, false)
-        } else {
-            enablePhotoHighlight
-        }
+        get() =
+            if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN)) {
+                prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, false)
+            } else {
+                enablePhotoHighlight
+            }
         set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, enablePhotoHighlight).apply()
 
     var enablePhotoHighlightInDashboard: Boolean
-        get() = if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD)) {
-            prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, false)
-        } else {
-            enablePhotoHighlight
-        }
+        get() =
+            if (prefs.contains(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD)) {
+                prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, false)
+            } else {
+                enablePhotoHighlight
+            }
         set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, enablePhotoHighlight).apply()
 
     var enableStatusBarDarkenColor: Boolean

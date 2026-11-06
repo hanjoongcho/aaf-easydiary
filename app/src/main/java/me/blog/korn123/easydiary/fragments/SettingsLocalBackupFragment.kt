@@ -34,6 +34,7 @@ import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.UriFileType
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.classifyUriByExtension
@@ -124,7 +125,7 @@ class SettingsLocalBackupFragment : Fragment() {
                                                 }
                                             }
                                     }
-                                    return ""
+                                    return String.EMPTY
                                 }
                                 it.data?.data?.let { uri ->
                                     when (classifyUriByExtension(getFileNameFromUri(uri))) {
@@ -437,7 +438,7 @@ class SettingsLocalBackupFragment : Fragment() {
                             val itemInfo =
                                 parent.adapter.getItem(position) as? Map<*, *>
 
-                            val fileName = (itemInfo?.get("name") as? String) ?: ""
+                            val fileName = (itemInfo?.get("name") as? String) ?: String.EMPTY
                             when (classifyUriByExtension(fileName)) {
                                 UriFileType.ROOM -> {
                                     lifecycleScope.launch {

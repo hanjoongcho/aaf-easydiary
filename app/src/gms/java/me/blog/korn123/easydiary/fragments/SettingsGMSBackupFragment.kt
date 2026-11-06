@@ -54,6 +54,7 @@ import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.databinding.DialogSyncGoogleCalendarBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.UriFileType
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.classifyUriByExtension
@@ -500,7 +501,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 parent.adapter.getItem(position) as HashMap<*, *>
 
                             // check file name
-                            when (classifyUriByExtension((itemInfo["name"] ?: "") as String)) {
+                            when (classifyUriByExtension((itemInfo["name"] ?: String.EMPTY) as String)) {
                                 UriFileType.ROOM -> {
                                     progressContainer.visibility = View.VISIBLE
                                     val destFilePath =

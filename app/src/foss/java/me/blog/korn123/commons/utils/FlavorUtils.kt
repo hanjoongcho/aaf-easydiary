@@ -16,6 +16,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.DiarySymbol
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import java.util.*
@@ -71,7 +72,7 @@ object FlavorUtils {
                         if (context.config.customSymbolPaths.size > targetIndex) {
                             context.config.customSymbolPaths[targetIndex].getFilePath()
                         } else {
-                            ""
+                            String.EMPTY
                         }
 //                    setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath))
                     Glide

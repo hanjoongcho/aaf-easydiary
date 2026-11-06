@@ -175,7 +175,7 @@ fun ComponentActivity.syncMarkDown(
                                     val dateString = matchResult.groupValues[1]
                                     return dateString
                                 } else {
-                                    return ""
+                                    return String.EMPTY
                                 }
                             }
 
@@ -200,10 +200,10 @@ fun ComponentActivity.syncMarkDown(
                                 var diary = items[0]
                                 diary =
                                     diary.copy(
-                                        contents = re.body() ?: "",
+                                        contents = re.body() ?: String.EMPTY,
                                         symbolSequence = checkedSymbolSequence,
                                     )
-                                val updateDateString = getUpdateDate(diary.contents ?: "")
+                                val updateDateString = getUpdateDate(diary.contents)
                                 if (updateDateString.isNotEmpty()) {
                                     diary =
                                         diary.copy(
@@ -236,7 +236,7 @@ fun ComponentActivity.syncMarkDown(
                                     Diary(
                                         currentTimeMillis = System.currentTimeMillis(),
                                         title = title,
-                                        contents = re.body() ?: "",
+                                        contents = re.body() ?: String.EMPTY,
                                         symbolSequence = checkedSymbolSequence,
                                         isAllDay = true,
                                     ),

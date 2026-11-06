@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.DiarySymbol
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.BUILDING_APARTMENT
@@ -648,7 +649,7 @@ object FlavorUtils {
                         if (context.config.customSymbolPaths.size > targetIndex) {
                             context.config.customSymbolPaths[targetIndex].getFilePath()
                         } else {
-                            ""
+                            String.EMPTY
                         }
 //                    setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath))
                     Glide

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.SettingsAppInfoFragment
 import me.blog.korn123.easydiary.fragments.SettingsBasicFragment
@@ -16,60 +17,74 @@ class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val fragmentList = arrayListOf(
-                SettingsBasicFragment(), SettingsFontFragment(),
-                SettingsLockFragment(), SettingsLocalBackupFragment(),
-                SettingsScheduleFragment(), SettingsAppInfoFragment()
-        )
+        val fragmentList =
+            arrayListOf(
+                SettingsBasicFragment(),
+                SettingsFontFragment(),
+                SettingsLockFragment(),
+                SettingsLocalBackupFragment(),
+                SettingsScheduleFragment(),
+                SettingsAppInfoFragment(),
+            )
         dotIndicatorPager2Adapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
         binding.run {
             viewPager.adapter = dotIndicatorPager2Adapter
-            val pageChangeListener = object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            val pageChangeListener =
+                object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int,
+                    ) {}
 
-                override fun onPageSelected(position: Int) {
-                    currentPosition = position
-                    supportActionBar?.run {
-                        when (position) {
-                            0 -> {
-                                title = getString(R.string.preferences_category_settings)
-                                subtitle = ""
-                                buttonAddSchedule.visibility = View.GONE
-                            }
-                            1 -> {
-                                title = getString(R.string.preferences_category_font)
-                                subtitle = ""
-                                buttonAddSchedule.visibility = View.GONE
-                            }
-                            2 -> {
-                                title = getString(R.string.preferences_category_lock)
-                                subtitle = ""
-                                buttonAddSchedule.visibility = View.GONE
-                            }
-                            3 -> {
-                                title = getString(R.string.preferences_category_backup_restore_device)
-                                subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
-                                pauseLock()
-                                updateUI()
-                                buttonAddSchedule.visibility = View.GONE
-                            }
-                            4 -> {
-                                title = getString(R.string.preferences_category_schedule)
-                                subtitle = ""
-                                buttonAddSchedule.visibility = View.VISIBLE
-                            }
-                            else -> {
-                                title = getString(R.string.preferences_category_information)
-                                subtitle = ""
-                                buttonAddSchedule.visibility = View.GONE
+                    override fun onPageSelected(position: Int) {
+                        currentPosition = position
+                        supportActionBar?.run {
+                            when (position) {
+                                0 -> {
+                                    title = getString(R.string.preferences_category_settings)
+                                    subtitle = String.EMPTY
+                                    buttonAddSchedule.visibility = View.GONE
+                                }
+
+                                1 -> {
+                                    title = getString(R.string.preferences_category_font)
+                                    subtitle = String.EMPTY
+                                    buttonAddSchedule.visibility = View.GONE
+                                }
+
+                                2 -> {
+                                    title = getString(R.string.preferences_category_lock)
+                                    subtitle = String.EMPTY
+                                    buttonAddSchedule.visibility = View.GONE
+                                }
+
+                                3 -> {
+                                    title = getString(R.string.preferences_category_backup_restore_device)
+                                    subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                                    pauseLock()
+                                    updateUI()
+                                    buttonAddSchedule.visibility = View.GONE
+                                }
+
+                                4 -> {
+                                    title = getString(R.string.preferences_category_schedule)
+                                    subtitle = String.EMPTY
+                                    buttonAddSchedule.visibility = View.VISIBLE
+                                }
+
+                                else -> {
+                                    title = getString(R.string.preferences_category_information)
+                                    subtitle = String.EMPTY
+                                    buttonAddSchedule.visibility = View.GONE
+                                }
                             }
                         }
+                        invalidateOptionsMenu()
                     }
-                    invalidateOptionsMenu()
-                }
 
-                override fun onPageScrollStateChanged(state: Int) {}
-            }
+                    override fun onPageScrollStateChanged(state: Int) {}
+                }
             viewPager.addOnPageChangeListener(pageChangeListener)
             pageChangeListener.onPageSelected(viewPager.currentItem)
             dotsIndicator.setViewPager(viewPager)
@@ -77,25 +92,30 @@ class SettingsActivity : BaseSettingsActivity() {
         }
     }
 
-    override fun manualUrl(): String = when (currentPosition) {
-        0 -> {
-            getString(R.string.user_manual_url_basic)
-        }
-        1 -> {
-            getString(R.string.user_manual_url_font)
-        }
-        2 -> {
-            getString(R.string.user_manual_url_lock)
-        }
-        3 -> {
-            getString(R.string.user_manual_url_backup_restore_device)
-        }
-        4 -> {
-            getString(R.string.user_manual_url_schedule)
+    override fun manualUrl(): String =
+        when (currentPosition) {
+            0 -> {
+                getString(R.string.user_manual_url_basic)
+            }
 
+            1 -> {
+                getString(R.string.user_manual_url_font)
+            }
+
+            2 -> {
+                getString(R.string.user_manual_url_lock)
+            }
+
+            3 -> {
+                getString(R.string.user_manual_url_backup_restore_device)
+            }
+
+            4 -> {
+                getString(R.string.user_manual_url_schedule)
+            }
+
+            else -> {
+                getString(R.string.user_manual_url_application_information)
+            }
         }
-        else -> {
-            getString(R.string.user_manual_url_application_information)
-        }
-    }
 }

@@ -18,6 +18,7 @@ import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostcardActivity
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
@@ -77,7 +78,7 @@ class PhotoAdapter(
                     dialogPositiveCallback.invoke()
                     notifyDataSetChanged()
                 }
-            }.show(activity.supportFragmentManager, "")
+            }.show(activity.supportFragmentManager, String.EMPTY)
     }
 
 //    fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {

@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
 import me.blog.korn123.easydiary.enums.ActionLogKey
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import me.blog.korn123.easydiary.utils.DateUtils
 
@@ -51,8 +52,8 @@ fun DiaryEntity.toDomain(photoUris: List<PhotoUri> = emptyList()): Diary =
         diaryId = this.diaryId,
         originDiaryId = this.originDiaryId,
         currentTimeMillis = this.currentTimeMillis,
-        title = this.title,
-        contents = this.contents ?: "",
+        title = this.title ?: String.EMPTY,
+        contents = this.contents ?: String.EMPTY,
         dateString = this.dateString,
         symbolSequence = this.symbolSequence,
         linkedDiaries = ArrayList(this.linkedDiaries),
@@ -79,8 +80,8 @@ fun DiaryWithPhotos.toDomain(): Diary =
         diaryId = this.diary.diaryId,
         originDiaryId = this.diary.originDiaryId,
         currentTimeMillis = this.diary.currentTimeMillis,
-        title = this.diary.title,
-        contents = this.diary.contents ?: "",
+        title = this.diary.title ?: String.EMPTY,
+        contents = this.diary.contents ?: String.EMPTY,
         dateString = this.diary.dateString,
         symbolSequence = this.diary.symbolSequence,
         linkedDiaries = ArrayList(this.diary.linkedDiaries),
@@ -172,5 +173,5 @@ fun DDayEntity.toDomain(): DDay =
     DDay(
         id = this.id,
         targetTimeStamp = this.targetTimeStamp,
-        title = this.title ?: "",
+        title = this.title ?: String.EMPTY,
     )

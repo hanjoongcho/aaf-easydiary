@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyBottomNavigationInsets
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
@@ -37,25 +38,25 @@ class SettingsActivity : BaseSettingsActivity() {
                         supportActionBar?.run {
                             when (position) {
                                 0 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = getString(R.string.preferences_category_settings)
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
                                 1 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = getString(R.string.preferences_category_font)
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
                                 2 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = getString(R.string.preferences_category_lock)
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
                                 3 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = "${getString(R.string.preferences_category_backup_restore)} (${
                                         getString(
                                             R.string.preferences_category_backup_restore_sub,
@@ -67,19 +68,19 @@ class SettingsActivity : BaseSettingsActivity() {
                                 }
 
                                 4 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = "${getString(R.string.preferences_category_backup_restore_device)} (${getString(R.string.preferences_category_backup_restore_device_sub)})"
                                     buttonAddSchedule.visibility = View.GONE
                                 }
 
                                 5 -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = getString(R.string.preferences_category_schedule)
                                     buttonAddSchedule.visibility = View.VISIBLE
                                 }
 
                                 else -> {
-                                    title = ""
+                                    title = String.EMPTY
                                     subtitle = getString(R.string.preferences_category_information)
                                     buttonAddSchedule.visibility = View.GONE
                                 }

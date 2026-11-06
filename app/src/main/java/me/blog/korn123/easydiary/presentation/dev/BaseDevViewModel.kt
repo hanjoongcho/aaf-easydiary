@@ -18,6 +18,7 @@ import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class BaseDevViewModel
         val config = application.config
         var symbol by mutableIntStateOf(1)
         var locationInfo by mutableStateOf("N/A")
-        var coroutine1Console by mutableStateOf("")
+        var coroutine1Console by mutableStateOf(String.EMPTY)
         var isLoading by mutableStateOf(false)
         var loadingMessage by mutableStateOf<String?>(null)
         var profilePicUri by mutableStateOf<String?>(null)

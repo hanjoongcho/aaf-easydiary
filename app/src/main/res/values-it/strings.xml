@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">Come genitore</string>
     <string name="link_entry_as_child">Come figlio</string>
     <string name="link_entry_later">Più tardi</string>
+    <string name="link_entry_already_linked">L\'elemento è già collegato.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d voci</string>
     <string name="task_todo_count_format">(Attività incomplete: %d)</string>
     <string name="no_written_diary">Non c\'è alcun diario scritto.</string>

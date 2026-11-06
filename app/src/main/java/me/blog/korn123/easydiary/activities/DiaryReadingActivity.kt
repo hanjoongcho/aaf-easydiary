@@ -51,6 +51,7 @@ import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
 import me.blog.korn123.easydiary.databinding.PopupEncryptionBinding
 import me.blog.korn123.easydiary.databinding.PopupMenuReadBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
@@ -128,7 +129,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             selectedValue?.let {
                                 diaryViewModel.findDiaryById(fragment.getSequence())?.let {
                                     if (it.linkedDiaries.contains(selectedValue)) {
-                                        makeSnackBar("이미 연결된 항목 입니다.")
+                                        makeSnackBar(getString(R.string.link_entry_already_linked))
                                     } else {
                                         it.linkedDiaries.add(selectedValue)
                                         diaryRepository.updateDiaryWithPhotos(it)
@@ -143,7 +144,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             selectedValue?.let {
                                 diaryViewModel.findDiaryById(selectedValue)?.let {
                                     if (it.linkedDiaries.contains(fragment.getSequence())) {
-                                        makeSnackBar("이미 연결된 항목 입니다.")
+                                        makeSnackBar(getString(R.string.link_entry_already_linked))
                                     } else {
                                         it.linkedDiaries.add(fragment.getSequence())
                                         diaryRepository.updateDiaryWithPhotos(it)
@@ -174,7 +175,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 setContentView(root)
                 setSupportActionBar(toolbar)
                 supportActionBar?.run {
-                    title = ""
+                    title = String.EMPTY
                     setDisplayHomeAsUpEnabled(true)
                 }
                 partialComposeLoadingScreen.composeView.setContent {
@@ -359,8 +360,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     ) {
         popupEncryptionBinding.run {
             updateDrawableColorInnerCardView(closePopup)
-            var inputPass = ""
-            var confirmPass = ""
+            var inputPass = String.EMPTY
+            var confirmPass = String.EMPTY
             holdCurrentOrientation()
             val popupView =
                 root.apply {
@@ -388,175 +389,31 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }, 300)
             }
 
-            fun clearPassView() {
-                pass1.text = ""
-                pass2.text = ""
-                pass3.text = ""
-                pass4.text = ""
-                pass5.text = ""
-                pass6.text = ""
-            }
-
-            when (workMode) {
-                DiaryReadingConstants.ENCRYPTION -> {
-                    description.text = getString(R.string.diary_encryption_title)
-                    guideMessage.text = getString(R.string.diary_encryption_guide)
-                    decMode.visibility = View.GONE
-                }
-
-                DiaryReadingConstants.DECRYPTION -> {
-                    description.text = getString(R.string.diary_decryption_title)
-                    guideMessage.text = getString(R.string.diary_decryption_guide)
-                    decMode.visibility = View.VISIBLE
-                }
-
-                DiaryReadingConstants.EDITING -> {
-                    description.text = getString(R.string.diary_decryption_title)
-                    guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
-                    decMode.visibility = View.GONE
-                }
-            }
-            EasyDiaryUtils.warningString(guideMessage)
+            configureEncryptionWorkMode(workMode)
 
             val onclickListener =
-                View.OnClickListener {
+                View.OnClickListener { v ->
                     clearPassView()
-                    when (it.id) {
-                        R.id.button1 -> {
-                            inputPass += "1"
-                        }
-
-                        R.id.button2 -> {
-                            inputPass += "2"
-                        }
-
-                        R.id.button3 -> {
-                            inputPass += "3"
-                        }
-
-                        R.id.button4 -> {
-                            inputPass += "4"
-                        }
-
-                        R.id.button5 -> {
-                            inputPass += "5"
-                        }
-
-                        R.id.button6 -> {
-                            inputPass += "6"
-                        }
-
-                        R.id.button7 -> {
-                            inputPass += "7"
-                        }
-
-                        R.id.button8 -> {
-                            inputPass += "8"
-                        }
-
-                        R.id.button9 -> {
-                            inputPass += "9"
-                        }
-
-                        R.id.button0 -> {
-                            inputPass += "0"
-                        }
-
-                        R.id.buttonDel -> {
-                            if (inputPass.isNotEmpty()) {
-                                inputPass =
-                                    inputPass.substring(0, inputPass.length.minus(1))
-                            }
-                        }
-                    }
-
-                    if (inputPass.isNotEmpty()) pass1.text = "*"
-                    if (inputPass.length > 1) pass2.text = "*"
-                    if (inputPass.length > 2) pass3.text = "*"
-                    if (inputPass.length > 3) pass4.text = "*"
-                    if (inputPass.length > 4) pass5.text = "*"
-                    if (inputPass.length > 5) pass6.text = "*"
+                    inputPass = handleKeypadClick(v.id, inputPass)
+                    updatePassIndicator(inputPass)
 
                     if (inputPass.length == 6) {
-                        when {
-                            confirmPass.length == 6 -> {
-                                when (confirmPass == inputPass) {
-                                    true -> {
-                                        fragment.encryptData(inputPass)
-                                        popupWindow.dismiss()
-                                        clearHoldOrientation()
-                                    }
-
-                                    false -> {
-                                        guideMessage.text =
-                                            getString(R.string.diary_pin_number_confirm_error)
-                                    }
-                                }
-                                inputPass = ""
-                                confirmPass = ""
-                            }
-
-                            workMode == DiaryReadingConstants.DECRYPTION -> {
-                                lifecycleScope.launch {
-                                    when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                        true -> {
-                                            if (decMode1.isChecked) {
-                                                fragment.decryptDataOnce(inputPass)
-                                            } else {
-                                                fragment.decryptData(inputPass)
-                                            }
-                                            popupWindow.dismiss()
-                                            clearHoldOrientation()
-                                        }
-
-                                        false -> {
-                                            inputPass = ""
-                                            guideMessage.text =
-                                                getString(R.string.diary_pin_number_verification_error)
-                                        }
-                                    }
-                                }
-                            }
-
-                            workMode == DiaryReadingConstants.EDITING -> {
-                                lifecycleScope.launch {
-                                    when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
-                                        true -> {
-                                            callback?.invoke(inputPass)
-                                            popupWindow.dismiss()
-                                            clearHoldOrientation()
-                                        }
-
-                                        else -> {
-                                            inputPass = ""
-                                            guideMessage.text =
-                                                getString(R.string.diary_pin_number_verification_error)
-                                        }
-                                    }
-                                }
-                            }
-
-                            else -> {
-                                confirmPass = inputPass
-                                inputPass = ""
-                                guideMessage.text =
-                                    getString(R.string.diary_pin_number_confirm_guide)
-                            }
-                        }
+                        val (newConfirmPass, newInputPass) =
+                            handlePinSubmission(
+                                inputPass = inputPass,
+                                confirmPass = confirmPass,
+                                workMode = workMode,
+                                fragment = fragment,
+                                callback = callback,
+                                popupWindow = popupWindow,
+                            )
+                        confirmPass = newConfirmPass
+                        inputPass = newInputPass
                         clearPassView()
                     }
                 }
-            button1.setOnClickListener(onclickListener)
-            button2.setOnClickListener(onclickListener)
-            button3.setOnClickListener(onclickListener)
-            button4.setOnClickListener(onclickListener)
-            button5.setOnClickListener(onclickListener)
-            button6.setOnClickListener(onclickListener)
-            button7.setOnClickListener(onclickListener)
-            button8.setOnClickListener(onclickListener)
-            button9.setOnClickListener(onclickListener)
-            button0.setOnClickListener(onclickListener)
-            buttonDel.setOnClickListener(onclickListener)
+
+            setupKeypadListeners(onclickListener)
 
             run {
                 updateTextColors(this.root)
@@ -564,6 +421,297 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 updateCardViewPolicy(this.root)
             }
             FontUtils.setFontsTypeface(applicationContext, null, popupView, true)
+        }
+    }
+
+    private fun PopupEncryptionBinding.configureEncryptionWorkMode(workMode: String) {
+        when (workMode) {
+            DiaryReadingConstants.ENCRYPTION -> {
+                description.text = getString(R.string.diary_encryption_title)
+                guideMessage.text = getString(R.string.diary_encryption_guide)
+                decMode.visibility = View.GONE
+            }
+
+            DiaryReadingConstants.DECRYPTION -> {
+                description.text = getString(R.string.diary_decryption_title)
+                guideMessage.text = getString(R.string.diary_decryption_guide)
+                decMode.visibility = View.VISIBLE
+            }
+
+            DiaryReadingConstants.EDITING -> {
+                description.text = getString(R.string.diary_decryption_title)
+                guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
+                decMode.visibility = View.GONE
+            }
+        }
+        EasyDiaryUtils.warningString(guideMessage)
+    }
+
+    private fun PopupEncryptionBinding.clearPassView() {
+        pass1.text = String.EMPTY
+        pass2.text = String.EMPTY
+        pass3.text = String.EMPTY
+        pass4.text = String.EMPTY
+        pass5.text = String.EMPTY
+        pass6.text = String.EMPTY
+    }
+
+    private fun PopupEncryptionBinding.updatePassIndicator(inputPass: String) {
+        if (inputPass.isNotEmpty()) pass1.text = "*"
+        if (inputPass.length > 1) pass2.text = "*"
+        if (inputPass.length > 2) pass3.text = "*"
+        if (inputPass.length > 3) pass4.text = "*"
+        if (inputPass.length > 4) pass5.text = "*"
+        if (inputPass.length > 5) pass6.text = "*"
+    }
+
+    private fun handleKeypadClick(
+        viewId: Int,
+        currentInput: String,
+    ): String {
+        var input = currentInput
+        when (viewId) {
+            R.id.button1 -> {
+                input += "1"
+            }
+
+            R.id.button2 -> {
+                input += "2"
+            }
+
+            R.id.button3 -> {
+                input += "3"
+            }
+
+            R.id.button4 -> {
+                input += "4"
+            }
+
+            R.id.button5 -> {
+                input += "5"
+            }
+
+            R.id.button6 -> {
+                input += "6"
+            }
+
+            R.id.button7 -> {
+                input += "7"
+            }
+
+            R.id.button8 -> {
+                input += "8"
+            }
+
+            R.id.button9 -> {
+                input += "9"
+            }
+
+            R.id.button0 -> {
+                input += "0"
+            }
+
+            R.id.buttonDel -> {
+                if (input.isNotEmpty()) {
+                    input = input.substring(0, input.length - 1)
+                }
+            }
+        }
+        return input
+    }
+
+    private fun PopupEncryptionBinding.handlePinSubmission(
+        inputPass: String,
+        confirmPass: String,
+        workMode: String,
+        fragment: PlaceholderFragment,
+        callback: ((inputPass: String) -> Unit)?,
+        popupWindow: PopupWindow,
+    ): Pair<String, String> {
+        var newConfirmPass = confirmPass
+        var newInputPass = inputPass
+
+        when {
+            newConfirmPass.length == 6 -> {
+                when (newConfirmPass == newInputPass) {
+                    true -> {
+                        fragment.encryptData(newInputPass)
+                        popupWindow.dismiss()
+                        clearHoldOrientation()
+                    }
+
+                    false -> {
+                        guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
+                    }
+                }
+                newInputPass = String.EMPTY
+                newConfirmPass = String.EMPTY
+            }
+
+            workMode == DiaryReadingConstants.DECRYPTION -> {
+                lifecycleScope.launch {
+                    when (fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)) {
+                        true -> {
+                            if (decMode1.isChecked) {
+                                fragment.decryptDataOnce(newInputPass)
+                            } else {
+                                fragment.decryptData(newInputPass)
+                            }
+                            popupWindow.dismiss()
+                            clearHoldOrientation()
+                        }
+
+                        false -> {
+                            guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                        }
+                    }
+                }
+                newInputPass = String.EMPTY
+            }
+
+            workMode == DiaryReadingConstants.EDITING -> {
+                lifecycleScope.launch {
+                    when (fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)) {
+                        true -> {
+                            callback?.invoke(newInputPass)
+                            popupWindow.dismiss()
+                            clearHoldOrientation()
+                        }
+
+                        false -> {
+                            guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                        }
+                    }
+                }
+                newInputPass = String.EMPTY
+            }
+
+            else -> {
+                newConfirmPass = newInputPass
+                newInputPass = String.EMPTY
+                guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
+            }
+        }
+        return Pair(newConfirmPass, newInputPass)
+    }
+
+    private fun PopupEncryptionBinding.setupKeypadListeners(listener: View.OnClickListener) {
+        button1.setOnClickListener(listener)
+        button2.setOnClickListener(listener)
+        button3.setOnClickListener(listener)
+        button4.setOnClickListener(listener)
+        button5.setOnClickListener(listener)
+        button6.setOnClickListener(listener)
+        button7.setOnClickListener(listener)
+        button8.setOnClickListener(listener)
+        button9.setOnClickListener(listener)
+        button0.setOnClickListener(listener)
+        buttonDel.setOnClickListener(listener)
+    }
+
+    private fun handleFindClick(fragment: PlaceholderFragment) {
+        fun highLight() {
+            when (
+                dialogHighlightKeywordBinding.searchKeywordQuery.text
+                    .toString()
+                    .isNotEmpty()
+            ) {
+                true -> {
+                    fragment.highlightDiary(
+                        dialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
+                        true,
+                    )
+                }
+
+                false -> {
+                    fragment.clearHighLight()
+                }
+            }
+        }
+
+        fun updateLabel() {
+            dialogHighlightKeywordBinding.indexes.text =
+                getString(R.string.search_index_format, currentIndexesSequence, searchIndexes.size)
+        }
+        dialogSearch?.show() ?: run {
+            val builder =
+                AlertDialog.Builder(this@DiaryReadingActivity).apply {
+                    setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                    }
+                }
+            dialogSearch = builder.create()
+            dialogHighlightKeywordBinding.run {
+                next.setOnClickListener {
+                    if (currentIndexesSequence < searchIndexes.size) {
+                        currentIndexesSequence++
+                        fragment.moveScroll(
+                            searchKeywordQuery.text.toString(),
+                            searchIndexes[currentIndexesSequence - 1],
+                        )
+                        updateLabel()
+                    }
+                }
+                previous.setOnClickListener {
+                    if (currentIndexesSequence > 1) {
+                        currentIndexesSequence--
+                        fragment.moveScroll(
+                            searchKeywordQuery.text.toString(),
+                            searchIndexes[currentIndexesSequence - 1],
+                        )
+                        updateLabel()
+                    }
+                }
+                searchKeywordQuery.addTextChangedListener(
+                    object : TextWatcher {
+                        override fun beforeTextChanged(
+                            charSequence: CharSequence,
+                            i: Int,
+                            i1: Int,
+                            i2: Int,
+                        ) {
+                        }
+
+                        override fun onTextChanged(
+                            charSequence: CharSequence,
+                            i: Int,
+                            i1: Int,
+                            i2: Int,
+                        ) {
+                            currentIndexesSequence = 0
+                            searchIndexes.clear()
+                            searchIndexes.addAll(
+                                EasyDiaryUtils.searchWordIndexes(
+                                    fragment.getContents(),
+                                    charSequence.toString(),
+                                ),
+                            )
+                            highLight()
+                            if (searchIndexes.isNotEmpty()) currentIndexesSequence = 1
+                            updateLabel()
+                        }
+
+                        override fun afterTextChanged(editable: Editable) {}
+                    },
+                )
+                root.run {
+                    updateTextColors(this)
+                    FontUtils.setFontsTypeface(
+                        applicationContext,
+                        null,
+                        this,
+                        customLineSpacing,
+                    )
+                    updateAlertDialogWithIcon(
+                        DialogMode.INFO,
+                        dialogSearch!!,
+                        null,
+                        this,
+                        null,
+                        200,
+                    )
+                }
+                updateLabel()
+            }
         }
     }
 
@@ -710,7 +858,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                         diaryViewModel.findDiaryById(fragment.getSequence())?.let {
                                             val title = it.title
                                             val contents = it.contents
-                                            pushMarkDown(title!!, contents)
+                                            pushMarkDown(title, contents)
                                         }
                                     }
                                 }
@@ -726,109 +874,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 }
 
                                 R.id.find -> {
-                                    fun highLight() {
-                                        when (
-                                            dialogHighlightKeywordBinding.searchKeywordQuery.text
-                                                .toString()
-                                                .isNotEmpty()
-                                        ) {
-                                            true -> {
-                                                fragment.highlightDiary(
-                                                    dialogHighlightKeywordBinding.searchKeywordQuery.text.toString(),
-                                                    true,
-                                                )
-                                            }
-
-                                            false -> {
-                                                fragment.clearHighLight()
-                                            }
-                                        }
-                                    }
-
-                                    fun updateLabel() {
-                                        dialogHighlightKeywordBinding.indexes.text =
-                                            "$currentIndexesSequence / ${searchIndexes.size}"
-                                    }
-                                    dialogSearch?.show() ?: run {
-                                        val builder =
-                                            AlertDialog.Builder(this@DiaryReadingActivity).apply {
-                                                setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                                                }
-                                            }
-                                        dialogSearch = builder.create()
-                                        dialogHighlightKeywordBinding.run {
-                                            next.setOnClickListener {
-                                                if (currentIndexesSequence < searchIndexes.size) {
-                                                    currentIndexesSequence = currentIndexesSequence.plus(1)
-                                                    fragment.moveScroll(
-                                                        searchKeywordQuery.text.toString(),
-                                                        searchIndexes[currentIndexesSequence.minus(1)],
-                                                    )
-                                                    updateLabel()
-                                                }
-                                            }
-                                            previous.setOnClickListener {
-                                                if (currentIndexesSequence > 1) {
-                                                    currentIndexesSequence = currentIndexesSequence.minus(1)
-                                                    fragment.moveScroll(
-                                                        searchKeywordQuery.text.toString(),
-                                                        searchIndexes[currentIndexesSequence.minus(1)],
-                                                    )
-                                                    updateLabel()
-                                                }
-                                            }
-                                            searchKeywordQuery.addTextChangedListener(
-                                                object : TextWatcher {
-                                                    override fun beforeTextChanged(
-                                                        charSequence: CharSequence,
-                                                        i: Int,
-                                                        i1: Int,
-                                                        i2: Int,
-                                                    ) {
-                                                    }
-
-                                                    override fun onTextChanged(
-                                                        charSequence: CharSequence,
-                                                        i: Int,
-                                                        i1: Int,
-                                                        i2: Int,
-                                                    ) {
-                                                        currentIndexesSequence = 0
-                                                        searchIndexes.clear()
-                                                        searchIndexes.addAll(
-                                                            EasyDiaryUtils.searchWordIndexes(
-                                                                fragment.getContents(),
-                                                                charSequence.toString(),
-                                                            ),
-                                                        )
-                                                        highLight()
-                                                        if (searchIndexes.isNotEmpty()) currentIndexesSequence = 1
-                                                        updateLabel()
-                                                    }
-
-                                                    override fun afterTextChanged(editable: Editable) {}
-                                                },
-                                            )
-                                            root.run {
-                                                updateTextColors(this)
-                                                FontUtils.setFontsTypeface(
-                                                    applicationContext,
-                                                    null,
-                                                    this,
-                                                    customLineSpacing,
-                                                )
-                                                updateAlertDialogWithIcon(
-                                                    DialogMode.INFO,
-                                                    dialogSearch!!,
-                                                    null,
-                                                    this,
-                                                    null,
-                                                    200,
-                                                )
-                                            }
-                                            updateLabel()
-                                        }
-                                    }
+                                    handleFindClick(fragment)
                                 }
                             }
                             popupWindow?.dismiss()
@@ -846,6 +892,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     updateDrawableColorInnerCardView(imgDelete)
                     updateDrawableColorInnerCardView(imgLinkEntry)
 
+                    @Suppress("KotlinConstantConditions")
                     if (BuildConfig.FLAVOR == "lab") {
                         push.visibility = View.VISIBLE
                         push.setOnClickListener(itemClickListener)
@@ -1089,12 +1136,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 val diaryDto = diaryViewModel.findDiaryById(getSequence())!!
                 binding.run {
                     diaryTitle.visibility =
-                        if (diaryDto.title.isNullOrEmpty()) View.GONE else View.VISIBLE
+                        if (diaryDto.title.isEmpty()) View.GONE else View.VISIBLE
                     diaryTitle.text = diaryDto.title
 
                     EasyDiaryUtils.boldString(requireContext(), diaryTitle)
                     if (storedContents != diaryDto.contents) {
-                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents ?: "")
+                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents)
                         storedContents = diaryDto.contents
                         Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
                     }
@@ -1122,13 +1169,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     val weatherFlag = diaryDto.symbolSequence
                     FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
 
-                    val photoCount = diaryDto.photoUris?.size ?: 0
+                    val photoCount = diaryDto.photoUris.size
                     binding.run {
                         if (photoCount > 0) {
                             photoContainerFlexBox.visibility = View.VISIBLE
                             if (photoContainerFlexBox.isNotEmpty()) photoContainerFlexBox.removeAllViews()
 
-                            context?.let { appContext ->
+                            context?.let { _ ->
                                 diaryDto
                                     .photoUrisWithEncryptionPolicy()
                                     ?.forEachIndexed { index, item ->
@@ -1165,7 +1212,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 text =
                                     getString(
                                         R.string.diary_contents_length,
-                                        diaryDto.contents?.length ?: 0,
+                                        diaryDto.contents.length,
                                     )
                             }
                         }
@@ -1212,7 +1259,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     diary =
                         diary.copy(
                             isEncrypt = true,
-                            title = JasyptUtils.encrypt(it.title ?: "", inputPass),
+                            title = JasyptUtils.encrypt(it.title, inputPass),
                             contents = JasyptUtils.encrypt(it.contents, inputPass),
                             encryptKeyHash = JasyptUtils.sha256(inputPass),
                         )
@@ -1225,10 +1272,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         suspend fun decryptDataOnce(inputPass: String) {
             diaryViewModel.findDiaryById(getSequence())?.let { diaryDto ->
                 binding.run {
-                    diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
+                    diaryTitle.text = JasyptUtils.decrypt(diaryDto.title, inputPass)
                     requireActivity().applyMarkDownPolicy(
                         diaryContents,
-                        JasyptUtils.decrypt(diaryDto.contents!!, inputPass),
+                        JasyptUtils.decrypt(diaryDto.contents, inputPass),
                     )
                 }
             }
@@ -1243,7 +1290,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         diary =
                             diary.copy(
                                 isEncrypt = false,
-                                title = JasyptUtils.decrypt(it.title ?: "", inputPass),
+                                title = JasyptUtils.decrypt(it.title, inputPass),
                                 contents = JasyptUtils.decrypt(it.contents, inputPass),
                             )
                         requireContext().diaryRepository.updateDiaryWithPhotos(diary)

@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">Comme parent</string>
     <string name="link_entry_as_child">Comme enfant</string>
     <string name="link_entry_later">Plus tard</string>
+    <string name="link_entry_already_linked">L\'élément est déjà lié.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d entrées</string>
     <string name="task_todo_count_format">(Tâches non terminées: %d)</string>
     <string name="no_written_diary">Il n\'y a pas de journal écrit.</string>

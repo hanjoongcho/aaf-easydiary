@@ -25,6 +25,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardBinding
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.actionBarHeight
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
@@ -69,7 +70,7 @@ class PostcardActivity : EasyDiaryActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.run {
-            title = ""
+            title = String.EMPTY
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
             elevation = 0F
@@ -290,11 +291,12 @@ class PostcardActivity : EasyDiaryActivity() {
 
     private fun shareDiary() {
         val file = File(savedDiaryCardPath)
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
-            type = "image/jpeg"
-        }
+        val shareIntent =
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
+                type = "image/jpeg"
+            }
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
 

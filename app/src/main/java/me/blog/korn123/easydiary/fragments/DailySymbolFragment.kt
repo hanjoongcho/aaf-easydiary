@@ -28,6 +28,7 @@ import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -172,9 +173,9 @@ class DailySymbolFragment : Fragment() {
                 DailySymbolAdapter.DailySymbol(
                     dateFormat.format(cal.time),
                     cal.get(Calendar.DAY_OF_WEEK),
-                    cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) ?: "",
+                    cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()) ?: String.EMPTY,
                     dayOfMonth.format(cal.time),
-                    cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.uppercase() ?: "",
+                    cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.uppercase() ?: String.EMPTY,
                 ),
             )
             cal.add(Calendar.DATE, -1)

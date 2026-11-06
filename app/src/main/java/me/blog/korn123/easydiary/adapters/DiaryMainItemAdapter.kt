@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
@@ -76,7 +77,7 @@ class DiaryMainItemAdapter(
                         true -> str.take(maxLength).plus("…")
                         false -> str
                     }
-                } ?: ""
+                } ?: String.EMPTY
             return ellipsisString
         }
 

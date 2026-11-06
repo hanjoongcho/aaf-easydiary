@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -66,7 +67,7 @@ class FontItemAdapter(
                 imageView.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.ic_check_mark_off))
                 imageView.alpha = 0.1F
             }
-            textView.text = ""
+            textView.text = String.EMPTY
             Log.i(AAF_TEST, "${this.position} -> $position")
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
 

@@ -44,6 +44,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -338,7 +339,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         outState.run {
             val listUriString = arrayListOf<String>()
             photoUris.map { model ->
-                listUriString.add(model.photoUri ?: "")
+                listUriString.add(model.photoUri ?: String.EMPTY)
             }
             putStringArrayList(LIST_URI_STRING, listUriString)
             putInt(SELECTED_YEAR, year)

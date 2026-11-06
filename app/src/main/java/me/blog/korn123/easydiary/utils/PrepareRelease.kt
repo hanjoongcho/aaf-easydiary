@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.utils
 
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.PrepareReleaseConstants
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -7,8 +8,8 @@ import java.nio.charset.StandardCharsets
 class PrepareRelease {
     data class Release(
         var currentVersion: Int = -1,
-        var currentVersionName: String = "",
-        var currentVersionReleaseDate: String = "",
+        var currentVersionName: String = String.EMPTY,
+        var currentVersionReleaseDate: String = String.EMPTY,
         var releaseInfoLines: ArrayList<String> = arrayListOf(),
         var startIndex: Int = -1,
         var endIndex: Int = -1,
@@ -34,8 +35,8 @@ class PrepareRelease {
             if (versionNameInfoIndex in lines.indices) {
                 val parts = lines[versionNameInfoIndex].split("/")
                 if (parts.size >= 2) {
-                    defaultRelease.currentVersionName = parts[0].trim().replace("v", "")
-                    defaultRelease.currentVersionReleaseDate = parts[1].trim().replace("\\n", "")
+                    defaultRelease.currentVersionName = parts[0].trim().replace("v", String.EMPTY)
+                    defaultRelease.currentVersionReleaseDate = parts[1].trim().replace("\\n", String.EMPTY)
                 }
             }
         }
@@ -168,7 +169,7 @@ class PrepareRelease {
                                         )
                                     if (release.releaseInfoLines.size >= 3) {
                                         for (lineIndex in 2 until release.releaseInfoLines.size - 1) {
-                                            val newLine = "  * ${release.releaseInfoLines[lineIndex].replace("\\n", "").trim()}"
+                                            val newLine = "  * ${release.releaseInfoLines[lineIndex].replace("\\n", String.EMPTY).trim()}"
                                             println(newLine)
                                             newLines.add(newLine)
                                         }

@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">상위항목으로</string>
     <string name="link_entry_as_child">하위항목으로</string>
     <string name="link_entry_later">다음에</string>
+    <string name="link_entry_already_linked">이미 연결된 항목 입니다.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d건</string>
     <string name="task_todo_count_format">미완료 작업: %d건</string>
     <string name="no_written_diary">작성된 일기가 없습니다.</string>

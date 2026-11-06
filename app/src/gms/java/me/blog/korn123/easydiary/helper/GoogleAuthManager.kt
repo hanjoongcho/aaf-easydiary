@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -487,7 +488,7 @@ class GoogleAuthManager(
         val diary =
             DiaryDomain(
                 currentTimeMillis = millis,
-                title = if (description != null) summary.orEmpty() else "",
+                title = if (description != null) summary.orEmpty() else String.EMPTY,
                 contents = description ?: summary.orEmpty(),
                 symbolSequence = SYMBOL_GOOGLE_CALENDAR,
                 isAllDay = isAllDay,

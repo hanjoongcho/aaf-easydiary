@@ -48,6 +48,7 @@ import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -672,7 +673,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
 
                         supportActionBar?.run {
-                            title = ""
+                            title = String.EMPTY
                         }
                     }
                 }
@@ -752,7 +753,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     },
                     clearFilter = {
                         selectFeelingSymbol()
-                        diaryViewModel.query.value = ""
+                        diaryViewModel.query.value = String.EMPTY
                     },
                     callbackQuery = { query ->
                         diaryViewModel.query.value = query

@@ -44,16 +44,17 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.DialogStockChartOptionBinding
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateAlertDialog
-import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.CHART_LABEL_FONT_SIZE_DEFAULT_DP
+import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.DAILY_STOCK
 import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -288,12 +289,12 @@ class StockLineChartFragment : Fragment() {
                 setGhostLineChartColor(this)
             }
         krTradingProfitNegativeDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
         krTradingProfitPositiveDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
@@ -307,12 +308,12 @@ class StockLineChartFragment : Fragment() {
                 setGhostLineChartColor(this)
             }
         usTradingProfitNegativeDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
         usTradingProfitPositiveDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
@@ -326,12 +327,12 @@ class StockLineChartFragment : Fragment() {
                 setGhostLineChartColor(this)
             }
         totalTradingProfitNegativeDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorMinus)
                 isHighlightEnabled = false
             }
         totalTradingProfitPositiveDataSet =
-            LineDataSet(null, "").apply {
+            LineDataSet(null, String.EMPTY).apply {
                 setDefaultFillChartColor(this, colorPlus)
                 isHighlightEnabled = false
             }
@@ -636,7 +637,7 @@ class StockLineChartFragment : Fragment() {
                         timeMillisMap[index] = diaryDto.currentTimeMillis
                         index++
                     } catch (e: Exception) {
-                        Log.i(AAF_TEST, e.message ?: "")
+                        Log.i(AAF_TEST, e.message ?: String.EMPTY)
                     }
                 }
             }

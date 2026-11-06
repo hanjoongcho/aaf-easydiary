@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
@@ -91,7 +92,7 @@ class AlarmAdapter(
                                     .fillMaxWidth()
                                     .weight(1f)
 
-                            val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.alarmId}] " else ""
+                            val prefix = if (activity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.alarmId}] " else String.EMPTY
                             val alarmTag =
                                 when (alarm.workMode) {
                                     AlarmConstants.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
@@ -105,7 +106,7 @@ class AlarmAdapter(
                             AlarmCard(
                                 alarmTime = alarm.timeInMinutes,
                                 alarmDays = activity.getSelectedDaysString(alarm.days),
-                                alarmDescription = alarm.label ?: "",
+                                alarmDescription = alarm.label ?: String.EMPTY,
                                 modifier = modifier,
                                 isOn = isOn,
                                 alarmTag = alarmTag,

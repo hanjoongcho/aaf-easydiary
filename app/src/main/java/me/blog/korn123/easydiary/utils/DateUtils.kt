@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.utils
 
 import android.content.Context
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -69,8 +70,8 @@ object DateUtils {
     fun getOnlyDayRemaining(
         targetTimeStamp: Long,
         onlyDays: Boolean = true,
-        yearFormat: String = "",
-        dayFormat: String = "",
+        yearFormat: String = String.EMPTY,
+        dayFormat: String = String.EMPTY,
     ): String {
         val oneDayMillis: Long = 1000 * 60 * 60 * 24
         val diffTarget =

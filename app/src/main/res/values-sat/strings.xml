@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">ᱟᱭᱳ-ᱵᱟᱵᱟ ᱞᱮᱠᱟᱛᱮ</string>
     <string name="link_entry_as_child">ᱜᱤᱫᱽᱨᱟᱹ ᱞᱮᱠᱷᱟ</string>
     <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ</string>
+    <string name="link_entry_already_linked">ᱡᱤᱱᱤᱥ ᱫᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱜᱮ ᱞᱤᱝᱠ ᱟᱠᱟᱱᱟ᱾</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d ᱚᱞᱠᱚ</string>
     <string name="task_todo_count_format">(Incomplete Tasks: %d)</string>
     <string name="no_written_diary">There is no written diary.</string>

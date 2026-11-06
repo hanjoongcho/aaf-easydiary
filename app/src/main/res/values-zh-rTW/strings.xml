@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">作為父項</string>
     <string name="link_entry_as_child">作為子項</string>
     <string name="link_entry_later">稍後</string>
+    <string name="link_entry_already_linked">該項已連結。</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d 筆記錄</string>
     <string name="task_todo_count_format">(未完成任務: %d)</string>
     <string name="no_written_diary">沒有已撰寫的日記。</string>

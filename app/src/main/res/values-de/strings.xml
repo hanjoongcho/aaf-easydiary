@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">Als übergeordnet</string>
     <string name="link_entry_as_child">Als untergeordnet</string>
     <string name="link_entry_later">Später</string>
+    <string name="link_entry_already_linked">Das Element ist bereits verknüpft.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d Einträge</string>
     <string name="task_todo_count_format">(Offene Aufgaben: %d)</string>
     <string name="no_written_diary">Es gibt kein geschriebenes Tagebuch.</string>

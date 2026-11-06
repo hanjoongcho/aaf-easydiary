@@ -1,13 +1,14 @@
 package me.blog.korn123.easydiary.domain.model
 
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 
 data class Diary(
     val diaryId: Long = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
     val originDiaryId: Long = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
     val currentTimeMillis: Long = System.currentTimeMillis(),
-    val title: String? = null,
-    val contents: String = "",
+    val title: String = String.EMPTY,
+    val contents: String = String.EMPTY,
     val dateString: String? = null,
     val symbolSequence: Int = 0,
     val photoUris: List<PhotoUri> = emptyList(),
@@ -24,7 +25,7 @@ data class Diary(
     fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
         when (isEncrypt) {
             true -> {
-                photoUris.map { PhotoUri("") }
+                photoUris.map { PhotoUri(String.EMPTY) }
             }
 
             false -> {

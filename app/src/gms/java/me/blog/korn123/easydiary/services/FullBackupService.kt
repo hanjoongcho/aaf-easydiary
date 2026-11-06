@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.ActionLogKey
+import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.actionLogRepository
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.applicationScope
@@ -146,7 +147,7 @@ class FullBackupService : Service() {
                 ),
             )
         }
-        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: ""
+        mWorkingFolderId = intent?.getStringExtra(GDriveConstants.WORKING_FOLDER_ID) ?: String.EMPTY
 
         // test alarm sequence is 5
         val alarmId = intent?.getIntExtra(SettingConstants.ALARM_ID, 5) ?: 5
@@ -324,7 +325,7 @@ class FullBackupService : Service() {
         }.onFailure { exception ->
             reExecuteGmsBackup(
                 alarm,
-                "${exception.message ?: ""} (determineRemoteDrivePhotos)",
+                "${exception.message ?: String.EMPTY} (determineRemoteDrivePhotos)",
                 FullBackupService::class.java.name,
             )
             stopSelf()
@@ -364,7 +365,7 @@ class FullBackupService : Service() {
                 updateNotification(alarm, workStatus)
                 reExecuteGmsBackup(
                     alarm,
-                    "${exception.message ?: ""} (uploadDiaryPhoto)",
+                    "${exception.message ?: String.EMPTY} (uploadDiaryPhoto)",
                     FullBackupService::class.java.name,
                 )
                 stopSelf()
@@ -453,7 +454,7 @@ class FullBackupService : Service() {
             }.onFailure { exception ->
                 reExecuteGmsBackup(
                     alarm,
-                    "${exception.message ?: ""} (backupDiaryRealm)",
+                    "${exception.message ?: String.EMPTY} (backupDiaryRealm)",
                     FullBackupService::class.java.name,
                 )
                 stopSelf()

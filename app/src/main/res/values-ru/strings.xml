@@ -1037,6 +1037,8 @@
     <string name="link_entry_as_parent">Как родительский</string>
     <string name="link_entry_as_child">Как дочерний</string>
     <string name="link_entry_later">Позже</string>
+    <string name="link_entry_already_linked">Элемент уже связан.</string>
+    <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d записей</string>
     <string name="task_todo_count_format">(Незавершенные задачи: %d)</string>
     <string name="no_written_diary">Нет написанных дневников.</string>
