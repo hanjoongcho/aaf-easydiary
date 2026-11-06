@@ -35,8 +35,8 @@ configure<ApplicationExtension> {
         applicationId = "me.blog.korn123.easydiary"
         minSdk = 26
         targetSdk = appCompileSdk
-        versionCode = 353
-        versionName = "1.4.353.202611060"
+        versionCode = 354
+        versionName = "1.4.354.202611xx0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
