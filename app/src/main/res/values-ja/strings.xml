@@ -782,6 +782,11 @@
         v1.4.352.202610020 / 2026.10.02\n
         ローカルデータベースをRealmからRoomに変更しました。
     </string>
+    <string name="release_353">
+        v1.4.353.202611060 / 2026.11.06\n
+        Realm依存関係を完全に削除\n
+        全体的なユーザーインターフェースとエクスペリエンスの向上
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1034,4 +1039,5 @@
     <string name="link_entry_later">あとで</string>
     <string name="diary_count_format">%d件</string>
     <string name="task_todo_count_format">(未完了タスク: %d件)</string>
+    <string name="no_written_diary">書かれた日記はありません。</string>
 </resources>

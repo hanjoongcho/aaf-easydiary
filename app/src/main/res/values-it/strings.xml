@@ -782,6 +782,11 @@
         v1.4.352.202610020 / 2026.10.02\n
         Migrate local database from Realm to Room
     </string>
+    <string name="release_353">
+        v1.4.353.202611060 / 2026.11.06\n
+        Rimozione completa della dipendenza da Realm\n
+        Miglioramento dell\'interfaccia utente e dell\'esperienza generale
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1034,4 +1039,5 @@
     <string name="link_entry_later">Più tardi</string>
     <string name="diary_count_format">%d voci</string>
     <string name="task_todo_count_format">(Attività incomplete: %d)</string>
+    <string name="no_written_diary">Non c\'è alcun diario scritto.</string>
 </resources>

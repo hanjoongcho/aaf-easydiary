@@ -36,7 +36,7 @@ configure<ApplicationExtension> {
         minSdk = 26
         targetSdk = appCompileSdk
         versionCode = 353
-        versionName = "1.4.353.202610xx0"
+        versionName = "1.4.353.202611060"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -279,7 +279,7 @@ tasks.register<JavaExec>("syncReleaseString") {
     description = "Sync release strings across locale folders"
     val compileKotlinTask = tasks.named("compileFossDebugKotlin")
     dependsOn(compileKotlinTask)
-    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    mainClass.set("me.blog.korn123.easydiary.utils.PrepareRelease")
     classpath = files(
         compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
@@ -294,7 +294,7 @@ tasks.register<JavaExec>("syncNewString") {
     description = "Sync new strings across locale folders"
     val compileKotlinTask = tasks.named("compileFossDebugKotlin")
     dependsOn(compileKotlinTask)
-    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    mainClass.set("me.blog.korn123.easydiary.utils.PrepareRelease")
     classpath = files(
         compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
@@ -309,7 +309,7 @@ tasks.register<JavaExec>("syncReleaseNote") {
     description = "Sync release notes from strings.xml"
     val compileKotlinTask = tasks.named("compileFossDebugKotlin")
     dependsOn(compileKotlinTask)
-    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    mainClass.set("me.blog.korn123.easydiary.utils.PrepareRelease")
     classpath = files(
         compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")
@@ -324,7 +324,7 @@ tasks.register<JavaExec>("prepareRelease") {
     description = "Sync all release strings and release notes"
     val compileKotlinTask = tasks.named("compileFossDebugKotlin")
     dependsOn(compileKotlinTask)
-    mainClass.set("me.blog.korn123.commons.utils.PrepareRelease")
+    mainClass.set("me.blog.korn123.easydiary.utils.PrepareRelease")
     classpath = files(
         compileKotlinTask.map { it.outputs.files },
     ) + configurations.getByName("fossDebugCompileClasspath")

@@ -149,7 +149,7 @@ fun TimelineScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = "There is no written diary.",
+                            text = stringResource(id = R.string.no_written_diary),
                             style =
                                 TextStyle(
                                     fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(context),
