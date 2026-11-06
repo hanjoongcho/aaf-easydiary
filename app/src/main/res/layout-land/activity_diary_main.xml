@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="There is no written diary."
+                    android:text="@string/no_written_diary"
                     android:visibility="gone"
                     tools:visibility="visible" />
             </androidx.appcompat.widget.LinearLayoutCompat>

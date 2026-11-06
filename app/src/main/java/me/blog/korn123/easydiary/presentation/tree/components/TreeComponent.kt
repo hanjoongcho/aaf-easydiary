@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -170,43 +171,65 @@ fun TreeContent(
             ) {
                 item { Spacer(modifier = Modifier.height(topToolbarHeight)) }
 
-                items(
-                    items = filteredTreeData,
-                    key = { "${it.first.sequence}-${it.first.fullPath}" },
-                ) { (node, level) ->
-                    TreeCard(
-                        sequence = node.sequence,
-                        weather = node.weather,
-                        title = node.name,
-                        subTitle = node.fullPath,
-                        level = level,
-                        currentTimeMillis = node.currentTimeMillis,
-                        isFile = node.isFile,
-                        currentQuery = currentQuery,
-                        isFolderOpen = node.isFolderOpen,
-                        visibleSubTitle = visibleSubTitle,
-                        stretchCard = stretchCard,
-                        onClick = {
-                            handleNodeClick(
-                                node,
-                                isResultAPI,
-                                context,
-                                activity,
-                                currentQuery,
-                                resultAPICallback,
-                                folderOnClick,
+                if (filteredTreeData.isEmpty()) {
+                    item {
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillParentMaxHeight()
+                                    .fillMaxWidth(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.no_written_diary),
+                                style =
+                                    TextStyle(
+                                        fontFamily = if (LocalInspectionMode.current) null else FontUtils.getComposeFontFamily(context),
+                                        color = Color(config.textColor),
+                                        fontSize = 16.sp,
+                                    ),
                             )
-                        },
-                        onLongClick = {
-                            if (!node.isFile) {
-                                isLoading = true
-                                (activity as ComponentActivity).syncMarkDown(null, node.fullPath) {
-                                    isLoading = false
-                                    fetchDiary()
+                        }
+                    }
+                } else {
+                    items(
+                        items = filteredTreeData,
+                        key = { "${it.first.sequence}-${it.first.fullPath}" },
+                    ) { (node, level) ->
+                        TreeCard(
+                            sequence = node.sequence,
+                            weather = node.weather,
+                            title = node.name,
+                            subTitle = node.fullPath,
+                            level = level,
+                            currentTimeMillis = node.currentTimeMillis,
+                            isFile = node.isFile,
+                            currentQuery = currentQuery,
+                            isFolderOpen = node.isFolderOpen,
+                            visibleSubTitle = visibleSubTitle,
+                            stretchCard = stretchCard,
+                            onClick = {
+                                handleNodeClick(
+                                    node,
+                                    isResultAPI,
+                                    context,
+                                    activity,
+                                    currentQuery,
+                                    resultAPICallback,
+                                    folderOnClick,
+                                )
+                            },
+                            onLongClick = {
+                                if (!node.isFile) {
+                                    isLoading = true
+                                    (activity as ComponentActivity).syncMarkDown(null, node.fullPath) {
+                                        isLoading = false
+                                        fetchDiary()
+                                    }
                                 }
-                            }
-                        },
-                    )
+                            },
+                        )
+                    }
                 }
 
                 item { Spacer(modifier = Modifier.height(bottomToolbarHeight + 5.dp)) }
@@ -258,7 +281,7 @@ fun TreeContent(
                     expandTreeCallback = { toggleWholeTree(true) },
                     collapseTreeCallback = { toggleWholeTree(false) },
                     scrollTop = { coroutineScope.launch { listState.animateScrollToItem(0) } },
-                    scrollEnd = { coroutineScope.launch { listState.animateScrollToItem(filteredTreeData.size.minus(1)) } },
+                    scrollEnd = { coroutineScope.launch { if (filteredTreeData.isNotEmpty()) listState.animateScrollToItem(filteredTreeData.size.minus(1)) } },
                     moveToTodayEntry = { moveToTodayEntryAction() },
                 )
             }

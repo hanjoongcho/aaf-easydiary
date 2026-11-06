@@ -782,6 +782,11 @@
         v1.4.352.202610020 / 2026.10.02\n
         Migrate local database from Realm to Room
     </string>
+    <string name="release_353">
+        v1.4.353.202611060 / 2026.11.06\n
+        徹底移除 Realm 依賴\n
+        提升整體使用者介面與體驗
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -1034,4 +1039,5 @@
     <string name="link_entry_later">稍後</string>
     <string name="diary_count_format">%d 筆記錄</string>
     <string name="task_todo_count_format">(未完成任務: %d)</string>
+    <string name="no_written_diary">沒有已撰寫的日記。</string>
 </resources>

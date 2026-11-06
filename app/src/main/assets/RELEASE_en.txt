@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.353.202611060 (date: 2026.11.06)
+  * Remove Realm dependency completely
+  * Enhance overall user interface and experience
+
 # Changes in 1.4.352.202610020 (date: 2026.10.02)
   * Migrate local database from Realm to Room
 

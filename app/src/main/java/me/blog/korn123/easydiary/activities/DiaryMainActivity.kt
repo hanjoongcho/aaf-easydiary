@@ -159,7 +159,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             rescheduleEnabledAlarms()
             FontUtils.checkFontSetting(this@DiaryMainActivity)
             initDiaryGrid()
-            initDummyData()
             confirmPrePermissions()
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
             setupPopupMenu()
@@ -692,50 +691,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun initSampleData() {
-        diaryRepository.run {
-            insertDiary(
-                DiaryDomain(
-                    currentTimeMillis = System.currentTimeMillis() - 395000000L,
-                    title = getString(R.string.sample_diary_title_1),
-                    contents = getString(R.string.sample_diary_1),
-                    symbolSequence = 1,
-                ),
-            )
-            insertDiary(
-                DiaryDomain(
-                    currentTimeMillis = System.currentTimeMillis() - 263000000L,
-                    title = getString(R.string.sample_diary_title_2),
-                    contents = getString(R.string.sample_diary_2),
-                    symbolSequence = 2,
-                ),
-            )
-            insertDiary(
-                DiaryDomain(
-                    currentTimeMillis = System.currentTimeMillis() - 132000000L,
-                    title = getString(R.string.sample_diary_title_3),
-                    contents = getString(R.string.sample_diary_3),
-                    symbolSequence = 3,
-                ),
-            )
-            insertDiary(
-                DiaryDomain(
-                    currentTimeMillis = System.currentTimeMillis() - 4000000L,
-                    title = getString(R.string.sample_diary_title_4),
-                    contents = getString(R.string.sample_diary_4),
-                    symbolSequence = 4,
-                ),
-            )
-        }
-    }
-
-    private suspend fun initDummyData() {
-        if (!config.isInitDummyData) {
-            initSampleData()
-            config.isInitDummyData = true
         }
     }
 
