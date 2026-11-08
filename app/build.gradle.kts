@@ -221,13 +221,6 @@ dependencies {
     //noinspection NewerVersionAvailable
     implementation(libs.google.guava)
 
-    // AAFactory
-    implementation(libs.io.github.aafactory.commons) {
-        exclude(group = "com.werb.eventbuskotlin", module = "eventbuskotlin")
-        exclude(group = "com.werb.moretype", module = "moretype")
-        exclude(group = "id.zelory", module = "compressor")
-    }
-
     // etc.
     implementation(libs.com.kizitonwose.calendar.compose)
     implementation(libs.com.tbuonomo.dotsindicator)
