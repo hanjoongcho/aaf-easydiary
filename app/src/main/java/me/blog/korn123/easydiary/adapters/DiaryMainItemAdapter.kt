@@ -15,7 +15,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -66,6 +65,18 @@ class DiaryMainItemAdapter(
         holder.bindTo(diaryItems[position])
     }
 
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>,
+    ) {
+        if (payloads.contains(PAYLOAD_CHECKBOX)) {
+            holder.bindCheckbox(diaryItems[position])
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
     override fun getItemCount(): Int = diaryItems.size
 
     override fun getSectionName(position: Int): String {
@@ -97,16 +108,25 @@ class DiaryMainItemAdapter(
         return selectedItems
     }
 
-    suspend fun toggleCheckBoxALl() {
-        val updateItems = arrayListOf<DiaryDomain>()
-        diaryItems.forEach { diary ->
-            diary.run {
-                isSelected = isSelected.not()
-                updateItems.add(this)
-            }
+    fun setDiaryMode(
+        mode: DiaryMode,
+        clearSelection: Boolean = true,
+    ) {
+        (activity as DiaryMainActivity).diaryMode = mode
+        if (clearSelection) {
+            diaryItems.forEach { it.isSelected = false }
         }
-        activity.diaryRepository.updateDiaries(updateItems)
+        notifyItemRangeChanged(0, diaryItems.size, PAYLOAD_CHECKBOX)
     }
+
+    fun toggleCheckBoxAll() {
+        diaryItems.forEach { diary ->
+            diary.isSelected = diary.isSelected.not()
+        }
+        notifyItemRangeChanged(0, diaryItems.size, PAYLOAD_CHECKBOX)
+    }
+
+    suspend fun toggleCheckBoxALl() = toggleCheckBoxAll()
 
     inner class ViewHolder(
         val activity: Activity,
@@ -170,23 +190,7 @@ class DiaryMainItemAdapter(
                     }
                 }
 
-                selection.setOnCheckedChangeListener { _, isChecked ->
-                    lifecycle.launch {
-                        diary.isSelected = isChecked
-                        activity.diaryRepository.updateDiaryWithPhotos(diary)
-                    }
-                }
-
-                when ((activity as DiaryMainActivity).diaryMode) {
-                    DiaryMode.READ -> {
-                        selection.visibility = View.GONE
-                    }
-
-                    DiaryMode.DELETE -> {
-                        selection.visibility = View.VISIBLE
-                        selection.isChecked = diary.isSelected
-                    }
-                }
+                bindCheckbox(diary)
 
                 if (diary.title.isNullOrEmpty()) {
                     textTitle.visibility = View.GONE
@@ -324,5 +328,29 @@ class DiaryMainItemAdapter(
                     }
             }
         }
+
+        fun bindCheckbox(diary: DiaryDomain) {
+            itemDiaryMainBinding.run {
+                selection.setOnCheckedChangeListener(null)
+                selection.isChecked = diary.isSelected
+                when ((activity as DiaryMainActivity).diaryMode) {
+                    DiaryMode.READ -> {
+                        selection.visibility = View.GONE
+                    }
+
+                    DiaryMode.DELETE -> {
+                        selection.visibility = View.VISIBLE
+                    }
+                }
+
+                selection.setOnCheckedChangeListener { _, isChecked ->
+                    diary.isSelected = isChecked
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val PAYLOAD_CHECKBOX = "PAYLOAD_CHECKBOX"
     }
 }
