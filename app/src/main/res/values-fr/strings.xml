@@ -1068,4 +1068,25 @@
     <string name="screen_background_color">Couleur d\'arrière-plan de l\'écran</string>
     <string name="text_color">Couleur du texte</string>
     <string name="save">Enregistrer</string>
+    <string name="monday_letter">L</string>
+    <string name="tuesday_letter">M</string>
+    <string name="wednesday_letter">M</string>
+    <string name="thursday_letter">J</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">D</string>
+    <string name="monday">Lundi</string>
+    <string name="tuesday">Mardi</string>
+    <string name="wednesday">Mercredi</string>
+    <string name="thursday">Jeudi</string>
+    <string name="friday">Vendredi</string>
+    <string name="saturday">Samedi</string>
+    <string name="sunday">Dimanche</string>
+    <string name="monday_short">Lun</string>
+    <string name="tuesday_short">Mar</string>
+    <string name="wednesday_short">Mer</string>
+    <string name="thursday_short">Jeu</string>
+    <string name="friday_short">Ven</string>
+    <string name="saturday_short">Sam</string>
+    <string name="sunday_short">Dim</string>
 </resources>

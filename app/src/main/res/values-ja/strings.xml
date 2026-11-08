@@ -1068,4 +1068,25 @@
     <string name="screen_background_color">画面の背景色</string>
     <string name="text_color">文字色</string>
     <string name="save">保存</string>
+    <string name="monday_letter">月</string>
+    <string name="tuesday_letter">火</string>
+    <string name="wednesday_letter">水</string>
+    <string name="thursday_letter">木</string>
+    <string name="friday_letter">金</string>
+    <string name="saturday_letter">土</string>
+    <string name="sunday_letter">日</string>
+    <string name="monday">月曜日</string>
+    <string name="tuesday">火曜日</string>
+    <string name="wednesday">水曜日</string>
+    <string name="thursday">木曜日</string>
+    <string name="friday">金曜日</string>
+    <string name="saturday">土曜日</string>
+    <string name="sunday">日曜日</string>
+    <string name="monday_short">月</string>
+    <string name="tuesday_short">火</string>
+    <string name="wednesday_short">水</string>
+    <string name="thursday_short">木</string>
+    <string name="friday_short">金</string>
+    <string name="saturday_short">土</string>
+    <string name="sunday_short">日</string>
 </resources>

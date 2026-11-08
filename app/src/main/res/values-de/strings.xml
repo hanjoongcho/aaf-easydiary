@@ -1068,4 +1068,25 @@
     <string name="screen_background_color">Bildschirm-Hintergrundfarbe</string>
     <string name="text_color">Textfarbe</string>
     <string name="save">Speichern</string>
+    <string name="monday_letter">M</string>
+    <string name="tuesday_letter">D</string>
+    <string name="wednesday_letter">M</string>
+    <string name="thursday_letter">D</string>
+    <string name="friday_letter">F</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">S</string>
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+    <string name="monday_short">Mo</string>
+    <string name="tuesday_short">Di</string>
+    <string name="wednesday_short">Mi</string>
+    <string name="thursday_short">Do</string>
+    <string name="friday_short">Fr</string>
+    <string name="saturday_short">Sa</string>
+    <string name="sunday_short">So</string>
 </resources>

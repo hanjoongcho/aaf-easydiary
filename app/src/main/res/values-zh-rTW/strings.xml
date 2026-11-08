@@ -1068,4 +1068,25 @@
     <string name="screen_background_color">螢幕背景顏色</string>
     <string name="text_color">文字顏色</string> <!-- wait, let's fix text color for traditional chinese: 文字顏色 -->
     <string name="save">儲存</string>
+    <string name="monday_letter">一</string>
+    <string name="tuesday_letter">二</string>
+    <string name="wednesday_letter">三</string>
+    <string name="thursday_letter">四</string>
+    <string name="friday_letter">五</string>
+    <string name="saturday_letter">六</string>
+    <string name="sunday_letter">日</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+    <string name="sunday">星期日</string>
+    <string name="monday_short">週一</string>
+    <string name="tuesday_short">週二</string>
+    <string name="wednesday_short">週三</string>
+    <string name="thursday_short">週四</string>
+    <string name="friday_short">週五</string>
+    <string name="saturday_short">週六</string>
+    <string name="sunday_short">週日</string>
 </resources>

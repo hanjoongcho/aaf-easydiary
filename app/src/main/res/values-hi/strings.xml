@@ -1068,4 +1068,25 @@
     <string name="screen_background_color">स्क्रीन पृष्ठभूमि रंग</string>
     <string name="text_color">पाठ का रंग</string>
     <string name="save">सहेजें</string>
+    <string name="monday_letter">सो</string>
+    <string name="tuesday_letter">मं</string>
+    <string name="wednesday_letter">बु</string>
+    <string name="thursday_letter">गु</string>
+    <string name="friday_letter">शु</string>
+    <string name="saturday_letter">श</string>
+    <string name="sunday_letter">र</string>
+    <string name="monday">सोमवार</string>
+    <string name="tuesday">मंगलवार</string>
+    <string name="wednesday">बुधवार</string>
+    <string name="thursday">गुरुवार</string>
+    <string name="friday">शुक्रवार</string>
+    <string name="saturday">शनिवार</string>
+    <string name="sunday">रविवार</string>
+    <string name="monday_short">सोम</string>
+    <string name="tuesday_short">मंगल</string>
+    <string name="wednesday_short">बुध</string>
+    <string name="thursday_short">गुरु</string>
+    <string name="friday_short">शुक्र</string>
+    <string name="saturday_short">शनि</string>
+    <string name="sunday_short">रवि</string>
 </resources>
