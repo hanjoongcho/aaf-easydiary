@@ -38,7 +38,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.werb.pickphotoview.util.PickConfig
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -203,15 +202,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME),
                     false,
                 )
-            }
-        }
-    private val requestPickPhotoData =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            pauseLock()
-            result?.data?.let { data ->
-                @Suppress("UNCHECKED_CAST")
-                val selectedUriPaths = data.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as? java.util.ArrayList<String>
-                selectedUriPaths?.let { attachPhotos(it, true) }
             }
         }
     protected lateinit var binding: ActivityBaseDiaryEditingBinding

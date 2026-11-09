@@ -76,7 +76,7 @@ configure<ApplicationExtension> {
             res.directories.add("src/gmsProd/res")
         }
         getByName("androidTest") {
-            assets.srcDirs(files("$projectDir/schemas"))
+            assets.directories.add("$projectDir/schemas")
         }
     }
 
@@ -186,7 +186,6 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowsizeclass)
 
     // room
-    val roomVersion = libs.versions.room.get()
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
@@ -220,13 +219,6 @@ dependencies {
     implementation(libs.google.code.gson)
     //noinspection NewerVersionAvailable
     implementation(libs.google.guava)
-
-    // AAFactory
-    implementation(libs.io.github.aafactory.commons) {
-        exclude(group = "com.werb.eventbuskotlin", module = "eventbuskotlin")
-        exclude(group = "com.werb.moretype", module = "moretype")
-        exclude(group = "id.zelory", module = "compressor")
-    }
 
     // etc.
     implementation(libs.com.kizitonwose.calendar.compose)

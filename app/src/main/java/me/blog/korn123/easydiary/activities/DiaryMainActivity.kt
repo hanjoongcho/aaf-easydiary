@@ -39,9 +39,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
@@ -260,7 +258,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> return handleHomeSelected()
@@ -276,21 +273,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun handleHomeSelected(): Boolean {
-        diaryMode = DiaryMode.READ
+        diaryMainItemAdapter?.setDiaryMode(DiaryMode.READ)
         invalidateOptionsMenu()
-        diaryMainItemAdapter?.notifyDataSetChanged()
         return true
     }
 
     private fun handleCheckAllSelected() {
-        lifecycleScope.launch {
-            diaryViewModel.isLoading = true
-            withContext(Dispatchers.Default) {
-                diaryMainItemAdapter?.toggleCheckBoxALl()
-            }
-            diaryMainItemAdapter?.notifyDataSetChanged()
-            diaryViewModel.isLoading = false
-        }
+        diaryMainItemAdapter?.toggleCheckBoxAll()
     }
 
     private fun handleDeleteSelected() {
@@ -307,6 +296,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 forEach {
                                     diaryRepository.deleteDiaryById(it.diaryId)
                                 }
+                                diaryMainItemAdapter?.setDiaryMode(DiaryMode.READ)
                             }
                         },
                         { _, _ -> },
@@ -704,12 +694,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
             }) {
-                lifecycleScope.launch {
-                    diaryRepository.clearSelectedStatus()
-                    diaryMode = DiaryMode.DELETE
-                    invalidateOptionsMenu()
-                    diaryMainItemAdapter?.notifyDataSetChanged()
-                }
+                diaryMainItemAdapter?.setDiaryMode(DiaryMode.DELETE)
+                invalidateOptionsMenu()
             }
 
         gridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
