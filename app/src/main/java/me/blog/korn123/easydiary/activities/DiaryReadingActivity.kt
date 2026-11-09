@@ -9,6 +9,7 @@ import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -69,6 +70,7 @@ import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
@@ -551,6 +553,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
             workMode == DiaryReadingConstants.DECRYPTION -> {
                 lifecycleScope.launch {
+                    Log.i(AAF_TEST, "${fragment.getPasswordHash()},$newInputPass, ${JasyptUtils.sha256(newInputPass)}, ${fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)}")
                     when (fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)) {
                         true -> {
                             if (decMode1.isChecked) {
@@ -566,8 +569,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             guideMessage.text = getString(R.string.diary_pin_number_verification_error)
                         }
                     }
+                    newInputPass = String.EMPTY
                 }
-                newInputPass = String.EMPTY
             }
 
             workMode == DiaryReadingConstants.EDITING -> {
@@ -583,8 +586,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             guideMessage.text = getString(R.string.diary_pin_number_verification_error)
                         }
                     }
+                    newInputPass = String.EMPTY
                 }
-                newInputPass = String.EMPTY
             }
 
             else -> {
