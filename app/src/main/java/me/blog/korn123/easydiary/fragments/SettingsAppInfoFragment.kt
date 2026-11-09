@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.MarkDownViewerActivity
+import me.blog.korn123.easydiary.presentation.markdown.MarkDownViewerActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsAppInfoBinding
 import me.blog.korn123.easydiary.enums.Launcher

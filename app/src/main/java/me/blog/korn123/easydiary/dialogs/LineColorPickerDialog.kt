@@ -1,11 +1,10 @@
 package me.blog.korn123.easydiary.dialogs
 
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.os.Build
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.toColorInt
 import com.simplemobiletools.commons.extensions.copyToClipboard
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.toHex
@@ -28,13 +27,16 @@ import me.blog.korn123.easydiary.helper.AUTO_SETUP_SCREEN_BACKGROUND_DARKEN_COLO
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
+@Suppress("ktlint:standard:property-naming")
 class LineColorPickerDialog(
     val activity: BaseSimpleActivity,
     val color: Int,
     val callback: (wasPositivePressed: Boolean, color: Int) -> Unit,
 ) {
     private var mDialogLineColorPickerBinding: DialogLineColorPickerBinding = DialogLineColorPickerBinding.inflate(activity.layoutInflater)
+
     private val PRIMARY_COLORS_COUNT = 19
+
     private val DEFAULT_PRIMARY_COLOR_INDEX = 7
     private val DEFAULT_SECONDARY_COLOR_INDEX = 6
     private val DEFAULT_COLOR_VALUE = activity.resources.getColor(R.color.colorPrimary)
@@ -80,8 +82,8 @@ class LineColorPickerDialog(
         dialog =
             AlertDialog
                 .Builder(activity)
-                .setPositiveButton(R.string.ok, { dialog, which -> dialogConfirmed() })
-                .setNegativeButton(R.string.cancel, { dialog, which -> dialogDismissed() })
+                .setPositiveButton(R.string.ok, { _, _ -> dialogConfirmed() })
+                .setNegativeButton(R.string.cancel, { _, _ -> dialogDismissed() })
                 .setOnCancelListener { dialogDismissed() }
                 .create()
                 .apply {
@@ -99,24 +101,22 @@ class LineColorPickerDialog(
         mDialogLineColorPickerBinding.run {
             hexCode.text = color.toHex()
             switchStatusBarDarkenColor.run {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    trackTintList =
-                        ColorStateList(
-                            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
-                            intArrayOf(
-                                Color.parseColor("#AEAEAE"),
-                                ColorUtils.setAlphaComponent(color, 100),
-                            ),
-                        )
-                    thumbTintList =
-                        ColorStateList(
-                            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
-                            intArrayOf(
-                                Color.parseColor("#EAE4E4"),
-                                color,
-                            ),
-                        )
-                }
+                trackTintList =
+                    ColorStateList(
+                        arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                        intArrayOf(
+                            "#AEAEAE".toColorInt(),
+                            ColorUtils.setAlphaComponent(color, 100),
+                        ),
+                    )
+                thumbTintList =
+                    ColorStateList(
+                        arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+                        intArrayOf(
+                            "#EAE4E4".toColorInt(),
+                            color,
+                        ),
+                    )
             }
         }
     }

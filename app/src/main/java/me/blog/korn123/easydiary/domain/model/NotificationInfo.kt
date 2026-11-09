@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.activities
+package me.blog.korn123.easydiary.domain.model
 
 data class NotificationInfo(
     var largeIconResourceId: Int,

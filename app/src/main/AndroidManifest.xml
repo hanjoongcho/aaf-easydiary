@@ -152,7 +152,7 @@
             android:name=".presentation.pinlock.PinLockActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.MarkDownViewerActivity"
+            android:name=".presentation.markdown.MarkDownViewerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SymbolFilterPickerActivity"

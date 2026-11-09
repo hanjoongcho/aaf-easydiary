@@ -136,7 +136,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
-import me.blog.korn123.easydiary.activities.NotificationInfo
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.di.ApplicationScope
@@ -144,6 +143,7 @@ import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.NotificationInfo
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
