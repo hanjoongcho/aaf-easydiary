@@ -64,7 +64,7 @@ fun PostcardViewPagerScreen(
         topBar = {
             EasyDiaryActionBar(
                 title = currentTitle,
-                useCloseIcon = true,
+                useCloseIcon = false,
                 actions = {
                     IconButton(
                         onClick = {

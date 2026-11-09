@@ -48,22 +48,24 @@ fun GalleryViewPagerScreen(
     val context = LocalContext.current
     val totalCount = attachedPhotos.size
     val safeInitialPage = if (initialPosition in attachedPhotos.indices) initialPosition else 0
-    val pagerState = rememberPagerState(
-        initialPage = safeInitialPage,
-        pageCount = { attachedPhotos.size },
-    )
+    val pagerState =
+        rememberPagerState(
+            initialPage = safeInitialPage,
+            pageCount = { attachedPhotos.size },
+        )
 
-    val currentTitle = if (totalCount > 0) {
-        "${pagerState.currentPage + 1} / $totalCount"
-    } else {
-        "0 / 0"
-    }
+    val currentTitle =
+        if (totalCount > 0) {
+            "${pagerState.currentPage + 1} / $totalCount"
+        } else {
+            "0 / 0"
+        }
 
     Scaffold(
         topBar = {
             EasyDiaryActionBar(
                 title = currentTitle,
-                useCloseIcon = true,
+                useCloseIcon = false,
                 actions = {
                     IconButton(
                         onClick = {
@@ -99,16 +101,18 @@ fun GalleryViewPagerScreen(
         modifier = modifier,
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(Color(context.config.screenBackgroundColor)),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(Color(context.config.screenBackgroundColor)),
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(30.dp)
-                        .align(Alignment.Center),
+                    modifier =
+                        Modifier
+                            .size(30.dp)
+                            .align(Alignment.Center),
                     color = Color(context.config.primaryColor),
                 )
             } else if (attachedPhotos.isNotEmpty()) {
@@ -117,13 +121,14 @@ fun GalleryViewPagerScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) { page ->
                     val attachedPhoto = attachedPhotos[page]
-                    val bitmap = remember(attachedPhoto) {
-                        if (attachedPhoto.diary?.isEncrypt == true) {
-                            null
-                        } else {
-                            BitmapFactory.decodeFile(attachedPhoto.file.path)
+                    val bitmap =
+                        remember(attachedPhoto) {
+                            if (attachedPhoto.diary?.isEncrypt == true) {
+                                null
+                            } else {
+                                BitmapFactory.decodeFile(attachedPhoto.file.path)
+                            }
                         }
-                    }
 
                     if (bitmap != null) {
                         AndroidView(
@@ -143,11 +148,12 @@ fun GalleryViewPagerScreen(
                             },
                         )
                     } else {
-                        val errorMessage = if (attachedPhoto.diary?.isEncrypt == true) {
-                            "The diary is encrypted. You will need to decrypt the diary to see the attached photos."
-                        } else {
-                            stringResource(id = R.string.photo_view_error_info)
-                        }
+                        val errorMessage =
+                            if (attachedPhoto.diary?.isEncrypt == true) {
+                                "The diary is encrypted. You will need to decrypt the diary to see the attached photos."
+                            } else {
+                                stringResource(id = R.string.photo_view_error_info)
+                            }
                         AndroidView(
                             modifier = Modifier.fillMaxSize(),
                             factory = { viewContext ->

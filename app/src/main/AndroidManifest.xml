@@ -125,8 +125,7 @@
             android:name=".activities.StatisticsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.PhotoViewPagerActivity"
-            android:hardwareAccelerated="false"
+            android:name=".presentation.photoviewer.PhotoViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PostcardActivity"
