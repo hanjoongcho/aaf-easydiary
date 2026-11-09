@@ -161,7 +161,7 @@
             android:name=".activities.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.GalleryViewPagerActivity"
+            android:name=".presentation.gallery.GalleryViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
 

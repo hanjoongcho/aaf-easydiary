@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import me.blog.korn123.easydiary.presentation.gallery.GalleryViewPagerActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
