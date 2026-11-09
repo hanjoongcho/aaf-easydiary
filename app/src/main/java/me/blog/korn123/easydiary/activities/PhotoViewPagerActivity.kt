@@ -161,7 +161,18 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             position: Int,
             `object`: Any,
         ) {
-            container.removeView(`object` as View)
+            val view = `object` as View
+            if (view is ViewGroup) {
+                for (i in 0 until view.childCount) {
+                    val child = view.getChildAt(i)
+                    if (child is PhotoView) {
+                        child.setImageDrawable(null)
+                        child.clearAnimation()
+                        child.animate()?.cancel()
+                    }
+                }
+            }
+            container.removeView(view)
         }
 
         override fun isViewFromObject(

@@ -141,9 +141,7 @@
             android:name=".activities.DashboardActivity"
             android:theme="@style/SplashScreenTheme" />
         <activity
-            android:name=".activities.PostcardViewPagerActivity"
-            android:hardwareAccelerated="false"
-            android:launchMode="singleTask"
+            android:name=".presentation.postcard.PostcardViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".presentation.fingerprintlock.FingerprintLockActivity"

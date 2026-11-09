@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.extensions.getStatusBarColor
 import me.blog.korn123.easydiary.extensions.isBelowVanillaIceCream
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
@@ -76,8 +77,8 @@ open class EasyDiaryComposeBaseActivity :
         }
     }
 
-    fun finishActivityWithTransition() {
-        TransitionHelper.finishActivityWithTransition(this@EasyDiaryComposeBaseActivity)
+    fun finishActivityWithTransition(type: Int = TransitionConstants.DEFAULT) {
+        TransitionHelper.finishActivityWithTransition(this@EasyDiaryComposeBaseActivity, type)
     }
 
     private var mSensorManager: SensorManager? = null

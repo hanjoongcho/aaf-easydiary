@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
 import android.content.Intent
+import me.blog.korn123.easydiary.presentation.postcard.PostcardViewPagerActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem

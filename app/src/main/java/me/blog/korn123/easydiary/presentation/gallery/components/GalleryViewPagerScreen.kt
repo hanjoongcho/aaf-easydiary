@@ -136,6 +136,11 @@ fun GalleryViewPagerScreen(
                             update = { photoView ->
                                 photoView.setImageBitmap(bitmap)
                             },
+                            onRelease = { photoView ->
+                                photoView.setImageDrawable(null)
+                                photoView.clearAnimation()
+                                photoView.animate().cancel()
+                            },
                         )
                     } else {
                         val errorMessage = if (attachedPhoto.diary?.isEncrypt == true) {

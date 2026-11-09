@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
+import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.base.EasyDiaryComposeBaseActivity
 import me.blog.korn123.easydiary.presentation.gallery.components.GalleryViewPagerScreen
