@@ -38,8 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isNotEmpty
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -79,7 +80,6 @@ import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryReadingConstants
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
-import me.blog.korn123.easydiary.helper.TransitionConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
@@ -113,16 +113,20 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var pendingSpeechText: String? = null
     private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
 
+    private fun getFragmentAt(position: Int = binding.diaryViewPager.currentItem): PlaceholderFragment? {
+        val sequence = diaryList.getOrNull(position)?.diaryId ?: return null
+        return supportFragmentManager.findFragmentByTag("f$sequence") as? PlaceholderFragment
+            ?: supportFragmentManager.fragments.firstOrNull { fragment ->
+                fragment is PlaceholderFragment && fragment.isAdded && fragment.getSequence() == sequence
+            } as? PlaceholderFragment
+    }
+
     private val selectValueLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                val fragment =
-                    sectionsPagerAdapter.instantiateItem(
-                        binding.diaryViewPager,
-                        binding.diaryViewPager.currentItem,
-                    ) as PlaceholderFragment
+                val fragment = getFragmentAt() ?: return@registerForActivityResult
                 val selectedValue = result.data?.getLongExtra("sequence", 0)
 
                 showAlertDialog(
@@ -196,7 +200,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
+        sectionsPagerAdapter = SectionsPagerAdapter(this, diaryList, query)
         setupViewPager()
 
         lifecycleScope.launch {
@@ -259,15 +263,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         super.onResume()
         if (diaryList.isNotEmpty()) {
             sectionsPagerAdapter.notifyDataSetChanged()
-            sectionsPagerAdapter
-                .instantiateItem(
-                    binding.diaryViewPager,
-                    binding.diaryViewPager.currentItem,
-                ).run {
-                    if (this is PlaceholderFragment) {
-                        if (this.isAdded) this.initContents()
-                    }
-                }
+            getFragmentAt()?.run {
+                if (isAdded) initContents()
+            }
         }
     }
 
@@ -281,12 +279,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val fragment =
-            sectionsPagerAdapter.instantiateItem(
-                binding.diaryViewPager,
-                binding.diaryViewPager.currentItem,
-            )
-        if (fragment is PlaceholderFragment) {
+        getFragmentAt()?.let { fragment ->
             outState.putLong(DIARY_SEQUENCE, fragment.getSequence())
         }
         super.onSaveInstanceState(outState)
@@ -297,11 +290,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     var currentIndexesSequence = 0
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val fragment =
-            sectionsPagerAdapter.instantiateItem(
-                binding.diaryViewPager,
-                binding.diaryViewPager.currentItem,
-            )
+        val fragment = getFragmentAt()
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
                 android.R.id.home -> {
@@ -705,14 +694,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         this,
                         customLineSpacing,
                     )
-                    updateAlertDialogWithIcon(
-                        DialogMode.INFO,
-                        dialogSearch!!,
-                        null,
-                        this,
-                        null,
-                        200,
-                    )
+                    dialogSearch?.let { dialog ->
+                        updateAlertDialogWithIcon(
+                            DialogMode.INFO,
+                            dialog,
+                            null,
+                            this,
+                            null,
+                            200,
+                        )
+                    }
                 }
                 updateLabel()
             }
@@ -721,26 +712,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     private fun setupViewPager() {
         binding.diaryViewPager.adapter = sectionsPagerAdapter
-        binding.diaryViewPager.addOnPageChangeListener(
-            object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int,
-                ) {
-                }
-
+        binding.diaryViewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val fragment =
-                        sectionsPagerAdapter.instantiateItem(
-                            binding.diaryViewPager,
-                            binding.diaryViewPager.currentItem,
-                        )
-                    fragment.let {
-                    }
+                    super.onPageSelected(position)
+                    getFragmentAt(position)
                 }
-
-                override fun onPageScrollStateChanged(state: Int) {}
             },
         )
     }
@@ -802,11 +779,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 updateAppViews(this)
                 updateTextColors(this)
                 FontUtils.setFontsTypeface(applicationContext, null, this, true)
-                val fragment =
-                    sectionsPagerAdapter.instantiateItem(
-                        binding.diaryViewPager,
-                        binding.diaryViewPager.currentItem,
-                    ) as PlaceholderFragment
+                val fragment = getFragmentAt() ?: return
                 pmrBinding.run {
                     lifecycleScope.launch {
                         when (fragment.isEncryptContents()) {
@@ -1137,7 +1110,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun initContents() {
             lifecycleScope.launch {
-                val diaryDto = diaryViewModel.findDiaryById(getSequence())!!
+                val diaryDto = diaryViewModel.findDiaryById(getSequence()) ?: return@launch
                 binding.run {
                     diaryTitle.visibility =
                         if (diaryDto.title.isEmpty()) View.GONE else View.VISIBLE
@@ -1247,7 +1220,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         private fun setFontsTypeface() {
-            activity?.let { it ->
+            activity?.let {
                 FontUtils.setFontsTypeface(it, "", rootView)
             }
         }
@@ -1341,14 +1314,19 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     class SectionsPagerAdapter(
-        fm: androidx.fragment.app.FragmentManager,
+        fragmentActivity: androidx.fragment.app.FragmentActivity,
         private val diaryList: List<DiaryDomain>,
         private val query: String?,
-    ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int): androidx.fragment.app.Fragment = PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
+    ) : FragmentStateAdapter(fragmentActivity) {
+        override fun getItemCount(): Int = diaryList.size
+
+        override fun createFragment(position: Int): androidx.fragment.app.Fragment =
+            PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
+
+        override fun getItemId(position: Int): Long = diaryList[position].diaryId
+
+        override fun containsItem(itemId: Long): Boolean = diaryList.any { it.diaryId == itemId }
 
         fun sequenceToPageIndex(sequence: Long): Int = EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
-
-        override fun getCount(): Int = diaryList.size
     }
 }
