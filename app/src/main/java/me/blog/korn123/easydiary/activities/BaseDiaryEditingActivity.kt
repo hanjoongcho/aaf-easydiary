@@ -184,7 +184,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var currentTimeMillis: Long = 0
     protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
-    protected var symbolSequence = 0
     protected var isDiarySaved = false
 
     protected var linkedDiaries: List<Long> = arrayListOf()
@@ -890,7 +889,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     protected suspend fun isExistEasterEggDiary(allowStoredCnt: Int) =
-        symbolSequence == SYMBOL_EASTER_EGG && diaryViewModel
+        selectedItemPosition == SYMBOL_EASTER_EGG && diaryViewModel
             .findDiary(
                 null,
                 false,
@@ -921,7 +920,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         private val photoIndex: Int,
     ) : View.OnClickListener {
         override fun onClick(v: View) {
-            if (symbolSequence != SYMBOL_EASTER_EGG) {
+            if (selectedItemPosition != SYMBOL_EASTER_EGG) {
                 showAlertDialog(
                     getString(R.string.delete_photo_confirm_message),
                     { _, _ ->

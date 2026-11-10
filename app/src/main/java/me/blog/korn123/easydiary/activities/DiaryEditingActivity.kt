@@ -64,7 +64,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
     private suspend fun initData() {
         diarySequence = intent.getLongExtra(DIARY_SEQUENCE, 0)
         diaryViewModel.findDiaryById(diarySequence)?.let { diary ->
-            symbolSequence = diary.symbolSequence
+            selectedItemPosition = diary.symbolSequence
             linkedDiaries = diary.linkedDiaries
             initData(diary)
         }
@@ -76,7 +76,9 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                 duplicatedEasterEggWarning()
             } else {
                 hideSoftInputFromWindow()
-                if (binding.partialEditContents.diaryContents.text.isNullOrEmpty()) {
+                if (binding.partialEditContents.diaryContents.text
+                        .isNullOrEmpty()
+                ) {
                     binding.partialEditContents.diaryContents.requestFocus()
                     makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
                 } else {
@@ -88,8 +90,12 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                 DiaryDomain(
                                     diaryId = diarySequence,
                                     currentTimeMillis = currentTimeMillis,
-                                    title = binding.partialEditContents.diaryTitle.text.toString(),
-                                    contents = binding.partialEditContents.diaryContents.text.toString(),
+                                    title =
+                                        binding.partialEditContents.diaryTitle.text
+                                            .toString(),
+                                    contents =
+                                        binding.partialEditContents.diaryContents.text
+                                            .toString(),
                                     symbolSequence = selectedItemPosition,
                                     isAllDay = binding.partialEditContents.allDay.isChecked,
                                     photoUris = photoUris.map { it },
@@ -102,14 +108,18 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                 DiaryDomain(
                                     diaryId = diarySequence,
                                     currentTimeMillis = currentTimeMillis,
-                                    title = JasyptUtils.encrypt(
-                                        binding.partialEditContents.diaryTitle.text.toString(),
-                                        encryptionPass,
-                                    ),
-                                    contents = JasyptUtils.encrypt(
-                                        binding.partialEditContents.diaryContents.text.toString(),
-                                        encryptionPass,
-                                    ),
+                                    title =
+                                        JasyptUtils.encrypt(
+                                            binding.partialEditContents.diaryTitle.text
+                                                .toString(),
+                                            encryptionPass,
+                                        ),
+                                    contents =
+                                        JasyptUtils.encrypt(
+                                            binding.partialEditContents.diaryContents.text
+                                                .toString(),
+                                            encryptionPass,
+                                        ),
                                     isEncrypt = true,
                                     encryptKeyHash = JasyptUtils.sha256(encryptionPass),
                                     symbolSequence = selectedItemPosition,
@@ -130,8 +140,10 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
     }
 
     private fun bindEvent() {
-        binding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(clickListener)
-        binding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(clickListener)
+        binding.partialEditContents.partialEditPhotoContainer.photoView
+            .setOnClickListener(clickListener)
+        binding.partialEditContents.partialEditPhotoContainer.captureCamera
+            .setOnClickListener(clickListener)
         binding.partialEditContents.locationContainer.setOnClickListener(clickListener)
         binding.partialEditContents.diaryTitle.setOnTouchListener(touchListener)
         binding.partialEditContents.diaryContents.setOnTouchListener(touchListener)
