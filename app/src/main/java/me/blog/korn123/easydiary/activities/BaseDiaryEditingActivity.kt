@@ -1,21 +1,16 @@
 package me.blog.korn123.easydiary.activities
 
 import android.Manifest
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -37,13 +32,13 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
-import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -112,23 +107,13 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     private lateinit var secondsPickerDialog: AlertDialog
     private val calendarInstance = Calendar.getInstance(Locale.getDefault())
     private val removeIndexes = ArrayList<Int>()
-    private val locationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private val locationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     private val networkLocationListener =
         object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 if (config.enableDebugOptionToastLocation) makeToast("Network location has been updated")
                 locationManager.removeUpdates(this)
             }
-
-            override fun onStatusChanged(
-                provider: String?,
-                status: Int,
-                extras: Bundle?,
-            ) {}
-
-            override fun onProviderEnabled(provider: String) {}
-
-            override fun onProviderDisabled(provider: String) {}
         }
     private val gpsLocationListener =
         object : LocationListener {
@@ -136,21 +121,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 if (config.enableDebugOptionToastLocation) makeToast("GPS location has been updated")
                 locationManager.removeUpdates(this)
             }
-
-            override fun onStatusChanged(
-                provider: String?,
-                status: Int,
-                extras: Bundle?,
-            ) {}
-
-            override fun onProviderEnabled(provider: String) {}
-
-            override fun onProviderDisabled(provider: String) {}
         }
     private val requestSpeechInput =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             pauseLock()
-            if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
+            if (activityResult.resultCode == RESULT_OK && activityResult.data != null) {
                 binding.partialEditContents.run {
                     activityResult.data
                         ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
@@ -179,9 +154,9 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     private val requestImagePicker =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             pauseLock()
-            if (result.resultCode == Activity.RESULT_OK && result.data?.data != null) {
+            if (result.resultCode == RESULT_OK && result.data?.data != null) {
                 result.data?.data?.toString()?.let { uriString ->
-                    attachPhotos(arrayListOf(uriString), true)
+                    attachPhotos(arrayListOf(uriString), isUriString = true)
                 }
             }
         }
@@ -189,7 +164,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
             pauseLock()
             if (uris.isNotEmpty()) {
-                attachPhotos(ArrayList(uris.map { uri -> uri.toString() }), true)
+                attachPhotos(ArrayList(uris.map { uri -> uri.toString() }), isUriString = true)
             } else {
                 showAlertDialog("No selected photos.")
             }
@@ -197,7 +172,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     val requestCaptureCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             pauseLock()
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 attachPhotos(
                     arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME),
                     false,
@@ -207,7 +182,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected lateinit var binding: ActivityBaseDiaryEditingBinding
     protected val photoUris: ArrayList<PhotoUriDomain> = ArrayList()
     protected var currentTimeMillis: Long = 0
-    protected var year = calendarInstance.get(Calendar.YEAR)
+    protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
     protected var symbolSequence = 0
     protected var isDiarySaved = false
@@ -218,11 +193,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
      * month is not Calendar.MONTH
      * month range is 1 ~ 12
      */
-    var month = calendarInstance.get(Calendar.MONTH).plus(1)
-    var dayOfMonth = calendarInstance.get(Calendar.DAY_OF_MONTH)
-    var hourOfDay = calendarInstance.get(Calendar.HOUR_OF_DAY)
-    var minute = calendarInstance.get(Calendar.MINUTE)
-    var second = calendarInstance.get(Calendar.SECOND)
+    var month = calendarInstance[Calendar.MONTH] + 1
+    var dayOfMonth = calendarInstance[Calendar.DAY_OF_MONTH]
+    var hourOfDay = calendarInstance[Calendar.HOUR_OF_DAY]
+    var minute = calendarInstance[Calendar.MINUTE]
+    var second = calendarInstance[Calendar.SECOND]
     var selectedItemPosition = 0
     var currentCursor = 0
 
@@ -327,10 +302,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         applyRemoveIndex()
         outState.run {
-            val listUriString = arrayListOf<String>()
-            photoUris.map { model ->
-                listUriString.add(model.photoUri ?: String.EMPTY)
-            }
+            val listUriString = ArrayList(photoUris.mapNotNull { it.photoUri })
             putStringArrayList(LIST_URI_STRING, listUriString)
             putInt(SELECTED_YEAR, year)
             putInt(SELECTED_MONTH, month)
@@ -373,8 +345,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             R.id.secondsPicker -> {
                 val itemClickListener =
                     AdapterView.OnItemClickListener { parent, _, position, _ ->
-                        val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                        itemMap["value"]?.let {
+                        (parent.adapter.getItem(position) as? Map<*, *>)?.get("value")?.toString()?.let {
                             second = it.toInt()
                             setDateTime()
                         }
@@ -441,8 +412,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     private fun showSpeechDialog() {
         try {
             requestSpeechInput.launch(recognizerIntent)
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
+        } catch (_: ActivityNotFoundException) {
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message))
         }
     }
 
@@ -451,8 +422,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             try {
                 requestImagePicker.launch(pickImageIntent)
-            } catch (e: ActivityNotFoundException) {
-                showAlertDialog(getString(R.string.gallery_intent_not_found_message), { _, _ -> })
+            } catch (_: ActivityNotFoundException) {
+                showAlertDialog(getString(R.string.gallery_intent_not_found_message))
             }
         } else {
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -489,7 +460,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 originDiaryId = originSequence,
                 photoUris = photoUris.map { it },
             )
-        if (diaryTemp.title?.isNotEmpty() == true ||
+        if (diaryTemp.title.isNotEmpty() ||
             diaryTemp.contents.isNotEmpty() || diaryTemp.photoUris.isNotEmpty()
         ) {
             diaryRepository.insertTemporaryDiary(
@@ -669,7 +640,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun hideSoftInputFromWindow() {
         val currentView = this.currentFocus
         if (currentView != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentView.windowToken, 0)
         }
     }
@@ -677,14 +648,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun setupDialog() {
         datePickerDialog =
             DatePickerDialog(this, startDateListener, year, month - 1, dayOfMonth).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    datePicker.firstDayOfWeek =
-                        when (config.calendarStartDay) {
-                            CALENDAR_START_DAY_MONDAY -> Calendar.MONDAY
-                            CALENDAR_START_DAY_SATURDAY -> Calendar.SATURDAY
-                            else -> CALENDAR_START_DAY_SUNDAY
-                        }
-                }
+                datePicker.firstDayOfWeek =
+                    when (config.calendarStartDay) {
+                        CALENDAR_START_DAY_MONDAY -> Calendar.MONDAY
+                        CALENDAR_START_DAY_SATURDAY -> Calendar.SATURDAY
+                        else -> CALENDAR_START_DAY_SUNDAY
+                    }
             }
         timePickerDialog = TimePickerDialog(this, timeSetListener, hourOfDay, minute, DateFormat.is24HourFormat(this))
     }
@@ -716,66 +685,61 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         isUriString: Boolean,
     ) {
         setVisiblePhotoProgress(true)
-        Thread(
-            Runnable {
-                selectPaths.map { item ->
-                    val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                    try {
-                        val mimeType: String =
-                            when (isUriString) {
-                                true -> {
-                                    EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath))
-                                }
-
-                                false -> {
-                                    EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
-                                    MIME_TYPE_JPEG
-                                }
-                            }
-                        val photoUriDto = PhotoUriDomain(FILE_URI_PREFIX + photoPath, mimeType)
-                        photoUris.add(photoUriDto)
-                        val currentIndex = photoUris.size - 1
-                        runOnUiThread {
-                            val imageView =
-                                when (isLandScape()) {
-                                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
-                                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
-                                }
-                            imageView.setOnClickListener(PhotoClickListener(currentIndex))
-                            binding.partialEditContents.partialEditPhotoContainer.run {
-                                photoContainer.addView(imageView, photoContainer.childCount - 1)
-                            }
-                            initBottomToolbar()
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-                runOnUiThread {
-                    binding.partialEditContents.partialEditPhotoContainer.run {
-                        when (isLandScape()) {
+        Thread {
+            selectPaths.forEach { item ->
+                val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                try {
+                    val mimeType: String =
+                        when (isUriString) {
                             true -> {
-                                photoContainer.postDelayed(
-                                    { (photoContainerScrollView.getChildAt(0) as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) },
-                                    100L,
-                                )
+                                EasyDiaryUtils.downSamplingImage(this, item.toUri(), File(photoPath))
                             }
 
                             false -> {
-                                photoContainer.postDelayed({
-                                    (
-                                        photoContainerScrollView.getChildAt(
-                                            0,
-                                        ) as HorizontalScrollView
-                                    ).fullScroll(HorizontalScrollView.FOCUS_RIGHT)
-                                }, 100L)
+                                EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
+                                MIME_TYPE_JPEG
                             }
                         }
+                    val photoUriDto = PhotoUriDomain(FILE_URI_PREFIX + photoPath, mimeType)
+                    photoUris.add(photoUriDto)
+                    val currentIndex = photoUris.size - 1
+                    runOnUiThread {
+                        val imageView =
+                            when (isLandScape()) {
+                                true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
+                                false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
+                            }
+                        imageView.setOnClickListener(PhotoClickListener(currentIndex))
+                        binding.partialEditContents.partialEditPhotoContainer.run {
+                            photoContainer.addView(imageView, photoContainer.childCount - 1)
+                        }
+                        initBottomToolbar()
                     }
-                    setVisiblePhotoProgress(false)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            },
-        ).start()
+            }
+            runOnUiThread {
+                binding.partialEditContents.partialEditPhotoContainer.run {
+                    when (isLandScape()) {
+                        true -> {
+                            photoContainer.postDelayed(
+                                { (photoContainerScrollView.getChildAt(0) as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) },
+                                100L,
+                            )
+                        }
+
+                        false -> {
+                            photoContainer.postDelayed(
+                                { (photoContainerScrollView.getChildAt(0) as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) },
+                                100L,
+                            )
+                        }
+                    }
+                }
+                setVisiblePhotoProgress(false)
+            }
+        }.start()
     }
 
     protected fun initBottomToolbar() {
@@ -808,12 +772,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         if (currentTimeMillis > 0) {
             val calendar = Calendar.getInstance(Locale.getDefault())
             calendar.timeInMillis = currentTimeMillis
-            year = calendar.get(Calendar.YEAR)
-            month = calendar.get(Calendar.MONTH).plus(1)
-            dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-            hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-            minute = calendar.get(Calendar.MINUTE)
-            second = calendar.get(Calendar.SECOND)
+            year = calendar[Calendar.YEAR]
+            month = calendar[Calendar.MONTH] + 1
+            dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+            hourOfDay = calendar[Calendar.HOUR_OF_DAY]
+            minute = calendar[Calendar.MINUTE]
+            second = calendar[Calendar.SECOND]
         }
     }
 
@@ -825,7 +789,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 photoContainer.removeAllViews()
                 photoContainer.addView(attachView)
 
-                getStringArrayList(LIST_URI_STRING)?.map { uriString ->
+                getStringArrayList(LIST_URI_STRING)?.forEach { uriString ->
                     photoUris.add(PhotoUriDomain(uriString))
                 }
                 year = getInt(SELECTED_YEAR, year)
@@ -874,14 +838,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
 
             false -> {
-                binding.partialEditContents.diaryTitle.setText(JasyptUtils.decrypt(diary.title ?: "", encryptionPass))
-                binding.partialEditContents.diaryContents.setText(JasyptUtils.decrypt(diary.contents ?: "", encryptionPass))
+                binding.partialEditContents.diaryTitle.setText(JasyptUtils.decrypt(diary.title, encryptionPass))
+                binding.partialEditContents.diaryContents.setText(JasyptUtils.decrypt(diary.contents, encryptionPass))
             }
         }
 
         currentTimeMillis = diary.currentTimeMillis
         if (config.holdPositionEnterEditScreen) {
-            Handler(Looper.getMainLooper()).post {
+            binding.partialEditContents.contentsContainer.post {
                 binding.partialEditContents.contentsContainer.scrollY =
                     intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) -
                     (binding.partialEditContents.feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
@@ -895,7 +859,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         photoUris.let {
-            val thumbnailSize = config.settingThumbnailSize
             it.forEachIndexed { index, photoUriDto ->
                 val imageView =
                     when (isLandScape()) {

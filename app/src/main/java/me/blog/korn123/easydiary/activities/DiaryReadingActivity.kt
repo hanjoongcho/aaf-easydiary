@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -39,9 +40,9 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isNotEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -172,6 +173,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
+    @SuppressLint("NotifyDataSetChanged")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -259,6 +261,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         if (diaryList.isNotEmpty()) {
@@ -1320,8 +1323,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     ) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = diaryList.size
 
-        override fun createFragment(position: Int): androidx.fragment.app.Fragment =
-            PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
+        override fun createFragment(position: Int): androidx.fragment.app.Fragment = PlaceholderFragment.newInstance(diaryList[position].diaryId, query)
 
         override fun getItemId(position: Int): Long = diaryList[position].diaryId
 
