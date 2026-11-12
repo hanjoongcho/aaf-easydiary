@@ -6,26 +6,14 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Point
-import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.provider.Settings.SettingNotFoundException
-import android.util.DisplayMetrics
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -33,22 +21,17 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -57,20 +40,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
-import id.zelory.compressor.Compressor
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FlavorUtils.getDiarySymbolMap
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
-import me.blog.korn123.easydiary.presentation.fingerprintlock.FingerprintLockActivity
-import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.enums.GridSpanMode
-import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.FingerprintLockConstants
@@ -80,15 +57,9 @@ import me.blog.korn123.easydiary.helper.PinLockConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.utils.DateUtils
-import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.presentation.fingerprintlock.FingerprintLockActivity
+import me.blog.korn123.easydiary.presentation.pinlock.PinLockActivity
 import me.blog.korn123.easydiary.views.SlidingTabLayout
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
 /***************************************************************************************************
  *   Hilt EntryPoint for Repository access in extensions
@@ -146,95 +117,12 @@ fun Activity.makeSnackBar(
         .show()
 }
 
-fun Activity.showBetaFeatureMessage() {
-    makeSnackBar("\uD83D\uDEA7 This feature is currently in beta testing.", Snackbar.LENGTH_LONG)
-}
-
 /***************************************************************************************************
  *   Screen Dimension
  *
  ***************************************************************************************************/
 
-/**
- * 0 → 3버튼 네비게이션 (기본 소프트키)
- * 1 → 2버튼 네비게이션 (홈/뒤로 버튼)
- * 2 → 제스처 네비게이션
- * @return
- */
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-)
-fun Activity.getNavigationMode(): Int {
-    try {
-        return Settings.Secure.getInt(contentResolver, "navigation_mode")
-    } catch (e: SettingNotFoundException) {
-        e.printStackTrace()
-        return -1 // 설정 값이 없을 경우
-    }
-}
 
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-)
-fun Activity.hideStatusBars() {
-    if (isRedVelvetCakePlus()) {
-        window.insetsController?.hide(WindowInsets.Type.statusBars())
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    }
-}
-
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-)
-fun Activity.hideNavigationBars() {
-    if (isVanillaIceCreamPlus()) {
-        window.insetsController?.hide(WindowInsets.Type.navigationBars())
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    }
-}
-
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-)
-@RequiresApi(Build.VERSION_CODES.R)
-fun Activity.isNavigationBarVisible(): Boolean {
-    // 전체 화면 크기 가져오기
-    val metrics = windowManager.currentWindowMetrics
-    val fullHeight = metrics.bounds.height()
-
-    // 현재 화면에서 사용 가능한 높이 가져오기
-    val visibleBounds: Rect = Rect()
-    window.decorView.getWindowVisibleDisplayFrame(visibleBounds)
-    val visibleHeight: Int = visibleBounds.height()
-
-    // 네비게이션 바 높이가 존재하면 보이는 상태
-    return (fullHeight - visibleHeight) > 0
-}
-
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-)
-fun Activity.printDisplayMetrics() {
-    val metrics = DisplayMetrics()
-    val realMetrics = DisplayMetrics()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        display?.getRealMetrics(realMetrics)
-        display?.getMetrics(metrics)
-    } else {
-        val display = windowManager.defaultDisplay
-        display.getRealMetrics(realMetrics)
-        display.getMetrics(metrics)
-    }
-    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
-    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
-}
-
-@Deprecated(
-    message = "검증되지 않아서 사용하지 않는 기능임",
-    replaceWith =
-        ReplaceWith(""),
-)
-fun Activity.getRootViewHeight(): Int = getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
 
 fun Activity.isLandScape(): Boolean = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -256,8 +144,6 @@ fun Activity.statusBarHeight(): Int {
     return statusBarHeight
 }
 
-fun Activity.topBarHeight(): Int = actionBarHeight().plus(statusBarHeight())
-
 fun Activity.navigationBarHeight(): Int {
     var navigationBarHeight = 0
     val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
@@ -276,32 +162,13 @@ fun Activity.getDefaultDisplay(): Point {
 
 fun Activity.getDashboardCardWidth(ratio: Float): Int {
     val scaleFactor = if (isLandScape()) 0.5F else 1F
-    return getDefaultDisplay()
-        .x
-        .times(ratio)
-        .times(scaleFactor)
-        .toInt()
-}
-
-fun Activity.getDisplayMetrics(): DisplayMetrics {
-    val outMetrics = DisplayMetrics()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val display = display
-        display?.getMetrics(outMetrics)
-//        display?.getRealMetrics(outMetrics)
-    } else {
-        val display = windowManager.defaultDisplay
-        display.getMetrics(outMetrics)
-//        display.getRealMetrics(outMetrics)
-    }
-    return outMetrics
+    return (getDefaultDisplay().x * ratio * scaleFactor).toInt()
 }
 
 /**
- * 화면 좌우 시스템영역 인셋 처리를 함
- *
- * 머티리얼 앱바의 경우 XML레이아웃 사용 시 가로화면에서 앱바 UI가 시스템영역에 가려질 수 있으나 XML레벨에서 처리할 방법이 없어서
- * 코드에서 직접 처리해야 함
+ * Handles horizontal system window insets.
+ * For Material ActionBars using XML layouts, the ActionBar UI might be obscured by system bars in landscape mode,
+ * which cannot be handled at the XML level, so it must be handled programmatically.
  */
 fun Activity.applyHorizontalInsets() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
@@ -335,10 +202,9 @@ fun Activity.applyHorizontalInsets() {
 }
 
 /**
- * - 애플리케이션 화면이 하단 내비게이션 영역까지 확장되어 사용되는 경우 파라미터로 넘겨받은
- * 뷰의 하단에 내비게이션영역 높이값만큼 마진을 추가함
- * - Version SDK 35 미만인 경우 Edege to Edge 모드가 강제 적용되지 않고 앱이 시스템 UI 뒤로 확장되지 않기 때문에
- * 버전 체크를 하지 않음
+ * Adds bottom margin equal to the navigation bar height to the given view
+ * when the application screen extends into the bottom navigation area.
+ * Version check is omitted since Edge-to-Edge mode is not forced below SDK 35.
  */
 fun Activity.applyBottomNavigationInsets(view: View) {
     ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
@@ -353,10 +219,10 @@ fun Activity.applyBottomNavigationInsets(view: View) {
 }
 
 /**
- * Version SDK 35 이상의 경우 IME 영역의 인셋을 적용함
- * IME 영역은 키보드가 올라올 때 화면 하단에 나타나는 영역으로, 이 영역의 높이만큼
- * 파라미터로 넘겨받은 뷰의 하단 마진을 조정함
- * 이 기능은 세로화면 모드에서만 적용되며, 가로화면 모드에서는 적용되지 않음
+ * Applies IME inset for SDK 35+.
+ * The IME area appears at the bottom of the screen when the keyboard is raised,
+ * and this adjusts the bottom margin of the given view by the height of that area.
+ * This feature only applies in portrait mode and is not applied in landscape mode.
  */
 fun Activity.applyBottomImeInsets(view: View) {
     if (isVanillaIceCreamPlus() && !isLandScape()) {
@@ -373,7 +239,7 @@ fun Activity.applyBottomImeInsets(view: View) {
 }
 
 /**
- * Version SDK 35 이상의 가로화면 모드인 경우 강제로 시스템바를 숨김처리 함
+ * Forcefully hides system bars in landscape mode for SDK 35+.
  */
 fun Activity.hideSystemBarsVanillaIceCreamPlusIsLandScape() {
     if (isVanillaIceCreamPlus() && isLandScape()) {
@@ -395,15 +261,15 @@ fun Activity.hideSystemBars() {
 }
 
 /**
- * 💡 시스템 상태바의 배경컬러 또는 텍스트(아이콘) 컬러를 변경함
- *  - Version SDK 35 이상: 텍스트(아이콘) 컬러를 변경함
- *  - Version SDK 35 미만: 배경색을 반투명 처리함
- *  - 상단 액션바 없이 전체화면으로 화면이 확장되어 사용되는 경우에 호출하는 것이 기본임
+ * Changes the system status bar background color or text (icon) color.
+ * - SDK 35+: Changes text (icon) color.
+ * - Below SDK 35: Makes background color translucent.
+ * - Typically called when the screen extends fullscreen without a top action bar.
  */
 fun Activity.applyFullScreenStatusBarTheme(checkColor: Int = config.screenBackgroundColor) {
     if (isVanillaIceCreamPlus()) {
-        // true: 밝은 배경 → 검정 텍스트 (light status bar icons)
-        // false: 어두운 배경 → 흰색 텍스트
+        // true: Light background -> Dark text (light status bar icons)
+        // false: Dark background -> White text
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = isColorLight(checkColor)
     } else {
         @Suppress("DEPRECATION")
@@ -430,8 +296,6 @@ fun Activity.updateNavigationBarAppearance(checkColor: Int = config.primaryColor
         isAppearanceLightNavigationBars = isColorLight(checkColor)
     }
 }
-
-fun Activity.getSystemBarColor(): Int = if (isColorLight(config.primaryColor)) Color.WHITE else Color.BLACK
 
 /***************************************************************************************************
  *   etc functions
@@ -468,7 +332,7 @@ fun Activity.applyPolicyForRecentApps() {
 }
 
 fun Activity.openGooglePlayBy(targetAppId: String) {
-    val uri = Uri.parse("market://details?id=" + targetAppId)
+    val uri = Uri.parse("market://details?id=$targetAppId")
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     // To count with Play market backstack, After pressing back button,
     // to taken back to our application, we need to add following flags to intent.
@@ -479,11 +343,11 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
     )
     try {
         startActivity(goToMarket)
-    } catch (e: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=" + targetAppId),
+                Uri.parse("http://play.google.com/store/apps/details?id=$targetAppId"),
             ),
         )
     }
@@ -522,18 +386,6 @@ fun Activity.startActivityWithTransition(intent: Intent) {
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 }
 
-// fun Activity.restartApp() {
-//    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
-//    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-//    val mPendingIntentId = 123456
-//    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-//    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-//    ActivityCompat.finishAffinity(this)
-//    //System.runFinalizersOnExit(true)
-//    exitProcess(0)
-// }
-
 fun Activity.refreshApp() {
     getSystemService<NotificationManager>()?.cancelAll()
 
@@ -561,7 +413,7 @@ suspend fun Activity.syncCustomSymbolPaths() {
                 symbolSequence = SYMBOL_EASTER_EGG,
             )
 
-    val diary = if (items.isNotEmpty()) items[0] else null
+    val diary = items.firstOrNull()
     val result = diary?.photoUris?.map { it } ?: listOf()
     config.customSymbolPaths = result
 }
@@ -673,7 +525,7 @@ fun Activity.addUserCustomSymbols(
     if (config.enableDebugMode) {
         val customSymbols = arrayListOf<String>()
         categoryList.add("Custom")
-        config.customSymbolPaths.forEach { item ->
+        config.customSymbolPaths.forEach { _ ->
 //            item.getFilePath()
             customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
         }
@@ -704,163 +556,6 @@ fun Activity.getUncheckedSymbolItem(): String {
     return if (resourceId != 0) resources.getStringArray(resourceId)[0] else "-1|N/A"
 }
 
-fun Activity.getLayoutLayoutInflater(): LayoutInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-fun Activity.scaledDrawable(
-    id: Int,
-    width: Int,
-    height: Int,
-): Drawable? {
-    var drawable = AppCompatResources.getDrawable(this, id)
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        drawable = (DrawableCompat.wrap(drawable!!)).mutate()
-    }
-
-    val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
-}
-
-// }
-
-// @TargetApi(Build.VERSION_CODES.KITKAT)
-// fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
-//    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-//        // Filter to only show results that can be "opened", such as
-//        // a file (as opposed to a list of contacts or timezones).
-//        addCategory(Intent.CATEGORY_OPENABLE)
-//
-//        type = mimeType
-//        // Create a file with the requested MIME type.
-//        putExtra(Intent.EXTRA_TITLE, fileName)
-//    }
-//    startActivityForResult(intent, requestCode)
-
-fun Activity.exportHtmlBook(
-    uri: Uri?,
-    diaryList: List<DiaryDomain>,
-) {
-    uri?.let {
-        contentResolver.openOutputStream(it)?.use { os ->
-            os.write(createHtmlString(diaryList).toByteArray(Charsets.UTF_8))
-        }
-    }
-}
-
-fun Activity.createHtmlString(diaryList: List<DiaryDomain>): String {
-    val diaryDivision = StringBuilder()
-    diaryList.forEach {
-        val html = StringBuilder()
-        val resourceId = FlavorUtils.sequenceToSymbolResourceId(it.symbolSequence)
-        when (resourceId > 0) {
-            true -> {
-                html.append(
-                    "<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(
-                        resourceId,
-                    )}' /></div> <div class='title-right'>${it.title}</div> </div>",
-                )
-            }
-
-            false -> {
-                html.append("<div class='title'> <div class='title-right'>${it.title}</div> </div>")
-            }
-        }
-        html.append(
-            "<div class='datetime'>${DateUtils.getDateTimeStringFromTimeMillis(
-                it.currentTimeMillis,
-                SimpleDateFormat.FULL,
-                SimpleDateFormat.FULL,
-            )}</div>",
-        )
-        html.append("<pre class='contents'>")
-        html.append(it.contents)
-        html.append("</pre>")
-        html.append("<div class='photo-container'>")
-
-        it.photoUris?.let { photoUriList ->
-            val imageColumn =
-                when (photoUriList.size) {
-                    1 -> 1
-
-                    //                photoUriList.size % 2 == 0 -> 2
-                    else -> 2
-                }
-            photoUriList.forEach { photoUriDto ->
-                html.append(
-                    "<div class='photo col$imageColumn'><img src='data:image/png;base64, ${photoToBase64(
-                        EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(),
-                    )}' /></div>",
-                )
-            }
-        }
-        html.append("</div>")
-        html.append("<hr>")
-        diaryDivision.append(html.toString())
-    }
-
-    val template = StringBuilder()
-    template.append("<!DOCTYPE html>")
-    template.append("<html>")
-    template.append("<head>")
-    template.append("   <meta charset='UTF-8'>")
-    template.append("   <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
-    template.append("   <title>Insert title here</title>")
-    template.append("   <style type='text/css'>")
-    template.append("       body { margin: 1rem; font-family: 나눔고딕, monospace; }")
-    template.append("       hr { margin: 1.5rem 0 }")
-    template.append("       .title { margin-top: 1rem; font-size: 1.3rem; display: flex; }")
-    template.append("       .title img { width: 30px; margin-right: 1rem; display: block; }")
-    template.append("       .title-left { display:inline-block; }")
-    template.append("       .title-right { display:inline-block; white-space: pre-wrap; word-break: break-all; }")
-    template.append("       .datetime { font-size: 0.8rem; text-align: right; }")
-    template.append(
-        "       .contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; word-break: break-all; }",
-    )
-    template.append("       .photo-container { display: flex; flex-wrap: wrap; }")
-    template.append(
-        "       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }",
-    )
-    template.append("       .photo.col1 { width: calc(100% - 0.5rem); }")
-    template.append("       .photo.col2 { width: calc(50% - 0.5rem); }")
-    template.append("       .photo img { width: 100%; display: block; border-radius: 5px; }")
-    template.append("   </style>")
-    template.append("<body>")
-    template.append(diaryDivision.toString())
-    template.append("</body>")
-    template.append("</html>")
-
-    return template.toString()
-}
-
-fun Activity.photoToBase64(photoPath: String): String {
-    var image64 = ""
-    val bos = ByteArrayOutputStream()
-    try {
-        val bitmap = BitmapFactory.decodeFile(photoPath).cropCenter()
-
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
-        image64 = bos.toByteArray().toBase64()
-    } catch (e: Exception) {
-        bos.close()
-    }
-    return image64
-}
-
-fun Activity.resourceToBase64(resourceId: Int): String {
-    var image64 = ""
-    val bitmap = scaledDrawable(resourceId, 100, 100)?.toBitmap()
-//        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-    if (bitmap != null) {
-        val bos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
-        image64 = bos.toByteArray().toBase64()
-        bos.close()
-    }
-    return image64
-}
-
 fun Activity.openGridSettingDialog(
     rootView: ViewGroup,
     gridSpanMode: GridSpanMode,
@@ -883,7 +578,7 @@ fun Activity.openGridSettingDialog(
         }
     val optionItems = mutableListOf<Map<String, String>>()
     for (i in 1..maxSpanCount) {
-        optionItems.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
+        optionItems.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to i.toString()))
     }
 
     var spanCount = 0
@@ -975,7 +670,7 @@ fun Activity.getStatusBarColor(color: Int) = if (config.enableStatusBarDarkenCol
 fun Activity.updateStatusBarColor(color: Int) {
     window.statusBarColor = getStatusBarColor(color)
 
-    // SDK Version 35 이상인 경우 상태바 컨드롤을 직접 할 수 없어서 dummy view를 사용함
+    // Since status bar control cannot be done directly on SDK 35+, a dummy view is used.
     if (isVanillaIceCreamPlus()) findViewById<View>(R.id.dummyStatusBar)?.setBackgroundColor(getStatusBarColor(color))
 }
 
@@ -1023,126 +718,21 @@ fun EasyDiaryActivity.acquireGPSPermissions(
     }
 }
 
-// fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
-//    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
-//        true -> {
-//            if (isLocationEnabled()) {
-//                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-//            } else {
-//                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-//            }
-//        }
-//        false -> {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
-//                if (hasCoarseLocation) {
-//                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
-//                        if (hasFineLocation) {
-//                            if (isLocationEnabled()) {
-//                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-//                            } else {
-//                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-// }
-
-fun Activity.appLaunched() {
-    val appId = BuildConfig.APPLICATION_ID
-    val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
-    //
-    packageManager.setComponentEnabledSetting(
-        ComponentName(appId, defaultClassName),
-        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-        PackageManager.DONT_KILL_APP,
-    )
-
-    val lineClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity.Line"
-    packageManager.setComponentEnabledSetting(
-        ComponentName(appId, lineClassName),
-        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-        PackageManager.DONT_KILL_APP,
-    )
-}
-
-fun Activity.clearLockSettingsTemporary() {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
-    val parsedDate: Date? = dateFormat.parse("2022-05-14 23:59:59")
-    parsedDate?.let {
-        val remainMinutes =
-            it.time
-                .minus(System.currentTimeMillis())
-                .div(1000)
-                .div(60)
-        if (remainMinutes > 0) {
-            config.aafPinLockEnable = false
-            config.fingerprintLockEnable = false
-            showAlertDialog(
-                "Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.",
-                null,
-            )
-        }
-    }
-}
-
-fun Activity.uriToFile(
-    uri: Uri,
-    photoPath: String,
-): Boolean {
-    var result = false
-    try {
-        val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
-        contentResolver.openInputStream(uri)?.use { inputStream ->
-            tempFile.outputStream().use { outputStream ->
-                inputStream.copyTo(outputStream)
-            }
-        }
-
-        val compressedFile = Compressor(this).setQuality(70).compressToFile(tempFile)
-        compressedFile.copyTo(File(photoPath), overwrite = true)
-        result = true
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return result
-}
-
-fun Activity.triggerRestart(cls: Class<*>) {
-    val intent = Intent(this, cls)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    this.startActivity(intent)
-    finish()
-    Runtime.getRuntime().exit(0)
-}
-
 @SuppressLint("SourceLockedOrientationActivity")
 fun Activity.holdCurrentOrientation() {
     when (resources.configuration.orientation) {
-        Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        Configuration.ORIENTATION_LANDSCAPE -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        Configuration.ORIENTATION_PORTRAIT -> {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
+        else -> {}
     }
 }
 
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-}
-
-fun Activity.hideSoftInputFromWindow() {
-    val currentView = this.currentFocus
-    if (currentView != null) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentView.windowToken, 0)
-    }
 }
