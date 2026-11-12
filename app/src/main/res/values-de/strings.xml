@@ -1089,4 +1089,6 @@
     <string name="friday_short">Fr</string>
     <string name="saturday_short">Sa</string>
     <string name="sunday_short">So</string>
+    <string name="disable_future_diary_title">Zukünftige Termine ausblenden</string>
+    <string name="disable_future_diary_summary">Konfigurieren, um zukünftige Termine in der Hauptbildschirm-Liste auszublenden.</string>
 </resources>

@@ -1089,4 +1089,6 @@
     <string name="friday_short">Ven</string>
     <string name="saturday_short">Sam</string>
     <string name="sunday_short">Dim</string>
+    <string name="disable_future_diary_title">Masquer les plannings futurs</string>
+    <string name="disable_future_diary_summary">Configurer pour masquer les plannings futurs de la liste de l\'écran principal.</string>
 </resources>

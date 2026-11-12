@@ -1089,4 +1089,6 @@
     <string name="friday_short">금</string>
     <string name="saturday_short">토</string>
     <string name="sunday_short">일</string>
+    <string name="disable_future_diary_title">미래일정 숨김</string>
+    <string name="disable_future_diary_summary">미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.</string>
 </resources>

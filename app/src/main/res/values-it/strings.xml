@@ -1089,4 +1089,6 @@
     <string name="friday_short">Ven</string>
     <string name="saturday_short">Sab</string>
     <string name="sunday_short">Dom</string>
+    <string name="disable_future_diary_title">Nascondi programmi futuri</string>
+    <string name="disable_future_diary_summary">Configura per nascondere i programmi futuri dall\'elenco della schermata principale.</string>
 </resources>

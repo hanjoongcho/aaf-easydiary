@@ -1089,4 +1089,6 @@
     <string name="friday_short">Пт</string>
     <string name="saturday_short">Сб</string>
     <string name="sunday_short">Вс</string>
+    <string name="disable_future_diary_title">Скрыть будущие расписания</string>
+    <string name="disable_future_diary_summary">Настройте скрытие будущих расписаний из списка на главном экране.</string>
 </resources>

@@ -1089,4 +1089,6 @@
     <string name="friday_short">周五</string>
     <string name="saturday_short">周六</string>
     <string name="sunday_short">周日</string>
+    <string name="disable_future_diary_title">隐藏未来日程</string>
+    <string name="disable_future_diary_summary">设置在主界面列表中不显示未来日程。</string>
 </resources>

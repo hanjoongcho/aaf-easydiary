@@ -205,8 +205,8 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
             }
             item {
                 SwitchCard(
-                    "미래일정 숨김",
-                    "미래일정을 메인화면 목록에서 보이지 않도록 설정합니다.",
+                    stringResource(R.string.disable_future_diary_title),
+                    stringResource(R.string.disable_future_diary_summary),
                     settingCardModifier,
                     disableFutureDiary,
                     enableCardViewPolicy = enableCardViewPolicy,

@@ -1089,4 +1089,6 @@
     <string name="friday_short">Vie</string>
     <string name="saturday_short">Sáb</string>
     <string name="sunday_short">Dom</string>
+    <string name="disable_future_diary_title">Ocultar horarios futuros</string>
+    <string name="disable_future_diary_summary">Configurar para ocultar horarios futuros de la lista de la pantalla principal.</string>
 </resources>

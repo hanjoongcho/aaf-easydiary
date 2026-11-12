@@ -1089,4 +1089,6 @@
     <string name="friday_short">金</string>
     <string name="saturday_short">土</string>
     <string name="sunday_short">日</string>
+    <string name="disable_future_diary_title">将来の予定を非表示</string>
+    <string name="disable_future_diary_summary">メイン画面のリストに将来の予定が表示されないように設定します。</string>
 </resources>

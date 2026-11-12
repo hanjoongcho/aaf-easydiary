@@ -1089,4 +1089,6 @@
     <string name="friday_short">Fri</string>
     <string name="saturday_short">Sat</string>
     <string name="sunday_short">Sun</string>
+    <string name="disable_future_diary_title">Hide future schedules</string>
+    <string name="disable_future_diary_summary">Configure to hide future schedules from the main screen list.</string>
 </resources>

@@ -1089,4 +1089,6 @@
     <string name="friday_short">शुक्र</string>
     <string name="saturday_short">शनि</string>
     <string name="sunday_short">रवि</string>
+    <string name="disable_future_diary_title">भविष्य के शेड्यूल छुपाएं</string>
+    <string name="disable_future_diary_summary">मुख्य स्क्रीन सूची से भविष्य के शेड्यूल छुपाने के लिए कॉन्फ़िगर करें।</string>
 </resources>
