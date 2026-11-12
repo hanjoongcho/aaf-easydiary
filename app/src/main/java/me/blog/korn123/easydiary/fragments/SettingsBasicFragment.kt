@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
+import me.blog.korn123.easydiary.extensions.isFossFlavor
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -113,7 +114,7 @@ class SettingsBasicFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        if (BuildConfig.FLAVOR == "foss") settingsViewModel.setEnableReviewFlowVisible(false)
+        if (requireActivity().isFossFlavor()) settingsViewModel.setEnableReviewFlowVisible(false)
 
         updateFragmentUI(binding.root)
         initPreference()

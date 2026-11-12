@@ -43,9 +43,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isGmsOrLabFlavor
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -237,7 +237,7 @@ class QuickSettingsActivity : EasyDiaryComposeBaseActivity() {
                     }
                 }
             }
-            if (BuildConfig.FLAVOR != "foss") {
+            if (isGmsOrLabFlavor()) {
                 item {
                     val bottomPadding =
                         if (isVanillaIceCreamPlus()) {

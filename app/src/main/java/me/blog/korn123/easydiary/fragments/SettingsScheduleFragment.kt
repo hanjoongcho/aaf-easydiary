@@ -45,6 +45,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isFossFlavor
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.removeBit
@@ -262,7 +263,7 @@ class SettingsScheduleFragment : Fragment() {
                     updateAppViews(root)
                     FontUtils.setFontsTypeface(this@activity, null, root)
 
-                    if (BuildConfig.FLAVOR == "foss") radioDiaryBackupGms.visibility = View.GONE
+                    if (isFossFlavor()) radioDiaryBackupGms.visibility = View.GONE
                 }
 
                 alertDialog =

@@ -41,6 +41,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import me.blog.korn123.commons.utils.FlavorUtils.getDiarySymbolMap
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
@@ -121,8 +122,6 @@ fun Activity.makeSnackBar(
  *   Screen Dimension
  *
  ***************************************************************************************************/
-
-
 
 fun Activity.isLandScape(): Boolean = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -736,3 +735,9 @@ fun Activity.holdCurrentOrientation() {
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
+
+fun Activity.isGmsOrLabFlavor(): Boolean = BuildConfig.FLAVOR != "foss"
+
+fun Activity.isFossFlavor(): Boolean = BuildConfig.FLAVOR == "foss"
+
+fun Activity.isLabFlavor(): Boolean = BuildConfig.FLAVOR == "lab"

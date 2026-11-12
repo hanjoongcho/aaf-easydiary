@@ -20,19 +20,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.presentation.markdown.MarkDownViewerActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsAppInfoBinding
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isFossFlavor
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.MarkdownConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.markdown.MarkDownViewerActivity
 import me.blog.korn123.easydiary.presentation.settings.SettingsViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
@@ -94,7 +94,7 @@ class SettingsAppInfoFragment : Fragment() {
                         fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
                     ) {
-                        if (BuildConfig.FLAVOR == "foss") {
+                        if (requireActivity().isFossFlavor()) {
                             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getStoreUrl())))
                         } else {
                             requireActivity().openGooglePlayBy("me.blog.korn123.easydiary")
@@ -229,9 +229,7 @@ class SettingsAppInfoFragment : Fragment() {
     }
 
     private fun getStoreUrl(): String =
-        if (BuildConfig.FLAVOR ==
-            "foss"
-        ) {
+        if (requireActivity().isFossFlavor()) {
             "https://f-droid.org/packages/${requireActivity().packageName}/"
         } else {
             "https://play.google.com/store/apps/details?id=${requireActivity().packageName}"

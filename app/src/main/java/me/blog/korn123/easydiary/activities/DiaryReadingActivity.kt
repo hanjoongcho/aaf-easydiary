@@ -63,6 +63,7 @@ import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
+import me.blog.korn123.easydiary.extensions.isLabFlavor
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -872,8 +873,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     updateDrawableColorInnerCardView(imgDelete)
                     updateDrawableColorInnerCardView(imgLinkEntry)
 
-                    @Suppress("KotlinConstantConditions")
-                    if (BuildConfig.FLAVOR == "lab") {
+                    if (isLabFlavor()) {
                         push.visibility = View.VISIBLE
                         push.setOnClickListener(itemClickListener)
                         updateDrawableColorInnerCardView(imgPush, Color.Red.toArgb())
