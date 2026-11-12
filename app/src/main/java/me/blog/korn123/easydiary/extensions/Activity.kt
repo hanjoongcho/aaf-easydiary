@@ -736,8 +736,8 @@ fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
 
-fun Activity.isGmsOrLabFlavor(): Boolean = BuildConfig.FLAVOR != "foss"
+fun Activity.isGmsOrLabFlavor(): Boolean = !BuildConfig.IS_FOSS
 
-fun Activity.isFossFlavor(): Boolean = BuildConfig.FLAVOR == "foss"
+fun Activity.isFossFlavor(): Boolean = BuildConfig.IS_FOSS
 
-fun Activity.isLabFlavor(): Boolean = BuildConfig.FLAVOR == "lab"
+fun Activity.isLabFlavor(): Boolean = BuildConfig.IS_LAB

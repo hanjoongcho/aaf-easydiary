@@ -45,15 +45,23 @@ configure<ApplicationExtension> {
     productFlavors {
         create("gmsProd") {
             dimension = "mode"
+            buildConfigField("Boolean", "IS_FOSS", "false")
+            buildConfigField("Boolean", "IS_LAB", "false")
         }
         create("gmsDev") {
             dimension = "mode"
+            buildConfigField("Boolean", "IS_FOSS", "false")
+            buildConfigField("Boolean", "IS_LAB", "false")
         }
         create("foss") {
             dimension = "mode"
+            buildConfigField("Boolean", "IS_FOSS", "true")
+            buildConfigField("Boolean", "IS_LAB", "false")
         }
         create("lab") {
             dimension = "mode"
+            buildConfigField("Boolean", "IS_FOSS", "false")
+            buildConfigField("Boolean", "IS_LAB", "true")
         }
     }
 
