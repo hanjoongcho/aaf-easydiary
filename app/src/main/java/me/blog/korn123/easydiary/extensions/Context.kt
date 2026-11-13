@@ -1990,6 +1990,24 @@ suspend fun Context.exportRoomData(updateLocalBackupTime: Boolean = false): Stri
     return destFile.absolutePath
 }
 
+suspend fun Context.exportLegacyRealmFile() {
+    val destFilePath = BACKUP_DB_DIRECTORY + "diary.realm_"
+    withContext(Dispatchers.IO) {
+        try {
+            val srcFile = File(filesDir, "diary.realm")
+            val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this@exportLegacyRealmFile) + destFilePath)
+            if (srcFile.exists()) {
+                destFile.parentFile?.let { parent ->
+                    if (!parent.exists()) parent.mkdirs()
+                }
+                srcFile.copyTo(destFile, overwrite = true)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
 suspend fun Context.generateRoomDataMap(): Map<String, Any> =
     mutableMapOf(
         "PREFERENCE" to preferenceToJsonString(),

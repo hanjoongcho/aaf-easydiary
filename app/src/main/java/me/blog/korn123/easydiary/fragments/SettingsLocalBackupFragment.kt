@@ -40,6 +40,7 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.classifyUriByExtension
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmExternalStoragePermission
+import me.blog.korn123.easydiary.extensions.exportLegacyRealmFile
 import me.blog.korn123.easydiary.extensions.exportRoomData
 import me.blog.korn123.easydiary.extensions.exportRoomDataWithSAF
 import me.blog.korn123.easydiary.extensions.importRoomData
@@ -579,6 +580,7 @@ class SettingsLocalBackupFragment : Fragment() {
 
     private fun exportFullBackupFile(uri: Uri?) {
         lifecycleScope.launch {
+            requireActivity().exportLegacyRealmFile()
             exportRoomData()
             BackupOperations
                 .Builder(
