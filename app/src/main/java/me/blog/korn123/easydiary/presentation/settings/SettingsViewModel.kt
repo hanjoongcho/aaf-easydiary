@@ -56,6 +56,31 @@ class SettingsViewModel(
      *   SubDescription
      *
      ***************************************************************************************************/
+    private val _appLanguageSubDescription: MutableStateFlow<String> = MutableStateFlow(getAppLanguageDisplayName(config.settingAppLanguage))
+    val appLanguageSubDescription: StateFlow<String> get() = _appLanguageSubDescription.asStateFlow()
+
+    fun updateAppLanguageSubDescription() {
+        _appLanguageSubDescription.value = getAppLanguageDisplayName(config.settingAppLanguage)
+    }
+
+    fun getAppLanguageDisplayName(languageCode: String): String {
+        return when (languageCode) {
+            "de" -> "Deutsch"
+            "en" -> "English"
+            "es" -> "Español"
+            "fr" -> "Français"
+            "hi" -> "हिन्दी"
+            "it" -> "Italiano"
+            "ja" -> "日本語"
+            "ko" -> "한국어"
+            "ru" -> "Русский"
+            "sat" -> "Santali"
+            "zh-CN" -> "简体中文"
+            "zh-TW" -> "繁體中文"
+            else -> application.getString(R.string.language_system_default)
+        }
+    }
+
     private val _thumbnailSizeSubDescription: MutableStateFlow<String> = MutableStateFlow("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
     val thumbnailSizeSubDescription: StateFlow<String> = _thumbnailSizeSubDescription.asStateFlow()
 

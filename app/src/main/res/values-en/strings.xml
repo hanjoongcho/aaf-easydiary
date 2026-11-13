@@ -1091,4 +1091,7 @@
     <string name="sunday_short">Sun</string>
     <string name="disable_future_diary_title">Hide future schedules</string>
     <string name="disable_future_diary_summary">Configure to hide future schedules from the main screen list.</string>
+    <string name="language_setting_title">Language</string>
+    <string name="language_setting_summary">Set the app language override device settings</string>
+    <string name="language_system_default">System Default</string>
 </resources>

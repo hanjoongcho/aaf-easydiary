@@ -1091,4 +1091,7 @@
     <string name="sunday_short">Вс</string>
     <string name="disable_future_diary_title">Скрыть будущие расписания</string>
     <string name="disable_future_diary_summary">Настройте скрытие будущих расписаний из списка на главном экране.</string>
+    <string name="language_setting_title">Язык</string>
+    <string name="language_setting_summary">Установка языка приложения в приоритете над настройками устройства</string>
+    <string name="language_system_default">По умолчанию</string>
 </resources>
