@@ -368,6 +368,10 @@ class Config(
         get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
         set(enableShakeDetector) = prefs.edit().putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector).apply()
 
+    var settingAppLanguage: String
+        get() = prefs.getString(SETTING_APP_LANGUAGE, LANGUAGE_SYSTEM_DEFAULT)!!
+        set(settingAppLanguage) = prefs.edit().putString(SETTING_APP_LANGUAGE, settingAppLanguage).apply()
+
     var customSymbolPaths: List<PhotoUriDomain>
         get() {
             val jsonString = prefs.getString(SETTING_CUSTOM_SYMBOL_PATHS, null)

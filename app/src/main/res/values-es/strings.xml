@@ -1091,4 +1091,7 @@
     <string name="sunday_short">Dom</string>
     <string name="disable_future_diary_title">Ocultar horarios futuros</string>
     <string name="disable_future_diary_summary">Configurar para ocultar horarios futuros de la lista de la pantalla principal.</string>
+    <string name="language_setting_title">Idioma</string>
+    <string name="language_setting_summary">Establecer el idioma de la aplicación por encima de la configuración del dispositivo</string>
+    <string name="language_system_default">Predeterminado del sistema</string>
 </resources>

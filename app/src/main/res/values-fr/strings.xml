@@ -1091,4 +1091,7 @@
     <string name="sunday_short">Dim</string>
     <string name="disable_future_diary_title">Masquer les plannings futurs</string>
     <string name="disable_future_diary_summary">Configurer pour masquer les plannings futurs de la liste de l\'écran principal.</string>
+    <string name="language_setting_title">Langue</string>
+    <string name="language_setting_summary">Définir la langue de l\'application prioritaire sur les paramètres du système</string>
+    <string name="language_system_default">Par défaut du système</string>
 </resources>

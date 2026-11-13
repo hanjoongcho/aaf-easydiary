@@ -1091,4 +1091,7 @@
     <string name="sunday_short">周日</string>
     <string name="disable_future_diary_title">隐藏未来日程</string>
     <string name="disable_future_diary_summary">设置在主界面列表中不显示未来日程。</string>
+    <string name="language_setting_title">语言设置</string>
+    <string name="language_setting_summary">设置优先于设备设置的应用语言</string>
+    <string name="language_system_default">系统默认</string>
 </resources>

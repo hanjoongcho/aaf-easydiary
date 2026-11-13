@@ -1091,4 +1091,7 @@
     <string name="sunday_short">रवि</string>
     <string name="disable_future_diary_title">भविष्य के शेड्यूल छुपाएं</string>
     <string name="disable_future_diary_summary">मुख्य स्क्रीन सूची से भविष्य के शेड्यूल छुपाने के लिए कॉन्फ़िगर करें।</string>
+    <string name="language_setting_title">भाषा</string>
+    <string name="language_setting_summary">डिवाइस सेटिंग्स को ओवरराइड करने के लिए ऐप भाषा सेट करें</string>
+    <string name="language_system_default">सिस्टम डिफ़ॉल्ट</string>
 </resources>

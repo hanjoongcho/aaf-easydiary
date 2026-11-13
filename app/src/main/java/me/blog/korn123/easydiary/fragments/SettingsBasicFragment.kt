@@ -13,6 +13,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
@@ -264,6 +266,18 @@ class SettingsBasicFragment : Fragment() {
                                 }
                             }
                         }
+                    }
+
+                    val settingAppLanguage: String by settingsViewModel.appLanguageSubDescription.collectAsState()
+                    SimpleCard(
+                        title = getString(R.string.language_setting_title),
+                        description = getString(R.string.language_setting_summary),
+                        subDescription = settingAppLanguage,
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        openLanguageSettingDialog()
                     }
 
                     val settingThumbnailSize: String by settingsViewModel.thumbnailSizeSubDescription.collectAsState()
@@ -660,6 +674,63 @@ class SettingsBasicFragment : Fragment() {
                 builder.create().apply {
                     updateAlertDialogWithIcon(DialogMode.SETTING, this, null, containerView, getString(R.string.max_lines_title))
                 }
+            listView.setSelection(selectedIndex)
+        }
+    }
+
+    private fun openLanguageSettingDialog() {
+        requireActivity().run {
+            var alertDialog: AlertDialog? = null
+            val builder = AlertDialog.Builder(this)
+            builder.setNegativeButton(getString(android.R.string.cancel), null)
+            val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val containerView = inflater.inflate(R.layout.dialog_option_item, binding.root, false)
+            val listView = containerView.findViewById<ListView>(R.id.listView)
+
+            val listLanguages = listOf(
+                mapOf("optionTitle" to getString(R.string.language_system_default), "optionValue" to ""),
+                mapOf("optionTitle" to "Deutsch", "optionValue" to "de"),
+                mapOf("optionTitle" to "English", "optionValue" to "en"),
+                mapOf("optionTitle" to "Español", "optionValue" to "es"),
+                mapOf("optionTitle" to "Français", "optionValue" to "fr"),
+                mapOf("optionTitle" to "हिन्दी", "optionValue" to "hi"),
+                mapOf("optionTitle" to "Italiano", "optionValue" to "it"),
+                mapOf("optionTitle" to "日本語", "optionValue" to "ja"),
+                mapOf("optionTitle" to "한국어", "optionValue" to "ko"),
+                mapOf("optionTitle" to "Русский", "optionValue" to "ru"),
+                mapOf("optionTitle" to "Santali", "optionValue" to "sat"),
+                mapOf("optionTitle" to "简体中文", "optionValue" to "zh-CN"),
+                mapOf("optionTitle" to "繁體中文", "optionValue" to "zh-TW"),
+            )
+
+            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listLanguages, null, config.settingAppLanguage)
+            listView.adapter = arrayAdapter
+            listView.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, _, position, _ ->
+                    val optionInfo = parent.adapter.getItem(position) as? Map<*, *>
+                    (optionInfo?.get("optionValue") as? String)?.let { languageCode ->
+                        config.settingAppLanguage = languageCode
+                        val localeList =
+                            if (languageCode.isEmpty()) {
+                                LocaleListCompat.getEmptyLocaleList()
+                            } else {
+                                LocaleListCompat.forLanguageTags(languageCode)
+                            }
+                        AppCompatDelegate.setApplicationLocales(localeList)
+                        settingsViewModel.updateAppLanguageSubDescription()
+                    }
+                    alertDialog?.cancel()
+                }
+
+            alertDialog =
+                builder.create().apply {
+                    updateAlertDialogWithIcon(DialogMode.SETTING, this, null, containerView, getString(R.string.language_setting_title))
+                }
+
+            var selectedIndex = 0
+            listLanguages.forEachIndexed { index, map ->
+                if (config.settingAppLanguage == map["optionValue"]) selectedIndex = index
+            }
             listView.setSelection(selectedIndex)
         }
     }
