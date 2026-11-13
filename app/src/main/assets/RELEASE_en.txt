@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.355.202611140 (date: 2026.11.14)
+  * Added per-app language settings
+
 # Changes in 1.4.353.202611060 (date: 2026.11.06)
   * Remove Realm dependency completely
   * Enhance overall user interface and experience

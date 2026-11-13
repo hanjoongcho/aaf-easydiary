@@ -787,6 +787,10 @@
         Suppression complète de la dépendance Realm\n
         Amélioration de l\'interface utilisateur et de l\'expérience globale
     </string>
+    <string name="release_355">
+        v1.4.355.202611140 / 2026.11.14\n
+        Ajout des paramètres de langue par application
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

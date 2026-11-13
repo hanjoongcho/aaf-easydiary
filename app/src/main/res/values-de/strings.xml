@@ -787,6 +787,10 @@
         Realm-Abhängigkeit vollständig entfernt\n
         Gesamte Benutzeroberfläche und Benutzererfahrung verbessert
     </string>
+    <string name="release_355">
+        v1.4.355.202611140 / 2026.11.14\n
+        App-spezifische Spracheinstellungen hinzugefügt
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
