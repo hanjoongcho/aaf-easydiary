@@ -6,11 +6,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.ui.unit.dp
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.databinding.ActivityBaseSettingsBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
+import me.blog.korn123.easydiary.presentation.components.CustomElevatedButton
 
 abstract class BaseSettingsActivity : EasyDiaryActivity() {
     protected lateinit var binding: ActivityBaseSettingsBinding
@@ -30,9 +32,17 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
         }
 
         binding.run {
-            buttonAddSchedule.setOnClickListener {
-                dotIndicatorPager2Adapter.instantiateItem(binding.viewPager, binding.viewPager.currentItem).run {
-                    if (this is SettingsScheduleFragment) openAlarmDialog(alarmViewModel.makeTemporaryAlarm())
+            buttonAddSchedule.setContent {
+                CustomElevatedButton(
+                    text = "새로운 스케줄",
+                    iconResourceId = R.drawable.ic_signs,
+                    iconSize = 18.dp,
+                ) {
+                    dotIndicatorPager2Adapter.instantiateItem(binding.viewPager, binding.viewPager.currentItem).run {
+                        if (this is SettingsScheduleFragment) {
+                            openAlarmDialog(alarmViewModel.makeTemporaryAlarm(), null)
+                        }
+                    }
                 }
             }
         }
@@ -65,4 +75,3 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
 
     fun getProgressContainer() = binding.partialSettingsProgress.progressContainer
 }
-

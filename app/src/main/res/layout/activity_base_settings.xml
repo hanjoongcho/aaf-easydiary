@@ -72,16 +72,15 @@
         android:fitsSystemWindows="true"
         android:gravity="bottom|end"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.simplemobiletools.commons.views.MyFloatingActionButton
+        android:layout_height="match_parent"
+        android:layout_marginBottom="32dp"
+        >
+        <androidx.compose.ui.platform.ComposeView
             tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/button_add_schedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_signs" />
+            android:layout_margin="@dimen/fab_margin" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

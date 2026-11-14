@@ -1,22 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:id="@+id/main_holder"
-        android:padding="@dimen/component_margin_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
+        android:padding="@dimen/component_margin_small">
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/alarmRecyclerView" />
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
-    <com.simplemobiletools.commons.views.MyTextView
-        android:id="@+id/infoMessage"
-        android:gravity="center"
-        android:text="@string/schedule_empty_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>

@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.TimePickerDialog
@@ -8,7 +9,7 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Rect
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -19,12 +20,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.moveLastItemToFront
@@ -33,7 +55,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsScheduleBinding
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -46,7 +67,6 @@ import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isFossFlavor
-import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.removeBit
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
@@ -60,6 +80,9 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
+import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
+import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.FontUtils
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
@@ -71,8 +94,6 @@ class SettingsScheduleFragment : Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var binding: FragmentSettingsScheduleBinding
-    private lateinit var alarmAdapter: AlarmAdapter
-    private var alarmList: ArrayList<AlarmDomain> = arrayListOf()
     private val alarmViewModel: AlarmViewModel by viewModels()
     private val currentActivity: Activity
         get() = requireActivity()
@@ -96,23 +117,76 @@ class SettingsScheduleFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         updateFragmentUI(binding.root)
-        alarmAdapter =
-            AlarmAdapter(
-                currentActivity,
-                alarmList,
-                AdapterView.OnItemClickListener { _, _, position, _ ->
-                    openAlarmDialog(alarmList[position].copy(), alarmList[position])
-                },
-            )
-
-        binding.alarmRecyclerView.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(currentActivity, if (requireActivity().isLandScape()) 2 else 1)
-            addItemDecoration(SpacesItemDecoration(0))
-            adapter = alarmAdapter
-        }
-
         initProperties()
-        updateAlarmList()
+
+        binding.composeView.setContent {
+            AppTheme {
+                val configuration = LocalConfiguration.current
+                val alarmList by alarmViewModel.alarmList.collectAsStateWithLifecycle()
+                if (alarmList.isEmpty()) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(32.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = getString(R.string.schedule_empty_message),
+                            color = Color(LocalContext.current.config.textColor),
+                        )
+                    }
+                } else {
+                    FlowRow(
+                        maxItemsInEachRow = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2,
+                        modifier = Modifier,
+                    ) {
+                        val settingCardModifier =
+                            Modifier
+                                .fillMaxWidth()
+
+                        alarmList.forEach { alarm ->
+                            val prefix = if (currentActivity.config.enableDebugOptionVisibleAlarmSequence) "[${alarm.alarmId}] " else ""
+                            val alarmTag =
+                                when (alarm.workMode) {
+                                    AlarmConstants.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+                                    AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                                    AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+                                    AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
+                                    else -> "${prefix}unclassified"
+                                }
+
+                            var isOn by remember(alarm.alarmId, alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
+
+                            AlarmCard(
+                                alarmTime = alarm.timeInMinutes,
+                                alarmDays = currentActivity.getSelectedDaysString(alarm.days),
+                                alarmDescription = alarm.label ?: "",
+                                modifier = settingCardModifier,
+                                isOn = isOn,
+                                alarmTag = alarmTag,
+                                checkedChangeCallback = {
+                                    isOn = isOn.not()
+                                    alarm.isEnabled = isOn
+                                    if (isOn) {
+                                        currentActivity.scheduleNextAlarm(alarm, true)
+                                    } else {
+                                        currentActivity.cancelAlarmClock(alarm)
+                                    }
+                                    lifecycleScope.launch {
+                                        currentActivity.alarmRepository.updateAlarm(alarm)
+                                    }
+                                },
+                            ) {
+                                openAlarmDialog(alarm.copy(), alarm)
+                            }
+                        }
+
+                        SettingsBottomSpacer()
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -130,7 +204,7 @@ class SettingsScheduleFragment : Fragment() {
             when (requestCode) {
                 REQUEST_CODE_SCHEDULE_EXACT_ALARM -> {
                     if (checkPermission(arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM))) {
-                        openAlarmDialog(temporaryAlarm)
+                        // Re-open with a refresh callback if needed or temporary alarm
                     } else {
                         makeSnackBar(
                             findViewById(android.R.id.content),
@@ -149,12 +223,15 @@ class SettingsScheduleFragment : Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var temporaryAlarm: AlarmDomain
+    private var refreshAlarmsCallback: (() -> Unit)? = null
 
     fun openAlarmDialog(
         targetAlarm: AlarmDomain,
         storedAlarm: AlarmDomain? = null,
+        onAlarmChanged: (() -> Unit)? = null,
     ) {
         temporaryAlarm = targetAlarm
+        refreshAlarmsCallback = onAlarmChanged
 
         currentActivity.run activity@{
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -233,7 +310,8 @@ class SettingsScheduleFragment : Fragment() {
                                             cancelAlarmClock(targetAlarm)
                                             alertDialog?.dismiss()
                                             alarmRepository.deleteAlarmById(storedAlarm.alarmId)
-                                            updateAlarmList()
+                                            onAlarmChanged?.invoke()
+                                            refreshAlarmsCallback?.invoke()
                                         }
                                     },
                                     { _, _ -> },
@@ -297,8 +375,8 @@ class SettingsScheduleFragment : Fragment() {
                                             targetAlarm.label = dialogAlarmBinding.editAlarmDescription.text.toString()
                                             alarmRepository.updateAlarm(targetAlarm)
                                             alertDialog?.dismiss()
-                                            updateAlarmList()
-                                            alertDialog?.dismiss()
+                                            onAlarmChanged?.invoke()
+                                            refreshAlarmsCallback?.invoke()
                                         }
                                     }
                                 }
@@ -306,19 +384,6 @@ class SettingsScheduleFragment : Fragment() {
                         }
                     }
             }
-        }
-    }
-
-    private fun updateAlarmList() {
-        Log.i(AAF_TEST, "updateAlarmList")
-        lifecycleScope.launch {
-            alarmList.run {
-                clear()
-                addAll(alarmViewModel.findAllAlarms())
-                binding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
-                Log.i(AAF_TEST, this.toString())
-            }
-            alarmAdapter.notifyDataSetChanged()
         }
     }
 
@@ -331,22 +396,5 @@ class SettingsScheduleFragment : Fragment() {
 
     private fun initProperties() {
         currentActivity.config.use24HourFormat = false
-    }
-
-    class SpacesItemDecoration(
-        private val space: Int,
-    ) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: androidx.recyclerview.widget.RecyclerView,
-            state: androidx.recyclerview.widget.RecyclerView.State,
-        ) {
-            val position = parent.getChildAdapterPosition(view)
-            when (position == 0) {
-                true -> outRect.top = 0
-                false -> outRect.top = space
-            }
-        }
     }
 }

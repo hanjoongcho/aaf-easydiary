@@ -139,10 +139,11 @@ fun AlarmCard(
                 }
             }
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    modifier = modifier,
                     text =
                         LocalContext.current
                             .getFormattedTime(alarmTime.times(60), false, true)
