@@ -957,7 +957,8 @@
     <string name="schedule_description_hint">अलार्म विवरण</string>
     <string name="schedule_diary_writing_description">डायरी लेखन \n डायरी लेखन अनुसूची का अवलोकन करें। शेड्यूल पंजीकृत होने के बाद, निर्धारित दिन और समय के अनुसार एक अधिसूचना संदेश प्रदान किया जाता है।</string>
     <string name="schedule_backup_local_description">डायरी बैकअप (डिवाइस भंडारण) \n शेड्यूलिंग समय और समय के अनुसार डिवाइस के स्थानीय स्टोरेज के लिए संलग्न तस्वीरों को छोड़कर डेटाबेस फाइलों को शेड्यूल करता है और ऑपरेशन के परिणाम को अधिसूचना संदेश के रूप में प्रदान करता है।</string>
-    <string name="schedule_empty_message">कोई शेड्यूल जानकारी नहीं है। नया शेड्यूल जोड़ने के लिए ऊपर दाईं ओर प्लस बटन क्लिक करें।</string>
+    <string name="schedule_empty_message">कोई शेड्यूल जानकारी नहीं है। नया शेड्यूल जोड़ने के लिए ऊपर दाईं ओर प्लस बटन क्लिक करें。</string>
+    <string name="schedule_new">नया शेड्यूल</string>
     <string name="permission_confirmation_dialog_title">प्राधिकरण से अनुरोध करें</string>
     <string name="permission_confirmation_dialog_message">इजी डायरी का उपयोग करने के लिए प्राधिकरण की आवश्यकता है।</string>
     <string name="google_drive_account_information_title">Google खाते की जानकारी लिंक की गई</string>

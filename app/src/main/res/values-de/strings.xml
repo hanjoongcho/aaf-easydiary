@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">Tagebuch schreiben\nRegistrieren Sie den Zeitplan für das Tagebuchschreiben.\nWenn der Zeitplan registriert wird, wird eine Benachrichtigung entsprechend dem festgelegten Tag und der Uhrzeit bereitgestellt.</string>
     <string name="schedule_backup_local_description">Tagebuch-Sicherung (Gerätespeicherung)\nDurch die Registrierung des Zeitplans werden die Datenbankdateien mit Ausnahme der angehängten Fotos auf dem lokalen Speicher des Geräts entsprechend dem eingestellten Tag und der Uhrzeit gesichert und das Ergebnis der Operation als Benachrichtigung bereitgestellt.</string>
     <string name="schedule_empty_message">Es gibt keine festen Zeitplaninformationen.\nKlicken Sie auf die Plus-Schaltfläche oben rechts, um einen neuen Zeitplan hinzuzufügen.</string>
+    <string name="schedule_new">Neuer Zeitplan</string>
     <string name="permission_confirmation_dialog_title">Genehmigung beantragen</string>
     <string name="permission_confirmation_dialog_message">Für die Verwendung von Easy Diary ist eine Autorisierung erforderlich.</string>
     <string name="google_drive_account_information_title">Verknüpfte Google-Kontoinformationen</string>

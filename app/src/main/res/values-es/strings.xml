@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">Escritura de diario\nRegistre el horario de escritura del diario.\nCuando se registra el horario, se proporciona un mensaje de notificación de acuerdo con el día y la hora configurados.</string>
     <string name="schedule_backup_local_description">Copia de seguridad del diario (almacenamiento del dispositivo)\nEl registro de la programación hace una copia de seguridad de los archivos de la base de datos, excluidas las fotos adjuntas, en el almacenamiento local del dispositivo de acuerdo con el día y la hora establecidos y proporciona el resultado de la operación como un mensaje de notificación.</string>
     <string name="schedule_empty_message">No hay información de programación establecida.\nHaga clic en el botón más en la parte superior derecha para agregar un nuevo horario.</string>
+    <string name="schedule_new">Nuevo horario</string>
     <string name="permission_confirmation_dialog_title">Solicitar autorización</string>
     <string name="permission_confirmation_dialog_message">Se requiere autorización para usar Easy Diary.</string>
     <string name="google_drive_account_information_title">Información de la cuenta de Google vinculada</string>

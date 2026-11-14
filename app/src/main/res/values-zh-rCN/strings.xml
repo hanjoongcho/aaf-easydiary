@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">日记写作\n设定日记写作日程表。\n当日程表被设定时，会根据设定的日期和时间提供通知消息。</string>
     <string name="schedule_backup_local_description">日记备份(设备储存)\n根据时间表设定的日期和时间，备份数据库文件，但不包括从本地储存附加的照片，并以通知信息形式提供操作结果。</string>
     <string name="schedule_empty_message">没有设定日程信息。\n单击右上角的加号按钮添加新的日程。</string>
+    <string name="schedule_new">新日程</string>
     <string name="permission_confirmation_dialog_title">申请授权</string>
     <string name="permission_confirmation_dialog_message">使用Easy Diary须经授权。</string>
     <string name="google_drive_account_information_title">链接的Google帐户资料</string>

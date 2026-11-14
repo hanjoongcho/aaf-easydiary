@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">Ведение дневника\nЗарегистрируйте расписание ведения дневника.\nКогда расписание зарегистрировано, уведомление появится в соответствии с установленным днём и временем.</string>
     <string name="schedule_backup_local_description">Резервное копирование дневника (Хранилище устройства)\nПри регистрации расписания выполняется резервное копирование файлов базы данных, за исключением прикреплённых фотографий, в локальное хранилище устройства в соответствии с установленным днём и временем, результат операции отобразится в виде уведомления.</string>
     <string name="schedule_empty_message">Информация о расписании отсутствует.\nНажмите кнопку с плюсом в правом верхнем углу, чтобы добавить новое расписание.</string>
+    <string name="schedule_new">Новое расписание</string>
     <string name="permission_confirmation_dialog_title">Требуется авторизация</string>
     <string name="permission_confirmation_dialog_message">Для использования Easy Diary требуется авторизация.</string>
     <string name="google_drive_account_information_title">Информация о связанной учётной записи Google</string>

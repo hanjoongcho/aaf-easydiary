@@ -34,8 +34,8 @@ abstract class BaseSettingsActivity : EasyDiaryActivity() {
         binding.run {
             buttonAddSchedule.setContent {
                 CustomElevatedButton(
-                    text = "새로운 스케줄",
-                    iconResourceId = R.drawable.ic_signs,
+                    text = getString(R.string.schedule_new),
+                    iconResourceId = R.drawable.ic_outline_schedule_24,
                     iconSize = 18.dp,
                 ) {
                     dotIndicatorPager2Adapter.instantiateItem(binding.viewPager, binding.viewPager.currentItem).run {

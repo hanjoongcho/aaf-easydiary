@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">ᱰᱟᱭᱨᱤ ᱚᱞ\nᱰᱟᱭᱨᱤ ᱚᱞ ᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱢᱮ ᱾\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ, ᱥᱮᱴ ᱟᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾  </string>
     <string name="schedule_backup_local_description">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ(Device storage)\n\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱠᱚ ᱵᱮᱠᱟᱹᱯᱟᱭ ᱠᱷᱟᱹᱞᱤ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹ ᱪᱷᱟᱲᱤ ᱠᱟᱛᱮ ᱟᱨ ᱚᱱᱟ ᱥᱮᱴ ᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱨᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾</string>
     <string name="schedule_empty_message">ᱥᱮᱴ ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾\nᱱᱟᱶᱟ ᱥᱮᱰᱭᱩᱞ ᱥᱮᱞᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱪᱮᱛᱟᱱ ᱡᱚᱡᱚᱢ ᱛᱤ ᱯᱟᱦᱢᱟ ᱨᱮ ᱢᱮᱱᱟᱜ ᱵᱩᱛᱟᱹᱢ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
+    <string name="schedule_new">New schedule</string>
     <string name="permission_confirmation_dialog_title">ᱚᱛᱷᱚᱨᱟᱭᱡᱮᱥᱚᱱ ᱱᱮᱦᱚᱨ</string>
     <string name="permission_confirmation_dialog_message">Easy Diary ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱚᱛᱷᱚᱨᱟᱭᱡᱮᱥᱚᱱ ᱫᱚᱨᱠᱟᱨ ᱾</string>
     <string name="google_drive_account_information_title">ᱡᱩᱲᱟᱹᱣ ᱟᱠᱟᱱᱟ Google ᱠᱷᱟᱛᱟ ᱵᱤᱵᱨᱚᱬ</string>

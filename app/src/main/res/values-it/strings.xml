@@ -958,6 +958,7 @@
     <string name="schedule_diary_writing_description">Scrivi nel diario\nPianifica il momento in cui scrivere nel diario.\nQuando l\'attività pianificata viene salvata si genera un messaggio di notifica per data e orario selezionati.</string>
     <string name="schedule_backup_local_description">Backup del diario (memoria del dispositivo)\nPianificando questa attività verrà eseguito il backup dei file di database nella memoria interna del dispositivo, escluse le foto allegate, nella data e orario selezionati e verrà inviato un messaggio di notifica al termine dell\'operazione.</string>
     <string name="schedule_empty_message">Nessuna attività pianificata.\nTocca il pulsante \+ in alto a destra per aggiungere una nuova attività.</string>
+    <string name="schedule_new">Nuovo programma</string>
     <string name="permission_confirmation_dialog_title">Richiedi autorizzazione</string>
     <string name="permission_confirmation_dialog_message">È richiesta l\'autorizzazione per utilizzare Easy Diary.</string>
     <string name="google_drive_account_information_title">Informazioni account Google associato</string>
