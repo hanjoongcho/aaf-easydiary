@@ -55,7 +55,6 @@ class SymbolFilterPickerViewModel @Inject constructor(
         val currentSelected = _uiState.value.selectedSymbols
         val filteredList = currentSelected.filter { it != sequence }
         if (filteredList.isNotEmpty()) {
-            context.config.selectedSymbols = filteredList.joinToString(",")
             _uiState.update { it.copy(selectedSymbols = filteredList) }
         } else {
             _uiState.update {
@@ -77,7 +76,6 @@ class SymbolFilterPickerViewModel @Inject constructor(
             }
         } else {
             val updatedList = currentSelected + symbolSequence
-            context.config.selectedSymbols = updatedList.joinToString(",")
             _uiState.update {
                 it.copy(
                     selectedSymbols = updatedList,
@@ -85,6 +83,10 @@ class SymbolFilterPickerViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun saveSelectedSymbols() {
+        context.config.selectedSymbols = _uiState.value.selectedSymbols.joinToString(",")
     }
 
     fun onScrollToBottomHandled() {

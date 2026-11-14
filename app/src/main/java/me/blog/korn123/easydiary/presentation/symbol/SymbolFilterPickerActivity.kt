@@ -36,6 +36,7 @@ class SymbolFilterPickerActivity : EasyDiaryComposeBaseActivity() {
                     onRemoveSymbol = { sequence -> viewModel.removeSymbol(sequence) },
                     onAddSymbol = { sequence -> viewModel.addSymbol(sequence) },
                     onDismissAlertDialog = { viewModel.dismissAlertDialog() },
+                    onConfirmClick = { handleConfirm() },
                     onCloseClick = { handleClose() },
                     onScrollToBottomHandled = { viewModel.onScrollToBottomHandled() },
                 )
@@ -43,8 +44,14 @@ class SymbolFilterPickerActivity : EasyDiaryComposeBaseActivity() {
         }
     }
 
-    private fun handleClose() {
+    private fun handleConfirm() {
+        viewModel.saveSelectedSymbols()
         setResult(RESULT_OK)
+        finishActivityWithPauseLock()
+    }
+
+    private fun handleClose() {
+        setResult(RESULT_CANCELED)
         finishActivityWithPauseLock()
     }
 }

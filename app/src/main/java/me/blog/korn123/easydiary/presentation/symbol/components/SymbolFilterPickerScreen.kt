@@ -21,6 +21,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,6 +55,7 @@ fun SymbolFilterPickerScreen(
     onRemoveSymbol: (Int) -> Unit,
     onAddSymbol: (Int) -> Unit,
     onDismissAlertDialog: () -> Unit,
+    onConfirmClick: () -> Unit,
     onCloseClick: () -> Unit,
     onScrollToBottomHandled: () -> Unit,
 ) {
@@ -72,24 +75,35 @@ fun SymbolFilterPickerScreen(
             EasyDiaryActionBar(
                 title = "Symbol Picker",
                 useCloseIcon = true,
+                actions = {
+                    IconButton(onClick = onConfirmClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_check),
+                            contentDescription = "Confirm",
+                            tint = Color.White,
+                        )
+                    }
+                },
                 close = onCloseClick,
             )
         },
         containerColor = Color(context.config.backgroundColor),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             // Selected Symbol List (Top Grid)
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 state = gridState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp),
             ) {
                 items(uiState.selectedSymbols) { sequence ->
                     SelectedSymbolItem(
@@ -101,17 +115,20 @@ fun SymbolFilterPickerScreen(
 
             // Bottom Symbol Picker ViewPager (using SymbolPagerAdapter like openFeelingSymbolDialog)
             if (activity != null && uiState.categories.isNotEmpty()) {
-                val itemList = remember(uiState.categories) {
-                    ArrayList(uiState.categories.map { cat -> cat.symbols.map { it.info }.toTypedArray() })
-                }
-                val categoryList = remember(uiState.categories) {
-                    uiState.categories.map { cat -> cat.categoryName }
-                }
+                val itemList =
+                    remember(uiState.categories) {
+                        ArrayList(uiState.categories.map { cat -> cat.symbols.map { it.info }.toTypedArray() })
+                    }
+                val categoryList =
+                    remember(uiState.categories) {
+                        uiState.categories.map { cat -> cat.categoryName }
+                    }
 
                 AndroidView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(280.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(280.dp),
                     factory = { ctx ->
                         val inflater = LayoutInflater.from(ctx)
                         val view = inflater.inflate(R.layout.dialog_feeling_pager, null)
@@ -120,22 +137,25 @@ fun SymbolFilterPickerScreen(
                             (it as? View)?.visibility = View.GONE
                         }
 
-                        val viewPager = view.findViewById<ViewPager>(R.id.viewpager).apply {
-                            setBackgroundColor(ctx.config.backgroundColor)
-                        }
-                        val slidingTabLayout = view.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply {
-                            setBackgroundColor(ctx.config.backgroundColor)
-                        }
+                        val viewPager =
+                            view.findViewById<ViewPager>(R.id.viewpager).apply {
+                                setBackgroundColor(ctx.config.backgroundColor)
+                            }
+                        val slidingTabLayout =
+                            view.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply {
+                                setBackgroundColor(ctx.config.backgroundColor)
+                            }
 
-                        val adapter = SymbolPagerAdapter(
-                            activity = activity,
-                            items = itemList,
-                            categories = categoryList,
-                            selectedSymbolSequence = 0,
-                            callback = { symbolSequence ->
-                                onAddSymbol(symbolSequence)
-                            },
-                        )
+                        val adapter =
+                            SymbolPagerAdapter(
+                                activity = activity,
+                                items = itemList,
+                                categories = categoryList,
+                                selectedSymbolSequence = 0,
+                                callback = { symbolSequence ->
+                                    onAddSymbol(symbolSequence)
+                                },
+                            )
                         viewPager.adapter = adapter
                         slidingTabLayout.setViewPager(viewPager)
                         view
@@ -167,15 +187,17 @@ fun SelectedSymbolItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .padding(dimensionResource(id = R.dimen.component_margin_small))
-            .clickable { onRemoveClick() },
+        modifier =
+            modifier
+                .padding(dimensionResource(id = R.dimen.component_margin_small))
+                .clickable { onRemoveClick() },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
             contentAlignment = Alignment.Center,
         ) {
             AndroidView(
@@ -198,9 +220,10 @@ fun SelectedSymbolItem(
             Image(
                 painter = painterResource(id = R.drawable.ic_delete),
                 contentDescription = "Remove symbol",
-                modifier = Modifier
-                    .size(20.dp)
-                    .align(Alignment.TopEnd),
+                modifier =
+                    Modifier
+                        .size(20.dp)
+                        .align(Alignment.TopEnd),
             )
         }
     }
