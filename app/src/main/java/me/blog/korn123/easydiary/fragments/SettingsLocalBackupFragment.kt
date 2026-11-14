@@ -16,12 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -380,7 +378,7 @@ class SettingsLocalBackupFragment : Fragment() {
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    SettingsBottomSpacer()
                 }
             }
         }

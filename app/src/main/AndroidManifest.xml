@@ -152,7 +152,7 @@
             android:name=".presentation.markdown.MarkDownViewerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SymbolFilterPickerActivity"
+            android:name=".presentation.symbol.SymbolFilterPickerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.GalleryActivity"
