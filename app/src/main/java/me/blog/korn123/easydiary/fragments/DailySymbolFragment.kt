@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.activities.DashboardActivity
-import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
+import me.blog.korn123.easydiary.presentation.symbol.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
@@ -33,6 +33,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DateUtilConstants
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.calendar.CalendarContent
 import me.blog.korn123.easydiary.presentation.calendar.CalendarViewModel
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
@@ -85,6 +86,7 @@ class DailySymbolFragment : Fragment() {
                     Intent(requireContext(), SymbolFilterPickerActivity::class.java).apply {
                         requestUpdateDailySymbol.launch(this)
                     }
+                    TransitionHelper.applyTransition(requireActivity())
                 }
                 switchCalendar.setOnCheckedChangeListener { _, isChecked ->
                     config.enableDashboardCalendar = isChecked

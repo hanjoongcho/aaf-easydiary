@@ -36,5 +36,18 @@ class TransitionHelper {
                 }
             }
         }
+
+        fun applyTransition(
+            activity: Activity?,
+            type: Int = TransitionConstants.DEFAULT,
+        ) {
+            activity?.run {
+                when (type) {
+                    TransitionConstants.DEFAULT -> overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    TransitionConstants.BOTTOM_TO_TOP -> overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
+                    TransitionConstants.TOP_TO_BOTTOM -> overridePendingTransition(R.anim.stay, R.anim.slide_in_down)
+                }
+            }
+        }
     }
 }

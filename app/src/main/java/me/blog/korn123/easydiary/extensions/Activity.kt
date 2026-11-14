@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -550,7 +551,7 @@ fun Activity.addCategory(
     }
 }
 
-fun Activity.getUncheckedSymbolItem(): String {
+fun Context.getUncheckedSymbolItem(): String {
     val resourceId = resources.getIdentifier("weather_item_array", "array", packageName)
     return if (resourceId != 0) resources.getStringArray(resourceId)[0] else "-1|N/A"
 }
