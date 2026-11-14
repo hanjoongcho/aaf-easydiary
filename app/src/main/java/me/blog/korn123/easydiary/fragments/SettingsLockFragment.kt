@@ -9,9 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.R
@@ -163,7 +161,7 @@ class SettingsLockFragment : Fragment() {
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    SettingsBottomSpacer()
                 }
             }
         }

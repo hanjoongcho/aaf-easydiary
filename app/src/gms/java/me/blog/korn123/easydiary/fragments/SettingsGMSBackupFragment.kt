@@ -19,15 +19,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -316,7 +314,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                         syncGoogleCalendar()
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    SettingsBottomSpacer()
                 }
             }
         }

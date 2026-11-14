@@ -14,12 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,6 +29,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.BuildConfig
@@ -46,6 +45,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isFossFlavor
 import me.blog.korn123.easydiary.extensions.isLocationEnabled
+import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
@@ -462,7 +462,7 @@ class SettingsBasicFragment : Fragment() {
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    SettingsBottomSpacer()
                 }
             }
         }
@@ -687,21 +687,22 @@ class SettingsBasicFragment : Fragment() {
             val containerView = inflater.inflate(R.layout.dialog_option_item, binding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
-            val listLanguages = listOf(
-                mapOf("optionTitle" to getString(R.string.language_system_default), "optionValue" to ""),
-                mapOf("optionTitle" to "Deutsch", "optionValue" to "de"),
-                mapOf("optionTitle" to "English", "optionValue" to "en"),
-                mapOf("optionTitle" to "Español", "optionValue" to "es"),
-                mapOf("optionTitle" to "Français", "optionValue" to "fr"),
-                mapOf("optionTitle" to "हिन्दी", "optionValue" to "hi"),
-                mapOf("optionTitle" to "Italiano", "optionValue" to "it"),
-                mapOf("optionTitle" to "日本語", "optionValue" to "ja"),
-                mapOf("optionTitle" to "한국어", "optionValue" to "ko"),
-                mapOf("optionTitle" to "Русский", "optionValue" to "ru"),
-                mapOf("optionTitle" to "Santali", "optionValue" to "sat"),
-                mapOf("optionTitle" to "简体中文", "optionValue" to "zh-CN"),
-                mapOf("optionTitle" to "繁體中文", "optionValue" to "zh-TW"),
-            )
+            val listLanguages =
+                listOf(
+                    mapOf("optionTitle" to getString(R.string.language_system_default), "optionValue" to ""),
+                    mapOf("optionTitle" to "Deutsch", "optionValue" to "de"),
+                    mapOf("optionTitle" to "English", "optionValue" to "en"),
+                    mapOf("optionTitle" to "Español", "optionValue" to "es"),
+                    mapOf("optionTitle" to "Français", "optionValue" to "fr"),
+                    mapOf("optionTitle" to "हिन्दी", "optionValue" to "hi"),
+                    mapOf("optionTitle" to "Italiano", "optionValue" to "it"),
+                    mapOf("optionTitle" to "日本語", "optionValue" to "ja"),
+                    mapOf("optionTitle" to "한국어", "optionValue" to "ko"),
+                    mapOf("optionTitle" to "Русский", "optionValue" to "ru"),
+                    mapOf("optionTitle" to "Santali", "optionValue" to "sat"),
+                    mapOf("optionTitle" to "简体中文", "optionValue" to "zh-CN"),
+                    mapOf("optionTitle" to "繁體中文", "optionValue" to "zh-TW"),
+                )
 
             val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listLanguages, null, config.settingAppLanguage)
             listView.adapter = arrayAdapter
