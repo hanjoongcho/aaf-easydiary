@@ -189,7 +189,7 @@ import me.blog.korn123.easydiary.helper.SETTING_FONT_SIZE
 import me.blog.korn123.easydiary.helper.SETTING_SELECTED_SYMBOLS
 import me.blog.korn123.easydiary.helper.SETTING_SUMMARY_MAX_LINES
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
-import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
+import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
@@ -1241,7 +1241,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
     if (isNightMode()) return
 
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP.toFloat())
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
         .map { index -> viewGroup.getChildAt(index) }
@@ -1287,7 +1287,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
 fun Context.initTextSize(textView: TextView) {
     if (isNightMode()) return
 
-    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

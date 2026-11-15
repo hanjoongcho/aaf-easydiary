@@ -11,6 +11,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -37,6 +38,7 @@ fun SimpleText(
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     maxLines: Int = Int.MAX_VALUE,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     val density = LocalDensity.current
     val textUnit =
@@ -55,6 +57,7 @@ fun SimpleText(
 //                        fontStyle = FontStyle.Italic,
                 color = fontColor.copy(alpha),
                 fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                textAlign = textAlign,
             ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
         maxLines = maxLines,
@@ -80,6 +83,7 @@ fun SimpleText(
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
     maxLines: Int = Int.MAX_VALUE,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     val density = LocalDensity.current
     val textUnit =
@@ -98,6 +102,7 @@ fun SimpleText(
 //                        fontStyle = FontStyle.Italic,
                 color = fontColor.copy(alpha),
                 fontSize = TextUnit(textUnit.value, TextUnitType.Sp),
+                textAlign = textAlign,
             ),
         lineHeight = textUnit.value.times(lineSpacingScaleFactor.sp),
         maxLines = maxLines,

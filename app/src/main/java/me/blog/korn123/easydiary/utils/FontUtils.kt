@@ -88,7 +88,7 @@ object FontUtils {
         activity.run {
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
+                config.settingFontSize = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP.toFloat())
             }
         }
     }
@@ -124,8 +124,8 @@ object FontUtils {
     fun getTypeface(
         context: Context,
         fontName: String?,
-    ): Typeface {
-        return try {
+    ): Typeface =
+        try {
             val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
             val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
             when {
@@ -160,7 +160,6 @@ object FontUtils {
         } catch (_: Throwable) {
             Typeface.DEFAULT
         }
-    }
 
     fun fontFileNameToDisplayName(
         context: Context,
@@ -216,15 +215,16 @@ object FontUtils {
                     if (fontName.equals(CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT, ignoreCase = true)) {
                         null
                     } else {
-                        val typeface = try {
-                            Typeface.createFromAsset(context.assets, "fonts/" + fontName)
-                        } catch (_: Throwable) {
+                        val typeface =
                             try {
-                                Typeface.createFromAsset(context.applicationContext.assets, "fonts/" + fontName)
+                                Typeface.createFromAsset(context.assets, "fonts/" + fontName)
                             } catch (_: Throwable) {
-                                null
+                                try {
+                                    Typeface.createFromAsset(context.applicationContext.assets, "fonts/" + fontName)
+                                } catch (_: Throwable) {
+                                    null
+                                }
                             }
-                        }
                         typeface?.let { FontFamily(it) }
                     }
                 }

@@ -1,17 +1,13 @@
 package me.blog.korn123.easydiary.presentation.settings.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -31,22 +27,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.ComposeConstants.VERTICAL_PADDING
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.utils.FontUtils
+import java.util.Locale
 
 /***************************************************************************************************
  *   Font / Display Setting Card
@@ -256,6 +252,7 @@ fun LineSpacing(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FontSize(
     title: String,
@@ -272,8 +269,7 @@ fun FontSize(
             )
         },
     lineSpacingScaleFactor: Float = LocalContext.current.config.lineSpacingScaleFactor,
-    callbackMinus: () -> Unit = {},
-    callbackPlus: () -> Unit = {},
+    callback: (fontSizePixel: Float) -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
@@ -307,44 +303,71 @@ fun FontSize(
                 )
             }
 
+            val ctx = LocalContext.current
+            val density = LocalDensity.current
+            val currentSp = with(density) { fontSize.toSp().value }
+
+            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 32.dp) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(
+                        onClick = {
+                            val newSp = (currentSp - 0.5f).coerceIn(10f, 35f)
+                            val roundedPixel = kotlin.math.round(ctx.spToPixelFloatValue(newSp) * 10) / 10.0f
+                            ctx.config.settingFontSize = roundedPixel
+                            callback(roundedPixel)
+                        },
+                        modifier = Modifier.size(32.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Decrease font size",
+                            tint = Color(ctx.config.textColor),
+                        )
+                    }
+
+                    SimpleText(
+                        modifier = Modifier.weight(1f),
+                        text = "${String.format(Locale.US, "%.1f", currentSp)} sp",
+                        fontSize = fontSize,
+                        fontFamily = fontFamily,
+                        lineSpacingScaleFactor = lineSpacingScaleFactor,
+                        textAlign = TextAlign.Center,
+                    )
+
+                    IconButton(
+                        onClick = {
+                            val newSp = (currentSp + 0.5f).coerceIn(10f, 35f)
+                            val roundedPixel = kotlin.math.round(ctx.spToPixelFloatValue(newSp) * 10) / 10.0f
+                            ctx.config.settingFontSize = roundedPixel
+                            callback(roundedPixel)
+                        },
+                        modifier = Modifier.size(32.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Increase font size",
+                            tint = Color(ctx.config.textColor),
+                        )
+                    }
+                }
+            }
+
             Row(
                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 SimpleText(
-                    modifier = Modifier.weight(1f),
                     text = description,
                     alpha = 0.7f,
                     fontSize = fontSize,
                     fontFamily = fontFamily,
                     lineSpacingScaleFactor = lineSpacingScaleFactor,
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_minus_6),
-                    contentDescription = "Google Calendar",
-                    contentScale = ContentScale.Fit,
-                    modifier =
-                        Modifier
-                            .size(32.dp)
-                            .padding(3.dp)
-                            .clickable {
-                                callbackMinus.invoke()
-                            },
-                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.ic_plus_6),
-                    contentDescription = "Google Calendar",
-                    contentScale = ContentScale.Fit,
-                    modifier =
-                        Modifier
-                            .size(32.dp)
-                            .padding(3.dp)
-                            .clickable {
-                                callbackPlus.invoke()
-                            },
-                    colorFilter = ColorFilter.tint(Color(LocalContext.current.config.textColor)),
                 )
             }
         }

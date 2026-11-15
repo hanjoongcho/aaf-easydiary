@@ -197,17 +197,9 @@ class SettingsFontFragment : Fragment() {
                         fontSize = fontSize,
                         fontFamily = fontFamily,
                         lineSpacingScaleFactor = lineSpacingScaleFactor,
-                        callbackMinus = {
-                            requireActivity().run {
-                                config.settingFontSize = config.settingFontSize.minus(3)
-                                settingsViewModel.setFontSize(config.settingFontSize)
-                            }
-                        },
-                        callbackPlus = {
-                            requireActivity().run {
-                                config.settingFontSize = config.settingFontSize.plus(3)
-                                settingsViewModel.setFontSize(config.settingFontSize)
-                            }
+                        callback = { fontSizePixel ->
+                            setFontsStyle()
+                            settingsViewModel.setFontSize(fontSizePixel)
                         },
                     )
 

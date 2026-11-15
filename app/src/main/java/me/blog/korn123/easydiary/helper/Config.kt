@@ -101,7 +101,7 @@ class Config(
         set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
 
     var settingFontSize: Float
-        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()))
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP.toFloat()))
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 
     var diarySearchQueryCaseSensitive: Boolean
