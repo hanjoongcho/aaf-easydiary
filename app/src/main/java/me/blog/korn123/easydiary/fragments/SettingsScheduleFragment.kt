@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.TimePickerDialog
@@ -53,13 +52,11 @@ import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.addBit
 import me.blog.korn123.easydiary.extensions.alarmRepository
 import me.blog.korn123.easydiary.extensions.cancelAlarmClock
-import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getFormattedTime
 import me.blog.korn123.easydiary.extensions.getSelectedDaysString
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isFossFlavor
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.removeBit
 import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -69,7 +66,6 @@ import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.AlarmConstants
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_SCHEDULE_EXACT_ALARM
 import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
 import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
@@ -186,29 +182,6 @@ class SettingsScheduleFragment : Fragment() {
         currentActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray,
-    ) {
-        requireActivity().run {
-            when (requestCode) {
-                REQUEST_CODE_SCHEDULE_EXACT_ALARM -> {
-                    if (checkPermission(arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM))) {
-                        // Re-open with a refresh callback if needed or temporary alarm
-                    } else {
-                        makeSnackBar(
-                            findViewById(android.R.id.content),
-                            getString(R.string.guide_message_3),
-                        )
-                    }
-                }
-
-                else -> {}
-            }
-        }
-    }
-
     /***************************************************************************************************
      *   etc functions
      *
@@ -227,7 +200,17 @@ class SettingsScheduleFragment : Fragment() {
         currentActivity.run activity@{
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                showAlertDialog(
+                    message = getString(R.string.guide_message_3),
+                    positiveListener = { _, _ ->
+                        startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                    },
+                    negativeListener = { _, _ -> },
+                    dialogMode = DialogMode.WARNING,
+                    positiveButtonLabel = getString(R.string.settings),
+                    negativeButtonLabel = getString(android.R.string.cancel),
+                    paramTitle = getString(R.string.preferences_category_schedule),
+                )
             } else {
                 val dialogAlarmBinding = DialogAlarmBinding.inflate(layoutInflater)
                 var alertDialog: AlertDialog? = null
