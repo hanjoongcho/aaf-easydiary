@@ -1,9 +1,10 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import android.graphics.Color
 import android.text.format.DateFormat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,104 +34,100 @@ class Config(
     // / Simple Mobile Tools properties
     // / ------------------------------------------------------------------
     var textColor: Int
-        get() = prefs.getInt(TEXT_COLOR, context.resources.getColor(R.color.default_text_color))
-        set(textColor) = prefs.edit().putInt(TEXT_COLOR, textColor).apply()
+        get() = prefs.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.default_text_color))
+        set(textColor) = prefs.edit { putInt(TEXT_COLOR, textColor) }
 
     var backgroundColor: Int
-        get() = prefs.getInt(BACKGROUND_COLOR, context.resources.getColor(R.color.default_background_color))
-        set(backgroundColor) = prefs.edit().putInt(BACKGROUND_COLOR, backgroundColor).apply()
+        get() = prefs.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.default_background_color))
+        set(backgroundColor) = prefs.edit { putInt(BACKGROUND_COLOR, backgroundColor) }
 
     var primaryColor: Int
-        get() = prefs.getInt(PRIMARY_COLOR, context.resources.getColor(R.color.color_primary))
-        set(primaryColor) = prefs.edit().putInt(PRIMARY_COLOR, primaryColor).apply()
+        get() = prefs.getInt(PRIMARY_COLOR, ContextCompat.getColor(context, R.color.color_primary))
+        set(primaryColor) = prefs.edit { putInt(PRIMARY_COLOR, primaryColor) }
 
     var use24HourFormat: Boolean
         get() = prefs.getBoolean(USE_24_HOUR_FORMAT, DateFormat.is24HourFormat(context))
-        set(use24HourFormat) = prefs.edit().putBoolean(USE_24_HOUR_FORMAT, use24HourFormat).apply()
+        set(use24HourFormat) = prefs.edit { putBoolean(USE_24_HOUR_FORMAT, use24HourFormat) }
 
     var isSundayFirst: Boolean
         get() {
             val isSundayFirst = Calendar.getInstance(Locale.getDefault()).firstDayOfWeek == Calendar.SUNDAY
             return prefs.getBoolean(SUNDAY_FIRST, isSundayFirst)
         }
-        set(sundayFirst) = prefs.edit().putBoolean(SUNDAY_FIRST, sundayFirst).apply()
+        set(sundayFirst) = prefs.edit { putBoolean(SUNDAY_FIRST, sundayFirst) }
 
     var screenBackgroundColor: Int
-        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
-        set(screenBackgroundColor) = prefs.edit().putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor).apply()
+        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR.toColorInt())
+        set(screenBackgroundColor) = prefs.edit { putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor) }
 
     // / ------------------------------------------------------------------
     // / Awesome Application Factory legacy properties
     // / ------------------------------------------------------------------
     var aafPinLockPauseMillis: Long
         get() = prefs.getLong(AAF_PIN_LOCK_PAUSE_MILLIS, 0L)
-        set(aafPinLockPauseMillis) = prefs.edit().putLong(AAF_PIN_LOCK_PAUSE_MILLIS, aafPinLockPauseMillis).apply()
+        set(aafPinLockPauseMillis) = prefs.edit { putLong(AAF_PIN_LOCK_PAUSE_MILLIS, aafPinLockPauseMillis) }
 
     var isThemeChanged: Boolean
         get() = prefs.getBoolean(AAF_THEME_CHANGE, false)
-        set(isThemeChanged) = prefs.edit().putBoolean(AAF_THEME_CHANGE, isThemeChanged).apply()
+        set(isThemeChanged) = prefs.edit { putBoolean(AAF_THEME_CHANGE, isThemeChanged) }
 
     // / ------------------------------------------------------------------
     // / Dev properties
     // / ------------------------------------------------------------------
     var devStockChartOptionFromMillis: Long
         get() = prefs.getLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, Calendar.getInstance(Locale.getDefault()).apply { add(Calendar.MONTH, -3) }.timeInMillis)
-        set(stockChartOptionFromMillis) = prefs.edit().putLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, stockChartOptionFromMillis).apply()
+        set(stockChartOptionFromMillis) = prefs.edit { putLong(DEV_STOCK_CHART_OPTIONS_FROM_MILLIS, stockChartOptionFromMillis) }
 
     var devStockEnableEvaluatePrice: Boolean
         get() = prefs.getBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, true)
-        set(devStockEnableEvaluatePrice) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, devStockEnableEvaluatePrice).apply()
+        set(devStockEnableEvaluatePrice) = prefs.edit { putBoolean(DEV_STOCK_ENABLE_EVALUATE_PRICE, devStockEnableEvaluatePrice) }
 
     var devStockEnablePrincipalHighlight: Boolean
         get() = prefs.getBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, false)
-        set(devStockEnablePrincipalHighlight) = prefs.edit().putBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, devStockEnablePrincipalHighlight).apply()
+        set(devStockEnablePrincipalHighlight) = prefs.edit { putBoolean(DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT, devStockEnablePrincipalHighlight) }
 
     // / ------------------------------------------------------------------
     // / Easy Diary properties
     // / ------------------------------------------------------------------
     var settingFontName: String
         get() = legacyPrefs.getString(SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)!!
-        set(settingFontName) = legacyPrefs.edit().putString(SETTING_FONT_NAME, settingFontName).apply()
+        set(settingFontName) = legacyPrefs.edit { putString(SETTING_FONT_NAME, settingFontName) }
 
     var aafPinLockSavedPassword: String
         get() = legacyPrefs.getString(APP_LOCK_SAVED_PASSWORD, APP_LOCK_DEFAULT_PASSWORD)!!
-        set(aafPinLockSavedPassword) = legacyPrefs.edit().putString(APP_LOCK_SAVED_PASSWORD, aafPinLockSavedPassword).apply()
+        set(aafPinLockSavedPassword) = legacyPrefs.edit { putString(APP_LOCK_SAVED_PASSWORD, aafPinLockSavedPassword) }
 
     var previousActivity: Int
         get() = legacyPrefs.getInt(PREVIOUS_ACTIVITY, -1)
-        set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
+        set(previousActivity) = legacyPrefs.edit { putInt(PREVIOUS_ACTIVITY, previousActivity) }
 
     var settingFontSize: Float
         get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP.toFloat()))
-        set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
+        set(settingFontSize) = legacyPrefs.edit { putFloat(SETTING_FONT_SIZE, settingFontSize) }
 
     var diarySearchQueryCaseSensitive: Boolean
         get() = legacyPrefs.getBoolean(DIARY_SEARCH_QUERY_CASE_SENSITIVE, false)
-        set(diarySearchQueryCaseSensitive) = legacyPrefs.edit().putBoolean(DIARY_SEARCH_QUERY_CASE_SENSITIVE, diarySearchQueryCaseSensitive).apply()
+        set(diarySearchQueryCaseSensitive) = legacyPrefs.edit { putBoolean(DIARY_SEARCH_QUERY_CASE_SENSITIVE, diarySearchQueryCaseSensitive) }
 
     var aafPinLockEnable: Boolean
         get() = legacyPrefs.getBoolean(APP_LOCK_ENABLE, false)
-        set(aafPinLockEnable) = legacyPrefs.edit().putBoolean(APP_LOCK_ENABLE, aafPinLockEnable).apply()
-
-    var isInitDummyData: Boolean
-        get() = legacyPrefs.getBoolean(INIT_DUMMY_DATA_FLAG, false)
-        set(isInitDummyData) = legacyPrefs.edit().putBoolean(INIT_DUMMY_DATA_FLAG, isInitDummyData).apply()
+        set(aafPinLockEnable) = legacyPrefs.edit { putBoolean(APP_LOCK_ENABLE, aafPinLockEnable) }
 
     var lineSpacingScaleFactor: Float
         get() = legacyPrefs.getFloat(LINE_SPACING_SCALE_FACTOR, LINE_SPACING_SCALE_DEFAULT)
-        set(lineSpacingScaleFactor) = legacyPrefs.edit().putFloat(LINE_SPACING_SCALE_FACTOR, lineSpacingScaleFactor).apply()
+        set(lineSpacingScaleFactor) = legacyPrefs.edit { putFloat(LINE_SPACING_SCALE_FACTOR, lineSpacingScaleFactor) }
 
     var settingThumbnailSize: Float
         get() = prefs.getFloat(SETTING_THUMBNAIL_SIZE, THUMBNAIL_SIZE_DEFAULT_DP.toFloat())
-        set(settingThumbnailSize) = prefs.edit().putFloat(SETTING_THUMBNAIL_SIZE, settingThumbnailSize).apply()
+        set(settingThumbnailSize) = prefs.edit { putFloat(SETTING_THUMBNAIL_SIZE, settingThumbnailSize) }
 
     var settingCalendarFontScale: Float
-        get() = prefs.getFloat(SETTING_CALENDAR_FONT_SCALE, DEFAULT_CALENDAR_FONT_SCALE.toFloat())
-        set(calendarFontScale) = prefs.edit().putFloat(SETTING_CALENDAR_FONT_SCALE, calendarFontScale).apply()
+        get() = prefs.getFloat(SETTING_CALENDAR_FONT_SCALE, DEFAULT_CALENDAR_FONT_SCALE)
+        set(calendarFontScale) = prefs.edit { putFloat(SETTING_CALENDAR_FONT_SCALE, calendarFontScale) }
 
     var boldStyleEnable: Boolean
         get() = prefs.getBoolean(SETTING_BOLD_STYLE, false)
-        set(boldStyleEnable) = prefs.edit().putBoolean(SETTING_BOLD_STYLE, boldStyleEnable).apply()
+        set(boldStyleEnable) = prefs.edit { putBoolean(SETTING_BOLD_STYLE, boldStyleEnable) }
 
 //    var multiPickerEnable: Boolean
 //        get() = prefs.getBoolean(SETTING_MULTIPLE_PICKER, false)
@@ -138,115 +135,107 @@ class Config(
 
     var fingerprintLockEnable: Boolean
         get() = prefs.getBoolean(SETTING_FINGERPRINT_LOCK, false)
-        set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
+        set(fingerprintLockEnable) = prefs.edit { putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable) }
 
     var fingerprintEncryptData: String
         get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, String.EMPTY) ?: String.EMPTY
-        set(fingerprintEncryptData) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData).apply()
+        set(fingerprintEncryptData) = prefs.edit { putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData) }
 
     var fingerprintEncryptDataIV: String
         get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, String.EMPTY) ?: String.EMPTY
-        set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
+        set(fingerprintEncryptDataIV) = prefs.edit { putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV) }
 
     var fingerprintAuthenticationFailCount: Int
         get() = prefs.getInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, 0)
-        set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
+        set(fingerprintAuthenticationFailCount) = prefs.edit { putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount) }
 
     var enableCardViewPolicy: Boolean
         get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, true)
-        set(enableCardViewPolicy) = prefs.edit().putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy).apply()
+        set(enableCardViewPolicy) = prefs.edit { putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy) }
 
     var enableContentsSummary: Boolean
         get() = prefs.getBoolean(SETTING_CONTENTS_SUMMARY, true)
-        set(enableContentsSummary) = prefs.edit().putBoolean(SETTING_CONTENTS_SUMMARY, enableContentsSummary).apply()
-
-    var postCardCropMode: Int
-        get() = prefs.getInt(POSTCARD_CROP_MODE, 0)
-        set(postCardCropMode) = prefs.edit().putInt(POSTCARD_CROP_MODE, postCardCropMode).apply()
-
-    var clearLegacyToken: Boolean
-        get() = prefs.getBoolean(SETTING_CLEAR_LEGACY_TOKEN, false)
-        set(clearLegacyToken) = prefs.edit().putBoolean(SETTING_CLEAR_LEGACY_TOKEN, clearLegacyToken).apply()
+        set(enableContentsSummary) = prefs.edit { putBoolean(SETTING_CONTENTS_SUMMARY, enableContentsSummary) }
 
     var calendarStartDay: Int
         get() = prefs.getInt(SETTING_CALENDAR_START_DAY, CALENDAR_START_DAY_SUNDAY)
-        set(calendarStartDay) = prefs.edit().putInt(SETTING_CALENDAR_START_DAY, calendarStartDay).apply()
+        set(calendarStartDay) = prefs.edit { putInt(SETTING_CALENDAR_START_DAY, calendarStartDay) }
 
     var enableCountCharacters: Boolean
         get() = prefs.getBoolean(SETTING_COUNT_CHARACTERS, false)
-        set(enableCountCharacters) = prefs.edit().putBoolean(SETTING_COUNT_CHARACTERS, enableCountCharacters).apply()
+        set(enableCountCharacters) = prefs.edit { putBoolean(SETTING_COUNT_CHARACTERS, enableCountCharacters) }
 
     var diaryBackupGoogle: Long
         get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
-        set(diaryBackupGoogle) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle).apply()
+        set(diaryBackupGoogle) = prefs.edit { putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle) }
 
     var photoBackupGoogle: Long
         get() = prefs.getLong(PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
-        set(photoBackupGoogle) = prefs.edit().putLong(PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, photoBackupGoogle).apply()
+        set(photoBackupGoogle) = prefs.edit { putLong(PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, photoBackupGoogle) }
 
     var diaryBackupLocal: Long
         get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_LOCAL, 0)
-        set(diaryBackupLocal) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_LOCAL, diaryBackupLocal).apply()
+        set(diaryBackupLocal) = prefs.edit { putLong(DIARY_LAST_BACKUP_TIMESTAMP_LOCAL, diaryBackupLocal) }
 
     var calendarSorting: Int
         get() = prefs.getInt(SETTING_CALENDAR_SORTING, CALENDAR_SORTING_DESC)
-        set(calendarSorting) = prefs.edit().putInt(SETTING_CALENDAR_SORTING, calendarSorting).apply()
+        set(calendarSorting) = prefs.edit { putInt(SETTING_CALENDAR_SORTING, calendarSorting) }
 
     var updatePreference: Boolean
         get() = prefs.getBoolean(UPDATE_SHARED_PREFERENCE, false)
-        set(updatePreference) = prefs.edit().putBoolean(UPDATE_SHARED_PREFERENCE, updatePreference).apply()
+        set(updatePreference) = prefs.edit { putBoolean(UPDATE_SHARED_PREFERENCE, updatePreference) }
 
     var holdPositionEnterEditScreen: Boolean
         get() = prefs.getBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, false)
-        set(holdPositionEnterEditScreen) = prefs.edit().putBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, holdPositionEnterEditScreen).apply()
+        set(holdPositionEnterEditScreen) = prefs.edit { putBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, holdPositionEnterEditScreen) }
 
     var summaryMaxLines: Int
         get() = prefs.getInt(SETTING_SUMMARY_MAX_LINES, SETTING_SUMMARY_MAX_LINES_DEFAULT)
-        set(summaryMaxLines) = prefs.edit().putInt(SETTING_SUMMARY_MAX_LINES, summaryMaxLines).apply()
+        set(summaryMaxLines) = prefs.edit { putInt(SETTING_SUMMARY_MAX_LINES, summaryMaxLines) }
 
     var enableDebugMode: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_DEBUG_CONSOLE, false)
-        set(enableDebugMode) = prefs.edit().putBoolean(SETTING_ENABLE_DEBUG_CONSOLE, enableDebugMode).apply()
+        set(enableDebugMode) = prefs.edit { putBoolean(SETTING_ENABLE_DEBUG_CONSOLE, enableDebugMode) }
 
     var enableLocationInfo: Boolean
         get() = prefs.getBoolean(SETTING_LOCATION_INFO, false)
-        set(enableLocationInfo) = prefs.edit().putBoolean(SETTING_LOCATION_INFO, enableLocationInfo).apply()
+        set(enableLocationInfo) = prefs.edit { putBoolean(SETTING_LOCATION_INFO, enableLocationInfo) }
 
     var enableTaskSymbolTopOrder: Boolean
         get() = prefs.getBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, false)
-        set(enableTaskSymbolTopOrder) = prefs.edit().putBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, enableTaskSymbolTopOrder).apply()
+        set(enableTaskSymbolTopOrder) = prefs.edit { putBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, enableTaskSymbolTopOrder) }
 
     var selectedSymbols: String
         get() = prefs.getString(SETTING_SELECTED_SYMBOLS, SELECTED_SYMBOLS_DEFAULT)!!
-        set(selectedSymbols) = prefs.edit().putString(SETTING_SELECTED_SYMBOLS, selectedSymbols).apply()
+        set(selectedSymbols) = prefs.edit { putString(SETTING_SELECTED_SYMBOLS, selectedSymbols) }
 
     var appExecutionCount: Int
         get() = prefs.getInt(APP_EXECUTION_COUNT, APP_EXECUTION_COUNT_DEFAULT)
-        set(appExecutionCount) = prefs.edit().putInt(APP_EXECUTION_COUNT, appExecutionCount).apply()
+        set(appExecutionCount) = prefs.edit { putInt(APP_EXECUTION_COUNT, appExecutionCount) }
 
     var enableReviewFlow: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_REVIEW_FLOW, true)
-        set(enableReviewFlow) = prefs.edit().putBoolean(SETTING_ENABLE_REVIEW_FLOW, enableReviewFlow).apply()
+        set(enableReviewFlow) = prefs.edit { putBoolean(SETTING_ENABLE_REVIEW_FLOW, enableReviewFlow) }
 
     var postcardSpanCountLandscape: Int
         get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, 5)
-        set(postcardSpanCountLandscape) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, postcardSpanCountLandscape).apply()
+        set(postcardSpanCountLandscape) = prefs.edit { putInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, postcardSpanCountLandscape) }
 
     var postcardSpanCountPortrait: Int
         get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, 2)
-        set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, postcardSpanCountPortrait).apply()
+        set(postcardSpanCountPortrait) = prefs.edit { putInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, postcardSpanCountPortrait) }
 
     var diaryMainSpanCountLandscape: Int
         get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, 1)
-        set(diaryMainSpanCountLandscape) = prefs.edit().putInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, diaryMainSpanCountLandscape).apply()
+        set(diaryMainSpanCountLandscape) = prefs.edit { putInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, diaryMainSpanCountLandscape) }
 
     var diaryMainSpanCountPortrait: Int
         get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, 1)
-        set(diaryMainSpanCountPortrait) = prefs.edit().putInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, diaryMainSpanCountPortrait).apply()
+        set(diaryMainSpanCountPortrait) = prefs.edit { putInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, diaryMainSpanCountPortrait) }
 
     var enablePhotoHighlight: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, false)
-        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight).apply()
+        set(enablePhotoHighlight) = prefs.edit { putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight) }
 
     var enablePhotoHighlightInDiaryMain: Boolean
         get() =
@@ -255,7 +244,7 @@ class Config(
             } else {
                 enablePhotoHighlight
             }
-        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, enablePhotoHighlight).apply()
+        set(enablePhotoHighlight) = prefs.edit { putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN, enablePhotoHighlight) }
 
     var enablePhotoHighlightInDashboard: Boolean
         get() =
@@ -264,79 +253,79 @@ class Config(
             } else {
                 enablePhotoHighlight
             }
-        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, enablePhotoHighlight).apply()
+        set(enablePhotoHighlight) = prefs.edit { putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD, enablePhotoHighlight) }
 
     var enableStatusBarDarkenColor: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, true)
-        set(enableStatusBarDarkenColor) = prefs.edit().putBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, enableStatusBarDarkenColor).apply()
+        set(enableStatusBarDarkenColor) = prefs.edit { putBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, enableStatusBarDarkenColor) }
 
     var enableWelcomeDashboardPopup: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_WELCOME_DASHBOARD_POPUP, false)
-        set(enableWelcomeDashboardPopup) = prefs.edit().putBoolean(SETTING_ENABLE_WELCOME_DASHBOARD_POPUP, enableWelcomeDashboardPopup).apply()
+        set(enableWelcomeDashboardPopup) = prefs.edit { putBoolean(SETTING_ENABLE_WELCOME_DASHBOARD_POPUP, enableWelcomeDashboardPopup) }
 
     var enableDDayFlexboxLayout: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, false)
-        set(enableDDayFlexboxLayout) = prefs.edit().putBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, enableDDayFlexboxLayout).apply()
+        set(enableDDayFlexboxLayout) = prefs.edit { putBoolean(SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT, enableDDayFlexboxLayout) }
 
     var enableDashboardCalendar: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, true)
-        set(enableDashboardCalendar) = prefs.edit().putBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, enableDashboardCalendar).apply()
+        set(enableDashboardCalendar) = prefs.edit { putBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, enableDashboardCalendar) }
 
     var settingDatetimeFormat: String
         get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
-        set(settingDatetimeFormat) = prefs.edit().putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat).apply()
+        set(settingDatetimeFormat) = prefs.edit { putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat) }
 
     var enableMarkdown: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)
-        set(enableMarkdown) = prefs.edit().putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown).apply()
+        set(enableMarkdown) = prefs.edit { putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown) }
 
     var enableDebugOptionToastLocation: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_LOCATION, false)
-        set(enableDebugOptionToastLocation) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_LOCATION, enableDebugOptionToastLocation).apply()
+        set(enableDebugOptionToastLocation) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_TOAST_LOCATION, enableDebugOptionToastLocation) }
 
     var enableDebugOptionToastAttachedPhoto: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, false)
-        set(enableDebugOptionToastAttachedPhoto) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, enableDebugOptionToastAttachedPhoto).apply()
+        set(enableDebugOptionToastAttachedPhoto) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO, enableDebugOptionToastAttachedPhoto) }
 
     var enableDebugOptionToastNotificationInfo: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO, false)
-        set(enableDebugOptionToastNotificationInfo) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO, enableDebugOptionToastNotificationInfo).apply()
+        set(enableDebugOptionToastNotificationInfo) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO, enableDebugOptionToastNotificationInfo) }
 
     var enableDebugOptionToastReviewFlowInfo: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO, false)
-        set(enableDebugOptionToastReviewFlowInfo) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO, enableDebugOptionToastReviewFlowInfo).apply()
+        set(enableDebugOptionToastReviewFlowInfo) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO, enableDebugOptionToastReviewFlowInfo) }
 
     var enableDebugOptionToastPhotoHighlightUpdateTime: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME, false)
-        set(enableDebugOptionToastPhotoHighlightUpdateTime) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME, enableDebugOptionToastPhotoHighlightUpdateTime).apply()
+        set(enableDebugOptionToastPhotoHighlightUpdateTime) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME, enableDebugOptionToastPhotoHighlightUpdateTime) }
 
     var enableDebugOptionVisibleDiarySequence: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, false)
-        set(enableDebugOptionVisibleDiarySequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, enableDebugOptionVisibleDiarySequence).apply()
+        set(enableDebugOptionVisibleDiarySequence) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE, enableDebugOptionVisibleDiarySequence) }
 
     var enableDebugOptionVisibleAlarmSequence: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, false)
-        set(enableDebugOptionVisibleAlarmSequence) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, enableDebugOptionVisibleAlarmSequence).apply()
+        set(enableDebugOptionVisibleAlarmSequence) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE, enableDebugOptionVisibleAlarmSequence) }
 
     var enableDebugOptionVisibleTreeStatus: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS, false)
-        set(enableDebugOptionVisibleTreeStatus) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS, enableDebugOptionVisibleTreeStatus).apply()
+        set(enableDebugOptionVisibleTreeStatus) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS, enableDebugOptionVisibleTreeStatus) }
 
     var enableDebugOptionVisibleChartWeight: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, false)
-        set(enableDebugOptionVisibleChartWeight) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, enableDebugOptionVisibleChartWeight).apply()
+        set(enableDebugOptionVisibleChartWeight) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT, enableDebugOptionVisibleChartWeight) }
 
     var enableDebugOptionVisibleChartStock: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, false)
-        set(enableDebugOptionVisibleChartStock) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, enableDebugOptionVisibleChartStock).apply()
+        set(enableDebugOptionVisibleChartStock) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK, enableDebugOptionVisibleChartStock) }
 
     var enableDebugOptionVisibleFontPreviewEmoji: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI, false)
-        set(enableDebugOptionVisibleFontPreviewEmoji) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI, enableDebugOptionVisibleFontPreviewEmoji).apply()
+        set(enableDebugOptionVisibleFontPreviewEmoji) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI, enableDebugOptionVisibleFontPreviewEmoji) }
 
     var enableDebugOptionVisibleTemporaryDiary: Boolean
         get() = prefs.getBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, false)
-        set(enableDebugOptionVisibleTemporaryDiary) = prefs.edit().putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, enableDebugOptionVisibleTemporaryDiary).apply()
+        set(enableDebugOptionVisibleTemporaryDiary) = prefs.edit { putBoolean(SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY, enableDebugOptionVisibleTemporaryDiary) }
 
     var enableJetpackRoomDatabase: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_JETPACK_ROOM_DATABASE, false)
@@ -350,27 +339,27 @@ class Config(
 
     var gallerySpanCountLandscape: Int
         get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, 5)
-        set(gallerySpanCountLandscape) = prefs.edit().putInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, gallerySpanCountLandscape).apply()
+        set(gallerySpanCountLandscape) = prefs.edit { putInt(SETTING_GALLERY_SPAN_COUNT_LANDSCAPE, gallerySpanCountLandscape) }
 
     var gallerySpanCountPortrait: Int
         get() = prefs.getInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, 2)
-        set(gallerySpanCountPortrait) = prefs.edit().putInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, gallerySpanCountPortrait).apply()
+        set(gallerySpanCountPortrait) = prefs.edit { putInt(SETTING_GALLERY_SPAN_COUNT_PORTRAIT, gallerySpanCountPortrait) }
 
     var visibleUnlinkedPhotos: Boolean
         get() = prefs.getBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, false)
-        set(visibleUnlinkedPhotos) = prefs.edit().putBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, visibleUnlinkedPhotos).apply()
+        set(visibleUnlinkedPhotos) = prefs.edit { putBoolean(SETTING_VISIBLE_UNLINKED_PHOTOS, visibleUnlinkedPhotos) }
 
     var disableFutureDiary: Boolean
         get() = prefs.getBoolean(SETTING_DISABLE_FUTURE_DIARY, false)
-        set(disableFutureDiary) = prefs.edit().putBoolean(SETTING_DISABLE_FUTURE_DIARY, disableFutureDiary).apply()
+        set(disableFutureDiary) = prefs.edit { putBoolean(SETTING_DISABLE_FUTURE_DIARY, disableFutureDiary) }
 
     var enableShakeDetector: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
-        set(enableShakeDetector) = prefs.edit().putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector).apply()
+        set(enableShakeDetector) = prefs.edit { putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector) }
 
     var settingAppLanguage: String
         get() = prefs.getString(SETTING_APP_LANGUAGE, LANGUAGE_SYSTEM_DEFAULT)!!
-        set(settingAppLanguage) = prefs.edit().putString(SETTING_APP_LANGUAGE, settingAppLanguage).apply()
+        set(settingAppLanguage) = prefs.edit { putString(SETTING_APP_LANGUAGE, settingAppLanguage) }
 
     var customSymbolPaths: List<PhotoUriDomain>
         get() {
@@ -382,7 +371,7 @@ class Config(
                 Gson().fromJson(jsonString, type)
             }
         }
-        set(value) = prefs.edit().putString(SETTING_CUSTOM_SYMBOL_PATHS, Gson().toJson(value)).apply()
+        set(value) = prefs.edit { putString(SETTING_CUSTOM_SYMBOL_PATHS, Gson().toJson(value)) }
 
     companion object {
         fun newInstance(context: Context) = Config(context)

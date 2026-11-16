@@ -386,10 +386,7 @@ const val CALENDAR_START_DAY_SATURDAY = 7
  *   Showcase constants
  *
  ***************************************************************************************************/
-const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
-const val SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2
-const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
 
 /***************************************************************************************************
  *   Notification constants
@@ -429,9 +426,7 @@ const val BACKUP_DB_DIRECTORY = "${WORKING_DIRECTORY}Backup/Database/"
 const val REQUEST_CODE_EXTERNAL_STORAGE = 1
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2
 
-// const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN = 4
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM = 7
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM = 8
@@ -451,9 +446,7 @@ const val REQUEST_CODE_NOTIFICATION = 12
 
 const val REQUEST_CODE_SAF_WRITE_ZIP = 40
 const val REQUEST_CODE_SAF_WRITE_XLS = 41
-const val REQUEST_CODE_SAF_WRITE_REALM = 42
 const val REQUEST_CODE_SAF_READ_ZIP = 43
-const val REQUEST_CODE_SAF_READ_REALM = 44
 const val REQUEST_CODE_SAF_WRITE_ROOM = 50
 const val REQUEST_CODE_SAF_READ_ROOM = 51
 // const val REQUEST_CODE_SAF_HTML_BOOK = 45
@@ -470,9 +463,6 @@ const val DIARY_EXECUTION_MODE = "diary_execution_mode"
 // Diary Mode Case01: DiaryMainWidget or getOpenAlarmTabIntent
 const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outside"
 
-// Diary Mode Case02: Automatically open Dashboard popup when app is restarting after finish
-const val EXECUTION_MODE_WELCOME_DASHBOARD = "execution_mode_welcome_dashboard"
-
 /***************************************************************************************************
  *   Diary view mode for DiaryMainActivity grid item layout (Bundle)
  *   me.blog.korn123.easydiary.enums.DiaryMode
@@ -487,7 +477,6 @@ const val MIME_TYPE_BINARY = "application/octet-stream"
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 const val MIME_TYPE_JPEG = "image/jpeg"
-const val MIME_TYPE_HTML = "text/html"
 
 /***************************************************************************************************
  *   Theme Color
@@ -542,7 +531,6 @@ const val SETTING_ENABLE_JETPACK_ROOM_DATABASE = "setting_enable_jetpack_room_da
 val EXTERNAL_STORAGE_PERMISSIONS =
     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
-const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
 const val APP_LOCK_ENABLE = "application_lock"
 
@@ -571,7 +559,6 @@ const val POSTCARD_BG_COLOR = "postcard_bg_color"
 const val POSTCARD_TEXT_COLOR = "postcard_text_color"
 const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
-const val POSTCARD_CROP_MODE = "postcard_crop_mode"
 
 // const val APP_BACKGROUND_ALPHA = 200
 // const val INTRO_BACKGROUND_ALPHA = 255
@@ -582,7 +569,6 @@ const val SETTING_THUMBNAIL_SIZE = "thumbnail_size"
 const val SETTING_BOLD_STYLE = "setting_bold_style"
 const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
 const val SETTING_CONTENTS_SUMMARY = "setting_contents_summary"
-const val SETTING_CLEAR_LEGACY_TOKEN = "setting_clear_legacy_token"
 const val SETTING_SUMMARY_MAX_LINES = "setting_summary_max_lines"
 const val SETTING_SUMMARY_MAX_LINES_DEFAULT = 3
 const val SETTING_ENABLE_DEBUG_CONSOLE = "setting_enable_debug_console"
@@ -699,15 +685,6 @@ object SettingConstants {
 }
 
 object SettingLocalConstants {
-    const val SEQ = 0
-    const val WRITE_DATE = 1
-    const val TITLE = 2
-    const val CONTENTS = 3
-    const val ATTACH_PHOTO_NAME = 4
-    const val ATTACH_PHOTO_SIZE = 5
-    const val SYMBOL = 6
-    const val IS_ALL_DAY = 7
-    const val WRITE_TIME_MILLIS = 8
     const val MODE_BACKUP = 0
     const val MODE_RECOVERY = 1
 }
@@ -879,10 +856,6 @@ object GalleryConstants {
     const val GUIDE_MESSAGE = "No information"
 }
 
-object RealmConstants {
-    const val DIARY_DB_NAME = "diary.realm"
-    const val SCHEMA_VERSION = 24L
-}
 
 object RoomConstants {
     const val DIARY_DB_NAME = "easy_diary.db"
