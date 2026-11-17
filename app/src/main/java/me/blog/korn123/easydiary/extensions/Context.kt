@@ -159,7 +159,6 @@ import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
 import me.blog.korn123.easydiary.helper.CAPTURE_CAMERA_FILE_NAME
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DAILY_TODO
-import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
@@ -1247,12 +1246,6 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
         .map { index -> viewGroup.getChildAt(index) }
         .forEach {
             when (it) {
-                is me.blog.korn123.easydiary.views.CalendarItem -> {
-                    if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE) {
-                        it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * config.settingCalendarFontScale)
-                    }
-                }
-
                 is FixedTextView -> {
                     if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                 }
@@ -1412,7 +1405,6 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
     preferenceMap[SETTING_FONT_NAME] = config.settingFontName
     preferenceMap[LINE_SPACING_SCALE_FACTOR] = config.lineSpacingScaleFactor
     preferenceMap[SETTING_FONT_SIZE] = config.settingFontSize
-    preferenceMap[SETTING_CALENDAR_FONT_SCALE] = config.settingCalendarFontScale
     preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
 
     // Settings Lock
@@ -1450,7 +1442,6 @@ fun Context.jsonStringToPreference(jsonString: String) {
         settingFontName = map[SETTING_FONT_NAME] as String
         lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
         settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
-        settingCalendarFontScale = (map[SETTING_CALENDAR_FONT_SCALE] as Double).toFloat()
         boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
 
         // Settings Lock

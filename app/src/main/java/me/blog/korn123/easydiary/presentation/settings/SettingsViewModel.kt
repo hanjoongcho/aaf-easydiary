@@ -63,8 +63,8 @@ class SettingsViewModel(
         _appLanguageSubDescription.value = getAppLanguageDisplayName(config.settingAppLanguage)
     }
 
-    fun getAppLanguageDisplayName(languageCode: String): String {
-        return when (languageCode) {
+    fun getAppLanguageDisplayName(languageCode: String): String =
+        when (languageCode) {
             "de" -> "Deutsch"
             "en" -> "English"
             "es" -> "Español"
@@ -79,7 +79,6 @@ class SettingsViewModel(
             "zh-TW" -> "繁體中文"
             else -> application.getString(R.string.language_system_default)
         }
-    }
 
     private val _thumbnailSizeSubDescription: MutableStateFlow<String> = MutableStateFlow("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
     val thumbnailSizeSubDescription: StateFlow<String> = _thumbnailSizeSubDescription.asStateFlow()
@@ -102,23 +101,6 @@ class SettingsViewModel(
     fun updateFontSettingDescription() {
         _fontSettingDescription.value = FontUtils.fontFileNameToDisplayName(application, config.settingFontName)
     }
-
-    private val _calendarFontScaleDescription: MutableStateFlow<String> =
-        MutableStateFlow(
-            when (config.settingCalendarFontScale) {
-                DEFAULT_CALENDAR_FONT_SCALE -> {
-                    application.getString(R.string.calendar_font_scale_disable)
-                }
-
-                else -> {
-                    application.getString(
-                        R.string.calendar_font_scale_factor,
-                        config.settingCalendarFontScale,
-                    )
-                }
-            },
-        )
-    val calendarFontScaleDescription: StateFlow<String> get() = _calendarFontScaleDescription.asStateFlow()
 
     /***************************************************************************************************
      *   Setting Value

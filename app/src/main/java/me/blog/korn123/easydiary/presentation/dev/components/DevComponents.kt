@@ -3,17 +3,12 @@ package me.blog.korn123.easydiary.presentation.dev.components
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Build
-import android.net.Uri
 import androidx.activity.compose.LocalActivity
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,13 +27,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +59,6 @@ import me.blog.korn123.easydiary.helper.UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP
 import me.blog.korn123.easydiary.presentation.dev.BaseDevViewModel
 import me.blog.korn123.easydiary.presentation.dev.Demo1Activity
 import me.blog.korn123.easydiary.presentation.dev.SelfDevelopmentRepoActivity
-import me.blog.korn123.easydiary.presentation.main.DiaryMainActivity as PresentationDiaryMainActivity
 import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.settings.components.ScrollableCard
@@ -76,11 +67,12 @@ import me.blog.korn123.easydiary.presentation.settings.components.SimpleCardWith
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardWithImage
 import me.blog.korn123.easydiary.presentation.settings.components.SymbolCard
-import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.time.Duration.Companion.milliseconds
+import me.blog.korn123.easydiary.presentation.main.DiaryMainActivity as PresentationDiaryMainActivity
 
 @Composable
 fun RefactoringBacklog(
@@ -870,7 +862,7 @@ fun Coroutine(
                                         currentThreadName,
                                     )
                                 }
-                                delay(500)
+                                delay(500.milliseconds)
                             }
                         }
                     }
@@ -913,7 +905,7 @@ fun Coroutine(
                         withContext(Dispatchers.Main) {
                             updateConsole(i.toString(), currentThreadName)
                         }
-                        delay(100)
+                        delay(100.milliseconds)
                     }
                 }
             }
@@ -926,7 +918,7 @@ fun Coroutine(
             updateConsole("scope before launch")
             lifecycleScope.launch {
                 updateConsole("inner scope before delay")
-                delay(2000)
+                delay(2000.milliseconds)
                 updateConsole("inner scope after delay")
             }
             updateConsole("scope after launch")
