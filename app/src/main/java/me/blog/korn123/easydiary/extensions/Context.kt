@@ -99,9 +99,11 @@ import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.SATURDAY_BIT
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.SUNDAY_BIT
+import com.simplemobiletools.commons.helpers.SUNDAY_FIRST
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import com.simplemobiletools.commons.helpers.THURSDAY_BIT
 import com.simplemobiletools.commons.helpers.TUESDAY_BIT
+import com.simplemobiletools.commons.helpers.USE_24_HOUR_FORMAT
 import com.simplemobiletools.commons.helpers.WEDNESDAY_BIT
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.views.MyAppCompatSpinner
@@ -153,6 +155,7 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
 import me.blog.korn123.easydiary.helper.BACKUP_DB_DIRECTORY
@@ -209,6 +212,7 @@ import kotlin.math.roundToInt
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -1385,34 +1389,90 @@ fun Context.createTemporaryPhotoFile(
 fun Context.preferenceToJsonString(): HashMap<String, Any> {
     val preferenceMap: HashMap<String, Any> = hashMapOf()
 
-    // Settings Basic
-    preferenceMap[PRIMARY_COLOR] = config.primaryColor
-    preferenceMap[BACKGROUND_COLOR] = config.backgroundColor
-    preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
-    preferenceMap[TEXT_COLOR] = config.textColor
-    preferenceMap[SETTING_THUMBNAIL_SIZE] = config.settingThumbnailSize
-    preferenceMap[SETTING_CONTENTS_SUMMARY] = config.enableContentsSummary
-    preferenceMap[SETTING_SUMMARY_MAX_LINES] = config.summaryMaxLines
-    preferenceMap[ENABLE_CARD_VIEW_POLICY] = config.enableCardViewPolicy
-//    preferenceMap[SETTING_MULTIPLE_PICKER] = config.multiPickerEnable
-    preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
-    preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
-    preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
-    preferenceMap[SETTING_COUNT_CHARACTERS] = config.enableCountCharacters
-    preferenceMap[HOLD_POSITION_ENTER_EDIT_SCREEN] = config.holdPositionEnterEditScreen
+    config.run {
+        // Simple Mobile Tools properties
+        preferenceMap[PRIMARY_COLOR] = primaryColor
+        preferenceMap[BACKGROUND_COLOR] = backgroundColor
+        preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = screenBackgroundColor
+        preferenceMap[TEXT_COLOR] = textColor
+        preferenceMap[USE_24_HOUR_FORMAT] = use24HourFormat
+        preferenceMap[SUNDAY_FIRST] = isSundayFirst
 
-    // Settings font
-    preferenceMap[SETTING_FONT_NAME] = config.settingFontName
-    preferenceMap[LINE_SPACING_SCALE_FACTOR] = config.lineSpacingScaleFactor
-    preferenceMap[SETTING_FONT_SIZE] = config.settingFontSize
-    preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
+        // Awesome Application Factory legacy properties
+//        preferenceMap[AAF_PIN_LOCK_PAUSE_MILLIS] = aafPinLockPauseMillis
+//        preferenceMap[AAF_THEME_CHANGE] = isThemeChanged
 
-    // Settings Lock
-//    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
-//    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
+        // Dev properties
+        preferenceMap[DEV_STOCK_CHART_OPTIONS_FROM_MILLIS] = devStockChartOptionFromMillis
+        preferenceMap[DEV_STOCK_ENABLE_EVALUATE_PRICE] = devStockEnableEvaluatePrice
+        preferenceMap[DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT] = devStockEnablePrincipalHighlight
 
-    // ETC.
-    preferenceMap[SETTING_SELECTED_SYMBOLS] = config.selectedSymbols
+        // Easy Diary properties
+        preferenceMap[SETTING_FONT_NAME] = settingFontName
+//        preferenceMap[APP_LOCK_SAVED_PASSWORD] = aafPinLockSavedPassword
+        preferenceMap[PREVIOUS_ACTIVITY] = previousActivity
+        preferenceMap[SETTING_FONT_SIZE] = settingFontSize
+        preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = diarySearchQueryCaseSensitive
+//        preferenceMap[APP_LOCK_ENABLE] = aafPinLockEnable
+        preferenceMap[LINE_SPACING_SCALE_FACTOR] = lineSpacingScaleFactor
+        preferenceMap[SETTING_THUMBNAIL_SIZE] = settingThumbnailSize
+        preferenceMap[SETTING_CALENDAR_FONT_SCALE] = settingCalendarFontScale
+        preferenceMap[SETTING_BOLD_STYLE] = boldStyleEnable
+//        preferenceMap[SETTING_FINGERPRINT_LOCK] = fingerprintLockEnable
+//        preferenceMap[FINGERPRINT_ENCRYPT_DATA] = fingerprintEncryptData
+//        preferenceMap[FINGERPRINT_ENCRYPT_DATA_IV] = fingerprintEncryptDataIV
+//        preferenceMap[FINGERPRINT_AUTHENTICATION_FAIL_COUNT] = fingerprintAuthenticationFailCount
+        preferenceMap[ENABLE_CARD_VIEW_POLICY] = enableCardViewPolicy
+        preferenceMap[SETTING_CONTENTS_SUMMARY] = enableContentsSummary
+        preferenceMap[SETTING_CALENDAR_START_DAY] = calendarStartDay
+        preferenceMap[SETTING_COUNT_CHARACTERS] = enableCountCharacters
+        preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = diaryBackupGoogle
+        preferenceMap[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = photoBackupGoogle
+        preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL] = diaryBackupLocal
+        preferenceMap[SETTING_CALENDAR_SORTING] = calendarSorting
+        preferenceMap[UPDATE_SHARED_PREFERENCE] = updatePreference
+        preferenceMap[HOLD_POSITION_ENTER_EDIT_SCREEN] = holdPositionEnterEditScreen
+        preferenceMap[SETTING_SUMMARY_MAX_LINES] = summaryMaxLines
+        preferenceMap[SETTING_ENABLE_DEBUG_CONSOLE] = enableDebugMode
+        preferenceMap[SETTING_LOCATION_INFO] = enableLocationInfo
+        preferenceMap[SETTING_TASK_SYMBOL_TOP_ORDER] = enableTaskSymbolTopOrder
+        preferenceMap[SETTING_SELECTED_SYMBOLS] = selectedSymbols
+        preferenceMap[APP_EXECUTION_COUNT] = appExecutionCount
+        preferenceMap[SETTING_ENABLE_REVIEW_FLOW] = enableReviewFlow
+        preferenceMap[SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE] = postcardSpanCountLandscape
+        preferenceMap[SETTING_POSTCARD_SPAN_COUNT_PORTRAIT] = postcardSpanCountPortrait
+        preferenceMap[SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE] = diaryMainSpanCountLandscape
+        preferenceMap[SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT] = diaryMainSpanCountPortrait
+        preferenceMap[SETTING_ENABLE_PHOTO_HIGHLIGHT] = enablePhotoHighlight
+        preferenceMap[SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN] = enablePhotoHighlightInDiaryMain
+        preferenceMap[SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD] = enablePhotoHighlightInDashboard
+        preferenceMap[SETTING_ENABLE_STATUSBAR_DARKEN_COLOR] = enableStatusBarDarkenColor
+        preferenceMap[SETTING_ENABLE_WELCOME_DASHBOARD_POPUP] = enableWelcomeDashboardPopup
+        preferenceMap[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT] = enableDDayFlexboxLayout
+        preferenceMap[SETTING_ENABLE_DASHBOARD_CALENDAR] = enableDashboardCalendar
+        preferenceMap[SETTING_DATETIME_FORMAT] = settingDatetimeFormat
+        preferenceMap[SETTING_ENABLE_MARKDOWN] = enableMarkdown
+        preferenceMap[SETTING_DEBUG_OPTION_TOAST_LOCATION] = enableDebugOptionToastLocation
+        preferenceMap[SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO] = enableDebugOptionToastAttachedPhoto
+        preferenceMap[SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO] = enableDebugOptionToastNotificationInfo
+        preferenceMap[SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO] = enableDebugOptionToastReviewFlowInfo
+        preferenceMap[SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME] = enableDebugOptionToastPhotoHighlightUpdateTime
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE] = enableDebugOptionVisibleDiarySequence
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE] = enableDebugOptionVisibleAlarmSequence
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS] = enableDebugOptionVisibleTreeStatus
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT] = enableDebugOptionVisibleChartWeight
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK] = enableDebugOptionVisibleChartStock
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI] = enableDebugOptionVisibleFontPreviewEmoji
+        preferenceMap[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY] = enableDebugOptionVisibleTemporaryDiary
+        preferenceMap[SETTING_ENABLE_JETPACK_ROOM_DATABASE] = enableJetpackRoomDatabase
+        preferenceMap[SETTING_GALLERY_SPAN_COUNT_LANDSCAPE] = gallerySpanCountLandscape
+        preferenceMap[SETTING_GALLERY_SPAN_COUNT_PORTRAIT] = gallerySpanCountPortrait
+        preferenceMap[SETTING_VISIBLE_UNLINKED_PHOTOS] = visibleUnlinkedPhotos
+        preferenceMap[SETTING_DISABLE_FUTURE_DIARY] = disableFutureDiary
+        preferenceMap[SETTING_ENABLE_SHAKE_DETECTOR] = enableShakeDetector
+        preferenceMap[SETTING_APP_LANGUAGE] = settingAppLanguage
+        preferenceMap[SETTING_CUSTOM_SYMBOL_PATHS] = customSymbolPaths
+    }
 
     return preferenceMap
 }
@@ -1422,32 +1482,88 @@ fun Context.jsonStringToPreference(jsonString: String) {
     val type = object : TypeToken<HashMap<String, Any>>() {}.type
     val map: HashMap<String, Any> = gson.fromJson(jsonString, type)
     config.run {
-        // Settings Basic
-        primaryColor = (map[PRIMARY_COLOR] as Double).toInt()
-        backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
-        screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
-        textColor = (map[TEXT_COLOR] as Double).toInt()
-        settingThumbnailSize = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
-        enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
-        summaryMaxLines = (map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
-        enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
-//                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
-        diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean
-        calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
-        calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()
-        enableCountCharacters = map[SETTING_COUNT_CHARACTERS] as Boolean
-        holdPositionEnterEditScreen = map[HOLD_POSITION_ENTER_EDIT_SCREEN] as Boolean
+        map[PRIMARY_COLOR]?.let { primaryColor = (it as? Double)?.toInt() ?: primaryColor }
+        map[BACKGROUND_COLOR]?.let { backgroundColor = (it as? Double)?.toInt() ?: backgroundColor }
+        map[SETTING_CARD_VIEW_BACKGROUND_COLOR]?.let { screenBackgroundColor = (it as? Double)?.toInt() ?: screenBackgroundColor }
+        map[TEXT_COLOR]?.let { textColor = (it as? Double)?.toInt() ?: textColor }
+        map[USE_24_HOUR_FORMAT]?.let { use24HourFormat = it as? Boolean ?: use24HourFormat }
+        map[SUNDAY_FIRST]?.let { isSundayFirst = it as? Boolean ?: isSundayFirst }
 
-        // Settings font
-        settingFontName = map[SETTING_FONT_NAME] as String
-        lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
-        settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
-        boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
+//        map[AAF_PIN_LOCK_PAUSE_MILLIS]?.let { aafPinLockPauseMillis = (it as? Double)?.toLong() ?: aafPinLockPauseMillis }
+//        map[AAF_THEME_CHANGE]?.let { isThemeChanged = it as? Boolean ?: isThemeChanged }
 
-        // Settings Lock
+        map[DEV_STOCK_CHART_OPTIONS_FROM_MILLIS]?.let { devStockChartOptionFromMillis = (it as? Double)?.toLong() ?: devStockChartOptionFromMillis }
+        map[DEV_STOCK_ENABLE_EVALUATE_PRICE]?.let { devStockEnableEvaluatePrice = it as? Boolean ?: devStockEnableEvaluatePrice }
+        map[DEV_STOCK_ENABLE_PRINCIPAL_HIGHLIGHT]?.let { devStockEnablePrincipalHighlight = it as? Boolean ?: devStockEnablePrincipalHighlight }
 
-        // ETC.
-        selectedSymbols = map[SETTING_SELECTED_SYMBOLS] as String
+        map[SETTING_FONT_NAME]?.let { settingFontName = it as? String ?: settingFontName }
+//        map[APP_LOCK_SAVED_PASSWORD]?.let { aafPinLockSavedPassword = it as? String ?: aafPinLockSavedPassword }
+        map[PREVIOUS_ACTIVITY]?.let { previousActivity = (it as? Double)?.toInt() ?: previousActivity }
+        map[SETTING_FONT_SIZE]?.let { settingFontSize = (it as? Double)?.toFloat() ?: settingFontSize }
+        map[DIARY_SEARCH_QUERY_CASE_SENSITIVE]?.let { diarySearchQueryCaseSensitive = it as? Boolean ?: diarySearchQueryCaseSensitive }
+//        map[APP_LOCK_ENABLE]?.let { aafPinLockEnable = it as? Boolean ?: aafPinLockEnable }
+        map[LINE_SPACING_SCALE_FACTOR]?.let { lineSpacingScaleFactor = (it as? Double)?.toFloat() ?: lineSpacingScaleFactor }
+        map[SETTING_THUMBNAIL_SIZE]?.let { settingThumbnailSize = (it as? Double)?.toFloat() ?: settingThumbnailSize }
+        map[SETTING_CALENDAR_FONT_SCALE]?.let { settingCalendarFontScale = (it as? Double)?.toFloat() ?: settingCalendarFontScale }
+        map[SETTING_BOLD_STYLE]?.let { boldStyleEnable = it as? Boolean ?: boldStyleEnable }
+//        map[SETTING_FINGERPRINT_LOCK]?.let { fingerprintLockEnable = it as? Boolean ?: fingerprintLockEnable }
+//        map[FINGERPRINT_ENCRYPT_DATA]?.let { fingerprintEncryptData = it as? String ?: fingerprintEncryptData }
+//        map[FINGERPRINT_ENCRYPT_DATA_IV]?.let { fingerprintEncryptDataIV = it as? String ?: fingerprintEncryptDataIV }
+//        map[FINGERPRINT_AUTHENTICATION_FAIL_COUNT]?.let { fingerprintAuthenticationFailCount = (it as? Double)?.toInt() ?: fingerprintAuthenticationFailCount }
+        map[ENABLE_CARD_VIEW_POLICY]?.let { enableCardViewPolicy = it as? Boolean ?: enableCardViewPolicy }
+        map[SETTING_CONTENTS_SUMMARY]?.let { enableContentsSummary = it as? Boolean ?: enableContentsSummary }
+        map[SETTING_CALENDAR_START_DAY]?.let { calendarStartDay = (it as? Double)?.toInt() ?: calendarStartDay }
+        map[SETTING_COUNT_CHARACTERS]?.let { enableCountCharacters = it as? Boolean ?: enableCountCharacters }
+        map[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { diaryBackupGoogle = (it as? Double)?.toLong() ?: diaryBackupGoogle }
+        map[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { photoBackupGoogle = (it as? Double)?.toLong() ?: photoBackupGoogle }
+        map[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL]?.let { diaryBackupLocal = (it as? Double)?.toLong() ?: diaryBackupLocal }
+        map[SETTING_CALENDAR_SORTING]?.let { calendarSorting = (it as? Double)?.toInt() ?: calendarSorting }
+        map[UPDATE_SHARED_PREFERENCE]?.let { updatePreference = it as? Boolean ?: updatePreference }
+        map[HOLD_POSITION_ENTER_EDIT_SCREEN]?.let { holdPositionEnterEditScreen = it as? Boolean ?: holdPositionEnterEditScreen }
+        map[SETTING_SUMMARY_MAX_LINES]?.let { summaryMaxLines = (it as? Double)?.toInt() ?: summaryMaxLines }
+        map[SETTING_ENABLE_DEBUG_CONSOLE]?.let { enableDebugMode = it as? Boolean ?: enableDebugMode }
+        map[SETTING_LOCATION_INFO]?.let { enableLocationInfo = it as? Boolean ?: enableLocationInfo }
+        map[SETTING_TASK_SYMBOL_TOP_ORDER]?.let { enableTaskSymbolTopOrder = it as? Boolean ?: enableTaskSymbolTopOrder }
+        map[SETTING_SELECTED_SYMBOLS]?.let { selectedSymbols = it as? String ?: selectedSymbols }
+        map[APP_EXECUTION_COUNT]?.let { appExecutionCount = (it as? Double)?.toInt() ?: appExecutionCount }
+        map[SETTING_ENABLE_REVIEW_FLOW]?.let { enableReviewFlow = it as? Boolean ?: enableReviewFlow }
+        map[SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE]?.let { postcardSpanCountLandscape = (it as? Double)?.toInt() ?: postcardSpanCountLandscape }
+        map[SETTING_POSTCARD_SPAN_COUNT_PORTRAIT]?.let { postcardSpanCountPortrait = (it as? Double)?.toInt() ?: postcardSpanCountPortrait }
+        map[SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE]?.let { diaryMainSpanCountLandscape = (it as? Double)?.toInt() ?: diaryMainSpanCountLandscape }
+        map[SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT]?.let { diaryMainSpanCountPortrait = (it as? Double)?.toInt() ?: diaryMainSpanCountPortrait }
+        map[SETTING_ENABLE_PHOTO_HIGHLIGHT]?.let { enablePhotoHighlight = it as? Boolean ?: enablePhotoHighlight }
+        map[SETTING_ENABLE_PHOTO_HIGHLIGHT_DIARY_MAIN]?.let { enablePhotoHighlightInDiaryMain = it as? Boolean ?: enablePhotoHighlightInDiaryMain }
+        map[SETTING_ENABLE_PHOTO_HIGHLIGHT_DASHBOARD]?.let { enablePhotoHighlightInDashboard = it as? Boolean ?: enablePhotoHighlightInDashboard }
+        map[SETTING_ENABLE_STATUSBAR_DARKEN_COLOR]?.let { enableStatusBarDarkenColor = it as? Boolean ?: enableStatusBarDarkenColor }
+        map[SETTING_ENABLE_WELCOME_DASHBOARD_POPUP]?.let { enableWelcomeDashboardPopup = it as? Boolean ?: enableWelcomeDashboardPopup }
+        map[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT]?.let { enableDDayFlexboxLayout = it as? Boolean ?: enableDDayFlexboxLayout }
+        map[SETTING_ENABLE_DASHBOARD_CALENDAR]?.let { enableDashboardCalendar = it as? Boolean ?: enableDashboardCalendar }
+        map[SETTING_DATETIME_FORMAT]?.let { settingDatetimeFormat = it as? String ?: settingDatetimeFormat }
+        map[SETTING_ENABLE_MARKDOWN]?.let { enableMarkdown = it as? Boolean ?: enableMarkdown }
+        map[SETTING_DEBUG_OPTION_TOAST_LOCATION]?.let { enableDebugOptionToastLocation = it as? Boolean ?: enableDebugOptionToastLocation }
+        map[SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO]?.let { enableDebugOptionToastAttachedPhoto = it as? Boolean ?: enableDebugOptionToastAttachedPhoto }
+        map[SETTING_DEBUG_OPTION_TOAST_NOTIFICATION_INFO]?.let { enableDebugOptionToastNotificationInfo = it as? Boolean ?: enableDebugOptionToastNotificationInfo }
+        map[SETTING_DEBUG_OPTION_TOAST_REVIEW_FLOW_INFO]?.let { enableDebugOptionToastReviewFlowInfo = it as? Boolean ?: enableDebugOptionToastReviewFlowInfo }
+        map[SETTING_DEBUG_OPTION_TOAST_PHOTO_HIGHLIGHT_UPDATE_TIME]?.let { enableDebugOptionToastPhotoHighlightUpdateTime = it as? Boolean ?: enableDebugOptionToastPhotoHighlightUpdateTime }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_DIARY_SEQUENCE]?.let { enableDebugOptionVisibleDiarySequence = it as? Boolean ?: enableDebugOptionVisibleDiarySequence }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_ALARM_SEQUENCE]?.let { enableDebugOptionVisibleAlarmSequence = it as? Boolean ?: enableDebugOptionVisibleAlarmSequence }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TREE_STATUS]?.let { enableDebugOptionVisibleTreeStatus = it as? Boolean ?: enableDebugOptionVisibleTreeStatus }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_WEIGHT]?.let { enableDebugOptionVisibleChartWeight = it as? Boolean ?: enableDebugOptionVisibleChartWeight }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_CHART_STOCK]?.let { enableDebugOptionVisibleChartStock = it as? Boolean ?: enableDebugOptionVisibleChartStock }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_FONT_PREVIEW_EMOJI]?.let { enableDebugOptionVisibleFontPreviewEmoji = it as? Boolean ?: enableDebugOptionVisibleFontPreviewEmoji }
+        map[SETTING_DEBUG_OPTION_DISPLAY_VISIBLE_TEMPORARY_DIARY]?.let { enableDebugOptionVisibleTemporaryDiary = it as? Boolean ?: enableDebugOptionVisibleTemporaryDiary }
+        map[SETTING_ENABLE_JETPACK_ROOM_DATABASE]?.let { enableJetpackRoomDatabase = it as? Boolean ?: enableJetpackRoomDatabase }
+        map[SETTING_GALLERY_SPAN_COUNT_LANDSCAPE]?.let { gallerySpanCountLandscape = (it as? Double)?.toInt() ?: gallerySpanCountLandscape }
+        map[SETTING_GALLERY_SPAN_COUNT_PORTRAIT]?.let { gallerySpanCountPortrait = (it as? Double)?.toInt() ?: gallerySpanCountPortrait }
+        map[SETTING_VISIBLE_UNLINKED_PHOTOS]?.let { visibleUnlinkedPhotos = it as? Boolean ?: visibleUnlinkedPhotos }
+        map[SETTING_DISABLE_FUTURE_DIARY]?.let { disableFutureDiary = it as? Boolean ?: disableFutureDiary }
+        map[SETTING_ENABLE_SHAKE_DETECTOR]?.let { enableShakeDetector = it as? Boolean ?: enableShakeDetector }
+        map[SETTING_APP_LANGUAGE]?.let { settingAppLanguage = it as? String ?: settingAppLanguage }
+        map[SETTING_CUSTOM_SYMBOL_PATHS]?.let {
+            val json = gson.toJson(it)
+            val customSymbolType = object : TypeToken<List<PhotoUriDomain>>() {}.type
+            customSymbolPaths = gson.fromJson(json, customSymbolType)
+        }
 
         updatePreference = true
     }
