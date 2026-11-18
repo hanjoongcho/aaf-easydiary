@@ -44,6 +44,7 @@ import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 
 @AndroidEntryPoint
@@ -129,27 +130,30 @@ class SymbolBarChartFragment : Fragment() {
         mv.chartView = barChart
         barChart.marker = mv
 
-        arguments?.let { bundle ->
-            val title = bundle.getString(ChartConstants.CHART_TITLE)
-            if (title != null) {
-                chartTitle.text = title
-                chartTitle.visibility = View.VISIBLE
+        val title = arguments?.getString(ChartConstants.CHART_TITLE)
+        if (title != null) {
+            chartTitle.text = title
+            chartTitle.visibility = View.VISIBLE
 
-                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
-                    it.visibility = View.VISIBLE
-                    requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
-                    it.setOnClickListener { v ->
-                        v.postDelayed({
-                            TransitionHelper.startActivityWithTransition(
+            getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
+                it.visibility = View.VISIBLE
+                requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
+                it.setOnClickListener { v ->
+                    v.postDelayed({
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(
                                 requireActivity(),
-                                Intent(
-                                    requireActivity(),
-                                    StatisticsActivity::class.java,
-                                ).putExtra(StatisticsConstants.CHART_MODE, StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL),
-                            )
-                        }, 300)
-                    }
+                                StatisticsActivity::class.java,
+                            ).putExtra(StatisticsConstants.CHART_MODE, StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL),
+                        )
+                    }, 300)
                 }
+            }
+        } else {
+            (view as? FixedCardView)?.run {
+                fixedAppcompatPadding = false
+                radius = 0f
             }
         }
 

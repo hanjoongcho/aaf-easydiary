@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,20 +11,18 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.databinding.PopupMenuStatisticsBinding
-import me.blog.korn123.easydiary.enums.GridSpanMode
 import me.blog.korn123.easydiary.extensions.EMPTY
-import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.confirmPermission
-import me.blog.korn123.easydiary.extensions.openGridSettingDialog
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.fragments.*
-import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE
+import me.blog.korn123.easydiary.fragments.StockLineChartFragment
+import me.blog.korn123.easydiary.fragments.SymbolBarChartFragment
+import me.blog.korn123.easydiary.fragments.SymbolHorizontalBarChartFragment
+import me.blog.korn123.easydiary.fragments.WeightLineChartFragment
+import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
 import me.blog.korn123.easydiary.helper.StatisticsConstants
-import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 
@@ -144,6 +141,7 @@ class StatisticsActivity : ChartBase() {
             }
             executePendingTransactions()
         }
+        applyUIConfig()
     }
 
     private fun switchChart(
@@ -151,10 +149,29 @@ class StatisticsActivity : ChartBase() {
         titleResId: Int,
     ) {
         supportActionBar?.subtitle = getString(titleResId)
-        supportFragmentManager.beginTransaction().run {
-            replace(R.id.chartView, fragment)
-            commit()
+        supportFragmentManager.run {
+            beginTransaction().run {
+                replace(R.id.chartView, fragment)
+                commit()
+            }
+            executePendingTransactions()
         }
+        applyUIConfig()
+    }
+
+    private fun applyUIConfig() {
+        getMainViewGroup()?.let {
+            initTextSize(it)
+            updateTextColors(it)
+            updateAppViews(it)
+            updateCardViewPolicy(it)
+        }
+        FontUtils.setFontsTypeface(
+            applicationContext,
+            null,
+            findViewById(android.R.id.content),
+            customLineSpacing,
+        )
     }
 
     private fun isSingleChart(): Boolean = intent.getStringExtra(StatisticsConstants.CHART_MODE) != null
