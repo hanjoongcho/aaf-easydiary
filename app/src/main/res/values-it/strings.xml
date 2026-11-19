@@ -1099,4 +1099,26 @@
     <string name="language_setting_title">Lingua</string>
     <string name="language_setting_summary">Imposta la lingua dell\'app con priorità rispetto alle impostazioni del dispositivo</string>
     <string name="language_system_default">Predefinito di sistema</string>
+
+    <!-- PDF export -->
+    <string name="pdf_export_title">Save as PDF</string>
+    <string name="pdf_export_export_selected">Export as PDF</string>
+    <string name="pdf_export_include_photos">Include photos</string>
+    <string name="pdf_export_text_only">Text only</string>
+    <string name="pdf_export_confirm_single_message">Save this entry as a PDF document.</string>
+    <string name="pdf_export_confirm_message">Save %d entries as a single PDF document.</string>
+    <string name="pdf_export_choose_photos">Choose whether to include attached photos.</string>
+    <string name="pdf_export_unencrypted_warning">The generated PDF file is not encrypted, so anyone who opens the file can read its contents.</string>
+    <string name="pdf_export_encrypted_entries_warning">%d encrypted entries will be exported without their contents. Export encrypted entries one at a time to enter the password.</string>
+    <string name="pdf_export_limit_exceeded">You can export up to %d entries at a time. Reduce the selection and try again.</string>
+    <string name="pdf_export_in_progress">Creating the PDF file…</string>
+    <string name="pdf_export_success">Saved the PDF file (%d pages).</string>
+    <string name="pdf_export_failed">Could not create the PDF file.</string>
+    <string name="pdf_export_open">Open</string>
+    <string name="pdf_export_share">Share</string>
+    <string name="pdf_export_close">Close</string>
+    <string name="pdf_export_no_app_to_open">There is no app that can open the PDF file.</string>
+    <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
+    <string name="pdf_export_continued">(continued)</string>
+    <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
 </resources>
