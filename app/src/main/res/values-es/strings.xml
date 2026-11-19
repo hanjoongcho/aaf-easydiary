@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">Como secundario</string>
     <string name="link_entry_later">Más tarde</string>
     <string name="link_entry_already_linked">El elemento ya está vinculado.</string>
+    <string name="copy_link">Copiar enlace</string>
+    <string name="copy_diary_link_success">Enlace del diario copiado al portapapeles</string>
+    <string name="diary_link_not_found">No se pudo encontrar el diario vinculado. Es posible que se haya eliminado.</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d entradas</string>
     <string name="task_todo_count_format">(Tareas pendientes: %d)</string>

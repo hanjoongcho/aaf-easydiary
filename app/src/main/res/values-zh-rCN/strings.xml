@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">作为子条目</string>
     <string name="link_entry_later">稍后</string>
     <string name="link_entry_already_linked">该项已链接。</string>
+    <string name="copy_link">复制链接</string>
+    <string name="copy_diary_link_success">日记链接已复制到剪贴板</string>
+    <string name="diary_link_not_found">未找到链接的日记。可能已被删除。</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d 条记录</string>
     <string name="task_todo_count_format">(未完成任务: %d)</string>

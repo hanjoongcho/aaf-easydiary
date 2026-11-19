@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">Als untergeordnet</string>
     <string name="link_entry_later">Später</string>
     <string name="link_entry_already_linked">Das Element ist bereits verknüpft.</string>
+    <string name="copy_link">Link kopieren</string>
+    <string name="copy_diary_link_success">Tagebuch-Link in die Zwischenablage kopiert</string>
+    <string name="diary_link_not_found">Das verknüpfte Tagebuch konnte nicht gefunden werden. Es wurde möglicherweise gelöscht.</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d Einträge</string>
     <string name="task_todo_count_format">(Offene Aufgaben: %d)</string>

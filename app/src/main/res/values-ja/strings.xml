@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">子としてリンク</string>
     <string name="link_entry_later">あとで</string>
     <string name="link_entry_already_linked">アイテムはすでにリンクされています。</string>
+    <string name="copy_link">リンクをコピー</string>
+    <string name="copy_diary_link_success">日記のリンクをクリップボードにコピーしました</string>
+    <string name="diary_link_not_found">リンクされた日記が見つかりませんでした。削除された可能性があります。</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d件</string>
     <string name="task_todo_count_format">(未完了タスク: %d件)</string>

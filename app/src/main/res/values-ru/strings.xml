@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">Как дочерний</string>
     <string name="link_entry_later">Позже</string>
     <string name="link_entry_already_linked">Элемент уже связан.</string>
+    <string name="copy_link">Копировать ссылку</string>
+    <string name="copy_diary_link_success">Ссылка на дневник скопирована в буфер обмена</string>
+    <string name="diary_link_not_found">Связанный дневник не найден. Возможно, он был удален.</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d записей</string>
     <string name="task_todo_count_format">(Незавершенные задачи: %d)</string>

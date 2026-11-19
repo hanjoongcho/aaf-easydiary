@@ -1043,6 +1043,9 @@
     <string name="link_entry_as_child">ᱜᱤᱫᱽᱨᱟᱹ ᱞᱮᱠᱷᱟ</string>
     <string name="link_entry_later">ᱛᱟᱭᱚᱢ ᱛᱮ</string>
     <string name="link_entry_already_linked">ᱡᱤᱱᱤᱥ ᱫᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱜᱮ ᱞᱤᱝᱠ ᱟᱠᱟᱱᱟ᱾</string>
+    <string name="copy_link">Copy Link</string>
+    <string name="copy_diary_link_success">Diary link copied to clipboard</string>
+    <string name="diary_link_not_found">The linked diary could not be found. It may have been deleted.</string>
     <string name="search_index_format">%1$d / %2$d</string>
     <string name="diary_count_format">%d ᱚᱞᱠᱚ</string>
     <string name="task_todo_count_format">(Incomplete Tasks: %d)</string>
