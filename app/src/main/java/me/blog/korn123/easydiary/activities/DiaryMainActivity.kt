@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -39,10 +40,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
+import me.blog.korn123.easydiary.domain.model.DiaryPdfSnapshot
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.enums.GridSpanMode
@@ -65,7 +70,11 @@ import me.blog.korn123.easydiary.extensions.openOverDueNotification
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.rescheduleEnabledAlarms
 import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.showPdfExportOptionsDialog
+import me.blog.korn123.easydiary.extensions.showPdfExportResultDialog
+import me.blog.korn123.easydiary.extensions.startPdfSaveLocation
 import me.blog.korn123.easydiary.extensions.startReviewFlow
+import me.blog.korn123.easydiary.extensions.toPdfSnapshot
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -89,8 +98,10 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
 import me.blog.korn123.easydiary.presentation.main.components.MainBottomSheet
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.DiaryPdfExporter
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.utils.PdfExportUtils
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import java.util.Calendar
 import java.util.Locale
@@ -112,6 +123,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private var popupWindow: PopupWindow? = null
     private var lastHistoryCheckMillis = System.currentTimeMillis()
     private var bottomSheetHeightPx = 0
+    private var pendingPdfSnapshots: List<DiaryPdfSnapshot> = emptyList()
+    private var pendingPdfIncludePhotos = false
     private val requestSpeechInputLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -120,6 +133,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
             pauseLock()
+        }
+
+    private val requestWritePdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let { uri -> exportPdfTo(uri) }
+            }
         }
 
     var diaryMode = DiaryMode.READ
@@ -264,6 +284,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             R.id.checkAll -> handleCheckAllSelected()
             R.id.delete -> handleDeleteSelected()
             R.id.duplication -> handleDuplicationSelected()
+            R.id.pdfExport -> handlePdfExportSelected()
             R.id.planner -> handlePlannerSelected()
             R.id.microphone -> handleMicrophoneSelected()
             R.id.openDashboard -> handleOpenDashboardSelected()
@@ -349,6 +370,82 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
+    private fun handlePdfExportSelected() {
+        val selectedItems = diaryMainItemAdapter?.getSelectedItems().orEmpty()
+        when {
+            selectedItems.isEmpty() -> {
+                showAlertDialog(getString(R.string.no_items_warning))
+            }
+
+            !PdfExportUtils.isWithinExportLimit(selectedItems.size) -> {
+                showAlertDialog(
+                    getString(R.string.pdf_export_limit_exceeded, PdfExportUtils.MAX_EXPORT_COUNT),
+                )
+            }
+
+            else -> {
+                // Copy the fields the renderer needs on the main thread before leaving the list model behind.
+                val snapshots = selectedItems.map { it.toPdfSnapshot(this@DiaryMainActivity) }
+                val encryptedCount = snapshots.count { it.isEncrypt }
+                showPdfExportOptionsDialog(snapshots, encryptedEntriesWithoutContent = encryptedCount) { includePhotos ->
+                    pendingPdfSnapshots = snapshots
+                    pendingPdfIncludePhotos = includePhotos
+                    startPdfSaveLocation(
+                        PdfExportUtils.buildMultiExportFileName(System.currentTimeMillis()),
+                        requestWritePdfLauncher,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun exportPdfTo(uri: Uri) {
+        val snapshots = pendingPdfSnapshots
+        if (snapshots.isEmpty()) return
+        val includePhotos = pendingPdfIncludePhotos
+        pendingPdfSnapshots = emptyList()
+
+        diaryViewModel.loadingMessage = getString(R.string.pdf_export_in_progress)
+        diaryViewModel.isLoading = true
+        lifecycleScope.launch {
+            val pageCount =
+                try {
+                    withContext(Dispatchers.IO) {
+                        contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            DiaryPdfExporter.export(
+                                this@DiaryMainActivity,
+                                snapshots,
+                                includePhotos,
+                                null,
+                                outputStream,
+                            )
+                        } ?: throw IllegalStateException("Could not open the selected PDF file")
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Log.e(AAF_TEST, "Failed to export PDF", e)
+                    null
+                } finally {
+                    diaryViewModel.isLoading = false
+                    diaryViewModel.loadingMessage = null
+                }
+
+            if (isFinishing || isDestroyed) return@launch
+            when (pageCount) {
+                null -> {
+                    showAlertDialog(getString(R.string.pdf_export_failed))
+                }
+
+                else -> {
+                    diaryMainItemAdapter?.setDiaryMode(DiaryMode.READ)
+                    invalidateOptionsMenu()
+                    showPdfExportResultDialog(uri, pageCount)
+                }
+            }
+        }
+    }
+
     private fun handlePlannerSelected() {
         val calendarIntent = Intent(this@DiaryMainActivity, me.blog.korn123.easydiary.presentation.calendar.CalendarActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
@@ -380,6 +477,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cross)
                 menuInflater.inflate(R.menu.activity_diary_main_delete, menu)
+                applyFontToMenuItem(menu.findItem(R.id.pdfExport))
                 applyFontToMenuItem(menu.findItem(R.id.delete))
             }
         }

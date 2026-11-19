@@ -477,6 +477,7 @@ const val MIME_TYPE_BINARY = "application/octet-stream"
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 const val MIME_TYPE_JPEG = "image/jpeg"
+const val MIME_TYPE_PDF = "application/pdf"
 
 /***************************************************************************************************
  *   Theme Color
@@ -812,6 +813,7 @@ object DiaryReadingConstants {
     const val ENCRYPTION = "encryption"
     const val DECRYPTION = "decryption"
     const val EDITING = "editing"
+    const val PDF_EXPORT = "pdfExport"
 }
 
 object DashboardConstants {

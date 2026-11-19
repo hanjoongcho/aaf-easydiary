@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -44,7 +45,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -53,6 +57,7 @@ import me.blog.korn123.easydiary.databinding.DialogHighlightKeywordBinding
 import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
 import me.blog.korn123.easydiary.databinding.PopupEncryptionBinding
 import me.blog.korn123.easydiary.databinding.PopupMenuReadBinding
+import me.blog.korn123.easydiary.domain.model.DiaryPdfSnapshot
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
@@ -67,7 +72,11 @@ import me.blog.korn123.easydiary.extensions.isLabFlavor
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.showPdfExportOptionsDialog
+import me.blog.korn123.easydiary.extensions.showPdfExportResultDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.startPdfSaveLocation
+import me.blog.korn123.easydiary.extensions.toPdfSnapshot
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -94,10 +103,12 @@ import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleC
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DiaryPdfExporter
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.utils.JasyptUtils
+import me.blog.korn123.easydiary.utils.PdfExportUtils
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 
@@ -171,6 +182,19 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     getString(R.string.link_entry_as_parent),
                     getString(R.string.link_entry_later),
                 )
+            }
+        }
+
+    private var pendingPdfSnapshots: List<DiaryPdfSnapshot> = emptyList()
+    private var pendingPdfIncludePhotos = false
+    private var pendingPdfDecryptKey: String? = null
+
+    private val requestWritePdfLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let { uri -> exportPdfTo(uri) }
             }
         }
 
@@ -439,6 +463,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
                 decMode.visibility = View.GONE
             }
+
+            DiaryReadingConstants.PDF_EXPORT -> {
+                description.text = getString(R.string.pdf_export_title)
+                guideMessage.text = getString(R.string.pdf_export_pin_guide)
+                decMode.visibility = View.GONE
+            }
         }
         EasyDiaryUtils.warningString(guideMessage)
     }
@@ -567,6 +597,23 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
 
             workMode == DiaryReadingConstants.EDITING -> {
+                lifecycleScope.launch {
+                    when (fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)) {
+                        true -> {
+                            callback?.invoke(newInputPass)
+                            popupWindow.dismiss()
+                            clearHoldOrientation()
+                        }
+
+                        false -> {
+                            guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                        }
+                    }
+                    newInputPass = String.EMPTY
+                }
+            }
+
+            workMode == DiaryReadingConstants.PDF_EXPORT -> {
                 lifecycleScope.launch {
                     when (fragment.getPasswordHash() == JasyptUtils.sha256(newInputPass)) {
                         true -> {
@@ -826,6 +873,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     )
                                 }
 
+                                R.id.pdfExport -> {
+                                    handlePdfExportSelected(fragment)
+                                }
+
                                 R.id.encryptData -> {
                                     showEncryptPagePopup(fragment, DiaryReadingConstants.ENCRYPTION)
                                 }
@@ -862,12 +913,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         }
 
                     postcard.setOnClickListener(itemClickListener)
+                    pdfExport.setOnClickListener(itemClickListener)
                     encryptData.setOnClickListener(itemClickListener)
                     decryptData.setOnClickListener(itemClickListener)
                     delete.setOnClickListener(itemClickListener)
                     linkEntry.setOnClickListener(itemClickListener)
 
                     updateDrawableColorInnerCardView(imgPostcard)
+                    updateDrawableColorInnerCardView(imgPdfExport)
                     updateDrawableColorInnerCardView(imgEncryptData)
                     updateDrawableColorInnerCardView(imgDecryptData)
                     updateDrawableColorInnerCardView(imgDelete)
@@ -885,6 +938,84 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
             }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+    }
+
+    private fun handlePdfExportSelected(fragment: PlaceholderFragment) {
+        lifecycleScope.launch {
+            val diary = diaryViewModel.findDiaryById(fragment.getSequence()) ?: return@launch
+            val snapshot = diary.toPdfSnapshot(this@DiaryReadingActivity)
+            showPdfExportOptionsDialog(listOf(snapshot), encryptedEntriesWithoutContent = 0) { includePhotos ->
+                when (diary.isEncrypt) {
+                    true -> {
+                        showEncryptPagePopup(fragment, DiaryReadingConstants.PDF_EXPORT) { inputPass ->
+                            preparePdfExport(listOf(snapshot), includePhotos, inputPass)
+                        }
+                    }
+
+                    false -> {
+                        preparePdfExport(listOf(snapshot), includePhotos, null)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun preparePdfExport(
+        snapshots: List<DiaryPdfSnapshot>,
+        includePhotos: Boolean,
+        decryptKey: String?,
+    ) {
+        pendingPdfSnapshots = snapshots
+        pendingPdfIncludePhotos = includePhotos
+        pendingPdfDecryptKey = decryptKey
+        val fileName =
+            PdfExportUtils.buildSingleExportFileName(
+                snapshots.first().diaryId,
+                System.currentTimeMillis(),
+            )
+        startPdfSaveLocation(fileName, requestWritePdfLauncher)
+    }
+
+    private fun exportPdfTo(uri: Uri) {
+        val snapshots = pendingPdfSnapshots
+        if (snapshots.isEmpty()) return
+        val includePhotos = pendingPdfIncludePhotos
+        val decryptKey = pendingPdfDecryptKey
+        pendingPdfSnapshots = emptyList()
+        pendingPdfDecryptKey = null
+
+        diaryViewModel.loadingMessage = getString(R.string.pdf_export_in_progress)
+        diaryViewModel.isLoading = true
+        lifecycleScope.launch {
+            val pageCount =
+                try {
+                    withContext(Dispatchers.IO) {
+                        contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            DiaryPdfExporter.export(
+                                this@DiaryReadingActivity,
+                                snapshots,
+                                includePhotos,
+                                decryptKey,
+                                outputStream,
+                            )
+                        } ?: throw IllegalStateException("Could not open the selected PDF file")
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Log.e(AAF_TEST, "Failed to export PDF", e)
+                    null
+                } finally {
+                    diaryViewModel.isLoading = false
+                    diaryViewModel.loadingMessage = null
+                }
+
+            if (isFinishing || isDestroyed) return@launch
+            when (pageCount) {
+                null -> showAlertDialog(getString(R.string.pdf_export_failed))
+                else -> showPdfExportResultDialog(uri, pageCount)
+            }
+        }
     }
 
     /**
