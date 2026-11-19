@@ -196,6 +196,7 @@ import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DiaryLinkUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -987,6 +988,15 @@ fun Context.pauseLock() {
 //        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
         config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
+}
+
+fun Context.startDiaryReadingActivity(sequence: Long) {
+    val diaryReadingIntent =
+        Intent(this, DiaryReadingActivity::class.java).apply {
+            putExtra(DIARY_SEQUENCE, sequence)
+            if (this@startDiaryReadingActivity !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    startActivity(diaryReadingIntent)
 }
 
 fun Context.updateTextColors(
@@ -1976,17 +1986,22 @@ fun Context.applyMarkDownPolicy(
                                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                                     super.configureConfiguration(builder)
                                     builder.linkResolver { view, link ->
-                                        val customTabsIntent =
-                                            CustomTabsIntent
-                                                .Builder()
-                                                .setToolbarColor(config.primaryColor)
-                                                .setUrlBarHidingEnabled(true)
-                                                .setShowTitle(false)
-                                                .build()
-                                        customTabsIntent.launchUrl(
-                                            this@applyMarkDownPolicy,
-                                            Uri.parse(link),
-                                        )
+                                        val diarySequence = DiaryLinkUtils.parseDiarySequence(link)
+                                        if (diarySequence != null) {
+                                            this@applyMarkDownPolicy.startDiaryReadingActivity(diarySequence)
+                                        } else {
+                                            val customTabsIntent =
+                                                CustomTabsIntent
+                                                    .Builder()
+                                                    .setToolbarColor(config.primaryColor)
+                                                    .setUrlBarHidingEnabled(true)
+                                                    .setShowTitle(false)
+                                                    .build()
+                                            customTabsIntent.launchUrl(
+                                                this@applyMarkDownPolicy,
+                                                Uri.parse(link),
+                                            )
+                                        }
                                     }
                                 }
                             },
