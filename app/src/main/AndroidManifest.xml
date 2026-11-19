@@ -104,8 +104,20 @@
         <activity
             android:name=".activities.DiaryReadingActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/SplashScreenTheme"
-            />
+            android:exported="true"
+            android:theme="@style/SplashScreenTheme">
+            <!-- easydiary://diary/{diary sequence} -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="diary"
+                    android:scheme="easydiary" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.DiaryEditingActivity"
             android:theme="@style/SplashScreenTheme"

@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.activities
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -70,6 +72,7 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
 import me.blog.korn123.easydiary.extensions.isLabFlavor
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pushMarkDown
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.showPdfExportOptionsDialog
@@ -86,9 +89,11 @@ import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_CONTENTS_SCROLL_Y
 import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
+import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.DiaryComponentConstants
 import me.blog.korn123.easydiary.helper.DiaryReadingConstants
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -103,6 +108,7 @@ import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleC
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DiaryLinkUtils
 import me.blog.korn123.easydiary.utils.DiaryPdfExporter
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createAttachedPhotoViewForFlexBox
@@ -125,6 +131,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     private var isTtsInitialized = false
     private var pendingSpeechText: String? = null
     private val diaryList: ArrayList<DiaryDomain> = arrayListOf()
+    private var isDiaryLinkEntry = false
 
     private fun getFragmentAt(position: Int = binding.diaryViewPager.currentItem): PlaceholderFragment? {
         val sequence = diaryList.getOrNull(position)?.diaryId ?: return null
@@ -202,6 +209,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        isDiaryLinkEntry = applyDiaryLinkIntent()
+
         popupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
         dialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
         binding =
@@ -257,24 +266,23 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 )
             }
 
+            val requestedSequence =
+                if (savedInstanceState == null) {
+                    intent.getLongExtra(DIARY_SEQUENCE, -1)
+                } else {
+                    savedInstanceState.getLong(DIARY_SEQUENCE, -1)
+                }
+
+            if (isDiaryLinkEntry && savedInstanceState == null && !containsDiary(requestedSequence)) {
+                diaryViewModel.isLoading = false
+                makeToast(getString(R.string.diary_link_not_found))
+                startMainActivityWithClearTask()
+                return@launch
+            }
+
             sectionsPagerAdapter.notifyDataSetChanged()
 
-            val targetIndex =
-                if (savedInstanceState == null) {
-                    sectionsPagerAdapter.sequenceToPageIndex(
-                        intent.getLongExtra(
-                            DIARY_SEQUENCE,
-                            -1,
-                        ),
-                    )
-                } else {
-                    sectionsPagerAdapter.sequenceToPageIndex(
-                        savedInstanceState.getLong(
-                            DIARY_SEQUENCE,
-                            -1,
-                        ),
-                    )
-                }
+            val targetIndex = sectionsPagerAdapter.sequenceToPageIndex(requestedSequence)
 
             if (targetIndex >= 0) {
                 binding.diaryViewPager.post {
@@ -284,6 +292,26 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
             diaryViewModel.isLoading = false
         }
+    }
+
+    /**
+     * Resolves the diary sequence from the deep link (easydiary://diary/{sequence})
+     * so that the linked diary is shown first when the app is opened from outside.
+     */
+    private fun applyDiaryLinkIntent(): Boolean {
+        val diarySequence = DiaryLinkUtils.parseDiarySequence(intent.data) ?: return false
+        intent.putExtra(DIARY_SEQUENCE, diarySequence)
+        intent.putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+        return true
+    }
+
+    private fun containsDiary(sequence: Long): Boolean = diaryList.any { it.diaryId == sequence }
+
+    private fun copyDiaryLink(sequence: Long) {
+        val diaryLink = DiaryLinkUtils.createDiaryLinkUrl(sequence)
+        (getSystemService(CLIPBOARD_SERVICE) as ClipboardManager)
+            .setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), diaryLink))
+        makeSnackBar(getString(R.string.copy_diary_link_success))
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -877,6 +905,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     handlePdfExportSelected(fragment)
                                 }
 
+                                R.id.copyLink -> {
+                                    copyDiaryLink(fragment.getSequence())
+                                }
+
                                 R.id.encryptData -> {
                                     showEncryptPagePopup(fragment, DiaryReadingConstants.ENCRYPTION)
                                 }
@@ -914,6 +946,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                     postcard.setOnClickListener(itemClickListener)
                     pdfExport.setOnClickListener(itemClickListener)
+                    copyLink.setOnClickListener(itemClickListener)
                     encryptData.setOnClickListener(itemClickListener)
                     decryptData.setOnClickListener(itemClickListener)
                     delete.setOnClickListener(itemClickListener)
@@ -921,6 +954,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                     updateDrawableColorInnerCardView(imgPostcard)
                     updateDrawableColorInnerCardView(imgPdfExport)
+                    updateDrawableColorInnerCardView(imgCopyLink)
                     updateDrawableColorInnerCardView(imgEncryptData)
                     updateDrawableColorInnerCardView(imgDecryptData)
                     updateDrawableColorInnerCardView(imgDelete)

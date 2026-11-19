@@ -816,6 +816,12 @@ object DiaryReadingConstants {
     const val PDF_EXPORT = "pdfExport"
 }
 
+object DiaryLinkConstants {
+    const val SCHEME = "easydiary"
+    const val HOST_DIARY = "diary"
+    const val URI_PREFIX = "$SCHEME://$HOST_DIARY/"
+}
+
 object DashboardConstants {
     const val MODE_FLAG = "mode"
     const val MODE_LIFETIME = "lifetime"
