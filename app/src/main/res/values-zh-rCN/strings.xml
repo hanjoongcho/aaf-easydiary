@@ -1013,6 +1013,8 @@
     <string name="datetime_setting_summary">设置日期和时间的显示格式。（设置的显示格式适用于大多数界面，除了时间轴和创建日记的界面。）</string>
     <string name="markdown_setting_title">Markdown语法</string>
     <string name="markdown_setting_summary">如果激活了Markdown语法选项，您可以在写日记时使用Markdown语法输入各种格式。</string>
+    <string name="keyboard_incognito_setting_title">键盘无痕模式</string>
+    <string name="keyboard_incognito_setting_summary">让键盘不再学习在日记中输入的词语，日记内容不会留在个性化词库或自动补全中。（仅对支持此模式的键盘生效。）</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>

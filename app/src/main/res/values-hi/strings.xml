@@ -1013,6 +1013,8 @@
     <string name="datetime_setting_summary">तारीख और समय प्रदर्शन प्रारूप सेट करें। (समयरेखा और डायरी निर्माण स्क्रीन को छोड़कर अधिकांश स्क्रीन पर सेट डिस्प्ले प्रारूप लागू होता है।)</string>
     <string name="markdown_setting_title">मार्कडाउन वाक्यविन्यास</string>
     <string name="markdown_setting_summary">यदि आप मार्कडाउन सिंटैक्स विकल्प को सक्रिय करते हैं, तो आप डायरी लिखते समय मार्कडाउन सिंटैक्स का उपयोग करके विभिन्न प्रारूप दर्ज कर सकते हैं।</string>
+    <string name="keyboard_incognito_setting_title">कीबोर्ड इनकॉग्निटो मोड</string>
+    <string name="keyboard_incognito_setting_summary">कीबोर्ड डायरी में लिखे गए शब्दों को सीखना बंद कर देता है, ताकि डायरी की सामग्री व्यक्तिगत सुझावों या ऑटो-पूर्णता में न रहे। (यह केवल उन्हीं कीबोर्ड पर लागू होता है जो इस मोड का समर्थन करते हैं।)</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>

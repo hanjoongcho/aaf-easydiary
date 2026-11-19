@@ -1013,6 +1013,8 @@
     <string name="datetime_setting_summary">日付と時刻の表示形式を設定します。（タイムラインと日記作成画面を除くほとんどの画面に設定された表示形式が適用されます。）</string>
     <string name="markdown_setting_title">マークダウン文法</string>
     <string name="markdown_setting_summary">マークダウンオプションを有効にすると、ダイアリー作成時にマークダウン文法を利用して様々な書式を入力できます。</string>
+    <string name="keyboard_incognito_setting_title">キーボードのシークレットモード</string>
+    <string name="keyboard_incognito_setting_summary">キーボードがダイアリーで入力した単語を学習しないようにし、ダイアリーの内容が個別の変換候補や自動補完に残らないようにします。(このモードに対応したキーボードにのみ適用されます。)</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/7289069c812a451fbc005e61d954daab?v=96f57f603b1243a082a89b0879857cf3</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/f53504ba72bf47f7994c6379f07a7f3e?v=73179304834d4e1694282a9662e1848f</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/b749aae2ff5e4be8804bf99a547b8133?v=b2f88ff5a1874559ad590aab7882627d</string>

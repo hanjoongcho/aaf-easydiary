@@ -357,6 +357,10 @@ class Config(
         get() = prefs.getBoolean(SETTING_ENABLE_SHAKE_DETECTOR, false)
         set(enableShakeDetector) = prefs.edit { putBoolean(SETTING_ENABLE_SHAKE_DETECTOR, enableShakeDetector) }
 
+    var enableKeyboardIncognito: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_KEYBOARD_INCOGNITO, false)
+        set(enableKeyboardIncognito) = prefs.edit { putBoolean(SETTING_ENABLE_KEYBOARD_INCOGNITO, enableKeyboardIncognito) }
+
     var settingAppLanguage: String
         get() = prefs.getString(SETTING_APP_LANGUAGE, LANGUAGE_SYSTEM_DEFAULT)!!
         set(settingAppLanguage) = prefs.edit { putString(SETTING_APP_LANGUAGE, settingAppLanguage) }

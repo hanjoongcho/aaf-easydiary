@@ -1013,6 +1013,8 @@
     <string name="datetime_setting_summary">Establece el formato de visualización de fecha y hora. (El formato establecido se aplica a la mayoría de las pantallas, excepto a la línea de tiempo y a la pantalla de creación del diario).</string>
     <string name="markdown_setting_title">Sintaxis Markdown</string>
     <string name="markdown_setting_summary">Si activa la opción de sintaxis Markdown, puede introducir varios formatos utilizando la sintaxis Markdown al escribir un diario.</string>
+    <string name="keyboard_incognito_setting_title">Modo incógnito del teclado</string>
+    <string name="keyboard_incognito_setting_summary">Evita que el teclado aprenda las palabras que escribes en el diario, para que el contenido del diario no quede en las sugerencias personalizadas ni en el autocompletado. (Se aplica solo a los teclados compatibles con este modo.)</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
