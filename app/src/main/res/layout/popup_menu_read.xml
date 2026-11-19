@@ -36,7 +36,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_pdf_export"
                     android:id="@+id/img_pdf_export"
-                    android:padding="3dp"
+                    android:padding="0dp"
                     style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_popup_menu_item"

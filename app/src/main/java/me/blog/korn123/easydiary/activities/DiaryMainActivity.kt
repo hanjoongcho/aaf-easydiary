@@ -142,7 +142,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
         }
 
+    private var lastTaskTodoCount: Int = 0
+
     var diaryMode = DiaryMode.READ
+        set(value) {
+            field = value
+            updateSubtitle()
+        }
+
+    private fun updateSubtitle() {
+        supportActionBar?.run {
+            subtitle = when (diaryMode) {
+                DiaryMode.READ -> getString(R.string.task_todo_count_format, lastTaskTodoCount)
+                DiaryMode.DELETE -> null
+            }
+        }
+    }
 
     /***************************************************************************************************
      *   override functions
@@ -768,9 +783,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                 launch {
                     diaryViewModel.taskTodoCount.collect { count ->
-                        supportActionBar?.run {
-                            subtitle = getString(R.string.task_todo_count_format, count)
-                        }
+                        lastTaskTodoCount = count
+                        updateSubtitle()
                     }
                 }
 
