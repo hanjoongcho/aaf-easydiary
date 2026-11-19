@@ -1099,4 +1099,26 @@
     <string name="language_setting_title">다국어 설정</string>
     <string name="language_setting_summary">디바이스 설정보다 우선하는 앱의 언어를 설정합니다</string>
     <string name="language_system_default">시스템 기본값</string>
+
+    <!-- PDF 내보내기 -->
+    <string name="pdf_export_title">PDF로 저장</string>
+    <string name="pdf_export_export_selected">PDF로 내보내기</string>
+    <string name="pdf_export_include_photos">사진 포함</string>
+    <string name="pdf_export_text_only">텍스트만</string>
+    <string name="pdf_export_confirm_single_message">이 일기를 PDF 문서로 저장합니다.</string>
+    <string name="pdf_export_confirm_message">선택한 %d건의 일기를 하나의 PDF 문서로 저장합니다.</string>
+    <string name="pdf_export_choose_photos">첨부 사진 포함 여부를 선택하세요.</string>
+    <string name="pdf_export_unencrypted_warning">생성되는 PDF 파일은 암호화되지 않으므로, 파일을 여는 사람은 누구나 내용을 볼 수 있습니다.</string>
+    <string name="pdf_export_encrypted_entries_warning">암호화된 일기 %d건은 내용 없이 내보내집니다. 암호화된 일기는 한 건씩 내보내 비밀번호를 입력하세요.</string>
+    <string name="pdf_export_limit_exceeded">한 번에 최대 %d건까지 내보낼 수 있습니다. 선택 범위를 줄여 다시 시도해 주세요.</string>
+    <string name="pdf_export_in_progress">PDF 파일을 만드는 중입니다…</string>
+    <string name="pdf_export_success">PDF 파일을 저장했습니다. (%d쪽)</string>
+    <string name="pdf_export_failed">PDF 파일을 만들지 못했습니다.</string>
+    <string name="pdf_export_open">열기</string>
+    <string name="pdf_export_share">공유</string>
+    <string name="pdf_export_close">닫기</string>
+    <string name="pdf_export_no_app_to_open">PDF 파일을 열 수 있는 앱이 없습니다.</string>
+    <string name="pdf_export_pin_guide">암호화된 일기의 비밀번호를 입력하세요. 생성되는 PDF 파일 자체는 암호화되지 않습니다.</string>
+    <string name="pdf_export_continued">(이어서)</string>
+    <string name="pdf_export_encrypted_entry_note">암호화된 일기입니다. 이 PDF에는 내용이 포함되지 않았습니다.</string>
 </resources>

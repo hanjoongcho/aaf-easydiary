@@ -14,6 +14,12 @@
         android:title="Duplicate"
         app:showAsAction="always" />
     <item
+        android:icon="@drawable/ic_pdf_export"
+        android:id="@+id/pdfExport"
+        android:orderInCategory="100"
+        android:title="@string/pdf_export_export_selected"
+        app:showAsAction="ifRoom" />
+    <item
         android:icon="@drawable/ic_aaf_delete"
         android:id="@+id/delete"
         android:orderInCategory="100"
