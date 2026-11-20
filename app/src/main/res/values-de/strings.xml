@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">Zuletzt verwendet</string>
     <string name="datetime_setting_title">Datums- und Zeitformat</string>
     <string name="datetime_setting_summary">Legen Sie das Datums- und Uhrzeitformat fest. (Das eingestellte Format wird auf die meisten Bildschirme mit Ausnahme der Zeitleiste und des Tagebucherstellungsbildschirms angewendet.)</string>
+    <string name="time_format_setting_title">Zeitformat</string>
+    <string name="time_format_setting_summary">Wählen Sie, wie die Uhrzeit auf den Tagebuchbildschirmen angezeigt wird. „Standard“ folgt dem Anzeigeformat der Gerätesprache.</string>
+    <string name="time_format_system_default">Standard</string>
+    <string name="time_format_hour_12">12-Stunden-Format (AM/PM)</string>
+    <string name="time_format_hour_24">24-Stunden-Format</string>
     <string name="markdown_setting_title">Markdown-Syntax</string>
     <string name="markdown_setting_summary">Wenn du die Markdown-Syntax-Option aktivierst, kannst du beim Schreiben eines Tagebuchs verschiedene Formatierungen mit Markdown verwenden.</string>
     <string name="keyboard_incognito_setting_title">Tastatur-Inkognito-Modus</string>

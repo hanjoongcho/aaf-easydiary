@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">Récemment utilisés</string>
     <string name="datetime_setting_title">Format de la date et de l\'heure</string>
     <string name="datetime_setting_summary">Définir le format d\'affichage de la date et de l\'heure. (S\'applique à la plupart des écrans, sauf la chronologie et l\'écran de création du journal.)</string>
+    <string name="time_format_setting_title">Format de l\'heure</string>
+    <string name="time_format_setting_summary">Choisissez la façon dont l\'heure est affichée dans le journal. Par défaut, le format de la langue de l\'appareil est utilisé.</string>
+    <string name="time_format_system_default">Par défaut</string>
+    <string name="time_format_hour_12">12 heures (AM/PM)</string>
+    <string name="time_format_hour_24">24 heures</string>
     <string name="markdown_setting_title">Syntaxe Markdown</string>
     <string name="markdown_setting_summary">Si vous activez l\'option de syntaxe Markdown, vous pouvez utiliser divers formats Markdown lors de la rédaction d\'un journal.</string>
     <string name="keyboard_incognito_setting_title">Mode incognito du clavier</string>

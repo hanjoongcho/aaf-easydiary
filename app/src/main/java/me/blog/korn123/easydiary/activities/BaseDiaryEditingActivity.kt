@@ -58,6 +58,7 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
@@ -683,7 +684,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             binding.partialEditContents.date.text =
                 when (binding.partialEditContents.allDay.isChecked) {
                     true -> DateUtils.getDateStringFromTimeMillis(currentTimeMillis)
-                    false -> DateUtils.getDateTimeStringFromTimeMillis(currentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.MEDIUM)
+                    false -> DateUtils.getDateTimeStringFromTimeMillis(currentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.MEDIUM, timeFormatMode = storedTimeFormat())
                 }
         } catch (e: ParseException) {
             e.printStackTrace()

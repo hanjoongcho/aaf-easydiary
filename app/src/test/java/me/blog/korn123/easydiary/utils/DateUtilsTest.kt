@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.utils
 
+import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -116,5 +117,85 @@ class DateUtilsTest {
         val current = DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         assertNotNull(current)
         assertEquals(15, current.length)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern converts 24 hour pattern to 12 hour pattern with am pm at the end`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "yyyy. M. d. HH:mm",
+            timeFormatMode = TimeFormatMode.HOUR_12,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("yyyy. M. d. h:mm a", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern converts 24 hour pattern to 12 hour pattern with am pm at the front`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "yyyy'년' M'월' d'일' HH:mm:ss",
+            timeFormatMode = TimeFormatMode.HOUR_12,
+            amPmMarkerIsPrefix = true,
+        )
+        assertEquals("yyyy'년' M'월' d'일' a h:mm:ss", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern keeps 12 hour pattern with am pm unchanged`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "h:mm a",
+            timeFormatMode = TimeFormatMode.HOUR_12,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("h:mm a", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern converts 12 hour pattern to 24 hour pattern removing am pm at the end`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "yyyy. M. d. h:mm a",
+            timeFormatMode = TimeFormatMode.HOUR_24,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("yyyy. M. d. HH:mm", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern converts 12 hour pattern to 24 hour pattern removing am pm at the front`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "a h:mm:ss z",
+            timeFormatMode = TimeFormatMode.HOUR_24,
+            amPmMarkerIsPrefix = true,
+        )
+        assertEquals("HH:mm:ss z", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern keeps quoted literal and does not treat it as am pm marker`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "'a' HH:mm",
+            timeFormatMode = TimeFormatMode.HOUR_24,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("'a' HH:mm", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern keeps pattern unchanged on system default mode`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "yyyy. M. d. HH:mm:ss",
+            timeFormatMode = TimeFormatMode.SYSTEM_DEFAULT,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("yyyy. M. d. HH:mm:ss", result)
+    }
+
+    @Test
+    fun `convertTimeFormatPattern keeps date only pattern unchanged`() {
+        val result = DateUtils.convertTimeFormatPattern(
+            pattern = "yyyy. M. d.",
+            timeFormatMode = TimeFormatMode.HOUR_12,
+            amPmMarkerIsPrefix = false,
+        )
+        assertEquals("yyyy. M. d.", result)
     }
 }

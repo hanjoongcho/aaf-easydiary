@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">Usado recientemente</string>
     <string name="datetime_setting_title">Formato de fecha y hora</string>
     <string name="datetime_setting_summary">Establece el formato de visualización de fecha y hora. (El formato establecido se aplica a la mayoría de las pantallas, excepto a la línea de tiempo y a la pantalla de creación del diario).</string>
+    <string name="time_format_setting_title">Formato de hora</string>
+    <string name="time_format_setting_summary">Elige cómo se muestra la hora en las pantallas del diario. El valor predeterminado sigue el formato del idioma del dispositivo.</string>
+    <string name="time_format_system_default">Predeterminado</string>
+    <string name="time_format_hour_12">12 horas (a. m./p. m.)</string>
+    <string name="time_format_hour_24">24 horas</string>
     <string name="markdown_setting_title">Sintaxis Markdown</string>
     <string name="markdown_setting_summary">Si activa la opción de sintaxis Markdown, puede introducir varios formatos utilizando la sintaxis Markdown al escribir un diario.</string>
     <string name="keyboard_incognito_setting_title">Modo incógnito del teclado</string>

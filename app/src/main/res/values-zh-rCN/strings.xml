@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">最近使用</string>
     <string name="datetime_setting_title">日期时间格式</string>
     <string name="datetime_setting_summary">设置日期和时间的显示格式。（设置的显示格式适用于大多数界面，除了时间轴和创建日记的界面。）</string>
+    <string name="time_format_setting_title">时间格式</string>
+    <string name="time_format_setting_summary">选择日记界面中时间的显示方式。默认跟随设备语言的显示格式。</string>
+    <string name="time_format_system_default">默认</string>
+    <string name="time_format_hour_12">12 小时制（上午/下午）</string>
+    <string name="time_format_hour_24">24 小时制</string>
     <string name="markdown_setting_title">Markdown语法</string>
     <string name="markdown_setting_summary">如果激活了Markdown语法选项，您可以在写日记时使用Markdown语法输入各种格式。</string>
     <string name="keyboard_incognito_setting_title">键盘无痕模式</string>

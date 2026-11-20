@@ -15,6 +15,7 @@ import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.findActivity
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -67,9 +68,9 @@ fun TimelineItemCard(
                 false -> {
                     lineBreakStrings.add(
                         if (ctx.config.enableDebugOptionVisibleDiarySequence) {
-                            "[${diary.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM)}"
+                            "[${diary.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM, timeFormatMode = ctx.storedTimeFormat())}"
                         } else {
-                            DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM)
+                            DateUtils.getTimeStringFromTimeMillis(diary.currentTimeMillis, SimpleDateFormat.MEDIUM, timeFormatMode = ctx.storedTimeFormat())
                         },
                     )
                 }

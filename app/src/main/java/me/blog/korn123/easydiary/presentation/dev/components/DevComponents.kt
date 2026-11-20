@@ -51,6 +51,7 @@ import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.startReviewFlow
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.toggleLauncher
 import me.blog.korn123.easydiary.extensions.updateStatusBarAppearance
 import me.blog.korn123.easydiary.helper.ComposeConstants.HORIZONTAL_PADDING
@@ -240,6 +241,7 @@ fun Etc(
                         "Next: ${
                             DateUtils.getDateTimeStringFromTimeMillis(
                                 alarmInfo.triggerTime,
+                                timeFormatMode = currentContext.storedTimeFormat(),
                             )
                         }",
                     )

@@ -12,6 +12,7 @@ import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import java.util.*
@@ -274,6 +275,10 @@ class Config(
     var settingDatetimeFormat: String
         get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
         set(settingDatetimeFormat) = prefs.edit { putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat) }
+
+    var settingTimeFormat: String
+        get() = prefs.getString(SETTING_TIME_FORMAT, TimeFormatMode.SYSTEM_DEFAULT.name)!!
+        set(settingTimeFormat) = prefs.edit { putString(SETTING_TIME_FORMAT, settingTimeFormat) }
 
     var enableMarkdown: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)

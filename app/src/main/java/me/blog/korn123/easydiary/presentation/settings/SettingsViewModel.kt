@@ -92,6 +92,14 @@ class SettingsViewModel(
         )
     val datetimeFormatSubDescription: StateFlow<String> = _datetimeFormatSubDescription.asStateFlow()
 
+    fun updateDatetimeFormatSubDescription() {
+        _datetimeFormatSubDescription.value =
+            DateUtils.getDateTimeStringForceFormatting(
+                System.currentTimeMillis(),
+                application,
+            )
+    }
+
     private val _summaryMaxLinesSubDescription: MutableStateFlow<String> = MutableStateFlow(application.getString(R.string.max_lines_value, config.summaryMaxLines))
     val summaryMaxLinesSubDescription: StateFlow<String> get() = _summaryMaxLinesSubDescription.asStateFlow()
 

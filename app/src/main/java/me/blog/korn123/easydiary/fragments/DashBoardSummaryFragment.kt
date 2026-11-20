@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardSummaryBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getDashboardCardWidth
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
 
@@ -43,21 +44,21 @@ class DashBoardSummaryFragment : Fragment() {
                 val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
                 diaryBackupUsingGMS.text =
                     when {
-                        diaryBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
+                        diaryBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL, timeFormatMode = ctx.storedTimeFormat())
                         else -> getString(R.string.dashboard_backup_guide_message)
                     }
 
                 val photoBackupUsingGMSMillis = ctx.config.photoBackupGoogle
                 attachedPhotoBackupUsingGMS.text =
                     when {
-                        photoBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(photoBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
+                        photoBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(photoBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL, timeFormatMode = ctx.storedTimeFormat())
                         else -> getString(R.string.dashboard_backup_guide_message)
                     }
 
                 val diaryBackupUsingLocal = ctx.config.diaryBackupLocal
                 diaryBackupLocal.text =
                     when {
-                        diaryBackupUsingLocal > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingLocal, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
+                        diaryBackupUsingLocal > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingLocal, SimpleDateFormat.FULL, SimpleDateFormat.FULL, timeFormatMode = ctx.storedTimeFormat())
                         else -> getString(R.string.dashboard_backup_guide_message)
                     }
             }

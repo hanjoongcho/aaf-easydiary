@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">Недавние символы</string>
     <string name="datetime_setting_title">Форматирование даты и времени</string>
     <string name="datetime_setting_summary">Установите формат отображения даты и времени (применяется ко всем экранам, кроме хроники и экрана создания дневника).</string>
+    <string name="time_format_setting_title">Формат времени</string>
+    <string name="time_format_setting_summary">Выберите, как отображается время на экранах дневника. «По умолчанию» используется формат языка устройства.</string>
+    <string name="time_format_system_default">По умолчанию</string>
+    <string name="time_format_hour_12">12-часовой формат (AM/PM)</string>
+    <string name="time_format_hour_24">24-часовой формат</string>
     <string name="markdown_setting_title">Синтаксис Markdown</string>
     <string name="markdown_setting_summary">При включении опции синтаксиса Markdown вы можете использовать различные форматы разметки при написании дневника.</string>
     <string name="keyboard_incognito_setting_title">Режим инкогнито клавиатуры</string>

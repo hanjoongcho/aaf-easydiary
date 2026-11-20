@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">हाल ही में उपयोग किया गया</string>
     <string name="datetime_setting_title">डेटाटाइम फ़ॉर्मेटिंग</string>
     <string name="datetime_setting_summary">तारीख और समय प्रदर्शन प्रारूप सेट करें। (समयरेखा और डायरी निर्माण स्क्रीन को छोड़कर अधिकांश स्क्रीन पर सेट डिस्प्ले प्रारूप लागू होता है।)</string>
+    <string name="time_format_setting_title">समय प्रारूप</string>
+    <string name="time_format_setting_summary">चुनें कि डायरी स्क्रीन पर समय कैसे दिखाया जाए। डिफ़ॉल्ट विकल्प डिवाइस की भाषा के प्रारूप का अनुसरण करता है।</string>
+    <string name="time_format_system_default">डिफ़ॉल्ट</string>
+    <string name="time_format_hour_12">12-घंटे (AM/PM)</string>
+    <string name="time_format_hour_24">24-घंटे</string>
     <string name="markdown_setting_title">मार्कडाउन वाक्यविन्यास</string>
     <string name="markdown_setting_summary">यदि आप मार्कडाउन सिंटैक्स विकल्प को सक्रिय करते हैं, तो आप डायरी लिखते समय मार्कडाउन सिंटैक्स का उपयोग करके विभिन्न प्रारूप दर्ज कर सकते हैं।</string>
     <string name="keyboard_incognito_setting_title">कीबोर्ड इनकॉग्निटो मोड</string>
