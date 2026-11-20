@@ -11,6 +11,7 @@ import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -76,7 +77,7 @@ class TimelineItemAdapter(
             val lineBreakStrings = arrayListOf<String>()
             when (diaryDto.isAllDay) {
                 true -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${context.resources.getString(R.string.all_day)}" else context.resources.getString(R.string.all_day))
-                false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM)}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
+                false -> lineBreakStrings.add(if (context.config.enableDebugOptionVisibleDiarySequence) "[${diaryDto.originDiaryId}] ${DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM, timeFormatMode = context.storedTimeFormat())}" else DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM, timeFormatMode = context.storedTimeFormat()))
             }
             if (diaryDto.title?.isNotEmpty() == true) lineBreakStrings.add(diaryDto.title)
             activity.applyMarkDownPolicy(text1, diaryDto.contents, true, lineBreakStrings, true)

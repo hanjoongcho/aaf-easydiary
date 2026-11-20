@@ -40,6 +40,7 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
@@ -49,6 +50,7 @@ import me.blog.korn123.easydiary.extensions.isVanillaIceCreamPlus
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
@@ -319,6 +321,35 @@ class SettingsBasicFragment : Fragment() {
                         openDatetimeFormattingSettingDialog()
                     }
 
+                    var timeFormatMode by remember { mutableIntStateOf(requireContext().storedTimeFormat().ordinal) }
+                    RadioGroupCard(
+                        title = getString(R.string.time_format_setting_title),
+                        description = getString(R.string.time_format_setting_summary),
+                        modifier = settingCardModifier,
+                        options =
+                            listOf(
+                                mapOf(
+                                    "title" to stringResource(R.string.time_format_system_default),
+                                    "key" to TimeFormatMode.SYSTEM_DEFAULT.ordinal,
+                                ),
+                                mapOf(
+                                    "title" to stringResource(R.string.time_format_hour_12),
+                                    "key" to TimeFormatMode.HOUR_12.ordinal,
+                                ),
+                                mapOf(
+                                    "title" to stringResource(R.string.time_format_hour_24),
+                                    "key" to TimeFormatMode.HOUR_24.ordinal,
+                                ),
+                            ),
+                        selectedKey = timeFormatMode,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) { key ->
+                        timeFormatMode = key
+                        TimeFormatMode.entries.getOrNull(key)?.let { requireContext().config.settingTimeFormat = it.name }
+                        settingsViewModel.updateDatetimeFormatSubDescription()
+                    }
+
                     var enableContentsSummary by remember { mutableStateOf(requireContext().config.enableContentsSummary) }
                     SwitchCard(
                         title = getString(R.string.contents_summary_title),
@@ -565,9 +596,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.FULL,
-                            SimpleDateFormat.FULL,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.FULL,
+                            timeFormat = SimpleDateFormat.FULL,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_FULL_AND_TIME_FULL.toString(),
                 ),
@@ -576,9 +608,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.FULL,
-                            SimpleDateFormat.SHORT,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.FULL,
+                            timeFormat = SimpleDateFormat.SHORT,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString(),
                 ),
@@ -587,9 +620,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.LONG,
-                            SimpleDateFormat.LONG,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.LONG,
+                            timeFormat = SimpleDateFormat.LONG,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_LONG_AND_TIME_LONG.toString(),
                 ),
@@ -598,9 +632,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.MEDIUM,
-                            SimpleDateFormat.MEDIUM,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.MEDIUM,
+                            timeFormat = SimpleDateFormat.MEDIUM,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_MEDIUM.toString(),
                 ),
@@ -609,9 +644,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.MEDIUM,
-                            SimpleDateFormat.SHORT,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.MEDIUM,
+                            timeFormat = SimpleDateFormat.SHORT,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_MEDIUM_AND_TIME_SHORT.toString(),
                 ),
@@ -620,9 +656,10 @@ class SettingsBasicFragment : Fragment() {
                 mapOf(
                     "optionTitle" to
                         DateUtils.getDateTimeStringFromTimeMillis(
-                            System.currentTimeMillis(),
-                            SimpleDateFormat.SHORT,
-                            SimpleDateFormat.SHORT,
+                            timeMillis = System.currentTimeMillis(),
+                            dateFormat = SimpleDateFormat.SHORT,
+                            timeFormat = SimpleDateFormat.SHORT,
+                            timeFormatMode = storedTimeFormat(),
                         ),
                     "optionValue" to DateTimeFormat.DATE_SHORT_AND_TIME_SHORT.toString(),
                 ),
@@ -635,6 +672,7 @@ class SettingsBasicFragment : Fragment() {
                     val fontInfo = parent.adapter.getItem(position) as? Map<*, *>
                     (fontInfo?.get("optionValue") as? String)?.let {
                         config.settingDatetimeFormat = it
+                        settingsViewModel.updateDatetimeFormatSubDescription()
                         initPreference()
                     }
                     alertDialog?.cancel()

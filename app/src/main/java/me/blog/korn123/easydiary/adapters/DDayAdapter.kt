@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dDayRepository
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -101,7 +102,7 @@ class DDayAdapter(
 
                     fun updateDDayInfo() {
                         textTargetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                        textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(temporaryDDay.targetTimeStamp)
+                        textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(temporaryDDay.targetTimeStamp, timeFormatMode = activity.storedTimeFormat())
                         textDayRemaining.text = temporaryDDay.getOnlyDayRemaining()
                         textDayRemainingWithYear.text = temporaryDDay.getOnlyDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
                         textTimeRemaining.text = "${temporaryDDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))} ${temporaryDDay.getTimeRemaining()}"

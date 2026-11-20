@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">ᱱᱮᱱᱮ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱱ</string>
     <string name="datetime_setting_title">ᱫᱤᱱᱵᱮᱲᱟ ᱯᱷᱚᱨᱢᱟᱴᱤᱝ</string>
     <string name="datetime_setting_summary">ᱢᱟᱦᱟᱸ ᱟᱨ ᱚᱠᱛᱚ ᱯᱷᱚᱨᱢᱟᱴ ᱥᱮᱴ ᱢᱮ ᱾ (ᱴᱟᱭᱢᱞᱟᱭᱤᱱ ᱟᱨ ᱰᱟᱭᱨᱤ ᱵᱮᱱᱟᱣ ᱨᱮᱱᱟᱜ ᱥᱠᱨᱤᱱ ᱠᱚ ᱵᱮᱜᱚᱨ ᱰᱮᱵᱽᱞᱚᱯᱢᱮᱸᱴ ᱰᱟᱭᱨᱤ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱟᱹᱲᱛᱤ ᱥᱠᱨᱤᱱ ᱨᱮ ᱞᱟᱜᱟᱜᱼᱟ ᱾)</string>
+    <string name="time_format_setting_title">ᱚᱠᱛᱚ ᱯᱷᱚᱨᱢᱟᱴ</string>
+    <string name="time_format_setting_summary">ᱰᱟᱭᱨᱤ ᱥᱠᱨᱤᱱ ᱨᱮ ᱚᱠᱛᱚ ᱪᱮᱫ ᱞᱮᱠᱟᱭ ᱩᱫᱩᱜ ᱢᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾ ᱰᱤᱯᱷᱚᱞᱴ ᱫᱚ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱯᱟᱹᱨᱥᱤ ᱯᱷᱚᱨᱢᱟᱴ ᱮ ᱯᱟᱧᱡᱟᱭᱟ ᱾</string>
+    <string name="time_format_system_default">ᱰᱤᱯᱷᱚᱞᱴ</string>
+    <string name="time_format_hour_12">᱑᱒ ᱴᱟᱲᱟᱝ (AM/PM)</string>
+    <string name="time_format_hour_24">᱒᱔ ᱴᱟᱲᱟᱝ</string>
     <string name="markdown_setting_title">ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ</string>
     <string name="markdown_setting_summary">ᱡᱩᱫᱤ ᱟᱢ ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ ᱢᱚᱱᱮᱛᱮᱭᱟᱜ ᱮᱠᱴᱤᱵᱷ ᱠᱮᱫᱟ, ᱟᱢ ᱫᱚ ᱢᱟᱨᱠᱰᱟᱣᱱ ᱥᱤᱱᱴᱮᱠᱥ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮᱜ ᱟᱭᱢᱟ ᱞᱮᱠᱟᱱ ᱯᱷᱚᱨᱢᱮᱴ ᱠᱚ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜ ᱟ ᱡᱚᱠᱷᱚᱱ ᱟᱢ ᱰᱟᱭᱨᱤ ᱮᱢ ᱚᱞ ᱮᱫᱟ ᱾</string>
     <string name="keyboard_incognito_setting_title">ᱠᱤᱵᱳᱨᱰ ᱤᱱᱠᱳᱜᱱᱤᱴᱳ ᱢᱳᱰ</string>

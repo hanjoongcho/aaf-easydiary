@@ -1011,6 +1011,11 @@
     <string name="recently_used_symbol">최근사용</string>
     <string name="datetime_setting_title">날짜 표시형식 설정</string>
     <string name="datetime_setting_summary">다이어리에 표시되는 날짜와 시간 표시형식을 설정합니다. (타임라인과 다이어리 작성화면을 제외한 대부분의 화면에 설정된 표시형식이 적용됩니다.)</string>
+    <string name="time_format_setting_title">시간 표시형식</string>
+    <string name="time_format_setting_summary">일기 화면에 표시되는 시간의 표시형식을 선택합니다. 기본값은 기기 언어의 표시형식을 따릅니다.</string>
+    <string name="time_format_system_default">기본값</string>
+    <string name="time_format_hour_12">12시간제 (오전/오후)</string>
+    <string name="time_format_hour_24">24시간제</string>
     <string name="markdown_setting_title">마크다운 문법</string>
     <string name="markdown_setting_summary">마크다운 옵션을 활성화 시키면 다이어리 작성 시 마크다운 문법을 이용하여 다양한 서식을 입력할 수 있습니다.</string>
     <string name="keyboard_incognito_setting_title">키보드 시크릿 모드</string>

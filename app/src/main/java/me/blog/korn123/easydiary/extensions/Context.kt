@@ -155,6 +155,7 @@ import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.Launcher
+import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.helper.AlarmConstants
 import me.blog.korn123.easydiary.helper.AlarmWorkExecutor
@@ -1461,6 +1462,7 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
         preferenceMap[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT] = enableDDayFlexboxLayout
         preferenceMap[SETTING_ENABLE_DASHBOARD_CALENDAR] = enableDashboardCalendar
         preferenceMap[SETTING_DATETIME_FORMAT] = settingDatetimeFormat
+        preferenceMap[SETTING_TIME_FORMAT] = settingTimeFormat
         preferenceMap[SETTING_ENABLE_MARKDOWN] = enableMarkdown
         preferenceMap[SETTING_DEBUG_OPTION_TOAST_LOCATION] = enableDebugOptionToastLocation
         preferenceMap[SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO] = enableDebugOptionToastAttachedPhoto
@@ -1550,6 +1552,7 @@ fun Context.jsonStringToPreference(jsonString: String) {
         map[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT]?.let { enableDDayFlexboxLayout = it as? Boolean ?: enableDDayFlexboxLayout }
         map[SETTING_ENABLE_DASHBOARD_CALENDAR]?.let { enableDashboardCalendar = it as? Boolean ?: enableDashboardCalendar }
         map[SETTING_DATETIME_FORMAT]?.let { settingDatetimeFormat = it as? String ?: settingDatetimeFormat }
+        map[SETTING_TIME_FORMAT]?.let { settingTimeFormat = it as? String ?: settingTimeFormat }
         map[SETTING_ENABLE_MARKDOWN]?.let { enableMarkdown = it as? Boolean ?: enableMarkdown }
         map[SETTING_DEBUG_OPTION_TOAST_LOCATION]?.let { enableDebugOptionToastLocation = it as? Boolean ?: enableDebugOptionToastLocation }
         map[SETTING_DEBUG_OPTION_TOAST_ATTACHED_PHOTO]?.let { enableDebugOptionToastAttachedPhoto = it as? Boolean ?: enableDebugOptionToastAttachedPhoto }
@@ -2050,6 +2053,8 @@ fun Context.applyBoldToDate(
 fun Context.parsedMarkdownString(markdownString: String): Spanned = Markwon.builder(this).build().toMarkdown(markdownString)
 
 fun Context.storedDatetimeFormat() = DateTimeFormat.valueOf(config.settingDatetimeFormat)
+
+fun Context.storedTimeFormat() = TimeFormatMode.fromName(config.settingTimeFormat)
 
 fun Context.isColorLight(color: Int): Boolean {
     val r = Color.red(color)

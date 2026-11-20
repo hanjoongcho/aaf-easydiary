@@ -1,9 +1,13 @@
 package me.blog.korn123.easydiary.utils
 
 import android.content.Context
+import android.text.format.DateFormat
 import me.blog.korn123.easydiary.enums.DateTimeFormat
+import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.storedDatetimeFormat
+import me.blog.korn123.easydiary.extensions.storedTimeFormat
+import java.text.DateFormat as JavaDateFormat
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -31,10 +35,11 @@ object DateUtils {
         timeMillis: Long,
         timeFormat: Int = SimpleDateFormat.SHORT,
         locale: Locale = Locale.getDefault(),
+        timeFormatMode: TimeFormatMode = TimeFormatMode.SYSTEM_DEFAULT,
     ): String {
         val date = Date(timeMillis)
         val simpleDateFormat = SimpleDateFormat.getTimeInstance(timeFormat, locale)
-        return simpleDateFormat.format(date)
+        return simpleDateFormat.formatWithTimeFormatMode(date, locale, timeFormatMode)
     }
 
     fun getDateTimeStringFromTimeMillis(
@@ -43,6 +48,7 @@ object DateUtils {
         timeFormat: Int = SimpleDateFormat.SHORT,
         dateTimeFormat: DateTimeFormat? = null,
         locale: Locale = Locale.getDefault(),
+        timeFormatMode: TimeFormatMode = TimeFormatMode.SYSTEM_DEFAULT,
     ): String {
         val date = Date(timeMillis)
         val simpleDateFormat =
@@ -59,13 +65,51 @@ object DateUtils {
                     )
                 }
             }
-        return simpleDateFormat.format(date)
+        return simpleDateFormat.formatWithTimeFormatMode(date, locale, timeFormatMode)
     }
 
     fun getDateTimeStringForceFormatting(
         timeMillis: Long,
         context: Context,
-    ) = getDateTimeStringFromTimeMillis(timeMillis, -1, -1, context.storedDatetimeFormat())
+    ) = getDateTimeStringFromTimeMillis(
+        timeMillis = timeMillis,
+        dateFormat = -1,
+        timeFormat = -1,
+        dateTimeFormat = context.storedDatetimeFormat(),
+        timeFormatMode = context.storedTimeFormat(),
+    )
+
+    /**
+     * [timeFormatMode]에 맞게 시간 필드가 변환된 SimpleDateFormat 패턴을 반환합니다.
+     *
+     * SimpleDateFormat.getTimeInstance, getDateTimeInstance가 돌려주는 패턴은 로케일마다
+     * 12시간제('a h:mm') 또는 24시간제('HH:mm')로 고정되어 있고, 앱에서 이를 바꾸려면
+     * 패턴 문자열을 변환한 뒤 다시 포맷해야 합니다. 이 함수는 그 변환만 순수하게 수행합니다.
+     *
+     * - [TimeFormatMode.HOUR_12]: 24시간제 hour 필드(H, k)를 로케일 관례대로 앞자리 0이 없는 12시간제(h)로
+     *   바꾸고, 오전/오후 표시(a)가 없으면 [amPmMarkerIsPrefix] 위치에 추가합니다.
+     * - [TimeFormatMode.HOUR_24]: 12시간제 hour 필드(h, K)를 두 자리 24시간제(HH)로 바꾸고,
+     *   오전/오후 표시(a)를 제거합니다.
+     * - 따옴표(')로 감싼 리터럴 안의 문자는 변환하지 않습니다.
+     */
+    fun convertTimeFormatPattern(
+        pattern: String,
+        timeFormatMode: TimeFormatMode,
+        amPmMarkerIsPrefix: Boolean,
+    ): String =
+        when (timeFormatMode) {
+            TimeFormatMode.SYSTEM_DEFAULT -> {
+                pattern
+            }
+
+            TimeFormatMode.HOUR_12 -> {
+                pattern.convertHourField(HOUR_FIELDS_OF_24_HOUR_CLOCK, HOUR_FIELD_12).insertAmPmMarker(amPmMarkerIsPrefix)
+            }
+
+            TimeFormatMode.HOUR_24 -> {
+                pattern.convertHourField(HOUR_FIELDS_OF_12_HOUR_CLOCK, HOUR_FIELD_24).removeAmPmMarker()
+            }
+        }
 
     fun getOnlyDayRemaining(
         targetTimeStamp: Long,
@@ -198,4 +242,127 @@ object DateUtils {
         val dateFormat = SimpleDateFormat(pattern)
         return dateFormat.format(date)
     }
+
+    // ------------------------------------------------------------------
+    // Time format mode helpers
+    // ------------------------------------------------------------------
+    private fun JavaDateFormat.formatWithTimeFormatMode(
+        date: Date,
+        locale: Locale,
+        timeFormatMode: TimeFormatMode,
+    ): String {
+        if (timeFormatMode == TimeFormatMode.SYSTEM_DEFAULT) return format(date)
+        val simpleDateFormat = this as? SimpleDateFormat ?: return format(date)
+        return simpleDateFormat
+            .applyTimeFormatMode(locale, timeFormatMode)
+            .format(date)
+    }
+
+    private fun SimpleDateFormat.applyTimeFormatMode(
+        locale: Locale,
+        timeFormatMode: TimeFormatMode,
+    ): SimpleDateFormat {
+        val pattern = toPattern()
+        val convertedPattern = convertTimeFormatPattern(pattern, timeFormatMode, isAmPmMarkerPrefix(locale))
+        if (convertedPattern == pattern) return this
+        return SimpleDateFormat(convertedPattern, locale).apply { timeZone = this@applyTimeFormatMode.timeZone }
+    }
+
+    /**
+     * 로케일이 오전/오후 표시를 시각 앞에 쓰는지 여부를 반환합니다.
+     * (예: 한국어 '오후 3:30'은 앞, 영어 '3:30 PM'은 뒤)
+     *
+     * ICU의 12시간제 스켈레톤("hm")으로 로케일별 최적 패턴을 얻어 판단합니다.
+     */
+    private fun isAmPmMarkerPrefix(locale: Locale): Boolean {
+        val bestPattern = DateFormat.getBestDateTimePattern(locale, "hm")
+        val hourIndex = bestPattern.indexOfFirst { it in HOUR_FIELDS }
+        val amPmIndex = bestPattern.indexOfFirst { it == AM_PM_FIELD }
+        return amPmIndex >= 0 && hourIndex >= 0 && amPmIndex < hourIndex
+    }
+
+    private fun String.convertHourField(
+        sourceFields: String,
+        replacement: String,
+    ): String {
+        val mask = unquotedMask()
+        val builder = StringBuilder(length)
+        var index = 0
+        while (index < length) {
+            if (mask[index] && this[index] in sourceFields) {
+                builder.append(replacement)
+                while (index + 1 < length && mask[index + 1] && this[index + 1] == this[index]) index++
+            } else {
+                builder.append(this[index])
+            }
+            index++
+        }
+        return builder.toString()
+    }
+
+    private fun String.insertAmPmMarker(amPmMarkerIsPrefix: Boolean): String {
+        val mask = unquotedMask()
+        if (indices.any { mask[it] && this[it] == AM_PM_FIELD }) return this
+        val hourIndex = indices.firstOrNull { mask[it] && this[it] in HOUR_FIELDS } ?: return this
+        return when (amPmMarkerIsPrefix) {
+            true -> {
+                substring(0, hourIndex) + "$AM_PM_FIELD " + substring(hourIndex)
+            }
+
+            false -> {
+                val lastTimeFieldIndex = indices.lastOrNull { mask[it] && this[it] in TIME_FIELDS } ?: hourIndex
+                substring(0, lastTimeFieldIndex + 1) + " $AM_PM_FIELD" + substring(lastTimeFieldIndex + 1)
+            }
+        }
+    }
+
+    private fun String.removeAmPmMarker(): String {
+        val mask = unquotedMask()
+        val amPmIndex = indices.firstOrNull { mask[it] && this[it] == AM_PM_FIELD } ?: return this
+        val startIndex = if (amPmIndex > 0 && this[amPmIndex - 1] == SPACE) amPmIndex - 1 else amPmIndex
+        val endIndex =
+            if (startIndex == amPmIndex && amPmIndex + 1 < length && this[amPmIndex + 1] == SPACE) {
+                amPmIndex + 2
+            } else {
+                amPmIndex + 1
+            }
+        return removeRange(startIndex, endIndex)
+    }
+
+    /**
+     * 따옴표(')로 감싼 리터럴을 제외한 위치를 true로 표시한 배열을 반환합니다.
+     * ('를 두 번 연속으로 쓴 경우는 리터럴 따옴표 한 개로 처리합니다.)
+     */
+    private fun String.unquotedMask(): BooleanArray {
+        val mask = BooleanArray(length)
+        var quoted = false
+        var index = 0
+        while (index < length) {
+            when {
+                this[index] == QUOTE && index + 1 < length && this[index + 1] == QUOTE -> {
+                    index++
+                }
+
+                this[index] == QUOTE -> {
+                    quoted = !quoted
+                }
+
+                !quoted -> {
+                    mask[index] = true
+                }
+            }
+            index++
+        }
+        return mask
+    }
+
+    private const val AM_PM_FIELD = 'a'
+    private const val SPACE = ' '
+    private const val QUOTE = '\''
+    private const val HOUR_FIELD_12 = "h"
+    private const val HOUR_FIELD_24 = "HH"
+    private const val HOUR_FIELDS_OF_12_HOUR_CLOCK = "hK"
+    private const val HOUR_FIELDS_OF_24_HOUR_CLOCK = "Hk"
+    private const val HOUR_FIELDS = "hHkK"
+    private const val TIME_FIELDS = "hHkKms"
 }
