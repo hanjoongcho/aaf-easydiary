@@ -68,6 +68,7 @@
                                 <com.simplemobiletools.commons.views.MyEditText
                                     android:id="@+id/diaryTitle"
                                     style="@style/edit_diary_edit_inner_contents"
+                                    android:textCursorDrawable="@null"
                                     android:layout_gravity="center_vertical"
                                     android:background="@android:color/transparent"
                                     android:gravity="center_vertical"
@@ -120,6 +121,7 @@
                             <com.simplemobiletools.commons.views.MyEditText
                                 android:id="@+id/diaryContents"
                                 style="@style/edit_diary_edit_inner_contents"
+                                android:textCursorDrawable="@null"
                                 android:background="@android:color/transparent"
                                 android:gravity="top"
                                 android:hint="@string/contents_text_hint"

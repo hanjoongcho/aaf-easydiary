@@ -40,6 +40,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
+import me.blog.korn123.easydiary.extensions.applyTextCursorColor
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -395,6 +396,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
+        applyDiaryEditorCursorColor()
         applyKeyboardIncognitoPolicy()
         toggleTimePickerTool()
     }
@@ -412,6 +414,19 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   Etc functions
      ***************************************************************************************************/
+    /**
+     * Paints the caret of title and contents with the text color so that the caret stays visible
+     * on every customized theme (#156, #224). The text colors of the screen are refreshed in
+     * `EasyDiaryActivity.onResume()` before this runs, so the caret follows the current theme.
+     */
+    private fun applyDiaryEditorCursorColor() {
+        val textColor = config.textColor
+        binding.partialEditContents.run {
+            diaryTitle.applyTextCursorColor(textColor)
+            diaryContents.applyTextCursorColor(textColor)
+        }
+    }
+
     private fun applyKeyboardIncognitoPolicy() {
         val keyboardIncognitoEnabled = config.enableKeyboardIncognito
         binding.partialEditContents.run {
