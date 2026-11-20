@@ -31,9 +31,9 @@ import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.AuthManager
-import me.blog.korn123.easydiary.helper.GCalendarConstants
 import me.blog.korn123.easydiary.helper.SYMBOL_GOOGLE_CALENDAR
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.GoogleCalendarUtils
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -352,7 +352,9 @@ class GoogleAuthManager(
         // 1. 유효성 및 필터링 검사
         if (summary.isNullOrEmpty() && description.isNullOrEmpty()) return 0
 
-        val isHolidayCalendar = GCalendarConstants.HOLIDAY_CALENDAR_IDS.contains(calendarId)
+        // Every Google public holiday calendar of every country is treated equally, whatever
+        // language/country prefix its id carries.
+        val isHolidayCalendar = GoogleCalendarUtils.isGoogleHolidayCalendar(calendarId)
         if (isHolidayCalendar && description?.contains("Observance") == true) return 0
 
         // 2. 종일 일정 여부 확인 (start.date가 있으면 종일 일정)
