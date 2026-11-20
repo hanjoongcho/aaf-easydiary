@@ -727,11 +727,13 @@ object GDriveConstants {
 }
 
 object GCalendarConstants {
-    val HOLIDAY_CALENDAR_IDS =
-        setOf(
-            "ko.south_korea#holiday@group.v.calendar.google.com",
-            "en.south_korea#holiday@group.v.calendar.google.com",
-        )
+    /**
+     * Suffix of every Google public holiday calendar id, for any country and language.
+     * e.g. "ko.south_korea#holiday@group.v.calendar.google.com",
+     * "en.usa#holiday@group.v.calendar.google.com".
+     * Use [me.blog.korn123.easydiary.utils.GoogleCalendarUtils.isGoogleHolidayCalendar] to test an id.
+     */
+    const val HOLIDAY_CALENDAR_SUFFIX = "#holiday@group.v.calendar.google.com"
 }
 
 object AlarmConstants {
