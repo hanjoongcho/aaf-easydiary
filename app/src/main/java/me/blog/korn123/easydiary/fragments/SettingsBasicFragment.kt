@@ -165,6 +165,21 @@ class SettingsBasicFragment : Fragment() {
                         }
                     }
 
+                    var enableKeyboardIncognito by remember { mutableStateOf(requireContext().config.enableKeyboardIncognito) }
+                    SwitchCard(
+                        title = getString(R.string.keyboard_incognito_setting_title),
+                        description = getString(R.string.keyboard_incognito_setting_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableKeyboardIncognito,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        requireActivity().run {
+                            enableKeyboardIncognito = enableKeyboardIncognito.not()
+                            config.enableKeyboardIncognito = enableKeyboardIncognito
+                        }
+                    }
+
                     val enableShakeDetector: Boolean by settingsViewModel.enableShakeDetector.collectAsState()
                     SwitchCard(
                         title = getString(R.string.quick_setting_title),

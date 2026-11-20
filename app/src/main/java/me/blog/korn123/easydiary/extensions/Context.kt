@@ -1480,6 +1480,7 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
         preferenceMap[SETTING_VISIBLE_UNLINKED_PHOTOS] = visibleUnlinkedPhotos
         preferenceMap[SETTING_DISABLE_FUTURE_DIARY] = disableFutureDiary
         preferenceMap[SETTING_ENABLE_SHAKE_DETECTOR] = enableShakeDetector
+        preferenceMap[SETTING_ENABLE_KEYBOARD_INCOGNITO] = enableKeyboardIncognito
         preferenceMap[SETTING_APP_LANGUAGE] = settingAppLanguage
         preferenceMap[SETTING_CUSTOM_SYMBOL_PATHS] = customSymbolPaths
     }
@@ -1568,6 +1569,7 @@ fun Context.jsonStringToPreference(jsonString: String) {
         map[SETTING_VISIBLE_UNLINKED_PHOTOS]?.let { visibleUnlinkedPhotos = it as? Boolean ?: visibleUnlinkedPhotos }
         map[SETTING_DISABLE_FUTURE_DIARY]?.let { disableFutureDiary = it as? Boolean ?: disableFutureDiary }
         map[SETTING_ENABLE_SHAKE_DETECTOR]?.let { enableShakeDetector = it as? Boolean ?: enableShakeDetector }
+        map[SETTING_ENABLE_KEYBOARD_INCOGNITO]?.let { enableKeyboardIncognito = it as? Boolean ?: enableKeyboardIncognito }
         map[SETTING_APP_LANGUAGE]?.let { settingAppLanguage = it as? String ?: settingAppLanguage }
         map[SETTING_CUSTOM_SYMBOL_PATHS]?.let {
             val json = gson.toJson(it)

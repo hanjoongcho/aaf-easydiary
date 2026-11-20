@@ -68,6 +68,7 @@ import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.helper.KeyboardIncognitoHelper
 import me.blog.korn123.easydiary.helper.LIST_URI_STRING
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
@@ -287,6 +288,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         applyBottomImeInsets(binding.partialEditContents.root)
+        applyKeyboardIncognitoPolicy()
 
         onBackPressedDispatcher.addCallback(
             this,
@@ -392,6 +394,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
+        applyKeyboardIncognitoPolicy()
         toggleTimePickerTool()
     }
 
@@ -408,6 +411,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   Etc functions
      ***************************************************************************************************/
+    private fun applyKeyboardIncognitoPolicy() {
+        val keyboardIncognitoEnabled = config.enableKeyboardIncognito
+        binding.partialEditContents.run {
+            KeyboardIncognitoHelper.applyPolicy(diaryTitle, keyboardIncognitoEnabled)
+            KeyboardIncognitoHelper.applyPolicy(diaryContents, keyboardIncognitoEnabled)
+        }
+    }
+
     private fun showSpeechDialog() {
         try {
             requestSpeechInput.launch(recognizerIntent)

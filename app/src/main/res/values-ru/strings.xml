@@ -1013,6 +1013,8 @@
     <string name="datetime_setting_summary">Установите формат отображения даты и времени (применяется ко всем экранам, кроме хроники и экрана создания дневника).</string>
     <string name="markdown_setting_title">Синтаксис Markdown</string>
     <string name="markdown_setting_summary">При включении опции синтаксиса Markdown вы можете использовать различные форматы разметки при написании дневника.</string>
+    <string name="keyboard_incognito_setting_title">Режим инкогнито клавиатуры</string>
+    <string name="keyboard_incognito_setting_summary">Запрещает клавиатуре запоминать слова, введённые в дневнике, чтобы содержимое дневника не попадало в персональные подсказки и автодополнение. (Действует только в клавиатурах, поддерживающих этот режим.)</string>
     <string name="user_manual_url_basic">https://spiced-skirt-15c.notion.site/abc9df1f91664eec9ed56cc0f5aec58e?v=6ec78fcd248e4b32876d8421b4c417e0</string>
     <string name="user_manual_url_lock">https://spiced-skirt-15c.notion.site/944e2660628845fe8379ba6602377f30?v=9e9f574cbefa43d8b6c3f27ab9146d0a</string>
     <string name="user_manual_url_schedule">https://spiced-skirt-15c.notion.site/ea1fc4761c494777a2a42f27dc0c6d53?v=bb95e45c57434c73924f405210d662e8</string>
