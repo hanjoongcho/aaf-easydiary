@@ -107,6 +107,7 @@ import me.blog.korn123.easydiary.presentation.photoviewer.PhotoViewPagerActivity
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
+import me.blog.korn123.easydiary.utils.ClickableLinkUtils
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.DiaryLinkUtils
 import me.blog.korn123.easydiary.utils.DiaryPdfExporter
@@ -1286,7 +1287,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                     EasyDiaryUtils.boldString(requireContext(), diaryTitle)
                     if (storedContents != diaryDto.contents) {
-                        requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents)
+                        requireActivity().applyMarkDownPolicy(
+                            diaryContents,
+                            diaryDto.contents,
+                            applyTextLinks =
+                                ClickableLinkUtils.shouldApplyTextLinks(
+                                    isEncrypt = diaryDto.isEncrypt,
+                                    isRecyclerItem = false,
+                                ),
+                        )
                         storedContents = diaryDto.contents
                         Handler(Looper.getMainLooper()).post { scrollDiaryContents.scrollY = 0 }
                     }
@@ -1421,6 +1430,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     requireActivity().applyMarkDownPolicy(
                         diaryContents,
                         JasyptUtils.decrypt(diaryDto.contents, inputPass),
+                        // The body is readable while the entered passphrase is in use, so link it
+                        applyTextLinks = true,
                     )
                 }
             }

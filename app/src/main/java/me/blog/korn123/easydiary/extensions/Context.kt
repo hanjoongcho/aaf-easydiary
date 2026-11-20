@@ -40,8 +40,10 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.MenuItem
@@ -196,8 +198,9 @@ import me.blog.korn123.easydiary.helper.SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_DP
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.utils.ClickableLinkUtils
 import me.blog.korn123.easydiary.utils.DateUtils
-import me.blog.korn123.easydiary.utils.DiaryLinkUtils
+import me.blog.korn123.easydiary.utils.DiaryLinkTarget
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -998,6 +1001,38 @@ fun Context.startDiaryReadingActivity(sequence: Long) {
             if (this@startDiaryReadingActivity !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     startActivity(diaryReadingIntent)
+}
+
+/**
+ * Opens the dialer with the number already filled in. ACTION_DIAL only prepares the call so
+ * that the user still decides to place it, and the app needs no CALL_PHONE permission.
+ */
+fun Context.dialPhoneNumber(number: String) {
+    val dialIntent =
+        Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number")).apply {
+            if (this@dialPhoneNumber !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    startActivityOrNotify(dialIntent)
+}
+
+/** Opens a web page in a custom tab, the way the app opens its other external links. */
+fun Context.openWebPage(url: String) {
+    val customTabsIntent =
+        CustomTabsIntent
+            .Builder()
+            .setToolbarColor(config.primaryColor)
+            .setUrlBarHidingEnabled(true)
+            .setShowTitle(false)
+            .build()
+    if (runCatching { customTabsIntent.launchUrl(this, Uri.parse(url)) }.isFailure) {
+        makeToast(getString(R.string.no_app_found))
+    }
+}
+
+private fun Context.startActivityOrNotify(intent: Intent) {
+    if (runCatching { startActivity(intent) }.isFailure) {
+        makeToast(getString(R.string.no_app_found))
+    }
 }
 
 fun Context.updateTextColors(
@@ -1901,6 +1936,12 @@ fun Context.applyMarkDownPolicy(
     isTimeline: Boolean = false,
     lineBreakStrings: ArrayList<String> = arrayListOf(),
     isRecyclerItem: Boolean = false,
+    // Turns the URLs and phone numbers of a plain text diary into links. The reading
+    // screen passes true; a card in a list keeps tapping through to the reading screen.
+    applyTextLinks: Boolean = false,
+    // Includes phone numbers in the markdown linkify mask. Screens whose result is captured
+    // as an image (postcard) pass false so that link styling does not end up in the image.
+    linkifyPhoneNumbers: Boolean = true,
 ) {
     when (config.enableMarkdown) {
         true -> {
@@ -1981,6 +2022,11 @@ fun Context.applyMarkDownPolicy(
                 }
 
                 false -> {
+                    val linkifyMask =
+                        when (linkifyPhoneNumbers) {
+                            true -> Linkify.WEB_URLS or Linkify.PHONE_NUMBERS
+                            false -> Linkify.WEB_URLS
+                        }
                     Markwon
                         .builder(this)
                         .usePlugin(codeBlockTheme)
@@ -1989,27 +2035,34 @@ fun Context.applyMarkDownPolicy(
                         .usePlugin(tablePlugin)
                         .usePlugin(strikeoutPlugin)
                         .usePlugin(MovementMethodPlugin.link())
-                        .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                        .usePlugin(LinkifyPlugin.create(linkifyMask))
                         .usePlugin(
                             object : AbstractMarkwonPlugin() {
                                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                                     super.configureConfiguration(builder)
                                     builder.linkResolver { view, link ->
-                                        val diarySequence = DiaryLinkUtils.parseDiarySequence(link)
-                                        if (diarySequence != null) {
-                                            this@applyMarkDownPolicy.startDiaryReadingActivity(diarySequence)
-                                        } else {
-                                            val customTabsIntent =
-                                                CustomTabsIntent
-                                                    .Builder()
-                                                    .setToolbarColor(config.primaryColor)
-                                                    .setUrlBarHidingEnabled(true)
-                                                    .setShowTitle(false)
-                                                    .build()
-                                            customTabsIntent.launchUrl(
-                                                this@applyMarkDownPolicy,
-                                                Uri.parse(link),
-                                            )
+                                        when (val target = ClickableLinkUtils.resolveTarget(link)) {
+                                            is DiaryLinkTarget.Diary ->
+                                                this@applyMarkDownPolicy.startDiaryReadingActivity(
+                                                    target.sequence,
+                                                )
+
+                                            is DiaryLinkTarget.Phone ->
+                                                this@applyMarkDownPolicy.dialPhoneNumber(
+                                                    target.number,
+                                                )
+
+                                            is DiaryLinkTarget.Web ->
+                                                this@applyMarkDownPolicy.openWebPage(
+                                                    target.url,
+                                                )
+
+                                            is DiaryLinkTarget.External ->
+                                                this@applyMarkDownPolicy.openWebPage(
+                                                    target.address,
+                                                )
+
+                                            null -> Unit
                                         }
                                     }
                                 }
@@ -2017,6 +2070,7 @@ fun Context.applyMarkDownPolicy(
                         ).build()
                         .apply {
                             setMarkdown(contentsView, markdownContents)
+                            (contentsView.text as? Spannable)?.removeDateOrTimeLinks()
                         }
                 }
             }
@@ -2041,8 +2095,57 @@ fun Context.applyMarkDownPolicy(
                         contents
                     }
                 }
+            if (applyTextLinks) contentsView.applyClickableLinks()
         }
     }
+}
+
+/**
+ * Turns the URLs and phone numbers of a plain text diary into links that open a browser or the
+ * dialer (#167). Linkify links are replaced by [DiaryLinkSpan] so that a phone number reaches
+ * the dialer and a web page opens the way the markdown links do, and so that a date which only
+ * looks like a phone number (2021-10-23) can be dropped. A diary without a real link keeps its
+ * text untouched and stays fully selectable.
+ */
+fun TextView.applyClickableLinks() {
+    val linkedContents = SpannableString(text)
+    if (!Linkify.addLinks(linkedContents, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)) return
+    if (linkedContents.replaceUrlSpansWithDiaryLinks() == 0) return
+
+    text = linkedContents
+    // A click on a link needs the movement method Linkify would otherwise set by itself.
+    movementMethod = LinkMovementMethod.getInstance()
+}
+
+/**
+ * Linkify links are URLSpans, whose click opens whatever the system makes of the address. They
+ * are replaced by [DiaryLinkSpan] so that a phone number reaches the dialer and a web page
+ * opens the way the links of a markdown diary do.
+ *
+ * @return the number of links that were kept
+ */
+private fun Spannable.replaceUrlSpansWithDiaryLinks(): Int {
+    var linkCount = 0
+    getSpans(0, length, URLSpan::class.java).forEach { span ->
+        val start = getSpanStart(span)
+        val end = getSpanEnd(span)
+        val spanFlags = getSpanFlags(span)
+        removeSpan(span)
+        if (ClickableLinkUtils.isDateOrTimeLike(subSequence(start, end))) return@forEach
+        setSpan(DiaryLinkSpan(span.url), start, end, spanFlags)
+        linkCount++
+    }
+    return linkCount
+}
+
+/**
+ * Linkify counts the digits of a match, so 2021-10-23 or 05:14 is detected as a phone number.
+ * Such a span is dropped so that a date of the diary does not turn into a number to call.
+ */
+private fun Spannable.removeDateOrTimeLinks() {
+    getSpans(0, length, URLSpan::class.java)
+        .filter { span -> ClickableLinkUtils.isDateOrTimeLike(subSequence(getSpanStart(span), getSpanEnd(span))) }
+        .forEach { span -> removeSpan(span) }
 }
 
 fun Context.applyBoldToDate(
