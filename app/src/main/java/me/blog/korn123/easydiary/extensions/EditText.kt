@@ -14,8 +14,8 @@ import me.blog.korn123.easydiary.utils.EditCursorUtils
  * manufacturer skin substitutes the caret with the primary color (#156, #224).
  *
  * The drawable only declares an intrinsic width, the height is left to the platform which fits
- * every caret to the line height. Do nothing below API 29 where [EditText.setTextCursorDrawable] is
- * not public; the xml attribute covers these versions.
+ * every caret to the line height. Do nothing below API 29, where `setTextCursorDrawable` is not
+ * public; the xml attribute covers these versions.
  */
 fun EditText.applyTextCursorColor(color: Int) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return
@@ -24,7 +24,8 @@ fun EditText.applyTextCursorColor(color: Int) {
     if (currentCursor is GradientDrawable) {
         // The editor keeps the first cursor drawable it has loaded and does not load a replacement,
         // so an already applied caret is recolored in place instead of being assigned a new one.
-        currentCursor.mutate().setColor(color)
+        currentCursor.mutate()
+        currentCursor.setColor(color)
         return
     }
 
