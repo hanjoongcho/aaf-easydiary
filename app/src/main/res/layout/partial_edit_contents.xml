@@ -94,6 +94,7 @@
                                     <com.simplemobiletools.commons.views.MyEditText
                                         android:id="@+id/diaryTitle"
                                         style="@style/edit_diary_edit_inner_contents"
+                                        android:textCursorDrawable="@null"
                                         android:layout_gravity="center_vertical"
                                         android:background="@android:color/transparent"
                                         android:gravity="center_vertical"
@@ -141,6 +142,7 @@
                                 android:layout_marginBottom="@dimen/card_contents_padding"
                                 android:id="@+id/diaryContents"
                                 style="@style/edit_diary_edit_inner_contents"
+                                android:textCursorDrawable="@null"
                                 android:minHeight="500dp"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
