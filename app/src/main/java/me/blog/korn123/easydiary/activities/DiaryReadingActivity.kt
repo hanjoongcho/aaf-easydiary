@@ -67,6 +67,7 @@ import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.diaryRepository
+import me.blog.korn123.easydiary.extensions.getElapsedDaysLabel
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.isAccessFromOutside
@@ -1361,6 +1362,23 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     )
                             }
                         }
+
+                        val elapsedDaysLabel = getElapsedDaysLabel(diaryDto.currentTimeMillis)
+                        elapsedDays.text = elapsedDaysLabel ?: String.EMPTY
+                        cardElapsedDays.visibility =
+                            if (config.enableElapsedDays && elapsedDaysLabel != null) View.VISIBLE else View.GONE
+                        cardLocation.visibility = if (config.enableLocationInfo) View.VISIBLE else View.GONE
+                        cardContentsCounting.visibility = if (config.enableCountCharacters) View.VISIBLE else View.GONE
+                        // 경과 일수를 포함해 하단 라벨에 표시할 항목이 하나도 없으면 빈 여백이 남지 않도록 숨깁니다.
+                        layoutInfoLabel.visibility =
+                            if (cardLocation.visibility == View.VISIBLE ||
+                                cardContentsCounting.visibility == View.VISIBLE ||
+                                cardElapsedDays.visibility == View.VISIBLE
+                            ) {
+                                View.VISIBLE
+                            } else {
+                                View.GONE
+                            }
                     }
                 }
 

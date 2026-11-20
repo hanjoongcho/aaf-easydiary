@@ -575,6 +575,7 @@ const val SETTING_SUMMARY_MAX_LINES_DEFAULT = 3
 const val SETTING_ENABLE_DEBUG_CONSOLE = "setting_enable_debug_console"
 const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
 const val SETTING_LOCATION_INFO = "setting_location_info"
+const val SETTING_ENABLE_ELAPSED_DAYS = "setting_enable_elapsed_days"
 const val SETTING_TASK_SYMBOL_TOP_ORDER = "setting_task_symbol_top_order"
 const val SETTING_SELECTED_SYMBOLS = "setting_selected_symbols"
 const val SETTING_ENABLE_REVIEW_FLOW = "setting_enable_review_flow"

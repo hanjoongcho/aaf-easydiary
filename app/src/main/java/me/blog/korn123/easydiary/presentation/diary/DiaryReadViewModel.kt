@@ -16,4 +16,7 @@ class DiaryReadViewModel(
 
     private val _isShowAddress: MutableStateFlow<Boolean> = MutableStateFlow(config.enableLocationInfo)
     val isShowAddress: StateFlow<Boolean> = _isShowAddress.asStateFlow()
+
+    private val _isShowElapsedDays: MutableStateFlow<Boolean> = MutableStateFlow(config.enableElapsedDays)
+    val isShowElapsedDays: StateFlow<Boolean> = _isShowElapsedDays.asStateFlow()
 }

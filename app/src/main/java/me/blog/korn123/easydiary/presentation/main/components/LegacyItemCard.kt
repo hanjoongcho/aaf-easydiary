@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.findActivity
+import me.blog.korn123.easydiary.extensions.getElapsedDaysLabel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -128,6 +129,14 @@ fun LegacyDiaryItemCard(
                     binding.contentsLengthContainer.visibility = View.VISIBLE
                 } else {
                     binding.contentsLengthContainer.visibility = View.GONE
+                }
+
+                if (config.enableElapsedDays) {
+                    val elapsedDaysLabel = getElapsedDaysLabel(diary.currentTimeMillis)
+                    binding.elapsedDays.text = elapsedDaysLabel ?: String.EMPTY
+                    binding.elapsedDaysContainer.visibility = if (elapsedDaysLabel != null) View.VISIBLE else View.GONE
+                } else {
+                    binding.elapsedDaysContainer.visibility = View.GONE
                 }
 
 //                        selection.setOnCheckedChangeListener { _, isChecked ->

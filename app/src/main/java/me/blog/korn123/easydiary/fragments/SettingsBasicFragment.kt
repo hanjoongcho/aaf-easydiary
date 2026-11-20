@@ -491,6 +491,21 @@ class SettingsBasicFragment : Fragment() {
                         }
                     }
 
+                    var enableElapsedDays by remember { mutableStateOf(requireContext().config.enableElapsedDays) }
+                    SwitchCard(
+                        title = getString(R.string.elapsed_days_title),
+                        description = getString(R.string.elapsed_days_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableElapsedDays,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        requireActivity().run {
+                            enableElapsedDays = enableElapsedDays.not()
+                            config.enableElapsedDays = enableElapsedDays
+                        }
+                    }
+
                     var holdPositionEnterEditScreen by remember { mutableStateOf(requireContext().config.holdPositionEnterEditScreen) }
                     SwitchCard(
                         title = getString(R.string.hold_position_title),

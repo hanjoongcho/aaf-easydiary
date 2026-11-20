@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getElapsedDaysLabel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -187,6 +188,14 @@ class DiaryMainItemAdapter(
                         contentsLengthContainer.visibility = View.VISIBLE
                     } else {
                         contentsLengthContainer.visibility = View.GONE
+                    }
+
+                    if (config.enableElapsedDays) {
+                        val elapsedDaysLabel = context.getElapsedDaysLabel(diary.currentTimeMillis)
+                        elapsedDays.run { text = elapsedDaysLabel ?: String.EMPTY }
+                        elapsedDaysContainer.visibility = if (elapsedDaysLabel != null) View.VISIBLE else View.GONE
+                    } else {
+                        elapsedDaysContainer.visibility = View.GONE
                     }
                 }
 

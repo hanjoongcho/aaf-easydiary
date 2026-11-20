@@ -88,13 +88,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/card_contents_padding"
-                                android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }">
+                                android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting || view_model.isShowElapsedDays ? View.VISIBLE : View.GONE }">
 
                                 <me.blog.korn123.easydiary.views.FixedCardView
+                                    android:id="@+id/card_location"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignWithParentIfMissing="true"
-                                    android:layout_toStartOf="@+id/card_contents_counting"
+                                    android:layout_toStartOf="@+id/card_right_info"
                                     android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
                                     app:fixedAppcompatPadding="true">
 
@@ -124,23 +125,48 @@
                                     </LinearLayout>
                                 </me.blog.korn123.easydiary.views.FixedCardView>
 
-                                <me.blog.korn123.easydiary.views.FixedCardView
-                                    android:id="@+id/card_contents_counting"
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:id="@+id/card_right_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
-                                    android:layout_marginStart="5dp"
-                                    android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
-                                    app:fixedAppcompatPadding="true">
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                                    <TextView
-                                        android:id="@+id/contentsLength"
+                                    <me.blog.korn123.easydiary.views.FixedCardView
+                                        android:id="@+id/card_elapsed_days"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:padding="5dp"
-                                        android:textColor="?attr/colorPrimary"
-                                        tools:text="100" />
-                                </me.blog.korn123.easydiary.views.FixedCardView>
+                                        android:layout_marginStart="5dp"
+                                        android:visibility="gone"
+                                        app:fixedAppcompatPadding="true">
+
+                                        <TextView
+                                            android:id="@+id/elapsedDays"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:padding="5dp"
+                                            android:textColor="?attr/colorPrimary"
+                                            tools:text="3 days ago" />
+                                    </me.blog.korn123.easydiary.views.FixedCardView>
+
+                                    <me.blog.korn123.easydiary.views.FixedCardView
+                                        android:id="@+id/card_contents_counting"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="5dp"
+                                        android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
+                                        app:fixedAppcompatPadding="true">
+
+                                        <TextView
+                                            android:id="@+id/contentsLength"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:padding="5dp"
+                                            android:textColor="?attr/colorPrimary"
+                                            tools:text="100" />
+                                    </me.blog.korn123.easydiary.views.FixedCardView>
+                                </androidx.appcompat.widget.LinearLayoutCompat>
                             </RelativeLayout>
 
                             <com.simplemobiletools.commons.views.MyTextView

@@ -1437,6 +1437,7 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
         preferenceMap[SETTING_CONTENTS_SUMMARY] = enableContentsSummary
         preferenceMap[SETTING_CALENDAR_START_DAY] = calendarStartDay
         preferenceMap[SETTING_COUNT_CHARACTERS] = enableCountCharacters
+        preferenceMap[SETTING_ENABLE_ELAPSED_DAYS] = enableElapsedDays
         preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = diaryBackupGoogle
         preferenceMap[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = photoBackupGoogle
         preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL] = diaryBackupLocal
@@ -1528,6 +1529,7 @@ fun Context.jsonStringToPreference(jsonString: String) {
         map[SETTING_CONTENTS_SUMMARY]?.let { enableContentsSummary = it as? Boolean ?: enableContentsSummary }
         map[SETTING_CALENDAR_START_DAY]?.let { calendarStartDay = (it as? Double)?.toInt() ?: calendarStartDay }
         map[SETTING_COUNT_CHARACTERS]?.let { enableCountCharacters = it as? Boolean ?: enableCountCharacters }
+        map[SETTING_ENABLE_ELAPSED_DAYS]?.let { enableElapsedDays = it as? Boolean ?: enableElapsedDays }
         map[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { diaryBackupGoogle = (it as? Double)?.toLong() ?: diaryBackupGoogle }
         map[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { photoBackupGoogle = (it as? Double)?.toLong() ?: photoBackupGoogle }
         map[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL]?.let { diaryBackupLocal = (it as? Double)?.toLong() ?: diaryBackupLocal }
@@ -2055,6 +2057,18 @@ fun Context.applyBoldToDate(
 fun Context.parsedMarkdownString(markdownString: String): Spanned = Markwon.builder(this).build().toMarkdown(markdownString)
 
 fun Context.storedDatetimeFormat() = DateTimeFormat.valueOf(config.settingDatetimeFormat)
+
+/**
+ * 일기 카드 하단에 표시할 경과 일수 문자열을 반환합니다.
+ * 미래 날짜는 표시하지 않으므로 `null`을 반환합니다.
+ */
+fun Context.getElapsedDaysLabel(timeMillis: Long): String? =
+    DateUtils.getElapsedDaysLabel(
+        elapsedDays = DateUtils.getElapsedDays(timeMillis),
+        todayText = getString(R.string.diary_elapsed_days_today),
+        oneDayAgoText = getString(R.string.diary_elapsed_days_one_day_ago),
+        daysAgoFormat = getString(R.string.diary_elapsed_days_days_ago),
+    )
 
 fun Context.storedTimeFormat() = TimeFormatMode.fromName(config.settingTimeFormat)
 

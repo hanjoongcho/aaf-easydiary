@@ -897,6 +897,11 @@
     <string name="diary_contents_length">字元: %d</string>
     <string name="count_characters_title">字數</string>
     <string name="count_characters_summary">計算日記中的字數</string>
+    <string name="elapsed_days_title">經過天數</string>
+    <string name="elapsed_days_summary">顯示日記寫成後已經過了多少天。</string>
+    <string name="diary_elapsed_days_today">今天</string>
+    <string name="diary_elapsed_days_one_day_ago">1 天前</string>
+    <string name="diary_elapsed_days_days_ago">%d 天前</string>
     <string name="google_drive_account_sign_out_title">Reset Google Drive linked account</string>
     <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
     <string name="calendar_font_scale_title">設定日曆字體大小</string>
