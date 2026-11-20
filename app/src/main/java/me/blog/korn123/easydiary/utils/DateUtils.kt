@@ -15,6 +15,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -172,6 +173,40 @@ object DateUtils {
             }
         return dayRemaining
     }
+
+    /**
+     * [targetTimeMillis]가 오늘로부터 며칠 전인지 로컬 타임존의 날짜(자정 경계) 기준으로 계산합니다.
+     *
+     * 24시간 경과 여부가 아니라 달력상의 날짜 차이를 사용하므로 어제 23:50에 작성한 일기도
+     * 오늘 00:10에는 `1`일 전으로 계산됩니다. `0`은 오늘, 양수는 과거, 음수는 미래 날짜입니다.
+     */
+    fun getElapsedDays(
+        targetTimeMillis: Long,
+        nowMillis: Long = System.currentTimeMillis(),
+        zoneId: ZoneId = ZoneId.systemDefault(),
+    ): Long {
+        val targetDate = Instant.ofEpochMilli(targetTimeMillis).atZone(zoneId).toLocalDate()
+        val todayDate = Instant.ofEpochMilli(nowMillis).atZone(zoneId).toLocalDate()
+        return ChronoUnit.DAYS.between(targetDate, todayDate)
+    }
+
+    /**
+     * 경과 일수 표시 문자열을 만듭니다.
+     *
+     * 미래 날짜(`elapsedDays < 0`)는 표시하지 않아야 하므로 `null`을 반환합니다.
+     */
+    fun getElapsedDaysLabel(
+        elapsedDays: Long,
+        todayText: String,
+        oneDayAgoText: String,
+        daysAgoFormat: String,
+    ): String? =
+        when {
+            elapsedDays < 0L -> null
+            elapsedDays == 0L -> todayText
+            elapsedDays == 1L -> oneDayAgoText
+            else -> String.format(Locale.getDefault(), daysAgoFormat, elapsedDays)
+        }
 
     fun dateStringToTimeStamp(dateString: String): Long {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
