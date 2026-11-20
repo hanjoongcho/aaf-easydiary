@@ -355,7 +355,7 @@ class GoogleAuthManager(
         // Every Google public holiday calendar of every country is treated equally, whatever
         // language/country prefix its id carries.
         val isHolidayCalendar = GoogleCalendarUtils.isGoogleHolidayCalendar(calendarId)
-        if (isHolidayCalendar && description?.contains("Observance") == true) return 0
+        if (isHolidayCalendar && !GoogleCalendarUtils.isPublicHoliday(description)) return 0
 
         // 2. 종일 일정 여부 확인 (start.date가 있으면 종일 일정)
         val isAllDay = item.start?.date != null
