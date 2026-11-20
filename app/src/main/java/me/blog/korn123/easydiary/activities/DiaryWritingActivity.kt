@@ -35,6 +35,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         setupRecognizer()
         initDateTime()
         setupDialog()
+        applyAllDayDefault()
         setupPhotoView()
         setDateTime()
         bindEvent()
@@ -60,6 +61,17 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                 saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
             }
         }
+    }
+
+    /**
+     * Issue #235: 'All day by default' is applied to a new diary only.
+     * DiaryEditingActivity never calls this, so an existing diary keeps its own isAllDay value.
+     * toggleTimePickerTool() resets the time to 00:00:00 and hides the time/seconds pickers.
+     */
+    private fun applyAllDayDefault() {
+        if (config.enableAllDayDefault.not()) return
+        binding.partialEditContents.allDay.isChecked = true
+        toggleTimePickerTool()
     }
 
     private fun setupKeypad() {

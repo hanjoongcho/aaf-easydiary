@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">Недавние символы</string>
     <string name="datetime_setting_title">Форматирование даты и времени</string>
     <string name="datetime_setting_summary">Установите формат отображения даты и времени (применяется ко всем экранам, кроме хроники и экрана создания дневника).</string>
+    <string name="all_day_default_title">Весь день по умолчанию</string>
+    <string name="all_day_default_summary">Новые записи дневника создаются с включённым параметром «Весь день», поэтому сохраняется только дата. Снимите флажок «Весь день» на экране создания, чтобы указать время. На существующую запись при редактировании это не влияет.</string>
     <string name="time_format_setting_title">Формат времени</string>
     <string name="time_format_setting_summary">Выберите, как отображается время на экранах дневника. «По умолчанию» используется формат языка устройства.</string>
     <string name="time_format_system_default">По умолчанию</string>

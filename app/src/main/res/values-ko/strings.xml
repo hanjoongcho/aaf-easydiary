@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">최근사용</string>
     <string name="datetime_setting_title">날짜 표시형식 설정</string>
     <string name="datetime_setting_summary">다이어리에 표시되는 날짜와 시간 표시형식을 설정합니다. (타임라인과 다이어리 작성화면을 제외한 대부분의 화면에 설정된 표시형식이 적용됩니다.)</string>
+    <string name="all_day_default_title">종일(All day) 기본 설정</string>
+    <string name="all_day_default_summary">새 일기를 작성할 때 종일(All day)을 기본으로 체크합니다. 날짜만 저장되고 시간과 초는 00:00:00으로 설정됩니다. 작성화면에서 종일을 해제하면 시간을 입력할 수 있습니다. (기존 일기를 수정할 때는 적용되지 않습니다.)</string>
     <string name="time_format_setting_title">시간 표시형식</string>
     <string name="time_format_setting_summary">일기 화면에 표시되는 시간의 표시형식을 선택합니다. 기본값은 기기 언어의 표시형식을 따릅니다.</string>
     <string name="time_format_system_default">기본값</string>

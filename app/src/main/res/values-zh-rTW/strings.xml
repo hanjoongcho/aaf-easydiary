@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">最近使用</string>
     <string name="datetime_setting_title">日期時間格式</string>
     <string name="datetime_setting_summary">設定日期和時間的顯示格式。（設定的顯示格式適用於大多數畫面，時間軸和建立日記畫面除外。）</string>
+    <string name="all_day_default_title">預設為整天</string>
+    <string name="all_day_default_summary">建立新日記時預設勾選整天，因此只儲存日期，時間與秒設為 00:00:00。在撰寫畫面取消勾選整天即可輸入時間。（編輯既有日記時不受此設定影響。）</string>
     <string name="time_format_setting_title">時間格式</string>
     <string name="time_format_setting_summary">選擇日記介面中時間的顯示方式。預設跟隨裝置語言的顯示格式。</string>
     <string name="time_format_system_default">預設</string>

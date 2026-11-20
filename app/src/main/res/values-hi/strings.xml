@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">हाल ही में उपयोग किया गया</string>
     <string name="datetime_setting_title">डेटाटाइम फ़ॉर्मेटिंग</string>
     <string name="datetime_setting_summary">तारीख और समय प्रदर्शन प्रारूप सेट करें। (समयरेखा और डायरी निर्माण स्क्रीन को छोड़कर अधिकांश स्क्रीन पर सेट डिस्प्ले प्रारूप लागू होता है।)</string>
+    <string name="all_day_default_title">डिफ़ॉल्ट रूप से पूरा दिन</string>
+    <string name="all_day_default_summary">नई डायरी प्रविष्टियाँ पूरा दिन चयनित होने के साथ शुरू होती हैं, इसलिए केवल तारीख सहेजी जाती है। समय दर्ज करने के लिए लेखन स्क्रीन में पूरा दिन अचयनित करें। यह किसी मौजूदा प्रविष्टि पर लागू नहीं होता जिसे आप संपादित करते हैं।</string>
     <string name="time_format_setting_title">समय प्रारूप</string>
     <string name="time_format_setting_summary">चुनें कि डायरी स्क्रीन पर समय कैसे दिखाया जाए। डिफ़ॉल्ट विकल्प डिवाइस की भाषा के प्रारूप का अनुसरण करता है।</string>
     <string name="time_format_system_default">डिफ़ॉल्ट</string>

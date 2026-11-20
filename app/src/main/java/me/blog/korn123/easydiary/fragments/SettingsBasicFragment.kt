@@ -321,6 +321,21 @@ class SettingsBasicFragment : Fragment() {
                         openDatetimeFormattingSettingDialog()
                     }
 
+                    var enableAllDayDefault by remember { mutableStateOf(requireContext().config.enableAllDayDefault) }
+                    SwitchCard(
+                        title = getString(R.string.all_day_default_title),
+                        description = getString(R.string.all_day_default_summary),
+                        modifier = settingCardModifier,
+                        isOn = enableAllDayDefault,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        requireActivity().run {
+                            enableAllDayDefault = enableAllDayDefault.not()
+                            config.enableAllDayDefault = enableAllDayDefault
+                        }
+                    }
+
                     var timeFormatMode by remember { mutableIntStateOf(requireContext().storedTimeFormat().ordinal) }
                     RadioGroupCard(
                         title = getString(R.string.time_format_setting_title),
