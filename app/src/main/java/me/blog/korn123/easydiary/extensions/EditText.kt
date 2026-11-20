@@ -20,6 +20,14 @@ import me.blog.korn123.easydiary.utils.EditCursorUtils
 fun EditText.applyTextCursorColor(color: Int) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return
 
+    val currentCursor = textCursorDrawable
+    if (currentCursor is GradientDrawable) {
+        // The editor keeps the first cursor drawable it has loaded and does not load a replacement,
+        // so an already applied caret is recolored in place instead of being assigned a new one.
+        currentCursor.mutate().setColor(color)
+        return
+    }
+
     val cursorWidth = EditCursorUtils.cursorWidthPx(resources.displayMetrics.density)
     textCursorDrawable =
         GradientDrawable().apply {
