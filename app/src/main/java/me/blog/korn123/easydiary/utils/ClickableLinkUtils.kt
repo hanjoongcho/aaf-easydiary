@@ -71,6 +71,19 @@ object ClickableLinkUtils {
     }
 
     /**
+     * Whether the range [start, end) shares at least one character with one of [links].
+     *
+     * A diary link ends with a sequence of digits, which the linking rules of a text view read
+     * as a phone number. Such a phone match overlaps the diary link and has to give way to it,
+     * while a phone number written anywhere else is kept.
+     */
+    fun overlapsDiaryLink(
+        start: Int,
+        end: Int,
+        links: List<DiaryLinkRange>,
+    ): Boolean = links.any { link -> start < link.end && link.start < end }
+
+    /**
      * A date or a time also looks like a phone number to Linkify, which only counts the
      * digits of a match. Such a match is dropped so that 2021-10-23 does not become a
      * number to call.

@@ -41,6 +41,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
@@ -200,7 +201,9 @@ import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.utils.ClickableLinkUtils
 import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DiaryLinkRange
 import me.blog.korn123.easydiary.utils.DiaryLinkTarget
+import me.blog.korn123.easydiary.utils.DiaryLinkUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -2070,7 +2073,12 @@ fun Context.applyMarkDownPolicy(
                         ).build()
                         .apply {
                             setMarkdown(contentsView, markdownContents)
-                            (contentsView.text as? Spannable)?.removeDateOrTimeLinks()
+                            (contentsView.text as? Spannable)?.run {
+                                removeDateOrTimeLinks()
+                                // A postcard is captured as an image and keeps its text plain,
+                                // so a diary link written in it is not linked there.
+                                if (linkifyPhoneNumbers) linkDiaryDeepLinks()
+                            }
                         }
                 }
             }
@@ -2106,11 +2114,17 @@ fun Context.applyMarkDownPolicy(
  * the dialer and a web page opens the way the markdown links do, and so that a date which only
  * looks like a phone number (2021-10-23) can be dropped. A diary without a real link keeps its
  * text untouched and stays fully selectable.
+ *
+ * A diary deep link (easydiary://diary/123) is not a web address to Linkify, which reads only its
+ * sequence as a phone number, so those links are found first and linked whole (#268).
  */
 fun TextView.applyClickableLinks() {
+    val diaryLinks = DiaryLinkUtils.findDiaryLinkRanges(text)
     val linkedContents = SpannableString(text)
-    if (!Linkify.addLinks(linkedContents, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)) return
-    if (linkedContents.replaceUrlSpansWithDiaryLinks() == 0) return
+    // A text that holds nothing but a diary link leaves nothing for Linkify to link, so its
+    // result cannot decide whether there is a link to click.
+    Linkify.addLinks(linkedContents, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    if (linkedContents.replaceUrlSpansWithDiaryLinks(diaryLinks) == 0) return
 
     text = linkedContents
     // A click on a link needs the movement method Linkify would otherwise set by itself.
@@ -2124,18 +2138,72 @@ fun TextView.applyClickableLinks() {
  *
  * @return the number of links that were kept
  */
-private fun Spannable.replaceUrlSpansWithDiaryLinks(): Int {
+private fun Spannable.replaceUrlSpansWithDiaryLinks(diaryLinks: List<DiaryLinkRange>): Int {
     var linkCount = 0
     getSpans(0, length, URLSpan::class.java).forEach { span ->
         val start = getSpanStart(span)
         val end = getSpanEnd(span)
         val spanFlags = getSpanFlags(span)
         removeSpan(span)
+        // The sequence digits of a diary link are read as a phone number, and the diary link
+        // below covers them.
+        if (ClickableLinkUtils.overlapsDiaryLink(start, end, diaryLinks)) return@forEach
         if (ClickableLinkUtils.isDateOrTimeLike(subSequence(start, end))) return@forEach
         setSpan(DiaryLinkSpan(span.url), start, end, spanFlags)
         linkCount++
     }
+    diaryLinks.forEach { diaryLink ->
+        setSpan(
+            DiaryLinkSpan(diaryLink.link),
+            diaryLink.start,
+            diaryLink.end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        linkCount++
+    }
     return linkCount
+}
+
+/**
+ * Links the diary deep links of a markdown diary (#268).
+ *
+ * Markwon leaves easydiary://diary/123 as plain text because it is not a web address, and its
+ * linking rules then read the sequence as a phone number, which turns the last digits into a
+ * number to call. Every diary link that no markdown link already covers whole gets a
+ * [DiaryLinkSpan], and the phone link of its digits is dropped.
+ *
+ * @return the number of diary links that were added
+ */
+private fun Spannable.linkDiaryDeepLinks(): Int {
+    val diaryLinks = DiaryLinkUtils.findDiaryLinkRanges(this)
+    if (diaryLinks.isEmpty()) return 0
+
+    getSpans(0, length, ClickableSpan::class.java).forEach { span ->
+        val start = getSpanStart(span)
+        val end = getSpanEnd(span)
+        if (!ClickableLinkUtils.overlapsDiaryLink(start, end, diaryLinks)) return@forEach
+        // A link written around the address, such as the label of [easydiary://diary/123](...),
+        // is left as it is; a link that covers only a part of the address is what the digits
+        // were mistaken for.
+        val coversWholeLink = diaryLinks.any { link -> start <= link.start && link.end <= end }
+        if (!coversWholeLink) removeSpan(span)
+    }
+
+    return diaryLinks.count { diaryLink ->
+        val alreadyLinked =
+            getSpans(diaryLink.start, diaryLink.end, ClickableSpan::class.java).any { span ->
+                getSpanStart(span) <= diaryLink.start && diaryLink.end <= getSpanEnd(span)
+            }
+        if (!alreadyLinked) {
+            setSpan(
+                DiaryLinkSpan(diaryLink.link),
+                diaryLink.start,
+                diaryLink.end,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+        !alreadyLinked
+    }
 }
 
 /**

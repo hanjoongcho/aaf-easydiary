@@ -86,4 +86,30 @@ class ClickableLinkUtilsTest {
         assertFalse(ClickableLinkUtils.shouldApplyTextLinks(isEncrypt = false, isRecyclerItem = true))
         assertFalse(ClickableLinkUtils.shouldApplyTextLinks(isEncrypt = true, isRecyclerItem = true))
     }
+
+    @Test
+    fun `a phone number that overlaps a diary link gives way to it`() {
+        val text = "easydiary://diary/20261121"
+        val links = DiaryLinkUtils.findDiaryLinkRanges(text)
+        val sequenceStart = text.indexOf("20261121")
+
+        // The sequence digits are what a text view reads as a phone number.
+        assertTrue(ClickableLinkUtils.overlapsDiaryLink(sequenceStart, text.length, links))
+        assertTrue(ClickableLinkUtils.overlapsDiaryLink(0, text.length, links))
+    }
+
+    @Test
+    fun `a phone number outside a diary link is kept`() {
+        val text = "easydiary://diary/221\n그리고 010-1234-5678"
+        val links = DiaryLinkUtils.findDiaryLinkRanges(text)
+        val phoneStart = text.indexOf("010-1234-5678")
+
+        assertFalse(ClickableLinkUtils.overlapsDiaryLink(phoneStart, phoneStart + "010-1234-5678".length, links))
+        assertTrue(ClickableLinkUtils.overlapsDiaryLink(0, links.first().end, links))
+    }
+
+    @Test
+    fun `a text without a diary link overlaps nothing`() {
+        assertFalse(ClickableLinkUtils.overlapsDiaryLink(0, 13, emptyList()))
+    }
 }
