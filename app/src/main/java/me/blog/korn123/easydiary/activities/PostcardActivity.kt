@@ -86,7 +86,12 @@ class PostcardActivity : EasyDiaryActivity() {
                     true -> diaryTitle.visibility = View.GONE
                     false -> diaryTitle.text = diaryDto.title
                 }
-                applyMarkDownPolicy(contents, diaryDto.contents)
+                applyMarkDownPolicy(
+                    contents,
+                    diaryDto.contents,
+                    // The postcard is captured as an image, so phone numbers keep their plain look there
+                    linkifyPhoneNumbers = false,
+                )
                 date.text =
                     when (diaryDto.isAllDay) {
                         true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
