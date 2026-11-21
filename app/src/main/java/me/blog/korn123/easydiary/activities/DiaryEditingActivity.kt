@@ -40,6 +40,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
             savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(diarySequence) }
             initBottomToolbar()
             toggleSimpleLayout()
+            startDraftAutoSave(diarySequence)
         }
     }
 
@@ -52,13 +53,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
 
     override fun onPause() {
         super.onPause()
-        lifecycleScope.launch {
-            if (isDiarySaved) {
-                diaryRepository.deleteTemporaryDiaryByOriginId(diarySequence)
-            } else {
-                saveTemporaryDiary(diarySequence)
-            }
-        }
+        persistDraftOnPause()
     }
 
     private suspend fun initData() {
@@ -132,8 +127,9 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                         }
 
                     diaryRepository.updateDiaryWithPhotos(diary)
-                    TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
                     isDiarySaved = true
+                    clearDraftAfterSave(diarySequence)
+                    TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)
                 }
             }
         }

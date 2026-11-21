@@ -34,11 +34,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.enums.DialogMode
+import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
 import me.blog.korn123.easydiary.extensions.applyTextCursorColor
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
@@ -86,6 +95,9 @@ import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.utils.DateUtils
+import me.blog.korn123.easydiary.utils.DiaryAutoSavePolicy
+import me.blog.korn123.easydiary.utils.DiaryDraftSnapshot
+import me.blog.korn123.easydiary.utils.DiaryDraftTracker
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.easydiary.utils.JasyptUtils
@@ -188,6 +200,24 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
     protected var isDiarySaved = false
+
+    /***************************************************************************************************
+     *   Draft autosave (issue #261)
+     ***************************************************************************************************/
+    private val draftTracker = DiaryDraftTracker()
+    private var draftOriginSequence: Long = DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY
+    private var isDraftAutoSaveStarted = false
+    private var isDraftFinalized = false
+    private var draftGeneration = 0
+    private var draftDebounceJob: Job? = null
+    private var draftPeriodicJob: Job? = null
+
+    /**
+     * Serialises every write and delete of the draft of this editor. A delete queued while an insert is
+     * still in flight waits for that insert and then removes what it wrote, so a draft cannot come back
+     * after the entry was saved or the draft was discarded.
+     */
+    private val draftWriteMutex = Mutex()
 
     protected var linkedDiaries: List<Long> = arrayListOf()
 
@@ -471,27 +501,153 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         )
     }
 
-    protected suspend fun saveTemporaryDiary(originSequence: Long) {
-        val diaryTemp =
-            DiaryDomain(
-                currentTimeMillis = currentTimeMillis,
-                title =
-                    binding.partialEditContents.diaryTitle.text
-                        .toString(),
-                contents =
-                    binding.partialEditContents.diaryContents.text
-                        .toString(),
-                symbolSequence = selectedItemPosition,
-                isAllDay = binding.partialEditContents.allDay.isChecked,
-                originDiaryId = originSequence,
-                photoUris = photoUris.map { it },
-            )
-        if (diaryTemp.title.isNotEmpty() ||
-            diaryTemp.contents.isNotEmpty() || diaryTemp.photoUris.isNotEmpty()
-        ) {
-            diaryRepository.insertTemporaryDiary(
-                location?.let { diaryTemp.copy(location = it) } ?: diaryTemp,
-            )
+    /**
+     * Starts the autosave of [originSequence] once the editor holds its initial state, so that state becomes
+     * the baseline and merely opening and leaving the editor writes nothing to the database (issue #261).
+     * The periodic write keeps a draft of at most [DiaryAutoSavePolicy.INTERVAL_MILLIS] of typing when the
+     * process dies without ever pausing the editor.
+     */
+    protected fun startDraftAutoSave(originSequence: Long) {
+        draftOriginSequence = originSequence
+        draftTracker.markStored(captureDraftSnapshot())
+        isDraftAutoSaveStarted = true
+        draftPeriodicJob?.cancel()
+        draftPeriodicJob =
+            lifecycleScope.launch {
+                while (isActive) {
+                    delay(DiaryAutoSavePolicy.INTERVAL_MILLIS)
+                    persistDraftIfDirty()
+                }
+            }
+    }
+
+    /**
+     * Takes the editor state the user now sees (a loaded diary or a restored draft) as the baseline, so the
+     * next autosave writes only what is edited after this point.
+     */
+    protected fun resetDraftBaseline() {
+        draftTracker.markStored(captureDraftSnapshot())
+    }
+
+    /**
+     * Restarts the idle debounce. Every editor change calls this: title, contents, feeling symbol,
+     * date/time, all day, attached photos and location.
+     */
+    protected fun onEditorStateChanged() {
+        if (isDraftAutoSaveStarted.not() || isDraftFinalized) return
+        draftDebounceJob?.cancel()
+        draftDebounceJob =
+            lifecycleScope.launch {
+                delay(DiaryAutoSavePolicy.DEBOUNCE_MILLIS)
+                persistDraftIfDirty()
+            }
+    }
+
+    /**
+     * Last chance to keep what was typed when the editor pauses. The write is dispatched on the application
+     * scope, so tearing the activity down does not cancel it, and it is skipped when the entry was saved or
+     * the editor state did not change.
+     */
+    protected fun persistDraftOnPause() {
+        if (isDiarySaved) return
+        persistDraftIfDirty()
+    }
+
+    private fun persistDraftIfDirty() {
+        if (isDraftAutoSaveStarted.not() || isDraftFinalized) return
+        val snapshot = captureDraftSnapshot()
+        if (draftTracker.isDirty(snapshot).not()) return
+        val generation = draftGeneration
+        val originSequence = draftOriginSequence
+        applicationScope.launch(Dispatchers.Main.immediate) {
+            draftWriteMutex.withLock {
+                // A save or discard may have happened while this write was waiting for the lock.
+                if (generation != draftGeneration) return@withLock
+                try {
+                    withContext(Dispatchers.IO) {
+                        diaryRepository.insertTemporaryDiary(snapshot.toDiary(originSequence))
+                    }
+                    draftTracker.markStored(snapshot)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    // A failed draft write must never interrupt the editor; the next autosave retries it.
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun captureDraftSnapshot(): DiaryDraftSnapshot {
+        return DiaryDraftSnapshot(
+            title =
+                binding.partialEditContents.diaryTitle.text
+                    .toString(),
+            contents =
+                binding.partialEditContents.diaryContents.text
+                    .toString(),
+            symbolSequence = selectedItemPosition,
+            isAllDay = binding.partialEditContents.allDay.isChecked,
+            currentTimeMillis = currentTimeMillis,
+            photoUris = draftPhotoUris(),
+            location = location,
+        )
+    }
+
+    /**
+     * The attached photos without the ones the user removed, computed without touching [photoUris] or
+     * [removeIndexes]: the views of the photo container index into [photoUris], and applying the removals on
+     * every autosave would leave those indexes behind (the removals are applied for real on save and
+     * onSaveInstanceState).
+     */
+    private fun draftPhotoUris(): List<PhotoUriDomain> {
+        if (removeIndexes.isEmpty()) return photoUris.toList()
+        val removedIndexes = removeIndexes.toSet()
+        return photoUris.filterIndexed { index, _ -> index !in removedIndexes }
+    }
+
+    /**
+     * Removes the draft because the user explicitly saved the entry.
+     *
+     * The generation is bumped first, so an autosave that is still queued writes nothing, and the write lock
+     * is taken afterwards, so an insert already running completes before the delete. This editor writes no
+     * further draft (issue #261).
+     */
+    protected suspend fun clearDraftAfterSave(originSequence: Long) {
+        isDraftFinalized = true
+        draftGeneration++
+        draftDebounceJob?.cancel()
+        draftPeriodicJob?.cancel()
+        draftTracker.clear()
+        draftWriteMutex.withLock {
+            deleteDraftWhileLocked(originSequence)
+        }
+    }
+
+    /**
+     * Removes a draft the user explicitly chose not to restore, and keeps tracking the editor so that a new
+     * edit still leaves a draft behind.
+     */
+    protected fun discardDraft(originSequence: Long) {
+        draftGeneration++
+        draftDebounceJob?.cancel()
+        applicationScope.launch(Dispatchers.Main.immediate) {
+            draftWriteMutex.withLock {
+                deleteDraftWhileLocked(originSequence)
+            }
+            resetDraftBaseline()
+        }
+    }
+
+    private suspend fun deleteDraftWhileLocked(originSequence: Long) {
+        try {
+            withContext(Dispatchers.IO) {
+                diaryRepository.deleteTemporaryDiaryByOriginId(originSequence)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -504,13 +660,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         lifecycleScope.launch {
                             initData(diary)
                             initBottomToolbar()
-                            diaryRepository.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
+                            // The restored draft stays in the database until the entry is explicitly saved or
+                            // discarded, so a process that dies right after the restore still recovers it.
+                            resetDraftBaseline()
                         }
                     },
                     { _, _ ->
-                        lifecycleScope.launch {
-                            diaryRepository.deleteDiaryById(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
-                        }
+                        // The user discarded the draft the dialog offered; remove exactly that draft so the
+                        // prompt does not come back on the next visit (issue #261).
+                        discardDraft(originSequence)
                     },
                     DialogMode.INFO,
                     false,
@@ -520,8 +678,31 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
+    private val draftTextWatcher =
+        object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int,
+            ) {}
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int,
+            ) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                onEditorStateChanged()
+            }
+        }
+
     protected fun addTextWatcher() {
         binding.partialEditContents.run {
+            diaryTitle.addTextChangedListener(draftTextWatcher)
+            diaryContents.addTextChangedListener(draftTextWatcher)
             if (config.enableCountCharacters) {
                 contentsLength.run {
                     text = getString(R.string.diary_contents_length, 0)
@@ -594,6 +775,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 }
                 locationProgress.visibility = View.GONE
             }
+            onEditorStateChanged()
         }
     }
 
@@ -704,6 +886,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
+        onEditorStateChanged()
     }
 
     protected fun attachPhotos(
@@ -740,6 +923,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                             photoContainer.addView(imageView, photoContainer.childCount - 1)
                         }
                         initBottomToolbar()
+                        onEditorStateChanged()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -786,6 +970,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             false -> binding.partialEditContents.symbolText.visibility = View.GONE
         }
         FlavorUtils.initWeatherView(this, binding.partialEditContents.symbol, selectedItemPosition, false)
+        onEditorStateChanged()
     }
 
     protected fun initDateTime() {
@@ -955,6 +1140,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         binding.partialEditContents.partialEditPhotoContainer.photoContainer
                             .removeView(v)
                         initBottomToolbar()
+                        onEditorStateChanged()
                     },
                     { _, _ -> },
                     DialogMode.INFO,

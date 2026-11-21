@@ -43,6 +43,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
         savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY) }
         initBottomToolbar()
         toggleSimpleLayout()
+        startDraftAutoSave(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
     }
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
@@ -54,13 +55,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
 
     override fun onPause() {
         super.onPause()
-        lifecycleScope.launch {
-            if (isDiarySaved) {
-                diaryRepository.deleteTemporaryDiaryByOriginId(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
-            } else {
-                saveTemporaryDiary(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
-            }
-        }
+        persistDraftOnPause()
     }
 
     /**
@@ -102,13 +97,14 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                             location = location,
                         )
                     diaryRepository.insertDiary(diary)
+                    isDiarySaved = true
+                    clearDraftAfterSave(DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY)
                     config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                     if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
                     } else {
                         TransitionHelper.finishActivityWithTransition(this@DiaryWritingActivity)
                     }
-                    isDiarySaved = true
                 }
             }
         }
