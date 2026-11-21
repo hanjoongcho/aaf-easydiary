@@ -851,10 +851,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
         photoUris.clear()
 
-        if (diary.isAllDay) {
-            binding.partialEditContents.allDay.isChecked = true
-            toggleTimePickerTool()
-        }
+        // A loaded diary (existing diary or auto-saved temporary diary) always keeps its own all day state,
+        // so the 'All day by default' setting never overwrites what the user saved.
+        binding.partialEditContents.allDay.isChecked = diary.isAllDay
+        toggleTimePickerTool()
 
         val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
         when (encryptionPass == null) {

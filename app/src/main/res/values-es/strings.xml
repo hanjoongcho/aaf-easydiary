@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">Usado recientemente</string>
     <string name="datetime_setting_title">Formato de fecha y hora</string>
     <string name="datetime_setting_summary">Establece el formato de visualización de fecha y hora. (El formato establecido se aplica a la mayoría de las pantallas, excepto a la línea de tiempo y a la pantalla de creación del diario).</string>
+    <string name="all_day_default_title">Todo el día por defecto</string>
+    <string name="all_day_default_summary">Las nuevas entradas del diario empiezan con Todo el día marcado, así que solo se guarda la fecha. Desmarca Todo el día en la pantalla de escritura para indicar una hora. No afecta a una entrada existente que edites.</string>
     <string name="time_format_setting_title">Formato de hora</string>
     <string name="time_format_setting_summary">Elige cómo se muestra la hora en las pantallas del diario. El valor predeterminado sigue el formato del idioma del dispositivo.</string>
     <string name="time_format_system_default">Predeterminado</string>

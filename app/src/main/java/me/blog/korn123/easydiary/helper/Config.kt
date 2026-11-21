@@ -280,6 +280,10 @@ class Config(
         get() = prefs.getString(SETTING_TIME_FORMAT, TimeFormatMode.SYSTEM_DEFAULT.name)!!
         set(settingTimeFormat) = prefs.edit { putString(SETTING_TIME_FORMAT, settingTimeFormat) }
 
+    var enableAllDayDefault: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_ALL_DAY_DEFAULT, false)
+        set(enableAllDayDefault) = prefs.edit { putBoolean(SETTING_ENABLE_ALL_DAY_DEFAULT, enableAllDayDefault) }
+
     var enableMarkdown: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_MARKDOWN, false)
         set(enableMarkdown) = prefs.edit { putBoolean(SETTING_ENABLE_MARKDOWN, enableMarkdown) }

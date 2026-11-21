@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">Zuletzt verwendet</string>
     <string name="datetime_setting_title">Datums- und Zeitformat</string>
     <string name="datetime_setting_summary">Legen Sie das Datums- und Uhrzeitformat fest. (Das eingestellte Format wird auf die meisten Bildschirme mit Ausnahme der Zeitleiste und des Tagebucherstellungsbildschirms angewendet.)</string>
+    <string name="all_day_default_title">Ganztägig als Standard</string>
+    <string name="all_day_default_summary">Neue Tagebucheinträge starten mit aktivierter Option Ganztägig, daher wird nur das Datum gespeichert. Deaktivieren Sie Ganztägig im Bearbeitungsbildschirm, um eine Uhrzeit einzugeben. Für einen vorhandenen Eintrag, den Sie bearbeiten, gilt diese Einstellung nicht.</string>
     <string name="time_format_setting_title">Zeitformat</string>
     <string name="time_format_setting_summary">Wählen Sie, wie die Uhrzeit auf den Tagebuchbildschirmen angezeigt wird. „Standard“ folgt dem Anzeigeformat der Gerätesprache.</string>
     <string name="time_format_system_default">Standard</string>

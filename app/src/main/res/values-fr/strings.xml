@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">Récemment utilisés</string>
     <string name="datetime_setting_title">Format de la date et de l\'heure</string>
     <string name="datetime_setting_summary">Définir le format d\'affichage de la date et de l\'heure. (S\'applique à la plupart des écrans, sauf la chronologie et l\'écran de création du journal.)</string>
+    <string name="all_day_default_title">Toute la journée par défaut</string>
+    <string name="all_day_default_summary">Les nouvelles entrées du journal commencent avec l\'option Toute la journée cochée : seule la date est enregistrée. Décochez Toute la journée dans l\'écran de saisie pour indiquer une heure. Ce réglage ne s\'applique pas à une entrée existante que vous modifiez.</string>
     <string name="time_format_setting_title">Format de l\'heure</string>
     <string name="time_format_setting_summary">Choisissez la façon dont l\'heure est affichée dans le journal. Par défaut, le format de la langue de l\'appareil est utilisé.</string>
     <string name="time_format_system_default">Par défaut</string>

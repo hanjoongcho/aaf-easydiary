@@ -1011,6 +1011,8 @@
     <string name="recently_used_symbol">最近使用</string>
     <string name="datetime_setting_title">日期时间格式</string>
     <string name="datetime_setting_summary">设置日期和时间的显示格式。（设置的显示格式适用于大多数界面，除了时间轴和创建日记的界面。）</string>
+    <string name="all_day_default_title">默认整天</string>
+    <string name="all_day_default_summary">新建日记时默认勾选整天，因此只保存日期，时间和秒设为 00:00:00。在撰写界面取消勾选整天即可输入时间。（编辑已有日记时不受此设置影响。）</string>
     <string name="time_format_setting_title">时间格式</string>
     <string name="time_format_setting_summary">选择日记界面中时间的显示方式。默认跟随设备语言的显示格式。</string>
     <string name="time_format_system_default">默认</string>
