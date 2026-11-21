@@ -7,6 +7,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
 
@@ -105,12 +106,34 @@ class DateUtilsTest {
     }
 
     @Test
-    fun `getOnlyDayRemaining returns correct remaining day format`() {
-        val targetMillis = timeMillis + (1000L * 60 * 60 * 24 * 5) // 5 days later
-        val remaining = DateUtils.getOnlyDayRemaining(targetMillis, onlyDays = true)
-        assertNotNull(remaining)
-        assertTrue(remaining.startsWith("D"))
+    fun `getOnlyDayRemaining returns D-Day for a diary of today`() {
+        assertEquals("D-Day", DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = 0)))
     }
+
+    @Test
+    fun `getOnlyDayRemaining returns D plus the day count for a past diary`() {
+        val remaining = DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = -3))
+        assertTrue(remaining.startsWith("D＋"))
+        assertTrue(remaining.removePrefix("D＋").toInt() > 0)
+    }
+
+    @Test
+    fun `getOnlyDayRemaining returns D minus the day count for a future diary`() {
+        val remaining = DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = 2))
+        assertTrue(remaining.startsWith("D－"))
+        assertTrue(remaining.removePrefix("D－").toInt() > 0)
+    }
+
+    // getOnlyDayRemaining() normalizes both dates to midnight in the device time zone, so the
+    // tests work on noon of a date and stay clear of midnight boundaries.
+    private fun noonOf(daysFromToday: Long): Long =
+        LocalDate
+            .now(ZoneId.systemDefault())
+            .plusDays(daysFromToday)
+            .atTime(12, 0)
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
 
     @Test
     fun `getCurrentDateTime returns non empty formatted string`() {

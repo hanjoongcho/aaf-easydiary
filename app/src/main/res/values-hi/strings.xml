@@ -897,6 +897,8 @@
     <string name="diary_contents_length">वर्ण: %d</string>
     <string name="count_characters_title">पाठ की गिनती</string>
     <string name="count_characters_summary">डायरी के शरीर में वर्णों की संख्या गिनें।</string>
+    <string name="elapsed_days_title">बीते हुए दिन</string>
+    <string name="elapsed_days_summary">डायरी लिखे जाने के बाद बीते दिनों को कार्ड के ऊपर बाएँ कोने में D-Day बैज के रूप में दिखाएँ।</string>
     <string name="google_drive_account_sign_out_title">Google डिस्क लिंक किए गए खाते को रीसेट करें</string>
     <string name="google_drive_account_sign_out_description">Google ड्राइव से जुड़े खाते का उपयोग करके आसान डायरी द्वारा प्रकाशित टोकन जानकारी निकालें।</string>
     <string name="calendar_font_scale_title">कैलेंडर फ़ॉन्ट आकार सेट करें</string>

@@ -897,6 +897,8 @@
     <string name="diary_contents_length">Caracteres: %d</string>
     <string name="count_characters_title">Conteo de texto</string>
     <string name="count_characters_summary">Cuente el número de caracteres en el cuerpo del diario.</string>
+    <string name="elapsed_days_title">Días transcurridos</string>
+    <string name="elapsed_days_summary">Muestra los días transcurridos desde que se escribió el diario como una insignia D-Day en la esquina superior izquierda de la tarjeta.</string>
     <string name="google_drive_account_sign_out_title">Restablecer la cuenta vinculada de Google Drive</string>
     <string name="google_drive_account_sign_out_description">Elimine la información del token publicada por Easy Diary usando la cuenta vinculada de Google Drive.</string>
     <string name="calendar_font_scale_title">Establecer el tamaño de fuente del calendario</string>

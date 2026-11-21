@@ -897,6 +897,8 @@
     <string name="diary_contents_length">文字数: %d</string>
     <string name="count_characters_title">本文文字数</string>
     <string name="count_characters_summary">日記本文の文字数をカウントします。</string>
+    <string name="elapsed_days_title">経過日数</string>
+    <string name="elapsed_days_summary">日記を書いてから経過した日数をカードの左上にD-Dayバッジで表示します。</string>
     <string name="google_drive_account_sign_out_title">Google連動アカウントの初期化</string>
     <string name="google_drive_account_sign_out_description">Googleアカウントを利用してイージー日記で発行されたトークン情報をクリアします。</string>
     <string name="calendar_font_scale_title">カレンダーフォントサイズの設定</string>

@@ -1437,6 +1437,7 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
         preferenceMap[SETTING_CONTENTS_SUMMARY] = enableContentsSummary
         preferenceMap[SETTING_CALENDAR_START_DAY] = calendarStartDay
         preferenceMap[SETTING_COUNT_CHARACTERS] = enableCountCharacters
+        preferenceMap[SETTING_ENABLE_ELAPSED_DAYS] = enableElapsedDays
         preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = diaryBackupGoogle
         preferenceMap[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE] = photoBackupGoogle
         preferenceMap[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL] = diaryBackupLocal
@@ -1528,6 +1529,7 @@ fun Context.jsonStringToPreference(jsonString: String) {
         map[SETTING_CONTENTS_SUMMARY]?.let { enableContentsSummary = it as? Boolean ?: enableContentsSummary }
         map[SETTING_CALENDAR_START_DAY]?.let { calendarStartDay = (it as? Double)?.toInt() ?: calendarStartDay }
         map[SETTING_COUNT_CHARACTERS]?.let { enableCountCharacters = it as? Boolean ?: enableCountCharacters }
+        map[SETTING_ENABLE_ELAPSED_DAYS]?.let { enableElapsedDays = it as? Boolean ?: enableElapsedDays }
         map[DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { diaryBackupGoogle = (it as? Double)?.toLong() ?: diaryBackupGoogle }
         map[PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE]?.let { photoBackupGoogle = (it as? Double)?.toLong() ?: photoBackupGoogle }
         map[DIARY_LAST_BACKUP_TIMESTAMP_LOCAL]?.let { diaryBackupLocal = (it as? Double)?.toLong() ?: diaryBackupLocal }

@@ -135,7 +135,8 @@ class DiaryMainItemAdapter(
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
         fun bindTo(diary: DiaryDomain) {
             itemDiaryMainBinding.run {
-                if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                // 경과 일수 설정이 켜져 있으면 미래 일정이 아니어도 좌측 상단 배지에 D-Day 형식으로 표시합니다.
+                if (diary.currentTimeMillis > System.currentTimeMillis() || activity.config.enableElapsedDays) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
                     cardFutureDiaryBadge.visibility = View.VISIBLE
                     textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)

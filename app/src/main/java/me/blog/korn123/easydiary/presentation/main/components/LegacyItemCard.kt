@@ -78,7 +78,7 @@ fun LegacyDiaryItemCard(
             val ctx = view.context
             val activity = ctx.findActivity()
             val currentQuery = ""
-            if (diary.currentTimeMillis > System.currentTimeMillis()) {
+            if (diary.currentTimeMillis > System.currentTimeMillis() || ctx.config.enableElapsedDays) {
                 binding.viewFutureDiaryBadge.visibility = View.VISIBLE
                 binding.cardFutureDiaryBadge.visibility = View.VISIBLE
                 binding.textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
@@ -342,7 +342,7 @@ fun LegacyDiarySubItemCard(
             update = { rootView ->
                 val context = rootView.context
                 ItemDiarySubBinding.bind(rootView).run {
-                    if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                    if (diary.currentTimeMillis > System.currentTimeMillis() || context.config.enableElapsedDays) {
                         viewFutureDiaryBadge.visibility = View.VISIBLE
                         cardFutureDiaryBadge.visibility = View.VISIBLE
                         textDDayCount.text =

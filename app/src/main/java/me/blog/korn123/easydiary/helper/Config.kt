@@ -166,6 +166,10 @@ class Config(
         get() = prefs.getBoolean(SETTING_COUNT_CHARACTERS, false)
         set(enableCountCharacters) = prefs.edit { putBoolean(SETTING_COUNT_CHARACTERS, enableCountCharacters) }
 
+    var enableElapsedDays: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_ELAPSED_DAYS, false)
+        set(enableElapsedDays) = prefs.edit { putBoolean(SETTING_ENABLE_ELAPSED_DAYS, enableElapsedDays) }
+
     var diaryBackupGoogle: Long
         get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
         set(diaryBackupGoogle) = prefs.edit { putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle) }
