@@ -332,7 +332,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                                 forEach {
                                     diaryRepository.deleteDiaryById(it.diaryId)
                                 }
-                                diaryMainItemAdapter?.setDiaryMode(DiaryMode.READ)
                             }
                         },
                         { _, _ -> },
@@ -769,6 +768,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                             if (diaryList.isEmpty()) {
                                 diaryListView.visibility = View.GONE
                                 textNoDiary.visibility = View.VISIBLE
+                                if (diaryMode == DiaryMode.DELETE) {
+                                    diaryMainItemAdapter?.setDiaryMode(DiaryMode.READ)
+                                    invalidateOptionsMenu()
+                                }
                             } else {
                                 diaryListView.visibility = View.VISIBLE
                                 textNoDiary.visibility = View.GONE
