@@ -52,6 +52,7 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.PostcardPhotoUtils
 import java.io.File
 
 class PostcardActivity : EasyDiaryActivity() {
@@ -99,29 +100,38 @@ class PostcardActivity : EasyDiaryActivity() {
                     setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
                 }
 
-                diaryDto.photoUris?.let { uris ->
-                    if (uris.isNotEmpty()) {
-                        photoContainer.visibility = View.VISIBLE
+                val postcardPhotos =
+                    PostcardPhotoUtils.buildPhotos(
+                        diaryDto,
+                        EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity),
+                    )
+                if (postcardPhotos.isNotEmpty()) {
+                    photoContainer.visibility = View.VISIBLE
 
-                        val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
-                        uris.forEachIndexed { index, photoUriDto ->
-                            postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + photoUriDto.getFilePath(), index, 2, 0))
+                    val postCardPhotoItems =
+                        postcardPhotos.mapIndexed { index, postcardPhoto ->
+                            PhotoAdapter.PostCardPhotoItem(
+                                photoUri = postcardPhoto.filePath,
+                                position = index,
+                                viewMode = 2,
+                                filterMode = 0,
+                                isEncrypt = postcardPhoto.isEncrypt,
+                            )
                         }
-                        photoAdapter =
-                            PhotoAdapter(this@PostcardActivity, postCardPhotoItems) {
-                                resizePhotoGrid()
+                    photoAdapter =
+                        PhotoAdapter(this@PostcardActivity, postCardPhotoItems) {
+                            resizePhotoGrid()
+                        }
+
+                    photoGrid.run {
+                        layoutManager =
+                            FlexboxLayoutManager(this@PostcardActivity).apply {
+                                flexWrap = FlexWrap.WRAP
+                                flexDirection = FlexDirection.ROW
                             }
-
-                        photoGrid.run {
-                            layoutManager =
-                                FlexboxLayoutManager(this@PostcardActivity).apply {
-                                    flexWrap = FlexWrap.WRAP
-                                    flexDirection = FlexDirection.ROW
-                                }
-                            adapter = photoAdapter
-                        }
-                        resizePhotoGrid()
+                        adapter = photoAdapter
                     }
+                    resizePhotoGrid()
                 }
 
                 fontSizeSeekBar?.setOnSeekBarChangeListener(

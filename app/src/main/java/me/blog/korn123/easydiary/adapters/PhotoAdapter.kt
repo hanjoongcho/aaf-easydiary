@@ -67,6 +67,8 @@ class PhotoAdapter(
 
     fun onItemHolderClick(itemHolder: PhotoViewHolder) {
         val postCardPhotoItem = postCardPhotoItems[itemHolder.adapterPosition]
+        // The photo of an encrypted diary is not shown, so there is nothing to crop or filter.
+        if (postCardPhotoItem.isEncrypt) return
         PhotoFlexItemOptionFragment
             .newInstance(postCardPhotoItem)
             .apply {
@@ -131,7 +133,7 @@ class PhotoAdapter(
                 }
             }
 
-            applyOption(imageView.context, postCardPhotoItem.photoUri, postCardPhotoItem.viewMode, postCardPhotoItem.filterMode, imageView)
+            applyOption(imageView.context, postCardPhotoItem.photoUri, postCardPhotoItem.viewMode, postCardPhotoItem.filterMode, imageView, postCardPhotoItem.isEncrypt)
         }
 
         fun getStatusBarHeight(): Int {
@@ -173,7 +175,17 @@ class PhotoAdapter(
                 viewMode: Int,
                 filterMode: Int,
                 imageView: ImageView,
+                isEncrypt: Boolean = false,
             ) {
+                if (isEncrypt) {
+                    // Same padlock placeholder the reading screen and the diary cards use for a
+                    // photo of an encrypted diary.
+                    imageView.scaleType = ImageView.ScaleType.CENTER
+                    imageView.setImageResource(R.drawable.ic_padlock)
+                    return
+                }
+                imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+
                 val glide = Glide.with(context).load(photoUri)
                 val radius = (imageView.layoutParams.width * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL).toInt()
                 when (viewMode) {
@@ -235,5 +247,6 @@ class PhotoAdapter(
         var viewMode: Int,
         var filterMode: Int,
         var forceSinglePhotoPosition: Boolean = false,
+        val isEncrypt: Boolean = false,
     )
 }
