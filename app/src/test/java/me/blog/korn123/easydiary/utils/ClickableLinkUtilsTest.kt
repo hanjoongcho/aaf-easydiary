@@ -21,7 +21,7 @@ class ClickableLinkUtilsTest {
     fun `a tel link becomes a phone target`() {
         assertEquals(DiaryLinkTarget.Phone("01012345678"), ClickableLinkUtils.resolveTarget("tel:01012345678"))
         assertEquals(DiaryLinkTarget.Phone("010-1234-5678"), ClickableLinkUtils.resolveTarget("TEL:010-1234-5678"))
-        assertEquals(DiaryLinkTarget.Phone("+821031201547"), ClickableLinkUtils.resolveTarget("tel:+821031201547"))
+        assertEquals(DiaryLinkTarget.Phone("+821012345678"), ClickableLinkUtils.resolveTarget("tel:+821012345678"))
     }
 
     @Test
@@ -72,7 +72,7 @@ class ClickableLinkUtilsTest {
     @Test
     fun `a phone number is not a date or a time`() {
         assertFalse(ClickableLinkUtils.isDateOrTimeLike("010-1234-5678"))
-        assertFalse(ClickableLinkUtils.isDateOrTimeLike("+82 10-3120-1547"))
+        assertFalse(ClickableLinkUtils.isDateOrTimeLike("+82 10-1234-5678"))
         assertFalse(ClickableLinkUtils.isDateOrTimeLike("1544-1234"))
         assertFalse(ClickableLinkUtils.isDateOrTimeLike("2021"))
         assertFalse(ClickableLinkUtils.isDateOrTimeLike(""))
