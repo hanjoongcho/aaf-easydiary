@@ -30,6 +30,7 @@ import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.History
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
@@ -106,7 +107,7 @@ class DiaryViewModel
                                                 History(
                                                     historyTag,
                                                     DateUtils.getDateStringFromTimeMillis(
-                                                        diary.currentTimeMillis,
+                                                        diary.dateAnchorTimeMillis(),
                                                         SimpleDateFormat.FULL,
                                                     ),
                                                     if (diary.isEncrypt) {

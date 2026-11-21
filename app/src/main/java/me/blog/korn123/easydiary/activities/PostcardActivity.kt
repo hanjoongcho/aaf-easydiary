@@ -31,6 +31,7 @@ import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.getUriForFile
@@ -94,7 +95,7 @@ class PostcardActivity : EasyDiaryActivity() {
                 )
                 date.text =
                     when (diaryDto.isAllDay) {
-                        true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                        true -> DateUtils.getDateStringFromTimeMillis(diaryDto.dateAnchorTimeMillis())
                         false -> DateUtils.getDateTimeStringForceFormatting(diaryDto.currentTimeMillis, this@PostcardActivity)
                     }
                 EasyDiaryUtils.boldString(applicationContext, diaryTitle)

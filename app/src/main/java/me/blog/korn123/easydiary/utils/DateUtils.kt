@@ -15,6 +15,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -177,6 +178,28 @@ object DateUtils {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val date: Date = formatter.parse(dateString)
         return date.time
+    }
+
+    /**
+     * The start of the day [dateString] ('yyyy-MM-dd') names, in the device time zone, as epoch millis.
+     * Returns null when the string is missing or not a date in that form.
+     *
+     * An 'All day' diary stores the day itself as its date (issue #214), so the date has to be anchored
+     * to 00:00 of that day in whatever time zone the device is in now, instead of to the instant the
+     * entry was written at, which a time zone change moves to another day.
+     */
+    fun startOfDayTimeMillis(dateString: String?): Long? {
+        val text = dateString?.trim().orEmpty()
+        if (text.isEmpty()) return null
+        return try {
+            LocalDate
+                .parse(text, DateTimeFormatter.ISO_LOCAL_DATE)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli()
+        } catch (e: DateTimeParseException) {
+            null
+        }
     }
 
     /**

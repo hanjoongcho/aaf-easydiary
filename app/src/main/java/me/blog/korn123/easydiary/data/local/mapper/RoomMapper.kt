@@ -25,7 +25,7 @@ fun Diary.toEntity(): DiaryEntity =
         currentTimeMillis = this.currentTimeMillis,
         title = this.title,
         contents = this.contents,
-        dateString = this.dateString,
+        dateString = storedDateString(),
         symbolSequence = this.symbolSequence,
         linkedDiaries = this.linkedDiaries,
         fontName = this.fontName,
@@ -43,9 +43,25 @@ fun Diary.toEntity(): DiaryEntity =
                 )
             },
         isHoliday = this.isHoliday,
-    ).apply {
-        dateString = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
+    )
+
+/**
+ * The date string this diary is stored with.
+ *
+ * An 'All day' diary keeps the date it already has, because that date is the value the entry is about
+ * (issue #214). [Diary.currentTimeMillis] only says which moment of that day the entry was written at, and
+ * a device time zone change moves that moment to another day: a write that does not edit the date itself
+ * (linking an entry to another one, encrypting it, restoring a backup) must not move the entry with it. The
+ * date is only derived from the instant when the diary brings none, which is what a fresh entry, a restored
+ * draft and a save from the editor do.
+ */
+private fun Diary.storedDateString(): String =
+    when (isAllDay) {
+        true -> dateString?.takeIf { DateUtils.startOfDayTimeMillis(it) != null } ?: dateFromTimeMillis()
+        false -> dateFromTimeMillis()
     }
+
+private fun Diary.dateFromTimeMillis(): String = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
 
 fun DiaryEntity.toDomain(photoUris: List<PhotoUri> = emptyList()): Diary =
     Diary(

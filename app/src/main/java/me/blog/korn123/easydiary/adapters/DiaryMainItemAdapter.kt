@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -136,10 +137,10 @@ class DiaryMainItemAdapter(
         fun bindTo(diary: DiaryDomain) {
             itemDiaryMainBinding.run {
                 // 경과 일수 설정이 켜져 있으면 미래 일정이 아니어도 좌측 상단 배지에 D-Day 형식으로 표시합니다.
-                if (diary.currentTimeMillis > System.currentTimeMillis() || activity.config.enableElapsedDays) {
+                if (diary.dateAnchorTimeMillis() > System.currentTimeMillis() || activity.config.enableElapsedDays) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
                     cardFutureDiaryBadge.visibility = View.VISIBLE
-                    textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                    textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.dateAnchorTimeMillis())
                 } else {
                     viewFutureDiaryBadge.visibility = View.GONE
                     cardFutureDiaryBadge.visibility = View.GONE
@@ -221,7 +222,7 @@ class DiaryMainItemAdapter(
                 textDateTime.text =
                     when (diary.isAllDay) {
                         true -> {
-                            DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                            DateUtils.getDateStringFromTimeMillis(diary.dateAnchorTimeMillis())
                         }
 
                         false -> {

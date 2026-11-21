@@ -27,6 +27,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.DiaryRepositoryEntryPoint
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_USER_CUSTOM_START
@@ -94,7 +95,7 @@ class DiaryMainWidgetFactory(
                 R.id.text3,
                 when (diaryDto.isAllDay) {
                     true -> {
-                        DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                        DateUtils.getDateStringFromTimeMillis(diaryDto.dateAnchorTimeMillis())
                     }
 
                     false -> {

@@ -40,6 +40,7 @@ import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.findActivity
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -78,10 +79,10 @@ fun LegacyDiaryItemCard(
             val ctx = view.context
             val activity = ctx.findActivity()
             val currentQuery = ""
-            if (diary.currentTimeMillis > System.currentTimeMillis() || ctx.config.enableElapsedDays) {
+            if (diary.dateAnchorTimeMillis() > System.currentTimeMillis() || ctx.config.enableElapsedDays) {
                 binding.viewFutureDiaryBadge.visibility = View.VISIBLE
                 binding.cardFutureDiaryBadge.visibility = View.VISIBLE
-                binding.textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                binding.textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.dateAnchorTimeMillis())
             } else {
                 binding.viewFutureDiaryBadge.visibility = View.GONE
                 binding.cardFutureDiaryBadge.visibility = View.GONE
@@ -181,7 +182,7 @@ fun LegacyDiaryItemCard(
                 binding.textDateTime.text =
                     when (diary.isAllDay) {
                         true -> {
-                            DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                            DateUtils.getDateStringFromTimeMillis(diary.dateAnchorTimeMillis())
                         }
 
                         false -> {
@@ -342,11 +343,11 @@ fun LegacyDiarySubItemCard(
             update = { rootView ->
                 val context = rootView.context
                 ItemDiarySubBinding.bind(rootView).run {
-                    if (diary.currentTimeMillis > System.currentTimeMillis() || context.config.enableElapsedDays) {
+                    if (diary.dateAnchorTimeMillis() > System.currentTimeMillis() || context.config.enableElapsedDays) {
                         viewFutureDiaryBadge.visibility = View.VISIBLE
                         cardFutureDiaryBadge.visibility = View.VISIBLE
                         textDDayCount.text =
-                            DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                            DateUtils.getOnlyDayRemaining(diary.dateAnchorTimeMillis())
                     } else {
                         viewFutureDiaryBadge.visibility = View.GONE
                         cardFutureDiaryBadge.visibility = View.GONE
@@ -355,7 +356,7 @@ fun LegacyDiarySubItemCard(
                     textDateTime.text =
                         when (diary.isAllDay) {
                             true -> {
-                                DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                                DateUtils.getDateStringFromTimeMillis(diary.dateAnchorTimeMillis())
                             }
 
                             false -> {

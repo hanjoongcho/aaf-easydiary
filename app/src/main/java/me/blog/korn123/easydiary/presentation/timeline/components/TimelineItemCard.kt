@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.findActivity
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.storedTimeFormat
@@ -43,7 +44,7 @@ fun TimelineItemCard(
             val activity = ctx.findActivity()
 
             if (isFirstInGroup) {
-                binding.title.text = DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
+                binding.title.text = DateUtils.getDateStringFromTimeMillis(diary.dateAnchorTimeMillis())
                 binding.titleContainer.visibility = View.VISIBLE
                 binding.topLine.visibility = View.VISIBLE
             } else {
@@ -101,9 +102,9 @@ fun TimelineItemCard(
                 binding.text1.ellipsize = null
             }
 
-            if (diary.currentTimeMillis > System.currentTimeMillis()) {
+            if (diary.dateAnchorTimeMillis() > System.currentTimeMillis()) {
                 binding.textDDayCount.visibility = View.VISIBLE
-                binding.textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)}）"
+                binding.textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diary.dateAnchorTimeMillis())}）"
             } else {
                 binding.textDDayCount.visibility = View.GONE
             }
