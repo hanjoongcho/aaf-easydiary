@@ -316,7 +316,13 @@ class DiaryViewModel
 
         suspend fun findTemporaryDiaryBy(
             originSequence: Long,
-        ): Diary? = findDiary(null).firstOrNull { it.originDiaryId == originSequence }
+        ): Diary? =
+            // A draft row carries the sequence it was written for as its originDiaryId, and resolveDiaryFilter()
+            // drops such rows from every diary list, so the draft has to be read from the repository directly
+            // instead of findDiary() (issue #261).
+            diaryRepository
+                .getDiariesWithPhotos()
+                .firstOrNull { it.originDiaryId == originSequence }
 
         suspend fun getDiaryCount(): Int = findDiary(query = null).size
 
