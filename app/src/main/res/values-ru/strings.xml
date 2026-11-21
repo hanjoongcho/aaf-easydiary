@@ -898,10 +898,7 @@
     <string name="count_characters_title">Подсчет текста</string>
     <string name="count_characters_summary">Считает количество символов в заметках.</string>
     <string name="elapsed_days_title">Прошло дней</string>
-    <string name="elapsed_days_summary">Показывает, сколько дней прошло с момента написания записи.</string>
-    <string name="diary_elapsed_days_today">Сегодня</string>
-    <string name="diary_elapsed_days_one_day_ago">1 день назад</string>
-    <string name="diary_elapsed_days_days_ago">%d дней назад</string>
+    <string name="elapsed_days_summary">Показывает, сколько дней прошло с момента написания записи, в виде значка D-Day в левом верхнем углу карточки.</string>
     <string name="google_drive_account_sign_out_title">Сбросить связанный аккаунт Google диска</string>
     <string name="google_drive_account_sign_out_description">Удалить информацию о токене, опубликованную Easy Diary, с помощью связанной учетной записи Google диска.</string>
     <string name="calendar_font_scale_title">Установить размер шрифта календаря</string>

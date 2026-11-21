@@ -4,11 +4,10 @@ import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
 
@@ -107,112 +106,40 @@ class DateUtilsTest {
     }
 
     @Test
-    fun `getOnlyDayRemaining returns correct remaining day format`() {
-        val targetMillis = timeMillis + (1000L * 60 * 60 * 24 * 5) // 5 days later
-        val remaining = DateUtils.getOnlyDayRemaining(targetMillis, onlyDays = true)
-        assertNotNull(remaining)
-        assertTrue(remaining.startsWith("D"))
+    fun `getOnlyDayRemaining returns D-Day for a diary of today`() {
+        assertEquals("D-Day", DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = 0)))
     }
+
+    @Test
+    fun `getOnlyDayRemaining returns D plus the day count for a past diary`() {
+        val remaining = DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = -3))
+        assertTrue(remaining.startsWith("D＋"))
+        assertTrue(remaining.removePrefix("D＋").toInt() > 0)
+    }
+
+    @Test
+    fun `getOnlyDayRemaining returns D minus the day count for a future diary`() {
+        val remaining = DateUtils.getOnlyDayRemaining(noonOf(daysFromToday = 2))
+        assertTrue(remaining.startsWith("D－"))
+        assertTrue(remaining.removePrefix("D－").toInt() > 0)
+    }
+
+    // getOnlyDayRemaining() normalizes both dates to midnight in the device time zone, so the
+    // tests work on noon of a date and stay clear of midnight boundaries.
+    private fun noonOf(daysFromToday: Long): Long =
+        LocalDate
+            .now(ZoneId.systemDefault())
+            .plusDays(daysFromToday)
+            .atTime(12, 0)
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
 
     @Test
     fun `getCurrentDateTime returns non empty formatted string`() {
         val current = DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         assertNotNull(current)
         assertEquals(15, current.length)
-    }
-
-    // ------------------------------------------------------------------
-    // Elapsed days (issue #248)
-    // ------------------------------------------------------------------
-
-    private val seoul: ZoneId = ZoneId.of("Asia/Seoul")
-
-    private fun millis(
-        dateTime: LocalDateTime,
-        zoneId: ZoneId = seoul,
-    ): Long = dateTime.atZone(zoneId).toInstant().toEpochMilli()
-
-    @Test
-    fun `getElapsedDays returns 0 for an entry written earlier the same day`() {
-        val now = millis(LocalDateTime.of(2026, 11, 20, 18, 0))
-        val writtenAt = millis(LocalDateTime.of(2026, 11, 20, 0, 5))
-        assertEquals(0L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays counts calendar days instead of 24 hour periods`() {
-        // 23:50 yesterday is already `1 day ago` at 00:10 today, although only 20 minutes passed.
-        val now = millis(LocalDateTime.of(2026, 11, 20, 0, 10))
-        val writtenAt = millis(LocalDateTime.of(2026, 11, 19, 23, 50))
-        assertEquals(1L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays returns 0 for a long day that does not cross midnight`() {
-        // 23 hours on the same date is still 0 days.
-        val now = millis(LocalDateTime.of(2026, 11, 20, 23, 0))
-        val writtenAt = millis(LocalDateTime.of(2026, 11, 20, 0, 0))
-        assertEquals(0L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays returns several elapsed days`() {
-        val now = millis(LocalDateTime.of(2026, 11, 20, 9, 0))
-        val writtenAt = millis(LocalDateTime.of(2026, 11, 13, 21, 30))
-        assertEquals(7L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays crosses a month boundary`() {
-        val now = millis(LocalDateTime.of(2026, 3, 1, 8, 0))
-        val writtenAt = millis(LocalDateTime.of(2026, 2, 28, 22, 0))
-        assertEquals(1L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays counts the leap day of a leap year`() {
-        val now = millis(LocalDateTime.of(2024, 3, 1, 0, 30))
-        val writtenAt = millis(LocalDateTime.of(2024, 2, 28, 23, 30))
-        assertEquals(2L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDays crosses a daylight saving time change`() {
-        // US daylight saving time starts on 2024-03-10, so this range is only 47 hours but 2 dates.
-        val newYork = ZoneId.of("America/New_York")
-        val now = millis(LocalDateTime.of(2024, 3, 11, 0, 30), newYork)
-        val writtenAt = millis(LocalDateTime.of(2024, 3, 9, 23, 30), newYork)
-        assertEquals(2L, DateUtils.getElapsedDays(writtenAt, now, newYork))
-    }
-
-    @Test
-    fun `getElapsedDays returns a negative value for a future diary`() {
-        val now = millis(LocalDateTime.of(2026, 11, 20, 12, 0))
-        val writtenAt = millis(LocalDateTime.of(2026, 11, 22, 9, 0))
-        assertEquals(-2L, DateUtils.getElapsedDays(writtenAt, now, seoul))
-    }
-
-    @Test
-    fun `getElapsedDaysLabel describes today as today`() {
-        val label = DateUtils.getElapsedDaysLabel(0L, "Today", "1 day ago", "%d days ago")
-        assertEquals("Today", label)
-    }
-
-    @Test
-    fun `getElapsedDaysLabel uses the singular text for one day ago`() {
-        val label = DateUtils.getElapsedDaysLabel(1L, "Today", "1 day ago", "%d days ago")
-        assertEquals("1 day ago", label)
-    }
-
-    @Test
-    fun `getElapsedDaysLabel formats more than one day with the day count`() {
-        val label = DateUtils.getElapsedDaysLabel(5L, "Today", "1 day ago", "%d days ago")
-        assertEquals("5 days ago", label)
-    }
-
-    @Test
-    fun `getElapsedDaysLabel returns null for a future diary`() {
-        assertNull(DateUtils.getElapsedDaysLabel(-1L, "Today", "1 day ago", "%d days ago"))
     }
 
     @Test

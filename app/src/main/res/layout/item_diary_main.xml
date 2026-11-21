@@ -113,7 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignWithParentIfMissing="true"
-                            android:layout_toStartOf="@id/rightInfoContainer"
+                            android:layout_toStartOf="@id/contentsLengthContainer"
                             app:fixedAppcompatPadding="true">
 
                             <LinearLayout
@@ -141,48 +141,22 @@
                             </LinearLayout>
                         </me.blog.korn123.easydiary.views.FixedCardView>
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:id="@+id/rightInfoContainer"
+                        <me.blog.korn123.easydiary.views.FixedCardView
+                            android:id="@+id/contentsLengthContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:layout_marginStart="5dp"
+                            app:fixedAppcompatPadding="true">
 
-                            <me.blog.korn123.easydiary.views.FixedCardView
-                                android:id="@+id/elapsedDaysContainer"
+                            <TextView
+                                android:id="@+id/contentsLength"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="3dp"
-                                android:visibility="gone"
-                                tools:visibility="visible"
-                                app:fixedAppcompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/elapsedDays"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:textColor="?attr/colorPrimary"
-                                    tools:text="3 days ago" />
-                            </me.blog.korn123.easydiary.views.FixedCardView>
-
-                            <me.blog.korn123.easydiary.views.FixedCardView
-                                android:id="@+id/contentsLengthContainer"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="3dp"
-                                app:fixedAppcompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/contentsLength"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:textColor="?attr/colorPrimary"
-                                    tools:text="100" />
-                            </me.blog.korn123.easydiary.views.FixedCardView>
-                        </androidx.appcompat.widget.LinearLayoutCompat>
+                                android:padding="5dp"
+                                android:textColor="?attr/colorPrimary"
+                                tools:text="100" />
+                        </me.blog.korn123.easydiary.views.FixedCardView>
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>

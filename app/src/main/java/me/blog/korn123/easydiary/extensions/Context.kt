@@ -1271,7 +1271,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                     if (it.tag == "tabTitle") return
                     if (it.text == "Dashboard") return
                     when (it.id) {
-                        R.id.contentsLength, R.id.locationLabel, R.id.elapsedDays -> {
+                        R.id.contentsLength, R.id.locationLabel -> {
                             it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                         }
 
@@ -2057,18 +2057,6 @@ fun Context.applyBoldToDate(
 fun Context.parsedMarkdownString(markdownString: String): Spanned = Markwon.builder(this).build().toMarkdown(markdownString)
 
 fun Context.storedDatetimeFormat() = DateTimeFormat.valueOf(config.settingDatetimeFormat)
-
-/**
- * 일기 카드 하단에 표시할 경과 일수 문자열을 반환합니다.
- * 미래 날짜는 표시하지 않으므로 `null`을 반환합니다.
- */
-fun Context.getElapsedDaysLabel(timeMillis: Long): String? =
-    DateUtils.getElapsedDaysLabel(
-        elapsedDays = DateUtils.getElapsedDays(timeMillis),
-        todayText = getString(R.string.diary_elapsed_days_today),
-        oneDayAgoText = getString(R.string.diary_elapsed_days_one_day_ago),
-        daysAgoFormat = getString(R.string.diary_elapsed_days_days_ago),
-    )
 
 fun Context.storedTimeFormat() = TimeFormatMode.fromName(config.settingTimeFormat)
 

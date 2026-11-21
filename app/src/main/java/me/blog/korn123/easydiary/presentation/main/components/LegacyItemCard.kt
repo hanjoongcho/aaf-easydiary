@@ -36,14 +36,12 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainMigBinding
 import me.blog.korn123.easydiary.databinding.ItemDiarySubBinding
-import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.findActivity
-import me.blog.korn123.easydiary.extensions.getElapsedDaysLabel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -80,7 +78,7 @@ fun LegacyDiaryItemCard(
             val ctx = view.context
             val activity = ctx.findActivity()
             val currentQuery = ""
-            if (diary.currentTimeMillis > System.currentTimeMillis()) {
+            if (diary.currentTimeMillis > System.currentTimeMillis() || ctx.config.enableElapsedDays) {
                 binding.viewFutureDiaryBadge.visibility = View.VISIBLE
                 binding.cardFutureDiaryBadge.visibility = View.VISIBLE
                 binding.textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
@@ -130,14 +128,6 @@ fun LegacyDiaryItemCard(
                     binding.contentsLengthContainer.visibility = View.VISIBLE
                 } else {
                     binding.contentsLengthContainer.visibility = View.GONE
-                }
-
-                if (config.enableElapsedDays) {
-                    val elapsedDaysLabel = getElapsedDaysLabel(diary.currentTimeMillis)
-                    binding.elapsedDays.text = elapsedDaysLabel ?: String.EMPTY
-                    binding.elapsedDaysContainer.visibility = if (elapsedDaysLabel != null) View.VISIBLE else View.GONE
-                } else {
-                    binding.elapsedDaysContainer.visibility = View.GONE
                 }
 
 //                        selection.setOnCheckedChangeListener { _, isChecked ->
@@ -352,7 +342,7 @@ fun LegacyDiarySubItemCard(
             update = { rootView ->
                 val context = rootView.context
                 ItemDiarySubBinding.bind(rootView).run {
-                    if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                    if (diary.currentTimeMillis > System.currentTimeMillis() || context.config.enableElapsedDays) {
                         viewFutureDiaryBadge.visibility = View.VISIBLE
                         cardFutureDiaryBadge.visibility = View.VISIBLE
                         textDDayCount.text =

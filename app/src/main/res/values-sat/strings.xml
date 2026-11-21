@@ -898,10 +898,7 @@
     <string name="count_characters_title">ᱚᱞ ᱦᱤᱥᱟᱹᱵ</string>
     <string name="count_characters_summary">ᱰᱟᱭᱨᱤ ᱵᱚᱰᱭ ᱨᱮ ᱚᱠᱷᱚᱨ ᱨᱮᱭᱟᱜ ᱦᱤᱥᱟᱹᱵ ᱫᱚᱦᱚᱭ ᱢᱮ ᱾</string>
     <string name="elapsed_days_title">ᱢᱟᱦᱟᱸ ᱦᱤᱥᱟᱹᱵ</string>
-    <string name="elapsed_days_summary">ᱰᱟᱭᱨᱤ ᱚᱞ ᱠᱟᱛᱮ ᱛᱤᱱᱟᱹᱜ ᱢᱟᱦᱟᱸ ᱦᱮᱸᱜᱮ ᱮᱱᱟ ᱚᱱᱟ ᱧᱮᱞ ᱢᱮ ᱾</string>
-    <string name="diary_elapsed_days_today">ᱛᱮᱦᱮᱸᱧ</string>
-    <string name="diary_elapsed_days_one_day_ago">᱑ ᱢᱟᱦᱟᱸ ᱢᱟᱲᱟᱝ</string>
-    <string name="diary_elapsed_days_days_ago">%d ᱢᱟᱦᱟᱸ ᱢᱟᱲᱟᱝ</string>
+    <string name="elapsed_days_summary">ᱰᱟᱭᱨᱤ ᱚᱞ ᱠᱟᱛᱮ ᱛᱤᱱᱟᱹᱜ ᱢᱟᱦᱟᱸ ᱦᱮᱸᱜᱮ ᱮᱱᱟ ᱚᱱᱟ ᱠᱟᱨᱰ ᱨᱮᱭᱟᱜ ᱞᱮᱸᱜᱮ ᱪᱮᱛᱟᱱ ᱨᱮ D-Day ᱞᱮᱠᱟᱛᱮ ᱧᱮᱞ ᱢᱮ ᱾</string>
     <string name="google_drive_account_sign_out_title">Google Drive ᱡᱩᱲᱟᱹᱣ ᱠᱷᱟᱛᱟ ᱨᱤᱥᱮᱴ ᱢᱮ</string>
     <string name="google_drive_account_sign_out_description">Google Drive ᱞᱤᱸᱠ ᱠᱷᱟᱛᱟ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱴᱚᱠᱮᱱ ᱵᱤᱵᱨᱚᱬ ᱠᱚ Easy Diary ᱯᱟᱨᱮᱞ ᱠᱟᱱ ᱡᱤᱱᱤᱥ ᱠᱚ ᱚᱪᱚᱜ ᱢᱮ ᱾</string>
     <string name="calendar_font_scale_title">ᱠᱮᱞᱮᱱᱰᱚᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱥᱮᱴ ᱢᱮ</string>

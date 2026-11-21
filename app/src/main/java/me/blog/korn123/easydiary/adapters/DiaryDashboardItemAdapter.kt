@@ -17,12 +17,10 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemDiaryDashboardBinding
 import me.blog.korn123.easydiary.enums.Calculation
-import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
-import me.blog.korn123.easydiary.extensions.getElapsedDaysLabel
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -61,7 +59,8 @@ class DiaryDashboardItemAdapter(
                     EasyDiaryUtils.boldString(activity, this)
                 }
 
-                if (diary.currentTimeMillis > System.currentTimeMillis()) {
+                // 경과 일수 설정이 켜져 있으면 미래 일정이 아니어도 좌측 상단 배지에 D-Day 형식으로 표시합니다.
+                if (diary.currentTimeMillis > System.currentTimeMillis() || context.config.enableElapsedDays) {
                     viewFutureDiaryBadge.visibility = View.VISIBLE
                     cardFutureDiaryBadge.visibility = View.VISIBLE
                     textDDayCount.text = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
@@ -113,14 +112,6 @@ class DiaryDashboardItemAdapter(
                         contentsLengthContainer.visibility = View.VISIBLE
                     } else {
                         contentsLengthContainer.visibility = View.GONE
-                    }
-
-                    if (config.enableElapsedDays) {
-                        val elapsedDaysLabel = getElapsedDaysLabel(diary.currentTimeMillis)
-                        elapsedDays.text = elapsedDaysLabel ?: String.EMPTY
-                        elapsedDaysContainer.visibility = if (elapsedDaysLabel != null) View.VISIBLE else View.GONE
-                    } else {
-                        elapsedDaysContainer.visibility = View.GONE
                     }
 
                     FlavorUtils.initWeatherView(this, imageSymbol, diary.symbolSequence)

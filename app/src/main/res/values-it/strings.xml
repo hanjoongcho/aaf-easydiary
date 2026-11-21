@@ -898,10 +898,7 @@
     <string name="count_characters_title">Conteggio parole</string>
     <string name="count_characters_summary">Calcola il numero di caratteri nel testo del diario.</string>
     <string name="elapsed_days_title">Giorni trascorsi</string>
-    <string name="elapsed_days_summary">Mostra quanti giorni sono passati da quando è stato scritto il diario.</string>
-    <string name="diary_elapsed_days_today">Oggi</string>
-    <string name="diary_elapsed_days_one_day_ago">1 giorno fa</string>
-    <string name="diary_elapsed_days_days_ago">%d giorni fa</string>
+    <string name="elapsed_days_summary">Mostra i giorni trascorsi da quando è stato scritto il diario come badge D-Day in alto a sinistra della scheda.</string>
     <string name="google_drive_account_sign_out_title">Reimposta account Google Drive associato</string>
     <string name="google_drive_account_sign_out_description">Rimuovi informazioni sul token pubblicato da Easy Diary con l\'account Google Drive associato.</string>
     <string name="calendar_font_scale_title">Imposta dimensioni carattere del calendario</string>
