@@ -230,6 +230,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         invalidateOptionsMenu()
         applyBannerContainerMargin()
+        diaryViewModel.refreshDiaries()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             lifecycleScope.launch {

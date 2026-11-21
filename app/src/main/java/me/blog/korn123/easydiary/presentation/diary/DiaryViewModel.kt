@@ -185,6 +185,11 @@ class DiaryViewModel
         val endTimeMillis = MutableStateFlow(0L)
         val symbolSequence = MutableStateFlow(0)
         val checkFutureDiaryOption = MutableStateFlow(true)
+        private val refreshTrigger = MutableStateFlow(0L)
+
+        fun refreshDiaries() {
+            refreshTrigger.value = System.currentTimeMillis()
+        }
 
         data class FindDiaryParams(
             val query: String?,
@@ -197,7 +202,7 @@ class DiaryViewModel
 
         private val findDiaryParams =
             combine(
-                query,
+                query.combine(refreshTrigger) { q, _ -> q },
                 isSensitive,
                 startTimeMillis,
                 endTimeMillis,
