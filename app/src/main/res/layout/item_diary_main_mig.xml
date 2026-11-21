@@ -149,7 +149,7 @@
                                 android:id="@+id/elapsedDaysContainer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
+                                android:layout_marginStart="3dp"
                                 android:visibility="gone"
                                 app:fixedAppcompatPadding="true">
 
@@ -166,7 +166,7 @@
                                 android:id="@+id/contentsLengthContainer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
+                                android:layout_marginStart="3dp"
                                 app:fixedAppcompatPadding="true">
 
                                 <TextView

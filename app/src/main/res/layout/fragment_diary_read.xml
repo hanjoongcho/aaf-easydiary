@@ -137,7 +137,7 @@
                                         android:id="@+id/card_elapsed_days"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="5dp"
+                                        android:layout_marginStart="3dp"
                                         android:visibility="gone"
                                         app:fixedAppcompatPadding="true">
 
@@ -154,7 +154,7 @@
                                         android:id="@+id/card_contents_counting"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="5dp"
+                                        android:layout_marginStart="3dp"
                                         android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
                                         app:fixedAppcompatPadding="true">
 

@@ -191,7 +191,7 @@ class DiaryMainItemAdapter(
                     }
 
                     if (config.enableElapsedDays) {
-                        val elapsedDaysLabel = context.getElapsedDaysLabel(diary.currentTimeMillis)
+                        val elapsedDaysLabel = getElapsedDaysLabel(diary.currentTimeMillis)
                         elapsedDays.run { text = elapsedDaysLabel ?: String.EMPTY }
                         elapsedDaysContainer.visibility = if (elapsedDaysLabel != null) View.VISIBLE else View.GONE
                     } else {
