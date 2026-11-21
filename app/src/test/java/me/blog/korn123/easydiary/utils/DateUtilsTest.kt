@@ -4,12 +4,17 @@ import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.helper.DateUtilConstants
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
+import java.util.TimeZone
+
+// Fixed offsets instead of named zones: the tests must not depend on daylight saving rules.
+private const val UTC_PLUS_2 = "GMT+02:00"
 
 /**
  * Modernized unit test suite for DateUtils.
@@ -134,6 +139,43 @@ class DateUtilsTest {
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
+
+    @Test
+    fun `startOfDayTimeMillis names the stored date in the current time zone`() {
+        withDefaultTimeZone(UTC_PLUS_2) {
+            val startOfDay = requireNotNull(DateUtils.startOfDayTimeMillis("2023-05-27"))
+
+            assertEquals("2023-05-27", DateUtils.timeMillisToDate(startOfDay, DateUtilConstants.DATE_PATTERN_DASH))
+            assertEquals("00", DateUtils.timeMillisToDate(startOfDay, "HH"))
+        }
+    }
+
+    @Test
+    fun `startOfDayTimeMillis returns null for a missing or unreadable date string`() {
+        assertNull(DateUtils.startOfDayTimeMillis(null))
+        assertNull(DateUtils.startOfDayTimeMillis(""))
+        assertNull(DateUtils.startOfDayTimeMillis("   "))
+        assertNull(DateUtils.startOfDayTimeMillis("2023-5-27"))
+        assertNull(DateUtils.startOfDayTimeMillis("May 27, 2023"))
+        assertNull(DateUtils.startOfDayTimeMillis("2023-02-30"))
+    }
+
+    /**
+     * Runs [block] with [zoneId] as the device time zone and always restores the previous one, so a failing
+     * assertion cannot leave the rest of the suite on a fixed offset.
+     */
+    private fun <T> withDefaultTimeZone(
+        zoneId: String,
+        block: () -> T,
+    ): T {
+        val original = TimeZone.getDefault()
+        return try {
+            TimeZone.setDefault(TimeZone.getTimeZone(zoneId))
+            block()
+        } finally {
+            TimeZone.setDefault(original)
+        }
+    }
 
     @Test
     fun `getCurrentDateTime returns non empty formatted string`() {

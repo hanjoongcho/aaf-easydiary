@@ -55,6 +55,7 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.fullAddress
@@ -981,15 +982,23 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         if (currentTimeMillis > 0) {
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            calendar.timeInMillis = currentTimeMillis
-            year = calendar[Calendar.YEAR]
-            month = calendar[Calendar.MONTH] + 1
-            dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
-            hourOfDay = calendar[Calendar.HOUR_OF_DAY]
-            minute = calendar[Calendar.MINUTE]
-            second = calendar[Calendar.SECOND]
+            applyCurrentTimeMillis(currentTimeMillis)
         }
+    }
+
+    /**
+     * Copies [timeMillis] into the year/month/day and hour/minute/second fields the date and time pickers
+     * edit, in the current time zone.
+     */
+    protected fun applyCurrentTimeMillis(timeMillis: Long) {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = timeMillis
+        year = calendar[Calendar.YEAR]
+        month = calendar[Calendar.MONTH] + 1
+        dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+        hourOfDay = calendar[Calendar.HOUR_OF_DAY]
+        minute = calendar[Calendar.MINUTE]
+        second = calendar[Calendar.SECOND]
     }
 
     protected fun restoreContents(savedInstanceState: Bundle?) {
@@ -1036,6 +1045,12 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
         photoUris.clear()
 
+        // An 'All day' diary keeps the day it was written on in any time zone: the editor re-anchors the
+        // entry to 00:00 of the stored date string (issue #214), so the date picker shows that day and a
+        // save in another time zone writes it back instead of the day the zone change moved the entry to.
+        currentTimeMillis = diary.dateAnchorTimeMillis()
+        applyCurrentTimeMillis(currentTimeMillis)
+
         // A loaded diary (existing diary or auto-saved temporary diary) always keeps its own all day state,
         // so the 'All day by default' setting never overwrites what the user saved.
         binding.partialEditContents.allDay.isChecked = diary.isAllDay
@@ -1054,7 +1069,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
         }
 
-        currentTimeMillis = diary.currentTimeMillis
         if (config.holdPositionEnterEditScreen) {
             binding.partialEditContents.contentsContainer.post {
                 binding.partialEditContents.contentsContainer.scrollY =

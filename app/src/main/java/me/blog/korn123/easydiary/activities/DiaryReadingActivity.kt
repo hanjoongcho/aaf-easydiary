@@ -66,6 +66,7 @@ import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.clearHoldOrientation
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.diaryRepository
 import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -1302,7 +1303,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     date.text =
                         when (diaryDto.isAllDay) {
                             true -> {
-                                DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                                DateUtils.getDateStringFromTimeMillis(diaryDto.dateAnchorTimeMillis())
                             }
 
                             false -> {

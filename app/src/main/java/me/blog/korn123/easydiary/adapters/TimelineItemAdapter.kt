@@ -10,6 +10,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -68,7 +69,7 @@ class TimelineItemAdapter(
                 titleContainer.visibility = View.GONE
                 topLine.visibility = View.GONE
             } else {
-                title.text = DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
+                title.text = DateUtils.getDateStringFromTimeMillis(diaryDto.dateAnchorTimeMillis())
                 titleContainer.visibility = View.VISIBLE
                 topLine.visibility = View.VISIBLE
             }
@@ -108,9 +109,9 @@ class TimelineItemAdapter(
                 }
             }
 
-            if (diaryDto.currentTimeMillis > System.currentTimeMillis()) {
+            if (diaryDto.dateAnchorTimeMillis() > System.currentTimeMillis()) {
                 textDDayCount.visibility = View.VISIBLE
-                textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diaryDto.currentTimeMillis)}）"
+                textDDayCount.text = "（${DateUtils.getOnlyDayRemaining(diaryDto.dateAnchorTimeMillis())}）"
             } else {
                 textDDayCount.visibility = View.GONE
             }

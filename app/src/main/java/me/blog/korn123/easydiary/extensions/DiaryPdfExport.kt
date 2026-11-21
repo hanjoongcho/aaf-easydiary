@@ -28,7 +28,7 @@ fun Diary.toPdfSnapshot(context: Context): DiaryPdfSnapshot {
     val appDataDirectory = EasyDiaryUtils.getApplicationDataDirectory(context)
     val dateString =
         when (isAllDay) {
-            true -> DateUtils.getDateStringFromTimeMillis(currentTimeMillis)
+            true -> DateUtils.getDateStringFromTimeMillis(dateAnchorTimeMillis())
             false -> DateUtils.getDateTimeStringForceFormatting(currentTimeMillis, context)
         }
 

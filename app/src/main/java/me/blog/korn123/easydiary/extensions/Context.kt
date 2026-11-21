@@ -661,7 +661,7 @@ fun Context.openOverDueNotification(diaryList: List<DiaryDomain>) {
                     notification.id,
                     createNotification(notification)
                         .also {
-                            val dday = DateUtils.getOnlyDayRemaining(diary.currentTimeMillis)
+                            val dday = DateUtils.getOnlyDayRemaining(diary.dateAnchorTimeMillis())
                             val contentTitle = "${if (dday.contains(
                                     "＋",
                                 )
@@ -669,7 +669,7 @@ fun Context.openOverDueNotification(diaryList: List<DiaryDomain>) {
                                 "\uD83D\uDD34"
                             } else {
                                 "\uD83D\uDFE2"
-                            }} 《$dday》 ${DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)}"
+                            }} 《$dday》 ${DateUtils.getDateStringFromTimeMillis(diary.dateAnchorTimeMillis())}"
                             val contentText = if (diary.title.isNullOrEmpty()) diary.contents!!.split("\n")[0] else diary.title
 //                    contentText += diary.contents
                             it.setContentTitle(contentTitle)

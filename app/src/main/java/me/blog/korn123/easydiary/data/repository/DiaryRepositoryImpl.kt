@@ -116,6 +116,9 @@ class DiaryRepositoryImpl
                     diaryId = DiaryEditingConstants.DIARY_SEQUENCE_INIT,
                     originDiaryId = DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT,
                     currentTimeMillis = System.currentTimeMillis(),
+                    // The duplicate is a copy written now, so it takes today's date even when the original is
+                    // an 'All day' diary that keeps its own date (issue #214).
+                    dateString = null,
                 ),
             )
         }
