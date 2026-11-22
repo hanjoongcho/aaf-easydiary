@@ -420,7 +420,7 @@ class SettingsBasicFragment : Fragment() {
                     ) {
                         requireActivity().run {
                             diarySearchQueryCaseSensitive = diarySearchQueryCaseSensitive.not()
-                            config.enableContentsSummary = diarySearchQueryCaseSensitive
+                            config.diarySearchQueryCaseSensitive = diarySearchQueryCaseSensitive
                         }
                     }
 
@@ -570,6 +570,8 @@ class SettingsBasicFragment : Fragment() {
                 }
             }
         }
+        settingsViewModel.updateThumbnailSizeSubDescription()
+        settingsViewModel.updateSummaryMaxLinesSubDescription()
     }
 
     private fun openThumbnailSettingDialog() {
@@ -599,6 +601,7 @@ class SettingsBasicFragment : Fragment() {
                     val fontInfo = parent.adapter.getItem(position) as? Map<*, *>
                     (fontInfo?.get("optionValue") as? String)?.let {
                         config.settingThumbnailSize = it.toFloat()
+                        settingsViewModel.updateThumbnailSizeSubDescription()
                         initPreference()
                     }
                     alertDialog?.cancel()
@@ -748,6 +751,7 @@ class SettingsBasicFragment : Fragment() {
                     val optionInfo = parent.adapter.getItem(position) as? Map<*, *>
                     (optionInfo?.get("optionValue") as? String)?.let {
                         config.summaryMaxLines = it.toInt()
+                        settingsViewModel.updateSummaryMaxLinesSubDescription()
                         initPreference()
                     }
                     alertDialog?.cancel()

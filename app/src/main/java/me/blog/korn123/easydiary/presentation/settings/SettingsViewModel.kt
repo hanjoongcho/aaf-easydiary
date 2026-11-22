@@ -83,6 +83,10 @@ class SettingsViewModel(
     private val _thumbnailSizeSubDescription: MutableStateFlow<String> = MutableStateFlow("${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp")
     val thumbnailSizeSubDescription: StateFlow<String> = _thumbnailSizeSubDescription.asStateFlow()
 
+    fun updateThumbnailSizeSubDescription() {
+        _thumbnailSizeSubDescription.value = "${config.settingThumbnailSize}dp x ${config.settingThumbnailSize}dp"
+    }
+
     private val _datetimeFormatSubDescription: MutableStateFlow<String> =
         MutableStateFlow(
             DateUtils.getDateTimeStringForceFormatting(
@@ -102,6 +106,10 @@ class SettingsViewModel(
 
     private val _summaryMaxLinesSubDescription: MutableStateFlow<String> = MutableStateFlow(application.getString(R.string.max_lines_value, config.summaryMaxLines))
     val summaryMaxLinesSubDescription: StateFlow<String> get() = _summaryMaxLinesSubDescription.asStateFlow()
+
+    fun updateSummaryMaxLinesSubDescription() {
+        _summaryMaxLinesSubDescription.value = application.getString(R.string.max_lines_value, config.summaryMaxLines)
+    }
 
     private val _fontSettingDescription: MutableStateFlow<String> = MutableStateFlow(FontUtils.fontFileNameToDisplayName(application, config.settingFontName))
     val fontSettingDescription: StateFlow<String> get() = _fontSettingDescription.asStateFlow()
