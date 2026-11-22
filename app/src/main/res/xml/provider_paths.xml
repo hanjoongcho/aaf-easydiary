@@ -15,4 +15,8 @@
     <files-path
         name="photo"
         path="../AAFactory/EasyDiary/Photos" />
+
+    <cache-path
+        name="sketch"
+        path="sketchpad/" />
 </paths>

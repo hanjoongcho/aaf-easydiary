@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">スケッチパッド</string>
+    <string name="sketchpad_eraser">消しゴム</string>
+    <string name="sketchpad_undo">元に戻す</string>
+    <string name="sketchpad_redo">やり直す</string>
+    <string name="sketchpad_clear">すべて消去</string>
+    <string name="sketchpad_clear_confirm">キャンバスの内容をすべて消去しますか？</string>
+    <string name="sketchpad_discard_confirm">スケッチが保存されていません。閉じますか？</string>
+    <string name="sketchpad_save_failed">スケッチを保存できませんでした。</string>
+    <string name="sketchpad_width_thin">細い</string>
+    <string name="sketchpad_width_medium">普通</string>
+    <string name="sketchpad_width_thick">太い</string>
+    <string name="sketchpad_color_black">黒</string>
+    <string name="sketchpad_color_red">赤</string>
+    <string name="sketchpad_color_blue">青</string>
+    <string name="sketchpad_color_green">緑</string>
+    <string name="sketchpad_color_orange">オレンジ</string>
+    <string name="sketchpad_color_purple">紫</string>
 </resources>

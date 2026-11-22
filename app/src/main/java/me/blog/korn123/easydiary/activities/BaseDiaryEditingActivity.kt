@@ -95,6 +95,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadActivity
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.DiaryAutoSavePolicy
 import me.blog.korn123.easydiary.utils.DiaryDraftSnapshot
@@ -195,6 +196,22 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 )
             }
         }
+
+    /**
+     * Takes the sketch the built-in sketchpad (issue #260) exported as a PNG content URI and feeds it into the
+     * same attachment pipeline as a picked photo, so the sketch is stored with the entry and travels with
+     * the diary view, the backups and the PDF export.
+     */
+    private val requestSketchpad =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            pauseLock()
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.toString()?.let { uriString ->
+                    attachPhotos(arrayListOf(uriString), isUriString = true)
+                }
+            }
+        }
+
     protected lateinit var binding: ActivityBaseDiaryEditingBinding
     protected val photoUris: ArrayList<PhotoUriDomain> = ArrayList()
     protected var currentTimeMillis: Long = 0
@@ -276,6 +293,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
                     requestCaptureCamera.launch(intent)
+                }
+
+                R.id.sketchpad -> {
+                    requestSketchpad.launch(Intent(this, SketchpadActivity::class.java))
                 }
 
                 R.id.locationContainer -> {
@@ -827,6 +848,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
             captureCamera.run {
+                layoutParams = imageLayoutParams
+                background =
+                    createBackgroundGradientDrawable(
+                        config.primaryColor,
+                        THUMBNAIL_BACKGROUND_ALPHA,
+                        imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
+                    )
+            }
+            sketchpad.run {
                 layoutParams = imageLayoutParams
                 background =
                     createBackgroundGradientDrawable(

@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">畫板</string>
+    <string name="sketchpad_eraser">橡皮擦</string>
+    <string name="sketchpad_undo">復原</string>
+    <string name="sketchpad_redo">重做</string>
+    <string name="sketchpad_clear">全部清除</string>
+    <string name="sketchpad_clear_confirm">要清除畫布上的所有內容嗎？</string>
+    <string name="sketchpad_discard_confirm">草圖尚未儲存，要關閉嗎？</string>
+    <string name="sketchpad_save_failed">無法儲存草圖。</string>
+    <string name="sketchpad_width_thin">細</string>
+    <string name="sketchpad_width_medium">中</string>
+    <string name="sketchpad_width_thick">粗</string>
+    <string name="sketchpad_color_black">黑色</string>
+    <string name="sketchpad_color_red">紅色</string>
+    <string name="sketchpad_color_blue">藍色</string>
+    <string name="sketchpad_color_green">綠色</string>
+    <string name="sketchpad_color_orange">橙色</string>
+    <string name="sketchpad_color_purple">紫色</string>
 </resources>

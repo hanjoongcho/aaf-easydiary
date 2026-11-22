@@ -140,6 +140,8 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
             .setOnClickListener(clickListener)
         binding.partialEditContents.partialEditPhotoContainer.captureCamera
             .setOnClickListener(clickListener)
+        binding.partialEditContents.partialEditPhotoContainer.sketchpad
+            .setOnClickListener(clickListener)
         binding.partialEditContents.locationContainer.setOnClickListener(clickListener)
         binding.partialEditContents.diaryTitle.setOnTouchListener(touchListener)
         binding.partialEditContents.diaryContents.setOnTouchListener(touchListener)

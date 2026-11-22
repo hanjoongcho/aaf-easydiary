@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">Skizzenblock</string>
+    <string name="sketchpad_eraser">Radiergummi</string>
+    <string name="sketchpad_undo">Rückgängig</string>
+    <string name="sketchpad_redo">Wiederholen</string>
+    <string name="sketchpad_clear">Alles löschen</string>
+    <string name="sketchpad_clear_confirm">Möchten Sie alles auf der Zeichenfläche löschen?</string>
+    <string name="sketchpad_discard_confirm">Die Skizze wurde nicht gespeichert. Möchten Sie sie schließen?</string>
+    <string name="sketchpad_save_failed">Die Skizze konnte nicht gespeichert werden.</string>
+    <string name="sketchpad_width_thin">Dünn</string>
+    <string name="sketchpad_width_medium">Mittel</string>
+    <string name="sketchpad_width_thick">Dick</string>
+    <string name="sketchpad_color_black">Schwarz</string>
+    <string name="sketchpad_color_red">Rot</string>
+    <string name="sketchpad_color_blue">Blau</string>
+    <string name="sketchpad_color_green">Grün</string>
+    <string name="sketchpad_color_orange">Orange</string>
+    <string name="sketchpad_color_purple">Violett</string>
 </resources>

@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">Libreta de bocetos</string>
+    <string name="sketchpad_eraser">Borrador</string>
+    <string name="sketchpad_undo">Deshacer</string>
+    <string name="sketchpad_redo">Rehacer</string>
+    <string name="sketchpad_clear">Borrar todo</string>
+    <string name="sketchpad_clear_confirm">¿Quieres borrar todo el lienzo?</string>
+    <string name="sketchpad_discard_confirm">El boceto no se ha guardado. ¿Quieres cerrarlo?</string>
+    <string name="sketchpad_save_failed">No se pudo guardar el boceto.</string>
+    <string name="sketchpad_width_thin">Fino</string>
+    <string name="sketchpad_width_medium">Medio</string>
+    <string name="sketchpad_width_thick">Grueso</string>
+    <string name="sketchpad_color_black">Negro</string>
+    <string name="sketchpad_color_red">Rojo</string>
+    <string name="sketchpad_color_blue">Azul</string>
+    <string name="sketchpad_color_green">Verde</string>
+    <string name="sketchpad_color_orange">Naranja</string>
+    <string name="sketchpad_color_purple">Morado</string>
 </resources>

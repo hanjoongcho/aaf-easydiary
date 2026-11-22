@@ -167,6 +167,9 @@
             android:name=".presentation.symbol.SymbolFilterPickerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".presentation.sketchpad.SketchpadActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
