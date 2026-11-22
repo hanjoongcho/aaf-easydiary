@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.presentation.sketchpad.components
 
+import android.content.DialogInterface
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,16 +18,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +42,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.SketchPalette
 import me.blog.korn123.easydiary.domain.model.SketchStroke
 import me.blog.korn123.easydiary.domain.model.SketchStrokeWidths
+import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadAlert
 import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadUiState
@@ -54,7 +55,6 @@ import me.blog.korn123.easydiary.views.SketchpadView
  * The built-in sketchpad screen (issue #260): a white drawing canvas with a pen palette, a width selector,
  * an eraser, undo/redo and 'Clear all', and a save action that hands the drawing back to the diary editor.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SketchpadScreen(
     uiState: SketchpadUiState,
@@ -162,28 +162,48 @@ fun SketchpadScreen(
         }
     }
 
-    when (uiState.alert) {
-        SketchpadAlert.CLEAR_CANVAS_CONFIRM ->
-            SketchpadConfirmDialog(
-                message = stringResource(id = R.string.sketchpad_clear_confirm),
-                onConfirm = onConfirmClear,
-                onDismiss = onDismissAlert,
-            )
+    /*
+     * The alert the sketchpad is waiting on is shown with the app common dialog, so the screen asks the same
+     * way the rest of the app does. uiState.alert stays set while the dialog is up, and the screen turns each
+     * alert into the dialog it shows: the buttons clear it themselves, and the dialog's cancel clears it for
+     * the exits that pick no button (a tap outside it or the back key), so a closed dialog never leaves the
+     * screen with an alert that would not be asked again.
+     */
+    LaunchedEffect(uiState.alert) {
+        val dismissAlertListener = DialogInterface.OnCancelListener { onDismissAlert() }
+        when (uiState.alert) {
+            SketchpadAlert.CLEAR_CANVAS_CONFIRM ->
+                context.showAlertDialog(
+                    message = context.getString(R.string.sketchpad_clear_confirm),
+                    positiveListener = { _, _ -> onConfirmClear() },
+                    negativeListener = { _, _ -> onDismissAlert() },
+                    dialogMode = DialogMode.WARNING,
+                    paramTitle = context.getString(R.string.sketchpad_clear),
+                    onCancelListener = dismissAlertListener,
+                )
 
-        SketchpadAlert.DISCARD_CONFIRM ->
-            SketchpadConfirmDialog(
-                message = stringResource(id = R.string.sketchpad_discard_confirm),
-                onConfirm = onDiscardConfirmed,
-                onDismiss = onDismissAlert,
-            )
+            SketchpadAlert.DISCARD_CONFIRM ->
+                context.showAlertDialog(
+                    message = context.getString(R.string.sketchpad_discard_confirm),
+                    positiveListener = { _, _ -> onDiscardConfirmed() },
+                    negativeListener = { _, _ -> onDismissAlert() },
+                    dialogMode = DialogMode.WARNING,
+                    paramTitle = context.getString(R.string.sketchpad),
+                    onCancelListener = dismissAlertListener,
+                )
 
-        SketchpadAlert.SAVE_FAILED ->
-            SketchpadMessageDialog(
-                message = stringResource(id = R.string.sketchpad_save_failed),
-                onDismiss = onDismissAlert,
-            )
+            SketchpadAlert.SAVE_FAILED ->
+                context.showAlertDialog(
+                    message = context.getString(R.string.sketchpad_save_failed),
+                    positiveListener = { _, _ -> onDismissAlert() },
+                    negativeListener = null,
+                    dialogMode = DialogMode.ERROR,
+                    paramTitle = context.getString(R.string.sketchpad),
+                    onCancelListener = dismissAlertListener,
+                )
 
-        null -> {}
+            null -> {}
+        }
     }
 }
 
@@ -397,44 +417,6 @@ private fun SketchHistoryActions(
             )
         }
     }
-}
-
-@Composable
-private fun SketchpadConfirmDialog(
-    message: String,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        text = { Text(text = message) },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(text = stringResource(id = R.string.ok))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-        },
-    )
-}
-
-@Composable
-private fun SketchpadMessageDialog(
-    message: String,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        text = { Text(text = message) },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text(text = stringResource(id = R.string.ok))
-            }
-        },
-    )
 }
 
 private fun sketchActionTint(
