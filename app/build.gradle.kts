@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import java.util.Properties
 
 plugins {
@@ -9,6 +10,8 @@ plugins {
 }
 
 val appCompileSdk = 37
+val appVersionCode = 356
+val appVersionName = "1.4.356.202611xx0"
 
 // AGP 9.0+ / 10.0+ 대응을 위한 ApplicationExtension 적용
 configure<ApplicationExtension> {
@@ -35,8 +38,8 @@ configure<ApplicationExtension> {
         applicationId = "me.blog.korn123.easydiary"
         minSdk = 26
         targetSdk = appCompileSdk
-        versionCode = 356
-        versionName = "1.4.356.202611xx0"
+        versionCode = appVersionCode
+        versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -136,6 +139,14 @@ configure<ApplicationExtension> {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("app-${variant.name}-$appVersionName.apk")
+        }
     }
 }
 
