@@ -836,10 +836,9 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val imageXY = applicationContext.dpToPixel(thumbnailSize)
-        val imageLayoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
         binding.partialEditContents.partialEditPhotoContainer.run {
             photoView.run {
-                layoutParams = imageLayoutParams
+                resizePhotoContainerIcon(imageXY)
                 background =
                     createBackgroundGradientDrawable(
                         config.primaryColor,
@@ -848,7 +847,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
             captureCamera.run {
-                layoutParams = imageLayoutParams
+                resizePhotoContainerIcon(imageXY)
                 background =
                     createBackgroundGradientDrawable(
                         config.primaryColor,
@@ -857,7 +856,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
             sketchpad.run {
-                layoutParams = imageLayoutParams
+                resizePhotoContainerIcon(imageXY)
                 background =
                     createBackgroundGradientDrawable(
                         config.primaryColor,
@@ -866,6 +865,20 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
         }
+    }
+
+    /**
+     * Resizes an icon of the photo container in place, keeping the margins declared in
+     * partial_edit_photo_container.xml (marginStart in portrait, marginTop in landscape)
+     * that a newly created LinearLayout.LayoutParams would drop.
+     */
+    private fun View.resizePhotoContainerIcon(imageXY: Int) {
+        val updatedParams =
+            (layoutParams as? LinearLayout.LayoutParams)?.apply {
+                width = imageXY
+                height = imageXY
+            } ?: LinearLayout.LayoutParams(imageXY, imageXY)
+        layoutParams = updatedParams
     }
 
     protected fun setupRecognizer() {
