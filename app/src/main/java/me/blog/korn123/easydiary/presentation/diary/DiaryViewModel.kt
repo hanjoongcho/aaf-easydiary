@@ -39,6 +39,7 @@ import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.helper.PhotoHighlightManager
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.utils.OnThisDayUtils
 import java.io.File
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -386,6 +387,10 @@ class DiaryViewModel
                     findDiary(query = null)
                         .filter { it.symbolSequence !in 80..83 && it.currentTimeMillis > currentTime }
                         .reversed()
+                }
+
+                DiaryComponentConstants.MODE_ON_THIS_DAY -> {
+                    OnThisDayUtils.diariesOfPastYearsOn(findDiary(query = null))
                 }
 
                 else -> {
