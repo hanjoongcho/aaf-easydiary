@@ -33,7 +33,8 @@
                 android:background="@drawable/bg_card_thumbnail"
                 android:src="@drawable/ic_camera_4"
                 android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                />
             <ImageView
                 android:id="@+id/sketchpad"
                 android:contentDescription="@string/sketchpad"

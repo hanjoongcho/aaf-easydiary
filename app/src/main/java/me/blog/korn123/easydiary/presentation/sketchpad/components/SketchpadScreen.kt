@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +54,7 @@ import me.blog.korn123.easydiary.views.SketchpadView
  * The built-in sketchpad screen (issue #260): a white drawing canvas with a pen palette, a width selector,
  * an eraser, undo/redo and 'Clear all', and a save action that hands the drawing back to the diary editor.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SketchpadScreen(
     uiState: SketchpadUiState,
