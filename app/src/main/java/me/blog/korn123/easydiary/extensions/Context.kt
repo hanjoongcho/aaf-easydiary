@@ -730,6 +730,7 @@ fun Context.makeSnackBar(
  * @param paramTitle
  * @param positiveButtonLabel
  * @param negativeButtonLabel
+ * @param onCancelListener Invoked when the dialog is dismissed without a button, such as a tap outside it or the back key.
  */
 fun Context.showAlertDialog(
     message: String,
@@ -740,6 +741,7 @@ fun Context.showAlertDialog(
     paramTitle: String? = null,
     positiveButtonLabel: String = getString(R.string.ok),
     negativeButtonLabel: String = getString(R.string.cancel),
+    onCancelListener: DialogInterface.OnCancelListener? = null,
 ) {
     showAlertDialog(
         message,
@@ -751,6 +753,7 @@ fun Context.showAlertDialog(
         paramTitle,
         positiveButtonLabel,
         negativeButtonLabel,
+        onCancelListener = onCancelListener,
     )
 }
 
@@ -767,6 +770,7 @@ fun Context.showAlertDialog(
  * @param positiveButtonLabel
  * @param negativeButtonLabel
  * @param neutralButtonLabel
+ * @param onCancelListener Invoked when the dialog is dismissed without a button, such as a tap outside it or the back key.
  */
 fun Context.showAlertDialog(
     message: String,
@@ -779,6 +783,7 @@ fun Context.showAlertDialog(
     positiveButtonLabel: String = getString(R.string.ok),
     negativeButtonLabel: String = getString(R.string.cancel),
     neutralButtonLabel: String = "-",
+    onCancelListener: DialogInterface.OnCancelListener? = null,
 ) {
     var iconResourceId: Int? = null
     var title: String? = null
@@ -814,6 +819,7 @@ fun Context.showAlertDialog(
     builder.setPositiveButton(positiveButtonLabel, positiveListener)
     negativeListener?.let { builder.setNegativeButton(negativeButtonLabel, it) }
     neutralListener?.let { builder.setNeutralButton(neutralButtonLabel, it) }
+    onCancelListener?.let { builder.setOnCancelListener(it) }
     builder.create().apply {
         updateAlertDialog(this, message, null, paramTitle ?: title, 255, iconResourceId)
     }
