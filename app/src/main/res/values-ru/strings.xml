@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">Блокнот для рисования</string>
+    <string name="sketchpad_eraser">Ластик</string>
+    <string name="sketchpad_undo">Отменить</string>
+    <string name="sketchpad_redo">Повторить</string>
+    <string name="sketchpad_clear">Очистить всё</string>
+    <string name="sketchpad_clear_confirm">Очистить всё на холсте?</string>
+    <string name="sketchpad_discard_confirm">Рисунок не сохранён. Закрыть его?</string>
+    <string name="sketchpad_save_failed">Не удалось сохранить рисунок.</string>
+    <string name="sketchpad_width_thin">Тонкий</string>
+    <string name="sketchpad_width_medium">Средний</string>
+    <string name="sketchpad_width_thick">Толстый</string>
+    <string name="sketchpad_color_black">Чёрный</string>
+    <string name="sketchpad_color_red">Красный</string>
+    <string name="sketchpad_color_blue">Синий</string>
+    <string name="sketchpad_color_green">Зелёный</string>
+    <string name="sketchpad_color_orange">Оранжевый</string>
+    <string name="sketchpad_color_purple">Фиолетовый</string>
 </resources>

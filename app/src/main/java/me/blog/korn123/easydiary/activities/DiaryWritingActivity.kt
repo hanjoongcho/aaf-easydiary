@@ -113,6 +113,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
     private fun bindEvent() {
         binding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(clickListener)
         binding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(clickListener)
+        binding.partialEditContents.partialEditPhotoContainer.sketchpad.setOnClickListener(clickListener)
         binding.partialEditContents.diaryTitle.setOnTouchListener(touchListener)
         binding.partialEditContents.diaryContents.setOnTouchListener(touchListener)
 

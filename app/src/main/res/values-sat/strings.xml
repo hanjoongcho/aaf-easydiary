@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">Sketchpad</string>
+    <string name="sketchpad_eraser">Eraser</string>
+    <string name="sketchpad_undo">Undo</string>
+    <string name="sketchpad_redo">Redo</string>
+    <string name="sketchpad_clear">Clear all</string>
+    <string name="sketchpad_clear_confirm">Do you want to clear everything on the canvas?</string>
+    <string name="sketchpad_discard_confirm">The sketch has not been saved. Do you want to close it?</string>
+    <string name="sketchpad_save_failed">Could not save the sketch.</string>
+    <string name="sketchpad_width_thin">Thin</string>
+    <string name="sketchpad_width_medium">Medium</string>
+    <string name="sketchpad_width_thick">Thick</string>
+    <string name="sketchpad_color_black">Black</string>
+    <string name="sketchpad_color_red">Red</string>
+    <string name="sketchpad_color_blue">Blue</string>
+    <string name="sketchpad_color_green">Green</string>
+    <string name="sketchpad_color_orange">Orange</string>
+    <string name="sketchpad_color_purple">Purple</string>
 </resources>

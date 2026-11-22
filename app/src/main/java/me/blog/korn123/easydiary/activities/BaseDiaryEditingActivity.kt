@@ -95,6 +95,7 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadActivity
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.DiaryAutoSavePolicy
 import me.blog.korn123.easydiary.utils.DiaryDraftSnapshot
@@ -195,6 +196,22 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 )
             }
         }
+
+    /**
+     * Takes the sketch the built-in sketchpad (issue #260) exported as a PNG content URI and feeds it into the
+     * same attachment pipeline as a picked photo, so the sketch is stored with the entry and travels with
+     * the diary view, the backups and the PDF export.
+     */
+    private val requestSketchpad =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            pauseLock()
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.toString()?.let { uriString ->
+                    attachPhotos(arrayListOf(uriString), isUriString = true)
+                }
+            }
+        }
+
     protected lateinit var binding: ActivityBaseDiaryEditingBinding
     protected val photoUris: ArrayList<PhotoUriDomain> = ArrayList()
     protected var currentTimeMillis: Long = 0
@@ -276,6 +293,10 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
                     requestCaptureCamera.launch(intent)
+                }
+
+                R.id.sketchpad -> {
+                    requestSketchpad.launch(Intent(this, SketchpadActivity::class.java))
                 }
 
                 R.id.locationContainer -> {
@@ -815,10 +836,9 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val imageXY = applicationContext.dpToPixel(thumbnailSize)
-        val imageLayoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
         binding.partialEditContents.partialEditPhotoContainer.run {
             photoView.run {
-                layoutParams = imageLayoutParams
+                resizePhotoContainerIcon(imageXY)
                 background =
                     createBackgroundGradientDrawable(
                         config.primaryColor,
@@ -827,7 +847,16 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
             captureCamera.run {
-                layoutParams = imageLayoutParams
+                resizePhotoContainerIcon(imageXY)
+                background =
+                    createBackgroundGradientDrawable(
+                        config.primaryColor,
+                        THUMBNAIL_BACKGROUND_ALPHA,
+                        imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
+                    )
+            }
+            sketchpad.run {
+                resizePhotoContainerIcon(imageXY)
                 background =
                     createBackgroundGradientDrawable(
                         config.primaryColor,
@@ -836,6 +865,20 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     )
             }
         }
+    }
+
+    /**
+     * Resizes an icon of the photo container in place, keeping the margins declared in
+     * partial_edit_photo_container.xml (marginStart in portrait, marginTop in landscape)
+     * that a newly created LinearLayout.LayoutParams would drop.
+     */
+    private fun View.resizePhotoContainerIcon(imageXY: Int) {
+        val updatedParams =
+            (layoutParams as? LinearLayout.LayoutParams)?.apply {
+                width = imageXY
+                height = imageXY
+            } ?: LinearLayout.LayoutParams(imageXY, imageXY)
+        layoutParams = updatedParams
     }
 
     protected fun setupRecognizer() {

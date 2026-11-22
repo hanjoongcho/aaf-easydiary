@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">암호화된 일기의 비밀번호를 입력하세요. 생성되는 PDF 파일 자체는 암호화되지 않습니다.</string>
     <string name="pdf_export_continued">(이어서)</string>
     <string name="pdf_export_encrypted_entry_note">암호화된 일기입니다. 이 PDF에는 내용이 포함되지 않았습니다.</string>
+
+    <string name="sketchpad">스케치패드</string>
+    <string name="sketchpad_eraser">지우개</string>
+    <string name="sketchpad_undo">실행 취소</string>
+    <string name="sketchpad_redo">다시 실행</string>
+    <string name="sketchpad_clear">전체 지우기</string>
+    <string name="sketchpad_clear_confirm">캔버스에 그린 내용을 모두 지울까요?</string>
+    <string name="sketchpad_discard_confirm">저장하지 않은 스케치가 있습니다. 닫으시겠습니까?</string>
+    <string name="sketchpad_save_failed">스케치를 저장하지 못했습니다.</string>
+    <string name="sketchpad_width_thin">얇게</string>
+    <string name="sketchpad_width_medium">중간</string>
+    <string name="sketchpad_width_thick">굵게</string>
+    <string name="sketchpad_color_black">검정</string>
+    <string name="sketchpad_color_red">빨강</string>
+    <string name="sketchpad_color_blue">파랑</string>
+    <string name="sketchpad_color_green">초록</string>
+    <string name="sketchpad_color_orange">주황</string>
+    <string name="sketchpad_color_purple">보라</string>
 </resources>

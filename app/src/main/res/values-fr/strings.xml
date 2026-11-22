@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">Bloc à croquis</string>
+    <string name="sketchpad_eraser">Gomme</string>
+    <string name="sketchpad_undo">Annuler</string>
+    <string name="sketchpad_redo">Rétablir</string>
+    <string name="sketchpad_clear">Tout effacer</string>
+    <string name="sketchpad_clear_confirm">Voulez-vous tout effacer sur le canevas ?</string>
+    <string name="sketchpad_discard_confirm">Le croquis n\'est pas enregistré. Voulez-vous le fermer ?</string>
+    <string name="sketchpad_save_failed">Le croquis n\'a pas pu être enregistré.</string>
+    <string name="sketchpad_width_thin">Fin</string>
+    <string name="sketchpad_width_medium">Moyen</string>
+    <string name="sketchpad_width_thick">Épais</string>
+    <string name="sketchpad_color_black">Noir</string>
+    <string name="sketchpad_color_red">Rouge</string>
+    <string name="sketchpad_color_blue">Bleu</string>
+    <string name="sketchpad_color_green">Vert</string>
+    <string name="sketchpad_color_orange">Orange</string>
+    <string name="sketchpad_color_purple">Violet</string>
 </resources>

@@ -1135,4 +1135,22 @@
     <string name="pdf_export_pin_guide">Enter the password of this encrypted entry. The generated PDF file itself is not encrypted.</string>
     <string name="pdf_export_continued">(continued)</string>
     <string name="pdf_export_encrypted_entry_note">This entry is encrypted. Its contents are not included in this PDF.</string>
+
+    <string name="sketchpad">स्केचपैड</string>
+    <string name="sketchpad_eraser">इरेज़र</string>
+    <string name="sketchpad_undo">पूर्ववत करें</string>
+    <string name="sketchpad_redo">फिर से करें</string>
+    <string name="sketchpad_clear">सब मिटाएँ</string>
+    <string name="sketchpad_clear_confirm">क्या आप कैनवास पर बनाया गया सब कुछ मिटाना चाहते हैं?</string>
+    <string name="sketchpad_discard_confirm">स्केच सहेजा नहीं गया है। क्या आप इसे बंद करना चाहते हैं?</string>
+    <string name="sketchpad_save_failed">स्केच सहेजा नहीं जा सका।</string>
+    <string name="sketchpad_width_thin">पतला</string>
+    <string name="sketchpad_width_medium">मध्यम</string>
+    <string name="sketchpad_width_thick">मोटा</string>
+    <string name="sketchpad_color_black">काला</string>
+    <string name="sketchpad_color_red">लाल</string>
+    <string name="sketchpad_color_blue">नीला</string>
+    <string name="sketchpad_color_green">हरा</string>
+    <string name="sketchpad_color_orange">नारंगी</string>
+    <string name="sketchpad_color_purple">बैंगनी</string>
 </resources>
