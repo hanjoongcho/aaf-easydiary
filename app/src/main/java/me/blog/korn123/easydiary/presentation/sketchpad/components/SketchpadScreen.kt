@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -55,6 +56,7 @@ import me.blog.korn123.easydiary.views.SketchpadView
  * The built-in sketchpad screen (issue #260): a white drawing canvas with a pen palette, a width selector,
  * an eraser, undo/redo and 'Clear all', and a save action that hands the drawing back to the diary editor.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SketchpadScreen(
     uiState: SketchpadUiState,
@@ -84,32 +86,26 @@ fun SketchpadScreen(
                 title = stringResource(id = R.string.sketchpad),
                 useCloseIcon = true,
                 actions = {
-                    when (uiState.isSaving) {
-                        true ->
-                            CircularProgressIndicator(
-                                modifier =
-                                    Modifier
-                                        .padding(end = 16.dp)
-                                        .size(20.dp),
-                                color = Color.White,
-                                strokeWidth = 2.dp,
+                    if (uiState.isSaving) {
+                        CircularProgressIndicator(
+                            modifier =
+                                Modifier
+                                    .padding(end = 16.dp)
+                                    .size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        IconButton(
+                            onClick = onSaveClick,
+                            enabled = uiState.hasContent,
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_save_w),
+                                contentDescription = stringResource(id = R.string.save),
+                                tint = if (uiState.hasContent) Color.White else Color.White.copy(alpha = SKETCH_DISABLED_ALPHA),
                             )
-
-                        false ->
-                            IconButton(
-                                onClick = onSaveClick,
-                                enabled = uiState.hasContent,
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_save_w),
-                                    contentDescription = stringResource(id = R.string.save),
-                                    tint =
-                                        when (uiState.hasContent) {
-                                            true -> Color.White
-                                            false -> Color.White.copy(alpha = SKETCH_DISABLED_ALPHA)
-                                        },
-                                )
-                            }
+                        }
                     }
                 },
                 close = onCloseClick,
@@ -129,7 +125,7 @@ fun SketchpadScreen(
                     Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                        .padding(bottom = 8.dp)
                         .clip(canvasShape)
                         .background(Color.White),
             ) {
@@ -162,6 +158,12 @@ fun SketchpadScreen(
         }
     }
 
+    val clearConfirmMessage = stringResource(id = R.string.sketchpad_clear_confirm)
+    val clearTitle = stringResource(id = R.string.sketchpad_clear)
+    val discardConfirmMessage = stringResource(id = R.string.sketchpad_discard_confirm)
+    val sketchpadTitle = stringResource(id = R.string.sketchpad)
+    val saveFailedMessage = stringResource(id = R.string.sketchpad_save_failed)
+
     /*
      * The alert the sketchpad is waiting on is shown with the app common dialog, so the screen asks the same
      * way the rest of the app does. uiState.alert stays set while the dialog is up, and the screen turns each
@@ -172,35 +174,38 @@ fun SketchpadScreen(
     LaunchedEffect(uiState.alert) {
         val dismissAlertListener = DialogInterface.OnCancelListener { onDismissAlert() }
         when (uiState.alert) {
-            SketchpadAlert.CLEAR_CANVAS_CONFIRM ->
+            SketchpadAlert.CLEAR_CANVAS_CONFIRM -> {
                 context.showAlertDialog(
-                    message = context.getString(R.string.sketchpad_clear_confirm),
+                    message = clearConfirmMessage,
                     positiveListener = { _, _ -> onConfirmClear() },
                     negativeListener = { _, _ -> onDismissAlert() },
                     dialogMode = DialogMode.WARNING,
-                    paramTitle = context.getString(R.string.sketchpad_clear),
+                    paramTitle = clearTitle,
                     onCancelListener = dismissAlertListener,
                 )
+            }
 
-            SketchpadAlert.DISCARD_CONFIRM ->
+            SketchpadAlert.DISCARD_CONFIRM -> {
                 context.showAlertDialog(
-                    message = context.getString(R.string.sketchpad_discard_confirm),
+                    message = discardConfirmMessage,
                     positiveListener = { _, _ -> onDiscardConfirmed() },
                     negativeListener = { _, _ -> onDismissAlert() },
                     dialogMode = DialogMode.WARNING,
-                    paramTitle = context.getString(R.string.sketchpad),
+                    paramTitle = sketchpadTitle,
                     onCancelListener = dismissAlertListener,
                 )
+            }
 
-            SketchpadAlert.SAVE_FAILED ->
+            SketchpadAlert.SAVE_FAILED -> {
                 context.showAlertDialog(
-                    message = context.getString(R.string.sketchpad_save_failed),
+                    message = saveFailedMessage,
                     positiveListener = { _, _ -> onDismissAlert() },
                     negativeListener = null,
                     dialogMode = DialogMode.ERROR,
-                    paramTitle = context.getString(R.string.sketchpad),
+                    paramTitle = sketchpadTitle,
                     onCancelListener = dismissAlertListener,
                 )
+            }
 
             null -> {}
         }
@@ -235,7 +240,7 @@ private fun SketchpadToolbar(
         ) {
             SketchColorPalette(
                 selectedColorArgb = uiState.penColorArgb,
-                isPenActive = uiState.isEraser.not(),
+                isPenActive = !uiState.isEraser,
                 primaryColor = primaryColor,
                 onColorSelected = onColorSelected,
             )
@@ -333,8 +338,7 @@ private fun SketchStrokeWidthSelector(
                             } else {
                                 Modifier
                             },
-                        )
-                        .clickable { onWidthSelected(widthDp) }
+                        ).clickable { onWidthSelected(widthDp) }
                         .semantics { contentDescription = label },
                 contentAlignment = Alignment.Center,
             ) {
