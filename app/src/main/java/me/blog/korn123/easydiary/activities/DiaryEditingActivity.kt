@@ -96,6 +96,7 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                     photoUris = photoUris.map { it },
                                     location = location,
                                     linkedDiaries = ArrayList(linkedDiaries),
+                                    tags = selectedTags.toList(),
                                 )
                             }
 
@@ -122,11 +123,12 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                     photoUris = photoUris.map { it },
                                     location = location,
                                     linkedDiaries = ArrayList(linkedDiaries),
+                                    tags = selectedTags.toList(),
                                 )
                             }
                         }
 
-                    diaryRepository.updateDiaryWithPhotos(diary)
+                    diaryRepository.updateDiaryWithPhotos(diary, tags = selectedTags.toList())
                     isDiarySaved = true
                     clearDraftAfterSave(diarySequence)
                     TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)

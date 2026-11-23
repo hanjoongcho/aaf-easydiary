@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.Menu
@@ -27,6 +28,7 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -95,7 +97,9 @@ import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
 import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.TagPickerConstants
 import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadActivity
+import me.blog.korn123.easydiary.presentation.tag.TagPickerActivity
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.DiaryAutoSavePolicy
 import me.blog.korn123.easydiary.utils.DiaryDraftSnapshot
@@ -103,6 +107,7 @@ import me.blog.korn123.easydiary.utils.DiaryDraftTracker
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.easydiary.utils.JasyptUtils
+import me.blog.korn123.easydiary.views.FixedCardView
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -113,6 +118,8 @@ import java.util.UUID
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.domain.model.Location as LocationDomain
 import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
+import me.blog.korn123.easydiary.domain.model.TagRules
 
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
@@ -212,8 +219,26 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             }
         }
 
+    private val requestTagPicker =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            pauseLock()
+            if (result.resultCode == RESULT_OK) {
+                val selectedNames =
+                    result.data
+                        ?.getStringArrayListExtra(TagPickerConstants.RESULT_SELECTED_TAG_NAMES)
+                        .orEmpty()
+                applySelectedTagNames(selectedNames)
+            }
+        }
+
     protected lateinit var binding: ActivityBaseDiaryEditingBinding
     protected val photoUris: ArrayList<PhotoUriDomain> = ArrayList()
+
+    /**
+     * The tags of the entry being edited (issue #270). A tag picked in the picker stays in memory until the
+     * entry is saved, so a name the writer creates here becomes a stored tag only together with the entry.
+     */
+    protected val selectedTags: MutableList<TagDomain> = mutableListOf()
     protected var currentTimeMillis: Long = 0
     protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
@@ -343,6 +368,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
         applyBottomImeInsets(binding.partialEditContents.root)
         applyKeyboardIncognitoPolicy()
+        binding.partialEditContents.tagAddButton.setOnClickListener { openTagPicker() }
+        renderTagChips()
 
         onBackPressedDispatcher.addCallback(
             this,
@@ -366,6 +393,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             putInt(SELECTED_MINUTE, minute)
             putInt(SELECTED_SECOND, second)
             putInt(SYMBOL_SEQUENCE, selectedItemPosition)
+            putStringArrayList(TagPickerConstants.SELECTED_TAG_NAMES, ArrayList(selectedTags.map { it.name }))
         }
         super.onSaveInstanceState(outState)
     }
@@ -485,6 +513,83 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             KeyboardIncognitoHelper.applyPolicy(diaryTitle, keyboardIncognitoEnabled)
             KeyboardIncognitoHelper.applyPolicy(diaryContents, keyboardIncognitoEnabled)
         }
+    }
+
+    /***************************************************************************************************
+     *   Tags (issue #270)
+     ***************************************************************************************************/
+    /** Opens the Compose tag picker with every stored tag and the ones this editor already holds. */
+    private fun openTagPicker() {
+        hideSoftInputFromWindow()
+        lifecycleScope.launch {
+            val storedNames = diaryViewModel.findAllTags().map { it.name }
+            val intent =
+                Intent(this@BaseDiaryEditingActivity, TagPickerActivity::class.java).apply {
+                    putStringArrayListExtra(TagPickerConstants.TAG_NAMES, ArrayList(storedNames))
+                    putStringArrayListExtra(
+                        TagPickerConstants.SELECTED_TAG_NAMES,
+                        ArrayList(selectedTags.map { it.name }),
+                    )
+                }
+            requestTagPicker.launch(intent)
+        }
+    }
+
+    /**
+     * Takes the picker's answer in. The order the writer picked the tags in is kept, and a tag the editor
+     * already knew keeps its stored id so saving it does not have to look the tag up again.
+     */
+    private fun applySelectedTagNames(names: List<String>) {
+        val knownTags = selectedTags.associateBy { TagRules.normalize(it.name) }
+        val cleanedNames = TagRules.sanitizeAll(names)
+        selectedTags.clear()
+        cleanedNames.forEach { name ->
+            selectedTags.add(knownTags[TagRules.normalize(name)] ?: TagDomain(name = name))
+        }
+        renderTagChips()
+        onEditorStateChanged()
+    }
+
+    private fun renderTagChips() {
+        binding.partialEditContents.tagChipContainer.run {
+            removeAllViews()
+            selectedTags.forEach { tag ->
+                addView(createTagChip(tag))
+            }
+        }
+    }
+
+    /** A chip of the tag row. Tapping it takes the tag off the entry again. */
+    private fun createTagChip(tag: TagDomain): View {
+        val padding = dpToPixel(5f)
+        val textView =
+            TextView(this).apply {
+                text = TagRules.label(tag.name).plus(TAG_CHIP_REMOVE_MARK)
+                setTextColor(config.textColor)
+                setPadding(padding, padding / 2, padding, padding / 2)
+                textSize = 12f
+                maxLines = 1
+                ellipsize = TextUtils.TruncateAt.END
+            }
+        val chip =
+            FixedCardView(this).apply {
+                fixedAppcompatPadding = true
+                layoutParams =
+                    ViewGroup.MarginLayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        marginEnd = dpToPixel(4f)
+                    }
+                addView(textView)
+            }
+        updateDashboardInnerCard(chip)
+        chip.setOnClickListener {
+            selectedTags.remove(tag)
+            renderTagChips()
+            onEditorStateChanged()
+        }
+        return chip
     }
 
     private fun showSpeechDialog() {
@@ -613,6 +718,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             currentTimeMillis = currentTimeMillis,
             photoUris = draftPhotoUris(),
             location = location,
+            tags = selectedTags.toList(),
         )
     }
 
@@ -1073,6 +1179,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 }
 
                 selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
+                applySelectedTagNames(getStringArrayList(TagPickerConstants.SELECTED_TAG_NAMES).orEmpty())
             }
         }
     }
@@ -1142,6 +1249,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         selectFeelingSymbol(diary.symbolSequence)
+        applySelectedTagNames(diary.tags.map { it.name })
         if (config.enableLocationInfo) {
             diary.location?.let {
                 binding.partialEditContents.locationContainer.visibility = View.VISIBLE
@@ -1206,3 +1314,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 }
+
+/** The mark that tells the writer a tag chip is tapped to take the tag off the entry. */
+private const val TAG_CHIP_REMOVE_MARK = "  ✕"

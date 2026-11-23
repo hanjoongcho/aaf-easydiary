@@ -95,6 +95,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                             isAllDay = binding.partialEditContents.allDay.isChecked,
                             photoUris = photoUris.map { it },
                             location = location,
+                            tags = selectedTags.toList(),
                         )
                     diaryRepository.insertDiary(diary)
                     isDiarySaved = true
