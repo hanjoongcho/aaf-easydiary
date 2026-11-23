@@ -26,11 +26,18 @@ interface TagDao {
     @Query("SELECT * FROM tags ORDER BY name COLLATE NOCASE ASC")
     suspend fun getTags(): List<TagEntity>
 
-    /** The tags at least one entry carries, which is what the main screen offers as a filter. */
+    /**
+     * The tags at least one entry carries, which is what the main screen offers as a filter.
+     *
+     * A draft row (a temporary save of an editor) is skipped: the main list never shows it, so a tag only a
+     * leftover draft carries would offer a filter that leads to an empty list.
+     */
     @Query(
         """
         SELECT DISTINCT t.* FROM tags t
         INNER JOIN diary_tag_cross_ref r ON t.tagId = r.tagId
+        INNER JOIN diaries d ON d.diaryId = r.diaryId
+        WHERE d.originDiaryId = 0
         ORDER BY t.name COLLATE NOCASE ASC
         """,
     )
