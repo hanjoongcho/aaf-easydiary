@@ -66,6 +66,7 @@ class DiaryFragment : Fragment() {
                 DiaryComponentConstants.MODE_TASK_DONE -> "Closed Task"
                 DiaryComponentConstants.MODE_TASK_CANCEL -> "CANCEL"
                 DiaryComponentConstants.MODE_FUTURE -> "Future"
+                DiaryComponentConstants.MODE_ON_THIS_DAY -> "On This Day"
                 else -> "Previous 100"
             }
         setupDiary()

@@ -777,6 +777,7 @@ object DiaryComponentConstants {
     const val MODE_TASK_CANCEL = "mode_task_cancel"
     const val MODE_PREVIOUS_100 = "mode_previous_100"
     const val MODE_FUTURE = "mode_future"
+    const val MODE_ON_THIS_DAY = "mode_on_this_day"
 }
 
 object ChartConstants {

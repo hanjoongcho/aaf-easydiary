@@ -133,6 +133,17 @@ class DashboardActivity : EasyDiaryActivity() {
                 },
             )
 
+            // 05-1. Diary On This Day
+            replace(
+                R.id.fragment_diary_on_this_day,
+                DiaryFragment().apply {
+                    arguments =
+                        Bundle().apply {
+                            putString(DiaryComponentConstants.MODE_FLAG, DiaryComponentConstants.MODE_ON_THIS_DAY)
+                        }
+                },
+            )
+
             // 06. Diary Previous 100
             replace(
                 R.id.fragment_diary_previous100,
