@@ -130,25 +130,21 @@
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
-                                    <HorizontalScrollView
+                                    <com.google.android.flexbox.FlexboxLayout
+                                        android:id="@+id/tagChipContainer"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:scrollbars="none">
-
-                                        <com.google.android.flexbox.FlexboxLayout
-                                            android:id="@+id/tagChipContainer"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            app:alignItems="center"
-                                            app:flexDirection="row"
-                                            app:flexWrap="nowrap" />
-                                    </HorizontalScrollView>
+                                        android:clipToPadding="false"
+                                        app:alignItems="center"
+                                        app:flexDirection="row"
+                                        app:flexWrap="wrap" />
 
                                     <me.blog.korn123.easydiary.views.FixedCardView
                                         android:id="@+id/tagAddButton"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="top"
                                         android:layout_marginStart="5dp"
                                         android:foreground="?attr/selectableItemBackground"
                                         app:fixedAppcompatPadding="true">

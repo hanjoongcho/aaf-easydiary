@@ -30,13 +30,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -1130,11 +1130,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 .navigationBarsPadding(),
                     ) {
                         if (tagsState.isNotEmpty()) {
-                            LazyRow(
+                            // The tags wrap onto as many lines as they need instead of scrolling
+                            // sideways, the way the main list card lays its tags out (issue #270).
+                            FlowRow(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 6.dp),
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
                             ) {
-                                items(tagsState, key = { it.tagId }) { tag ->
+                                tagsState.forEach { tag ->
                                     TagChip(
                                         name = tag.name,
                                         onClick = { filterMainByTag(tag.tagId) },

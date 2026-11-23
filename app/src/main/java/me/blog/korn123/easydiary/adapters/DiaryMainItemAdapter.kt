@@ -359,19 +359,24 @@ class DiaryMainItemAdapter(
         }
 
         private fun createTagChip(tag: TagDomain): View {
-            val padding = activity.dpToPixel(4f)
+            // The reading view's Compose TagChip carries 8dp sideways and 3dp up and down inside it, so
+            // the chips of this list use the same inner padding (issue #270).
+            val horizontalPadding = activity.dpToPixel(8f)
+            val verticalPadding = activity.dpToPixel(3f)
             val textView =
                 TextView(activity).apply {
                     text = TagRules.label(tag.name)
                     setTextColor(activity.config.textColor)
-                    setPadding(padding, padding / 2, padding, padding / 2)
+                    setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
                     textSize = 12f
                     maxLines = 1
                     ellipsize = TextUtils.TruncateAt.END
                 }
             val chip =
                 FixedCardView(activity).apply {
-                    fixedAppcompatPadding = true
+                    // Set before the first layout: turning it on in onDraw() left the first frame with
+                    // a different padding and shadow than the Compose chip (issue #270).
+                    useCompatPadding = true
                     radius = activity.resources.getDimension(R.dimen.card_radius)
                     cardElevation = activity.dpToPixel(2f).toFloat()
                     layoutParams =
@@ -380,6 +385,9 @@ class DiaryMainItemAdapter(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                         ).apply {
                             marginEnd = activity.dpToPixel(4f)
+                            // Keeps a wrapped row of chips apart, and keeps the bottom shadow off the
+                            // edge of the row (issue #270).
+                            marginBottom = activity.dpToPixel(4f)
                         }
                     addView(textView)
                 }

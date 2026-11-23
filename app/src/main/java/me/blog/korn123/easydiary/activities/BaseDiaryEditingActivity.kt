@@ -561,19 +561,23 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     /** A chip of the tag row. Tapping it takes the tag off the entry again. */
     private fun createTagChip(tag: TagDomain): View {
-        val padding = dpToPixel(5f)
+        // Same inner padding as the reading view's Compose TagChip: 8dp sideways, 3dp up and down (issue #270).
+        val horizontalPadding = dpToPixel(8f)
+        val verticalPadding = dpToPixel(3f)
         val textView =
             TextView(this).apply {
                 text = TagRules.label(tag.name).plus(TAG_CHIP_REMOVE_MARK)
                 setTextColor(config.textColor)
-                setPadding(padding, padding / 2, padding, padding / 2)
+                setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
                 textSize = 12f
                 maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END
             }
         val chip =
             FixedCardView(this).apply {
-                fixedAppcompatPadding = true
+                // Set before the first layout, so the very first frame already carries the padding and
+                // shadow the Compose chip has instead of gaining them in onDraw() (issue #270).
+                useCompatPadding = true
                 radius = resources.getDimension(R.dimen.card_radius)
                 cardElevation = dpToPixel(2f).toFloat()
                 layoutParams =
@@ -582,6 +586,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                     ).apply {
                         marginEnd = dpToPixel(4f)
+                        // Space between wrapped rows, and room for the bottom shadow inside the row.
+                        marginBottom = dpToPixel(4f)
                     }
                 addView(textView)
             }
