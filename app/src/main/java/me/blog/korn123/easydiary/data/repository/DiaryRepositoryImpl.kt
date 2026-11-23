@@ -1,16 +1,20 @@
 package me.blog.korn123.easydiary.data.repository
 
 import android.content.Context
+import androidx.room.withTransaction
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.blog.korn123.easydiary.data.datasource.DiaryDataSource
 import me.blog.korn123.easydiary.data.datasource.LocalDataSource
 import me.blog.korn123.easydiary.data.datasource.RemoteDataSource
+import me.blog.korn123.easydiary.data.local.AppDatabase
+import me.blog.korn123.easydiary.data.local.dao.TagDao
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.mapper.toDomain
 import me.blog.korn123.easydiary.data.local.mapper.toEntity
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import javax.inject.Inject
@@ -21,6 +25,8 @@ class DiaryRepositoryImpl
     @Inject
     constructor(
         @ApplicationContext private val context: Context,
+        private val database: AppDatabase,
+        private val tagDao: TagDao,
         @LocalDataSource private val localDataSource: DiaryDataSource,
         @RemoteDataSource private val remoteDataSource: DiaryDataSource,
     ) : DiaryRepository {
@@ -35,6 +41,7 @@ class DiaryRepositoryImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): Flow<List<Diary>> =
             dataSource
                 .getDiariesWithPhotosFlow(
@@ -43,6 +50,7 @@ class DiaryRepositoryImpl
                     startTimeMillis,
                     endTimeMillis,
                     symbolSequence,
+                    tagId,
                 ).map { entities ->
                     entities.map { it.toDomain() }
                 }
@@ -64,6 +72,7 @@ class DiaryRepositoryImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): List<Diary> =
             dataSource
                 .getDiariesWithPhotos(
@@ -72,6 +81,7 @@ class DiaryRepositoryImpl
                     startTimeMillis,
                     endTimeMillis,
                     symbolSequence,
+                    tagId,
                 ).map { it.toDomain() }
 
         override fun observeDiariesByDateString(
@@ -98,16 +108,24 @@ class DiaryRepositoryImpl
         override suspend fun getDiaryById(seq: Long): Diary? = dataSource.getDiaryById(seq)?.toDomain()
 
         override suspend fun insertDiary(diary: Diary) {
-            val diaryEntity = diary.toEntity()
-            val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
-            val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+            // The entry, its photos and its tags are one write: a half saved entry would show a diary without
+            // the tags the writer picked (issue #270).
+            database.withTransaction {
+                val tagIds = resolveTagIds(diary.tags)
+                val diaryEntity = diary.toEntity()
+                val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
+                dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities, tagIds)
+            }
         }
 
         override suspend fun insertTemporaryDiary(diary: Diary) {
-            dataSource.deleteTemporaryDiaryBy(diary.originDiaryId)
-            val diaryEntity = diary.toEntity()
-            val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
-            val diaryId = dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities)
+            database.withTransaction {
+                dataSource.deleteTemporaryDiaryBy(diary.originDiaryId)
+                val tagIds = resolveTagIds(diary.tags)
+                val diaryEntity = diary.toEntity()
+                val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
+                dataSource.insertDiaryWithPhotos(diaryEntity, photoEntities, tagIds)
+            }
         }
 
         override suspend fun duplicateDiary(diary: Diary) {
@@ -141,10 +159,26 @@ class DiaryRepositoryImpl
             dataSource.updateDiaries(diaries.map { it.toEntity() })
         }
 
-        override suspend fun updateDiaryWithPhotos(diary: Diary) {
-            val diaryEntity = diary.toEntity()
-            val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
-            dataSource.updateDiaryWithPhotos(diaryEntity, photoEntities)
+        override suspend fun updateDiaryWithPhotos(
+            diary: Diary,
+            tags: List<Tag>?,
+        ) {
+            database.withTransaction {
+                val tagIds = tags?.let { resolveTagIds(it) }
+                val diaryEntity = diary.toEntity()
+                val photoEntities = diary.photoUris.map { it.toEntity(diaryEntity.diaryId) }
+                dataSource.updateDiaryWithPhotos(diaryEntity, photoEntities, tagIds)
+            }
+        }
+
+        /**
+         * The stored ids of [tags], creating the tags that do not exist yet. Names are resolved instead of
+         * trusting the ids the editor holds, because a tag picked in the editor only becomes a row when the
+         * entry is written.
+         */
+        private suspend fun resolveTagIds(tags: List<Tag>): List<Long> {
+            if (tags.isEmpty()) return emptyList()
+            return tagDao.ensureTags(tags.map { it.name }).map { it.tagId }
         }
 
         override suspend fun deleteDiary(diary: Diary) {

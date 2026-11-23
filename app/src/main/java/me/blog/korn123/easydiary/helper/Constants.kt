@@ -800,6 +800,23 @@ object DiaryEditingConstants {
     const val DIARY_ORIGIN_SEQUENCE_INIT = 0L
 }
 
+object TagPickerConstants {
+    /** The tags the database holds, handed to the picker so it filters them without querying. */
+    const val TAG_NAMES = "tag_picker_tag_names"
+
+    /** The tags the editor already selected when it opens the picker. */
+    const val SELECTED_TAG_NAMES = "tag_picker_selected_tag_names"
+
+    /** The picker's answer: the selected names in the order they were picked. */
+    const val RESULT_SELECTED_TAG_NAMES = "tag_picker_result_selected_tag_names"
+
+    /** Extra a diary screen sends to the main screen to filter it by a tag. */
+    const val SELECTED_TAG_ID = "selected_tag_id"
+
+    /** [SELECTED_TAG_ID] value that asks the main screen for every entry. */
+    const val NO_TAG_ID = -1L
+}
+
 object PhotoFlexItemOptionConstants {
     const val ITEM_INDEX = "item_index"
     const val VIEW_MODE = "view_index"

@@ -222,3 +222,39 @@ val MIGRATION_6_7 =
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_diaries_currentTimeMillis` ON `diaries` (`currentTimeMillis`)")
         }
     }
+
+val MIGRATION_7_8 =
+    object : Migration(7, 8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // Issue #270: a diary carries any number of tags. The existing `diaries` table is not touched.
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS `tags` (
+                    `tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    `name` TEXT NOT NULL,
+                    `normalizedName` TEXT NOT NULL
+                )
+                """.trimIndent(),
+            )
+            db.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_normalizedName` ON `tags` (`normalizedName`)",
+            )
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS `diary_tag_cross_ref` (
+                    `diaryId` INTEGER NOT NULL,
+                    `tagId` INTEGER NOT NULL,
+                    PRIMARY KEY(`diaryId`, `tagId`),
+                    FOREIGN KEY(`diaryId`) REFERENCES `diaries`(`diaryId`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                    FOREIGN KEY(`tagId`) REFERENCES `tags`(`tagId`) ON UPDATE NO ACTION ON DELETE CASCADE
+                )
+                """.trimIndent(),
+            )
+            db.execSQL(
+                "CREATE INDEX IF NOT EXISTS `index_diary_tag_cross_ref_diaryId` ON `diary_tag_cross_ref` (`diaryId`)",
+            )
+            db.execSQL(
+                "CREATE INDEX IF NOT EXISTS `index_diary_tag_cross_ref_tagId` ON `diary_tag_cross_ref` (`tagId`)",
+            )
+        }
+    }

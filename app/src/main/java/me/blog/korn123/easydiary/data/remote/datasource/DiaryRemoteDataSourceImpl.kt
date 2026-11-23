@@ -18,6 +18,7 @@ class DiaryRemoteDataSourceImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): Flow<List<DiaryWithPhotos>> = flowOf(emptyList())
 
         override suspend fun getDiariesWithPhotos(
@@ -26,6 +27,7 @@ class DiaryRemoteDataSourceImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): List<DiaryWithPhotos> = emptyList()
 
         override fun getDiaryWithPhotosById(id: Long): Flow<DiaryWithPhotos?> = flowOf(null)
@@ -56,6 +58,7 @@ class DiaryRemoteDataSourceImpl
         override suspend fun insertDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
+            tagIds: List<Long>,
         ): Long {
             // Mock implementation
             return 0L
@@ -78,6 +81,7 @@ class DiaryRemoteDataSourceImpl
         override suspend fun updateDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
+            tagIds: List<Long>?,
         ) {
             // Mock implementation
         }

@@ -21,6 +21,12 @@ data class Diary(
     var isSelected: Boolean = false,
     val location: Location? = null,
     val isHoliday: Boolean = false,
+    /**
+     * The tags the entry carries (issue #270). Empty until the entry is saved or a tag is picked in the
+     * editor; a write that does not edit tags leaves the stored ones alone (see
+     * `DiaryRepository.updateDiaryWithPhotos`).
+     */
+    val tags: List<Tag> = emptyList(),
 ) {
     fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
         when (isEncrypt) {

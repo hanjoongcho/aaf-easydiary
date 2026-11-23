@@ -1153,4 +1153,11 @@
     <string name="sketchpad_color_green">Зелёный</string>
     <string name="sketchpad_color_orange">Оранжевый</string>
     <string name="sketchpad_color_purple">Фиолетовый</string>
+    <string name="tag_add">+ Тег</string>
+    <string name="tag_picker_title">Теги</string>
+    <string name="tag_picker_search_hint">Найти или создать тег</string>
+    <string name="tag_picker_create">Добавить «%1$s»</string>
+    <string name="tag_picker_empty">Тегов пока нет</string>
+    <string name="tag_filter_all">Все</string>
+    <string name="tag_picker_done">Готово</string>
 </resources>

@@ -20,10 +20,12 @@ import me.blog.korn123.easydiary.data.local.MIGRATION_3_4
 import me.blog.korn123.easydiary.data.local.MIGRATION_4_5
 import me.blog.korn123.easydiary.data.local.MIGRATION_5_6
 import me.blog.korn123.easydiary.data.local.MIGRATION_6_7
+import me.blog.korn123.easydiary.data.local.MIGRATION_7_8
 import me.blog.korn123.easydiary.data.local.dao.ActionLogDao
 import me.blog.korn123.easydiary.data.local.dao.AlarmDao
 import me.blog.korn123.easydiary.data.local.dao.DDayDao
 import me.blog.korn123.easydiary.data.local.dao.DiaryDao
+import me.blog.korn123.easydiary.data.local.dao.TagDao
 import me.blog.korn123.easydiary.data.local.datasource.ActionLogLocalDataSourceImpl
 import me.blog.korn123.easydiary.data.local.datasource.AlarmLocalDataSourceImpl
 import me.blog.korn123.easydiary.data.local.datasource.DDayLocalDataSourceImpl
@@ -73,7 +75,7 @@ abstract class DatabaseModule {
                     context,
                     AppDatabase::class.java,
                     RoomConstants.DIARY_DB_NAME,
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                 .build()
 
         @Provides
@@ -87,5 +89,8 @@ abstract class DatabaseModule {
 
         @Provides
         fun provideDDayDao(database: AppDatabase): DDayDao = database.dDayDao()
+
+        @Provides
+        fun provideTagDao(database: AppDatabase): TagDao = database.tagDao()
     }
 }
