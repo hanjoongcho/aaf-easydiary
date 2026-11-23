@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
-import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRef
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.entity.TagEntity
 
@@ -24,7 +24,7 @@ data class DiaryWithPhotos(
         parentColumn = "diaryId",
         entityColumn = "tagId",
         associateBy = Junction(
-            value = DiaryTagCrossRef::class,
+            value = DiaryTagCrossRefEntity::class,
             parentColumn = "diaryId",
             entityColumn = "tagId",
         ),

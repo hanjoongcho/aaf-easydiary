@@ -4,7 +4,7 @@ import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
-import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRef
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.LocationEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.entity.TagEntity
@@ -142,13 +142,13 @@ fun Tag.toEntity(): TagEntity =
         normalizedName = TagRules.normalize(this.name),
     )
 
-fun DiaryTagLink.toEntity(): DiaryTagCrossRef =
-    DiaryTagCrossRef(
+fun DiaryTagLink.toEntity(): DiaryTagCrossRefEntity =
+    DiaryTagCrossRefEntity(
         diaryId = this.diaryId,
         tagId = this.tagId,
     )
 
-fun DiaryTagCrossRef.toDomain(): DiaryTagLink =
+fun DiaryTagCrossRefEntity.toDomain(): DiaryTagLink =
     DiaryTagLink(
         diaryId = this.diaryId,
         tagId = this.tagId,

@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
-import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRef
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.TagEntity
 import me.blog.korn123.easydiary.domain.model.TagRules
 
@@ -56,10 +56,10 @@ interface TagDao {
     suspend fun deleteAllTags()
 
     @Query("SELECT * FROM diary_tag_cross_ref ORDER BY diaryId ASC, tagId ASC")
-    suspend fun getTagCrossRefs(): List<DiaryTagCrossRef>
+    suspend fun getTagCrossRefs(): List<DiaryTagCrossRefEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTagCrossRefs(crossRefs: List<DiaryTagCrossRef>)
+    suspend fun insertTagCrossRefs(crossRefs: List<DiaryTagCrossRefEntity>)
 
     /**
      * The stored tag of every name in [names], creating the ones that do not exist yet.

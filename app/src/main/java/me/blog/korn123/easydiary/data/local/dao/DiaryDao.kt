@@ -9,7 +9,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
-import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRef
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 
@@ -124,14 +124,14 @@ interface DiaryDao {
         tagIds: List<Long>,
     ) {
         deleteTagCrossRefsByDiaryId(diaryId)
-        insertTagCrossRefs(tagIds.distinct().map { DiaryTagCrossRef(diaryId = diaryId, tagId = it) })
+        insertTagCrossRefs(tagIds.distinct().map { DiaryTagCrossRefEntity(diaryId = diaryId, tagId = it) })
     }
 
     @Query("DELETE FROM diary_tag_cross_ref WHERE diaryId = :diaryId")
     suspend fun deleteTagCrossRefsByDiaryId(diaryId: Long)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTagCrossRefs(crossRefs: List<DiaryTagCrossRef>)
+    suspend fun insertTagCrossRefs(crossRefs: List<DiaryTagCrossRefEntity>)
 
     @Query("SELECT diaryId FROM diaries")
     suspend fun getDiaryIds(): List<Long>

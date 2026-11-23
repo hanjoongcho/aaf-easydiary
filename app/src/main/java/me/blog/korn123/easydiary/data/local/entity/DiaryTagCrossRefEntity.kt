@@ -30,7 +30,7 @@ import androidx.room.Index
     ],
     indices = [Index(value = ["diaryId"]), Index(value = ["tagId"])],
 )
-data class DiaryTagCrossRef(
+data class DiaryTagCrossRefEntity(
     var diaryId: Long = 0L,
     var tagId: Long = 0L,
 )

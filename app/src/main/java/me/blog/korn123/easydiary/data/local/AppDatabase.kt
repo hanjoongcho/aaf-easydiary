@@ -12,7 +12,7 @@ import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
-import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRef
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.entity.TagEntity
 
@@ -24,7 +24,7 @@ import me.blog.korn123.easydiary.data.local.entity.TagEntity
         ActionLogEntity::class,
         DDayEntity::class,
         TagEntity::class,
-        DiaryTagCrossRef::class
+        DiaryTagCrossRefEntity::class
     ],
     version = 8,
     exportSchema = true
