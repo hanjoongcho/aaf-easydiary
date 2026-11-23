@@ -57,7 +57,7 @@ fun MainBottomSheet(
     title: String,
     currentQuery: String,
     symbolSequence: Int = SYMBOL_SELECT_ALL,
-    /** The tags the entries carry, drawn as the filter row below the search field (issue #270). */
+    /** The tags the entries carry, drawn as the filter row at the top of the bottom sheet (issue #270). */
     tags: List<Tag> = emptyList(),
     selectedTagId: Long? = null,
     onTagFilterClick: (Tag?) -> Unit = {},
@@ -143,6 +143,18 @@ fun MainBottomSheet(
                         .padding(0.dp, 10.dp, 0.dp, 5.dp)
                         .navigationBarsPadding(),
             ) {
+                if (tags.isNotEmpty()) {
+                    TagFilterBar(
+                        tags = tags,
+                        selectedTagId = selectedTagId,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 0.dp, 0.dp, 6.dp),
+                        onTagSelected = onTagFilterClick,
+                    )
+                }
+
                 Row(
                     modifier =
                         Modifier
@@ -194,17 +206,6 @@ fun MainBottomSheet(
                     callbackQuery = callbackQuery,
                     clearFilter = clearFilter,
                 )
-                if (tags.isNotEmpty()) {
-                    TagFilterBar(
-                        tags = tags,
-                        selectedTagId = selectedTagId,
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(0.dp, 6.dp, 0.dp, 0.dp),
-                        onTagSelected = onTagFilterClick,
-                    )
-                }
                 BottomToolBarContainer(
                     isAutoPadding = false,
                 ) {
