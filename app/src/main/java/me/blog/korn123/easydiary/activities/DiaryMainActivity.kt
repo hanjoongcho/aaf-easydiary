@@ -835,6 +835,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
                     detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
                     detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
+                    // Keeps swiping in the reading screen inside the tag the main screen is filtered by (#270).
+                    detailIntent.putExtra(
+                        TagPickerConstants.SELECTED_TAG_ID,
+                        diaryViewModel.selectedTagId.value ?: TagPickerConstants.NO_TAG_ID,
+                    )
                     TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
                 },
                 itemLongClickCallback = {

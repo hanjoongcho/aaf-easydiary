@@ -247,6 +247,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
+        // The main screen hands over its tag filter so that swiping here stays inside that tag (#270).
+        val tagId =
+            intent
+                .getLongExtra(TagPickerConstants.SELECTED_TAG_ID, TagPickerConstants.NO_TAG_ID)
+                .takeIf { it > 0L }
         sectionsPagerAdapter = SectionsPagerAdapter(this, diaryList, query)
         setupViewPager()
 
@@ -263,6 +268,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 0,
                                 0,
                                 symbolSequence,
+                                tagId = tagId,
                             )
                         }
 
