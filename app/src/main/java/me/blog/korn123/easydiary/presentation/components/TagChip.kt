@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,16 +24,17 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 
 /**
  * One tag of an entry (issue #270).
  *
- * The chip keeps the shape of the cards the app already draws (`FixedCardView`: a rounded rectangle of
- * `card_radius`, 8dp) instead of a pill, so it sits next to them without a look of its own. It always carries
- * the soft shadow of a card, and the active filter is filled with the primary color while every other chip is
- * a card of the background color with a faint accent outline, which keeps it apart from the surface behind it
- * in both the light and the dark theme.
+ * The chip draws exactly what `FixedCardView` draws for the tag rows of the main list and the editor: a rounded
+ * rectangle of `card_radius` (8dp) with a 2dp shadow, a 12sp label and no outline. The active filter is filled
+ * with the primary color and white text; every other chip takes the inner card tone of the theme, so it stays
+ * apart from the surface behind it in both the light and the dark theme.
  */
 @Composable
 fun TagChip(
@@ -47,16 +47,19 @@ fun TagChip(
     val context = LocalContext.current
     val primaryColor = Color(context.config.primaryColor)
     val shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp)
-    val chipBackground = if (selected) primaryColor else Color(context.config.backgroundColor)
-    val chipOutline = if (selected) Color.Transparent else primaryColor.copy(alpha = TAG_CHIP_BORDER_ALPHA)
+    val chipBackground =
+        if (selected) {
+            primaryColor
+        } else {
+            Color(context.config.backgroundColor.darkenColor(context.innerCardDarkenFactor()))
+        }
     Box(
         modifier =
             modifier
                 .shadow(elevation = TAG_CHIP_ELEVATION, shape = shape, clip = true)
                 .background(chipBackground, shape)
-                .border(TAG_CHIP_BORDER_WIDTH, chipOutline, shape)
                 .clickable { onClick() }
-                .padding(horizontal = 10.dp, vertical = 3.dp),
+                .padding(horizontal = 8.dp, vertical = 3.dp),
     ) {
         Text(
             text = if (showMarker) TagRules.label(name) else name,
@@ -108,11 +111,6 @@ private const val FILTER_ALL_KEY = "tag_filter_all"
 
 /** The soft shadow of a card under every chip, so the chip row reads as the cards the app already draws. */
 private val TAG_CHIP_ELEVATION = 2.dp
-
-private val TAG_CHIP_BORDER_WIDTH = 1.dp
-
-/** Kept faint so an unselected chip reads as a card instead of an outlined pill. */
-private const val TAG_CHIP_BORDER_ALPHA = 0.25F
 
 @Preview(showBackground = true)
 @Composable

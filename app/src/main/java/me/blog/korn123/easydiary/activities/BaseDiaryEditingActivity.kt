@@ -574,6 +574,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         val chip =
             FixedCardView(this).apply {
                 fixedAppcompatPadding = true
+                radius = resources.getDimension(R.dimen.card_radius)
+                cardElevation = dpToPixel(2f).toFloat()
                 layoutParams =
                     ViewGroup.MarginLayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,

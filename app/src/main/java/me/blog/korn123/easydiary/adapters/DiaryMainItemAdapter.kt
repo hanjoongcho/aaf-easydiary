@@ -365,13 +365,15 @@ class DiaryMainItemAdapter(
                     text = TagRules.label(tag.name)
                     setTextColor(activity.config.textColor)
                     setPadding(padding, padding / 2, padding, padding / 2)
-                    textSize = 10f
+                    textSize = 12f
                     maxLines = 1
                     ellipsize = TextUtils.TruncateAt.END
                 }
             val chip =
                 FixedCardView(activity).apply {
                     fixedAppcompatPadding = true
+                    radius = activity.resources.getDimension(R.dimen.card_radius)
+                    cardElevation = activity.dpToPixel(2f).toFloat()
                     layoutParams =
                         ViewGroup.MarginLayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
