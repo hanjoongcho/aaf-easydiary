@@ -28,7 +28,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.GalleryAdapter
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.History
+import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
+import me.blog.korn123.easydiary.domain.repository.TagRepository
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -54,6 +56,7 @@ class DiaryViewModel
     constructor(
         app: Application,
         private val diaryRepository: DiaryRepository,
+        private val tagRepository: TagRepository,
         private val photoHighlightManager: PhotoHighlightManager,
     ) : AndroidViewModel(app) {
         val app = app
@@ -186,6 +189,39 @@ class DiaryViewModel
         val startTimeMillis = MutableStateFlow(0L)
         val endTimeMillis = MutableStateFlow(0L)
         val symbolSequence = MutableStateFlow(0)
+
+        /** The tag the main screen is filtered by, or null when every entry is shown (issue #270). */
+        val selectedTagId = MutableStateFlow<Long?>(null)
+
+        /** The tags at least one entry carries, offered as filter chips on the main screen. */
+        val tagsInUse: StateFlow<List<Tag>> =
+            tagRepository
+                .observeTagsInUse()
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = emptyList(),
+                )
+
+        fun setTagFilter(tagId: Long?) {
+            selectedTagId.value = tagId
+        }
+
+        /**
+         * Forgets a tag filter whose tag no longer carries any entry, so deleting the last entry of a tag
+         * while the screen is filtered by it cannot leave an empty list with no chip left to clear it.
+         */
+        init {
+            viewModelScope.launch {
+                tagRepository.observeTagsInUse().collect { tagsInUse ->
+                    val currentTagId = selectedTagId.value
+                    if (currentTagId != null && tagsInUse.none { it.tagId == currentTagId }) {
+                        selectedTagId.value = null
+                    }
+                }
+            }
+        }
+
         val checkFutureDiaryOption = MutableStateFlow(true)
         private val refreshTrigger = MutableStateFlow(0L)
 
@@ -199,6 +235,7 @@ class DiaryViewModel
             val startTimeMillis: Long = 0,
             val endTimeMillis: Long = 0,
             val symbolSequence: Int = 0,
+            val tagId: Long? = null,
             val checkFutureDiaryOption: Boolean = false,
         )
 
@@ -208,20 +245,21 @@ class DiaryViewModel
                 isSensitive,
                 startTimeMillis,
                 endTimeMillis,
-                symbolSequence,
+                combine(symbolSequence, selectedTagId) { symbol, tagId -> symbol to tagId },
             ) {
                 query,
                 isSensitive,
                 startTimeMillis,
                 endTimeMillis,
-                symbolSequence,
+                symbolAndTag,
                 ->
                 FindDiaryParams(
                     query,
                     app.config.diarySearchQueryCaseSensitive,
                     startTimeMillis,
                     endTimeMillis,
-                    symbolSequence,
+                    symbolAndTag.first,
+                    symbolAndTag.second,
                     checkFutureDiaryOption.value,
                 )
             }
@@ -237,6 +275,7 @@ class DiaryViewModel
                             startTimeMillis = params.startTimeMillis,
                             endTimeMillis = params.endTimeMillis,
                             symbolSequence = params.symbolSequence,
+                            tagId = params.tagId,
                         ).map {
                             EasyDiaryUtils.resolveDiaryFilter(
                                 it,
@@ -277,6 +316,7 @@ class DiaryViewModel
             endTimeMillis: Long = 0,
             symbolSequence: Int = 0,
             checkFutureDiaryOption: Boolean = false,
+            tagId: Long? = null,
         ): List<Diary> =
             EasyDiaryUtils.resolveDiaryFilter(
                 diaryRepository
@@ -286,6 +326,7 @@ class DiaryViewModel
                         startTimeMillis = startTimeMillis,
                         endTimeMillis = endTimeMillis,
                         symbolSequence = symbolSequence,
+                        tagId = tagId,
                     ),
                 app,
                 startTimeMillis,
@@ -295,6 +336,9 @@ class DiaryViewModel
             )
 
         suspend fun findDiaryById(sequence: Long): Diary? = diaryRepository.observeDiaryWithPhotosById(sequence).first()
+
+        /** Every stored tag, including the ones no entry carries yet, for the editor's tag picker. */
+        suspend fun findAllTags(): List<Tag> = tagRepository.getAllTags()
 
         suspend fun findOldestDiary(): Diary? =
             diaryRepository

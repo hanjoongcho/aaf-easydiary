@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.DialogInterface
@@ -27,13 +28,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -48,7 +55,6 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -97,9 +103,11 @@ import me.blog.korn123.easydiary.helper.DiaryReadingConstants
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
+import me.blog.korn123.easydiary.helper.TagPickerConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TreeConstants.IS_TREE_TIMELINE_LAUNCH_MODE_DEFAULT
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
+import me.blog.korn123.easydiary.presentation.components.TagChip
 import me.blog.korn123.easydiary.presentation.diary.DiaryReadViewModel
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.presentation.diary.LinkedDiaryViewModel
@@ -119,6 +127,7 @@ import me.blog.korn123.easydiary.utils.JasyptUtils
 import me.blog.korn123.easydiary.utils.PdfExportUtils
 import java.util.Locale
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -207,6 +216,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
+    @SuppressLint("NotifyDataSetChanged")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -238,7 +248,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
         sectionsPagerAdapter = SectionsPagerAdapter(this, diaryList, query)
-        configureViewPager()
+        setupViewPager()
 
         lifecycleScope.launch {
             diaryViewModel.isLoading = true
@@ -281,17 +291,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 return@launch
             }
 
-            // Attach the adapter only now that the list it reads from is complete, and place the
-            // pager on the requested page before it lays out anything. Attached before the load,
-            // the pager built page 0 for the still empty list; the jump to the requested page then
-            // took that page away again while its body was only half read, and coming back to
-            // index 0 later showed it without part of the body or the characters chip.
-            binding.diaryViewPager.adapter = sectionsPagerAdapter
+            sectionsPagerAdapter.notifyDataSetChanged()
 
             val targetIndex = sectionsPagerAdapter.sequenceToPageIndex(requestedSequence)
 
             if (targetIndex >= 0) {
-                binding.diaryViewPager.setCurrentItem(targetIndex, false)
+                binding.diaryViewPager.post {
+                    binding.diaryViewPager.setCurrentItem(targetIndex, false)
+                }
             }
 
             diaryViewModel.isLoading = false
@@ -318,17 +325,14 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         makeSnackBar(getString(R.string.copy_diary_link_success))
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        if (diaryList.isEmpty()) return
-
-        // The list is loaded once and the adapter is told about it there. Notifying again here
-        // rebuilt the view of every page, including the page the pager was still binding, and a
-        // page that was rebuilt at that moment showed a partly filled body or an empty contents
-        // length chip. The page in front reloads its own diary below, and that is the only entry
-        // that can have changed while this screen was away.
-        getFragmentAt()?.run {
-            if (isAdded) initContents()
+        if (diaryList.isNotEmpty()) {
+            sectionsPagerAdapter.notifyDataSetChanged()
+            getFragmentAt()?.run {
+                if (isAdded) initContents()
+            }
         }
     }
 
@@ -796,14 +800,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun configureViewPager() {
-        // The adapter is attached in onCreate once its list is loaded, so that the first page the
-        // pager builds is the one it is asked to show.
-        // Keep the page on either side of the current one built. A page that is created only after
-        // the swipe starts has to finish its database read and layout during the gesture, and a
-        // page that was still empty when it was measured kept that height and an unmeasured
-        // contents length chip until something else asked for a new layout.
-        binding.diaryViewPager.offscreenPageLimit = 1
+    private fun setupViewPager() {
+        binding.diaryViewPager.adapter = sectionsPagerAdapter
         binding.diaryViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -1075,7 +1073,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private val viewModel: DiaryReadViewModel by viewModels()
         private var primaryColor = 0
         private var storedContents: String? = null
-        private var initContentsJob: Job? = null
+
+        /** The tags of the entry shown, drawn as chips below the contents (issue #270). */
+        private var tagsState by mutableStateOf<List<TagDomain>>(emptyList())
 
         private var linkedDiaryViewModel: LinkedDiaryViewModel = LinkedDiaryViewModel()
         private val diaryViewModel: DiaryViewModel by viewModels()
@@ -1091,16 +1091,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             binding.viewModel = viewModel
             rootView = binding.mainHolder
             return rootView
-        }
-
-        override fun onDestroyView() {
-            initContentsJob?.cancel()
-            initContentsJob = null
-            // The page's view can be thrown away and built again when ViewPager2 recycles it. The
-            // body of the new view is empty, so it has to be applied again even when the diary
-            // itself did not change.
-            storedContents = null
-            super.onDestroyView()
         }
 
         override fun onViewCreated(
@@ -1133,6 +1123,21 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 .fillMaxSize()
                                 .navigationBarsPadding(),
                     ) {
+                        if (tagsState.isNotEmpty()) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                            ) {
+                                items(tagsState, key = { it.tagId }) { tag ->
+                                    TagChip(
+                                        name = tag.name,
+                                        onClick = { filterMainByTag(tag.tagId) },
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
                         val parentDiaries by linkedDiaryViewModel.parentDiaries.collectAsState()
                         if (parentDiaries.isNotEmpty()) {
                             CategoryTitleCard(
@@ -1247,6 +1252,19 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         fun getSequence() = arguments?.getLong(DIARY_SEQUENCE) ?: -1L
 
+        /**
+         * Tapping a `#tag` chip asks the main screen for the entries of that tag. The main screen is the
+         * activity below this one, so CLEAR_TOP|SINGLE_TOP reuses it and hands it the tag (issue #270).
+         */
+        private fun filterMainByTag(tagId: Long) {
+            val intent =
+                Intent(requireContext(), DiaryMainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    putExtra(TagPickerConstants.SELECTED_TAG_ID, tagId)
+                }
+            startActivity(intent)
+        }
+
         fun getDiaryContents(): String = binding.diaryContents.text.toString()
 
         suspend fun isEncryptContents() = diaryViewModel.findDiaryById(getSequence())?.isEncrypt ?: false
@@ -1301,15 +1319,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         fun initContents() {
-            // A page asks for its contents more than once (when the view is created, when the
-            // activity resumes, after encrypting, decrypting or linking). Work on the view only
-            // while it exists, and keep only the newest run so an older database read cannot
-            // write over it or over a view that has already been replaced.
-            if (view == null) return
-            initContentsJob?.cancel()
-            initContentsJob = viewLifecycleOwner.lifecycleScope.launch {
+            lifecycleScope.launch {
                 val diaryDto = diaryViewModel.findDiaryById(getSequence()) ?: return@launch
-                if (view == null) return@launch
+                tagsState = diaryDto.tags
                 binding.run {
                     diaryTitle.visibility =
                         if (diaryDto.title.isEmpty()) View.GONE else View.VISIBLE
@@ -1401,12 +1413,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             }
                         }
                     }
-
-                    // Everything above arrives after the page was laid out with an empty body,
-                    // so ask for a new measure. Without it a page whose text was set while the
-                    // pager was scrolling kept the height it had while empty, and the contents
-                    // length chip kept the width it was measured with before it had a label.
-                    rootView.requestLayout()
                 }
 
                 val linkedDiaries = mutableListOf<DiaryDomain>()

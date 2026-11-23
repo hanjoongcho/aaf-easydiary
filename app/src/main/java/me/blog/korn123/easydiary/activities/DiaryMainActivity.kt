@@ -93,6 +93,7 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_NOTIFICATION
 import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.SELECTED_SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
+import me.blog.korn123.easydiary.helper.TagPickerConstants
 import me.blog.korn123.easydiary.helper.ScrollDirection
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.components.LoadingScreen
@@ -197,6 +198,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
             setupPopupMenu()
             checkBundle(savedInstanceState)
+            applyTagFilterFromIntent(intent)
             setupReviewFlow()
             setupPhotoHighlight()
             showDebugNotificationInfo()
@@ -223,6 +225,27 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable(DIARY_MODE, diaryMode)
         super.onSaveInstanceState(outState)
+    }
+
+    /**
+     * A reading screen that tapped one of its `#tag` chips comes back to this existing main screen
+     * (CLEAR_TOP|SINGLE_TOP), so the tag filter it asked for arrives here (issue #270).
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyTagFilterFromIntent(intent)
+    }
+
+    private fun applyTagFilterFromIntent(intent: Intent?) {
+        if (intent?.hasExtra(TagPickerConstants.SELECTED_TAG_ID) != true) return
+        val tagId =
+            intent.getLongExtra(
+                TagPickerConstants.SELECTED_TAG_ID,
+                TagPickerConstants.NO_TAG_ID,
+            )
+        diaryViewModel.setTagFilter(tagId.takeIf { it != TagPickerConstants.NO_TAG_ID })
+        intent.removeExtra(TagPickerConstants.SELECTED_TAG_ID)
     }
 
     override fun onResume() {
@@ -803,16 +826,25 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun initDiaryGrid() {
         diaryMainItemAdapter =
-            DiaryMainItemAdapter(this, lifecycleScope, diaryList, {
-                val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
-                detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
-                detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
-                detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
-            }) {
-                diaryMainItemAdapter?.setDiaryMode(DiaryMode.DELETE)
-                invalidateOptionsMenu()
-            }
+            DiaryMainItemAdapter(
+                this,
+                lifecycleScope,
+                diaryList,
+                itemClickCallback = {
+                    val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
+                    detailIntent.putExtra(DIARY_SEQUENCE, it.diaryId)
+                    detailIntent.putExtra(SELECTED_SEARCH_QUERY, diaryViewModel.query.value)
+                    detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value)
+                    TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
+                },
+                itemLongClickCallback = {
+                    diaryMainItemAdapter?.setDiaryMode(DiaryMode.DELETE)
+                    invalidateOptionsMenu()
+                },
+                itemTagClickCallback = { tag ->
+                    diaryViewModel.setTagFilter(tag.tagId)
+                },
+            )
 
         gridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
         binding.diaryListView.run {
@@ -833,6 +865,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             val currentQuery by diaryViewModel.query.collectAsState()
             val items by diaryViewModel.diaries.collectAsStateWithLifecycle()
             val currentSymbol by viewModel.symbol.collectAsState()
+            val tags by diaryViewModel.tagsInUse.collectAsStateWithLifecycle()
+            val selectedTagId by diaryViewModel.selectedTagId.collectAsStateWithLifecycle()
             val density = LocalDensity.current
 
             AppTheme {
@@ -840,6 +874,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     title = "[Total: ${getString(R.string.diary_count_format, items.size)}] ${stringResource(id = R.string.guide_message_2)}",
                     currentQuery = currentQuery,
                     symbolSequence = currentSymbol,
+                    tags = tags,
+                    selectedTagId = selectedTagId,
+                    onTagFilterClick = { tag ->
+                        // Tapping the chip of the tag that is already filtering the list takes the filter off, so
+                        // the row needs no separate clear control besides its 'All' chip (issue #270).
+                        val currentTagId = diaryViewModel.selectedTagId.value
+                        diaryViewModel.setTagFilter(
+                            when {
+                                tag == null -> null
+                                tag.tagId == currentTagId -> null
+                                else -> tag.tagId
+                            },
+                        )
+                    },
                     onMicrophoneClick = { showSpeechDialog() },
                     onMoveToday = { moveToday() },
                     onFeelingSymbolClick = {

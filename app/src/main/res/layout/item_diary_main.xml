@@ -103,6 +103,17 @@
                         app:flexWrap="wrap"
                         app:justifyContent="flex_end" />
 
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/tagViews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/card_contents_padding"
+                        android:visibility="gone"
+                        app:flexDirection="row"
+                        app:flexWrap="wrap"
+                        app:justifyContent="flex_start"
+                        tools:visibility="visible" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

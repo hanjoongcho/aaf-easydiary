@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
@@ -44,6 +45,7 @@ import me.blog.korn123.easydiary.presentation.components.BottomToolBarContainer
 import me.blog.korn123.easydiary.presentation.components.CustomCircleIconButton
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
 import me.blog.korn123.easydiary.presentation.components.SymbolIconButton
+import me.blog.korn123.easydiary.presentation.components.TagFilterBar
 import me.blog.korn123.easydiary.presentation.dev.DevActivity
 import me.blog.korn123.easydiary.presentation.settings.QuickSettingsActivity
 import me.blog.korn123.easydiary.presentation.timeline.TimelineActivity
@@ -55,6 +57,10 @@ fun MainBottomSheet(
     title: String,
     currentQuery: String,
     symbolSequence: Int = SYMBOL_SELECT_ALL,
+    /** The tags the entries carry, drawn as the filter row below the search field (issue #270). */
+    tags: List<Tag> = emptyList(),
+    selectedTagId: Long? = null,
+    onTagFilterClick: (Tag?) -> Unit = {},
     enableCardViewPolicy: Boolean = LocalContext.current.config.enableCardViewPolicy,
     fontSize: Float = LocalContext.current.config.settingFontSize,
     fontColor: Color = Color(LocalContext.current.config.textColor),
@@ -188,6 +194,17 @@ fun MainBottomSheet(
                     callbackQuery = callbackQuery,
                     clearFilter = clearFilter,
                 )
+                if (tags.isNotEmpty()) {
+                    TagFilterBar(
+                        tags = tags,
+                        selectedTagId = selectedTagId,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 6.dp, 0.dp, 0.dp),
+                        onTagSelected = onTagFilterClick,
+                    )
+                }
                 BottomToolBarContainer(
                     isAutoPadding = false,
                 ) {

@@ -3,10 +3,12 @@ package me.blog.korn123.easydiary.adapters
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -37,7 +39,10 @@ import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.easydiary.utils.FontUtils
+import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
+import me.blog.korn123.easydiary.domain.model.TagRules
 
 class DiaryMainItemAdapter(
     val activity: Activity,
@@ -45,6 +50,8 @@ class DiaryMainItemAdapter(
     private val diaryItems: List<DiaryDomain>,
     val itemClickCallback: (diary: DiaryDomain) -> Unit,
     val itemLongClickCallback: () -> Unit,
+    /** Tapping a `#tag` chip of a card filters the main screen by that tag (issue #270). */
+    val itemTagClickCallback: (tag: TagDomain) -> Unit = {},
 ) : RecyclerView.Adapter<DiaryMainItemAdapter.ViewHolder>(),
     FastScrollRecyclerView.SectionedAdapter {
     var currentQuery: String? = null
@@ -328,7 +335,55 @@ class DiaryMainItemAdapter(
                         true -> activity.config.summaryMaxLines
                         false -> Integer.MAX_VALUE
                     }
+
+                bindTags(diary)
             }
+        }
+
+        /**
+         * Draws the `#tag` chips of the card (issue #270). The row is gone while the entry carries no tag, so a
+         * card without tags keeps the height it always had.
+         */
+        private fun bindTags(diary: DiaryDomain) {
+            itemDiaryMainBinding.tagViews.run {
+                removeAllViews()
+                if (diary.tags.isEmpty()) {
+                    visibility = View.GONE
+                } else {
+                    visibility = View.VISIBLE
+                    diary.tags.forEach { tag ->
+                        addView(createTagChip(tag))
+                    }
+                }
+            }
+        }
+
+        private fun createTagChip(tag: TagDomain): View {
+            val padding = activity.dpToPixel(4f)
+            val textView =
+                TextView(activity).apply {
+                    text = TagRules.label(tag.name)
+                    setTextColor(activity.config.textColor)
+                    setPadding(padding, padding / 2, padding, padding / 2)
+                    textSize = 10f
+                    maxLines = 1
+                    ellipsize = TextUtils.TruncateAt.END
+                }
+            val chip =
+                FixedCardView(activity).apply {
+                    fixedAppcompatPadding = true
+                    layoutParams =
+                        ViewGroup.MarginLayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ).apply {
+                            marginEnd = activity.dpToPixel(4f)
+                        }
+                    addView(textView)
+                }
+            activity.updateDashboardInnerCard(chip)
+            chip.setOnClickListener { adapter.itemTagClickCallback(tag) }
+            return chip
         }
 
         fun bindCheckbox(diary: DiaryDomain) {
