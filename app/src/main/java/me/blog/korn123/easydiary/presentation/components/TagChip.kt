@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,12 +25,16 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 
 /**
  * One tag of an entry (issue #270).
  *
- * The chip is drawn with the colors of the current theme, filled when it is the active filter and outlined
- * otherwise, so it sits next to the card badges the app already draws.
+ * The chip keeps the shape of the cards the app already draws (`FixedCardView`: a rounded rectangle of
+ * `card_radius`, 8dp) instead of a pill, so it sits next to them without a look of its own. It always carries
+ * the soft shadow of a card, and the active filter is filled with the primary color while every other chip is
+ * a card of the background color with a faint accent outline, which keeps it apart from the surface behind it
+ * in both the light and the dark theme.
  */
 @Composable
 fun TagChip(
@@ -42,13 +46,15 @@ fun TagChip(
 ) {
     val context = LocalContext.current
     val primaryColor = Color(context.config.primaryColor)
-    val shape = RoundedCornerShape(50)
+    val shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp)
+    val chipBackground = if (selected) primaryColor else Color(context.config.backgroundColor)
+    val chipOutline = if (selected) Color.Transparent else primaryColor.copy(alpha = TAG_CHIP_BORDER_ALPHA)
     Box(
         modifier =
             modifier
-                .clip(shape)
-                .background(if (selected) primaryColor else Color(context.config.backgroundColor))
-                .border(1.dp, primaryColor, shape)
+                .shadow(elevation = TAG_CHIP_ELEVATION, shape = shape, clip = true)
+                .background(chipBackground, shape)
+                .border(TAG_CHIP_BORDER_WIDTH, chipOutline, shape)
                 .clickable { onClick() }
                 .padding(horizontal = 10.dp, vertical = 3.dp),
     ) {
@@ -99,6 +105,14 @@ fun TagFilterBar(
 }
 
 private const val FILTER_ALL_KEY = "tag_filter_all"
+
+/** The soft shadow of a card under every chip, so the chip row reads as the cards the app already draws. */
+private val TAG_CHIP_ELEVATION = 2.dp
+
+private val TAG_CHIP_BORDER_WIDTH = 1.dp
+
+/** Kept faint so an unselected chip reads as a card instead of an outlined pill. */
+private const val TAG_CHIP_BORDER_ALPHA = 0.25F
 
 @Preview(showBackground = true)
 @Composable
