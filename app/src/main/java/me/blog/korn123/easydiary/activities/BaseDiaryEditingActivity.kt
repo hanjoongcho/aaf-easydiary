@@ -48,6 +48,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
+import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.extensions.applicationScope
 import me.blog.korn123.easydiary.extensions.applyBottomImeInsets
@@ -72,6 +73,7 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.extensions.storedTimeFormat
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
@@ -119,7 +121,6 @@ import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.domain.model.Location as LocationDomain
 import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
 import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
-import me.blog.korn123.easydiary.domain.model.TagRules
 
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
@@ -494,6 +495,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   Etc functions
      ***************************************************************************************************/
+
     /**
      * Paints the caret of title and contents with the text color so that the caret stays visible
      * on every customized theme (#156, #224). The text colors of the screen are refreshed in
@@ -518,6 +520,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   Tags (issue #270)
      ***************************************************************************************************/
+
     /** Opens the Compose tag picker with every stored tag and the ones this editor already holds. */
     private fun openTagPicker() {
         hideSoftInputFromWindow()
@@ -581,14 +584,15 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 radius = resources.getDimension(R.dimen.card_radius)
                 cardElevation = dpToPixel(2f).toFloat()
                 layoutParams =
-                    ViewGroup.MarginLayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ).apply {
-                        marginEnd = dpToPixel(4f)
-                        // Space between wrapped rows, and room for the bottom shadow inside the row.
-                        marginBottom = dpToPixel(4f)
-                    }
+                    ViewGroup
+                        .MarginLayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ).apply {
+                            marginEnd = dpToPixel(4f)
+                            // Space between wrapped rows, and room for the bottom shadow inside the row.
+                            bottomMargin = dpToPixel(4f)
+                        }
                 addView(textView)
             }
         updateDashboardInnerCard(chip)
@@ -713,8 +717,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun captureDraftSnapshot(): DiaryDraftSnapshot {
-        return DiaryDraftSnapshot(
+    private fun captureDraftSnapshot(): DiaryDraftSnapshot =
+        DiaryDraftSnapshot(
             title =
                 binding.partialEditContents.diaryTitle.text
                     .toString(),
@@ -728,7 +732,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             location = location,
             tags = selectedTags.toList(),
         )
-    }
 
     /**
      * The attached photos without the ones the user removed, computed without touching [photoUris] or

@@ -21,6 +21,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
+import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
@@ -42,7 +43,6 @@ import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
-import me.blog.korn123.easydiary.domain.model.TagRules
 
 class DiaryMainItemAdapter(
     val activity: Activity,
@@ -380,15 +380,16 @@ class DiaryMainItemAdapter(
                     radius = activity.resources.getDimension(R.dimen.card_radius)
                     cardElevation = activity.dpToPixel(2f).toFloat()
                     layoutParams =
-                        ViewGroup.MarginLayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ).apply {
-                            marginEnd = activity.dpToPixel(4f)
-                            // Keeps a wrapped row of chips apart, and keeps the bottom shadow off the
-                            // edge of the row (issue #270).
-                            marginBottom = activity.dpToPixel(4f)
-                        }
+                        ViewGroup
+                            .MarginLayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ).apply {
+                                marginEnd = activity.dpToPixel(4f)
+                                // Keeps a wrapped row of chips apart, and keeps the bottom shadow off the
+                                // edge of the row (issue #270).
+                                bottomMargin = activity.dpToPixel(4f)
+                            }
                     addView(textView)
                 }
             activity.updateDashboardInnerCard(chip)
