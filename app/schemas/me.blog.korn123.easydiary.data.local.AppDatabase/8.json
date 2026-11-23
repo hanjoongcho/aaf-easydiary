@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "485b54b90498e15167dc3cefce23cca1",
+    "identityHash": "e5541f4d15ef0ad51ebe5400d5c2f44b",
     "entities": [
       {
         "tableName": "diaries",
@@ -29,20 +29,17 @@
           {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "contents",
             "columnName": "contents",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "dateString",
             "columnName": "dateString",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "symbolSequence",
@@ -59,8 +56,7 @@
           {
             "fieldPath": "fontName",
             "columnName": "fontName",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "fontSize",
@@ -83,8 +79,7 @@
           {
             "fieldPath": "encryptKeyHash",
             "columnName": "encryptKeyHash",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "isSelected",
@@ -101,20 +96,17 @@
           {
             "fieldPath": "location.address",
             "columnName": "loc_address",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "location.latitude",
             "columnName": "loc_latitude",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           },
           {
             "fieldPath": "location.longitude",
             "columnName": "loc_longitude",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           }
         ],
         "primaryKey": {
@@ -133,8 +125,7 @@
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_diaries_currentTimeMillis` ON `${TABLE_NAME}` (`currentTimeMillis`)"
           }
-        ],
-        "foreignKeys": []
+        ]
       },
       {
         "tableName": "photo_uris",
@@ -155,14 +146,12 @@
           {
             "fieldPath": "photoUri",
             "columnName": "photoUri",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "mimeType",
             "columnName": "mimeType",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -233,20 +222,17 @@
           {
             "fieldPath": "soundTitle",
             "columnName": "soundTitle",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "soundUri",
             "columnName": "soundUri",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "label",
             "columnName": "label",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "workMode",
@@ -266,9 +252,7 @@
           "columnNames": [
             "alarmId"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "action_logs",
@@ -283,26 +267,22 @@
           {
             "fieldPath": "className",
             "columnName": "className",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "signature",
             "columnName": "signature",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "key",
             "columnName": "key",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "value",
             "columnName": "value",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -310,9 +290,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "d_days",
@@ -333,8 +311,7 @@
           {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -342,9 +319,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "tags",
@@ -385,8 +360,7 @@
             "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_normalizedName` ON `${TABLE_NAME}` (`normalizedName`)"
           }
-        ],
-        "foreignKeys": []
+        ]
       },
       {
         "tableName": "diary_tag_cross_ref",
@@ -458,10 +432,9 @@
         ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '485b54b90498e15167dc3cefce23cca1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e5541f4d15ef0ad51ebe5400d5c2f44b')"
     ]
   }
 }
