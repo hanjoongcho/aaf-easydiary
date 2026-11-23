@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.DialogInterface
@@ -208,7 +207,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
-    @SuppressLint("NotifyDataSetChanged")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -240,7 +238,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
         sectionsPagerAdapter = SectionsPagerAdapter(this, diaryList, query)
-        setupViewPager()
+        configureViewPager()
 
         lifecycleScope.launch {
             diaryViewModel.isLoading = true
@@ -283,14 +281,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 return@launch
             }
 
-            sectionsPagerAdapter.notifyDataSetChanged()
+            // Attach the adapter only now that the list it reads from is complete, and place the
+            // pager on the requested page before it lays out anything. Attached before the load,
+            // the pager built page 0 for the still empty list; the jump to the requested page then
+            // took that page away again while its body was only half read, and coming back to
+            // index 0 later showed it without part of the body or the characters chip.
+            binding.diaryViewPager.adapter = sectionsPagerAdapter
 
             val targetIndex = sectionsPagerAdapter.sequenceToPageIndex(requestedSequence)
 
             if (targetIndex >= 0) {
-                binding.diaryViewPager.post {
-                    binding.diaryViewPager.setCurrentItem(targetIndex, false)
-                }
+                binding.diaryViewPager.setCurrentItem(targetIndex, false)
             }
 
             diaryViewModel.isLoading = false
@@ -795,8 +796,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun setupViewPager() {
-        binding.diaryViewPager.adapter = sectionsPagerAdapter
+    private fun configureViewPager() {
+        // The adapter is attached in onCreate once its list is loaded, so that the first page the
+        // pager builds is the one it is asked to show.
         // Keep the page on either side of the current one built. A page that is created only after
         // the swipe starts has to finish its database read and layout during the gesture, and a
         // page that was still empty when it was measured kept that height and an unmeasured
