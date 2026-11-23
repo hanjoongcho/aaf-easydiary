@@ -49,6 +49,7 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -316,14 +317,17 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         makeSnackBar(getString(R.string.copy_diary_link_success))
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        if (diaryList.isNotEmpty()) {
-            sectionsPagerAdapter.notifyDataSetChanged()
-            getFragmentAt()?.run {
-                if (isAdded) initContents()
-            }
+        if (diaryList.isEmpty()) return
+
+        // The list is loaded once and the adapter is told about it there. Notifying again here
+        // rebuilt the view of every page, including the page the pager was still binding, and a
+        // page that was rebuilt at that moment showed a partly filled body or an empty contents
+        // length chip. The page in front reloads its own diary below, and that is the only entry
+        // that can have changed while this screen was away.
+        getFragmentAt()?.run {
+            if (isAdded) initContents()
         }
     }
 
@@ -793,6 +797,11 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     private fun setupViewPager() {
         binding.diaryViewPager.adapter = sectionsPagerAdapter
+        // Keep the page on either side of the current one built. A page that is created only after
+        // the swipe starts has to finish its database read and layout during the gesture, and a
+        // page that was still empty when it was measured kept that height and an unmeasured
+        // contents length chip until something else asked for a new layout.
+        binding.diaryViewPager.offscreenPageLimit = 1
         binding.diaryViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -1064,6 +1073,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private val viewModel: DiaryReadViewModel by viewModels()
         private var primaryColor = 0
         private var storedContents: String? = null
+        private var initContentsJob: Job? = null
 
         private var linkedDiaryViewModel: LinkedDiaryViewModel = LinkedDiaryViewModel()
         private val diaryViewModel: DiaryViewModel by viewModels()
@@ -1079,6 +1089,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             binding.viewModel = viewModel
             rootView = binding.mainHolder
             return rootView
+        }
+
+        override fun onDestroyView() {
+            initContentsJob?.cancel()
+            initContentsJob = null
+            // The page's view can be thrown away and built again when ViewPager2 recycles it. The
+            // body of the new view is empty, so it has to be applied again even when the diary
+            // itself did not change.
+            storedContents = null
+            super.onDestroyView()
         }
 
         override fun onViewCreated(
@@ -1279,8 +1299,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         }
 
         fun initContents() {
-            lifecycleScope.launch {
+            // A page asks for its contents more than once (when the view is created, when the
+            // activity resumes, after encrypting, decrypting or linking). Work on the view only
+            // while it exists, and keep only the newest run so an older database read cannot
+            // write over it or over a view that has already been replaced.
+            if (view == null) return
+            initContentsJob?.cancel()
+            initContentsJob = viewLifecycleOwner.lifecycleScope.launch {
                 val diaryDto = diaryViewModel.findDiaryById(getSequence()) ?: return@launch
+                if (view == null) return@launch
                 binding.run {
                     diaryTitle.visibility =
                         if (diaryDto.title.isEmpty()) View.GONE else View.VISIBLE
@@ -1372,6 +1399,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                             }
                         }
                     }
+
+                    // Everything above arrives after the page was laid out with an empty body,
+                    // so ask for a new measure. Without it a page whose text was set while the
+                    // pager was scrolling kept the height it had while empty, and the contents
+                    // length chip kept the width it was measured with before it had a label.
+                    rootView.requestLayout()
                 }
 
                 val linkedDiaries = mutableListOf<DiaryDomain>()
