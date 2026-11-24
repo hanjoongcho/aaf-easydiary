@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -39,6 +40,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.MultiTransformation
@@ -94,6 +97,9 @@ object EasyDiaryUtils {
      *
      ***************************************************************************************************/
     val easyDiaryRoomMimeType: String = "room/zip"
+
+    /** Distance from the top of the window at which [openCustomOptionMenu] places its popup. */
+    const val POPUP_MENU_TOP_OFFSET_DP = 24F
 
     /***************************************************************************************************
      *   String Utils
@@ -670,7 +676,7 @@ object EasyDiaryUtils {
                     parent,
                     Gravity.TOP or Gravity.END,
                     0,
-                    parent.context.dpToPixel(24F),
+                    parent.context.dpToPixel(POPUP_MENU_TOP_OFFSET_DP),
                 )
 //                }
             }
@@ -684,6 +690,31 @@ object EasyDiaryUtils {
             start()
         }
         return popup
+    }
+
+    /**
+     * Height in pixels an option menu shown by [openCustomOptionMenu] can occupy on this screen.
+     *
+     * It covers the space left between the popup's top offset and the bottom of the visible area,
+     * minus the bottom system bar (an edge-to-edge window does not subtract it for us) and a small
+     * margin, so a menu taller than that can be scrolled instead of being cut off below the screen.
+     */
+    fun optionMenuMaxHeight(parent: View): Int {
+        val offsetY = parent.context.dpToPixel(POPUP_MENU_TOP_OFFSET_DP)
+        val rootLocation = IntArray(2)
+        parent.rootView.getLocationOnScreen(rootLocation)
+        val visibleFrame = Rect()
+        parent.getWindowVisibleDisplayFrame(visibleFrame)
+        val bottomInset =
+            ViewCompat.getRootWindowInsets(parent)
+                ?.getInsets(WindowInsetsCompat.Type.systemBars())
+                ?.bottom ?: 0
+        val displayMetrics = parent.context.resources.displayMetrics
+        val safeBottom = minOf(visibleFrame.bottom, displayMetrics.heightPixels - bottomInset)
+        return maxOf(
+            safeBottom - rootLocation[1] - offsetY - parent.context.dpToPixel(8F),
+            parent.context.dpToPixel(120F),
+        )
     }
 
     /***************************************************************************************************

@@ -909,6 +909,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     private fun createCustomOptionMenu() {
         val pmrBinding = PopupMenuReadBinding.inflate(layoutInflater)
+        val popupMenuAnchor = findViewById<View>(R.id.popupMenu)
+        // Bound the menu to the space left on screen so it scrolls in landscape instead of being cut off.
+        pmrBinding.menuScroll.maxContentHeight = EasyDiaryUtils.optionMenuMaxHeight(popupMenuAnchor)
         var popupWindow: PopupWindow? = null
         val popupView =
             pmrBinding.root.apply {
@@ -1034,7 +1037,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     }
                 }
             }
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, popupMenuAnchor)
     }
 
     /**
