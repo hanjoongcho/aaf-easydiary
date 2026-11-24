@@ -58,9 +58,10 @@ class StreakUtilsTest {
 
         val twoDay = StreakUtils.calculate(entries, today, isTwoDayRule = true)
         assertEquals(StreakStatus.AT_RISK_TWO_DAY, twoDay.status)
-        // The chain has lasted from the 21st through yesterday, the skipped day included.
-        assertEquals(4, twoDay.currentStreak)
-        assertEquals(5, twoDay.streakIfWrittenToday)
+        // Three entries, and the skipped day the rule allowed, at once.
+        assertEquals(3, twoDay.currentStreak)
+        assertEquals(4, twoDay.streakIfWrittenToday)
+        assertEquals(3, twoDay.longestStreak)
     }
 
     @Test
@@ -72,14 +73,15 @@ class StreakUtilsTest {
     }
 
     @Test
-    fun `the two day rule counts the days the chain lasted, not the entries written`() {
+    fun `the two day rule keeps one chain across the day it allows to skip`() {
         // 21st, 22nd, then the 24th and the 25th: the 23rd is the one day the rule allows to skip.
         val entries = diaries(today.minusDays(4), today.minusDays(3), today.minusDays(1), today)
 
         assertEquals(2, StreakUtils.calculate(entries, today).currentStreak)
         val twoDay = StreakUtils.calculate(entries, today, isTwoDayRule = true)
         assertEquals(StreakStatus.WRITTEN_TODAY, twoDay.status)
-        assertEquals(5, twoDay.currentStreak)
+        assertEquals(4, twoDay.currentStreak)
+        assertEquals(4, twoDay.streakIfWrittenToday)
     }
 
     @Test
@@ -117,7 +119,7 @@ class StreakUtilsTest {
         val entries = diaries(today.minusDays(9), today.minusDays(7), today.minusDays(5), today.minusDays(1), today)
 
         assertEquals(2, StreakUtils.calculate(entries, today).longestStreak)
-        assertEquals(5, StreakUtils.calculate(entries, today, isTwoDayRule = true).longestStreak)
+        assertEquals(3, StreakUtils.calculate(entries, today, isTwoDayRule = true).longestStreak)
     }
 
     @Test
@@ -209,6 +211,27 @@ class StreakUtilsTest {
         assertTrue(lastWeek.filter { it.date.isAfter(today) }.all { it.isFuture })
         assertFalse(lastWeek.any { !it.date.isAfter(today) && it.isFuture })
         assertTrue(lastWeek.filter { it.date.isAfter(today) }.all { it.count == 0 })
+    }
+
+    @Test
+    fun `the current chain never outgrows the best chain`() {
+        val histories =
+            listOf(
+                diaries(today, today.minusDays(1), today.minusDays(2)),
+                diaries(today.minusDays(1), today.minusDays(2)),
+                diaries(today.minusDays(2), today.minusDays(3), today.minusDays(4)),
+                diaries(today.minusDays(3), today.minusDays(4)),
+                diaries(today.minusDays(30), today.minusDays(29), today),
+            )
+
+        histories.forEach { entries ->
+            listOf(false, true).forEach { isTwoDayRule ->
+                val summary = StreakUtils.calculate(entries, today, isTwoDayRule)
+
+                assertTrue(summary.currentStreak <= summary.longestStreak)
+                assertTrue(summary.streakIfWrittenToday >= summary.currentStreak)
+            }
+        }
     }
 
     private fun diaries(vararg dates: LocalDate): List<Diary> = dates.map { date -> diaryAt(date) }

@@ -63,9 +63,11 @@ data class StreakSummary(
  * **Two Day Rule** allows one missed day between entries. The chain stands as long as no two days in a row
  * pass without an entry, so entries of the 1st and the 3rd of a month belong to one chain.
  *
- * In the two day rule the numbers count the days the chain has lasted, not the days an entry was written: a
- * chain of the 1st, the 3rd and the 4th is shown as four days, because the chain stayed unbroken for four
- * days. The heatmap keeps showing which days actually hold an entry, so the allowed skip stays visible there.
+ * Both rules count the same thing: the days the chain holds an entry. A chain of the 1st, the 3rd and the 4th
+ * is three days under the two day rule, because those are the three days an entry was written, and the
+ * skipped 2nd is only the day the rule allowed to pass. Counting the entries rather than the days that have
+ * passed keeps the current number and the best number of the card on the same scale, and a number can always
+ * be checked against the green squares of the heatmap.
  *
  * Entries dated after today do not count; a day that has not come cannot extend a chain.
  */
@@ -129,7 +131,8 @@ object StreakUtils {
      * The chain that reaches today, and how the card should describe it.
      *
      * The chain is alive when the latest entry is today, yesterday, or - under the two day rule - the day
-     * before yesterday, which means yesterday was the one skipped day the rule allows.
+     * before yesterday, which means yesterday was the one skipped day the rule allows. The days it holds are
+     * the entries of that chain, so a chain the rule kept across a skipped day counts the entries alone.
      */
     private fun currentStreak(
         writtenDates: List<LocalDate>,
@@ -151,34 +154,31 @@ object StreakUtils {
                 // Only the two day rule lets the chain survive to here: yesterday was the skipped day.
                 else -> StreakStatus.AT_RISK_TWO_DAY
             }
-        val chainStart = chainStart(writtenDates, latestIndex, allowedGap)
+        val startIndex = chainStartIndex(writtenDates, latestIndex, allowedGap)
 
-        /*
-         * The days the chain has lasted so far: up to today when today holds an entry, up to yesterday
-         * otherwise (the day that has not ended yet is not counted until it holds an entry).
-         */
-        val lastedDays = ChronoUnit.DAYS.between(chainStart, today).toInt().plus(if (status == StreakStatus.WRITTEN_TODAY) 1 else 0)
+        // The days the chain holds an entry: today when today is written, the entries before it otherwise.
+        val chainDays = latestIndex - startIndex + 1
 
         return CurrentStreak(
-            days = lastedDays,
+            days = chainDays,
             status = status,
-            streakIfWrittenToday = if (status == StreakStatus.WRITTEN_TODAY) lastedDays else lastedDays + 1,
+            streakIfWrittenToday = if (status == StreakStatus.WRITTEN_TODAY) chainDays else chainDays + 1,
         )
     }
 
-    /** The earliest entry of the chain that ends at `writtenDates[latestIndex]`. */
-    private fun chainStart(
+    /** The index of the earliest entry of the chain that ends at `writtenDates[latestIndex]`. */
+    private fun chainStartIndex(
         writtenDates: List<LocalDate>,
         latestIndex: Int,
         allowedGap: Long,
-    ): LocalDate {
+    ): Int {
         var startIndex = latestIndex
         while (startIndex > 0 &&
             ChronoUnit.DAYS.between(writtenDates[startIndex - 1], writtenDates[startIndex]) <= allowedGap
         ) {
             startIndex--
         }
-        return writtenDates[startIndex]
+        return startIndex
     }
 
     /** The longest chain of the whole history, counted the way the selected rule counts a chain. */
@@ -190,25 +190,16 @@ object StreakUtils {
 
         val allowedGap = if (isTwoDayRule) TWO_DAY_RULE_MAX_GAP_DAYS else DAILY_MAX_GAP_DAYS
         var longest = 1
-        var start = writtenDates.first()
-        var previous = start
+        var chainDays = 1
 
         for (index in 1 until writtenDates.size) {
-            val date = writtenDates[index]
-            if (ChronoUnit.DAYS.between(previous, date) > allowedGap) {
-                longest = maxOf(longest, chainLength(start, previous))
-                start = date
-            }
-            previous = date
+            val gap = ChronoUnit.DAYS.between(writtenDates[index - 1], writtenDates[index])
+            chainDays = if (gap > allowedGap) 1 else chainDays + 1
+            longest = maxOf(longest, chainDays)
         }
 
-        return maxOf(longest, chainLength(start, previous))
+        return longest
     }
-
-    private fun chainLength(
-        start: LocalDate,
-        end: LocalDate,
-    ): Int = ChronoUnit.DAYS.between(start, end).toInt() + 1
 
     /**
      * The grid of the recent weeks, oldest week first, so the card can draw the last column right beside
