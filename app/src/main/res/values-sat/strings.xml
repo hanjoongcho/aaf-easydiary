@@ -791,6 +791,18 @@
         v1.4.355.202611140 / 2026.11.14\n
         Added per-app language settings
     </string>
+    <string name="release_356">
+        v1.4.356.202611250 / 2026.11.25\n
+        Add multi-tag support, tag filtering, and tag management\n
+        Add built-in sketchpad for attaching drawings to diaries\n
+        Add \'On This Day\' section to dashboard\n
+        Improve automatic draft saving while writing\n
+        Show elapsed days (D-Day) badge on diary cards\n
+        Add 12/24-hour time format and \'All day\' default options\n
+        Support country holiday calendars and clickable URLs/phone numbers\n
+        Apply app language and reschedule alarms automatically on restore\n
+        Improve landscape scrolling, encrypted diary photo privacy, and stability
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

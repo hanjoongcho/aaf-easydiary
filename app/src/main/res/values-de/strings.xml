@@ -791,6 +791,18 @@
         v1.4.355.202611140 / 2026.11.14\n
         App-spezifische Spracheinstellungen hinzugefügt
     </string>
+    <string name="release_356">
+        v1.4.356.202611250 / 2026.11.25\n
+        Unterstützung für mehrere Tags, Tag-Filter und Tag-Verwaltung hinzugefügt\n
+        Integriertes Skizzenpad zum Anhängen von Zeichnungen an Tagebücher hinzugefügt\n
+        Bereich „An diesem Tag“ zum Dashboard hinzugefügt\n
+        Automatisches Speichern von Entwürfen beim Schreiben verbessert\n
+        Badge für vergangene Tage (D-Day) auf Tagebuchkarten angezeigt\n
+        12/24-Stunden-Format und Standardoption „Ganztägig“ hinzugefügt\n
+        Kalender für gesetzliche Feiertage sowie Links zu URLs/Telefonnummern unterstützt\n
+        Beim Wiederherstellen werden die App-Sprache sofort übernommen und Alarme neu geplant\n
+        Scrollen im Querformat, Fotoenschutz gesperrter Tagebücher und Stabilität verbessert
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

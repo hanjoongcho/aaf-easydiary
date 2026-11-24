@@ -791,6 +791,18 @@
         v1.4.355.202611140 / 2026.11.14\n
         Aggiunte impostazioni di lingua per app
     </string>
+    <string name="release_356">
+        v1.4.356.202611250 / 2026.11.25\n
+        Aggiunto il supporto per più tag, filtri e gestione dei tag\n
+        Aggiunta la lavagna integrata per allegare disegni ai diari\n
+        Aggiunta la sezione \'In questo giorno\' alla dashboard\n
+        Migliorato il salvataggio automatico delle bozze durante la scrittura\n
+        Mostrato il badge dei giorni trascorsi (D-Day) sulle schede dei diari\n
+        Aggiunti il formato orario 12/24 ore e l\'opzione predefinita \'Tutto il giorno\'\n
+        Supporto per i calendari delle festività nazionali e per i link a URL/numeri di telefono\n
+        Al ripristino vengono applicate subito la lingua dell\'app e riprogrammate le sveglie\n
+        Migliorati lo scorrimento in orizzontale, la privacy delle foto dei diari bloccati e la stabilità
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

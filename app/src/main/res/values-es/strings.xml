@@ -791,6 +791,18 @@
         v1.4.355.202611140 / 2026.11.14\n
         Se agregaron configuraciones de idioma por aplicación
     </string>
+    <string name="release_356">
+        v1.4.356.202611250 / 2026.11.25\n
+        Se agregó compatibilidad con varias etiquetas, filtrado y gestión de etiquetas\n
+        Se agregó un bloc de dibujo integrado para adjuntar dibujos a los diarios\n
+        Se agregó la sección \'Un día como hoy\' al panel\n
+        Se mejoró el guardado automático del borrador mientras se escribe\n
+        Se muestra la insignia de días transcurridos (D-Day) en las tarjetas del diario\n
+        Se agregaron el formato de hora de 12/24 h y la opción predeterminada \'Todo el día\'\n
+        Compatibilidad con calendarios de días festivos y enlaces a URL/números de teléfono\n
+        Al restaurar se aplica de inmediato el idioma de la app y se reprograman las alarmas\n
+        Se mejoró el desplazamiento en horizontal, la privacidad de las fotos de diarios bloqueados y la estabilidad
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
