@@ -1195,4 +1195,6 @@
     <string name="writing_streak_status_due_today">Запишите сегодня — серия %1$d дн.</string>
     <string name="writing_streak_status_at_risk">Запишите сегодня, чтобы сохранить серию (завтра сбросится)</string>
     <string name="writing_streak_status_broken">Начните сегодня новую серию с 1 дня</string>
+    <string name="writing_streak_day_diaries_title">Записи за %1$s</string>
+    <string name="writing_streak_encrypted_diary">Зашифрованная запись</string>
 </resources>

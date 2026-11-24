@@ -2,10 +2,14 @@ package me.blog.korn123.easydiary.utils
 
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.dateAnchorTimeMillis
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 /**
  * How the dashboard shows the writing streak of issue #88.
@@ -24,12 +28,20 @@ enum class StreakStatus {
     BROKEN,
 }
 
-/** One square of the streak heatmap: the day, how many entries it holds, and whether it has happened yet. */
+/**
+ * One square of the streak heatmap: the day, the entries it holds, and whether it has happened yet.
+ *
+ * The entries travel with the square so a tap on it can open what was written that day without looking the
+ * day up again, newest first, the way the diary list of the app orders them. [count] is how many there are,
+ * which is what the square is coloured by.
+ */
 data class StreakHeatmapDay(
     val date: LocalDate,
-    val count: Int,
+    val diaries: List<Diary> = emptyList(),
     val isFuture: Boolean = false,
-)
+) {
+    val count: Int get() = diaries.size
+}
 
 /**
  * What the dashboard streak card draws.
@@ -45,6 +57,12 @@ data class StreakSummary(
     val streakIfWrittenToday: Int = 1,
     /** The heatmap columns, oldest first; each column holds the seven days of a week, Sunday first. */
     val heatmap: List<List<StreakHeatmapDay>> = emptyList(),
+    /**
+     * The month to write above each column of [heatmap], in the same order: the month a column starts in,
+     * named on the first column and wherever it changes, and `null` on a column that continues the month of
+     * the column before it.
+     */
+    val heatmapMonths: List<YearMonth?> = emptyList(),
 )
 
 /**
@@ -91,30 +109,44 @@ object StreakUtils {
         zoneId: ZoneId = ZoneId.systemDefault(),
         heatmapWeeks: Int = HEATMAP_WEEKS,
     ): StreakSummary {
-        val counts = writtenCountsByDate(diaries, today, zoneId)
-        val writtenDates = counts.keys.sorted()
+        val entries = writtenEntriesByDate(diaries, today, zoneId)
+        val writtenDates = entries.keys.sorted()
         val current = currentStreak(writtenDates, today, isTwoDayRule)
+        val heatmap = heatmap(entries, today, heatmapWeeks)
 
         return StreakSummary(
             currentStreak = current.days,
             longestStreak = longestStreak(writtenDates, isTwoDayRule),
             status = current.status,
             streakIfWrittenToday = current.streakIfWrittenToday,
-            heatmap = heatmap(counts, today, heatmapWeeks),
+            heatmap = heatmap,
+            heatmapMonths = monthLabels(heatmap),
         )
     }
 
-    /** The number of entries of every day up to [today]; a later day cannot be part of a chain yet. */
-    private fun writtenCountsByDate(
+    /**
+     * The entries of every day up to [today], newest first inside a day; a later day cannot be written yet.
+     *
+     * The draft of an entry being written (issue #261) is left out: it is a copy of the entry the writer is
+     * still editing, kept as a temporary entry that carries its origin, and counting it would show the same
+     * entry twice and colour a square the writer has not finished.
+     */
+    private fun writtenEntriesByDate(
         diaries: List<Diary>,
         today: LocalDate,
         zoneId: ZoneId,
-    ): Map<LocalDate, Int> =
+    ): Map<LocalDate, List<Diary>> =
         diaries
-            .mapNotNull { diary -> dateOf(diary, zoneId) }
-            .filter { date -> !date.isAfter(today) }
-            .groupingBy { date -> date }
-            .eachCount()
+            .filter { diary -> diary.isWrittenEntry() }
+            .mapNotNull { diary -> dateOf(diary, zoneId)?.let { date -> date to diary } }
+            .filter { (date, _) -> !date.isAfter(today) }
+            .groupBy({ (date, _) -> date }, { (_, diary) -> diary })
+            .mapValues { (_, entries) -> entries.sortedByDescending { diary -> diary.dateAnchorTimeMillis() } }
+
+    /** A saved entry, as opposed to the temporary entry that keeps the draft of one (issue #261). */
+    private fun Diary.isWrittenEntry(): Boolean =
+        originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT &&
+            diaryId != DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY
 
     private fun dateOf(
         diary: Diary,
@@ -207,7 +239,7 @@ object StreakUtils {
      * that have not come yet are marked as future so the card leaves them out.
      */
     private fun heatmap(
-        counts: Map<LocalDate, Int>,
+        entries: Map<LocalDate, List<Diary>>,
         today: LocalDate,
         weeks: Int,
     ): List<List<StreakHeatmapDay>> {
@@ -221,12 +253,40 @@ object StreakUtils {
                 val isFuture = date.isAfter(today)
                 StreakHeatmapDay(
                     date = date,
-                    count = if (isFuture) 0 else counts[date] ?: 0,
+                    diaries = if (isFuture) emptyList() else entries[date].orEmpty(),
                     isFuture = isFuture,
                 )
             }
         }
     }
+
+    /**
+     * The month to write above each column, so the grid says which month a square belongs to.
+     *
+     * A label sits on the first column and wherever the month of the column's first day changes, which names
+     * every month the grid reaches exactly once and puts the name on the first column that starts in it. A
+     * column that starts in the month before and runs into the next one therefore stays under the label of the
+     * month it started in, rather than repeating the name of the month only its last days reach.
+     */
+    private fun monthLabels(heatmap: List<List<StreakHeatmapDay>>): List<YearMonth?> {
+        var previous: YearMonth? = null
+
+        return heatmap.map { week ->
+            val month = week.firstOrNull()?.let { day -> YearMonth.from(day.date) }
+            if (month == null || month == previous) {
+                null
+            } else {
+                previous = month
+                month
+            }
+        }
+    }
+
+    /** The name of a month as the card writes it above a column, in the short form of [locale] (`11월`, `Nov`). */
+    fun monthLabel(
+        yearMonth: YearMonth,
+        locale: Locale = Locale.getDefault(),
+    ): String = yearMonth.format(DateTimeFormatter.ofPattern("MMM", locale))
 
     private data class CurrentStreak(
         val days: Int,

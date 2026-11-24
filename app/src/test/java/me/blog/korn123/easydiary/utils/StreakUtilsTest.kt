@@ -1,13 +1,16 @@
 package me.blog.korn123.easydiary.utils
 
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneId
+import java.util.Locale
 
 /**
  * Unit tests for the writing streak of the dashboard (issue #88).
@@ -16,6 +19,10 @@ import java.time.ZoneId
  * chain of daily entries after one day without an entry, the second allows one skipped day and ends the chain
  * only when two days in a row pass without one. The tests pin the four states the card can show, the day
  * boundary at midnight, an empty history, and the difference the rule selection makes on the same entries.
+ *
+ * The heatmap squares carry the entries of their day so a tap on one opens what was written that day, and the
+ * months above the columns name the month of the days below them; the tests pin what a square holds and where
+ * a month is named.
  */
 class StreakUtilsTest {
     private val today = LocalDate.of(2026, 11, 25)
@@ -211,6 +218,77 @@ class StreakUtilsTest {
         assertTrue(lastWeek.filter { it.date.isAfter(today) }.all { it.isFuture })
         assertFalse(lastWeek.any { !it.date.isAfter(today) && it.isFuture })
         assertTrue(lastWeek.filter { it.date.isAfter(today) }.all { it.count == 0 })
+    }
+
+    @Test
+    fun `a square carries the entries of its day, newest first`() {
+        val morning = diaryAt(today, hour = 8)
+        val evening = diaryAt(today, hour = 21)
+
+        val summary = StreakUtils.calculate(listOf(morning, evening, diaryAt(today.minusDays(1))), today)
+
+        val day = summary.heatmap.flatten().first { it.date == today }
+        assertEquals(2, day.count)
+        assertEquals(listOf(evening.diaryId, morning.diaryId), day.diaries.map { it.diaryId })
+
+        val empty = summary.heatmap.flatten().first { it.date == today.minusDays(3) }
+        assertEquals(0, empty.count)
+        assertTrue(empty.diaries.isEmpty())
+
+        // A day that has not come yet carries nothing, so a tap on it leads to no entry.
+        assertTrue(summary.heatmap.flatten().first { it.date == today.plusDays(2) }.diaries.isEmpty())
+    }
+
+    @Test
+    fun `the draft of an entry being written is counted by neither the chain nor the square`() {
+        val saved = diaryAt(today)
+        val draft =
+            saved.copy(
+                diaryId = DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY,
+                originDiaryId = saved.diaryId,
+            )
+        val draftOfAnEarlierDay =
+            diaryAt(today.minusDays(1)).copy(
+                diaryId = DiaryEditingConstants.DIARY_SEQUENCE_TEMPORARY,
+                originDiaryId = diaryAt(today.minusDays(1)).diaryId,
+            )
+
+        val summary = StreakUtils.calculate(listOf(saved, draft, draftOfAnEarlierDay), today)
+
+        assertEquals(1, summary.currentStreak)
+        assertEquals(1, summary.heatmap.flatten().first { it.date == today }.count)
+        assertEquals(0, summary.heatmap.flatten().first { it.date == today.minusDays(1) }.count)
+    }
+
+    @Test
+    fun `a month is named on the first column and wherever it changes`() {
+        val summary = StreakUtils.calculate(diaries(today), today)
+
+        assertEquals(StreakUtils.HEATMAP_WEEKS, summary.heatmapMonths.size)
+        assertEquals(
+            listOf(
+                0 to YearMonth.of(2026, 8),
+                4 to YearMonth.of(2026, 9),
+                8 to YearMonth.of(2026, 10),
+                12 to YearMonth.of(2026, 11),
+            ),
+            summary.heatmapMonths.mapIndexedNotNull { index, month -> month?.let { index to it } },
+        )
+    }
+
+    @Test
+    fun `an empty history names the months of the grid as well`() {
+        val summary = StreakUtils.calculate(emptyList(), today)
+
+        assertEquals(4, summary.heatmapMonths.count { month -> month != null })
+        assertEquals(YearMonth.of(2026, 8), summary.heatmapMonths.first())
+        assertEquals(YearMonth.of(2026, 11), summary.heatmapMonths.last { month -> month != null })
+    }
+
+    @Test
+    fun `a month is named in the short form of the device language`() {
+        assertEquals("11월", StreakUtils.monthLabel(YearMonth.of(2026, 11), Locale.KOREAN))
+        assertEquals("Nov", StreakUtils.monthLabel(YearMonth.of(2026, 11), Locale.ENGLISH))
     }
 
     @Test

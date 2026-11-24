@@ -1195,4 +1195,6 @@
     <string name="writing_streak_status_due_today">आज लिखें तो %1$d दिन की स्ट्रीक</string>
     <string name="writing_streak_status_at_risk">स्ट्रीक बनाए रखने के लिए आज लिखें (कल रीसेट हो जाएगी)</string>
     <string name="writing_streak_status_broken">आज से फिर दिन 1 से शुरू करें</string>
+    <string name="writing_streak_day_diaries_title">%1$s की डायरी</string>
+    <string name="writing_streak_encrypted_diary">एन्क्रिप्ट की गई डायरी</string>
 </resources>
