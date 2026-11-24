@@ -791,6 +791,18 @@
         v1.4.355.202611140 / 2026.11.14\n
         Ajout des paramètres de langue par application
     </string>
+    <string name="release_356">
+        v1.4.356.202611250 / 2026.11.25\n
+        Ajout de la prise en charge de plusieurs étiquettes, du filtrage et de la gestion des étiquettes\n
+        Ajout d\'un bloc-notes de dessin intégré pour joindre des dessins aux journaux\n
+        Ajout de la section « Ce jour-là » au tableau de bord\n
+        Amélioration de l\'enregistrement automatique des brouillons pendant la rédaction\n
+        Affichage d\'un badge du nombre de jours écoulés (D-Day) sur les cartes de journal\n
+        Ajout du format horaire 12/24 h et de l\'option par défaut « Toute la journée »\n
+        Prise en charge des calendriers de jours fériés et des liens URL/numéros de téléphone\n
+        Lors d\'une restauration, la langue de l\'app est appliquée immédiatement et les alarmes réenregistrées\n
+        Amélioration du défilement en mode paysage, de la protection des photos des journaux verrouillés et de la stabilité
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
