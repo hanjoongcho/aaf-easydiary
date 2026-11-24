@@ -19,11 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.extensions.config
@@ -51,6 +53,10 @@ import java.time.ZoneId
  * The card is drawn inside the dashboard's own card, so it paints no background of its own and takes its
  * colors from the theme the rest of the app uses: the primary color marks the days with an entry and the
  * current number, the text color the labels, and a faint tone of the background the days without one.
+ *
+ * Every size the card asks of [SimpleText] is handed over in pixels: the sizes below are written in sp, as the
+ * screen designs are, and turned into pixels with the screen density, because [SimpleText] reads its `fontSize`
+ * as a pixel value.
  */
 @Composable
 fun WritingStreakCard(
@@ -60,8 +66,13 @@ fun WritingStreakCard(
 ) {
     val context = LocalContext.current
     val config = context.config
+    val density = LocalDensity.current
     val primaryColor = Color(config.primaryColor)
     val textColor = Color(config.textColor)
+    val titleFontSize = with(density) { TITLE_FONT_SIZE_SP.sp.toPx() }
+    val maxCurrentFontSize = with(density) { MAX_CURRENT_FONT_SIZE_SP.sp.toPx() }
+    val maxLongestFontSize = with(density) { MAX_LONGEST_FONT_SIZE_SP.sp.toPx() }
+    val maxStatusFontSize = with(density) { MAX_STATUS_FONT_SIZE_SP.sp.toPx() }
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -70,7 +81,7 @@ fun WritingStreakCard(
         ) {
             SimpleText(
                 text = stringResource(R.string.writing_streak_title),
-                fontSize = TITLE_FONT_SIZE,
+                fontSize = titleFontSize,
                 fontColor = textColor,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -87,7 +98,7 @@ fun WritingStreakCard(
         Row(verticalAlignment = Alignment.Bottom) {
             SimpleText(
                 text = "🔥 " + stringResource(R.string.writing_streak_current_days, uiState.summary.currentStreak),
-                fontSize = (config.settingFontSize * 1.6F).coerceAtMost(MAX_CURRENT_FONT_SIZE),
+                fontSize = (config.settingFontSize * 1.6F).coerceAtMost(maxCurrentFontSize),
                 fontWeight = FontWeight.Bold,
                 fontColor = primaryColor,
             )
@@ -95,7 +106,7 @@ fun WritingStreakCard(
             SimpleText(
                 text = stringResource(R.string.writing_streak_longest_days, uiState.summary.longestStreak),
                 modifier = Modifier.weight(1F, fill = false),
-                fontSize = (config.settingFontSize * 0.8F).coerceAtMost(MAX_LONGEST_FONT_SIZE),
+                fontSize = (config.settingFontSize * 0.85F).coerceAtMost(maxLongestFontSize),
                 alpha = 0.7F,
                 fontColor = textColor,
                 maxLines = 1,
@@ -108,7 +119,7 @@ fun WritingStreakCard(
             summary = uiState.summary,
             primaryColor = primaryColor,
             textColor = textColor,
-            fontSize = (config.settingFontSize * 0.85F).coerceAtMost(MAX_STATUS_FONT_SIZE),
+            fontSizePx = (config.settingFontSize * 0.9F).coerceAtMost(maxStatusFontSize),
         )
 
         if (uiState.summary.heatmap.isNotEmpty()) {
@@ -165,6 +176,9 @@ private fun StreakRuleChip(
     textColor: Color,
     onClick: () -> Unit,
 ) {
+    val density = LocalDensity.current
+    val ruleFontSize = with(density) { RULE_FONT_SIZE_SP.sp.toPx() }
+
     Box(
         modifier =
             Modifier
@@ -175,7 +189,7 @@ private fun StreakRuleChip(
     ) {
         SimpleText(
             text = label,
-            fontSize = RULE_FONT_SIZE,
+            fontSize = ruleFontSize,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             fontColor = if (selected) Color.White else textColor,
             alpha = if (selected) 1.0F else 0.75F,
@@ -195,7 +209,7 @@ private fun StreakStatusBadge(
     summary: StreakSummary,
     primaryColor: Color,
     textColor: Color,
-    fontSize: Float,
+    fontSizePx: Float,
 ) {
     val atRisk = summary.status == StreakStatus.AT_RISK_TWO_DAY
     val message =
@@ -218,7 +232,7 @@ private fun StreakStatusBadge(
     ) {
         SimpleText(
             text = message,
-            fontSize = fontSize,
+            fontSize = fontSizePx,
             fontWeight = if (atRisk) FontWeight.Bold else FontWeight.Normal,
             fontColor = if (atRisk) primaryColor else textColor,
             maxLines = 2,
@@ -267,15 +281,19 @@ private fun StreakHeatmap(
 
 private const val DAYS_IN_WEEK = 7
 
+// The text sizes of the card, in sp. SimpleText takes its fontSize in pixels, not in sp, so each of these is
+// turned into pixels with the screen density of the screen the card is drawn on.
+
 /** The card title keeps the size of the dashboard card titles of the app, whatever the text size is set to. */
-private const val TITLE_FONT_SIZE = 17F
+private const val TITLE_FONT_SIZE_SP = 17F
 
 /** The rule chips stay the size of the tag chips of the app. */
-private const val RULE_FONT_SIZE = 12F
+private const val RULE_FONT_SIZE_SP = 12F
 
-private const val MAX_CURRENT_FONT_SIZE = 40F
-private const val MAX_LONGEST_FONT_SIZE = 20F
-private const val MAX_STATUS_FONT_SIZE = 18F
+/** The upper bounds of the sizes that follow the text size setting, so a large setting keeps the card in shape. */
+private const val MAX_CURRENT_FONT_SIZE_SP = 36F
+private const val MAX_LONGEST_FONT_SIZE_SP = 18F
+private const val MAX_STATUS_FONT_SIZE_SP = 16F
 
 private const val EMPTY_DAY_ALPHA = 0.12F
 private const val BADGE_BACKGROUND_ALPHA = 0.08F
