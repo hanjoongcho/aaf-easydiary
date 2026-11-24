@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
 import me.blog.korn123.easydiary.presentation.tag.TagPickerUiState
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
 /**
  * Picks the tags of an entry (issue #270).
@@ -75,6 +77,7 @@ fun TagPickerScreen(
                 close = onCloseClick,
             )
         },
+        containerColor = Color(context.config.backgroundColor),
     ) { paddingValues ->
         Column(
             modifier =
@@ -90,8 +93,21 @@ fun TagPickerScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 singleLine = true,
-                placeholder = { Text(text = stringResource(R.string.tag_picker_search_hint), color = textColor) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.tag_picker_search_hint),
+                        color = textColor.copy(alpha = 0.6f),
+                    )
+                },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Search, contentDescription = null, tint = primaryColor) },
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = textColor,
+                        unfocusedTextColor = textColor,
+                        cursorColor = primaryColor,
+                        focusedBorderColor = primaryColor,
+                        unfocusedBorderColor = textColor.copy(alpha = 0.4f),
+                    ),
                 trailingIcon = {
                     if (uiState.selectedNames.isNotEmpty()) {
                         Text(
@@ -129,7 +145,7 @@ fun TagPickerScreen(
                     item(key = EMPTY_ROW_KEY) {
                         Text(
                             text = stringResource(R.string.tag_picker_empty),
-                            color = textColor,
+                            color = textColor.copy(alpha = 0.7f),
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp),
                         )
                     }
@@ -215,17 +231,19 @@ private const val EMPTY_ROW_KEY = "tag_picker_empty_row"
 @Preview(showBackground = true)
 @Composable
 private fun TagPickerScreenPreview() {
-    TagPickerScreen(
-        uiState =
-            TagPickerUiState(
-                query = "tr",
-                allNames = listOf("travel", "trip", "work"),
-                selectedNames = listOf("trip"),
-            ),
-        onQueryChanged = {},
-        onToggleTag = {},
-        onCreateTag = {},
-        onConfirmClick = {},
-        onCloseClick = {},
-    )
+    AppTheme {
+        TagPickerScreen(
+            uiState =
+                TagPickerUiState(
+                    query = "tr",
+                    allNames = listOf("travel", "trip", "work"),
+                    selectedNames = listOf("trip"),
+                ),
+            onQueryChanged = {},
+            onToggleTag = {},
+            onCreateTag = {},
+            onConfirmClick = {},
+            onCloseClick = {},
+        )
+    }
 }
