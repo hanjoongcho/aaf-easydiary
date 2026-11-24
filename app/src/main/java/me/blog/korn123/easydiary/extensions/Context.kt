@@ -62,6 +62,7 @@ import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
@@ -75,6 +76,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -1649,6 +1651,28 @@ fun Context.jsonStringToPreference(jsonString: String) {
     }
 }
 
+/**
+ * Applies [languageCode] ([LANGUAGE_SYSTEM_DEFAULT] for the system language) as the app language.
+ *
+ * A backup restore only writes the language into SharedPreferences, so it is applied through this
+ * function as well, the same way the language setting does it.
+ *
+ * [AppCompatDelegate.setApplicationLocales] keeps the requested locales in memory, hands them to the
+ * activities created afterwards and recreates the attached ones, so it has to be called on the main
+ * thread. Nothing happens when the requested locales are the same as the ones in use.
+ */
+fun Context.applyAppLanguage(languageCode: String) {
+    val localeList =
+        if (languageCode.isEmpty()) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(languageCode)
+        }
+    if (AppCompatDelegate.getApplicationLocales() != localeList) {
+        AppCompatDelegate.setApplicationLocales(localeList)
+    }
+}
+
 fun Context.shareFile(targetFile: File) {
     shareFile(targetFile, contentResolver.getType(getUriForFile(targetFile)) ?: MIME_TYPE_BINARY)
 }
@@ -2405,8 +2429,15 @@ suspend fun Context.importRoomData(
                 object :
                     com.google.gson.reflect.TypeToken<List<Alarm>>() {}.type,
             )
+        // The alarms of the data being replaced are still registered in AlarmManager, which keeps them
+        // by alarmId in PendingIntent and not in the database. They are cancelled before the rows go,
+        // so an alarm the backup does not hold (or holds as disabled) stops waking the app up, and a
+        // restored alarm that reuses an id is scheduled once below. AlarmManager and PendingIntent may
+        // be used from this background thread.
+        alarmRepository.getAllAlarms().forEach { cancelAlarmClock(it) }
         alarmRepository.deleteAllAlarms()
         alarmRepository.insertAllAlarms(list)
+        list.forEach { if (it.isEnabled) scheduleNextAlarm(it, false) }
     }
 
     // Save D-Day
@@ -2492,6 +2523,10 @@ suspend fun Context.importRoomDataWithSAF(
             }
             withContext(Dispatchers.Main) {
                 successCallback("Import completed.")
+                // A restored language only reaches SharedPreferences, so it is handed over to AppCompat
+                // here for the screens created from now on, the one the callback restarts into included.
+                // The main thread is required: AppCompatDelegate recreates the attached activities.
+                applyAppLanguage(config.settingAppLanguage)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -2527,6 +2562,10 @@ suspend fun Context.importRoomData(
         }
         withContext(Dispatchers.Main) {
             successCallback("Import completed.")
+            // A restored language only reaches SharedPreferences, so it is handed over to AppCompat
+            // here for the screens created from now on, the one the callback restarts into included.
+            // The main thread is required: AppCompatDelegate recreates the attached activities.
+            applyAppLanguage(config.settingAppLanguage)
         }
     } catch (e: Exception) {
         e.printStackTrace()

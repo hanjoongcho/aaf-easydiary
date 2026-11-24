@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +28,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import me.blog.korn123.easydiary.BuildConfig
@@ -42,6 +40,7 @@ import me.blog.korn123.easydiary.enums.DateTimeFormat
 import me.blog.korn123.easydiary.enums.DialogMode
 import me.blog.korn123.easydiary.enums.TimeFormatMode
 import me.blog.korn123.easydiary.extensions.acquireGPSPermissions
+import me.blog.korn123.easydiary.extensions.applyAppLanguage
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.hasGPSPermissions
 import me.blog.korn123.easydiary.extensions.isFossFlavor
@@ -812,13 +811,7 @@ class SettingsBasicFragment : Fragment() {
                     val optionInfo = parent.adapter.getItem(position) as? Map<*, *>
                     (optionInfo?.get("optionValue") as? String)?.let { languageCode ->
                         config.settingAppLanguage = languageCode
-                        val localeList =
-                            if (languageCode.isEmpty()) {
-                                LocaleListCompat.getEmptyLocaleList()
-                            } else {
-                                LocaleListCompat.forLanguageTags(languageCode)
-                            }
-                        AppCompatDelegate.setApplicationLocales(localeList)
+                        applyAppLanguage(languageCode)
                         settingsViewModel.updateAppLanguageSubDescription()
                     }
                     alertDialog?.cancel()
