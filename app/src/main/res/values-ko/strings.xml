@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">태그 삭제</string>
     <string name="tag_management_delete_message">\'%1$s\' 태그를 삭제할까요? %2$d개 일기에서 이 태그가 빠지고, 일기 내용은 그대로 남습니다.</string>
     <string name="tag_management_delete_unused_message">\'%1$s\' 태그를 삭제할까요? 이 태그를 쓰는 일기가 없습니다.</string>
+    <string name="writing_streak_title">연속 기록</string>
+    <string name="writing_streak_rule_daily">매일</string>
+    <string name="writing_streak_rule_two_day">2일 규칙</string>
+    <string name="writing_streak_current_days">%1$d일 연속</string>
+    <string name="writing_streak_longest_days">최장 %1$d일</string>
+    <string name="writing_streak_status_written_today">오늘 작성 완료</string>
+    <string name="writing_streak_status_due_today">오늘 쓰면 %1$d일 연속</string>
+    <string name="writing_streak_status_at_risk">오늘 쓰면 연속 유지 (내일 넘기면 초기화)</string>
+    <string name="writing_streak_status_broken">오늘부터 다시 1일 시작</string>
 </resources>

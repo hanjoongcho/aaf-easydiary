@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">Delete tag</string>
     <string name="tag_management_delete_message">Delete \'%1$s\'? It is removed from %2$d entries, and the entries themselves are kept.</string>
     <string name="tag_management_delete_unused_message">Delete \'%1$s\'? No entry uses this tag.</string>
+    <string name="writing_streak_title">Writing streak</string>
+    <string name="writing_streak_rule_daily">Daily</string>
+    <string name="writing_streak_rule_two_day">2-day rule</string>
+    <string name="writing_streak_current_days">%1$d-day streak</string>
+    <string name="writing_streak_longest_days">Best %1$d days</string>
+    <string name="writing_streak_status_written_today">Written today</string>
+    <string name="writing_streak_status_due_today">Write today to reach %1$d days</string>
+    <string name="writing_streak_status_at_risk">Write today to keep the streak (it resets tomorrow)</string>
+    <string name="writing_streak_status_broken">Start a new streak with day 1 today</string>
 </resources>

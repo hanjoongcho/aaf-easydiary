@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">टैग हटाएँ</string>
     <string name="tag_management_delete_message">\'%1$s\' हटाएँ? यह %2$d प्रविष्टियों से हट जाएगा, प्रविष्टियाँ स्वयं बनी रहेंगी।</string>
     <string name="tag_management_delete_unused_message">\'%1$s\' हटाएँ? कोई प्रविष्टि इस टैग का उपयोग नहीं करती।</string>
+    <string name="writing_streak_title">राइटिंग स्ट्रीक</string>
+    <string name="writing_streak_rule_daily">रोज़</string>
+    <string name="writing_streak_rule_two_day">2-दिन नियम</string>
+    <string name="writing_streak_current_days">%1$d दिन की स्ट्रीक</string>
+    <string name="writing_streak_longest_days">सर्वश्रेष्ठ %1$d दिन</string>
+    <string name="writing_streak_status_written_today">आज लिखा गया</string>
+    <string name="writing_streak_status_due_today">आज लिखें तो %1$d दिन की स्ट्रीक</string>
+    <string name="writing_streak_status_at_risk">स्ट्रीक बनाए रखने के लिए आज लिखें (कल रीसेट हो जाएगी)</string>
+    <string name="writing_streak_status_broken">आज से फिर दिन 1 से शुरू करें</string>
 </resources>

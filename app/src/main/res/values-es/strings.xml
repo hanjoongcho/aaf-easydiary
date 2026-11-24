@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">Eliminar etiqueta</string>
     <string name="tag_management_delete_message">¿Eliminar \'%1$s\'? Se quitará de %2$d entradas y las entradas se mantendrán.</string>
     <string name="tag_management_delete_unused_message">¿Eliminar \'%1$s\'? Ninguna entrada usa esta etiqueta.</string>
+    <string name="writing_streak_title">Racha de escritura</string>
+    <string name="writing_streak_rule_daily">Cada día</string>
+    <string name="writing_streak_rule_two_day">Regla de 2 días</string>
+    <string name="writing_streak_current_days">Racha de %1$d días</string>
+    <string name="writing_streak_longest_days">Récord: %1$d días</string>
+    <string name="writing_streak_status_written_today">Escrito hoy</string>
+    <string name="writing_streak_status_due_today">Escribe hoy para llegar a %1$d días</string>
+    <string name="writing_streak_status_at_risk">Escribe hoy para mantener la racha (se reinicia mañana)</string>
+    <string name="writing_streak_status_broken">Empieza hoy de nuevo con el día 1</string>
 </resources>

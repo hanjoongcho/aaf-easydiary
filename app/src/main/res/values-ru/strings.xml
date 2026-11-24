@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">Удалить тег</string>
     <string name="tag_management_delete_message">Удалить «%1$s»? Тег будет снят с %2$d записей, сами записи сохранятся.</string>
     <string name="tag_management_delete_unused_message">Удалить «%1$s»? Ни одна запись не использует этот тег.</string>
+    <string name="writing_streak_title">Серия записей</string>
+    <string name="writing_streak_rule_daily">Каждый день</string>
+    <string name="writing_streak_rule_two_day">Правило 2 дней</string>
+    <string name="writing_streak_current_days">Серия %1$d дн.</string>
+    <string name="writing_streak_longest_days">Рекорд: %1$d дн.</string>
+    <string name="writing_streak_status_written_today">Сегодня записано</string>
+    <string name="writing_streak_status_due_today">Запишите сегодня — серия %1$d дн.</string>
+    <string name="writing_streak_status_at_risk">Запишите сегодня, чтобы сохранить серию (завтра сбросится)</string>
+    <string name="writing_streak_status_broken">Начните сегодня новую серию с 1 дня</string>
 </resources>
