@@ -1195,4 +1195,6 @@
     <string name="writing_streak_status_due_today">今日書けば %1$d日連続</string>
     <string name="writing_streak_status_at_risk">今日書けば連続を維持（明日になるとリセット）</string>
     <string name="writing_streak_status_broken">今日から1日目を再スタート</string>
+    <string name="writing_streak_day_diaries_title">%1$sの日記</string>
+    <string name="writing_streak_encrypted_diary">暗号化された日記</string>
 </resources>

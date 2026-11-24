@@ -1195,4 +1195,6 @@
     <string name="writing_streak_status_due_today">Scrivi oggi per arrivare a %1$d giorni</string>
     <string name="writing_streak_status_at_risk">Scrivi oggi per mantenere la serie (si azzera domani)</string>
     <string name="writing_streak_status_broken">Ricomincia oggi dal giorno 1</string>
+    <string name="writing_streak_day_diaries_title">Diari del %1$s</string>
+    <string name="writing_streak_encrypted_diary">Diario criptato</string>
 </resources>

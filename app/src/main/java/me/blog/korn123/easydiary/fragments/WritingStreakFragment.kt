@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import me.blog.korn123.easydiary.databinding.FragmentWritingStreakBinding
+import me.blog.korn123.easydiary.extensions.startDiaryReadingActivity
 import me.blog.korn123.easydiary.presentation.streak.WritingStreakViewModel
 import me.blog.korn123.easydiary.presentation.streak.components.WritingStreakCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
@@ -21,6 +22,9 @@ import me.blog.korn123.easydiary.presentation.theme.AppTheme
  * The card itself is Compose, as new UI in this app is, and the fragment only holds it inside the card the
  * dashboard lays out, next to the other cards. [onResume] tells the view model to count again from today, so a
  * dashboard left open overnight does not keep showing yesterday's state.
+ *
+ * A tap on a square of the card's grid hands the entry it leads to over here, and the entry is opened the way
+ * the rest of the app opens one: the reading screen of [startDiaryReadingActivity].
  */
 @AndroidEntryPoint
 class WritingStreakFragment : Fragment() {
@@ -49,6 +53,7 @@ class WritingStreakFragment : Fragment() {
                 WritingStreakCard(
                     uiState = uiState,
                     onRuleSelected = writingStreakViewModel::setTwoDayRule,
+                    onDiarySelected = { diaryId -> requireContext().startDiaryReadingActivity(diaryId) },
                 )
             }
         }
