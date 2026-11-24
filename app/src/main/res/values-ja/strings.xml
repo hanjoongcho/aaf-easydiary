@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">タグはまだありません</string>
     <string name="tag_filter_all">すべて</string>
     <string name="tag_picker_done">完了</string>
+    <string name="tag_management_title">タグの管理</string>
+    <string name="tag_management_summary">使ったタグの名前を変更したり削除したりします</string>
+    <string name="tag_management_add_hint">新しいタグ名</string>
+    <string name="tag_management_add">タグを追加</string>
+    <string name="tag_management_empty">タグはまだありません。日記を書くときに追加したタグがここに集まります。</string>
+    <string name="tag_management_diary_count">%1$d件の日記</string>
+    <string name="tag_management_rename">名前を変更</string>
+    <string name="tag_management_rename_hint">タグ名</string>
+    <string name="tag_management_name_required">タグ名を入力してください。</string>
+    <string name="tag_management_duplicate">\'%1$s\' はすでにあります。</string>
+    <string name="tag_management_merge_title">タグを統合</string>
+    <string name="tag_management_merge_message">\'%1$s\' はすでにあります。\'%2$s\' を統合しますか？日記はそのまま残り、タグだけが変わります。</string>
+    <string name="tag_management_delete_title">タグを削除</string>
+    <string name="tag_management_delete_message">\'%1$s\' を削除しますか？%2$d件の日記からこのタグが外れ、日記そのものは残ります。</string>
+    <string name="tag_management_delete_unused_message">\'%1$s\' を削除しますか？このタグを使っている日記はありません。</string>
 </resources>

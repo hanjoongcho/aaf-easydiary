@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">아직 태그가 없어요</string>
     <string name="tag_filter_all">전체</string>
     <string name="tag_picker_done">완료</string>
+    <string name="tag_management_title">태그 관리</string>
+    <string name="tag_management_summary">사용한 태그의 이름을 바꾸거나 삭제합니다</string>
+    <string name="tag_management_add_hint">새 태그 이름</string>
+    <string name="tag_management_add">태그 추가</string>
+    <string name="tag_management_empty">아직 태그가 없어요. 일기를 쓰면서 추가한 태그가 여기에 모입니다.</string>
+    <string name="tag_management_diary_count">%1$d개 일기</string>
+    <string name="tag_management_rename">이름 변경</string>
+    <string name="tag_management_rename_hint">태그 이름</string>
+    <string name="tag_management_name_required">태그 이름을 입력해 주세요.</string>
+    <string name="tag_management_duplicate">\'%1$s\' 태그가 이미 있어요.</string>
+    <string name="tag_management_merge_title">태그 합치기</string>
+    <string name="tag_management_merge_message">\'%1$s\' 태그가 이미 있어요. \'%2$s\' 태그를 합칠까요? 일기 내용은 그대로 두고 태그만 바뀝니다.</string>
+    <string name="tag_management_delete_title">태그 삭제</string>
+    <string name="tag_management_delete_message">\'%1$s\' 태그를 삭제할까요? %2$d개 일기에서 이 태그가 빠지고, 일기 내용은 그대로 남습니다.</string>
+    <string name="tag_management_delete_unused_message">\'%1$s\' 태그를 삭제할까요? 이 태그를 쓰는 일기가 없습니다.</string>
 </resources>

@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">Aucune étiquette</string>
     <string name="tag_filter_all">Tout</string>
     <string name="tag_picker_done">Terminé</string>
+    <string name="tag_management_title">Gérer les étiquettes</string>
+    <string name="tag_management_summary">Renommer ou supprimer les étiquettes utilisées</string>
+    <string name="tag_management_add_hint">Nouveau nom d\'étiquette</string>
+    <string name="tag_management_add">Ajouter une étiquette</string>
+    <string name="tag_management_empty">Aucune étiquette. Les étiquettes ajoutées pendant la rédaction d\'une entrée apparaîtront ici.</string>
+    <string name="tag_management_diary_count">%1$d entrées</string>
+    <string name="tag_management_rename">Renommer</string>
+    <string name="tag_management_rename_hint">Nom de l\'étiquette</string>
+    <string name="tag_management_name_required">Saisissez un nom d\'étiquette.</string>
+    <string name="tag_management_duplicate">\'%1$s\' existe déjà.</string>
+    <string name="tag_management_merge_title">Fusionner les étiquettes</string>
+    <string name="tag_management_merge_message">\'%1$s\' existe déjà. Fusionner \'%2$s\' avec elle ? Les entrées restent inchangées, seule leur étiquette change.</string>
+    <string name="tag_management_delete_title">Supprimer l\'étiquette</string>
+    <string name="tag_management_delete_message">Supprimer \'%1$s\' ? Elle sera retirée de %2$d entrées, les entrées elles-mêmes sont conservées.</string>
+    <string name="tag_management_delete_unused_message">Supprimer \'%1$s\' ? Aucune entrée n\'utilise cette étiquette.</string>
 </resources>

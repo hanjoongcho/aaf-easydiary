@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">No tags yet</string>
     <string name="tag_filter_all">All</string>
     <string name="tag_picker_done">Done</string>
+    <string name="tag_management_title">Manage tags</string>
+    <string name="tag_management_summary">Rename or delete the tags you have used</string>
+    <string name="tag_management_add_hint">New tag name</string>
+    <string name="tag_management_add">Add tag</string>
+    <string name="tag_management_empty">No tags yet. Tags you add while writing an entry show up here.</string>
+    <string name="tag_management_diary_count">%1$d entries</string>
+    <string name="tag_management_rename">Rename</string>
+    <string name="tag_management_rename_hint">Tag name</string>
+    <string name="tag_management_name_required">Enter a tag name.</string>
+    <string name="tag_management_duplicate">\'%1$s\' already exists.</string>
+    <string name="tag_management_merge_title">Merge tags</string>
+    <string name="tag_management_merge_message">\'%1$s\' already exists. Merge \'%2$s\' into it? Entries stay as they are and only their tag changes.</string>
+    <string name="tag_management_delete_title">Delete tag</string>
+    <string name="tag_management_delete_message">Delete \'%1$s\'? It is removed from %2$d entries, and the entries themselves are kept.</string>
+    <string name="tag_management_delete_unused_message">Delete \'%1$s\'? No entry uses this tag.</string>
 </resources>
