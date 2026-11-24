@@ -22,7 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,13 +29,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.tag.TagPickerUiState
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 
@@ -94,9 +92,10 @@ fun TagPickerScreen(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 singleLine = true,
                 placeholder = {
-                    Text(
+                    SimpleText(
                         text = stringResource(R.string.tag_picker_search_hint),
-                        color = textColor.copy(alpha = 0.6f),
+                        alpha = 0.6f,
+                        fontColor = textColor,
                     )
                 },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Search, contentDescription = null, tint = primaryColor) },
@@ -110,9 +109,10 @@ fun TagPickerScreen(
                     ),
                 trailingIcon = {
                     if (uiState.selectedNames.isNotEmpty()) {
-                        Text(
+                        SimpleText(
                             text = uiState.selectedNames.size.toString(),
-                            color = primaryColor,
+                            fontColor = primaryColor,
+                            maxLines = 1,
                             modifier = Modifier.padding(horizontal = 12.dp),
                         )
                     }
@@ -143,9 +143,10 @@ fun TagPickerScreen(
 
                 if (uiState.filteredNames.isEmpty() && uiState.createCandidate == null) {
                     item(key = EMPTY_ROW_KEY) {
-                        Text(
+                        SimpleText(
                             text = stringResource(R.string.tag_picker_empty),
-                            color = textColor.copy(alpha = 0.7f),
+                            alpha = 0.7f,
+                            fontColor = textColor,
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp),
                         )
                     }
@@ -188,12 +189,10 @@ private fun TagRow(
                 )
             }
         }
-        Text(
+        SimpleText(
             text = "#$name",
-            color = textColor,
-            fontSize = 15.sp,
+            fontColor = textColor,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -215,12 +214,10 @@ private fun CreateTagRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Icon(imageVector = Icons.Outlined.Add, contentDescription = null, tint = primaryColor)
-        Text(
+        SimpleText(
             text = stringResource(R.string.tag_picker_create, name),
-            color = textColor,
-            fontSize = 15.sp,
+            fontColor = textColor,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
         )
     }
 }
