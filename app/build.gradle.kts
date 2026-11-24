@@ -10,8 +10,8 @@ plugins {
 }
 
 val appCompileSdk = 37
-val appVersionCode = 356
-val appVersionName = "1.4.356.202611250"
+val appVersionCode = 357
+val appVersionName = "1.4.357.202611xx0"
 
 // AGP 9.0+ / 10.0+ 대응을 위한 ApplicationExtension 적용
 configure<ApplicationExtension> {
