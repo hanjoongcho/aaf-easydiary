@@ -337,7 +337,7 @@ class DiaryViewModel
 
         suspend fun findDiaryById(sequence: Long): Diary? = diaryRepository.observeDiaryWithPhotosById(sequence).first()
 
-        /** Every stored tag, including the ones no entry carries yet, for the editor's tag picker. */
+        /** Every stored tag, including the ones no entry carries yet, for the reading screen's tag picker. */
         suspend fun findAllTags(): List<Tag> = tagRepository.getAllTags()
 
         suspend fun findOldestDiary(): Diary? =
