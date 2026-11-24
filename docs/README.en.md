@@ -1,7 +1,17 @@
 # ADR and Diagram Writing Guide
 
 ## 📢 Purpose
-* Record architectural decisions and their rationale to make future review and tracking easier.
+Record architectural decisions and their rationale to make future review and tracking easier.
+
+## 📚 Documents
+
+| Document | Contents |
+| --- | --- |
+| [ADR-0001 — Adopt Realm for device local storage](adr/0001-use-realm-for-local-storage.en.md) | The Realm decision (superseded) |
+| [ADR-0002 — Move local storage to Room with a Repository layer](adr/0002-use-room-and-repository-pattern.en.md) | Current storage structure, layers, tag model, JSON backup |
+| [Model ERD](diagrams/models/erd.md) | Room entities, columns and relations (from `app/schemas/.../8.json`) |
+| [Data layer](diagrams/helper/EasyDiaryDbHelper.ko.md) | `AppDatabase` · DAO · DataSource · Repository flow (Korean) |
+| [Fingerprint lock screen](diagrams/activities/FingerprintLockActivity.ko.md) | `FingerprintLockActivity` entry points and authentication flow (Korean) |
 
 ## ADR Guide
 * Title / filename: e.g. `docs/adr/0001-short-title.ko.md`
@@ -11,6 +21,7 @@
 * Rationale: compare alternatives and explain reasons
 * Consequences (or Tradeoffs): impacts, pros and cons
 * Date / Authors / Related ADR / References
+* An ADR that reverses an earlier decision marks that ADR `Superseded` and links the two. (`0001` → `0002` is the example)
 
 ### ADR Template
 ```
@@ -52,23 +63,32 @@ YYYY-MM-DD
 ## 📋 Diagram Guide
 * Title / filename: e.g. `docs/diagrams/models/erd.md`
 * Clearly indicate persistent fields and relationships of models.
-* When using Realm, recommend annotations like `<<RealmObject>>`, `<<PrimaryKey>>`, `@LinkingObjects`.
-* Prefer readability for relations: `Diary "1" --> "0..1" Location : location`
+* Room notation: entities are `<<Entity>>`, primary keys `<<PK>>`, foreign keys and unique indices `<<FK>>` / `<<UNIQUE>>`, and value objects flattened with `@Embedded` are `<<Embedded>>`.
+* Take table and column names from the schema JSON under `app/schemas/` and from the entity code.
+* Prefer readability for relations: `DiaryEntity "1" --> "0..*" PhotoUriEntity : photoUris`
 
 ### Mermaid example
 ```
 classDiagram
-class Diary {
-    <<RealmObject>>
-    +Int sequence <<PrimaryKey>>
+class DiaryEntity {
+    <<Entity>>
+    +Long diaryId <<PK>>
+    +Long currentTimeMillis
     +String? title
-    +Location? location
+    +LocationEntity? location <<Embedded>>
 }
-class Location {
-    <<RealmObject>>
+class PhotoUriEntity {
+    <<Entity>>
+    +Int id <<PK>>
+    +Long diaryId <<FK>>
+    +String? photoUri
+}
+class LocationEntity {
+    <<Embedded>>
     +String? address
     +Double latitude
     +Double longitude
 }
-Diary "1" --> "0..1" Location : location
+DiaryEntity "1" *-- "0..1" LocationEntity : loc_
+DiaryEntity "1" --> "0..*" PhotoUriEntity : photoUris
 ```
