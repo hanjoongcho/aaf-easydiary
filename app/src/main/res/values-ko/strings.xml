@@ -1153,4 +1153,10 @@
     <string name="sketchpad_color_green">초록</string>
     <string name="sketchpad_color_orange">주황</string>
     <string name="sketchpad_color_purple">보라</string>
+    <string name="tag_picker_title">태그</string>
+    <string name="tag_picker_search_hint">태그 검색 또는 새로 만들기</string>
+    <string name="tag_picker_create">\'%1$s\' 추가</string>
+    <string name="tag_picker_empty">아직 태그가 없어요</string>
+    <string name="tag_filter_all">전체</string>
+    <string name="tag_picker_done">완료</string>
 </resources>

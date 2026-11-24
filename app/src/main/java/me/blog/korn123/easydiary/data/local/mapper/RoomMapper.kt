@@ -4,15 +4,20 @@ import me.blog.korn123.easydiary.data.local.entity.ActionLogEntity
 import me.blog.korn123.easydiary.data.local.entity.AlarmEntity
 import me.blog.korn123.easydiary.data.local.entity.DDayEntity
 import me.blog.korn123.easydiary.data.local.entity.DiaryEntity
+import me.blog.korn123.easydiary.data.local.entity.DiaryTagCrossRefEntity
 import me.blog.korn123.easydiary.data.local.entity.LocationEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
+import me.blog.korn123.easydiary.data.local.entity.TagEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
 import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.model.DDay
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.DiaryTagLink
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
+import me.blog.korn123.easydiary.domain.model.Tag
+import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
@@ -63,7 +68,10 @@ private fun Diary.storedDateString(): String =
 
 private fun Diary.dateFromTimeMillis(): String = DateUtils.timeMillisToDate(currentTimeMillis, DateUtilConstants.DATE_PATTERN_DASH)
 
-fun DiaryEntity.toDomain(photoUris: List<PhotoUri> = emptyList()): Diary =
+fun DiaryEntity.toDomain(
+    photoUris: List<PhotoUri> = emptyList(),
+    tags: List<Tag> = emptyList(),
+): Diary =
     Diary(
         diaryId = this.diaryId,
         originDiaryId = this.originDiaryId,
@@ -89,6 +97,7 @@ fun DiaryEntity.toDomain(photoUris: List<PhotoUri> = emptyList()): Diary =
             },
         isHoliday = this.isHoliday,
         photoUris = photoUris,
+        tags = tags,
     )
 
 fun DiaryWithPhotos.toDomain(): Diary =
@@ -117,6 +126,32 @@ fun DiaryWithPhotos.toDomain(): Diary =
             },
         isHoliday = this.diary.isHoliday,
         photoUris = this.photoUris.map { it.toDomain() },
+        tags = this.tags.map { it.toDomain() },
+    )
+
+fun TagEntity.toDomain(): Tag =
+    Tag(
+        tagId = this.tagId,
+        name = this.name,
+    )
+
+fun Tag.toEntity(): TagEntity =
+    TagEntity(
+        tagId = this.tagId,
+        name = TagRules.displayName(this.name),
+        normalizedName = TagRules.normalize(this.name),
+    )
+
+fun DiaryTagLink.toEntity(): DiaryTagCrossRefEntity =
+    DiaryTagCrossRefEntity(
+        diaryId = this.diaryId,
+        tagId = this.tagId,
+    )
+
+fun DiaryTagCrossRefEntity.toDomain(): DiaryTagLink =
+    DiaryTagLink(
+        diaryId = this.diaryId,
+        tagId = this.tagId,
     )
 
 fun PhotoUriEntity.toDomain(): PhotoUri =

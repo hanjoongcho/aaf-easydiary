@@ -96,6 +96,18 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/tagSetting">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/ic_tag_w"
+                    android:id="@+id/img_tag_setting"
+                    android:padding="3dp"
+                    style="@style/image_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_popup_menu_item"
+                    android:text="@string/tag_picker_title" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:id="@+id/delete">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_delete_w"

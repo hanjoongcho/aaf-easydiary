@@ -21,6 +21,12 @@ data class Diary(
     var isSelected: Boolean = false,
     val location: Location? = null,
     val isHoliday: Boolean = false,
+    /**
+     * The tags the entry carries (issue #270), set from the tag picker the reading screen opens. A write that
+     * does not edit tags leaves the stored ones alone (see `DiaryRepository.updateDiaryWithPhotos`), and the
+     * reading screen replaces only the tags with `DiaryRepository.updateDiaryTags`.
+     */
+    val tags: List<Tag> = emptyList(),
 ) {
     fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? =
         when (isEncrypt) {

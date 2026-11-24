@@ -126,6 +126,8 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                             }
                         }
 
+                    // The editor edits no tags: they are set from the reading screen's option menu, so this
+                    // update hands no tag list and the tags the entry already carries are left alone (#270).
                     diaryRepository.updateDiaryWithPhotos(diary)
                     isDiarySaved = true
                     clearDraftAfterSave(diarySequence)

@@ -214,6 +214,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected lateinit var binding: ActivityBaseDiaryEditingBinding
     protected val photoUris: ArrayList<PhotoUriDomain> = ArrayList()
+
     protected var currentTimeMillis: Long = 0
     protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
@@ -466,6 +467,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     /***************************************************************************************************
      *   Etc functions
      ***************************************************************************************************/
+
     /**
      * Paints the caret of title and contents with the text color so that the caret stays visible
      * on every customized theme (#156, #224). The text colors of the screen are refreshed in
@@ -600,8 +602,8 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun captureDraftSnapshot(): DiaryDraftSnapshot {
-        return DiaryDraftSnapshot(
+    private fun captureDraftSnapshot(): DiaryDraftSnapshot =
+        DiaryDraftSnapshot(
             title =
                 binding.partialEditContents.diaryTitle.text
                     .toString(),
@@ -614,7 +616,6 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
             photoUris = draftPhotoUris(),
             location = location,
         )
-    }
 
     /**
      * The attached photos without the ones the user removed, computed without touching [photoUris] or

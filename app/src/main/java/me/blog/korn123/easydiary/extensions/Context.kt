@@ -153,6 +153,7 @@ import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
+import me.blog.korn123.easydiary.domain.repository.TagRepository
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DateTimeFormat
@@ -220,7 +221,9 @@ import kotlin.math.roundToInt
 import me.blog.korn123.easydiary.domain.model.ActionLog as ActionLogDomain
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.DiaryTagLink as DiaryTagLinkDomain
 import me.blog.korn123.easydiary.domain.model.PhotoUri as PhotoUriDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -255,6 +258,12 @@ interface ActionLogRepositoryEntryPoint {
 @InstallIn(SingletonComponent::class)
 interface DDayRepositoryEntryPoint {
     fun dDayRepository(): DDayRepository
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface TagRepositoryEntryPoint {
+    fun tagRepository(): TagRepository
 }
 
 @EntryPoint
@@ -295,6 +304,14 @@ val Context.dDayRepository: DDayRepository
                 applicationContext,
                 DDayRepositoryEntryPoint::class.java,
             ).dDayRepository()
+
+val Context.tagRepository: TagRepository
+    get() =
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                TagRepositoryEntryPoint::class.java,
+            ).tagRepository()
 
 val Context.applicationScope: CoroutineScope
     get() =
@@ -2326,6 +2343,8 @@ suspend fun Context.generateRoomDataMap(): Map<String, Any> =
         "ALARM" to alarmRepository.getAllAlarms(),
         "D_DAY" to dDayRepository.getAllDDays(),
         "DIARY" to diaryRepository.getDiariesWithPhotos(),
+        "TAGS" to tagRepository.getAllTags(),
+        "DIARY_TAG_CROSS_REF" to tagRepository.getTagLinks(),
     )
 
 suspend fun Context.exportRoomDataWithSAF(uri: Uri?) {
@@ -2414,6 +2433,32 @@ suspend fun Context.importRoomData(
             )
         diaryRepository.deleteAllDiaries()
         diaryRepository.insertAllDiaries(list)
+    }
+
+    // Save Tags (issue #270). The restored entries replaced the previous ones, so their tags are cleared
+    // together with them; a backup written before tags existed holds neither key and the tables stay empty.
+    tagRepository.deleteAllTags()
+    dataMap["TAGS"]?.let {
+        val json = gson.toJson(it)
+        val list: List<TagDomain> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<TagDomain>>() {}.type,
+            )
+        tagRepository.addAllTags(list)
+    }
+
+    // Save the tag attachments of each diary. Restored after the diaries and the tags they point at.
+    dataMap["DIARY_TAG_CROSS_REF"]?.let {
+        val json = gson.toJson(it)
+        val list: List<DiaryTagLinkDomain> =
+            gson.fromJson(
+                json,
+                object :
+                    com.google.gson.reflect.TypeToken<List<DiaryTagLinkDomain>>() {}.type,
+            )
+        tagRepository.addAllTagLinks(list)
     }
 
     dataMap["PREFERENCE"]?.let {

@@ -1153,4 +1153,10 @@
     <string name="sketchpad_color_green">緑</string>
     <string name="sketchpad_color_orange">オレンジ</string>
     <string name="sketchpad_color_purple">紫</string>
+    <string name="tag_picker_title">タグ</string>
+    <string name="tag_picker_search_hint">タグを検索または作成</string>
+    <string name="tag_picker_create">\'%1$s\' を追加</string>
+    <string name="tag_picker_empty">タグはまだありません</string>
+    <string name="tag_filter_all">すべて</string>
+    <string name="tag_picker_done">完了</string>
 </resources>

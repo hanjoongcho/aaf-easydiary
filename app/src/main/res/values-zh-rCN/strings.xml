@@ -1153,4 +1153,10 @@
     <string name="sketchpad_color_green">绿色</string>
     <string name="sketchpad_color_orange">橙色</string>
     <string name="sketchpad_color_purple">紫色</string>
+    <string name="tag_picker_title">标签</string>
+    <string name="tag_picker_search_hint">搜索或创建标签</string>
+    <string name="tag_picker_create">添加“%1$s”</string>
+    <string name="tag_picker_empty">还没有标签</string>
+    <string name="tag_filter_all">全部</string>
+    <string name="tag_picker_done">完成</string>
 </resources>

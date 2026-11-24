@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.domain.repository
 import kotlinx.coroutines.flow.Flow
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.domain.model.Diary
+import me.blog.korn123.easydiary.domain.model.Tag
 
 /*
  * =====================================================================================
@@ -43,6 +44,7 @@ interface DiaryRepository {
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
+        tagId: Long? = null,
     ): Flow<List<Diary>>
 
     fun observeDiaryWithPhotosById(id: Long): Flow<Diary?>
@@ -59,6 +61,7 @@ interface DiaryRepository {
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
+        tagId: Long? = null,
     ): List<Diary>
 
     fun observeDiariesByDateString(
@@ -88,7 +91,25 @@ interface DiaryRepository {
 
     suspend fun insertAllDiaries(diaries: List<Diary>)
 
-    suspend fun updateDiaryWithPhotos(diary: Diary)
+    /**
+     * Saves an edited entry. [tags] holds the tags the entry should carry; a null list means the caller edits
+     * something else than the tags (the editor, encryption, linking, restoring), so the stored attachments
+     * stay as they are, and an empty list is a deliberate "no tags".
+     */
+    suspend fun updateDiaryWithPhotos(
+        diary: Diary,
+        tags: List<Tag>? = null,
+    )
+
+    /**
+     * Writes the tags of the entry [diaryId] as [tags], creating the tags that do not exist yet, and leaves
+     * every other column, photo and link of that entry alone. The reading screen saves the tags it picked
+     * with this, so tagging an entry never rewrites its contents (issue #270).
+     */
+    suspend fun updateDiaryTags(
+        diaryId: Long,
+        tags: List<Tag>,
+    )
 
     suspend fun updateDiaries(diaries: List<Diary>)
 

@@ -1153,4 +1153,10 @@
     <string name="sketchpad_color_green">हरा</string>
     <string name="sketchpad_color_orange">नारंगी</string>
     <string name="sketchpad_color_purple">बैंगनी</string>
+    <string name="tag_picker_title">टैग</string>
+    <string name="tag_picker_search_hint">टैग खोजें या बनाएँ</string>
+    <string name="tag_picker_create">\'%1$s\' जोड़ें</string>
+    <string name="tag_picker_empty">अभी कोई टैग नहीं</string>
+    <string name="tag_filter_all">सभी</string>
+    <string name="tag_picker_done">हो गया</string>
 </resources>

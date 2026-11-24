@@ -7,6 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,11 +41,14 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.presentation.components.TagChip
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
 
 class DiaryMainItemAdapter(
     val activity: Activity,
@@ -45,6 +56,8 @@ class DiaryMainItemAdapter(
     private val diaryItems: List<DiaryDomain>,
     val itemClickCallback: (diary: DiaryDomain) -> Unit,
     val itemLongClickCallback: () -> Unit,
+    /** Tapping a `#tag` chip of a card filters the main screen by that tag (issue #270). */
+    val itemTagClickCallback: (tag: TagDomain) -> Unit = {},
 ) : RecyclerView.Adapter<DiaryMainItemAdapter.ViewHolder>(),
     FastScrollRecyclerView.SectionedAdapter {
     var currentQuery: String? = null
@@ -134,6 +147,39 @@ class DiaryMainItemAdapter(
         private val itemDiaryMainBinding: ItemDiaryMainBinding,
         val adapter: DiaryMainItemAdapter,
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
+        /**
+         * The tags of the entry this holder currently shows (issue #270). The Compose chip row reads it, so a
+         * recycled holder only has to put a new list in it instead of rebuilding views.
+         */
+        private val tagChipState = mutableStateOf<List<TagDomain>>(emptyList())
+
+        init {
+            itemDiaryMainBinding.tagViews.run {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    AppTheme {
+                        FlowRow(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    // Room for the 2dp shadow of a chip, so the chips of the first and last column
+                                    // and of the last row keep their shadow inside the ComposeView (issue #270).
+                                    .padding(horizontal = 2.dp, vertical = 2.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            tagChipState.value.forEach { tag ->
+                                TagChip(
+                                    name = tag.name,
+                                    onClick = { adapter.itemTagClickCallback(tag) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         fun bindTo(diary: DiaryDomain) {
             itemDiaryMainBinding.run {
                 // 경과 일수 설정이 켜져 있으면 미래 일정이 아니어도 좌측 상단 배지에 D-Day 형식으로 표시합니다.
@@ -328,7 +374,18 @@ class DiaryMainItemAdapter(
                         true -> activity.config.summaryMaxLines
                         false -> Integer.MAX_VALUE
                     }
+
+                bindTags(diary)
             }
+        }
+
+        /**
+         * Draws the `#tag` chips of the card (issue #270). The row is gone while the entry carries no tag, so a
+         * card without tags keeps the height it always had.
+         */
+        private fun bindTags(diary: DiaryDomain) {
+            itemDiaryMainBinding.tagViews.visibility = if (diary.tags.isEmpty()) View.GONE else View.VISIBLE
+            tagChipState.value = diary.tags.toList()
         }
 
         fun bindCheckbox(diary: DiaryDomain) {

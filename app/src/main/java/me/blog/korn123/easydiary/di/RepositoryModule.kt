@@ -8,10 +8,12 @@ import me.blog.korn123.easydiary.data.repository.ActionLogRepositoryImpl
 import me.blog.korn123.easydiary.data.repository.AlarmRepositoryImpl
 import me.blog.korn123.easydiary.data.repository.DDayRepositoryImpl
 import me.blog.korn123.easydiary.data.repository.DiaryRepositoryImpl
+import me.blog.korn123.easydiary.data.repository.TagRepositoryImpl
 import me.blog.korn123.easydiary.domain.repository.ActionLogRepository
 import me.blog.korn123.easydiary.domain.repository.AlarmRepository
 import me.blog.korn123.easydiary.domain.repository.DDayRepository
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
+import me.blog.korn123.easydiary.domain.repository.TagRepository
 import javax.inject.Singleton
 
 @Module
@@ -41,4 +43,10 @@ abstract class RepositoryModule {
     abstract fun bindActionLogRepository(
         actionLogRepositoryImpl: ActionLogRepositoryImpl
     ): ActionLogRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTagRepository(
+        tagRepositoryImpl: TagRepositoryImpl
+    ): TagRepository
 }

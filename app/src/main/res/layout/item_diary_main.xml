@@ -103,6 +103,14 @@
                         app:flexWrap="wrap"
                         app:justifyContent="flex_end" />
 
+                    <androidx.compose.ui.platform.ComposeView
+                        android:id="@+id/tagViews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/card_contents_padding"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -14,6 +14,7 @@ interface DiaryDataSource {
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
+        tagId: Long? = null,
     ): Flow<List<DiaryWithPhotos>>
 
     suspend fun getDiariesWithPhotos(
@@ -22,6 +23,7 @@ interface DiaryDataSource {
         startTimeMillis: Long = 0,
         endTimeMillis: Long = 0,
         symbolSequence: Int = 0,
+        tagId: Long? = null,
     ): List<DiaryWithPhotos>
 
     fun getDiaryWithPhotosById(id: Long): Flow<DiaryWithPhotos?>
@@ -50,6 +52,7 @@ interface DiaryDataSource {
     suspend fun insertDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,
+        tagIds: List<Long> = emptyList(),
     ): Long
 
     suspend fun insertDiariesWithPhotos(
@@ -63,6 +66,7 @@ interface DiaryDataSource {
     suspend fun updateDiaryWithPhotos(
         diary: DiaryEntity,
         photoUris: List<PhotoUriEntity>,
+        tagIds: List<Long>? = null,
     )
 
     suspend fun deleteDiary(diary: DiaryEntity)

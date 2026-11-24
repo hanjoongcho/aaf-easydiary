@@ -21,6 +21,7 @@ class DiaryLocalDataSourceImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): Flow<List<DiaryWithPhotos>> =
             diaryDao.getDiariesWithPhotosFlow(
                 query,
@@ -28,6 +29,7 @@ class DiaryLocalDataSourceImpl
                 startTimeMillis,
                 endTimeMillis,
                 symbolSequence,
+                tagId,
             )
 
         override suspend fun getDiariesWithPhotos(
@@ -36,6 +38,7 @@ class DiaryLocalDataSourceImpl
             startTimeMillis: Long,
             endTimeMillis: Long,
             symbolSequence: Int,
+            tagId: Long?,
         ): List<DiaryWithPhotos> =
             diaryDao.getDiariesWithPhotos(
                 query,
@@ -43,6 +46,7 @@ class DiaryLocalDataSourceImpl
                 startTimeMillis,
                 endTimeMillis,
                 symbolSequence,
+                tagId,
             )
 
         override fun getDiaryWithPhotosById(id: Long): Flow<DiaryWithPhotos?> = diaryDao.getDiaryWithPhotosById(id)
@@ -73,7 +77,8 @@ class DiaryLocalDataSourceImpl
         override suspend fun insertDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
-        ): Long = diaryDao.insertDiaryWithPhotos(diary, photoUris)
+            tagIds: List<Long>,
+        ): Long = diaryDao.insertDiaryWithPhotos(diary, photoUris, tagIds)
 
         override suspend fun insertDiariesWithPhotos(diariesWithPhotos: List<Pair<DiaryEntity, List<PhotoUriEntity>>>) {
             diaryDao.insertDiariesWithPhotos(diariesWithPhotos)
@@ -90,8 +95,9 @@ class DiaryLocalDataSourceImpl
         override suspend fun updateDiaryWithPhotos(
             diary: DiaryEntity,
             photoUris: List<PhotoUriEntity>,
+            tagIds: List<Long>?,
         ) {
-            diaryDao.updateDiaryWithPhotos(diary, photoUris)
+            diaryDao.updateDiaryWithPhotos(diary, photoUris, tagIds)
         }
 
         override suspend fun deleteDiary(diary: DiaryEntity) {

@@ -1153,4 +1153,10 @@
     <string name="sketchpad_color_green">Verde</string>
     <string name="sketchpad_color_orange">Arancione</string>
     <string name="sketchpad_color_purple">Viola</string>
+    <string name="tag_picker_title">Tag</string>
+    <string name="tag_picker_search_hint">Cerca o crea un tag</string>
+    <string name="tag_picker_create">Aggiungi \'%1$s\'</string>
+    <string name="tag_picker_empty">Nessun tag</string>
+    <string name="tag_filter_all">Tutti</string>
+    <string name="tag_picker_done">Fatto</string>
 </resources>
