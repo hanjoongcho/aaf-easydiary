@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">刪除標籤</string>
     <string name="tag_management_delete_message">刪除「%1$s」？它會從 %2$d 篇日記中移除，日記本身會保留。</string>
     <string name="tag_management_delete_unused_message">刪除「%1$s」？沒有日記使用這個標籤。</string>
+    <string name="writing_streak_title">連續記錄</string>
+    <string name="writing_streak_rule_daily">每天</string>
+    <string name="writing_streak_rule_two_day">2 天規則</string>
+    <string name="writing_streak_current_days">連續 %1$d 天</string>
+    <string name="writing_streak_longest_days">最長 %1$d 天</string>
+    <string name="writing_streak_status_written_today">今天已完成</string>
+    <string name="writing_streak_status_due_today">今天寫就能連續 %1$d 天</string>
+    <string name="writing_streak_status_at_risk">今天寫就能維持連續（明天過後重置）</string>
+    <string name="writing_streak_status_broken">從今天重新開始第 1 天</string>
 </resources>

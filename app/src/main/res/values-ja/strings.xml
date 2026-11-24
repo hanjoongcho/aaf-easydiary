@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">タグを削除</string>
     <string name="tag_management_delete_message">\'%1$s\' を削除しますか？%2$d件の日記からこのタグが外れ、日記そのものは残ります。</string>
     <string name="tag_management_delete_unused_message">\'%1$s\' を削除しますか？このタグを使っている日記はありません。</string>
+    <string name="writing_streak_title">連続記録</string>
+    <string name="writing_streak_rule_daily">毎日</string>
+    <string name="writing_streak_rule_two_day">2日ルール</string>
+    <string name="writing_streak_current_days">%1$d日連続</string>
+    <string name="writing_streak_longest_days">最長 %1$d日</string>
+    <string name="writing_streak_status_written_today">今日は記録済み</string>
+    <string name="writing_streak_status_due_today">今日書けば %1$d日連続</string>
+    <string name="writing_streak_status_at_risk">今日書けば連続を維持（明日になるとリセット）</string>
+    <string name="writing_streak_status_broken">今日から1日目を再スタート</string>
 </resources>

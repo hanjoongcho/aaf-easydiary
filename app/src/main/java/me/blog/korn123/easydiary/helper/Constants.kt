@@ -592,6 +592,7 @@ const val SETTING_ENABLE_STATUSBAR_DARKEN_COLOR = "setting_enable_statusbar_dark
 const val SETTING_ENABLE_WELCOME_DASHBOARD_POPUP = "setting_enable_welcome_dashboard_popup"
 const val SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT = "setting_enable_dday_flexbox_layout"
 const val SETTING_ENABLE_DASHBOARD_CALENDAR = "setting_enable_dashboard_calendar"
+const val SETTING_ENABLE_STREAK_TWO_DAY_RULE = "setting_enable_streak_two_day_rule"
 const val SETTING_DATETIME_FORMAT = "setting_datetime_format"
 const val SETTING_ENABLE_ALL_DAY_DEFAULT = "setting_enable_all_day_default"
 const val SETTING_TIME_FORMAT = "setting_time_format"

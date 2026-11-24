@@ -53,6 +53,12 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/writingStreak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
                 android:id="@+id/fragment_diary_todo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

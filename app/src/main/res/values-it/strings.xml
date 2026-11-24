@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">Elimina tag</string>
     <string name="tag_management_delete_message">Eliminare \'%1$s\'? Verrà rimosso da %2$d voci, le voci stesse restano.</string>
     <string name="tag_management_delete_unused_message">Eliminare \'%1$s\'? Nessuna voce usa questo tag.</string>
+    <string name="writing_streak_title">Serie di scrittura</string>
+    <string name="writing_streak_rule_daily">Ogni giorno</string>
+    <string name="writing_streak_rule_two_day">Regola dei 2 giorni</string>
+    <string name="writing_streak_current_days">Serie di %1$d giorni</string>
+    <string name="writing_streak_longest_days">Record: %1$d giorni</string>
+    <string name="writing_streak_status_written_today">Scritto oggi</string>
+    <string name="writing_streak_status_due_today">Scrivi oggi per arrivare a %1$d giorni</string>
+    <string name="writing_streak_status_at_risk">Scrivi oggi per mantenere la serie (si azzera domani)</string>
+    <string name="writing_streak_status_broken">Ricomincia oggi dal giorno 1</string>
 </resources>

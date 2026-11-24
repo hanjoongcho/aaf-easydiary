@@ -161,6 +161,9 @@ class DashboardActivity : EasyDiaryActivity() {
             // 08. Daily Symbol
             replace(R.id.dashboard_daily_symbol, dailySymbolFragment)
 
+            // 08-1. Writing Streak
+            replace(R.id.writingStreak, WritingStreakFragment())
+
             // 09. DashBoardRank-Lifetime
             replace(
                 R.id.lifetime,

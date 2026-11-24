@@ -1186,4 +1186,13 @@
     <string name="tag_management_delete_title">Tag löschen</string>
     <string name="tag_management_delete_message">\'%1$s\' löschen? Der Tag wird aus %2$d Einträgen entfernt, die Einträge selbst bleiben erhalten.</string>
     <string name="tag_management_delete_unused_message">\'%1$s\' löschen? Kein Eintrag verwendet diesen Tag.</string>
+    <string name="writing_streak_title">Schreibserie</string>
+    <string name="writing_streak_rule_daily">Täglich</string>
+    <string name="writing_streak_rule_two_day">2-Tage-Regel</string>
+    <string name="writing_streak_current_days">%1$d Tage Serie</string>
+    <string name="writing_streak_longest_days">Bestwert: %1$d Tage</string>
+    <string name="writing_streak_status_written_today">Heute geschrieben</string>
+    <string name="writing_streak_status_due_today">Heute schreiben für %1$d Tage</string>
+    <string name="writing_streak_status_at_risk">Heute schreiben, um die Serie zu halten (morgen wird sie zurückgesetzt)</string>
+    <string name="writing_streak_status_broken">Heute mit Tag 1 neu beginnen</string>
 </resources>
