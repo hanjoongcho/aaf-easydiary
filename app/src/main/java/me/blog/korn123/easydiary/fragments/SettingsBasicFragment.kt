@@ -64,6 +64,7 @@ import me.blog.korn123.easydiary.presentation.settings.components.RadioGroupCard
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCard
 import me.blog.korn123.easydiary.presentation.settings.components.SwitchCardTodo
+import me.blog.korn123.easydiary.presentation.tagmanagement.TagManagementActivity
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import java.text.SimpleDateFormat
@@ -238,6 +239,19 @@ class SettingsBasicFragment : Fragment() {
                     ) {
                         enableTaskSymbolTopOrder = enableTaskSymbolTopOrder.not()
                         config.enableTaskSymbolTopOrder = enableTaskSymbolTopOrder
+                    }
+
+                    SimpleCard(
+                        title = getString(R.string.tag_management_title),
+                        description = getString(R.string.tag_management_summary),
+                        modifier = settingCardModifier,
+                        enableCardViewPolicy = enableCardViewPolicy,
+                        fontFamily = fontFamily,
+                    ) {
+                        TransitionHelper.startActivityWithTransition(
+                            requireActivity(),
+                            Intent(requireActivity(), TagManagementActivity::class.java),
+                        )
                     }
 
                     val enableLocationInfo: Boolean by settingsViewModel.enableLocationInfo.collectAsState()
