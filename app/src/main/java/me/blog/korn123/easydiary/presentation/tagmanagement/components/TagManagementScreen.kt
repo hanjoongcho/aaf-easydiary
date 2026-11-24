@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -84,7 +85,7 @@ fun TagManagementScreen(
                 close = onBackClick,
             )
         },
-        containerColor = Color(context.config.screenBackgroundColor),
+        containerColor = Color(context.config.backgroundColor),
         modifier = modifier,
     ) { innerPadding ->
         Column(
@@ -96,6 +97,7 @@ fun TagManagementScreen(
             AddTagRow(
                 name = uiState.newTagName,
                 primaryColor = primaryColor,
+                textColor = textColor,
                 onNameChanged = onNewTagNameChanged,
                 onAdd = onAddTag,
             )
@@ -106,6 +108,7 @@ fun TagManagementScreen(
                         SimpleText(
                             text = stringResource(R.string.tag_management_empty),
                             alpha = 0.7f,
+                            fontColor = textColor,
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
@@ -225,6 +228,7 @@ fun TagManagementScreen(
 private fun AddTagRow(
     name: String,
     primaryColor: Color,
+    textColor: Color,
     onNameChanged: (String) -> Unit,
     onAdd: () -> Unit,
 ) {
@@ -236,7 +240,21 @@ private fun AddTagRow(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
         singleLine = true,
-        placeholder = { SimpleText(text = stringResource(R.string.tag_management_add_hint), alpha = 0.6f) },
+        placeholder = {
+            SimpleText(
+                text = stringResource(R.string.tag_management_add_hint),
+                alpha = 0.6f,
+                fontColor = textColor,
+            )
+        },
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedTextColor = textColor,
+                unfocusedTextColor = textColor,
+                cursorColor = primaryColor,
+                focusedBorderColor = primaryColor,
+                unfocusedBorderColor = textColor.copy(alpha = 0.4f),
+            ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onAdd() }),
         trailingIcon = {
@@ -272,6 +290,7 @@ private fun TagRow(
         SimpleText(
             text = stringResource(R.string.tag_management_diary_count, tagWithCount.diaryCount),
             alpha = 0.7f,
+            fontColor = textColor,
             maxLines = 1,
         )
         IconButton(onClick = onRenameClick) {
@@ -322,7 +341,21 @@ private fun EditTagRow(
                     .weight(1f)
                     .focusRequester(focusRequester),
             singleLine = true,
-            placeholder = { SimpleText(text = stringResource(R.string.tag_management_rename_hint), alpha = 0.6f) },
+            placeholder = {
+                SimpleText(
+                    text = stringResource(R.string.tag_management_rename_hint),
+                    alpha = 0.6f,
+                    fontColor = textColor,
+                )
+            },
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = textColor,
+                    unfocusedTextColor = textColor,
+                    cursorColor = primaryColor,
+                    focusedBorderColor = primaryColor,
+                    unfocusedBorderColor = textColor.copy(alpha = 0.4f),
+                ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { onConfirm() }),
             trailingIcon = {
