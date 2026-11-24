@@ -146,15 +146,11 @@
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <com.google.android.flexbox.FlexboxLayout
+                                <androidx.compose.ui.platform.ComposeView
                                     android:id="@+id/tagChipContainer"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:clipToPadding="false"
-                                    app:alignItems="center"
-                                    app:flexDirection="row"
-                                    app:flexWrap="wrap" />
+                                    android:layout_weight="1" />
 
                                 <me.blog.korn123.easydiary.views.FixedCardView
                                     android:id="@+id/tagAddButton"

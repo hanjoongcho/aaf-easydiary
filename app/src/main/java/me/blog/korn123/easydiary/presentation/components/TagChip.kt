@@ -31,10 +31,13 @@ import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SI
 /**
  * One tag of an entry (issue #270).
  *
- * The chip draws exactly what `FixedCardView` draws for the tag rows of the main list and the editor: a rounded
- * rectangle of `card_radius` (8dp) with a 2dp shadow, a 12sp label and no outline. The active filter is filled
- * with the primary color and white text; every other chip takes the inner card tone of the theme, so it stays
- * apart from the surface behind it in both the light and the dark theme.
+ * One chip is drawn the same way on every screen that shows tags: a rounded rectangle of `card_radius` (8dp)
+ * with a 2dp shadow, a 12sp label and no outline. The active filter is filled with the primary color and white
+ * text; every other chip takes the inner card tone of the theme, so it stays apart from the surface behind it in
+ * both the light and the dark theme.
+ *
+ * `suffix` is appended to the label for the screens that need an extra mark on the chip; the editor passes the
+ * remove mark of its tag row with it.
  */
 @Composable
 fun TagChip(
@@ -42,6 +45,7 @@ fun TagChip(
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     showMarker: Boolean = true,
+    suffix: String = String.EMPTY,
     onClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -62,7 +66,7 @@ fun TagChip(
                 .padding(horizontal = 8.dp, vertical = 3.dp),
     ) {
         Text(
-            text = if (showMarker) TagRules.label(name) else name,
+            text = (if (showMarker) TagRules.label(name) else name) + suffix,
             color = if (selected) Color.White else Color(context.config.textColor),
             fontSize = 12.sp,
             maxLines = 1,

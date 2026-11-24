@@ -3,12 +3,18 @@ package me.blog.korn123.easydiary.adapters
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,7 +27,6 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
-import me.blog.korn123.easydiary.domain.model.TagRules
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
@@ -36,11 +41,12 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.presentation.components.TagChip
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.easydiary.utils.FontUtils
-import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
 import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
 
@@ -141,6 +147,39 @@ class DiaryMainItemAdapter(
         private val itemDiaryMainBinding: ItemDiaryMainBinding,
         val adapter: DiaryMainItemAdapter,
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
+        /**
+         * The tags of the entry this holder currently shows (issue #270). The Compose chip row reads it, so a
+         * recycled holder only has to put a new list in it instead of rebuilding views.
+         */
+        private val tagChipState = mutableStateOf<List<TagDomain>>(emptyList())
+
+        init {
+            itemDiaryMainBinding.tagViews.run {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    AppTheme {
+                        FlowRow(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    // Room for the 2dp shadow of a chip, so the chips of the first and last column
+                                    // and of the last row keep their shadow inside the ComposeView (issue #270).
+                                    .padding(horizontal = 2.dp, vertical = 2.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            tagChipState.value.forEach { tag ->
+                                TagChip(
+                                    name = tag.name,
+                                    onClick = { adapter.itemTagClickCallback(tag) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         fun bindTo(diary: DiaryDomain) {
             itemDiaryMainBinding.run {
                 // 경과 일수 설정이 켜져 있으면 미래 일정이 아니어도 좌측 상단 배지에 D-Day 형식으로 표시합니다.
@@ -345,56 +384,8 @@ class DiaryMainItemAdapter(
          * card without tags keeps the height it always had.
          */
         private fun bindTags(diary: DiaryDomain) {
-            itemDiaryMainBinding.tagViews.run {
-                removeAllViews()
-                if (diary.tags.isEmpty()) {
-                    visibility = View.GONE
-                } else {
-                    visibility = View.VISIBLE
-                    diary.tags.forEach { tag ->
-                        addView(createTagChip(tag))
-                    }
-                }
-            }
-        }
-
-        private fun createTagChip(tag: TagDomain): View {
-            // The reading view's Compose TagChip carries 8dp sideways and 3dp up and down inside it, so
-            // the chips of this list use the same inner padding (issue #270).
-            val horizontalPadding = activity.dpToPixel(8f)
-            val verticalPadding = activity.dpToPixel(3f)
-            val textView =
-                TextView(activity).apply {
-                    text = TagRules.label(tag.name)
-                    setTextColor(activity.config.textColor)
-                    setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-                    textSize = 12f
-                    maxLines = 1
-                    ellipsize = TextUtils.TruncateAt.END
-                }
-            val chip =
-                FixedCardView(activity).apply {
-                    // Set before the first layout: turning it on in onDraw() left the first frame with
-                    // a different padding and shadow than the Compose chip (issue #270).
-                    useCompatPadding = true
-                    radius = activity.resources.getDimension(R.dimen.card_radius)
-                    cardElevation = activity.dpToPixel(2f).toFloat()
-                    layoutParams =
-                        ViewGroup
-                            .MarginLayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ).apply {
-                                marginEnd = activity.dpToPixel(4f)
-                                // Keeps a wrapped row of chips apart, and keeps the bottom shadow off the
-                                // edge of the row (issue #270).
-                                bottomMargin = activity.dpToPixel(4f)
-                            }
-                    addView(textView)
-                }
-            activity.updateDashboardInnerCard(chip)
-            chip.setOnClickListener { adapter.itemTagClickCallback(tag) }
-            return chip
+            itemDiaryMainBinding.tagViews.visibility = if (diary.tags.isEmpty()) View.GONE else View.VISIBLE
+            tagChipState.value = diary.tags.toList()
         }
 
         fun bindCheckbox(diary: DiaryDomain) {

@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.Menu
@@ -28,11 +27,18 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -73,7 +79,6 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.extensions.storedTimeFormat
-import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
@@ -100,8 +105,10 @@ import me.blog.korn123.easydiary.helper.SYMBOL_SEQUENCE
 import me.blog.korn123.easydiary.helper.SettingConstants
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.helper.TagPickerConstants
+import me.blog.korn123.easydiary.presentation.components.TagChip
 import me.blog.korn123.easydiary.presentation.sketchpad.SketchpadActivity
 import me.blog.korn123.easydiary.presentation.tag.TagPickerActivity
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.DiaryAutoSavePolicy
 import me.blog.korn123.easydiary.utils.DiaryDraftSnapshot
@@ -109,7 +116,6 @@ import me.blog.korn123.easydiary.utils.DiaryDraftTracker
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.easydiary.utils.JasyptUtils
-import me.blog.korn123.easydiary.views.FixedCardView
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -240,6 +246,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
      * entry is saved, so a name the writer creates here becomes a stored tag only together with the entry.
      */
     protected val selectedTags: MutableList<TagDomain> = mutableListOf()
+
+    /**
+     * The tag row of the editor, handed to the Compose `FlowRow` once and redrawn whenever the picked tags
+     * change (issue #270). Holding the tags as state keeps the chips on the same `TagChip` the reading view, the
+     * filter bar of the main screen and the main list card use.
+     */
+    private val tagChipState = mutableStateOf<List<TagDomain>>(emptyList())
+
     protected var currentTimeMillis: Long = 0
     protected var year = calendarInstance[Calendar.YEAR]
     protected var location: LocationDomain? = null
@@ -370,7 +384,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         applyBottomImeInsets(binding.partialEditContents.root)
         applyKeyboardIncognitoPolicy()
         binding.partialEditContents.tagAddButton.setOnClickListener { openTagPicker() }
-        renderTagChips()
+        initTagChipView()
 
         onBackPressedDispatcher.addCallback(
             this,
@@ -554,54 +568,45 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     private fun renderTagChips() {
-        binding.partialEditContents.tagChipContainer.run {
-            removeAllViews()
-            selectedTags.forEach { tag ->
-                addView(createTagChip(tag))
-            }
-        }
+        tagChipState.value = selectedTags.toList()
     }
 
-    /** A chip of the tag row. Tapping it takes the tag off the entry again. */
-    private fun createTagChip(tag: TagDomain): View {
-        // Same inner padding as the reading view's Compose TagChip: 8dp sideways, 3dp up and down (issue #270).
-        val horizontalPadding = dpToPixel(8f)
-        val verticalPadding = dpToPixel(3f)
-        val textView =
-            TextView(this).apply {
-                text = TagRules.label(tag.name).plus(TAG_CHIP_REMOVE_MARK)
-                setTextColor(config.textColor)
-                setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-                textSize = 12f
-                maxLines = 1
-                ellipsize = TextUtils.TruncateAt.END
-            }
-        val chip =
-            FixedCardView(this).apply {
-                // Set before the first layout, so the very first frame already carries the padding and
-                // shadow the Compose chip has instead of gaining them in onDraw() (issue #270).
-                useCompatPadding = true
-                radius = resources.getDimension(R.dimen.card_radius)
-                cardElevation = dpToPixel(2f).toFloat()
-                layoutParams =
-                    ViewGroup
-                        .MarginLayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ).apply {
-                            marginEnd = dpToPixel(4f)
-                            // Space between wrapped rows, and room for the bottom shadow inside the row.
-                            bottomMargin = dpToPixel(4f)
+    /**
+     * Turns the tag row of the editor into the Compose chip row (issue #270). The composition is set up once here,
+     * and every later change of the tags only replaces the state the `TagChip`s read, so the row is never rebuilt
+     * from views and keeps the exact chip the other three screens draw.
+     */
+    private fun initTagChipView() {
+        binding.partialEditContents.tagChipContainer.run {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AppTheme {
+                    FlowRow(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                // Room for the 2dp shadow of a chip, so the chips of the first and last column and
+                                // of the last row keep their shadow inside the ComposeView (issue #270).
+                                .padding(horizontal = 2.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        tagChipState.value.forEach { tag ->
+                            TagChip(
+                                name = tag.name,
+                                suffix = TAG_CHIP_REMOVE_MARK,
+                                onClick = {
+                                    selectedTags.remove(tag)
+                                    renderTagChips()
+                                    onEditorStateChanged()
+                                },
+                            )
                         }
-                addView(textView)
+                    }
+                }
             }
-        updateDashboardInnerCard(chip)
-        chip.setOnClickListener {
-            selectedTags.remove(tag)
-            renderTagChips()
-            onEditorStateChanged()
         }
-        return chip
+        renderTagChips()
     }
 
     private fun showSpeechDialog() {
