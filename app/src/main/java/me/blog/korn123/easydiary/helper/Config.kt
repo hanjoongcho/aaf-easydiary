@@ -276,6 +276,14 @@ class Config(
         get() = prefs.getBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, true)
         set(enableDashboardCalendar) = prefs.edit { putBoolean(SETTING_ENABLE_DASHBOARD_CALENDAR, enableDashboardCalendar) }
 
+    /**
+     * The rule the dashboard writing streak counts with (issue #88): false keeps a chain of daily entries,
+     * true is the two day rule that allows one skipped day.
+     */
+    var enableStreakTwoDayRule: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_STREAK_TWO_DAY_RULE, false)
+        set(enableStreakTwoDayRule) = prefs.edit { putBoolean(SETTING_ENABLE_STREAK_TWO_DAY_RULE, enableStreakTwoDayRule) }
+
     var settingDatetimeFormat: String
         get() = prefs.getString(SETTING_DATETIME_FORMAT, DateTimeFormat.DATE_FULL_AND_TIME_SHORT.toString())!!
         set(settingDatetimeFormat) = prefs.edit { putString(SETTING_DATETIME_FORMAT, settingDatetimeFormat) }

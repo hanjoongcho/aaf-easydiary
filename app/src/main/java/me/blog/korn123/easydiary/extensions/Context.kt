@@ -1525,6 +1525,7 @@ fun Context.preferenceToJsonString(): HashMap<String, Any> {
         preferenceMap[SETTING_ENABLE_WELCOME_DASHBOARD_POPUP] = enableWelcomeDashboardPopup
         preferenceMap[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT] = enableDDayFlexboxLayout
         preferenceMap[SETTING_ENABLE_DASHBOARD_CALENDAR] = enableDashboardCalendar
+        preferenceMap[SETTING_ENABLE_STREAK_TWO_DAY_RULE] = enableStreakTwoDayRule
         preferenceMap[SETTING_DATETIME_FORMAT] = settingDatetimeFormat
         preferenceMap[SETTING_ENABLE_ALL_DAY_DEFAULT] = enableAllDayDefault
         preferenceMap[SETTING_TIME_FORMAT] = settingTimeFormat
@@ -1617,6 +1618,7 @@ fun Context.jsonStringToPreference(jsonString: String) {
         map[SETTING_ENABLE_WELCOME_DASHBOARD_POPUP]?.let { enableWelcomeDashboardPopup = it as? Boolean ?: enableWelcomeDashboardPopup }
         map[SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT]?.let { enableDDayFlexboxLayout = it as? Boolean ?: enableDDayFlexboxLayout }
         map[SETTING_ENABLE_DASHBOARD_CALENDAR]?.let { enableDashboardCalendar = it as? Boolean ?: enableDashboardCalendar }
+        map[SETTING_ENABLE_STREAK_TWO_DAY_RULE]?.let { enableStreakTwoDayRule = it as? Boolean ?: enableStreakTwoDayRule }
         map[SETTING_DATETIME_FORMAT]?.let { settingDatetimeFormat = it as? String ?: settingDatetimeFormat }
         map[SETTING_TIME_FORMAT]?.let { settingTimeFormat = it as? String ?: settingTimeFormat }
         map[SETTING_ENABLE_ALL_DAY_DEFAULT]?.let { enableAllDayDefault = it as? Boolean ?: enableAllDayDefault }
