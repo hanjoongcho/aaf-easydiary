@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">Тегов пока нет</string>
     <string name="tag_filter_all">Все</string>
     <string name="tag_picker_done">Готово</string>
+    <string name="tag_management_title">Управление тегами</string>
+    <string name="tag_management_summary">Переименуйте или удалите использованные теги</string>
+    <string name="tag_management_add_hint">Новое имя тега</string>
+    <string name="tag_management_add">Добавить тег</string>
+    <string name="tag_management_empty">Тегов пока нет. Теги, добавленные при записи, появятся здесь.</string>
+    <string name="tag_management_diary_count">Записей: %1$d</string>
+    <string name="tag_management_rename">Переименовать</string>
+    <string name="tag_management_rename_hint">Имя тега</string>
+    <string name="tag_management_name_required">Введите имя тега.</string>
+    <string name="tag_management_duplicate">«%1$s» уже существует.</string>
+    <string name="tag_management_merge_title">Объединить теги</string>
+    <string name="tag_management_merge_message">«%1$s» уже существует. Объединить «%2$s» с ним? Записи останутся как есть, изменится только их тег.</string>
+    <string name="tag_management_delete_title">Удалить тег</string>
+    <string name="tag_management_delete_message">Удалить «%1$s»? Тег будет снят с %2$d записей, сами записи сохранятся.</string>
+    <string name="tag_management_delete_unused_message">Удалить «%1$s»? Ни одна запись не использует этот тег.</string>
 </resources>

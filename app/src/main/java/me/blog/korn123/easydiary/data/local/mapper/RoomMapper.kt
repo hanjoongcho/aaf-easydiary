@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.data.local.entity.LocationEntity
 import me.blog.korn123.easydiary.data.local.entity.PhotoUriEntity
 import me.blog.korn123.easydiary.data.local.entity.TagEntity
 import me.blog.korn123.easydiary.data.local.relations.DiaryWithPhotos
+import me.blog.korn123.easydiary.data.local.relations.TagWithCountRow
 import me.blog.korn123.easydiary.domain.model.ActionLog
 import me.blog.korn123.easydiary.domain.model.Alarm
 import me.blog.korn123.easydiary.domain.model.DDay
@@ -18,6 +19,7 @@ import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
 import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.domain.model.TagRules
+import me.blog.korn123.easydiary.domain.model.TagWithCount
 import me.blog.korn123.easydiary.enums.ActionLogKey
 import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.helper.DateUtilConstants
@@ -133,6 +135,12 @@ fun TagEntity.toDomain(): Tag =
     Tag(
         tagId = this.tagId,
         name = this.name,
+    )
+
+fun TagWithCountRow.toDomain(): TagWithCount =
+    TagWithCount(
+        tag = this.tag.toDomain(),
+        diaryCount = this.diaryCount,
     )
 
 fun Tag.toEntity(): TagEntity =

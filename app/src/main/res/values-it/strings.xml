@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">Nessun tag</string>
     <string name="tag_filter_all">Tutti</string>
     <string name="tag_picker_done">Fatto</string>
+    <string name="tag_management_title">Gestisci tag</string>
+    <string name="tag_management_summary">Rinomina o elimina i tag che hai usato</string>
+    <string name="tag_management_add_hint">Nuovo nome del tag</string>
+    <string name="tag_management_add">Aggiungi tag</string>
+    <string name="tag_management_empty">Nessun tag. I tag che aggiungi mentre scrivi una voce appariranno qui.</string>
+    <string name="tag_management_diary_count">%1$d voci</string>
+    <string name="tag_management_rename">Rinomina</string>
+    <string name="tag_management_rename_hint">Nome del tag</string>
+    <string name="tag_management_name_required">Inserisci un nome del tag.</string>
+    <string name="tag_management_duplicate">\'%1$s\' esiste già.</string>
+    <string name="tag_management_merge_title">Unisci tag</string>
+    <string name="tag_management_merge_message">\'%1$s\' esiste già. Unire \'%2$s\' a questo? Le voci restano invariate, cambia solo il loro tag.</string>
+    <string name="tag_management_delete_title">Elimina tag</string>
+    <string name="tag_management_delete_message">Eliminare \'%1$s\'? Verrà rimosso da %2$d voci, le voci stesse restano.</string>
+    <string name="tag_management_delete_unused_message">Eliminare \'%1$s\'? Nessuna voce usa questo tag.</string>
 </resources>

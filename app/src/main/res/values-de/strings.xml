@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">Noch keine Tags</string>
     <string name="tag_filter_all">Alle</string>
     <string name="tag_picker_done">Fertig</string>
+    <string name="tag_management_title">Tags verwalten</string>
+    <string name="tag_management_summary">Verwendete Tags umbenennen oder löschen</string>
+    <string name="tag_management_add_hint">Neuer Tag-Name</string>
+    <string name="tag_management_add">Tag hinzufügen</string>
+    <string name="tag_management_empty">Noch keine Tags. Tags, die du beim Schreiben eines Eintrags anlegst, erscheinen hier.</string>
+    <string name="tag_management_diary_count">%1$d Einträge</string>
+    <string name="tag_management_rename">Umbenennen</string>
+    <string name="tag_management_rename_hint">Tag-Name</string>
+    <string name="tag_management_name_required">Gib einen Tag-Namen ein.</string>
+    <string name="tag_management_duplicate">\'%1$s\' existiert bereits.</string>
+    <string name="tag_management_merge_title">Tags zusammenführen</string>
+    <string name="tag_management_merge_message">\'%1$s\' existiert bereits. \'%2$s\' damit zusammenführen? Die Einträge bleiben, nur ihr Tag ändert sich.</string>
+    <string name="tag_management_delete_title">Tag löschen</string>
+    <string name="tag_management_delete_message">\'%1$s\' löschen? Der Tag wird aus %2$d Einträgen entfernt, die Einträge selbst bleiben erhalten.</string>
+    <string name="tag_management_delete_unused_message">\'%1$s\' löschen? Kein Eintrag verwendet diesen Tag.</string>
 </resources>

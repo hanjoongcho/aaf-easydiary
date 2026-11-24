@@ -170,6 +170,9 @@
             android:name=".presentation.tag.TagPickerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".presentation.tagmanagement.TagManagementActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".presentation.sketchpad.SketchpadActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

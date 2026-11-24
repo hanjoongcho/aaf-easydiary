@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">अभी कोई टैग नहीं</string>
     <string name="tag_filter_all">सभी</string>
     <string name="tag_picker_done">हो गया</string>
+    <string name="tag_management_title">टैग प्रबंधित करें</string>
+    <string name="tag_management_summary">अपने उपयोग किए गए टैग का नाम बदलें या हटाएँ</string>
+    <string name="tag_management_add_hint">नया टैग नाम</string>
+    <string name="tag_management_add">टैग जोड़ें</string>
+    <string name="tag_management_empty">अभी कोई टैग नहीं। प्रविष्टि लिखते समय जोड़े गए टैग यहाँ दिखेंगे।</string>
+    <string name="tag_management_diary_count">%1$d प्रविष्टियाँ</string>
+    <string name="tag_management_rename">नाम बदलें</string>
+    <string name="tag_management_rename_hint">टैग नाम</string>
+    <string name="tag_management_name_required">टैग नाम दर्ज करें।</string>
+    <string name="tag_management_duplicate">\'%1$s\' पहले से मौजूद है।</string>
+    <string name="tag_management_merge_title">टैग मिलाएँ</string>
+    <string name="tag_management_merge_message">\'%1$s\' पहले से मौजूद है। \'%2$s\' को इसमें मिलाएँ? प्रविष्टियाँ वैसी ही रहेंगी, केवल उनका टैग बदलेगा।</string>
+    <string name="tag_management_delete_title">टैग हटाएँ</string>
+    <string name="tag_management_delete_message">\'%1$s\' हटाएँ? यह %2$d प्रविष्टियों से हट जाएगा, प्रविष्टियाँ स्वयं बनी रहेंगी।</string>
+    <string name="tag_management_delete_unused_message">\'%1$s\' हटाएँ? कोई प्रविष्टि इस टैग का उपयोग नहीं करती।</string>
 </resources>

@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">Aún no hay etiquetas</string>
     <string name="tag_filter_all">Todo</string>
     <string name="tag_picker_done">Hecho</string>
+    <string name="tag_management_title">Gestionar etiquetas</string>
+    <string name="tag_management_summary">Cambia el nombre o elimina las etiquetas que has usado</string>
+    <string name="tag_management_add_hint">Nuevo nombre de etiqueta</string>
+    <string name="tag_management_add">Añadir etiqueta</string>
+    <string name="tag_management_empty">Aún no hay etiquetas. Las etiquetas que añadas al escribir una entrada aparecerán aquí.</string>
+    <string name="tag_management_diary_count">%1$d entradas</string>
+    <string name="tag_management_rename">Cambiar nombre</string>
+    <string name="tag_management_rename_hint">Nombre de la etiqueta</string>
+    <string name="tag_management_name_required">Escribe un nombre de etiqueta.</string>
+    <string name="tag_management_duplicate">\'%1$s\' ya existe.</string>
+    <string name="tag_management_merge_title">Combinar etiquetas</string>
+    <string name="tag_management_merge_message">\'%1$s\' ya existe. ¿Combinar \'%2$s\' con ella? Las entradas no cambian, solo su etiqueta.</string>
+    <string name="tag_management_delete_title">Eliminar etiqueta</string>
+    <string name="tag_management_delete_message">¿Eliminar \'%1$s\'? Se quitará de %2$d entradas y las entradas se mantendrán.</string>
+    <string name="tag_management_delete_unused_message">¿Eliminar \'%1$s\'? Ninguna entrada usa esta etiqueta.</string>
 </resources>

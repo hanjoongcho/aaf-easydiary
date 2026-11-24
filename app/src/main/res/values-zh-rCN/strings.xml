@@ -1159,4 +1159,19 @@
     <string name="tag_picker_empty">还没有标签</string>
     <string name="tag_filter_all">全部</string>
     <string name="tag_picker_done">完成</string>
+    <string name="tag_management_title">管理标签</string>
+    <string name="tag_management_summary">重命名或删除用过的标签</string>
+    <string name="tag_management_add_hint">新标签名称</string>
+    <string name="tag_management_add">添加标签</string>
+    <string name="tag_management_empty">还没有标签。写日记时添加的标签会集中在这里。</string>
+    <string name="tag_management_diary_count">%1$d 篇日记</string>
+    <string name="tag_management_rename">重命名</string>
+    <string name="tag_management_rename_hint">标签名称</string>
+    <string name="tag_management_name_required">请输入标签名称。</string>
+    <string name="tag_management_duplicate">“%1$s”已存在。</string>
+    <string name="tag_management_merge_title">合并标签</string>
+    <string name="tag_management_merge_message">“%1$s”已存在。要将“%2$s”合并到它吗？日记内容不变，只会改变标签。</string>
+    <string name="tag_management_delete_title">删除标签</string>
+    <string name="tag_management_delete_message">删除“%1$s”？它会从 %2$d 篇日记中移除，日记本身会保留。</string>
+    <string name="tag_management_delete_unused_message">删除“%1$s”？没有日记使用这个标签。</string>
 </resources>
