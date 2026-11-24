@@ -11,10 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
-import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.repository.DiaryRepository
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.DiaryEditingConstants
 import me.blog.korn123.easydiary.utils.StreakSummary
 import me.blog.korn123.easydiary.utils.StreakUtils
 import java.time.LocalDate
@@ -23,6 +21,9 @@ import javax.inject.Inject
 /**
  * What the dashboard streak card draws: the numbers of [summary] counted under the rule the writer picked,
  * and which rule that is so the two chips of the card can show the selection.
+ *
+ * [summary] carries the entries of every square of the heatmap as well, so a tap on a square can open what
+ * was written that day without reading the stored entries again.
  */
 data class WritingStreakUiState(
     val summary: StreakSummary = StreakSummary(),
@@ -55,7 +56,7 @@ class WritingStreakViewModel
                 today,
             ) { diaries, twoDayRule, todayDate ->
                 WritingStreakUiState(
-                    summary = StreakUtils.calculate(writtenEntriesOf(diaries), todayDate, twoDayRule),
+                    summary = StreakUtils.calculate(diaries, todayDate, twoDayRule),
                     isTwoDayRule = twoDayRule,
                 )
             }.flowOn(Dispatchers.Default)
@@ -80,13 +81,6 @@ class WritingStreakViewModel
         fun refreshToday() {
             today.value = LocalDate.now()
         }
-
-        /**
-         * The entries a streak counts: the saved entries, not the draft of one being written (issue #261),
-         * which carries the sequence it is written for as its origin.
-         */
-        private fun writtenEntriesOf(diaries: List<Diary>): List<Diary> =
-            diaries.filter { diary -> diary.originDiaryId == DiaryEditingConstants.DIARY_ORIGIN_SEQUENCE_INIT }
 
         companion object {
             private const val STOP_TIMEOUT_MILLIS = 5_000L
