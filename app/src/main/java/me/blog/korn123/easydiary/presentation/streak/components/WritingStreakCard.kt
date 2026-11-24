@@ -94,6 +94,7 @@ fun WritingStreakCard(
             Spacer(modifier = Modifier.width(10.dp))
             SimpleText(
                 text = stringResource(R.string.writing_streak_longest_days, uiState.summary.longestStreak),
+                modifier = Modifier.weight(1F, fill = false),
                 fontSize = (config.settingFontSize * 0.8F).coerceAtMost(MAX_LONGEST_FONT_SIZE),
                 alpha = 0.7F,
                 fontColor = textColor,
