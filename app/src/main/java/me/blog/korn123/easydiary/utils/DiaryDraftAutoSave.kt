@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.utils
 import me.blog.korn123.easydiary.domain.model.Diary
 import me.blog.korn123.easydiary.domain.model.Location
 import me.blog.korn123.easydiary.domain.model.PhotoUri
-import me.blog.korn123.easydiary.domain.model.Tag
 
 /**
  * Autosave policy of the diary editor (issue #261).
@@ -35,8 +34,6 @@ data class DiaryDraftSnapshot(
     val currentTimeMillis: Long = 0L,
     val photoUris: List<PhotoUri> = emptyList(),
     val location: Location? = null,
-    /** The tags picked in the editor, so a restored draft keeps them with the text (issue #270). */
-    val tags: List<Tag> = emptyList(),
 ) {
     /**
      * The write policy the editor has always had: an editor with no title, no contents and no photo has
@@ -57,8 +54,7 @@ data class DiaryDraftSnapshot(
             isAllDay == other.isAllDay &&
             currentTimeMillis == other.currentTimeMillis &&
             photoUris == other.photoUris &&
-            location == other.location &&
-            tags == other.tags
+            location == other.location
 
     /** Builds the domain diary that is persisted for the draft of [originDiaryId]. */
     fun toDiary(originDiaryId: Long): Diary =
@@ -71,7 +67,6 @@ data class DiaryDraftSnapshot(
             isAllDay = isAllDay,
             photoUris = photoUris.toList(),
             location = location,
-            tags = tags.toList(),
         )
 
     companion object {
@@ -85,7 +80,6 @@ data class DiaryDraftSnapshot(
                 currentTimeMillis = diary.currentTimeMillis,
                 photoUris = diary.photoUris.toList(),
                 location = diary.location,
-                tags = diary.tags.toList(),
             )
     }
 }

@@ -8,8 +8,8 @@ import java.util.Locale
  * A diary can carry several tags and one tag can be carried by several diaries, so the tag itself holds
  * nothing but its name; the attachment between a tag and an entry is [DiaryTagLink].
  *
- * @property tagId id of the stored tag. A tag picked in the editor but not saved yet keeps 0 until the
- * entry is written.
+ * @property tagId id of the stored tag. A tag created in the picker but not written yet keeps 0 until the
+ * entry it is attached to is saved.
  * @property name the name as the writer typed it, cleaned by [TagRules.displayName].
  */
 data class Tag(
@@ -31,8 +31,8 @@ data class DiaryTagLink(
 )
 
 /**
- * The single place that decides what a tag name is, so the editor, the picker, the filter bar and the
- * stored rows all agree on when two names mean the same tag.
+ * The single place that decides what a tag name is, so the picker, the screens that show tags, the filter bar
+ * and the stored rows all agree on when two names mean the same tag.
  *
  * Names are compared case insensitively and ignore surrounding and repeated whitespace: `' Trip '`,
  * `'trip'` and `'TRIP'` are one tag, stored once and shown with the spelling of the first name entered.

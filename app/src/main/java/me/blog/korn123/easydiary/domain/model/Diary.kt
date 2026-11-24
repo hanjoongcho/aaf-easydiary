@@ -22,9 +22,9 @@ data class Diary(
     val location: Location? = null,
     val isHoliday: Boolean = false,
     /**
-     * The tags the entry carries (issue #270). Empty until the entry is saved or a tag is picked in the
-     * editor; a write that does not edit tags leaves the stored ones alone (see
-     * `DiaryRepository.updateDiaryWithPhotos`).
+     * The tags the entry carries (issue #270), set from the tag picker the reading screen opens. A write that
+     * does not edit tags leaves the stored ones alone (see `DiaryRepository.updateDiaryWithPhotos`), and the
+     * reading screen replaces only the tags with `DiaryRepository.updateDiaryTags`.
      */
     val tags: List<Tag> = emptyList(),
 ) {

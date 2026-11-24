@@ -65,8 +65,8 @@ interface TagDao {
      * The stored tag of every name in [names], creating the ones that do not exist yet.
      *
      * Names are cleaned and deduplicated by [TagRules], so the result holds one row per distinct tag and
-     * keeps the order the names were given in. A tag the writer picked in an editor but never saved can
-     * therefore be written with the entry that finally carries it, without a separate "create tag" step.
+     * keeps the order the names were given in. A tag created in the picker but never written can therefore be
+     * stored with the entry that finally carries it, without a separate "create tag" step.
      */
     @Transaction
     suspend fun ensureTags(names: List<String>): List<TagEntity> {

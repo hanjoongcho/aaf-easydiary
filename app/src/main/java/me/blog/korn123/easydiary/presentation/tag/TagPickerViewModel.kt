@@ -10,10 +10,10 @@ import me.blog.korn123.easydiary.domain.model.TagRules
 import javax.inject.Inject
 
 /**
- * State of the tag picker of the diary editor (issue #270).
+ * State of the tag picker of a diary entry (issue #270).
  *
  * [selectedNames] keeps the order the tags were picked in; [allNames] is every stored tag plus the ones this
- * editor already created, and [createCandidate] is the name typed in the search field that no tag has yet,
+ * picker already created, and [createCandidate] is the name typed in the search field that no tag has yet,
  * which the screen offers as a `+ ...` row.
  */
 data class TagPickerUiState(
@@ -42,7 +42,7 @@ class TagPickerViewModel
 
         private var isInitialized = false
 
-        /** Takes the tags of the database and of the editor in, once per picker (a rotation keeps them). */
+        /** Takes the tags of the database and of the entry in, once per picker (a rotation keeps them). */
         fun initialize(
             allNames: List<String>,
             selectedNames: List<String>,

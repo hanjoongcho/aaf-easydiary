@@ -96,7 +96,6 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                     photoUris = photoUris.map { it },
                                     location = location,
                                     linkedDiaries = ArrayList(linkedDiaries),
-                                    tags = selectedTags.toList(),
                                 )
                             }
 
@@ -123,12 +122,13 @@ class DiaryEditingActivity : BaseDiaryEditingActivity() {
                                     photoUris = photoUris.map { it },
                                     location = location,
                                     linkedDiaries = ArrayList(linkedDiaries),
-                                    tags = selectedTags.toList(),
                                 )
                             }
                         }
 
-                    diaryRepository.updateDiaryWithPhotos(diary, tags = selectedTags.toList())
+                    // The editor edits no tags: they are set from the reading screen's option menu, so this
+                    // update hands no tag list and the tags the entry already carries are left alone (#270).
+                    diaryRepository.updateDiaryWithPhotos(diary)
                     isDiarySaved = true
                     clearDraftAfterSave(diarySequence)
                     TransitionHelper.finishActivityWithTransition(this@DiaryEditingActivity)

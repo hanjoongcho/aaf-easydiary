@@ -804,7 +804,7 @@ object TagPickerConstants {
     /** The tags the database holds, handed to the picker so it filters them without querying. */
     const val TAG_NAMES = "tag_picker_tag_names"
 
-    /** The tags the editor already selected when it opens the picker. */
+    /** The tags the entry already carries when the picker opens on it. */
     const val SELECTED_TAG_NAMES = "tag_picker_selected_tag_names"
 
     /** The picker's answer: the selected names in the order they were picked. */
@@ -815,6 +815,9 @@ object TagPickerConstants {
 
     /** [SELECTED_TAG_ID] value that asks the main screen for every entry. */
     const val NO_TAG_ID = -1L
+
+    /** The entry the open picker edits, saved so a re-created screen still applies the picker's answer. */
+    const val PENDING_TAG_SEQUENCE = "tag_picker_pending_sequence"
 }
 
 object PhotoFlexItemOptionConstants {

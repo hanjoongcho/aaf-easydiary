@@ -8,8 +8,8 @@ import me.blog.korn123.easydiary.domain.model.Tag
  * Reads and writes the tags of diary entries (issue #270).
  *
  * Writing a tag together with the entry that carries it stays in `DiaryRepository`, because the entry and
- * its tags are one write. This repository serves the places that look at tags on their own: the editor's
- * picker, the main screen's filter bar and the backup file.
+ * its tags are one write. This repository serves the places that look at tags on their own: the reading
+ * screen's picker, the main screen's filter bar and the backup file.
  */
 interface TagRepository {
     /** Every stored tag, for the picker, which offers tags that are not in use yet as well. */

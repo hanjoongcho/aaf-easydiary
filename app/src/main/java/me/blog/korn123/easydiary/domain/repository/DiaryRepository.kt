@@ -92,13 +92,23 @@ interface DiaryRepository {
     suspend fun insertAllDiaries(diaries: List<Diary>)
 
     /**
-     * Saves an edited entry. [tags] holds the tags the editor shows; a null list means the caller edits
-     * something else than the tags (encryption, linking, restoring), so the stored attachments stay as they
-     * are, and an empty list is a deliberate "no tags".
+     * Saves an edited entry. [tags] holds the tags the entry should carry; a null list means the caller edits
+     * something else than the tags (the editor, encryption, linking, restoring), so the stored attachments
+     * stay as they are, and an empty list is a deliberate "no tags".
      */
     suspend fun updateDiaryWithPhotos(
         diary: Diary,
         tags: List<Tag>? = null,
+    )
+
+    /**
+     * Writes the tags of the entry [diaryId] as [tags], creating the tags that do not exist yet, and leaves
+     * every other column, photo and link of that entry alone. The reading screen saves the tags it picked
+     * with this, so tagging an entry never rewrites its contents (issue #270).
+     */
+    suspend fun updateDiaryTags(
+        diaryId: Long,
+        tags: List<Tag>,
     )
 
     suspend fun updateDiaries(diaries: List<Diary>)

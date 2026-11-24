@@ -15,12 +15,12 @@ import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import java.util.ArrayList
 
 /**
- * The tag picker the diary editor opens from its `+ tag` button (issue #270).
+ * The tag picker the reading screen opens from its option menu (issue #270).
  *
  * Launch with [TagPickerConstants.TAG_NAMES] (the stored tags) and [TagPickerConstants.SELECTED_TAG_NAMES]
- * (the tags the editor already holds); the picker answers with
- * [TagPickerConstants.RESULT_SELECTED_TAG_NAMES]. It touches no database, so a tag created here only becomes
- * a row when the entry is saved.
+ * (the tags the entry already carries); the picker answers with
+ * [TagPickerConstants.RESULT_SELECTED_TAG_NAMES]. It touches no database, so the caller writes the answer and a
+ * tag created here only becomes a row when that write resolves its name.
  */
 @AndroidEntryPoint
 class TagPickerActivity : EasyDiaryComposeBaseActivity() {

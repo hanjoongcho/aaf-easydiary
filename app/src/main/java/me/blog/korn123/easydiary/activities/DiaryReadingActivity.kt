@@ -114,6 +114,7 @@ import me.blog.korn123.easydiary.presentation.diary.LinkedDiaryViewModel
 import me.blog.korn123.easydiary.presentation.main.components.LegacyDiarySubItemCard
 import me.blog.korn123.easydiary.presentation.photoviewer.PhotoViewPagerActivity
 import me.blog.korn123.easydiary.presentation.settings.components.CategoryTitleCard
+import me.blog.korn123.easydiary.presentation.tag.TagPickerActivity
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.presentation.tree.TreeTimelineActivity
 import me.blog.korn123.easydiary.utils.ClickableLinkUtils
@@ -146,11 +147,15 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
     private fun getFragmentAt(position: Int = binding.diaryViewPager.currentItem): PlaceholderFragment? {
         val sequence = diaryList.getOrNull(position)?.diaryId ?: return null
-        return supportFragmentManager.findFragmentByTag("f$sequence") as? PlaceholderFragment
+        return getFragmentOf(sequence)
+    }
+
+    /** The fragment showing the entry [sequence], whether or not the pager still draws it. */
+    private fun getFragmentOf(sequence: Long): PlaceholderFragment? =
+        supportFragmentManager.findFragmentByTag("f$sequence") as? PlaceholderFragment
             ?: supportFragmentManager.fragments.firstOrNull { fragment ->
                 fragment is PlaceholderFragment && fragment.isAdded && fragment.getSequence() == sequence
             } as? PlaceholderFragment
-    }
 
     private val selectValueLauncher =
         registerForActivityResult(
@@ -203,6 +208,38 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             }
         }
 
+    /**
+     * The entry whose tags the open picker edits. The answer is written to this entry even if the picker
+     * comes back to a pager that has moved on.
+     */
+    private var pendingTagSequence: Long? = null
+
+    /**
+     * The tag picker of the entry this screen shows (issue #270). Like the 'Link entry' picker, the answer is
+     * stored at once and the screen redraws, so a reader can tag an old entry without opening the editor.
+     */
+    private val requestTagPicker =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            val sequence = pendingTagSequence ?: return@registerForActivityResult
+            pendingTagSequence = null
+            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            val selectedNames =
+                result.data
+                    ?.getStringArrayListExtra(TagPickerConstants.RESULT_SELECTED_TAG_NAMES)
+                    .orEmpty()
+            lifecycleScope.launch {
+                // Only the tags of the entry are written: its contents, photos and links stay as they are, and a
+                // name the picker created becomes a stored tag here with the entry that carries it.
+                diaryRepository.updateDiaryTags(
+                    sequence,
+                    selectedNames.map { name -> TagDomain(name = name) },
+                )
+                getFragmentOf(sequence)?.initContents()
+            }
+        }
+
     private var pendingPdfSnapshots: List<DiaryPdfSnapshot> = emptyList()
     private var pendingPdfIncludePhotos = false
     private var pendingPdfDecryptKey: String? = null
@@ -220,6 +257,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        pendingTagSequence = savedInstanceState?.getLong(TagPickerConstants.PENDING_TAG_SEQUENCE)?.takeIf { it > 0L }
         isDiaryLinkEntry = applyDiaryLinkIntent()
 
         popupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
@@ -355,6 +393,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         getFragmentAt()?.let { fragment ->
             outState.putLong(DIARY_SEQUENCE, fragment.getSequence())
         }
+        // A picker the system re-creates this screen under still comes back with an answer for this entry.
+        pendingTagSequence?.let { outState.putLong(TagPickerConstants.PENDING_TAG_SEQUENCE, it) }
         super.onSaveInstanceState(outState)
     }
 
@@ -954,6 +994,10 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                     }
                                 }
 
+                                R.id.tagSetting -> {
+                                    openTagPicker(fragment)
+                                }
+
                                 R.id.find -> {
                                     handleFindClick(fragment)
                                 }
@@ -968,6 +1012,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     decryptData.setOnClickListener(itemClickListener)
                     delete.setOnClickListener(itemClickListener)
                     linkEntry.setOnClickListener(itemClickListener)
+                    tagSetting.setOnClickListener(itemClickListener)
 
                     updateDrawableColorInnerCardView(imgPostcard)
                     updateDrawableColorInnerCardView(imgPdfExport)
@@ -976,6 +1021,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     updateDrawableColorInnerCardView(imgDecryptData)
                     updateDrawableColorInnerCardView(imgDelete)
                     updateDrawableColorInnerCardView(imgLinkEntry)
+                    updateDrawableColorInnerCardView(imgTagSetting)
 
                     if (isLabFlavor()) {
                         push.visibility = View.VISIBLE
@@ -989,6 +1035,27 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
             }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+    }
+
+    /**
+     * Opens the tag picker on the tags of [fragment]'s entry, offering every stored tag with them.
+     *
+     * The picker touches no database, so the answer is written here by [requestTagPicker] when the reader
+     * confirms it, the way the 'Link entry' picker writes its answer on the spot (issue #270).
+     */
+    private fun openTagPicker(fragment: PlaceholderFragment) {
+        lifecycleScope.launch {
+            val sequence = fragment.getSequence()
+            val storedNames = diaryViewModel.findAllTags().map { it.name }
+            val entryNames = diaryViewModel.findDiaryById(sequence)?.tags?.map { it.name }.orEmpty()
+            val intent =
+                Intent(this@DiaryReadingActivity, TagPickerActivity::class.java).apply {
+                    putStringArrayListExtra(TagPickerConstants.TAG_NAMES, ArrayList(storedNames))
+                    putStringArrayListExtra(TagPickerConstants.SELECTED_TAG_NAMES, ArrayList(entryNames))
+                }
+            pendingTagSequence = sequence
+            requestTagPicker.launch(intent)
+        }
     }
 
     private fun handlePdfExportSelected(fragment: PlaceholderFragment) {

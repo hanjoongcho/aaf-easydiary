@@ -173,12 +173,24 @@ class DiaryRepositoryImpl
 
         /**
          * The stored ids of [tags], creating the tags that do not exist yet. Names are resolved instead of
-         * trusting the ids the editor holds, because a tag picked in the editor only becomes a row when the
-         * entry is written.
+         * trusting the ids a caller holds, because a tag created in the picker only becomes a row when the
+         * entry that carries it is written.
          */
         private suspend fun resolveTagIds(tags: List<Tag>): List<Long> {
             if (tags.isEmpty()) return emptyList()
             return tagDao.ensureTags(tags.map { it.name }).map { it.tagId }
+        }
+
+        override suspend fun updateDiaryTags(
+            diaryId: Long,
+            tags: List<Tag>,
+        ) {
+            // Only the attachments of this entry are replaced: the reading screen changes tags on an entry it
+            // does not edit, so its contents, photos and links are left as they are (issue #270).
+            database.withTransaction {
+                val tagIds = resolveTagIds(tags)
+                database.diaryDao().replaceDiaryTagCrossRefs(diaryId, tagIds)
+            }
         }
 
         override suspend fun deleteDiary(diary: Diary) {

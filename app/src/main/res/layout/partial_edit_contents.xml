@@ -138,39 +138,6 @@
                                 </androidx.appcompat.widget.LinearLayoutCompat>
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/tagContainer"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/card_contents_padding"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <androidx.compose.ui.platform.ComposeView
-                                    android:id="@+id/tagChipContainer"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1" />
-
-                                <me.blog.korn123.easydiary.views.FixedCardView
-                                    android:id="@+id/tagAddButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="top"
-                                    android:layout_marginStart="5dp"
-                                    android:foreground="?attr/selectableItemBackground"
-                                    app:fixedAppcompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/tagAddLabel"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:padding="5dp"
-                                        android:text="@string/tag_add"
-                                        android:textColor="?attr/colorPrimary" />
-                                </me.blog.korn123.easydiary.views.FixedCardView>
-                            </LinearLayout>
-
                             <com.simplemobiletools.commons.views.MyEditText
                                 android:layout_marginBottom="@dimen/card_contents_padding"
                                 android:id="@+id/diaryContents"
