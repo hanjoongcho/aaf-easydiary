@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-0002](0002-use-room-and-repository-pattern.en.md) (recorded 2026-11-24): the local storage was moved to Room with a Repository layer.
+
+> The text below is kept as the record of the decision as it was made. For the current structure see [ADR-0002](0002-use-room-and-repository-pattern.en.md) (Korean: [0002-use-room-and-repository-pattern.ko.md](0002-use-room-and-repository-pattern.ko.md)).
 
 ## Context
 
@@ -31,3 +33,11 @@ We adopt **Realm (NoSQL Object Database)** as the local database. This decision 
 
 * **Benefits:** Reduces time spent writing SQL queries, allowing more focus on business logic (markdown sync, encryption, etc.). Observing data changes in the UI layer becomes very easy.
 * **Drawbacks:** Adding the Realm library slightly increases app binary size (APK). Also, Realm objects are bound to the thread where they are created, so care is needed when passing data between threads.
+
+## Related ADRs
+
+* [ADR-0002](0002-use-room-and-repository-pattern.en.md) — Adopt Room with a Repository layer (supersedes this decision)
+
+## References
+
+* App release notes: `1.4.351` / `1.4.352` (migration to Room), `1.4.353` (Realm dependency removed, 2026-11-06)

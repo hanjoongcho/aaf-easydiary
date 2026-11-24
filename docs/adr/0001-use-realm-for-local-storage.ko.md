@@ -2,7 +2,9 @@
 
 ## 상태 (Status)
 
-승인됨 (Accepted)
+대체됨 (Superseded) — [ADR-0002](0002-use-room-and-repository-pattern.ko.md)가 로컬 저장소 구성을 Room + Repository 계층으로 바꾸면서 이 결정을 대체했습니다. (2026-11-24 기록)
+
+> 아래 내용은 결정 당시의 기록으로 남겨 둡니다. 현재 구조는 [ADR-0002](0002-use-room-and-repository-pattern.ko.md)를 참고하세요.
 
 ## 컨텍스트 (Context)
 
@@ -31,6 +33,14 @@
 
 * **장점:** SQL 쿼리 작성 시간을 줄여 비즈니스 로직(마크다운 동기화, 암호화 등)에 더 집중할 수 있습니다. UI 레이어에서 데이터 변경을 관찰하기가 매우 쉬워집니다.
 * **단점:** Realm 라이브러리 추가로 인해 앱 바이너리 크기(APK Size)가 약간 증가합니다. 또한, Realm 객체는 생성된 스레드에서만 접근 가능하므로 스레드 간 데이터 전달 시 주의가 필요합니다.
+
+## 관련 ADR
+
+* [ADR-0002](0002-use-room-and-repository-pattern.ko.md) — Room + Repository 패턴 채택 (이 결정을 대체함)
+
+## 참조
+
+* 앱 릴리스 노트: `1.4.351`·`1.4.352` (Room 전환), `1.4.353` (Realm 의존성 제거, 2026-11-06)
 
 ---
 
