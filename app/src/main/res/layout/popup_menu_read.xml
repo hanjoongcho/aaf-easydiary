@@ -13,138 +13,145 @@
         app:cardElevation="2dp"
         app:contentPadding="0dp"
         style="@style/AppCard">
-        <LinearLayout
-            android:id="@+id/menu"
+        <!-- A MaxHeightScrollView, so the card scrolls instead of being cut off when the menu is
+             taller than the space left below the popup anchor (landscape, large font). -->
+        <me.blog.korn123.easydiary.views.MaxHeightScrollView
+            android:id="@+id/menuScroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/postcard">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_picture_w"
-                    android:id="@+id/img_postcard"
-                    android:padding="2dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/postcard_making" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/copyLink">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_copy"
-                    android:id="@+id/img_copy_link"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/copy_link" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/pdfExport">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_pdf_export"
-                    android:id="@+id/img_pdf_export"
-                    android:padding="0dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/pdf_export_title" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                tools:visibility="visible"
-                android:visibility="gone"
-                android:id="@+id/encryptData">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_padlock"
-                    android:id="@+id/img_encrypt_data"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/encrypt_diary" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                tools:visibility="visible"
-                android:visibility="gone"
-                android:id="@+id/decryptData">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_unlock"
-                    android:id="@+id/img_decrypt_data"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/decrypt_diary" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/linkEntry">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_delete_link"
-                    android:id="@+id/img_link_entry"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/link_entry" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/tagSetting">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_tag_w"
-                    android:id="@+id/img_tag_setting"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/tag_picker_title" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:id="@+id/delete">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_delete_w"
-                    android:id="@+id/img_delete"
-                    android:padding="3dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/menu_delete" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:visibility="gone"
-                android:id="@+id/find">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_outline_find_in_page_64"
-                    android:id="@+id/img_find"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="Find Word" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
-                android:visibility="gone"
-                android:id="@+id/push">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_github_11"
-                    android:id="@+id/img_push"
-                    android:padding="1dp"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="Push" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </LinearLayout>
+            android:fadeScrollbars="true"
+            android:scrollbarStyle="insideInset">
+            <LinearLayout
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/postcard">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_picture_w"
+                        android:id="@+id/img_postcard"
+                        android:padding="2dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/postcard_making" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/copyLink">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_copy"
+                        android:id="@+id/img_copy_link"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/copy_link" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/pdfExport">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_pdf_export"
+                        android:id="@+id/img_pdf_export"
+                        android:padding="0dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/pdf_export_title" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:id="@+id/encryptData">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_padlock"
+                        android:id="@+id/img_encrypt_data"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/encrypt_diary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:id="@+id/decryptData">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_unlock"
+                        android:id="@+id/img_decrypt_data"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/decrypt_diary" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/linkEntry">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_delete_link"
+                        android:id="@+id/img_link_entry"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/link_entry" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/tagSetting">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_tag_w"
+                        android:id="@+id/img_tag_setting"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/tag_picker_title" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/delete">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_delete_w"
+                        android:id="@+id/img_delete"
+                        android:padding="3dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/menu_delete" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:visibility="gone"
+                    android:id="@+id/find">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_outline_find_in_page_64"
+                        android:id="@+id/img_find"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="Find Word" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:visibility="gone"
+                    android:id="@+id/push">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:src="@drawable/ic_github_11"
+                        android:id="@+id/img_push"
+                        android:padding="1dp"
+                        style="@style/image_popup_menu_icon" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="Push" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
+        </me.blog.korn123.easydiary.views.MaxHeightScrollView>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
-
-
