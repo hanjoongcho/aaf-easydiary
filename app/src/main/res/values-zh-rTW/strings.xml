@@ -888,6 +888,7 @@
     <string name="statistics_symbol_top_ten">前十名圖標統計</string>
     <string name="statistics_tag_top_ten">依標籤的前十名統計</string>
     <string name="statistics_tag_empty">還沒有使用過標籤。為日記加上標籤後，最常用的標籤會顯示在這裡。</string>
+    <string name="statistics_tag_total">合計</string>
     <string name="category_flag">FLAG</string>
     <string name="preferences_category_backup_restore_device">備份與還原</string>
     <string name="preferences_category_backup_restore_device_sub">裝置儲存空間</string>

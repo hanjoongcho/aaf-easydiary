@@ -9,7 +9,8 @@ import org.junit.Test
  *
  * The screen draws the tags that the most entries carry, so the tests pin what the ranking holds: the order by
  * count, the order of equal counts, the limit of ten, and that a tag no entry uses is left out so the screen can
- * tell an empty chart from a chart of empty bars.
+ * tell an empty chart from a chart of empty bars. They pin the shares as well: the percent of a row is counted
+ * inside the ranking and the percents of a ranking add up to 100%, which is what lets the ring close.
  */
 class TagStatisticsTest {
     private fun tag(
@@ -81,8 +82,67 @@ class TagStatisticsTest {
     }
 
     @Test
-    fun `the count the bars are measured against is the top of the ranking`() {
-        assertEquals(12, TagStatistics.maxCount(TagStatistics.topRanked(listOf(tag(1L, "travel", 12), tag(2L, "work", 3)))))
-        assertEquals(0, TagStatistics.maxCount(emptyList()))
+    fun `the ranking totals the entries its tags carry`() {
+        val ranked = TagStatistics.topRanked(listOf(tag(1L, "travel", 12), tag(2L, "work", 3)))
+
+        assertEquals(15, TagStatistics.totalCount(ranked))
+        assertEquals(0, TagStatistics.totalCount(emptyList()))
+    }
+
+    @Test
+    fun `the shares of the ranking add up to a hundred`() {
+        val ranked =
+            TagStatistics.topRanked(
+                listOf(
+                    tag(1L, "travel", 12),
+                    tag(2L, "work", 7),
+                    tag(3L, "diet", 3),
+                    tag(4L, "reading", 1),
+                ),
+            )
+
+        val shares = TagStatistics.shares(ranked)
+
+        assertEquals(100, shares.sumOf { it.percent })
+        assertEquals(ranked, shares.map { it.ranked })
+    }
+
+    @Test
+    fun `a share is the part the tag holds of the ranking`() {
+        val ranked = TagStatistics.topRanked(listOf(tag(1L, "travel", 15), tag(2L, "work", 5)))
+
+        assertEquals(listOf(75, 25), TagStatistics.shares(ranked).map { it.percent })
+    }
+
+    @Test
+    fun `equal counts share the ranking evenly`() {
+        val ranked = TagStatistics.topRanked((1..4).map { index -> tag(index.toLong(), "tag$index", 5) })
+
+        assertEquals(listOf(25, 25, 25, 25), TagStatistics.shares(ranked).map { it.percent })
+    }
+
+    @Test
+    fun `the points rounding cuts off go to the largest parts first`() {
+        // 3, 2 and 2 of 7 are 42.85%, 28.57% and 28.57%: the two points rounding cuts off go to the largest part
+        // first and then to the row that comes first in the ranking, so the ring closes at 100%.
+        val ranked = TagStatistics.topRanked(listOf(tag(1L, "a", 3), tag(2L, "b", 2), tag(3L, "c", 2)))
+
+        val shares = TagStatistics.shares(ranked)
+
+        assertEquals(100, shares.sumOf { it.percent })
+        assertEquals(listOf(43, 29, 28), shares.map { it.percent })
+    }
+
+    @Test
+    fun `a ranking of one tag holds the whole ring`() {
+        val ranked = TagStatistics.topRanked(listOf(tag(1L, "travel", 9), tag(2L, "unused", 0)))
+
+        assertEquals(listOf(100), TagStatistics.shares(ranked).map { it.percent })
+    }
+
+    @Test
+    fun `a ranking with nothing counted has no share to state`() {
+        assertTrue(TagStatistics.shares(emptyList()).isEmpty())
+        assertTrue(TagStatistics.shares(TagStatistics.topRanked(listOf(tag(1L, "unused", 0)))).isEmpty())
     }
 }

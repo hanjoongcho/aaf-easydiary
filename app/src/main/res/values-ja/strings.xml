@@ -888,6 +888,7 @@
     <string name="statistics_symbol_top_ten">シンボルごとの統計TOP10</string>
     <string name="statistics_tag_top_ten">タグごとの統計TOP10</string>
     <string name="statistics_tag_empty">まだタグを使っていません。日記にタグを付けると、よく使うタグからここに表示されます。</string>
+    <string name="statistics_tag_total">合計</string>
     <string name="category_flag">フラグ</string>
     <string name="preferences_category_backup_restore_device">バックアップとリストア</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>

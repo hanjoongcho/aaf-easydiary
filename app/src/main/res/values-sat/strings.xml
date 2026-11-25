@@ -888,6 +888,7 @@
     <string name="statistics_symbol_top_ten">ᱪᱤᱱᱦᱟᱹ ᱛᱮ ᱴᱚᱯ ᱑᱐ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱠᱚ</string>
     <string name="statistics_tag_top_ten">Top 10 statistics by tag</string>
     <string name="statistics_tag_empty">No tag has been used yet. Add tags to your entries and the ones you use most are listed here.</string>
+    <string name="statistics_tag_total">Total</string>
     <string name="category_flag">ᱯᱚᱛᱠᱟ</string>
     <string name="preferences_category_backup_restore_device">ᱮᱯ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱥᱴᱚᱨ</string>
     <string name="preferences_category_backup_restore_device_sub">ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ</string>

@@ -888,6 +888,7 @@
     <string name="statistics_symbol_top_ten">Top 10 des statistiques par symbole</string>
     <string name="statistics_tag_top_ten">Top 10 des statistiques par étiquette</string>
     <string name="statistics_tag_empty">Aucune étiquette utilisée pour l\'instant. Ajoutez des étiquettes à vos entrées et celles que vous utilisez le plus apparaîtront ici.</string>
+    <string name="statistics_tag_total">Total</string>
     <string name="category_flag">DRAPEAU</string>
     <string name="preferences_category_backup_restore_device">Sauvegarde et restauration de l\'application</string>
     <string name="preferences_category_backup_restore_device_sub">Espace de stockage de l\'appareil</string>
