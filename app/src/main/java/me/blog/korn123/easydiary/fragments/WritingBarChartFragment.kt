@@ -1,249 +1,153 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.widget.ContentLoadingProgressBar
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.BarLineChartBase
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
-import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
-import me.blog.korn123.easydiary.chart.IValueFormatterExt
-import me.blog.korn123.easydiary.chart.XYMarkerView
-import me.blog.korn123.easydiary.extensions.EMPTY
+import me.blog.korn123.easydiary.databinding.FragmentWritingTimeDonutChartBinding
+import me.blog.korn123.easydiary.domain.model.WritingTimeStatistics
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.ChartConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
+import me.blog.korn123.easydiary.presentation.statistics.WritingTimeChartUiState
+import me.blog.korn123.easydiary.presentation.statistics.components.WritingTimeDonutChart
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
-import me.blog.korn123.easydiary.utils.FontUtils
 import me.blog.korn123.easydiary.views.FixedCardView
-import me.blog.korn123.easydiary.views.FixedTextView
 
+/**
+ * The writing time chart of the statistics screen: the entries counted by the hour of the day they were written at,
+ * drawn as a ring of the eight spans of the day in the order of the clock.
+ *
+ * The fragment is the shell the other charts use: it fills the chart area of [StatisticsActivity], or sits in a
+ * dashboard card with the chart title the dashboard hands it and an icon that opens the chart on the whole screen.
+ * The drawing itself is [WritingTimeDonutChart], Compose as the rest of the new UI of this app is, so the hours of
+ * the day are rows beside the ring instead of labels on an axis.
+ *
+ * The class keeps the name the dashboard and the statistics screen know it by, so both keep opening it without a
+ * change. Its layout is a shell of its own (`fragment_writing_time_donut_chart.xml`) and not the layout of the
+ * symbol chart (`fragment_writing_barchart.xml`), which the symbol chart still draws its bars in.
+ *
+ * The entries are counted through [DiaryViewModel.findDiary] like the bar chart this chart replaces counted them,
+ * so the chart still leaves out a temporary entry and honours the settings that hide future entries.
+ */
 @AndroidEntryPoint
 class WritingBarChartFragment : Fragment() {
-    private lateinit var barChart: BarChart
-    private lateinit var chartTitle: FixedTextView
-    private lateinit var barChartProgressBar: ContentLoadingProgressBar
-    private var coroutineJob: Job? = null
+    private lateinit var binding: FragmentWritingTimeDonutChartBinding
     private val diaryViewModel: DiaryViewModel by viewModels()
+    private val chartState = MutableStateFlow(WritingTimeChartUiState())
+    private var coroutineJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? = inflater.inflate(R.layout.fragment_writing_barchart, container, false)
+    ): View {
+        binding = FragmentWritingTimeDonutChartBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        barChart = view.findViewById(R.id.barChart)
-        chartTitle = view.findViewById(R.id.chartTitle)
-        barChartProgressBar = view.findViewById(R.id.barChartProgressBar)
-
-        barChart.setDrawBarShadow(false)
-        barChart.setDrawValueAboveBar(true)
-        barChart.description.isEnabled = false
-        barChart.setMaxVisibleValueCount(60)
-        barChart.setPinchZoom(false)
-
-        val xAxisFormatter = DayAxisValueFormatter(context, barChart)
-        barChart.xAxis.run {
-            position = XAxis.XAxisPosition.BOTTOM
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textColor = requireContext().config.textColor
-            labelRotationAngle = -45F
-            setDrawGridLines(false)
-            granularity = 1f
-            labelCount = 7
-            valueFormatter = xAxisFormatter
-        }
-
-        val diaryCountingAxisValueFormatter = DiaryCountingAxisValueFormatter(context)
-        barChart.axisLeft.run {
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            valueFormatter = diaryCountingAxisValueFormatter
-            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-            spaceTop = 15f
-            axisMinimum = 0f
-        }
-
-        barChart.axisRight.run {
-            setDrawGridLines(false)
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            valueFormatter = diaryCountingAxisValueFormatter
-            spaceTop = 15f
-            axisMinimum = 0f
-        }
-
-        barChart.legend.run {
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.HORIZONTAL
-            setDrawInside(false)
-            form = Legend.LegendForm.SQUARE
-            formSize = 9f
-            textSize = 11f
-            xEntrySpace = 4f
-        }
-
-        val mv = XYMarkerView(requireContext(), xAxisFormatter)
-        mv.chartView = barChart
-        barChart.marker = mv
-
-        val title = arguments?.getString(ChartConstants.CHART_TITLE)
-        if (title != null) {
-            chartTitle.text = title
-            chartTitle.visibility = View.VISIBLE
-
-            view.findViewById<ImageView>(R.id.image_expend_chart)?.let {
-                it.visibility = View.VISIBLE
-                requireActivity().updateDrawableColorInnerCardView(it, requireContext().config.textColor)
-                it.setOnClickListener { v ->
-                    v.postDelayed({
-                        TransitionHelper.startActivityWithTransition(
-                            requireActivity(),
-                            Intent(
-                                requireActivity(),
-                                StatisticsActivity::class.java,
-                            ),
-                        )
-                    }, 300)
-                }
+        applyChartTitle(view)
+        binding.composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        binding.composeView.setContent {
+            AppTheme {
+                val uiState by chartState.collectAsStateWithLifecycle()
+                WritingTimeDonutChart(uiState = uiState)
             }
-        } else {
+        }
+        loadWritingTime()
+    }
+
+    /**
+     * Shows the title a dashboard card passes in and the icon that opens the chart on the whole screen. A chart
+     * opened from the statistics screen itself passes no title and fills the chart area without the card's
+     * padding, the way the other charts do.
+     */
+    private fun applyChartTitle(view: View) {
+        val title = arguments?.getString(ChartConstants.CHART_TITLE)
+        if (title == null) {
             (view as? FixedCardView)?.run {
                 fixedAppcompatPadding = false
                 radius = 0f
             }
+            return
         }
 
+        binding.chartTitle.run {
+            text = title
+            visibility = View.VISIBLE
+        }
+        view.findViewById<ImageView>(R.id.image_expend_chart)?.run {
+            visibility = View.VISIBLE
+            requireActivity().updateDrawableColorInnerCardView(this, requireContext().config.textColor)
+            setOnClickListener { expandIcon ->
+                expandIcon.postDelayed({
+                    TransitionHelper.startActivityWithTransition(
+                        requireActivity(),
+                        Intent(requireActivity(), StatisticsActivity::class.java),
+                    )
+                }, EXPAND_TRANSITION_DELAY_MILLIS)
+            }
+        }
+    }
+
+    /**
+     * Counts the entries of the database by the hour they were written at on a background thread and hands the
+     * chart the shares of the eight spans, which keeps the ring from being drawn before there are the counts it is
+     * drawn from.
+     */
+    private fun loadWritingTime() {
         coroutineJob =
-            lifecycleScope.launch(Dispatchers.IO) {
-                val barEntries = setData()
-                withContext(Dispatchers.Main) {
-                    if (barEntries.isNotEmpty()) {
-                        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
-                        val iValueFormatter = IValueFormatterExt(context)
-                        barDataSet.valueFormatter = iValueFormatter
-                        val colors =
-                            intArrayOf(
-                                Color.rgb(0, 19, 26),
-                                Color.rgb(0, 71, 96),
-                                Color.rgb(0, 117, 158),
-                                Color.rgb(0, 176, 240),
-                                Color.rgb(0, 161, 218),
-                                Color.rgb(0, 117, 158),
-                                Color.rgb(0, 71, 96),
-                                Color.rgb(0, 19, 26),
-                            )
-                        barDataSet.setColors(*colors)
-                        barDataSet.setDrawIcons(false)
-                        barDataSet.setDrawValues(true)
-                        val dataSets = ArrayList<IBarDataSet>()
-                        dataSets.add(barDataSet)
-                        val barData = BarData(dataSets)
-                        barData.setValueTextSize(10f)
-                        barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                        barData.setValueTextColor(requireContext().config.textColor)
-                        barData.barWidth = 0.9f
-                        barChart.data = barData
-                        barChart.animateY(2000)
-                    }
-                    barChartProgressBar.visibility = View.GONE
-                }
+            viewLifecycleOwner.lifecycleScope.launch {
+                val uiState = withContext(Dispatchers.IO) { readWritingTime() }
+                chartState.value = uiState
             }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private suspend fun readWritingTime(): WritingTimeChartUiState {
+        val hours =
+            diaryViewModel.findDiary(null).map { diary ->
+                DateUtils.timeMillisToDate(diary.currentTimeMillis, HOUR_OF_DAY_PATTERN).toIntOrNull() ?: MIDNIGHT
+            }
+        return WritingTimeChartUiState(shares = WritingTimeStatistics.shares(hours), isLoading = false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         coroutineJob?.run { if (isActive) cancel() }
     }
 
-    private suspend fun setData(count: Int = 8): ArrayList<BarEntry> {
-        val barEntries = ArrayList<BarEntry>()
-        val listDiary = diaryViewModel.findDiary(null)
-        if (listDiary.isNotEmpty()) {
-            val map = hashMapOf<Int, Int>()
-            listDiary.map { diaryDto ->
-                val writeHour = DateUtils.timeMillisToDate(diaryDto.currentTimeMillis, "HH")
-                val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
-                if (map[itemNumber] == null) {
-                    map[itemNumber] = 1
-                } else {
-                    map[itemNumber] = (map[itemNumber] ?: 0) + 1
-                }
-            }
-            for (i in 1..count) {
-                var total = 0
-                if (map[i] != null) total = map[i] ?: 0
-                barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
-            }
-        }
-        return barEntries
-    }
+    private companion object {
+        /** The hour of the day of an entry, which is what the chart counts instead of the date. */
+        const val HOUR_OF_DAY_PATTERN = "HH"
 
-    private fun hourToItemNumber(hour: Int): Int =
-        when (hour) {
-            in 1..3 -> 1
-            in 4..6 -> 2
-            in 7..9 -> 3
-            in 10..12 -> 4
-            in 13..15 -> 5
-            in 16..18 -> 6
-            in 19..21 -> 7
-            else -> 8
-        }
+        /** An hour the formatter could not read is counted at midnight rather than dropped from the total. */
+        const val MIDNIGHT = 0
 
-    class DayAxisValueFormatter(
-        private var context: Context?,
-        private val chart: BarLineChartBase<*>,
-    ) : IAxisValueFormatter {
-        override fun getFormattedValue(
-            value: Float,
-            axis: AxisBase?,
-        ): String =
-            when (value.toInt()) {
-                1 -> context?.getString(R.string.range_a) ?: String.EMPTY
-                2 -> context?.getString(R.string.range_b) ?: String.EMPTY
-                3 -> context?.getString(R.string.range_c) ?: String.EMPTY
-                4 -> context?.getString(R.string.range_d) ?: String.EMPTY
-                5 -> context?.getString(R.string.range_e) ?: String.EMPTY
-                6 -> context?.getString(R.string.range_f) ?: String.EMPTY
-                7 -> context?.getString(R.string.range_g) ?: String.EMPTY
-                else -> context?.getString(R.string.range_h) ?: String.EMPTY
-            }
+        /** The time the card's expand icon waits before it opens the statistics screen, as the other charts do. */
+        const val EXPAND_TRANSITION_DELAY_MILLIS = 300L
     }
 }
