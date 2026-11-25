@@ -886,6 +886,8 @@
     <string name="statistics_creation_time">सृजन काल के आँकड़े</string>
     <string name="statistics_symbol_all">प्रतीक द्वारा सभी आँकड़े</string>
     <string name="statistics_symbol_top_ten">प्रतीक द्वारा शीर्ष 10 आँकड़े</string>
+    <string name="statistics_tag_top_ten">टैग द्वारा शीर्ष 10 आँकड़े</string>
+    <string name="statistics_tag_empty">अभी तक कोई टैग इस्तेमाल नहीं हुआ है। अपनी प्रविष्टियों में टैग जोड़ें, फिर आपके सबसे ज़्यादा इस्तेमाल किए गए टैग यहाँ दिखेंगे।</string>
     <string name="category_flag">झंडा</string>
     <string name="preferences_category_backup_restore_device">एप्लिकेशन बैकअप और पुनर्स्थापित करें</string>
     <string name="preferences_category_backup_restore_device_sub">डिवाइस स्टोरेज</string>

@@ -886,6 +886,8 @@
     <string name="statistics_creation_time">Statistiche per orario di creazione</string>
     <string name="statistics_symbol_all">Statistiche per simbolo</string>
     <string name="statistics_symbol_top_ten">Prime 10 statistiche per simbolo</string>
+    <string name="statistics_tag_top_ten">Prime 10 statistiche per tag</string>
+    <string name="statistics_tag_empty">Nessun tag usato finora. Aggiungi tag alle tue voci e qui vedrai quelli che usi di più.</string>
     <string name="category_flag">BANDIERE</string>
     <string name="preferences_category_backup_restore_device">Backup e ripristino applicazione</string>
     <string name="preferences_category_backup_restore_device_sub">Memoria del dispositivo</string>

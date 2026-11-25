@@ -886,6 +886,8 @@
     <string name="statistics_creation_time">Статистика по времени создания</string>
     <string name="statistics_symbol_all">Вся статистика по символам</string>
     <string name="statistics_symbol_top_ten">Топ-10 символов</string>
+    <string name="statistics_tag_top_ten">Топ-10 статистики по тегам</string>
+    <string name="statistics_tag_empty">Теги пока не использовались. Добавьте теги к записям, и здесь появятся самые используемые.</string>
     <string name="category_flag">Флаг</string>
     <string name="preferences_category_backup_restore_device">Резервное Копирование и Восстановление приложения</string>
     <string name="preferences_category_backup_restore_device_sub">Память Телефона</string>
