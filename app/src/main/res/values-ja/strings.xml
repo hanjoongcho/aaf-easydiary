@@ -1197,4 +1197,22 @@
     <string name="writing_streak_status_broken">今日から1日目を再スタート</string>
     <string name="writing_streak_day_diaries_title">%1$sの日記</string>
     <string name="writing_streak_encrypted_diary">暗号化された日記</string>
+    <string name="dashboard_title">ダッシュボード</string>
+    <string name="dashboard_mode_open_task">未完了タスク</string>
+    <string name="dashboard_mode_doing">進行中</string>
+    <string name="dashboard_mode_closed_task">完了タスク</string>
+    <string name="dashboard_mode_cancel">キャンセル</string>
+    <string name="dashboard_mode_future">未来</string>
+    <string name="dashboard_mode_on_this_day">過去の同じ日</string>
+    <string name="dashboard_mode_previous_100">過去100件</string>
+    <string name="dashboard_dday_title">D-Day (BETA)</string>
+    <string name="dashboard_dday_flexbox_option">Flexbox</string>
+    <string name="dashboard_dday_new_item">新しいD-Day!!!</string>
+    <string name="dashboard_dday_add">追加</string>
+    <string name="dashboard_dday_title_hint">目標日の名前を入力してください。</string>
+    <string name="dashboard_dday_delete_confirm">選択したD-Dayを削除しますか？</string>
+    <string name="dashboard_daily_symbol_calendar">カレンダー</string>
+    <string name="dashboard_daily_symbol_no_data">なし</string>
+    <string name="dashboard_chart_weight">体重</string>
+    <string name="dashboard_chart_stock">株価</string>
 </resources>

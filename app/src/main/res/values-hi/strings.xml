@@ -1197,4 +1197,22 @@
     <string name="writing_streak_status_broken">आज से फिर दिन 1 से शुरू करें</string>
     <string name="writing_streak_day_diaries_title">%1$s की डायरी</string>
     <string name="writing_streak_encrypted_diary">एन्क्रिप्ट की गई डायरी</string>
+    <string name="dashboard_title">डैशबोर्ड</string>
+    <string name="dashboard_mode_open_task">खुला कार्य</string>
+    <string name="dashboard_mode_doing">प्रगति पर</string>
+    <string name="dashboard_mode_closed_task">बंद कार्य</string>
+    <string name="dashboard_mode_cancel">रद्द</string>
+    <string name="dashboard_mode_future">भविष्य</string>
+    <string name="dashboard_mode_on_this_day">इस दिन</string>
+    <string name="dashboard_mode_previous_100">पिछले 100</string>
+    <string name="dashboard_dday_title">D-Day (BETA)</string>
+    <string name="dashboard_dday_flexbox_option">Flexbox</string>
+    <string name="dashboard_dday_new_item">नया D-Day!!!</string>
+    <string name="dashboard_dday_add">जोड़ें</string>
+    <string name="dashboard_dday_title_hint">लक्ष्य तिथि का नाम दर्ज करें।</string>
+    <string name="dashboard_dday_delete_confirm">क्या आप वाकई चयनित D-Day को हटाना चाहते हैं?</string>
+    <string name="dashboard_daily_symbol_calendar">कैलेंडर</string>
+    <string name="dashboard_daily_symbol_no_data">लागू नहीं</string>
+    <string name="dashboard_chart_weight">वज़न</string>
+    <string name="dashboard_chart_stock">स्टॉक</string>
 </resources>

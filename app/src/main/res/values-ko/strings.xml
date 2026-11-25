@@ -1197,4 +1197,22 @@
     <string name="writing_streak_status_broken">오늘부터 다시 1일 시작</string>
     <string name="writing_streak_day_diaries_title">%1$s 일기</string>
     <string name="writing_streak_encrypted_diary">암호화된 일기</string>
+    <string name="dashboard_title">대시보드</string>
+    <string name="dashboard_mode_open_task">미완료 태스크</string>
+    <string name="dashboard_mode_doing">진행 중</string>
+    <string name="dashboard_mode_closed_task">완료 태스크</string>
+    <string name="dashboard_mode_cancel">취소</string>
+    <string name="dashboard_mode_future">미래</string>
+    <string name="dashboard_mode_on_this_day">과거의 오늘</string>
+    <string name="dashboard_mode_previous_100">이전 100개</string>
+    <string name="dashboard_dday_title">D-Day (BETA)</string>
+    <string name="dashboard_dday_flexbox_option">Flexbox</string>
+    <string name="dashboard_dday_new_item">새 D-Day!!!</string>
+    <string name="dashboard_dday_add">추가</string>
+    <string name="dashboard_dday_title_hint">목표 날짜의 이름을 입력하세요.</string>
+    <string name="dashboard_dday_delete_confirm">선택한 D-Day를 삭제하시겠습니까?</string>
+    <string name="dashboard_daily_symbol_calendar">캘린더</string>
+    <string name="dashboard_daily_symbol_no_data">없음</string>
+    <string name="dashboard_chart_weight">체중</string>
+    <string name="dashboard_chart_stock">주가</string>
 </resources>

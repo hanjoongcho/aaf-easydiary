@@ -1197,4 +1197,22 @@
     <string name="writing_streak_status_broken">Start a new streak with day 1 today</string>
     <string name="writing_streak_day_diaries_title">Diaries on %1$s</string>
     <string name="writing_streak_encrypted_diary">Encrypted diary</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_mode_open_task">Open Task</string>
+    <string name="dashboard_mode_doing">DOING</string>
+    <string name="dashboard_mode_closed_task">Closed Task</string>
+    <string name="dashboard_mode_cancel">CANCEL</string>
+    <string name="dashboard_mode_future">Future</string>
+    <string name="dashboard_mode_on_this_day">On This Day</string>
+    <string name="dashboard_mode_previous_100">Previous 100</string>
+    <string name="dashboard_dday_title">D-Day (BETA)</string>
+    <string name="dashboard_dday_flexbox_option">Flexbox</string>
+    <string name="dashboard_dday_new_item">New D-Day!!!</string>
+    <string name="dashboard_dday_add">ADD</string>
+    <string name="dashboard_dday_title_hint">Enter the name of the target date.</string>
+    <string name="dashboard_dday_delete_confirm">Are you sure you want to delete the selected D-Day?</string>
+    <string name="dashboard_daily_symbol_calendar">Calendar</string>
+    <string name="dashboard_daily_symbol_no_data">N/A</string>
+    <string name="dashboard_chart_weight">Weight</string>
+    <string name="dashboard_chart_stock">Stock</string>
 </resources>
