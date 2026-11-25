@@ -21,13 +21,20 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -885,66 +892,90 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
 
             AppTheme {
-                if (isBottomSheetCollapsed) {
-                    CollapsedBottomSheetButton(
-                        onExpandClick = { isBottomSheetCollapsed = false },
-                        onHeightChanged = onBottomSheetHeightChanged,
-                    )
-                } else {
-                    MainBottomSheet(
-                        title = "[Total: ${getString(R.string.diary_count_format, items.size)}] ${stringResource(id = R.string.guide_message_2)}",
-                        currentQuery = currentQuery,
-                        symbolSequence = currentSymbol,
-                        tags = tags,
-                        selectedTagId = selectedTagId,
-                        onTagFilterClick = { tag ->
-                            // Tapping the chip of the tag that is already filtering the list takes the filter off, so
-                            // the row needs no separate clear control besides its 'All' chip (issue #270).
-                            val currentTagId = diaryViewModel.selectedTagId.value
-                            diaryViewModel.setTagFilter(
-                                when {
-                                    tag == null -> null
-                                    tag.tagId == currentTagId -> null
-                                    else -> tag.tagId
-                                },
-                            )
-                        },
-                        onMicrophoneClick = { showSpeechDialog() },
-                        onMoveToday = { moveToday() },
-                        onFeelingSymbolClick = {
-                            lifecycleScope.launch {
-                                openFeelingSymbolDialog(
-                                    getString(R.string.diary_symbol_search_message),
-                                    viewModel.symbol.value,
-                                    diaryViewModel.getSymbolUsedCountMap(true),
-                                ) { symbolSequence ->
-                                    selectFeelingSymbol(symbolSequence)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomEnd,
+                ) {
+                    // The sheet and the button of its collapsed state change places with a transition instead of
+                    // being swapped at once: the sheet leaves downward while the button fades in over it.
+                    AnimatedVisibility(
+                        visible = !isBottomSheetCollapsed,
+                        enter = slideInVertically(animationSpec = tween(300)) { it } + fadeIn(animationSpec = tween(300)),
+                        exit = slideOutVertically(animationSpec = tween(300)) { it } + fadeOut(animationSpec = tween(300)),
+                    ) {
+                        MainBottomSheet(
+                            title = "[Total: ${getString(R.string.diary_count_format, items.size)}] ${stringResource(id = R.string.guide_message_2)}",
+                            currentQuery = currentQuery,
+                            symbolSequence = currentSymbol,
+                            tags = tags,
+                            selectedTagId = selectedTagId,
+                            onTagFilterClick = { tag ->
+                                // Tapping the chip of the tag that is already filtering the list takes the filter off, so
+                                // the row needs no separate clear control besides its 'All' chip (issue #270).
+                                val currentTagId = diaryViewModel.selectedTagId.value
+                                diaryViewModel.setTagFilter(
+                                    when {
+                                        tag == null -> null
+                                        tag.tagId == currentTagId -> null
+                                        else -> tag.tagId
+                                    },
+                                )
+                            },
+                            onMicrophoneClick = { showSpeechDialog() },
+                            onMoveToday = { moveToday() },
+                            onFeelingSymbolClick = {
+                                lifecycleScope.launch {
+                                    openFeelingSymbolDialog(
+                                        getString(R.string.diary_symbol_search_message),
+                                        viewModel.symbol.value,
+                                        diaryViewModel.getSymbolUsedCountMap(true),
+                                    ) { symbolSequence ->
+                                        selectFeelingSymbol(symbolSequence)
+                                    }
                                 }
-                            }
-                        },
-                        clearFilter = {
-                            selectFeelingSymbol()
-                            diaryViewModel.query.value = String.EMPTY
-                        },
-                        callbackQuery = { query ->
-                            diaryViewModel.query.value = query
-                        },
-                        onMenuClick = {
-                            openCustomOptionMenu()
-                        },
-                        onMoveTop = {
-                            binding.diaryListView.layoutManager?.scrollToPosition(0)
-                        },
-                        onMoveBottom = {
-                            binding.diaryListView.adapter?.itemCount?.let { count ->
-                                if (count > 0) {
-                                    binding.diaryListView.layoutManager?.scrollToPosition(count - 1)
+                            },
+                            clearFilter = {
+                                selectFeelingSymbol()
+                                diaryViewModel.query.value = String.EMPTY
+                            },
+                            callbackQuery = { query ->
+                                diaryViewModel.query.value = query
+                            },
+                            onMenuClick = {
+                                openCustomOptionMenu()
+                            },
+                            onMoveTop = {
+                                binding.diaryListView.layoutManager?.scrollToPosition(0)
+                            },
+                            onMoveBottom = {
+                                binding.diaryListView.adapter?.itemCount?.let { count ->
+                                    if (count > 0) {
+                                        binding.diaryListView.layoutManager?.scrollToPosition(count - 1)
+                                    }
                                 }
-                            }
-                        },
-                        onCollapseClick = { isBottomSheetCollapsed = true },
-                        onHeightChanged = onBottomSheetHeightChanged,
-                    )
+                            },
+                            onCollapseClick = { isBottomSheetCollapsed = true },
+                            onHeightChanged = { height ->
+                                // The sheet keeps reporting its bounds while it slides out, and those are stale
+                                // for a list that is already making room for the collapsed button only.
+                                if (!isBottomSheetCollapsed) onBottomSheetHeightChanged(height)
+                            },
+                        )
+                    }
+
+                    AnimatedVisibility(
+                        visible = isBottomSheetCollapsed,
+                        enter = fadeIn(animationSpec = tween(250, delayMillis = 50)),
+                        exit = fadeOut(animationSpec = tween(200)),
+                    ) {
+                        CollapsedBottomSheetButton(
+                            onExpandClick = { isBottomSheetCollapsed = false },
+                            onHeightChanged = { height ->
+                                // Likewise, the button keeps its bounds while it fades out to the sheet's return.
+                                if (isBottomSheetCollapsed) onBottomSheetHeightChanged(height)
+                            },
+                        )
+                    }
                 }
             }
         }
