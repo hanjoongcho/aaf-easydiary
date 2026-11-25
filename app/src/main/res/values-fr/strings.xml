@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Voulez-vous commencer une restauration des photos jointes ?</string>
     <string name="category_symbol">Symbole</string>
     <string name="statistics_creation_time">Statistiques par date de création</string>
+    <string name="statistics_creation_time_empty">Aucune entrée écrite pour le moment. Dès que vous écrirez une entrée, les heures auxquelles vous écrivez seront comptées ici.</string>
     <string name="statistics_symbol_all">Toutes les statistiques par symbole</string>
     <string name="statistics_symbol_top_ten">Top 10 des statistiques par symbole</string>
     <string name="statistics_tag_top_ten">Top 10 des statistiques par étiquette</string>

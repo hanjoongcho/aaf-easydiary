@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Вы хотите начать восстановление прикрепленных фотографий?</string>
     <string name="category_symbol">Символ</string>
     <string name="statistics_creation_time">Статистика по времени создания</string>
+    <string name="statistics_creation_time_empty">Записей пока нет. Когда вы напишете запись, здесь будут подсчитаны часы, в которые вы пишете.</string>
     <string name="statistics_symbol_all">Вся статистика по символам</string>
     <string name="statistics_symbol_top_ten">Топ-10 символов</string>
     <string name="statistics_tag_top_ten">Топ-10 статистики по тегам</string>

@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">是否要开始将附加的照片恢复？</string>
     <string name="category_symbol">符号</string>
     <string name="statistics_creation_time">按创作时间统计</string>
+    <string name="statistics_creation_time_empty">还没有写过日记。写下日记后，这里会统计你写作的时间。</string>
     <string name="statistics_symbol_all">按符号统计</string>
     <string name="statistics_symbol_top_ten">排名前十的符号</string>
     <string name="statistics_tag_top_ten">按标签的前十名统计</string>

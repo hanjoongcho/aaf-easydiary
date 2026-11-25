@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
     <string name="category_symbol">圖標</string>
     <string name="statistics_creation_time">依創作時間統計</string>
+    <string name="statistics_creation_time_empty">還沒有寫過日記。寫下日記後，這裡會統計你寫作的時間。</string>
     <string name="statistics_symbol_all">全部圖標統計</string>
     <string name="statistics_symbol_top_ten">前十名圖標統計</string>
     <string name="statistics_tag_top_ten">依標籤的前十名統計</string>

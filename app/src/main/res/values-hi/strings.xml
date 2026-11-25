@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">क्या आप संलग्न फोटो वसूली कार्य शुरू करना चाहते हैं?</string>
     <string name="category_symbol">प्रतीक</string>
     <string name="statistics_creation_time">सृजन काल के आँकड़े</string>
+    <string name="statistics_creation_time_empty">अभी तक कोई प्रविष्टि नहीं लिखी गई है। जब आप प्रविष्टि लिखेंगे, तो आपके लिखने के घंटे यहाँ गिने जाएँगे।</string>
     <string name="statistics_symbol_all">प्रतीक द्वारा सभी आँकड़े</string>
     <string name="statistics_symbol_top_ten">प्रतीक द्वारा शीर्ष 10 आँकड़े</string>
     <string name="statistics_tag_top_ten">टैग द्वारा शीर्ष 10 आँकड़े</string>

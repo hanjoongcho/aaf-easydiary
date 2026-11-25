@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">¿Quieres iniciar una tarea de recuperación de fotos adjuntas?</string>
     <string name="category_symbol">Símbolo</string>
     <string name="statistics_creation_time">Estadísticas por hora de creación</string>
+    <string name="statistics_creation_time_empty">Todavía no has escrito ninguna entrada. Cuando escribas una, aquí se contarán las horas en las que escribes.</string>
     <string name="statistics_symbol_all">Todas las estadísticas por símbolo</string>
     <string name="statistics_symbol_top_ten">Las 10 mejores estadísticas por símbolo</string>
     <string name="statistics_tag_top_ten">Las 10 mejores estadísticas por etiqueta</string>

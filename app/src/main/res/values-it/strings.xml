@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Avviare il ripristino delle foto allegate?</string>
     <string name="category_symbol">Simbolo</string>
     <string name="statistics_creation_time">Statistiche per orario di creazione</string>
+    <string name="statistics_creation_time_empty">Nessuna voce scritta finora. Quando scriverai una voce, qui verranno contate le ore in cui scrivi.</string>
     <string name="statistics_symbol_all">Statistiche per simbolo</string>
     <string name="statistics_symbol_top_ten">Prime 10 statistiche per simbolo</string>
     <string name="statistics_tag_top_ten">Prime 10 statistiche per tag</string>

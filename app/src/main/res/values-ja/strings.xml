@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">添付写真の復元作業を開始しますか？</string>
     <string name="category_symbol">シンボル</string>
     <string name="statistics_creation_time">作成時間別統計</string>
+    <string name="statistics_creation_time_empty">まだ日記がありません。日記を書くと、書いた時間帯がここに集計されます。</string>
     <string name="statistics_symbol_all">シンボルごとの統計全体</string>
     <string name="statistics_symbol_top_ten">シンボルごとの統計TOP10</string>
     <string name="statistics_tag_top_ten">タグごとの統計TOP10</string>

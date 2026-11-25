@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">ᱟᱢ ᱪᱮᱫ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱠᱟᱹᱢᱤ ᱮᱛᱦᱚᱵ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="category_symbol">ᱪᱤᱱᱦᱟᱹ</string>
     <string name="statistics_creation_time">ᱛᱮᱭᱟᱨ ᱚᱠᱛᱚ ᱨᱮᱭᱟᱜ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ</string>
+    <string name="statistics_creation_time_empty">No entry has been written yet. Write an entry and the hours you write at are counted here.</string>
     <string name="statistics_symbol_all">ᱪᱤᱛᱟᱹᱨ ᱛᱮ ᱡᱷᱚᱛᱚ ᱥᱴᱟᱴᱤᱥᱴᱤᱪᱥ</string>
     <string name="statistics_symbol_top_ten">ᱪᱤᱱᱦᱟᱹ ᱛᱮ ᱴᱚᱯ ᱑᱐ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱠᱚ</string>
     <string name="statistics_tag_top_ten">Top 10 statistics by tag</string>

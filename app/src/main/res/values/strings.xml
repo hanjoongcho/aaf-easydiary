@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
     <string name="category_symbol">Symbol</string>
     <string name="statistics_creation_time">Statistics by creation time</string>
+    <string name="statistics_creation_time_empty">No entry has been written yet. Write an entry and the hours you write at are counted here.</string>
     <string name="statistics_symbol_all">All statistics by symbol</string>
     <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
     <string name="statistics_tag_top_ten">Top 10 statistics by tag</string>

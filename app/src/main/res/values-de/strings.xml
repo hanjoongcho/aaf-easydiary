@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">Möchten Sie eine angehängte Fotowiederherstellungsaufgabe starten?</string>
     <string name="category_symbol">Symbol</string>
     <string name="statistics_creation_time">Statistik nach Erstellungszeit</string>
+    <string name="statistics_creation_time_empty">Noch kein Eintrag geschrieben. Sobald du einen Eintrag schreibst, werden hier die Uhrzeiten gezählt, zu denen du schreibst.</string>
     <string name="statistics_symbol_all">Alle Statistiken nach Symbolen</string>
     <string name="statistics_symbol_top_ten">Top-10-Statistik nach Symbolen</string>
     <string name="statistics_tag_top_ten">Top-10-Statistik nach Tags</string>

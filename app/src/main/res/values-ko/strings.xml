@@ -884,6 +884,7 @@
     <string name="recover_confirm_attached_photo">다이어리 첨부사진 복구 작업을 시작하시겠습니까?</string>
     <string name="category_symbol">심벌</string>
     <string name="statistics_creation_time">작성 시간별 통계</string>
+    <string name="statistics_creation_time_empty">아직 작성한 일기가 없어요. 일기를 쓰면 작성한 시간대가 여기에 집계됩니다.</string>
     <string name="statistics_symbol_all">심벌별 통계 전체</string>
     <string name="statistics_symbol_top_ten">심벌별 통계 TOP10</string>
     <string name="statistics_tag_top_ten">태그별 통계 TOP10</string>
