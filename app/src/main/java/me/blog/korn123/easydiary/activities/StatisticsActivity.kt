@@ -130,6 +130,7 @@ class StatisticsActivity : ChartBase() {
                     StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT -> "Weight"
                     StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> "Stock"
                     StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_all)
+                    StatisticsConstants.MODE_SINGLE_BAR_CHART_WRITING -> getString(R.string.statistics_creation_time)
                     StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
                     StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> getString(R.string.statistics_tag_top_ten)
                     else -> getString(R.string.statistics_creation_time)
@@ -143,6 +144,7 @@ class StatisticsActivity : ChartBase() {
                 StatisticsConstants.MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
                 StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> StockLineChartFragment()
                 StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
+                StatisticsConstants.MODE_SINGLE_BAR_CHART_WRITING -> WritingBarChartFragment()
                 StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
                 StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> TagHorizontalBarChartFragment()
                 else -> WritingBarChartFragment()
