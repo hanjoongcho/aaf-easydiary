@@ -59,7 +59,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/noItemMessage"
             android:gravity="center"
-            android:text="N/A"
+            android:text="@string/dashboard_daily_symbol_no_data"
             android:textSize="@dimen/basic_text_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

@@ -86,7 +86,7 @@ class DDayAdapter(
                     val calendar = Calendar.getInstance(Locale.getDefault())
                     when (storedDDay == null) {
                         true -> {
-                            textTitle.hint = "Enter the name of the target date."
+                            textTitle.hint = getString(R.string.dashboard_dday_title_hint)
                         }
 
                         false -> {
@@ -144,7 +144,7 @@ class DDayAdapter(
                         false -> {
                             imageDeleteDDay.setOnClickListener {
                                 showAlertDialog(
-                                    "Are you sure you want to delete the selected D-Day?",
+                                    getString(R.string.dashboard_dday_delete_confirm),
                                     { _, _ ->
                                         activity.applicationScope.launch {
                                             alertDialog?.dismiss()
@@ -175,7 +175,7 @@ class DDayAdapter(
                         setOnClickListener {
                             when {
                                 dDayBinding.textTitle.text?.isEmpty() ?: true -> {
-                                    toast("Enter the name of the target date.")
+                                    toast(getString(R.string.dashboard_dday_title_hint))
                                 }
 
                                 else -> {

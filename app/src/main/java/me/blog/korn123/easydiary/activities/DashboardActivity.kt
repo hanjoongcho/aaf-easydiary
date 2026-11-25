@@ -66,7 +66,7 @@ class DashboardActivity : EasyDiaryActivity() {
             }
 
         supportActionBar?.run {
-            title = "Dashboard"
+            title = getString(R.string.dashboard_title)
             setDisplayHomeAsUpEnabled(true)
         }
 
@@ -243,7 +243,7 @@ class DashboardActivity : EasyDiaryActivity() {
                     R.id.statistics4,
                     WeightLineChartFragment().apply {
                         val args = Bundle()
-                        args.putString(ChartConstants.CHART_TITLE, "Weight")
+                        args.putString(ChartConstants.CHART_TITLE, getString(R.string.dashboard_chart_weight))
                         arguments = args
                     },
                 )
@@ -256,7 +256,7 @@ class DashboardActivity : EasyDiaryActivity() {
                     R.id.statistics5,
                     StockLineChartFragment().apply {
                         val args = Bundle()
-                        args.putString(ChartConstants.CHART_TITLE, "Stock")
+                        args.putString(ChartConstants.CHART_TITLE, getString(R.string.dashboard_chart_stock))
                         arguments = args
                     },
                 )

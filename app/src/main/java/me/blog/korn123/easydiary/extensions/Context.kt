@@ -1332,7 +1332,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
 
                 is TextView -> {
                     if (it.tag == "tabTitle") return
-                    if (it.text == "Dashboard") return
+                    if (it.text == getString(R.string.dashboard_title)) return
                     when (it.id) {
                         R.id.contentsLength, R.id.locationLabel -> {
                             it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)

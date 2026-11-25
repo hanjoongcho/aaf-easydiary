@@ -100,9 +100,9 @@ class DDayFragment : Fragment() {
             dDayItems.run {
                 clear()
                 val items = requireContext().dDayRepository.getAllDDays(isAsc)
-                if (items.isNotEmpty()) add(DDayDomain(title = "New D-Day!!!"))
+                if (items.isNotEmpty()) add(DDayDomain(title = getString(R.string.dashboard_dday_new_item)))
                 addAll(items)
-                add(DDayDomain(title = "New D-Day!!!"))
+                add(DDayDomain(title = getString(R.string.dashboard_dday_new_item)))
             }
             dDayAdapter.notifyDataSetChanged()
         }

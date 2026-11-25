@@ -16,6 +16,7 @@ import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
@@ -61,13 +62,13 @@ class DiaryFragment : Fragment() {
 
         binding.textTitle.text =
             when (arguments?.getString(DiaryComponentConstants.MODE_FLAG, DiaryComponentConstants.MODE_PREVIOUS_100)) {
-                DiaryComponentConstants.MODE_TASK_TODO -> "Open Task"
-                DiaryComponentConstants.MODE_TASK_DOING -> "DOING"
-                DiaryComponentConstants.MODE_TASK_DONE -> "Closed Task"
-                DiaryComponentConstants.MODE_TASK_CANCEL -> "CANCEL"
-                DiaryComponentConstants.MODE_FUTURE -> "Future"
-                DiaryComponentConstants.MODE_ON_THIS_DAY -> "On This Day"
-                else -> "Previous 100"
+                DiaryComponentConstants.MODE_TASK_TODO -> getString(R.string.dashboard_mode_open_task)
+                DiaryComponentConstants.MODE_TASK_DOING -> getString(R.string.dashboard_mode_doing)
+                DiaryComponentConstants.MODE_TASK_DONE -> getString(R.string.dashboard_mode_closed_task)
+                DiaryComponentConstants.MODE_TASK_CANCEL -> getString(R.string.dashboard_mode_cancel)
+                DiaryComponentConstants.MODE_FUTURE -> getString(R.string.dashboard_mode_future)
+                DiaryComponentConstants.MODE_ON_THIS_DAY -> getString(R.string.dashboard_mode_on_this_day)
+                else -> getString(R.string.dashboard_mode_previous_100)
             }
         setupDiary()
     }
