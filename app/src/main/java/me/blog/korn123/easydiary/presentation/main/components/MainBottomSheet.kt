@@ -83,6 +83,8 @@ fun MainBottomSheet(
     onMenuClick: (() -> Unit)? = null,
     onMoveTop: () -> Unit = {},
     onMoveBottom: () -> Unit = {},
+    /** Puts the sheet away and leaves only the floating button of [CollapsedBottomSheetButton]; null hides the button. */
+    onCollapseClick: (() -> Unit)? = null,
     onHeightChanged: (Dp) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -192,6 +194,16 @@ fun MainBottomSheet(
                         contentDescription = "Speech input",
                         onClick = { onMicrophoneClick() },
                     )
+                    if (onCollapseClick != null) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                        CustomCircleIconButton(
+                            iconResourceId = R.drawable.ic_keyboard_arrow_down,
+                            contentDescription = stringResource(R.string.button_collapse_bottom_sheet),
+                            iconPadding = 1.dp,
+                            elevation = 3.dp,
+                            onClick = { onCollapseClick.invoke() },
+                        )
+                    }
                 }
 
                 MainSearchInput(

@@ -1200,6 +1200,8 @@
     <string name="writing_streak_status_broken">Ricomincia oggi dal giorno 1</string>
     <string name="writing_streak_day_diaries_title">Diari del %1$s</string>
     <string name="writing_streak_encrypted_diary">Diario criptato</string>
+    <string name="button_collapse_bottom_sheet">Comprimi</string>
+    <string name="button_expand_bottom_sheet">Espandi</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_mode_open_task">Attività aperta</string>
     <string name="dashboard_mode_doing">IN CORSO</string>
