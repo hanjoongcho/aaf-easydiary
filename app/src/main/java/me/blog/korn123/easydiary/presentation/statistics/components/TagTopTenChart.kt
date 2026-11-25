@@ -283,49 +283,55 @@ private fun TagRing(
             )
 
             val sweeps = shares.map { share -> share.percent * DEGREES_PER_PERCENT * sweepProgress }
-            // The chosen slice is drawn after its neighbours so the gap on either side of it belongs to it.
-            val drawOrder = shares.indices.sortedBy { index -> if (index == chosenIndex) 1 else 0 }
+            // Every slice keeps the angle its own share gives it, counted in the order of the ranking from the top of
+            // the ring. The drawing order must not move a slice: sorting the chosen one to the end and then piling
+            // the sweeps up in that order pushed it to the last angle and pulled the slices behind it forward, so
+            // the ring no longer matched the rows and a tap landed on a slice other than the one under the finger.
+            val sliceStarts = FloatArray(sweeps.size)
             var startAngle = RING_START_ANGLE
-            drawOrder.forEach { index ->
-                val sweep = sweeps[index]
-                val gap = sliceGap(shares.size, sweep)
-                drawArc(
-                    color =
-                        palette[index % palette.size].copy(
-                            alpha = if (chosenIndex < 0 || index == chosenIndex) 1F else 1F - DIMMED_ALPHA * dimProgress,
-                        ),
-                    startAngle = startAngle + gap / 2F,
-                    sweepAngle = (sweep - gap).coerceAtLeast(0F),
-                    useCenter = false,
-                    topLeft = ringArcTopLeft,
-                    size = ringArcSize,
-                    style = Stroke(width = ringStrokePx, cap = StrokeCap.Butt),
-                )
+            sweeps.forEachIndexed { index, sweep ->
+                sliceStarts[index] = startAngle
                 startAngle += sweep
             }
 
-            // The chosen slice is painted again a little wider, centred on the ring's line, which reads as the
-            // slice lifting out of the ring as the others fade.
-            if (chosenShare != null && dimProgress > 0F) {
+            // The neighbours of the chosen slice are drawn first and faded, each one at its own angle.
+            sweeps.forEachIndexed { index, sweep ->
+                if (index != chosenIndex) {
+                    val gap = sliceGap(shares.size, sweep)
+                    drawArc(
+                        color =
+                            palette[index % palette.size].copy(
+                                alpha = if (chosenIndex < 0) 1F else 1F - DIMMED_ALPHA * dimProgress,
+                            ),
+                        startAngle = sliceStarts[index] + gap / 2F,
+                        sweepAngle = (sweep - gap).coerceAtLeast(0F),
+                        useCenter = false,
+                        topLeft = ringArcTopLeft,
+                        size = ringArcSize,
+                        style = Stroke(width = ringStrokePx, cap = StrokeCap.Butt),
+                    )
+                }
+            }
+
+            // The chosen slice is painted last and once, a little wider and centred on the ring's line, which reads as
+            // the slice lifting out of the ring as the others fade. It stays at the angle its share gave it, and while
+            // the choice animates in (dimProgress at 0) it is still drawn, at the ring's own width, so it never
+            // disappears for a frame.
+            if (chosenIndex in sweeps.indices) {
+                val sweep = sweeps[chosenIndex]
+                val gap = sliceGap(shares.size, sweep)
                 val widerStrokePx = ringStrokePx * (1F + CHOSEN_STROKE_GROWTH * dimProgress)
                 val widerArcTopLeft = Offset(widerStrokePx / 2F, widerStrokePx / 2F)
                 val widerArcSize = Size(size.width - widerStrokePx, size.height - widerStrokePx)
-                var sliceStart = RING_START_ANGLE
-                sweeps.indices.forEach { index ->
-                    if (index == chosenIndex) {
-                        val gap = sliceGap(shares.size, sweeps[index])
-                        drawArc(
-                            color = palette[index % palette.size],
-                            startAngle = sliceStart + gap / 2F,
-                            sweepAngle = (sweeps[index] - gap).coerceAtLeast(0F),
-                            useCenter = false,
-                            topLeft = widerArcTopLeft,
-                            size = widerArcSize,
-                            style = Stroke(width = widerStrokePx, cap = StrokeCap.Butt),
-                        )
-                    }
-                    sliceStart += sweeps[index]
-                }
+                drawArc(
+                    color = palette[chosenIndex % palette.size],
+                    startAngle = sliceStarts[chosenIndex] + gap / 2F,
+                    sweepAngle = (sweep - gap).coerceAtLeast(0F),
+                    useCenter = false,
+                    topLeft = widerArcTopLeft,
+                    size = widerArcSize,
+                    style = Stroke(width = widerStrokePx, cap = StrokeCap.Butt),
+                )
             }
         }
 
