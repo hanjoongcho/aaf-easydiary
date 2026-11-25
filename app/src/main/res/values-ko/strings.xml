@@ -1200,6 +1200,8 @@
     <string name="writing_streak_status_broken">오늘부터 다시 1일 시작</string>
     <string name="writing_streak_day_diaries_title">%1$s 일기</string>
     <string name="writing_streak_encrypted_diary">암호화된 일기</string>
+    <string name="button_collapse_bottom_sheet">접기</string>
+    <string name="button_expand_bottom_sheet">펼치기</string>
     <string name="dashboard_title">대시보드</string>
     <string name="dashboard_mode_open_task">미완료 태스크</string>
     <string name="dashboard_mode_doing">진행 중</string>

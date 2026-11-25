@@ -1200,6 +1200,8 @@
     <string name="writing_streak_status_broken">今日から1日目を再スタート</string>
     <string name="writing_streak_day_diaries_title">%1$sの日記</string>
     <string name="writing_streak_encrypted_diary">暗号化された日記</string>
+    <string name="button_collapse_bottom_sheet">折りたたむ</string>
+    <string name="button_expand_bottom_sheet">展開</string>
     <string name="dashboard_title">ダッシュボード</string>
     <string name="dashboard_mode_open_task">未完了タスク</string>
     <string name="dashboard_mode_doing">進行中</string>

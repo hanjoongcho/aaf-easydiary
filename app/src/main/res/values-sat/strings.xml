@@ -1200,6 +1200,8 @@
     <string name="writing_streak_status_broken">Start a new streak with day 1 today</string>
     <string name="writing_streak_day_diaries_title">Diaries on %1$s</string>
     <string name="writing_streak_encrypted_diary">Encrypted diary</string>
+    <string name="button_collapse_bottom_sheet">Collapse</string>
+    <string name="button_expand_bottom_sheet">Expand</string>
     <string name="dashboard_title">ᱰᱮᱥᱵᱚᱰ</string>
     <string name="dashboard_mode_open_task">ᱠᱷᱩᱞᱟ ᱠᱟᱹᱢᱤ</string>
     <string name="dashboard_mode_doing">ᱪᱟᱞᱟᱜ ᱠᱟᱱ ᱠᱟᱹᱢᱤ</string>
