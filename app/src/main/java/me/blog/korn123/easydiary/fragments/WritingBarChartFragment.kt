@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.ChartConstants
+import me.blog.korn123.easydiary.helper.StatisticsConstants
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.utils.DateUtils
@@ -138,7 +139,7 @@ class WritingBarChartFragment : Fragment() {
                             Intent(
                                 requireActivity(),
                                 StatisticsActivity::class.java,
-                            ),
+                            ).putExtra(StatisticsConstants.CHART_MODE, StatisticsConstants.MODE_SINGLE_BAR_CHART_WRITING),
                         )
                     }, 300)
                 }
