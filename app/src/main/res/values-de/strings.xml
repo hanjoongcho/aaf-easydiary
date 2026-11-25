@@ -886,6 +886,9 @@
     <string name="statistics_creation_time">Statistik nach Erstellungszeit</string>
     <string name="statistics_symbol_all">Alle Statistiken nach Symbolen</string>
     <string name="statistics_symbol_top_ten">Top-10-Statistik nach Symbolen</string>
+    <string name="statistics_tag_top_ten">Top-10-Statistik nach Tags</string>
+    <string name="statistics_tag_empty">Noch kein Tag verwendet. Versehen Sie Ihre Einträge mit Tags, dann werden die meistgenutzten hier aufgelistet.</string>
+    <string name="statistics_tag_total">Gesamt</string>
     <string name="category_flag">Markierung</string>
     <string name="preferences_category_backup_restore_device">Sicherung und Wiederherstellung von Anwendungen</string>
     <string name="preferences_category_backup_restore_device_sub">Gerätespeicherung</string>

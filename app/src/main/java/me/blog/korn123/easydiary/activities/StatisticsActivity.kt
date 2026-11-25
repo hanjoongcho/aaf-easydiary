@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.fragments.StockLineChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolBarChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolHorizontalBarChartFragment
+import me.blog.korn123.easydiary.fragments.TagHorizontalBarChartFragment
 import me.blog.korn123.easydiary.fragments.WeightLineChartFragment
 import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
 import me.blog.korn123.easydiary.helper.StatisticsConstants
@@ -80,6 +81,10 @@ class StatisticsActivity : ChartBase() {
                     R.id.barChart3 -> {
                         switchChart(SymbolHorizontalBarChartFragment(), R.string.statistics_symbol_top_ten)
                     }
+
+                    R.id.barChart4 -> {
+                        switchChart(TagHorizontalBarChartFragment(), R.string.statistics_tag_top_ten)
+                    }
                 }
                 Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
             }
@@ -91,21 +96,27 @@ class StatisticsActivity : ChartBase() {
             barChart.setOnClickListener(customItemClickListener)
             barChart2.setOnClickListener(customItemClickListener)
             barChart3.setOnClickListener(customItemClickListener)
+            barChart4.setOnClickListener(customItemClickListener)
         }
     }
 
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@StatisticsActivity, null, popupMenuBinding.root, true)
+        // Bound the menu to the space left on screen, so the fourth chart of the menu scrolls into view in
+        // landscape instead of being cut off below the screen.
+        val popupMenuAnchor = findViewById<View>(R.id.toolbar)
+        popupMenuBinding.menuScroll.maxContentHeight = EasyDiaryUtils.optionMenuMaxHeight(popupMenuAnchor)
 
         popupWindow =
             EasyDiaryUtils.openCustomOptionMenu(
                 popupMenuBinding.root,
-                findViewById(R.id.toolbar),
+                popupMenuAnchor,
             )
         popupMenuBinding.run {
             updateDrawableColorInnerCardView(imgBarChart)
             updateDrawableColorInnerCardView(imgBarChart2)
             updateDrawableColorInnerCardView(imgBarChart3)
+            updateDrawableColorInnerCardView(imgBarChart4)
         }
     }
 
@@ -120,6 +131,7 @@ class StatisticsActivity : ChartBase() {
                     StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> "Stock"
                     StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_all)
                     StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
+                    StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> getString(R.string.statistics_tag_top_ten)
                     else -> getString(R.string.statistics_creation_time)
                 }
         }
@@ -132,6 +144,7 @@ class StatisticsActivity : ChartBase() {
                 StatisticsConstants.MODE_SINGLE_LINE_CHART_STOCK -> StockLineChartFragment()
                 StatisticsConstants.MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
                 StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
+                StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> TagHorizontalBarChartFragment()
                 else -> WritingBarChartFragment()
             }
         supportFragmentManager.run {

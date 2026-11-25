@@ -886,6 +886,9 @@
     <string name="statistics_creation_time">작성 시간별 통계</string>
     <string name="statistics_symbol_all">심벌별 통계 전체</string>
     <string name="statistics_symbol_top_ten">심벌별 통계 TOP10</string>
+    <string name="statistics_tag_top_ten">태그별 통계 TOP10</string>
+    <string name="statistics_tag_empty">아직 사용한 태그가 없어요. 일기에 태그를 달면 많이 쓴 태그부터 여기에 표시됩니다.</string>
+    <string name="statistics_tag_total">합계</string>
     <string name="category_flag">플래그</string>
     <string name="preferences_category_backup_restore_device">백업 및 복구</string>
     <string name="preferences_category_backup_restore_device_sub">디바이스 저장소</string>

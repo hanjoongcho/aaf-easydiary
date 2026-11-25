@@ -886,6 +886,9 @@
     <string name="statistics_creation_time">Statistics by creation time</string>
     <string name="statistics_symbol_all">All statistics by symbol</string>
     <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
+    <string name="statistics_tag_top_ten">Top 10 statistics by tag</string>
+    <string name="statistics_tag_empty">No tag has been used yet. Add tags to your entries and the ones you use most are listed here.</string>
+    <string name="statistics_tag_total">Total</string>
     <string name="category_flag">FLAG</string>
     <string name="preferences_category_backup_restore_device">Backup and Restore</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>

@@ -886,6 +886,9 @@
     <string name="statistics_creation_time">按创作时间统计</string>
     <string name="statistics_symbol_all">按符号统计</string>
     <string name="statistics_symbol_top_ten">排名前十的符号</string>
+    <string name="statistics_tag_top_ten">按标签的前十名统计</string>
+    <string name="statistics_tag_empty">还没有使用过标签。给日记添加标签后，使用最多的标签会显示在这里。</string>
+    <string name="statistics_tag_total">合计</string>
     <string name="category_flag">旗帜</string>
     <string name="preferences_category_backup_restore_device">应用备份及还原</string>
     <string name="preferences_category_backup_restore_device_sub">设备储存</string>

@@ -886,6 +886,9 @@
     <string name="statistics_creation_time">Estadísticas por hora de creación</string>
     <string name="statistics_symbol_all">Todas las estadísticas por símbolo</string>
     <string name="statistics_symbol_top_ten">Las 10 mejores estadísticas por símbolo</string>
+    <string name="statistics_tag_top_ten">Las 10 mejores estadísticas por etiqueta</string>
+    <string name="statistics_tag_empty">Todavía no has usado ninguna etiqueta. Añade etiquetas a tus entradas y aquí aparecerán las que más uses.</string>
+    <string name="statistics_tag_total">Total</string>
     <string name="category_flag">Bandera</string>
     <string name="preferences_category_backup_restore_device">Copia de seguridad y restauración de aplicaciones</string>
     <string name="preferences_category_backup_restore_device_sub">Almacenamiento del dispositivo</string>
