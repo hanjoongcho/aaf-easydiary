@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -351,10 +352,12 @@ private fun TagRingCenter(
     labelFontSize: Float,
     textColor: Color,
 ) {
-    val hole = innerDiameter.value
-    val valueFontSize = minOf(labelFontSize * CENTER_VALUE_FONT_SCALE, hole * CENTER_VALUE_MAX_SHARE)
-    val nameFontSize = minOf(labelFontSize * CENTER_NAME_FONT_SCALE, hole * CENTER_NAME_MAX_SHARE)
-    val captionFontSize = minOf(labelFontSize * CENTER_CAPTION_FONT_SCALE, hole * CENTER_CAPTION_MAX_SHARE)
+    // SimpleText takes its size in pixels, so the hole is converted to pixels before it caps those sizes. Comparing
+    // them against the hole in dp shrank the middle text by the screen density, to a few sp on a high-density phone.
+    val holePx = with(LocalDensity.current) { innerDiameter.toPx() }
+    val valueFontSize = minOf(labelFontSize * CENTER_VALUE_FONT_SCALE, holePx * CENTER_VALUE_MAX_SHARE)
+    val nameFontSize = minOf(labelFontSize * CENTER_NAME_FONT_SCALE, holePx * CENTER_NAME_MAX_SHARE)
+    val captionFontSize = minOf(labelFontSize * CENTER_CAPTION_FONT_SCALE, holePx * CENTER_CAPTION_MAX_SHARE)
 
     Column(
         modifier = Modifier.width(innerDiameter * CENTER_WIDTH_FRACTION),
