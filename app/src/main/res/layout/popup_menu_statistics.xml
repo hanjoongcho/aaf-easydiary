@@ -28,30 +28,6 @@
                 android:orientation="vertical">
                 <androidx.appcompat.widget.LinearLayoutCompat
                     style="@style/linear_popup_menu_item"
-                    android:id="@+id/barChart">
-                    <androidx.appcompat.widget.AppCompatImageView
-                        style="@style/image_popup_menu_icon"
-                        android:id="@+id/img_bar_chart"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        style="@style/text_popup_menu_item"
-                        android:text="@string/statistics_creation_time" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    style="@style/linear_popup_menu_item"
-                    android:id="@+id/barChart2">
-                    <androidx.appcompat.widget.AppCompatImageView
-                        style="@style/image_popup_menu_icon"
-                        android:id="@+id/img_bar_chart2"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        style="@style/text_popup_menu_item"
-                        android:text="@string/statistics_symbol_all" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    style="@style/linear_popup_menu_item"
                     android:id="@+id/barChart3">
                     <androidx.appcompat.widget.AppCompatImageView
                         style="@style/image_popup_menu_icon"
@@ -73,6 +49,30 @@
                     <me.blog.korn123.easydiary.views.FixedTextView
                         style="@style/text_popup_menu_item"
                         android:text="@string/statistics_tag_top_ten" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/barChart">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/image_popup_menu_icon"
+                        android:id="@+id/img_bar_chart"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/statistics_creation_time" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    style="@style/linear_popup_menu_item"
+                    android:id="@+id/barChart2">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/image_popup_menu_icon"
+                        android:id="@+id/img_bar_chart2"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_outline_bar_chart_4_bars_24" />
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        style="@style/text_popup_menu_item"
+                        android:text="@string/statistics_symbol_all" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </LinearLayout>
         </me.blog.korn123.easydiary.views.MaxHeightScrollView>

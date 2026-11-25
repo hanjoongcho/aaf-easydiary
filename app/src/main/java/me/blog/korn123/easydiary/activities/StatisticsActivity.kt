@@ -133,7 +133,7 @@ class StatisticsActivity : ChartBase() {
                     StatisticsConstants.MODE_SINGLE_BAR_CHART_WRITING -> getString(R.string.statistics_creation_time)
                     StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
                     StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> getString(R.string.statistics_tag_top_ten)
-                    else -> getString(R.string.statistics_creation_time)
+                    else -> getString(R.string.statistics_symbol_top_ten)
                 }
         }
     }
@@ -147,7 +147,7 @@ class StatisticsActivity : ChartBase() {
                 StatisticsConstants.MODE_SINGLE_BAR_CHART_WRITING -> WritingBarChartFragment()
                 StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
                 StatisticsConstants.MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG -> TagHorizontalBarChartFragment()
-                else -> WritingBarChartFragment()
+                else -> SymbolHorizontalBarChartFragment()
             }
         supportFragmentManager.run {
             beginTransaction().run {
