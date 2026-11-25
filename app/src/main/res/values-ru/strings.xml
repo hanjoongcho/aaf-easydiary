@@ -1200,4 +1200,22 @@
     <string name="writing_streak_status_broken">Начните сегодня новую серию с 1 дня</string>
     <string name="writing_streak_day_diaries_title">Записи за %1$s</string>
     <string name="writing_streak_encrypted_diary">Зашифрованная запись</string>
+    <string name="dashboard_title">Панель</string>
+    <string name="dashboard_mode_open_task">Открытая задача</string>
+    <string name="dashboard_mode_doing">В РАБОТЕ</string>
+    <string name="dashboard_mode_closed_task">Закрытая задача</string>
+    <string name="dashboard_mode_cancel">ОТМЕНЕНО</string>
+    <string name="dashboard_mode_future">Будущее</string>
+    <string name="dashboard_mode_on_this_day">В этот день</string>
+    <string name="dashboard_mode_previous_100">Последние 100</string>
+    <string name="dashboard_dday_title">D-Day (BETA)</string>
+    <string name="dashboard_dday_flexbox_option">Flexbox</string>
+    <string name="dashboard_dday_new_item">Новый D-Day!!!</string>
+    <string name="dashboard_dday_add">ДОБАВИТЬ</string>
+    <string name="dashboard_dday_title_hint">Введите название целевой даты.</string>
+    <string name="dashboard_dday_delete_confirm">Вы действительно хотите удалить выбранный D-Day?</string>
+    <string name="dashboard_daily_symbol_calendar">Календарь</string>
+    <string name="dashboard_daily_symbol_no_data">Н/Д</string>
+    <string name="dashboard_chart_weight">Вес</string>
+    <string name="dashboard_chart_stock">Акции</string>
 </resources>

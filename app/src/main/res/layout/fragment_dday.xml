@@ -14,7 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="D-Day (BETA)"
+            android:text="@string/dashboard_dday_title"
             android:textSize="@dimen/basic_text_medium"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
@@ -48,7 +48,7 @@
                 android:textSize="@dimen/basic_text_medium"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
-                android:text="Flexbox"
+                android:text="@string/dashboard_dday_flexbox_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.SwitchCompat
