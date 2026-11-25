@@ -791,6 +791,7 @@ object StatisticsConstants {
     const val MODE_SINGLE_LINE_CHART_STOCK = "mode_single_line_chart_stock"
     const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
     const val MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL = "mode_single_horizontal_bar_chart_symbol"
+    const val MODE_SINGLE_HORIZONTAL_BAR_CHART_TAG = "mode_single_horizontal_bar_chart_tag"
 }
 
 object DiaryEditingConstants {
