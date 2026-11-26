@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -57,6 +58,8 @@ import me.blog.korn123.easydiary.domain.model.TagRankShare
 import me.blog.korn123.easydiary.domain.model.TagStatistics
 import me.blog.korn123.easydiary.domain.model.TagWithCount
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.statistics.TagTopTenChartUiState
@@ -73,6 +76,11 @@ import kotlin.math.sqrt
  * Korean or English name on a line of its own, the count, and the percent. Choosing a slice or a row holds that
  * tag out of the ring, in the middle and in its row; choosing it again goes back to the whole top ten.
  *
+ * [isDashboardMode] draws the same chart for the dashboard card, which is 500dp high and loses the title's room
+ * off that: there the tags are chips that wrap two or three to a line under the ring, so all ten stay inside the
+ * card instead of being cut off below its edge. The statistics screen opens the chart without the flag and keeps
+ * the ten rows.
+ *
  * The chart paints nothing of its own: the card it sits in carries the background, and the colors come from the
  * theme the rest of the app is drawn with, so a theme change or a different font setting reaches it as well.
  */
@@ -80,6 +88,7 @@ import kotlin.math.sqrt
 fun TagTopTenChart(
     uiState: TagTopTenChartUiState,
     modifier: Modifier = Modifier,
+    isDashboardMode: Boolean = false,
 ) {
     val context = LocalContext.current
     val textColor = Color(context.config.textColor)
@@ -94,7 +103,10 @@ fun TagTopTenChart(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(horizontal = CHART_HORIZONTAL_PADDING, vertical = CHART_VERTICAL_PADDING),
+                .padding(
+                    horizontal = if (isDashboardMode) COMPACT_CHART_HORIZONTAL_PADDING else CHART_HORIZONTAL_PADDING,
+                    vertical = if (isDashboardMode) COMPACT_CHART_VERTICAL_PADDING else CHART_VERTICAL_PADDING,
+                ),
     ) {
         when {
             uiState.isLoading -> {
@@ -132,6 +144,7 @@ fun TagTopTenChart(
                     palette = palette,
                     labelFontSize = labelFontSize,
                     textColor = textColor,
+                    isDashboardMode = isDashboardMode,
                     onChoose = { index -> chosenTagId = shares.getOrNull(index)?.ranked?.tag?.tagId ?: NO_TAG_ID },
                 )
             }
@@ -142,6 +155,9 @@ fun TagTopTenChart(
 /**
  * Puts the ring and the rows in the room the chart was given: under each other on a tall chart, beside each other
  * on a wide one, so a landscape phone keeps a ring large enough to read and still shows all ten rows.
+ *
+ * In dashboard mode the rows become the chips of [CompactTagLegend] and the ring is capped a little tighter, so
+ * the ring and all ten tags fit the 500dp card without a scroll in both portrait and landscape.
  */
 @Composable
 private fun TagChartBody(
@@ -151,11 +167,16 @@ private fun TagChartBody(
     palette: List<Color>,
     labelFontSize: Float,
     textColor: Color,
+    isDashboardMode: Boolean,
     onChoose: (Int) -> Unit,
 ) {
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         if (maxWidth > maxHeight) {
-            val ringSize = minOf(maxHeight, maxWidth * WIDE_RING_WIDTH_FRACTION)
+            val ringSize =
+                minOf(
+                    maxHeight,
+                    maxWidth * (if (isDashboardMode) COMPACT_WIDE_RING_WIDTH_FRACTION else WIDE_RING_WIDTH_FRACTION),
+                )
             Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.width(ringSize).fillMaxHeight(), contentAlignment = Alignment.Center) {
                     TagRing(
@@ -169,19 +190,42 @@ private fun TagChartBody(
                         onChoose = onChoose,
                     )
                 }
-                Spacer(modifier = Modifier.width(SECTION_GAP))
-                TagLegend(
-                    shares = shares,
-                    chosenIndex = chosenIndex,
-                    palette = palette,
-                    labelFontSize = labelFontSize,
-                    textColor = textColor,
-                    onChoose = onChoose,
-                    modifier = Modifier.weight(1F).fillMaxHeight(),
-                )
+                Spacer(modifier = Modifier.width(if (isDashboardMode) COMPACT_SECTION_GAP else SECTION_GAP))
+                if (isDashboardMode) {
+                    CompactTagLegend(
+                        shares = shares,
+                        chosenIndex = chosenIndex,
+                        palette = palette,
+                        labelFontSize = labelFontSize,
+                        textColor = textColor,
+                        onChoose = onChoose,
+                        modifier = Modifier.weight(1F).fillMaxHeight(),
+                    )
+                } else {
+                    TagLegend(
+                        shares = shares,
+                        chosenIndex = chosenIndex,
+                        palette = palette,
+                        labelFontSize = labelFontSize,
+                        textColor = textColor,
+                        onChoose = onChoose,
+                        modifier = Modifier.weight(1F).fillMaxHeight(),
+                    )
+                }
             }
         } else {
-            val ringSize = minOf(maxWidth, maxHeight * TALL_RING_HEIGHT_FRACTION, RING_MAX_SIZE)
+            val ringSize =
+                if (isDashboardMode) {
+                    // The chips of the compact legend need less than half of what ten rows took, but they still
+                    // need their room: the ring gives it back instead of pushing the last chips under the edge.
+                    minOf(
+                        maxWidth * COMPACT_TALL_RING_WIDTH_FRACTION,
+                        maxHeight * COMPACT_TALL_RING_HEIGHT_FRACTION,
+                        COMPACT_RING_MAX_SIZE,
+                    )
+                } else {
+                    minOf(maxWidth, maxHeight * TALL_RING_HEIGHT_FRACTION, RING_MAX_SIZE)
+                }
             Column(modifier = Modifier.fillMaxSize()) {
                 Box(modifier = Modifier.fillMaxWidth().height(ringSize), contentAlignment = Alignment.Center) {
                     TagRing(
@@ -195,18 +239,30 @@ private fun TagChartBody(
                         onChoose = onChoose,
                     )
                 }
-                Spacer(modifier = Modifier.height(SECTION_GAP))
+                Spacer(modifier = Modifier.height(if (isDashboardMode) COMPACT_SECTION_GAP else SECTION_GAP))
                 // Ten rows are taller than what is left under the ring on a landscape phone or at a large font
                 // size, so the rows scroll instead of losing the tags below the card's edge.
-                TagLegend(
-                    shares = shares,
-                    chosenIndex = chosenIndex,
-                    palette = palette,
-                    labelFontSize = labelFontSize,
-                    textColor = textColor,
-                    onChoose = onChoose,
-                    modifier = Modifier.weight(1F).fillMaxWidth(),
-                )
+                if (isDashboardMode) {
+                    CompactTagLegend(
+                        shares = shares,
+                        chosenIndex = chosenIndex,
+                        palette = palette,
+                        labelFontSize = labelFontSize,
+                        textColor = textColor,
+                        onChoose = onChoose,
+                        modifier = Modifier.weight(1F).fillMaxWidth(),
+                    )
+                } else {
+                    TagLegend(
+                        shares = shares,
+                        chosenIndex = chosenIndex,
+                        palette = palette,
+                        labelFontSize = labelFontSize,
+                        textColor = textColor,
+                        onChoose = onChoose,
+                        modifier = Modifier.weight(1F).fillMaxWidth(),
+                    )
+                }
             }
         }
     }
@@ -499,6 +555,103 @@ private fun TagLegendRow(
     }
 }
 
+/**
+ * The legend of the dashboard card: the same tags as chips that wrap two or three to a line.
+ *
+ * The card is 500dp high, and ten full rows under the ring need more than what the title leaves of that, so in the
+ * card the rows become chips: a tag's color, its name, its count and its share, each chip one half of the line, so
+ * two of them stand in a column and ten chips need five lines instead of ten, which is what keeps the whole top ten
+ * inside the card without a scroll. A chip is a tap target of its own and tints like a row when its tag is chosen,
+ * and the chips still scroll if a very large font setting makes them taller than the card.
+ */
+@Composable
+private fun CompactTagLegend(
+    shares: List<TagRankShare>,
+    chosenIndex: Int,
+    palette: List<Color>,
+    labelFontSize: Float,
+    textColor: Color,
+    onChoose: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val chipBackground = Color(context.config.backgroundColor.darkenColor(context.innerCardDarkenFactor()))
+    BoxWithConstraints(modifier = modifier) {
+        // A chip never takes more than half of a line, however long its tag name is: the name is shortened inside
+        // the chip instead of pushing its neighbour past the card's edge, so two chips always share a line.
+        val chipMaxWidth = (maxWidth - COMPACT_CHIP_SPACING) / 2F        FlowRow(
+            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(COMPACT_CHIP_SPACING),
+            verticalArrangement = Arrangement.spacedBy(COMPACT_CHIP_SPACING),
+        ) {
+            shares.forEachIndexed { index, share ->
+                CompactTagChip(
+                    share = share,
+                    color = palette[index % palette.size],
+                    chipBackground = chipBackground,
+                    isChosen = index == chosenIndex,
+                    labelFontSize = labelFontSize,
+                    textColor = textColor,
+                    maxWidth = chipMaxWidth,
+                    onClick = { onChoose(if (index == chosenIndex) NO_INDEX else index) },
+                )
+            }
+        }
+    }
+}
+
+/** One tag of the compact legend: its color, its name, its count and its share of the top ten on a small chip. */
+@Composable
+private fun CompactTagChip(
+    share: TagRankShare,
+    color: Color,
+    chipBackground: Color,
+    isChosen: Boolean,
+    labelFontSize: Float,
+    textColor: Color,
+    maxWidth: Dp,
+    onClick: () -> Unit,
+) {
+    val shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp)
+    Row(
+        modifier =
+            Modifier
+                .widthIn(max = maxWidth)
+                .clip(shape)
+                .background(if (isChosen) color.copy(alpha = CHOSEN_ROW_ALPHA) else chipBackground)
+                .clickable(onClick = onClick)
+                .padding(horizontal = COMPACT_CHIP_HORIZONTAL_PADDING, vertical = COMPACT_CHIP_VERTICAL_PADDING),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(modifier = Modifier.size(COMPACT_INDICATOR_SIZE).clip(CircleShape).background(color))
+        Spacer(modifier = Modifier.width(COMPACT_INDICATOR_GAP))
+        SimpleText(
+            text = share.ranked.tag.label,
+            modifier = Modifier.weight(1F),
+            fontSize = labelFontSize * COMPACT_NAME_FONT_SCALE,
+            fontWeight = if (isChosen) FontWeight.SemiBold else FontWeight.Normal,
+            fontColor = textColor,
+            maxLines = 1,
+        )
+        Spacer(modifier = Modifier.width(COMPACT_COUNT_GAP))
+        SimpleText(
+            text = share.ranked.diaryCount.toString(),
+            fontSize = labelFontSize * COMPACT_COUNT_FONT_SCALE,
+            fontWeight = FontWeight.SemiBold,
+            fontColor = textColor,
+            maxLines = 1,
+        )
+        Spacer(modifier = Modifier.width(COMPACT_PERCENT_GAP))
+        SimpleText(
+            text = percentText(share.percent),
+            fontSize = labelFontSize * COMPACT_PERCENT_FONT_SCALE,
+            fontColor = textColor,
+            alpha = if (isChosen) 1F else PERCENT_ALPHA,
+            maxLines = 1,
+        )
+    }
+}
+
 /** The gap kept between two neighbouring slices: thin, and never so wide that a small slice disappears. */
 private fun sliceGap(
     sliceCount: Int,
@@ -575,6 +728,9 @@ private const val DARK_CARD_LUMINANCE = 0.35F
 private const val DARK_CARD_BRIGHTENING = 0.24F
 private const val WIDE_RING_WIDTH_FRACTION = 0.42F
 private const val TALL_RING_HEIGHT_FRACTION = 0.5F
+private const val COMPACT_WIDE_RING_WIDTH_FRACTION = 0.38F
+private const val COMPACT_TALL_RING_WIDTH_FRACTION = 0.7F
+private const val COMPACT_TALL_RING_HEIGHT_FRACTION = 0.5F
 private const val CENTER_WIDTH_FRACTION = 0.86F
 private const val CENTER_VALUE_FONT_SCALE = 1.9F
 private const val CENTER_VALUE_MAX_SHARE = 0.30F
@@ -588,11 +744,25 @@ private const val CHOSEN_ROW_ALPHA = 0.16F
 private const val PERCENT_ALPHA = 0.7F
 private const val COUNT_FONT_SCALE = 0.95F
 private const val PERCENT_FONT_SCALE = 0.85F
+private const val COMPACT_NAME_FONT_SCALE = 0.9F
+private const val COMPACT_COUNT_FONT_SCALE = 0.85F
+private const val COMPACT_PERCENT_FONT_SCALE = 0.8F
 private const val EMPTY_STATE_ALPHA = 0.7F
 private val RING_MAX_SIZE = 260.dp
+private val COMPACT_RING_MAX_SIZE = 220.dp
 private val CHART_HORIZONTAL_PADDING = 16.dp
 private val CHART_VERTICAL_PADDING = 16.dp
 private val SECTION_GAP = 16.dp
+private val COMPACT_CHART_HORIZONTAL_PADDING = 12.dp
+private val COMPACT_CHART_VERTICAL_PADDING = 8.dp
+private val COMPACT_SECTION_GAP = 8.dp
+private val COMPACT_CHIP_SPACING = 6.dp
+private val COMPACT_CHIP_HORIZONTAL_PADDING = 6.dp
+private val COMPACT_CHIP_VERTICAL_PADDING = 3.dp
+private val COMPACT_INDICATOR_SIZE = 8.dp
+private val COMPACT_INDICATOR_GAP = 4.dp
+private val COMPACT_COUNT_GAP = 4.dp
+private val COMPACT_PERCENT_GAP = 4.dp
 private val PROGRESS_SIZE = 28.dp
 private val INDICATOR_SIZE = 10.dp
 private val INDICATOR_GAP = 10.dp
@@ -602,6 +772,34 @@ private val COUNT_MIN_WIDTH = 28.dp
 private val PERCENT_MIN_WIDTH = 40.dp
 private val ROW_HORIZONTAL_PADDING = 6.dp
 private val ROW_VERTICAL_PADDING = 6.dp
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 392, heightDp = 500)
+@Composable
+private fun TagTopTenChartDashboardPreview() {
+    AppTheme {
+        // The 500dp dashboard card, with all ten tags the chart can hold, to see that the chips wrap inside it.
+        TagTopTenChart(
+            uiState =
+                TagTopTenChartUiState(
+                    tags =
+                        listOf(
+                            TagWithCount(tag = Tag(tagId = 1L, name = "travel with family"), diaryCount = 14),
+                            TagWithCount(tag = Tag(tagId = 2L, name = "work"), diaryCount = 9),
+                            TagWithCount(tag = Tag(tagId = 3L, name = "reading"), diaryCount = 5),
+                            TagWithCount(tag = Tag(tagId = 4L, name = "diet"), diaryCount = 2),
+                            TagWithCount(tag = Tag(tagId = 5L, name = "exercise"), diaryCount = 2),
+                            TagWithCount(tag = Tag(tagId = 6L, name = "family"), diaryCount = 1),
+                            TagWithCount(tag = Tag(tagId = 7L, name = "friends"), diaryCount = 1),
+                            TagWithCount(tag = Tag(tagId = 8L, name = "money"), diaryCount = 1),
+                            TagWithCount(tag = Tag(tagId = 9L, name = "health"), diaryCount = 1),
+                            TagWithCount(tag = Tag(tagId = 10L, name = "study"), diaryCount = 1),
+                        ),
+                    isLoading = false,
+                ),
+            isDashboardMode = true,
+        )
+    }
+}
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, heightDp = 460)
 @Composable

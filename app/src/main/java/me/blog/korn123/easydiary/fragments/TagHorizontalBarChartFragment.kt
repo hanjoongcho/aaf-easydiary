@@ -33,6 +33,10 @@ import me.blog.korn123.easydiary.views.FixedCardView
  * dashboard card with the chart title the dashboard hands it and an icon that opens the chart on the whole
  * screen. The drawing itself is [TagTopTenChart], Compose as new UI of this app is, so a long tag name is
  * shortened inside its own row instead of being pushed into an axis label.
+ *
+ * A card of the dashboard is 500dp high and loses the title's room off that, which is not enough for the ring and
+ * ten full rows under it, so the title the dashboard passes is also how the chart is told to draw its compact
+ * legend: the statistics screen itself opens the chart without a title and keeps the full rows.
  */
 @AndroidEntryPoint
 class TagHorizontalBarChartFragment : Fragment() {
@@ -54,11 +58,12 @@ class TagHorizontalBarChartFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         applyChartTitle(view)
+        val isDashboardMode = arguments?.getString(ChartConstants.CHART_TITLE) != null
         binding.composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding.composeView.setContent {
             AppTheme {
                 val uiState by tagTopTenChartViewModel.uiState.collectAsStateWithLifecycle()
-                TagTopTenChart(uiState = uiState)
+                TagTopTenChart(uiState = uiState, isDashboardMode = isDashboardMode)
             }
         }
     }
