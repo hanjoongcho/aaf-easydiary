@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">추가</string>
     <string name="dashboard_dday_title_hint">목표 날짜의 이름을 입력하세요.</string>
     <string name="dashboard_dday_delete_confirm">선택한 D-Day를 삭제하시겠습니까?</string>
+    <string name="dashboard_dday_show_all">전체 보기</string>
+    <string name="dashboard_dday_collapse">접기</string>
     <string name="dashboard_daily_symbol_calendar">캘린더</string>
     <string name="dashboard_daily_symbol_no_data">없음</string>
     <string name="dashboard_chart_weight">체중</string>
