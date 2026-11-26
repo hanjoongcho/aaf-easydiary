@@ -147,9 +147,11 @@ fun DdayCardFlow(
             val restWidth = if (growableCards.isEmpty()) 0 else freeWidth - sharedWidth * growableCards.size
 
             line.forEach { cardIndex ->
+                // Only a stored D-Day takes part in sharing the free width of its line; the `ADD` card keeps the
+                // width it asks for, so the cards of a line never add up to more than the line itself.
                 val extraWidth =
                     when {
-                        growableCards.isEmpty() -> 0
+                        !items[cardIndex].isStored || growableCards.isEmpty() -> 0
                         cardIndex == growableCards.last() -> sharedWidth + restWidth
                         else -> sharedWidth
                     }
