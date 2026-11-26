@@ -39,6 +39,11 @@ import me.blog.korn123.easydiary.presentation.components.SimpleText
  * the same icon-tinted text color, the same font of the app and the same three lights — today orange, a day that
  * has passed red, a day still to come green — beside the remaining days. A tap opens the dialog of the fragment,
  * which adds a D-Day for the `ADD` card and changes or deletes one for a stored card.
+ *
+ * The content follows the minimum constraints the card is measured with: a card of the wrap mode is given the free
+ * width of its line as a minimum ([DdayCardFlow]), and the box hands that width down to the content so the remaining
+ * days of a stored D-Day end at the right edge of the card and not at the end of the text above them. A card of the
+ * horizontal list has no minimum and keeps the width its content asks for.
  */
 @Composable
 fun DdayCard(
@@ -63,6 +68,10 @@ fun DdayCard(
                 .background(cardColor)
                 .clickable(onClick = onClick)
                 .padding(if (item.isNewItem) NEW_ITEM_CONTENT_PADDING else CARD_CONTENT_PADDING),
+        // Off, the content of a card widened by its line would keep the width it asks for and stay at the start of
+        // the card, so `Modifier.align(Alignment.End)` of the remaining days would align to the text and not to the
+        // card. On, the content is as wide as the card is, and a card with no minimum width is unchanged.
+        propagateMinConstraints = true,
     ) {
         when (item.isNewItem) {
             true -> DdayAddLabel(textColor = textColor)
