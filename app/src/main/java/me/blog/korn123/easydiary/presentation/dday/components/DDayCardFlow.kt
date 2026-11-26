@@ -34,10 +34,11 @@ import me.blog.korn123.easydiary.presentation.components.SimpleText
  * dropping and the `Show all` / `Collapse` row are decided here, from the width of the cards themselves: the whole
  * line that does not fit is enough to know that the row is needed.
  *
- * A card is measured twice, once to learn the width it asks for and once at the width and height of the line it
- * lands in, because a measured card cannot be resized afterwards and a card has to fill its line to keep the look
- * of the flexbox list. The two measurements are two compositions of the same remembered content, so a measure of
- * the list never composes a card by itself.
+ * A card is measured twice, once to learn the width it asks for and once at the width of the line it lands in,
+ * because a measured card cannot be resized afterwards and a card has to fill its line to keep the look of the
+ * flexbox list. A stored D-Day is then measured at the height of its line as well; the `ADD` card keeps the height
+ * of its own label, as the flexbox item of it did. The two measurements are two compositions of the same remembered
+ * content, so a measure of the list never composes a card by itself.
  */
 @Composable
 fun DdayCardFlow(
@@ -153,15 +154,21 @@ fun DdayCardFlow(
                         else -> sharedWidth
                     }
                 val cardWidth = cardWidths[cardIndex] + extraWidth
-                val cardHeight = lineHeights[lineIndex]
                 sizedCardWidths[cardIndex] = cardWidth
+                // A stored D-Day card fills the height of its line, so the cards of a line stay level. The `ADD`
+                // card is not: it keeps its own height and sits at the top of the line, the way
+                // `item_dday_add.xml` kept it short under the `top` gravity. Given the height of the line it would
+                // draw a tall empty card beside a line of three-line cards.
+                val isStored = items[cardIndex].isStored
+                val minHeight = if (isStored) lineHeights[lineIndex] else 0
+                val maxHeight = lineHeights[lineIndex]
                 sizedCards[cardIndex] =
                     placedCards[cardIndex].measure(
                         Constraints(
                             minWidth = cardWidth,
                             maxWidth = cardWidth,
-                            minHeight = cardHeight,
-                            maxHeight = cardHeight,
+                            minHeight = minHeight,
+                            maxHeight = maxHeight,
                         ),
                     )
             }
