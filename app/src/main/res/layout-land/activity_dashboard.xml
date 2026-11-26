@@ -199,6 +199,12 @@
                         android:orientation="vertical" />
 
                     <LinearLayout
+                        android:id="@+id/statistics6"
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
                         android:id="@+id/statistics1"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"

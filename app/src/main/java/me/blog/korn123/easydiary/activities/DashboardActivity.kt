@@ -236,6 +236,17 @@ class DashboardActivity : EasyDiaryActivity() {
                 },
             )
 
+            // 14-1. Statistics-Tag TopTen
+            val tagTopTenTitle = getString(R.string.statistics_tag_top_ten)
+            replace(
+                R.id.statistics6,
+                TagHorizontalBarChartFragment().apply {
+                    val args = Bundle()
+                    args.putString(ChartConstants.CHART_TITLE, tagTopTenTitle)
+                    arguments = args
+                },
+            )
+
             // 15. Chart Weight
             if (config.enableDebugOptionVisibleChartWeight) {
                 binding.statistics4.visibility = View.VISIBLE
@@ -278,6 +289,7 @@ class DashboardActivity : EasyDiaryActivity() {
                 statistics3.layoutParams.width = it
                 statistics4.layoutParams.width = it
                 statistics5.layoutParams.width = it
+                statistics6.layoutParams.width = it
                 if (isLandScape()) {
                     val height = getDefaultDisplay().y - statusBarHeight() - actionBarHeight()
                     statistics1.layoutParams.height = height
@@ -285,6 +297,7 @@ class DashboardActivity : EasyDiaryActivity() {
                     statistics3.layoutParams.height = height
                     statistics4.layoutParams.height = height
                     statistics5.layoutParams.height = height
+                    statistics6.layoutParams.height = height
                 }
             }
 
