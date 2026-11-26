@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/card_dashboard"
     app:contentPadding="0dp"
-    app:fixedAppcompatPadding="false"
+    app:fixedAppcompatPadding="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="@dimen/card_radius">
