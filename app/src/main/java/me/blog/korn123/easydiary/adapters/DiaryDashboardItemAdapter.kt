@@ -6,6 +6,16 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -28,16 +38,27 @@ import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.presentation.components.TagChip
+import me.blog.korn123.easydiary.presentation.theme.AppTheme
 import me.blog.korn123.easydiary.utils.DateUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.easydiary.utils.FontUtils
+import java.util.WeakHashMap
 import me.blog.korn123.easydiary.domain.model.Diary as DiaryDomain
+import me.blog.korn123.easydiary.domain.model.Tag as TagDomain
 
 class DiaryDashboardItemAdapter(
     val activity: Activity,
 ) : BaseBannerAdapter<DiaryDomain>() {
+    /**
+     * The tag chip state of each page view (issue #270). A banner page is inflated once and rebound while the
+     * pager keeps it, so the Compose content of the chip row is set once per page view and a rebind only puts a
+     * new list in the state instead of rebuilding the composition.
+     */
+    private val tagChipStates = WeakHashMap<ComposeView, MutableState<List<TagDomain>>>()
+
     override fun bindData(
         holder: BaseViewHolder<DiaryDomain>,
         diary: DiaryDomain,
@@ -172,8 +193,49 @@ class DiaryDashboardItemAdapter(
 //                        false -> Integer.MAX_VALUE
 //                    }
                 }
+
+                bindTags(binding, diary)
             }
         }
+    }
+
+    /**
+     * Draws the `#tag` chips of the card under the photos and above the location and contents length chips,
+     * the same place and style the main list uses (issue #270). The row is gone while the entry carries no tag,
+     * so a card without tags keeps the height it always had. The chips are labels here: the dashboard has no tag
+     * filter to apply, so a chip keeps the default action of [TagChip] and only holds the tap that lands on it,
+     * while a tap anywhere else on the page still opens the entry through the pager's page click listener.
+     */
+    private fun bindTags(
+        binding: ItemDiaryDashboardBinding,
+        diary: DiaryDomain,
+    ) {
+        val tagViews = binding.tagViews
+        tagViews.visibility = if (diary.tags.isEmpty()) View.GONE else View.VISIBLE
+        val tagChipState = tagChipStates[tagViews] ?: mutableStateOf<List<TagDomain>>(emptyList()).also { state ->
+            tagViews.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            tagViews.setContent {
+                AppTheme {
+                    FlowRow(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                // Room for the 2dp shadow of a chip, so the chips of the first and last column
+                                // and of the last row keep their shadow inside the ComposeView (issue #270).
+                                .padding(horizontal = 2.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        state.value.forEach { tag ->
+                            TagChip(name = tag.name)
+                        }
+                    }
+                }
+            }
+            tagChipStates[tagViews] = state
+            state
+        }
+        tagChipState.value = diary.tags.toList()
     }
 
     override fun getLayoutId(viewType: Int): Int = R.layout.item_diary_dashboard
