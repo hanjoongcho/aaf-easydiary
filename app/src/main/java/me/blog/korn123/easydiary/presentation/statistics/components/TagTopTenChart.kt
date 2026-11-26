@@ -579,7 +579,8 @@ private fun CompactTagLegend(
     BoxWithConstraints(modifier = modifier) {
         // A chip never takes more than half of a line, however long its tag name is: the name is shortened inside
         // the chip instead of pushing its neighbour past the card's edge, so two chips always share a line.
-        val chipMaxWidth = (maxWidth - COMPACT_CHIP_SPACING) / 2F        FlowRow(
+        val chipMaxWidth = (maxWidth - COMPACT_CHIP_SPACING) / 2
+        FlowRow(
             modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(COMPACT_CHIP_SPACING),
             verticalArrangement = Arrangement.spacedBy(COMPACT_CHIP_SPACING),
