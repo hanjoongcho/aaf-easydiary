@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">追加</string>
     <string name="dashboard_dday_title_hint">目標日の名前を入力してください。</string>
     <string name="dashboard_dday_delete_confirm">選択したD-Dayを削除しますか？</string>
+    <string name="dashboard_dday_show_all">すべて表示</string>
+    <string name="dashboard_dday_collapse">折りたたむ</string>
     <string name="dashboard_daily_symbol_calendar">カレンダー</string>
     <string name="dashboard_daily_symbol_no_data">なし</string>
     <string name="dashboard_chart_weight">体重</string>

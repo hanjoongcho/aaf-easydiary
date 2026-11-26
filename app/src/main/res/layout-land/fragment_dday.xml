@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/recycler_days"
+            app:layout_constraintBottom_toTopOf="@+id/dday_items_container"
             app:layout_constraintStart_toEndOf="@+id/dashboard_title"
             app:layout_constraintEnd_toStartOf="@+id/flexbox_option_container"
             />
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toEndOf="@id/image_d_day_sort_order"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/recycler_days"
+            app:layout_constraintBottom_toTopOf="@+id/dday_items_container"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="0dp">
@@ -56,14 +56,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_days"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/dday_items_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHeight_max="400dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dashboard_title" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboard_title"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <me.blog.korn123.easydiary.views.FixedTextView
+                android:id="@+id/button_dday_expand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/dashboard_dday_show_all"
+                android:textSize="@dimen/basic_text_medium"
+                android:visibility="gone"
+                app:applyGlobalColor="true"
+                app:applyGlobalSize="false"
+                tools:visibility="visible" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>

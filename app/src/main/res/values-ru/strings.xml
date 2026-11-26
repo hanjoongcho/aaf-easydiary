@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">ДОБАВИТЬ</string>
     <string name="dashboard_dday_title_hint">Введите название целевой даты.</string>
     <string name="dashboard_dday_delete_confirm">Вы действительно хотите удалить выбранный D-Day?</string>
+    <string name="dashboard_dday_show_all">Показать все</string>
+    <string name="dashboard_dday_collapse">Свернуть</string>
     <string name="dashboard_daily_symbol_calendar">Календарь</string>
     <string name="dashboard_daily_symbol_no_data">Н/Д</string>
     <string name="dashboard_chart_weight">Вес</string>

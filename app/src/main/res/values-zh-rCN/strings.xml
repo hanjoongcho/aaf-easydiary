@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">添加</string>
     <string name="dashboard_dday_title_hint">请输入目标日期的名称。</string>
     <string name="dashboard_dday_delete_confirm">确定要删除所选 D-Day 吗？</string>
+    <string name="dashboard_dday_show_all">显示全部</string>
+    <string name="dashboard_dday_collapse">收起</string>
     <string name="dashboard_daily_symbol_calendar">日历</string>
     <string name="dashboard_daily_symbol_no_data">无</string>
     <string name="dashboard_chart_weight">体重</string>

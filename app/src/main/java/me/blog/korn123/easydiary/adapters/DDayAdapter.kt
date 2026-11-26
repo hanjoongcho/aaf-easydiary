@@ -50,22 +50,22 @@ class DDayAdapter(
             false -> DDayAddViewHolder(ItemDdayAddBinding.inflate(activity.layoutInflater))
         }
 
-    override fun getItemViewType(position: Int): Int =
-        @Suppress("ktlint:standard:mixed-condition-operators")
-        when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
-            true -> 1
-            false -> 0
-        }
+    override fun getItemViewType(position: Int): Int = if (isNewDDayItem(position)) 1 else 0
 
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
-    ) =
-        @Suppress("ktlint:standard:mixed-condition-operators")
-        when (dDayItems.size == position.plus(1) || dDayItems.size > 1 && position == 0) {
-            true -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
-            false -> (holder as DDayViewHolder).bindTo(dDayItems[position])
-        }
+    ) = when {
+        isNewDDayItem(position) -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
+        else -> (holder as DDayViewHolder).bindTo(dDayItems[position])
+    }
+
+    /**
+     * The `New D-Day` cards the fragment puts at the head and the tail of the list are never stored, so they keep
+     * the default id of 0 while every stored D-Day has the auto generated one. Deciding this by the item instead of
+     * by its position keeps the collapsed list of the dashboard correct, because that one ends with a stored D-Day.
+     */
+    private fun isNewDDayItem(position: Int): Boolean = dDayItems[position].id == 0
 
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)

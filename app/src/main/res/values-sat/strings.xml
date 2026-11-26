@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">ᱥᱮᱞᱮᱫ</string>
     <string name="dashboard_dday_title_hint">ᱴᱟᱨᱜᱮᱴ ᱢᱟᱦᱟ ᱧᱩᱛᱩᱢ ᱚᱞ ᱢᱮ ᱾</string>
     <string name="dashboard_dday_delete_confirm">ᱟᱢ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱫ D-Day ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢᱟ?</string>
+    <string name="dashboard_dday_show_all">Show all</string>
+    <string name="dashboard_dday_collapse">Collapse</string>
     <string name="dashboard_daily_symbol_calendar">ᱠᱮᱞᱮᱱᱰᱚᱨ</string>
     <string name="dashboard_daily_symbol_no_data">ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
     <string name="dashboard_chart_weight">ᱳᱡᱚᱱ</string>

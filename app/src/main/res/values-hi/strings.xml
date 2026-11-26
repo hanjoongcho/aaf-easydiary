@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">जोड़ें</string>
     <string name="dashboard_dday_title_hint">लक्ष्य तिथि का नाम दर्ज करें।</string>
     <string name="dashboard_dday_delete_confirm">क्या आप वाकई चयनित D-Day को हटाना चाहते हैं?</string>
+    <string name="dashboard_dday_show_all">सभी दिखाएँ</string>
+    <string name="dashboard_dday_collapse">छोटा करें</string>
     <string name="dashboard_daily_symbol_calendar">कैलेंडर</string>
     <string name="dashboard_daily_symbol_no_data">लागू नहीं</string>
     <string name="dashboard_chart_weight">वज़न</string>

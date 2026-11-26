@@ -1216,6 +1216,8 @@
     <string name="dashboard_dday_add">ADD</string>
     <string name="dashboard_dday_title_hint">Enter the name of the target date.</string>
     <string name="dashboard_dday_delete_confirm">Are you sure you want to delete the selected D-Day?</string>
+    <string name="dashboard_dday_show_all">Show all</string>
+    <string name="dashboard_dday_collapse">Collapse</string>
     <string name="dashboard_daily_symbol_calendar">Calendar</string>
     <string name="dashboard_daily_symbol_no_data">N/A</string>
     <string name="dashboard_chart_weight">Weight</string>
