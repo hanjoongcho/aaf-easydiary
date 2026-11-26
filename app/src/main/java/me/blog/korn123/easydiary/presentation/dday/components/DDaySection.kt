@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
  * and every card keeps the width it asks for.
  */
 @Composable
-fun DdaySection(
+fun DDaySection(
     items: List<DDayCardItem>,
     isFlexboxEnabled: Boolean,
     isExpanded: Boolean,
@@ -27,7 +27,7 @@ fun DdaySection(
     modifier: Modifier = Modifier,
 ) {
     when (isFlexboxEnabled) {
-        true ->
+        true -> {
             DdayCardFlow(
                 items = items,
                 collapsedLineCount = COLLAPSED_LINE_COUNT,
@@ -38,13 +38,15 @@ fun DdaySection(
                     DdayCard(item = item, onClick = { onItemClick(item) })
                 },
             )
+        }
 
-        false ->
+        false -> {
             DdayHorizontalList(
                 items = items,
                 onItemClick = onItemClick,
                 modifier = modifier.fillMaxWidth(),
             )
+        }
     }
 }
 
