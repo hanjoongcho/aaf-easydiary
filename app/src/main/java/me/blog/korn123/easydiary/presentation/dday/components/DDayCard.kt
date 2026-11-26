@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.presentation.dday.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +40,11 @@ import me.blog.korn123.easydiary.presentation.components.SimpleText
  * the same icon-tinted text color, the same font of the app and the same three lights — today orange, a day that
  * has passed red, a day still to come green — beside the remaining days. A tap opens the dialog of the fragment,
  * which adds a D-Day for the `ADD` card and changes or deletes one for a stored card.
+ *
+ * The content follows the minimum constraints the card is measured with: a card of the wrap mode is given the free
+ * width of its line as a minimum ([DdayCardFlow]), and the box hands that width down to the content so the remaining
+ * days of a stored D-Day end at the right edge of the card and not at the end of the text above them. A card of the
+ * horizontal list has no minimum and keeps the width its content asks for.
  */
 @Composable
 fun DdayCard(
@@ -63,6 +69,10 @@ fun DdayCard(
                 .background(cardColor)
                 .clickable(onClick = onClick)
                 .padding(if (item.isNewItem) NEW_ITEM_CONTENT_PADDING else CARD_CONTENT_PADDING),
+        // Off, the content of a card widened by its line would keep the width it asks for and stay at the start of
+        // the card, so `Modifier.align(Alignment.End)` of the remaining days would align to the text and not to the
+        // card. On, the content is as wide as the card is, and a card with no minimum width is unchanged.
+        propagateMinConstraints = true,
     ) {
         when (item.isNewItem) {
             true -> DdayAddLabel(textColor = textColor)
@@ -91,6 +101,10 @@ private fun DdayAddLabel(textColor: Color) {
  *
  * The title is the only line that may be cut short, and it is cut at the width the card got, so a long title of a
  * card that fills its line hides the end of the name instead of widening the card past the card of the dashboard.
+ *
+ * The three lines are set apart by one spacing of their own. The padding of the title is left to the sides only, so
+ * it does not add to the spacing above and below it and the three lines of the card stay evenly spaced; the card
+ * itself gives the room above the title and below the remaining days.
  */
 @Composable
 private fun DdayContent(
@@ -101,10 +115,10 @@ private fun DdayContent(
     val textSize = with(density) { DDAY_TEXT_SIZE_SP.sp.toPx() }
     val titlePadding = (DDAY_TITLE_PADDING_SP * density.fontScale).dp
 
-    Column {
+    Column(verticalArrangement = Arrangement.spacedBy(DDAY_LINE_SPACING)) {
         SimpleText(
             text = item.title,
-            modifier = Modifier.padding(titlePadding),
+            modifier = Modifier.padding(horizontal = titlePadding),
             fontSize = textSize,
             fontColor = textColor,
             maxLines = 1,
@@ -171,6 +185,15 @@ private val NEW_ITEM_CONTENT_PADDING = PaddingValues(horizontal = 10.dp, vertica
 /** `basic_text_medium`, and `diary_card_text_padding` of the title, taken as `applyGlobalSize` left them. */
 private const val DDAY_TEXT_SIZE_SP = 15F
 private const val DDAY_TITLE_PADDING_SP = 3F
+
+/**
+ * The room between the title, the target date and the remaining days of a card.
+ *
+ * The recycler item had only the 3sp padding of its title between the first two lines and nothing at all between the
+ * date and the remaining days, which read as one block of text on the device. The lines are a little further apart
+ * here, evenly, and this value is what moves them.
+ */
+private val DDAY_LINE_SPACING = 4.dp
 
 private val DDAY_LIGHT_SIZE = 10.dp
 private val LIGHT_BORDER_WIDTH = 1.dp
