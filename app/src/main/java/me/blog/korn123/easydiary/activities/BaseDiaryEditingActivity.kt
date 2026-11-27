@@ -1143,11 +1143,14 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         }
 
         selectFeelingSymbol(diary.symbolSequence)
+        // A diary keeps the location it was stored with whatever the 'Location info' setting says: the setting
+        // only decides whether this screen shows and picks up a location, while saveContents() and the draft
+        // autosave write this field back, so leaving it empty here would drop the stored location.
+        location = diary.location
         if (config.enableLocationInfo) {
             diary.location?.let {
                 binding.partialEditContents.locationContainer.visibility = View.VISIBLE
                 binding.partialEditContents.locationLabel.text = it.address
-                location = it
             } ?: run {
                 setLocationInfo()
                 location?.let {

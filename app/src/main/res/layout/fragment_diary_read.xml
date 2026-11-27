@@ -88,14 +88,15 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/card_contents_padding"
-                                android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }">
+                                android:visibility="gone">
 
                                 <me.blog.korn123.easydiary.views.FixedCardView
+                                    android:id="@+id/locationContainer"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignWithParentIfMissing="true"
                                     android:layout_toStartOf="@+id/card_contents_counting"
-                                    android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
+                                    android:visibility="gone"
                                     app:fixedAppcompatPadding="true">
 
                                     <LinearLayout
@@ -119,8 +120,8 @@
                                             android:layout_height="wrap_content"
                                             android:ellipsize="end"
                                             android:singleLine="true"
-                                            android:text="There is no location information. Click to update location information."
-                                            android:textColor="?attr/colorPrimary" />
+                                            android:textColor="?attr/colorPrimary"
+                                            tools:text="There is no location information. Click to update location information." />
                                     </LinearLayout>
                                 </me.blog.korn123.easydiary.views.FixedCardView>
 

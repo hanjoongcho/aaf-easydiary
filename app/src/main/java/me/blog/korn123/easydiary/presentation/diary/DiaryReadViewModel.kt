@@ -13,7 +13,4 @@ class DiaryReadViewModel(
     val config = application.config
     private val _isShowContentsCounting: MutableStateFlow<Boolean> = MutableStateFlow(config.enableCountCharacters)
     val isShowContentsCounting: StateFlow<Boolean> = _isShowContentsCounting.asStateFlow()
-
-    private val _isShowAddress: MutableStateFlow<Boolean> = MutableStateFlow(config.enableLocationInfo)
-    val isShowAddress: StateFlow<Boolean> = _isShowAddress.asStateFlow()
 }
