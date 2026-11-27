@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">N/D</string>
     <string name="dashboard_chart_weight">Peso</string>
     <string name="dashboard_chart_stock">Acciones</string>
+    <string name="backup_full_password_title">Contraseña de la copia de seguridad (opcional)</string>
+    <string name="backup_full_password_description">Introduce una contraseña para cifrar el archivo de copia de seguridad. Déjalo vacío para hacer la copia sin contraseña.\nLa contraseña no se puede recuperar si la olvidas.</string>
+    <string name="backup_full_password_hint">Contraseña</string>
+    <string name="backup_full_password_confirm_hint">Confirmar contraseña</string>
+    <string name="backup_full_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="backup_full_password_continue">Continuar</string>
 </resources>

@@ -14,15 +14,21 @@ import me.blog.korn123.easydiary.helper.WorkerConstants
 internal class BackupOperations private constructor(
     val continuation: WorkContinuation,
 ) {
+    /**
+     * @param password zip password of the full backup. It is handed to [FullBackupWorker] as one-off work data and
+     * never stored anywhere else; null or blank keeps the archive unencrypted.
+     */
     internal class Builder(
         private val context: Context,
         private val uriString: String,
         val workMode: String,
+        private val password: String? = null,
     ) {
         @SuppressLint("EnqueueWork")
         fun build(): BackupOperations {
             val data = Data.Builder()
             data.putString(WorkerConstants.URI_STRING, uriString)
+            if (!password.isNullOrEmpty()) data.putString(WorkerConstants.PASSWORD_STRING, password)
             return if (workMode == WorkerConstants.WORK_MODE_BACKUP) {
                 val workRequest = OneTimeWorkRequest.Builder(FullBackupWorker::class.java)
                 workRequest.setInputData(data.build())

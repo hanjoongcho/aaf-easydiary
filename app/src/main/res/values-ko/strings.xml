@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">없음</string>
     <string name="dashboard_chart_weight">체중</string>
     <string name="dashboard_chart_stock">주가</string>
+    <string name="backup_full_password_title">백업 비밀번호 (선택)</string>
+    <string name="backup_full_password_description">백업 파일을 암호화할 비밀번호를 입력하세요. 비워 두면 비밀번호 없이 백업합니다.\n비밀번호를 잊으면 복구할 수 없습니다.</string>
+    <string name="backup_full_password_hint">비밀번호</string>
+    <string name="backup_full_password_confirm_hint">비밀번호 확인</string>
+    <string name="backup_full_password_mismatch">비밀번호가 일치하지 않습니다.</string>
+    <string name="backup_full_password_continue">계속</string>
 </resources>

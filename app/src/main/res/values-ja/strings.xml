@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">なし</string>
     <string name="dashboard_chart_weight">体重</string>
     <string name="dashboard_chart_stock">株価</string>
+    <string name="backup_full_password_title">バックアップのパスワード (任意)</string>
+    <string name="backup_full_password_description">バックアップファイルを暗号化するパスワードを入力してください。空欄のままにすると、パスワードなしでバックアップします。\nパスワードを忘れると復元できません。</string>
+    <string name="backup_full_password_hint">パスワード</string>
+    <string name="backup_full_password_confirm_hint">パスワードの確認</string>
+    <string name="backup_full_password_mismatch">パスワードが一致しません。</string>
+    <string name="backup_full_password_continue">続行</string>
 </resources>

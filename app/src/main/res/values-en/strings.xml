@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">N/A</string>
     <string name="dashboard_chart_weight">Weight</string>
     <string name="dashboard_chart_stock">Stock</string>
+    <string name="backup_full_password_title">Backup password (optional)</string>
+    <string name="backup_full_password_description">Enter a password to encrypt the backup file. Leave it empty to back up without a password.\nThe password cannot be recovered if you forget it.</string>
+    <string name="backup_full_password_hint">Password</string>
+    <string name="backup_full_password_confirm_hint">Confirm password</string>
+    <string name="backup_full_password_mismatch">The passwords do not match.</string>
+    <string name="backup_full_password_continue">Continue</string>
 </resources>

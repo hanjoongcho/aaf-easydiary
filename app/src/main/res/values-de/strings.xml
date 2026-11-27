@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">k. A.</string>
     <string name="dashboard_chart_weight">Gewicht</string>
     <string name="dashboard_chart_stock">Aktien</string>
+    <string name="backup_full_password_title">Backup-Passwort (optional)</string>
+    <string name="backup_full_password_description">Geben Sie ein Passwort ein, um die Sicherungsdatei zu verschlüsseln. Leer lassen, um ohne Passwort zu sichern.\nDas Passwort kann nicht wiederhergestellt werden, wenn Sie es vergessen.</string>
+    <string name="backup_full_password_hint">Passwort</string>
+    <string name="backup_full_password_confirm_hint">Passwort bestätigen</string>
+    <string name="backup_full_password_mismatch">Die Passwörter stimmen nicht überein.</string>
+    <string name="backup_full_password_continue">Weiter</string>
 </resources>

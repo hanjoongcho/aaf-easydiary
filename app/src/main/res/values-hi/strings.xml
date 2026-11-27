@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">लागू नहीं</string>
     <string name="dashboard_chart_weight">वज़न</string>
     <string name="dashboard_chart_stock">स्टॉक</string>
+    <string name="backup_full_password_title">बैकअप पासवर्ड (वैकल्पिक)</string>
+    <string name="backup_full_password_description">बैकअप फ़ाइल को एन्क्रिप्ट करने के लिए पासवर्ड दर्ज करें। बिना पासवर्ड बैकअप के लिए इसे खाली छोड़ दें।\nपासवर्ड भूल जाने पर इसे वापस नहीं पाया जा सकता।</string>
+    <string name="backup_full_password_hint">पासवर्ड</string>
+    <string name="backup_full_password_confirm_hint">पासवर्ड की पुष्टि करें</string>
+    <string name="backup_full_password_mismatch">पासवर्ड मेल नहीं खाते।</string>
+    <string name="backup_full_password_continue">जारी रखें</string>
 </resources>

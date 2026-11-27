@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">N/D</string>
     <string name="dashboard_chart_weight">Peso</string>
     <string name="dashboard_chart_stock">Azioni</string>
+    <string name="backup_full_password_title">Password del backup (facoltativa)</string>
+    <string name="backup_full_password_description">Inserisci una password per crittografare il file di backup. Lascia vuoto per eseguire il backup senza password.\nLa password non può essere recuperata se la dimentichi.</string>
+    <string name="backup_full_password_hint">Password</string>
+    <string name="backup_full_password_confirm_hint">Conferma password</string>
+    <string name="backup_full_password_mismatch">Le password non coincidono.</string>
+    <string name="backup_full_password_continue">Continua</string>
 </resources>

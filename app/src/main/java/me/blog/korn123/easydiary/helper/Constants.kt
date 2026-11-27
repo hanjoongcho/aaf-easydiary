@@ -761,6 +761,7 @@ object WidgetConstants {
 
 object WorkerConstants {
     const val URI_STRING = "uri_string"
+    const val PASSWORD_STRING = "password_string"
     const val WORK_MODE_BACKUP = "work_mode_backup"
     const val WORK_MODE_RECOVERY = "work_mode_recovery"
 }

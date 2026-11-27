@@ -18,6 +18,11 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
+import net.lingala.zip4j.ZipFile
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.AesKeyStrength
+import net.lingala.zip4j.model.enums.CompressionMethod
+import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -207,6 +212,50 @@ class ZipHelper(
             e.printStackTrace()
         }
     }
+
+    /**
+     * Writes the entries collected by [determineFiles] into [destFile] as an AES-256 encrypted zip.
+     * A null or blank [password] produces the plain archive of [compress], so a skipped password changes nothing
+     * for a user who does not want encryption.
+     */
+    fun compress(
+        destFile: File,
+        password: String?,
+    ) {
+        if (password.isNullOrEmpty() || mFileNames.isEmpty()) {
+            compress(destFile)
+            return
+        }
+
+        showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", NotificationConstants.ACTION_FULL_BACKUP_CANCEL)
+        try {
+            ZipFile(destFile, password.toCharArray()).use { zipFile ->
+                mFileNames.forEachIndexed { index, fileName ->
+                    if (!isOnProgress) return@forEachIndexed
+                    updateCompressProgress(index)
+                    try {
+                        FileInputStream(mRootDirectoryName + fileName).use { fileInputStream ->
+                            zipFile.addStream(fileInputStream, encryptedZipParameters(fileName))
+                        }
+                    } catch (ex: Exception) {
+                        // One unreadable file must not fail the whole backup, the same way the plain archive skips it.
+                        System.err.println(ex)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun encryptedZipParameters(fileName: String) =
+        ZipParameters().apply {
+            fileNameInZip = fileName
+            isEncryptFiles = true
+            encryptionMethod = EncryptionMethod.AES
+            aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+            compressionMethod = CompressionMethod.DEFLATE
+        }
 
     private fun countFileEntry(uri: Uri?): Int {
         val uriStream = context.contentResolver.openInputStream(uri!!)

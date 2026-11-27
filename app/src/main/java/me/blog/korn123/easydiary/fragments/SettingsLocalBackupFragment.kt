@@ -17,6 +17,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import me.blog.korn123.easydiary.presentation.settings.components.BackupPasswordDialog
 import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -91,6 +95,8 @@ class SettingsLocalBackupFragment : Fragment() {
     private lateinit var requestWriteFileWithSAF: ActivityResultLauncher<Intent>
     private lateinit var requestReadFileWithSAF: ActivityResultLauncher<Intent>
     private var taskFlag = 0
+    private var showBackupPasswordDialog by mutableStateOf(false)
+    private var pendingBackupPassword: String? = null
     private val diaryViewModel: DiaryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -180,6 +186,9 @@ class SettingsLocalBackupFragment : Fragment() {
                                 }
                             }
                         }
+                    } else if (taskFlag == REQUEST_CODE_SAF_WRITE_ZIP) {
+                        // The destination was not chosen, so the password typed for this run is dropped.
+                        pendingBackupPassword = null
                     }
                 }
             }
@@ -215,15 +224,7 @@ class SettingsLocalBackupFragment : Fragment() {
                             }
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> {
-                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(
-                                        DateUtils.getCurrentDateTime(
-                                            DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
-                                        ) + ".zip",
-                                        MIME_TYPE_ZIP,
-                                        requestWriteFileWithSAF,
-                                    )
-                                }
+                                showBackupPasswordDialog = true
                             }
                         }
                     } else {
@@ -346,15 +347,7 @@ class SettingsLocalBackupFragment : Fragment() {
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             true -> {
-                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(
-                                        DateUtils.getCurrentDateTime(
-                                            DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
-                                        ) + ".zip",
-                                        MIME_TYPE_ZIP,
-                                        requestWriteFileWithSAF,
-                                    )
-                                }
+                                showBackupPasswordDialog = true
                             }
 
                             false -> {
@@ -380,6 +373,15 @@ class SettingsLocalBackupFragment : Fragment() {
 
                     SettingsBottomSpacer()
                 }
+
+                BackupPasswordDialog(
+                    visible = showBackupPasswordDialog,
+                    onDismiss = { showBackupPasswordDialog = false },
+                    onConfirm = { password ->
+                        showBackupPasswordDialog = false
+                        launchFullBackupDestination(password)
+                    },
+                )
             }
         }
     }
@@ -576,7 +578,24 @@ class SettingsLocalBackupFragment : Fragment() {
         }
     }
 
+    /**
+     * Opens the SAF destination picker of the full backup, carrying the password the dialog collected.
+     * A null [password] backs up exactly as before, without encryption.
+     */
+    private fun launchFullBackupDestination(password: String?) {
+        pendingBackupPassword = password
+        setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
+            EasyDiaryUtils.writeFileWithSAF(
+                DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip",
+                MIME_TYPE_ZIP,
+                requestWriteFileWithSAF,
+            )
+        }
+    }
+
     private fun exportFullBackupFile(uri: Uri?) {
+        val password = pendingBackupPassword
+        pendingBackupPassword = null
         lifecycleScope.launch {
             requireActivity().exportLegacyRealmFile()
             exportRoomData()
@@ -585,6 +604,7 @@ class SettingsLocalBackupFragment : Fragment() {
                     requireActivity(),
                     uri.toString(),
                     WorkerConstants.WORK_MODE_BACKUP,
+                    password,
                 ).build()
                 .apply {
                     continuation.enqueue()
