@@ -1479,11 +1479,16 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                     }
 
                     context?.run {
-                        if (config.enableLocationInfo) {
-                            diaryDto.location?.let {
-                                locationLabel.text = it.address
-                            }
-                        }
+                        // The location card shows the address the entry carries and nothing else. With the
+                        // 'Location info' setting on and no location stored, the card used to stay visible over
+                        // the layout's placeholder text ('There is no location information. Click to update
+                        // location information.'), which describes an action this screen does not offer.
+                        val address = diaryDto.location?.address?.takeIf { it.isNotBlank() }
+                        val hasAddress = config.enableLocationInfo && address != null
+                        locationContainer.visibility = if (hasAddress) View.VISIBLE else View.GONE
+                        if (address != null) locationLabel.text = address
+                        layoutInfoLabel.visibility =
+                            if (hasAddress || config.enableCountCharacters) View.VISIBLE else View.GONE
 
                         if (config.enableCountCharacters) {
                             contentsLength.run {
