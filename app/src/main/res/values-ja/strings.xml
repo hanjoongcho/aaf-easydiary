@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">パスワードの確認</string>
     <string name="backup_full_password_mismatch">パスワードが一致しません。</string>
     <string name="backup_full_password_continue">続行</string>
+    <string name="recovery_full_password_title">バックアップのパスワード</string>
+    <string name="recovery_full_password_description">暗号化されたバックアップファイルです。作成時に設定したパスワードを入力してください。</string>
+    <string name="recovery_full_password_hint">パスワード</string>
+    <string name="recovery_full_password_empty">このバックアップファイルのパスワードを入力してください。</string>
+    <string name="recovery_full_password_wrong">パスワードが正しくありません。もう一度お試しください。</string>
+    <string name="recovery_full_password_continue">復元</string>
+    <string name="recovery_full_invalid_archive">有効なバックアップファイルではありません。</string>
+    <string name="recovery_full_failed_title">インポート失敗</string>
 </resources>

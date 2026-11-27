@@ -28,11 +28,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.databinding.DialogBackupPasswordBinding
+import me.blog.korn123.easydiary.databinding.DialogRecoveryPasswordBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -75,6 +78,7 @@ import me.blog.korn123.easydiary.helper.REQUEST_CODE_SAF_WRITE_ZIP
 import me.blog.korn123.easydiary.helper.RoomConstants
 import me.blog.korn123.easydiary.helper.SettingLocalConstants
 import me.blog.korn123.easydiary.helper.WorkerConstants
+import me.blog.korn123.easydiary.helper.ZipHelper
 import me.blog.korn123.easydiary.presentation.diary.DiaryViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.SimpleCard
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
@@ -704,12 +708,169 @@ class SettingsLocalBackupFragment : Fragment() {
         }
     }
 
+    /**
+     * Routes a chosen backup archive by what it holds, before any extraction starts.
+     *
+     * An archive without a password is imported exactly as before. An encrypted one asks for its password first, so a
+     * prompt that is cancelled or never answered cannot reach the recovery worker. A file that cannot be read as a zip
+     * is reported as such instead of starting a recovery that would fail later.
+     */
     private fun importFullBackupFile(uri: Uri?) {
+        if (uri == null) return
+        val zipHelper = ZipHelper(requireContext())
+        lifecycleScope.launch {
+            val status =
+                withContext(Dispatchers.IO) {
+                    zipHelper.inspectArchive(uri)
+                }
+            if (!isAdded) return@launch
+            when (status) {
+                ZipHelper.ArchiveStatus.PLAIN -> enqueueFullRecovery(uri, null)
+                ZipHelper.ArchiveStatus.ENCRYPTED -> showRecoveryPasswordDialog(uri)
+                ZipHelper.ArchiveStatus.INVALID ->
+                    requireActivity().makeSnackBar(getString(R.string.recovery_full_invalid_archive))
+            }
+        }
+    }
+
+    /**
+     * Asks for the password of an encrypted full backup before anything is extracted.
+     *
+     * The password is checked against the archive while the dialog stays open, so a typo never starts a recovery and
+     * the user can simply correct it. Cancelling the prompt leaves the current data untouched, because nothing is
+     * enqueued until a password has been accepted.
+     */
+    private fun showRecoveryPasswordDialog(uri: Uri) {
+        var alertDialog: AlertDialog? = null
+        val dialogBinding = DialogRecoveryPasswordBinding.inflate(layoutInflater)
+        var isVerifying = false
+        var isCancelled = false
+
+        fun showError(messageResId: Int) {
+            dialogBinding.textInvalidPassword.setText(messageResId)
+            dialogBinding.textInvalidPassword.visibility = View.VISIBLE
+        }
+
+        val submit: () -> Unit =
+            {
+                val password = dialogBinding.editPassword.text?.toString().orEmpty()
+                when {
+                    isVerifying -> {}
+
+                    password.isEmpty() -> {
+                        showError(R.string.recovery_full_password_empty)
+                    }
+
+                    else -> {
+                        isVerifying = true
+                        val currentDialog = alertDialog
+                        currentDialog?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = false
+                        val zipHelper = ZipHelper(requireContext())
+                        lifecycleScope.launch {
+                            val status =
+                                withContext(Dispatchers.IO) {
+                                    zipHelper.verifyPassword(uri, password)
+                                }
+                            isVerifying = false
+                            if (isCancelled) return@launch
+                            currentDialog?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = true
+                            when (status) {
+                                ZipHelper.PasswordStatus.CORRECT -> {
+                                    currentDialog?.dismiss()
+                                    if (isAdded) enqueueFullRecovery(uri, password)
+                                }
+
+                                ZipHelper.PasswordStatus.WRONG -> {
+                                    showError(R.string.recovery_full_password_wrong)
+                                }
+
+                                ZipHelper.PasswordStatus.INVALID_ARCHIVE -> {
+                                    currentDialog?.dismiss()
+                                    activity?.let { it.makeSnackBar(it.getString(R.string.recovery_full_invalid_archive)) }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        val clearErrorMessage =
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {}
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    dialogBinding.textInvalidPassword.visibility = View.GONE
+                }
+            }
+
+        dialogBinding.root.run {
+            setBackgroundColor(requireActivity().config.backgroundColor)
+            requireActivity().initTextSize(this)
+            requireActivity().updateTextColors(this)
+            requireActivity().updateAppViews(this)
+            FontUtils.setFontsTypeface(requireActivity(), null, this, true)
+        }
+        dialogBinding.textInvalidPassword.setTextColor(requireActivity().config.primaryColor)
+        dialogBinding.editPassword.addTextChangedListener(clearErrorMessage)
+        dialogBinding.editPassword.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    submit()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        val builder =
+            AlertDialog.Builder(requireActivity()).apply {
+                setPositiveButton(getString(R.string.recovery_full_password_continue), null)
+                setNegativeButton(getString(android.R.string.cancel), null)
+            }
+        alertDialog =
+            builder.create().apply {
+                requireActivity().updateAlertDialog(
+                    this,
+                    null,
+                    dialogBinding.root,
+                    getString(R.string.recovery_full_password_title),
+                )
+                getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { submit() }
+                getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                    isCancelled = true
+                    dismiss()
+                }
+                setOnCancelListener { isCancelled = true }
+            }
+    }
+
+    /**
+     * Hands a chosen backup archive to the recovery worker, carrying the password that unlocked it.
+     * A null [password] recovers a plain archive exactly as before.
+     */
+    private fun enqueueFullRecovery(
+        uri: Uri,
+        password: String?,
+    ) {
         BackupOperations
             .Builder(
                 requireActivity(),
                 uri.toString(),
                 WorkerConstants.WORK_MODE_RECOVERY,
+                password,
             ).build()
             .apply {
                 continuation.enqueue()

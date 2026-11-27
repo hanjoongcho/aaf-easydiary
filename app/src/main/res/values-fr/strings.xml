@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">Confirmer le mot de passe</string>
     <string name="backup_full_password_mismatch">Les mots de passe ne correspondent pas.</string>
     <string name="backup_full_password_continue">Continuer</string>
+    <string name="recovery_full_password_title">Mot de passe de sauvegarde</string>
+    <string name="recovery_full_password_description">Ce fichier de sauvegarde est chiffré. Saisissez le mot de passe défini lors de sa création.</string>
+    <string name="recovery_full_password_hint">Mot de passe</string>
+    <string name="recovery_full_password_empty">Saisissez le mot de passe de ce fichier de sauvegarde.</string>
+    <string name="recovery_full_password_wrong">Mot de passe incorrect. Veuillez réessayer.</string>
+    <string name="recovery_full_password_continue">Restaurer</string>
+    <string name="recovery_full_invalid_archive">Ce fichier n\'est pas un fichier de sauvegarde valide.</string>
+    <string name="recovery_full_failed_title">Échec de l\'importation</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.utils.FontUtils
 
@@ -38,13 +39,34 @@ class FullRecoveryWorker(
         }
 
         val uri = Uri.parse(inputData.getString(WorkerConstants.URI_STRING))
-        mZipHelper.decompress(uri)
-        if (mZipHelper.isOnProgress) {
-            FontUtils.setCommonTypeface(context)
-            isRecoverySuccessful = true
-            mZipHelper.updateNotification(NOTIFICATION_COMPRESS_COMPLETE_ID, "Import complete", "You can now select a restore point using the Restore Diary feature.")
-        } else {
-            NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
+        when (mZipHelper.decompress(uri, inputData.getString(WorkerConstants.PASSWORD_STRING))) {
+            ZipHelper.ExtractionResult.COMPLETED -> {
+                when (mZipHelper.isOnProgress) {
+                    true -> {
+                        FontUtils.setCommonTypeface(context)
+                        isRecoverySuccessful = true
+                        mZipHelper.updateNotification(NOTIFICATION_COMPRESS_COMPLETE_ID, "Import complete", "You can now select a restore point using the Restore Diary feature.")
+                    }
+
+                    false -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
+                }
+            }
+
+            ZipHelper.ExtractionResult.WRONG_PASSWORD ->
+                mZipHelper.updateNotification(
+                    NOTIFICATION_DECOMPRESS_ID,
+                    context.getString(R.string.recovery_full_failed_title),
+                    context.getString(R.string.recovery_full_password_wrong),
+                )
+
+            ZipHelper.ExtractionResult.INVALID_ARCHIVE ->
+                mZipHelper.updateNotification(
+                    NOTIFICATION_DECOMPRESS_ID,
+                    context.getString(R.string.recovery_full_failed_title),
+                    context.getString(R.string.recovery_full_invalid_archive),
+                )
+
+            else -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
         }
         return Result.success()
     }

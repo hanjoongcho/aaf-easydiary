@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">Confirm password</string>
     <string name="backup_full_password_mismatch">The passwords do not match.</string>
     <string name="backup_full_password_continue">Continue</string>
+    <string name="recovery_full_password_title">Backup password</string>
+    <string name="recovery_full_password_description">This backup file is encrypted. Enter the password that was set when it was created.</string>
+    <string name="recovery_full_password_hint">Password</string>
+    <string name="recovery_full_password_empty">Enter the password of this backup file.</string>
+    <string name="recovery_full_password_wrong">Wrong password. Please try again.</string>
+    <string name="recovery_full_password_continue">Recover</string>
+    <string name="recovery_full_invalid_archive">This file is not a valid backup file.</string>
+    <string name="recovery_full_failed_title">Import failed</string>
 </resources>

@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">确认密码</string>
     <string name="backup_full_password_mismatch">两次输入的密码不一致。</string>
     <string name="backup_full_password_continue">继续</string>
+    <string name="recovery_full_password_title">备份密码</string>
+    <string name="recovery_full_password_description">这是加密的备份文件。请输入创建时设置的密码。</string>
+    <string name="recovery_full_password_hint">密码</string>
+    <string name="recovery_full_password_empty">请输入此备份文件的密码。</string>
+    <string name="recovery_full_password_wrong">密码不正确。请重试。</string>
+    <string name="recovery_full_password_continue">恢复</string>
+    <string name="recovery_full_invalid_archive">这不是有效的备份文件。</string>
+    <string name="recovery_full_failed_title">导入失败</string>
 </resources>

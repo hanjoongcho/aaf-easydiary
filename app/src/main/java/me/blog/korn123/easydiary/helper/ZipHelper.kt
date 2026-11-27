@@ -19,6 +19,10 @@ import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.utils.EasyDiaryUtils
 import net.lingala.zip4j.ZipFile
+import net.lingala.zip4j.exception.ZipException as Zip4jException
+import net.lingala.zip4j.headers.HeaderReader
+import net.lingala.zip4j.io.inputstream.ZipInputStream as Zip4jInputStream
+import net.lingala.zip4j.model.LocalFileHeader
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.AesKeyStrength
 import net.lingala.zip4j.model.enums.CompressionMethod
@@ -35,6 +39,32 @@ import java.util.zip.ZipOutputStream
 class ZipHelper(
     val context: Context,
 ) {
+    /**
+     * What a selected archive turned out to be, read from its first local file header before anything is extracted.
+     * [INVALID] covers everything that is not a readable zip, so a recovery can be refused without touching data.
+     */
+    enum class ArchiveStatus {
+        PLAIN,
+        ENCRYPTED,
+        INVALID,
+    }
+
+    /** Result of checking a password against an encrypted archive. */
+    enum class PasswordStatus {
+        CORRECT,
+        WRONG,
+        INVALID_ARCHIVE,
+    }
+
+    /** How an extraction ended, so the caller can report a wrong password apart from a broken archive. */
+    enum class ExtractionResult {
+        COMPLETED,
+        CANCELLED,
+        WRONG_PASSWORD,
+        INVALID_ARCHIVE,
+        FAILED,
+    }
+
     private lateinit var mBuilder: NotificationCompat.Builder
     private val mFileNames = ArrayList<String>()
     private var mRootDirectoryName: String? = null
@@ -274,28 +304,97 @@ class ZipHelper(
         return count
     }
 
-    fun decompress(uri: Uri?) {
+    /**
+     * Reads only the first local file header of the archive behind [uri], which is where a zip records whether its
+     * entries are password protected. Nothing is written, so the caller can decide on a password prompt before the
+     * extraction - and the restore that follows it - ever starts.
+     */
+    fun inspectArchive(uri: Uri?): ArchiveStatus {
+        if (uri == null) return ArchiveStatus.INVALID
+        return try {
+            val localFileHeader =
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    HeaderReader().readLocalFileHeader(inputStream, null)
+                }
+            when {
+                localFileHeader == null -> ArchiveStatus.INVALID
+                localFileHeader.isEncrypted -> ArchiveStatus.ENCRYPTED
+                else -> ArchiveStatus.PLAIN
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ArchiveStatus.INVALID
+        }
+    }
+
+    /**
+     * Checks [password] against the first entry of the archive behind [uri] without extracting anything.
+     *
+     * Opening an encrypted entry derives the key from the password and compares it with the verifier (AES) or the
+     * check byte (ZipCrypto) stored in the archive, so a wrong password is rejected while the archive is still only
+     * being read.
+     */
+    fun verifyPassword(
+        uri: Uri?,
+        password: String,
+    ): PasswordStatus {
+        if (uri == null) return PasswordStatus.INVALID_ARCHIVE
+        if (password.isEmpty()) return PasswordStatus.WRONG
+        return try {
+            val localFileHeader =
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    Zip4jInputStream(inputStream, password.toCharArray()).getNextEntry()
+                }
+            when (localFileHeader) {
+                null -> PasswordStatus.INVALID_ARCHIVE
+                else -> PasswordStatus.CORRECT
+            }
+        } catch (e: Zip4jException) {
+            e.printStackTrace()
+            when (e.type) {
+                Zip4jException.Type.WRONG_PASSWORD -> PasswordStatus.WRONG
+                else -> PasswordStatus.INVALID_ARCHIVE
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            PasswordStatus.INVALID_ARCHIVE
+        }
+    }
+
+    /**
+     * Extracts the archive behind [uri] into the working directory.
+     *
+     * A null or blank [password] walks the plain archive exactly as this class always has. A password switches to the
+     * encrypted reader, which is the only one that can decode an AES entry; both readers share the same guard against
+     * entry names that would leave the working directory.
+     */
+    fun decompress(
+        uri: Uri?,
+        password: String? = null,
+    ): ExtractionResult {
+        if (uri == null) return ExtractionResult.INVALID_ARCHIVE
         showNotification(NOTIFICATION_DECOMPRESS_ID, "Full data recovery", "Recovery of all data is in progress.", NotificationConstants.ACTION_FULL_RECOVERY_CANCEL)
         val fileCount = countFileEntry(uri)
-        val uriStream = context.contentResolver.openInputStream(uri!!)
+        return when {
+            password.isNullOrEmpty() -> decompressPlain(uri, fileCount)
+            else -> decompressEncrypted(uri, password, fileCount)
+        }
+    }
+
+    private fun decompressPlain(
+        uri: Uri,
+        fileCount: Int,
+    ): ExtractionResult {
+        val uriStream = context.contentResolver.openInputStream(uri) ?: return ExtractionResult.INVALID_ARCHIVE
         val buffer = ByteArray(1024)
         try {
             val zipInputStream = ZipInputStream(uriStream)
             var zipEntry: ZipEntry? = zipInputStream.nextEntry
-            val workingDirectory = File(EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY).canonicalFile
-            val workingDirectoryPrefix = if (workingDirectory.path.endsWith(File.separator)) workingDirectory.path else workingDirectory.path + File.separator
             var index = 0
             while (zipEntry != null) {
-                if (!isOnProgress) break
+                if (!isOnProgress) return ExtractionResult.CANCELLED
                 val fileName = zipEntry.name
-                if (File(fileName).isAbsolute) {
-                    throw IOException("ZIP entry has an absolute path: $fileName")
-                }
-
-                val newFile = File(workingDirectory, fileName).canonicalFile
-                if (!newFile.path.startsWith(workingDirectoryPrefix)) {
-                    throw IOException("ZIP entry escapes the working directory: $fileName")
-                }
+                val newFile = resolveWorkingFile(fileName)
 
                 File(newFile.parent).mkdirs()
                 val fileOutputStream = FileOutputStream(newFile)
@@ -314,13 +413,97 @@ class ZipHelper(
                 zipEntry = zipInputStream.nextEntry
                 updateDecompressProgress(index++, fileCount, fileName)
             }
-
-            zipInputStream.closeEntry()
-            zipInputStream.close()
-            uriStream?.close()
+            return ExtractionResult.COMPLETED
         } catch (e: IOException) {
             e.printStackTrace()
+            return ExtractionResult.INVALID_ARCHIVE
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ExtractionResult.FAILED
+        } finally {
+            try {
+                uriStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
+    }
+
+    private fun decompressEncrypted(
+        uri: Uri,
+        password: String,
+        fileCount: Int,
+    ): ExtractionResult {
+        val uriStream = context.contentResolver.openInputStream(uri) ?: return ExtractionResult.INVALID_ARCHIVE
+        val buffer = ByteArray(1024)
+        try {
+            val zipInputStream = Zip4jInputStream(uriStream, password.toCharArray())
+            var localFileHeader: LocalFileHeader? = zipInputStream.getNextEntry()
+            var index = 0
+            while (localFileHeader != null) {
+                if (!isOnProgress) return ExtractionResult.CANCELLED
+                val fileName = localFileHeader.fileName
+                val newFile = resolveWorkingFile(fileName)
+
+                if (!localFileHeader.isDirectory) {
+                    File(newFile.parent).mkdirs()
+                    FileOutputStream(newFile).use { fileOutputStream ->
+                        var len: Int
+                        while (true) {
+                            len = zipInputStream.read(buffer)
+                            if (len > 0) {
+                                fileOutputStream.write(buffer, 0, len)
+                            } else {
+                                break
+                            }
+                        }
+                    }
+                }
+
+                localFileHeader = zipInputStream.getNextEntry()
+                updateDecompressProgress(index++, fileCount, fileName)
+            }
+            return when {
+                isOnProgress -> ExtractionResult.COMPLETED
+                else -> ExtractionResult.CANCELLED
+            }
+        } catch (e: Zip4jException) {
+            e.printStackTrace()
+            return when (e.type) {
+                Zip4jException.Type.WRONG_PASSWORD -> ExtractionResult.WRONG_PASSWORD
+                Zip4jException.Type.CHECKSUM_MISMATCH -> ExtractionResult.INVALID_ARCHIVE
+                else -> ExtractionResult.FAILED
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ExtractionResult.INVALID_ARCHIVE
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ExtractionResult.FAILED
+        } finally {
+            try {
+                uriStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    /**
+     * Maps a zip entry name onto the working directory, refusing names that are absolute or that climb out of it.
+     */
+    private fun resolveWorkingFile(fileName: String): File {
+        if (File(fileName).isAbsolute) {
+            throw IOException("ZIP entry has an absolute path: $fileName")
+        }
+
+        val workingDirectory = File(EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY).canonicalFile
+        val workingDirectoryPrefix = if (workingDirectory.path.endsWith(File.separator)) workingDirectory.path else workingDirectory.path + File.separator
+        val newFile = File(workingDirectory, fileName).canonicalFile
+        if (!newFile.path.startsWith(workingDirectoryPrefix)) {
+            throw IOException("ZIP entry escapes the working directory: $fileName")
+        }
+        return newFile
     }
 
     fun decompress(

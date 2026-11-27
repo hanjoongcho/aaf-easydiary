@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">비밀번호 확인</string>
     <string name="backup_full_password_mismatch">비밀번호가 일치하지 않습니다.</string>
     <string name="backup_full_password_continue">계속</string>
+    <string name="recovery_full_password_title">백업 비밀번호</string>
+    <string name="recovery_full_password_description">암호화된 백업 파일입니다. 백업할 때 설정한 비밀번호를 입력하세요.</string>
+    <string name="recovery_full_password_hint">비밀번호</string>
+    <string name="recovery_full_password_empty">이 백업 파일의 비밀번호를 입력하세요.</string>
+    <string name="recovery_full_password_wrong">비밀번호가 올바르지 않습니다. 다시 시도하세요.</string>
+    <string name="recovery_full_password_continue">복원</string>
+    <string name="recovery_full_invalid_archive">올바른 백업 파일이 아닙니다.</string>
+    <string name="recovery_full_failed_title">가져오기 실패</string>
 </resources>

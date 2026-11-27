@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">Passwort bestätigen</string>
     <string name="backup_full_password_mismatch">Die Passwörter stimmen nicht überein.</string>
     <string name="backup_full_password_continue">Weiter</string>
+    <string name="recovery_full_password_title">Backup-Passwort</string>
+    <string name="recovery_full_password_description">Diese Sicherungsdatei ist verschlüsselt. Geben Sie das Passwort ein, das beim Erstellen festgelegt wurde.</string>
+    <string name="recovery_full_password_hint">Passwort</string>
+    <string name="recovery_full_password_empty">Geben Sie das Passwort dieser Sicherungsdatei ein.</string>
+    <string name="recovery_full_password_wrong">Falsches Passwort. Bitte versuchen Sie es erneut.</string>
+    <string name="recovery_full_password_continue">Wiederherstellen</string>
+    <string name="recovery_full_invalid_archive">Diese Datei ist keine gültige Sicherungsdatei.</string>
+    <string name="recovery_full_failed_title">Import fehlgeschlagen</string>
 </resources>

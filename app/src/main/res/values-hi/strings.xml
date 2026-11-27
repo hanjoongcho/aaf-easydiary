@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">पासवर्ड की पुष्टि करें</string>
     <string name="backup_full_password_mismatch">पासवर्ड मेल नहीं खाते।</string>
     <string name="backup_full_password_continue">जारी रखें</string>
+    <string name="recovery_full_password_title">बैकअप पासवर्ड</string>
+    <string name="recovery_full_password_description">यह बैकअप फ़ाइल एन्क्रिप्टेड है। इसे बनाते समय सेट किया गया पासवर्ड दर्ज करें।</string>
+    <string name="recovery_full_password_hint">पासवर्ड</string>
+    <string name="recovery_full_password_empty">इस बैकअप फ़ाइल का पासवर्ड दर्ज करें।</string>
+    <string name="recovery_full_password_wrong">गलत पासवर्ड। कृपया पुनः प्रयास करें।</string>
+    <string name="recovery_full_password_continue">पुनर्स्थापित करें</string>
+    <string name="recovery_full_invalid_archive">यह मान्य बैकअप फ़ाइल नहीं है।</string>
+    <string name="recovery_full_failed_title">आयात विफल</string>
 </resources>

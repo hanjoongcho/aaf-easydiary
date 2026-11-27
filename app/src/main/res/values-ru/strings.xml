@@ -1228,4 +1228,12 @@
     <string name="backup_full_password_confirm_hint">Подтвердите пароль</string>
     <string name="backup_full_password_mismatch">Пароли не совпадают.</string>
     <string name="backup_full_password_continue">Продолжить</string>
+    <string name="recovery_full_password_title">Пароль резервной копии</string>
+    <string name="recovery_full_password_description">Этот файл резервной копии зашифрован. Введите пароль, заданный при его создании.</string>
+    <string name="recovery_full_password_hint">Пароль</string>
+    <string name="recovery_full_password_empty">Введите пароль этого файла резервной копии.</string>
+    <string name="recovery_full_password_wrong">Неверный пароль. Повторите попытку.</string>
+    <string name="recovery_full_password_continue">Восстановить</string>
+    <string name="recovery_full_invalid_archive">Это недопустимый файл резервной копии.</string>
+    <string name="recovery_full_failed_title">Не удалось импортировать</string>
 </resources>
