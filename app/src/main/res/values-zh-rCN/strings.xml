@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">无</string>
     <string name="dashboard_chart_weight">体重</string>
     <string name="dashboard_chart_stock">股票</string>
+    <string name="backup_full_password_title">备份密码 (可选)</string>
+    <string name="backup_full_password_description">输入用于加密备份文件的密码。留空则不使用密码进行备份。\n忘记密码后将无法恢复。</string>
+    <string name="backup_full_password_hint">密码</string>
+    <string name="backup_full_password_confirm_hint">确认密码</string>
+    <string name="backup_full_password_mismatch">两次输入的密码不一致。</string>
+    <string name="backup_full_password_continue">继续</string>
 </resources>

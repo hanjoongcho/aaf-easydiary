@@ -45,6 +45,7 @@ class FullBackupWorker(
         }
 
         val uri = Uri.parse(inputData.getString(WorkerConstants.URI_STRING))
+        val password = inputData.getString(WorkerConstants.PASSWORD_STRING)
         val os = context.contentResolver.openOutputStream(uri)
 
         val workingPath = EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
@@ -55,8 +56,8 @@ class FullBackupWorker(
 
         mZipHelper.determineFiles(workingPath)
 //        mZipHelper.printFileNames()
-        mZipHelper.compress(compressFile)
-        if (mZipHelper.isOnProgress) {
+        mZipHelper.compress(compressFile, password)
+        if (mZipHelper.isOnProgress && compressFile.exists()) {
             compressFile.inputStream().use { input ->
                 os?.use { output ->
                     input.copyTo(output)

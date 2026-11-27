@@ -53,6 +53,7 @@ androidObservablescrollview = "1.6.0"
 nineoldandroids = "2.4.0"
 recyclerviewFastscroll = "2.0.1"
 jasypt = "1.9.3"
+zip4j = "2.11.6"
 
 markwon = "4.6.2"
 prism4j = "2.0.0"
@@ -134,6 +135,7 @@ com-github-ksoichiro-android-observablescrollview = { group = "com.github.ksoich
 com-nineoldandroids-library = { group = "com.nineoldandroids", name = "library", version.ref = "nineoldandroids" }
 com-simplecityapps-recyclerview-fastscroll = { group = "com.simplecityapps", name = "recyclerview-fastscroll", version.ref = "recyclerviewFastscroll" }
 org-jasypt-jasypt = { group = "org.jasypt", name = "jasypt", version.ref = "jasypt" }
+net-lingala-zip4j = { group = "net.lingala.zip4j", name = "zip4j", version.ref = "zip4j" }
 
 io-noties-markwon-core = { group = "io.noties.markwon", name = "core", version.ref = "markwon" }
 io-noties-markwon-syntax-highlight = { group = "io.noties.markwon", name = "syntax-highlight", version.ref = "markwon" }

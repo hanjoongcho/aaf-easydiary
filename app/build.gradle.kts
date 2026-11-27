@@ -256,6 +256,7 @@ dependencies {
     implementation(libs.com.nineoldandroids.library)
     implementation(libs.com.simplecityapps.recyclerview.fastscroll)
     implementation(libs.org.jasypt.jasypt)
+    implementation(libs.net.lingala.zip4j)
 
     // io.noties (Markwon & Prism4j)
     implementation(libs.io.noties.markwon.core)

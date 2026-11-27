@@ -6,9 +6,12 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.activity.result.ActivityResultLauncher
@@ -29,6 +32,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
+import me.blog.korn123.easydiary.databinding.DialogBackupPasswordBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.enums.DialogMode
@@ -50,6 +54,7 @@ import me.blog.korn123.easydiary.extensions.refreshApp
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialog
 import me.blog.korn123.easydiary.extensions.updateAlertDialogWithIcon
+import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -91,6 +96,7 @@ class SettingsLocalBackupFragment : Fragment() {
     private lateinit var requestWriteFileWithSAF: ActivityResultLauncher<Intent>
     private lateinit var requestReadFileWithSAF: ActivityResultLauncher<Intent>
     private var taskFlag = 0
+    private var pendingBackupPassword: String? = null
     private val diaryViewModel: DiaryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -180,6 +186,9 @@ class SettingsLocalBackupFragment : Fragment() {
                                 }
                             }
                         }
+                    } else if (taskFlag == REQUEST_CODE_SAF_WRITE_ZIP) {
+                        // The destination was not chosen, so the password typed for this run is dropped.
+                        pendingBackupPassword = null
                     }
                 }
             }
@@ -215,15 +224,7 @@ class SettingsLocalBackupFragment : Fragment() {
                             }
 
                             REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> {
-                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(
-                                        DateUtils.getCurrentDateTime(
-                                            DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
-                                        ) + ".zip",
-                                        MIME_TYPE_ZIP,
-                                        requestWriteFileWithSAF,
-                                    )
-                                }
+                                showBackupPasswordDialog()
                             }
                         }
                     } else {
@@ -346,15 +347,7 @@ class SettingsLocalBackupFragment : Fragment() {
                     ) {
                         when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                             true -> {
-                                setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                                    EasyDiaryUtils.writeFileWithSAF(
-                                        DateUtils.getCurrentDateTime(
-                                            DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH,
-                                        ) + ".zip",
-                                        MIME_TYPE_ZIP,
-                                        requestWriteFileWithSAF,
-                                    )
-                                }
+                                showBackupPasswordDialog()
                             }
 
                             false -> {
@@ -576,7 +569,125 @@ class SettingsLocalBackupFragment : Fragment() {
         }
     }
 
+    /**
+     * Asks for the optional zip password of the full backup before the destination is chosen.
+     *
+     * An empty pair of fields is handed over as null, which keeps the plain archive the app has always produced. A
+     * password has to be typed twice the same, because an archive whose password nobody knows can never be opened
+     * again: two different values keep the dialog open and write nothing.
+     */
+    private fun showBackupPasswordDialog() {
+        var alertDialog: AlertDialog? = null
+        val dialogBinding = DialogBackupPasswordBinding.inflate(layoutInflater)
+
+        val confirm =
+            {
+                val password = dialogBinding.editPassword.text?.toString().orEmpty()
+                val confirmPassword = dialogBinding.editPasswordConfirm.text?.toString().orEmpty()
+                when {
+                    password.isEmpty() && confirmPassword.isEmpty() -> {
+                        alertDialog?.dismiss()
+                        launchFullBackupDestination(null)
+                    }
+
+                    password == confirmPassword -> {
+                        alertDialog?.dismiss()
+                        launchFullBackupDestination(password)
+                    }
+
+                    else -> {
+                        dialogBinding.textMismatch.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+        val clearMismatchMessage =
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {}
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    dialogBinding.textMismatch.visibility = View.GONE
+                }
+            }
+
+        dialogBinding.root.run {
+            setBackgroundColor(requireActivity().config.backgroundColor)
+            requireActivity().initTextSize(this)
+            requireActivity().updateTextColors(this)
+            requireActivity().updateAppViews(this)
+            FontUtils.setFontsTypeface(requireActivity(), null, this, true)
+        }
+        dialogBinding.textMismatch.setTextColor(requireActivity().config.primaryColor)
+        dialogBinding.editPassword.addTextChangedListener(clearMismatchMessage)
+        dialogBinding.editPasswordConfirm.addTextChangedListener(clearMismatchMessage)
+        dialogBinding.editPassword.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_NEXT -> {
+                    dialogBinding.editPasswordConfirm.requestFocus()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        dialogBinding.editPasswordConfirm.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    confirm()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        val builder =
+            AlertDialog.Builder(requireActivity()).apply {
+                setPositiveButton(getString(R.string.backup_full_password_continue), null)
+                setNegativeButton(getString(android.R.string.cancel), null)
+            }
+        alertDialog =
+            builder.create().apply {
+                requireActivity().updateAlertDialog(
+                    this,
+                    null,
+                    dialogBinding.root,
+                    getString(R.string.backup_full_password_title),
+                )
+                getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { confirm() }
+            }
+    }
+
+    /**
+     * Opens the SAF destination picker of the full backup, carrying the password the dialog collected.
+     * A null [password] backs up exactly as before, without encryption.
+     */
+    private fun launchFullBackupDestination(password: String?) {
+        pendingBackupPassword = password
+        setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
+            EasyDiaryUtils.writeFileWithSAF(
+                DateUtils.getCurrentDateTime(DateUtilConstants.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip",
+                MIME_TYPE_ZIP,
+                requestWriteFileWithSAF,
+            )
+        }
+    }
+
     private fun exportFullBackupFile(uri: Uri?) {
+        val password = pendingBackupPassword
+        pendingBackupPassword = null
         lifecycleScope.launch {
             requireActivity().exportLegacyRealmFile()
             exportRoomData()
@@ -585,6 +696,7 @@ class SettingsLocalBackupFragment : Fragment() {
                     requireActivity(),
                     uri.toString(),
                     WorkerConstants.WORK_MODE_BACKUP,
+                    password,
                 ).build()
                 .apply {
                     continuation.enqueue()

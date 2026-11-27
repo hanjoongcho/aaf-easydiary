@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">N/D</string>
     <string name="dashboard_chart_weight">Poids</string>
     <string name="dashboard_chart_stock">Actions</string>
+    <string name="backup_full_password_title">Mot de passe de sauvegarde (facultatif)</string>
+    <string name="backup_full_password_description">Saisissez un mot de passe pour chiffrer le fichier de sauvegarde. Laissez vide pour sauvegarder sans mot de passe.\nLe mot de passe ne peut pas être récupéré si vous l\'oubliez.</string>
+    <string name="backup_full_password_hint">Mot de passe</string>
+    <string name="backup_full_password_confirm_hint">Confirmer le mot de passe</string>
+    <string name="backup_full_password_mismatch">Les mots de passe ne correspondent pas.</string>
+    <string name="backup_full_password_continue">Continuer</string>
 </resources>

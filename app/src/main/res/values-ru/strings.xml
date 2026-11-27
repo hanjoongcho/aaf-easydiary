@@ -1222,4 +1222,10 @@
     <string name="dashboard_daily_symbol_no_data">Н/Д</string>
     <string name="dashboard_chart_weight">Вес</string>
     <string name="dashboard_chart_stock">Акции</string>
+    <string name="backup_full_password_title">Пароль резервной копии (необязательно)</string>
+    <string name="backup_full_password_description">Введите пароль для шифрования файла резервной копии. Оставьте поле пустым, чтобы создать копию без пароля.\nПароль невозможно восстановить, если вы его забудете.</string>
+    <string name="backup_full_password_hint">Пароль</string>
+    <string name="backup_full_password_confirm_hint">Подтвердите пароль</string>
+    <string name="backup_full_password_mismatch">Пароли не совпадают.</string>
+    <string name="backup_full_password_continue">Продолжить</string>
 </resources>
