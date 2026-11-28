@@ -161,6 +161,7 @@ fun CalendarContent(
     val context = LocalContext.current
     val startMonth = calendarViewModel.startMonth
     val endMonth = calendarViewModel.endMonth
+    val anchorMonth = calendarViewModel.anchorMonth
     val selection = calendarViewModel.selection
     val eventsMap = calendarViewModel.eventsMap
 
@@ -210,7 +211,9 @@ fun CalendarContent(
             startMonth = startMonth,
             endMonth = endMonth,
             firstDayOfWeek = daysOfWeek.first(),
-            firstVisibleMonth = calendarViewModel.currentMonth,
+            // The state is rebuilt whenever the range changes and starts at the month it is given,
+            // so it must be the month on screen rather than the current month (see anchorMonth).
+            firstVisibleMonth = anchorMonth,
         )
 
     val visibleMonth = state.firstVisibleMonth.yearMonth
@@ -222,8 +225,10 @@ fun CalendarContent(
 
     // rememberCalendarState keys its saved state on startMonth/endMonth, so widening the range
     // replaces the state with a new instance whose range contains the month we asked to jump to.
-    // Keying on the state instance lets this run again with that new range instead of scrolling on
-    // a state that would ignore the request as out of range.
+    // That new instance already starts at the requested month; this scroll covers the jump that
+    // rebuilds nothing, because the requested month is also the anchor and the range already holds
+    // it. Keying on the state instance lets it run again with that new range instead of scrolling
+    // on a state that would ignore the request as out of range.
     LaunchedEffect(state, pendingScrollMonth) {
         val targetMonth = pendingScrollMonth ?: return@LaunchedEffect
         if (!targetMonth.isBefore(state.startMonth) && !targetMonth.isAfter(state.endMonth)) {
