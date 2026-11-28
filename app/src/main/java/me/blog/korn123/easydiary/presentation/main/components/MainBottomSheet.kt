@@ -146,13 +146,15 @@ fun MainBottomSheet(
                         .navigationBarsPadding(),
             ) {
                 if (tags.isNotEmpty()) {
+                    // 6dp of the bar's own bottom padding + 5dp here + 5dp of the button row keeps 16dp under the
+                    // chips, the same 16dp the sheet's top padding and the bar's top padding leave above them.
                     TagFilterBar(
                         tags = tags,
                         selectedTagId = selectedTagId,
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .padding(0.dp, 0.dp, 0.dp, 6.dp),
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp),
                         onTagSelected = onTagFilterClick,
                     )
                 }
