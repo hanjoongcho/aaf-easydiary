@@ -115,11 +115,11 @@ fun MainBottomSheet(
                     ).background(
                         color =
                             if (isHighlighted) {
-                                Color(context.config.primaryColor).copy(alpha = 0.9f)
+                                Color(context.config.primaryColor)
                             } else {
                                 Color(
                                     context.config.backgroundColor,
-                                ).copy(alpha = 0.9f)
+                                )
                             },
                         shape =
                             RoundedCornerShape(
