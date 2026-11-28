@@ -31,6 +31,21 @@ class CalendarViewModel
             private set
         var endMonth by mutableStateOf(currentMonth.plusYears(2))
             private set
+
+        /**
+         * The month `rememberCalendarState` starts from when it builds a new calendar state.
+         *
+         * The calendar state is keyed on the range it receives, so every change of [startMonth] or
+         * [endMonth] builds a fresh state that begins at its first visible month. Pinning that month
+         * to the one on screen keeps the user where they are when the range grows; the current month
+         * would throw them back to today instead.
+         *
+         * It deliberately stays behind on ordinary swipes: following the visible month would rebuild
+         * the state on every swipe and cut the scroll in progress. Only a range change or an explicit
+         * jump moves it.
+         */
+        var anchorMonth by mutableStateOf(currentMonth)
+            private set
         var selection by mutableStateOf<LocalDate?>(LocalDate.now())
             private set
         var eventsMap by mutableStateOf<Map<LocalDate, List<Diary>>>(emptyMap())
@@ -51,9 +66,8 @@ class CalendarViewModel
          *
          * The margins mirror [observeEventsForMonth]: a month that lands within three months of
          * either edge would expand the range again as soon as it becomes visible, and a range
-         * change rebuilds the calendar state (which starts again at the current month), so the
-         * jump would be undone. Widening the range up front keeps the landing month away from
-         * both edges.
+         * change rebuilds the calendar state. Widening the range up front keeps the landing month
+         * away from both edges, so the jump is not followed by a rebuild.
          */
         fun jumpToMonth(targetMonth: YearMonth) {
             if (!targetMonth.isAfter(startMonth.plusMonths(3))) {
@@ -62,6 +76,9 @@ class CalendarViewModel
             if (!targetMonth.isBefore(endMonth.minusMonths(3))) {
                 endMonth = maxOf(endMonth, targetMonth.plusYears(2))
             }
+            // A rebuilt state must land on the requested month, not on the month it was anchored to
+            // before the jump.
+            anchorMonth = targetMonth
             pendingScrollMonth = targetMonth
         }
 
@@ -73,12 +90,18 @@ class CalendarViewModel
             if (currentObservingMonth == visibleMonth) return
             currentObservingMonth = visibleMonth
 
+            var rangeChanged = false
             if (!visibleMonth.isAfter(startMonth.plusMonths(3))) {
                 startMonth = startMonth.minusYears(2)
+                rangeChanged = true
             }
             if (!visibleMonth.isBefore(endMonth.minusMonths(3))) {
                 endMonth = endMonth.plusYears(2)
+                rangeChanged = true
             }
+            // Widening the range rebuilds the calendar state, which then starts at [anchorMonth].
+            // Anchor it to the month being browsed so the rebuild does not move the calendar.
+            if (rangeChanged) anchorMonth = visibleMonth
 
             isLoading = true
             val targetMonth = visibleMonth
