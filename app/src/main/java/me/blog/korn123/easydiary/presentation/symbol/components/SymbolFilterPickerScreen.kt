@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,8 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -45,6 +42,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.presentation.components.EasyDiaryActionBar
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryAlertDialog
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryDialogButton
+import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.symbol.SymbolFilterPickerUiState
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 
@@ -166,17 +166,18 @@ fun SymbolFilterPickerScreen(
     }
 
     uiState.alertDialogMessage?.let { message ->
-        AlertDialog(
+        EasyDiaryAlertDialog(
             onDismissRequest = onDismissAlertDialog,
-            confirmButton = {
-                TextButton(onClick = onDismissAlertDialog) {
-                    Text(text = stringResource(id = android.R.string.ok))
-                }
+            title = null,
+            buttons = {
+                EasyDiaryDialogButton(
+                    text = stringResource(id = android.R.string.ok),
+                    onClick = onDismissAlertDialog,
+                )
             },
-            text = {
-                Text(text = message)
-            },
-        )
+        ) {
+            SimpleText(text = message)
+        }
     }
 }
 
