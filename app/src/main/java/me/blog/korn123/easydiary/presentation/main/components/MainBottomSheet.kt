@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.domain.model.Tag
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
 import me.blog.korn123.easydiary.helper.SYMBOL_SELECT_ALL
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -115,7 +116,7 @@ fun MainBottomSheet(
                     ).background(
                         color =
                             if (isHighlighted) {
-                                Color(context.config.primaryColor)
+                                Color(context.config.primaryColor.darkenColor())
                             } else {
                                 Color(
                                     context.config.backgroundColor,
