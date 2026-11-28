@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -55,6 +57,7 @@ class CalendarViewModel
             private set
 
         private var currentObservingMonth: YearMonth? = null
+        private var observeEventsJob: Job? = null
 
         fun setSelectedDate(date: LocalDate?) {
             selection = date
@@ -103,6 +106,10 @@ class CalendarViewModel
             // Anchor it to the month being browsed so the rebuild does not move the calendar.
             if (rangeChanged) anchorMonth = visibleMonth
 
+            // A collected Room flow never completes on its own, so the collector of the previous
+            // month has to be cancelled before the next one starts; otherwise every month browsed
+            // adds a live collector that keeps overwriting eventsMap with its own range.
+            observeEventsJob?.cancel()
             isLoading = true
             val targetMonth = visibleMonth
             val startOfMonth = targetMonth.atDay(1)
@@ -113,38 +120,42 @@ class CalendarViewModel
             val startMillis = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
             val endMillis = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() + 86400000L
 
-            viewModelScope.launch {
-                try {
-                    diaryRepository
-                        .observeDiariesWithPhotos(
-                            startTimeMillis = startMillis,
-                            endTimeMillis = endMillis,
-                        ).map { allDiariesInRange ->
-                            val groupedMap =
-                                if (sortAsc) {
-                                    allDiariesInRange.sortedBy { it.currentTimeMillis }
-                                } else {
-                                    allDiariesInRange.sortedByDescending { it.currentTimeMillis }
-                                }.groupBy { it.dateString ?: "" }
+            observeEventsJob =
+                viewModelScope.launch {
+                    try {
+                        diaryRepository
+                            .observeDiariesWithPhotos(
+                                startTimeMillis = startMillis,
+                                endTimeMillis = endMillis,
+                            ).map { allDiariesInRange ->
+                                val groupedMap =
+                                    if (sortAsc) {
+                                        allDiariesInRange.sortedBy { it.currentTimeMillis }
+                                    } else {
+                                        allDiariesInRange.sortedByDescending { it.currentTimeMillis }
+                                    }.groupBy { it.dateString ?: "" }
 
-                            val resultMap = mutableMapOf<LocalDate, List<Diary>>()
-                            for ((dateStr, diaries) in groupedMap) {
-                                if (diaries.isNotEmpty()) {
-                                    try {
-                                        val localDate = LocalDate.parse(dateStr)
-                                        resultMap[localDate] = diaries
-                                    } catch (_: Exception) {
+                                val resultMap = mutableMapOf<LocalDate, List<Diary>>()
+                                for ((dateStr, diaries) in groupedMap) {
+                                    if (diaries.isNotEmpty()) {
+                                        try {
+                                            val localDate = LocalDate.parse(dateStr)
+                                            resultMap[localDate] = diaries
+                                        } catch (_: Exception) {
+                                        }
                                     }
                                 }
+                                resultMap
+                            }.collectLatest { newMap ->
+                                eventsMap = newMap
+                                isLoading = false
                             }
-                            resultMap
-                        }.collectLatest { newMap ->
-                            eventsMap = newMap
-                            isLoading = false
-                        }
-                } catch (_: Exception) {
-                    isLoading = false
+                    } catch (e: CancellationException) {
+                        // The next month is already subscribed and owns isLoading now.
+                        throw e
+                    } catch (_: Exception) {
+                        isLoading = false
+                    }
                 }
-            }
         }
     }
