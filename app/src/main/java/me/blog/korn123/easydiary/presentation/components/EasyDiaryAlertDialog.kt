@@ -37,10 +37,11 @@ import me.blog.korn123.easydiary.extensions.config
  *
  * It is the Compose counterpart of `Context.updateAlertDialog`, and takes its look from the same places that
  * function paints: the window is the background color of the theme rounded by 3dp, the title bar above it the
- * primary color with the title in bold white 18dp (the size the XML title is set to, in dp and not in sp, so
- * the text size setting leaves it alone, and left out when the dialog carries no title), the optional icon in
- * white at the start of the title, the content on the background color with the 15dp padding of
- * `dialog_message.xml`, and the buttons at the bottom end of the dialog in the text color.
+ * primary color with the title in bold white at 1.2 times the text size setting (`config.settingFontSize` is
+ * already a px value, so the title is `settingFontSize * 1.2` px: the setting scales the title as it scales the
+ * body, and the title stays a size above it; the bar is left out when the dialog carries no title), the
+ * optional icon in white at the start of the title, the content on the background color with the 15dp padding
+ * of `dialog_message.xml`, and the buttons at the bottom end of the dialog in the text color.
  *
  * ```
  * EasyDiaryAlertDialog(
@@ -81,10 +82,9 @@ fun EasyDiaryAlertDialog(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val context = LocalContext.current
-    val density = LocalDensity.current
     val backgroundColor = Color(context.config.backgroundColor)
     val primaryColor = Color(context.config.primaryColor)
-    val titleFontSize = with(density) { TITLE_FONT_SIZE_DP.dp.toPx() }
+    val titleFontSize = context.config.settingFontSize * TITLE_FONT_SIZE_SCALE
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -192,11 +192,14 @@ private const val TITLE_BAR_PADDING_DP = 15F
 private const val TITLE_ICON_MARGIN_DP = 5F
 private const val TITLE_TEXT_MARGIN_DP = 5F
 
-/** The title icons are 24dp drawables, the height the title text takes at 18dp. */
+/** The title icons are drawn at 24dp, the height the XML title takes around the default text size. */
 private const val TITLE_ICON_SIZE_DP = 24F
 
-/** The XML title is set to 18dp, a dp size that the text size setting does not scale. */
-private const val TITLE_FONT_SIZE_DP = 18F
+/**
+ * The title is 1.2 times the text size setting: `config.settingFontSize` is a px value, so the title font size
+ * is `settingFontSize * 1.2` px and the setting scales it as it scales the body.
+ */
+private const val TITLE_FONT_SIZE_SCALE = 1.2F
 
 /** `dialog_message.xml` carries the message with the 15dp padding of the app cards. */
 private const val CONTENT_PADDING_DP = 15F
