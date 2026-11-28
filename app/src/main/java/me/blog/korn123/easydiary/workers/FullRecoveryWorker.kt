@@ -22,8 +22,8 @@ class FullRecoveryWorker(
         val notification =
             mZipHelper.createNotification(
                 NOTIFICATION_DECOMPRESS_ID,
-                "Full data recovery",
-                "Recovery of all data is in progress.",
+                context.getString(R.string.recovery_full_notification_title),
+                context.getString(R.string.recovery_full_notification_progress),
                 NotificationConstants.ACTION_FULL_RECOVERY_CANCEL,
             )
         try {
@@ -45,7 +45,11 @@ class FullRecoveryWorker(
                     true -> {
                         FontUtils.setCommonTypeface(context)
                         isRecoverySuccessful = true
-                        mZipHelper.updateNotification(NOTIFICATION_COMPRESS_COMPLETE_ID, "Import complete", "You can now select a restore point using the Restore Diary feature.")
+                        mZipHelper.updateNotification(
+                            NOTIFICATION_COMPRESS_COMPLETE_ID,
+                            context.getString(R.string.recovery_full_complete_title),
+                            context.getString(R.string.recovery_full_complete_message),
+                        )
                     }
 
                     false -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)

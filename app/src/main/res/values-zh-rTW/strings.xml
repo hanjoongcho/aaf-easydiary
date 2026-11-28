@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">還原</string>
     <string name="recovery_full_invalid_archive">這不是有效的備份檔案。</string>
     <string name="recovery_full_failed_title">匯入失敗</string>
+    <string name="backup_full_notification_title">備份所有資料</string>
+    <string name="backup_full_notification_preparing">正在準備備份所有資料...</string>
+    <string name="backup_full_notification_compressing">正在壓縮</string>
+    <string name="backup_full_complete_title">匯出完成</string>
+    <string name="backup_full_complete_message">匯出的檔案大小為 %s</string>
+    <string name="recovery_full_notification_title">還原所有資料</string>
+    <string name="recovery_full_notification_progress">正在還原所有資料。</string>
+    <string name="recovery_full_notification_decompressing">正在解壓縮</string>
+    <string name="recovery_full_complete_title">匯入完成</string>
+    <string name="recovery_full_complete_message">現在可以在「還原日記」功能中選擇還原點。</string>
 </resources>

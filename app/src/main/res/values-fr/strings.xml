@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">Restaurer</string>
     <string name="recovery_full_invalid_archive">Ce fichier n\'est pas un fichier de sauvegarde valide.</string>
     <string name="recovery_full_failed_title">Échec de l\'importation</string>
+    <string name="backup_full_notification_title">Sauvegarde intégrale des données</string>
+    <string name="backup_full_notification_preparing">Préparation de la sauvegarde de toutes les données...</string>
+    <string name="backup_full_notification_compressing">Compression en cours</string>
+    <string name="backup_full_complete_title">Exportation terminée</string>
+    <string name="backup_full_complete_message">La taille du fichier exporté est de %s</string>
+    <string name="recovery_full_notification_title">Restauration intégrale des données</string>
+    <string name="recovery_full_notification_progress">La restauration de toutes les données est en cours.</string>
+    <string name="recovery_full_notification_decompressing">Décompression en cours</string>
+    <string name="recovery_full_complete_title">Importation terminée</string>
+    <string name="recovery_full_complete_message">Vous pouvez maintenant sélectionner un point de restauration avec la fonction « Restaurer le journal ».</string>
 </resources>

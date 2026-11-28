@@ -139,7 +139,7 @@ class ZipHelper(
                 .setProgress(mFileNames.size, progress.plus(1), false)
                 .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_COMPRESS_ID] ${progress.plus(1)}/${mFileNames.size}" else "${progress.plus(1)}/${mFileNames.size}")
                 .setContentText(message)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText("Compressing"))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(context.getString(R.string.backup_full_notification_compressing)))
             notificationManager.notify(NOTIFICATION_COMPRESS_ID, mBuilder.build())
         }
     }
@@ -157,7 +157,7 @@ class ZipHelper(
                 .setProgress(totalCount, progress.plus(1), false)
                 .setContentTitle(if (context.config.enableDebugOptionVisibleAlarmSequence) "[$NOTIFICATION_COMPRESS_ID] ${progress.plus(1)}/$totalCount" else "${progress.plus(1)}/$totalCount")
                 .setContentText(fileName)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText("Decompressing"))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText(context.getString(R.string.recovery_full_notification_decompressing)))
             notificationManager.notify(NOTIFICATION_DECOMPRESS_ID, mBuilder.build())
         }
     }
@@ -218,7 +218,12 @@ class ZipHelper(
     }
 
     fun compress(destFile: File) {
-        showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", NotificationConstants.ACTION_FULL_BACKUP_CANCEL)
+        showNotification(
+            NOTIFICATION_COMPRESS_ID,
+            context.getString(R.string.backup_full_notification_title),
+            context.getString(R.string.backup_full_notification_preparing),
+            NotificationConstants.ACTION_FULL_BACKUP_CANCEL,
+        )
         try {
             ZipOutputStream(FileOutputStream(destFile)).use { zipOutputStream ->
                 mFileNames.forEachIndexed { index, fileName ->
@@ -257,7 +262,12 @@ class ZipHelper(
             return
         }
 
-        showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", NotificationConstants.ACTION_FULL_BACKUP_CANCEL)
+        showNotification(
+            NOTIFICATION_COMPRESS_ID,
+            context.getString(R.string.backup_full_notification_title),
+            context.getString(R.string.backup_full_notification_preparing),
+            NotificationConstants.ACTION_FULL_BACKUP_CANCEL,
+        )
         try {
             ZipFile(destFile, password.toCharArray()).use { zipFile ->
                 mFileNames.forEachIndexed { index, fileName ->
@@ -403,7 +413,12 @@ class ZipHelper(
         password: String? = null,
     ): ExtractionResult {
         if (uri == null) return ExtractionResult.INVALID_ARCHIVE
-        showNotification(NOTIFICATION_DECOMPRESS_ID, "Full data recovery", "Recovery of all data is in progress.", NotificationConstants.ACTION_FULL_RECOVERY_CANCEL)
+        showNotification(
+            NOTIFICATION_DECOMPRESS_ID,
+            context.getString(R.string.recovery_full_notification_title),
+            context.getString(R.string.recovery_full_notification_progress),
+            NotificationConstants.ACTION_FULL_RECOVERY_CANCEL,
+        )
         val fileCount = countFileEntry(uri, password)
         return when {
             password.isNullOrEmpty() -> decompressPlain(uri, fileCount)

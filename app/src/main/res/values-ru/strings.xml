@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">Восстановить</string>
     <string name="recovery_full_invalid_archive">Это недопустимый файл резервной копии.</string>
     <string name="recovery_full_failed_title">Не удалось импортировать</string>
+    <string name="backup_full_notification_title">Резервное копирование всех данных</string>
+    <string name="backup_full_notification_preparing">Подготовка к резервному копированию всех данных...</string>
+    <string name="backup_full_notification_compressing">Сжатие</string>
+    <string name="backup_full_complete_title">Экспорт завершён</string>
+    <string name="backup_full_complete_message">Размер экспортированного файла: %s</string>
+    <string name="recovery_full_notification_title">Восстановление всех данных</string>
+    <string name="recovery_full_notification_progress">Восстановление всех данных выполняется.</string>
+    <string name="recovery_full_notification_decompressing">Распаковка</string>
+    <string name="recovery_full_complete_title">Импорт завершён</string>
+    <string name="recovery_full_complete_message">Теперь вы можете выбрать точку восстановления с помощью функции «Восстановить Дневник».</string>
 </resources>

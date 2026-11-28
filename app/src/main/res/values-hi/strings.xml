@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">पुनर्स्थापित करें</string>
     <string name="recovery_full_invalid_archive">यह मान्य बैकअप फ़ाइल नहीं है।</string>
     <string name="recovery_full_failed_title">आयात विफल</string>
+    <string name="backup_full_notification_title">पूर्ण डेटा बैकअप</string>
+    <string name="backup_full_notification_preparing">सभी डेटा का बैकअप तैयार किया जा रहा है ...</string>
+    <string name="backup_full_notification_compressing">संपीड़न हो रहा है</string>
+    <string name="backup_full_complete_title">निर्यात पूर्ण</string>
+    <string name="backup_full_complete_message">निर्यात की गई फ़ाइल का आकार %s है</string>
+    <string name="recovery_full_notification_title">पूर्ण डेटा पुनर्प्राप्ति</string>
+    <string name="recovery_full_notification_progress">सभी डेटा की पुनर्प्राप्ति जारी है।</string>
+    <string name="recovery_full_notification_decompressing">विसंपीड़न हो रहा है</string>
+    <string name="recovery_full_complete_title">आयात पूर्ण</string>
+    <string name="recovery_full_complete_message">अब आप डायरी बरामद सुविधा से पुनर्स्थापना बिंदु चुन सकते हैं।</string>
 </resources>

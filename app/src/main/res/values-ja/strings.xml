@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">復元</string>
     <string name="recovery_full_invalid_archive">有効なバックアップファイルではありません。</string>
     <string name="recovery_full_failed_title">インポート失敗</string>
+    <string name="backup_full_notification_title">完全なデータのバックアップ</string>
+    <string name="backup_full_notification_preparing">すべてのデータのバックアップを準備しています ...</string>
+    <string name="backup_full_notification_compressing">圧縮中</string>
+    <string name="backup_full_complete_title">エクスポート完了</string>
+    <string name="backup_full_complete_message">エクスポートしたファイルのサイズは %s です</string>
+    <string name="recovery_full_notification_title">完全なデータの復旧</string>
+    <string name="recovery_full_notification_progress">すべてのデータを復旧しています。</string>
+    <string name="recovery_full_notification_decompressing">解凍中</string>
+    <string name="recovery_full_complete_title">インポート完了</string>
+    <string name="recovery_full_complete_message">これで「日記を復元する」機能から復元ポイントを選択できます。</string>
 </resources>

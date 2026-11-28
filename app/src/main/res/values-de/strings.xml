@@ -1236,4 +1236,14 @@
     <string name="recovery_full_password_continue">Wiederherstellen</string>
     <string name="recovery_full_invalid_archive">Diese Datei ist keine gültige Sicherungsdatei.</string>
     <string name="recovery_full_failed_title">Import fehlgeschlagen</string>
+    <string name="backup_full_notification_title">Vollständige Datensicherung</string>
+    <string name="backup_full_notification_preparing">Die Sicherung aller Daten wird vorbereitet ...</string>
+    <string name="backup_full_notification_compressing">Wird komprimiert</string>
+    <string name="backup_full_complete_title">Export abgeschlossen</string>
+    <string name="backup_full_complete_message">Die exportierte Dateigröße beträgt %s</string>
+    <string name="recovery_full_notification_title">Vollständige Datenwiederherstellung</string>
+    <string name="recovery_full_notification_progress">Die Wiederherstellung aller Daten läuft.</string>
+    <string name="recovery_full_notification_decompressing">Wird entpackt</string>
+    <string name="recovery_full_complete_title">Import abgeschlossen</string>
+    <string name="recovery_full_complete_message">Sie können jetzt mit der Funktion „Tagebuch wiederherstellen“ einen Wiederherstellungspunkt auswählen.</string>
 </resources>
