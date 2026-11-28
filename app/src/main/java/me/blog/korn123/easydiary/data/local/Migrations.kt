@@ -258,3 +258,17 @@ val MIGRATION_7_8 =
             )
         }
     }
+
+val MIGRATION_8_9 =
+    object : Migration(8, 9) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // Issue #302 step 3: a schedule may now run a full backup into a folder the user picked, so the alarm row
+            // keeps that folder, the folder name shown on the edit screen, the optional zip password and the file
+            // naming mode. Existing rows keep a null folder and the overwrite mode, which none of the other work
+            // modes read.
+            db.execSQL("ALTER TABLE `alarms` ADD COLUMN `backupFolderUri` TEXT")
+            db.execSQL("ALTER TABLE `alarms` ADD COLUMN `backupFolderName` TEXT")
+            db.execSQL("ALTER TABLE `alarms` ADD COLUMN `backupPassword` TEXT")
+            db.execSQL("ALTER TABLE `alarms` ADD COLUMN `backupFileNameMode` INTEGER NOT NULL DEFAULT 0")
+        }
+    }

@@ -973,7 +973,8 @@
     <string name="schedule_description">ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ</string>
     <string name="schedule_description_hint">ᱮᱞᱟᱢ ᱵᱤᱵᱨᱚᱬ</string>
     <string name="schedule_diary_writing_description">ᱰᱟᱭᱨᱤ ᱚᱞ\nᱰᱟᱭᱨᱤ ᱚᱞ ᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱢᱮ ᱾\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ, ᱥᱮᱴ ᱟᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾  </string>
-    <string name="schedule_backup_local_description">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ(Device storage)\n\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱠᱚ ᱵᱮᱠᱟᱹᱯᱟᱭ ᱠᱷᱟᱹᱞᱤ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹ ᱪᱷᱟᱲᱤ ᱠᱟᱛᱮ ᱟᱨ ᱚᱱᱟ ᱥᱮᱴ ᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱨᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾</string>
+    <string name="schedule_backup_local_description">Diary backup (App internal storage, database only — no photos)
+Backs up the database file, without attached photos, to the internal storage of the app according to the scheduled day and time, and provides the operation result as a notification message. Only Easy Diary can read it, and a folder sync tool cannot reach it.</string>
     <string name="schedule_empty_message">ᱥᱮᱴ ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾\nᱱᱟᱶᱟ ᱥᱮᱰᱭᱩᱞ ᱥᱮᱞᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱪᱮᱛᱟᱱ ᱡᱚᱡᱚᱢ ᱛᱤ ᱯᱟᱦᱢᱟ ᱨᱮ ᱢᱮᱱᱟᱜ ᱵᱩᱛᱟᱹᱢ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
     <string name="schedule_new">New schedule</string>
     <string name="permission_confirmation_dialog_title">ᱚᱛᱷᱚᱨᱟᱭᱡᱮᱥᱚᱱ ᱱᱮᱦᱚᱨ</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">ᱥᱟᱫᱷᱚᱱ ᱫᱚ ᱰᱚᱡᱽ ᱢᱳᱰ ᱮ ᱵᱚᱞᱚ ᱮᱱᱟᱭ  ᱟᱨ ᱱᱮᱴᱣᱟᱨᱠ ᱛᱮ ᱵᱟᱹᱠᱟᱹᱯ ᱠᱚ ᱰᱤᱜᱟᱹᱣᱮᱱᱟ ᱾ ᱟᱢ ᱡᱩᱫᱤ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱡᱷᱚᱨᱠᱟ ᱨᱮ ᱚᱛᱟᱭᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱮᱠᱟᱹᱢ ᱠᱟᱹᱢᱤ ᱫᱚ ᱞᱟᱦᱟᱜᱼᱟ ᱾</string>
     <string name="schedule_pending_guide_message">ᱛᱟᱸᱜᱤ ᱥᱮᱰᱭᱩᱞ ᱮᱛᱦᱚᱵᱚᱜᱼᱟ ᱾</string>
     <string name="schedule_diary_writing_complete">ᱰᱟᱭᱨᱤ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱡᱷᱚᱨᱠᱟ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
-    <string name="schedule_backup_local_complete">ᱞᱚᱠᱟᱞ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱪᱟᱵᱟᱭᱮᱱᱟ ᱾</string>
+    <string name="schedule_backup_local_complete">Diary backup completed in the app internal storage (database only, no photos).</string>
     <string name="schedule_backup_gms_complete">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱟᱨ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ Google Drive ᱨᱮ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ ᱾%s</string>
     <string name="ok">ᱴᱷᱤᱠ</string>
     <string name="cancel">ᱵᱟᱹᱰᱨᱟᱹ</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">Decompressing</string>
     <string name="recovery_full_complete_title">Import complete</string>
     <string name="recovery_full_complete_message">You can now select a restore point using the Restore Diary feature.</string>
+    <string name="schedule_backup_external_description">Full backup (External folder)\nBacks up the database, the attached photos and the whole working directory as a single zip file to the folder you choose, according to the scheduled day and time. The archive is the same as [BETA] Backup full data, so [BETA] Recover full data restores it, and a folder sync tool can collect it.</string>
+    <string name="schedule_backup_external_complete">Full backup completed in the selected folder.</string>
+    <string name="schedule_backup_external_folder">Backup folder</string>
+    <string name="schedule_backup_external_folder_none">No folder selected. Tap to choose one.</string>
+    <string name="schedule_backup_external_password">Backup password (optional)</string>
+    <string name="schedule_backup_external_password_description">The password encrypts the archive. Leave it empty to write an unencrypted zip file. A password cannot be recovered if you forget it.</string>
+    <string name="schedule_backup_external_password_hint">Password</string>
+    <string name="schedule_backup_external_file_mode">File handling</string>
+    <string name="schedule_backup_external_file_mode_overwrite">Overwrite a fixed file name (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">Create a new file on every run (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">Please select the folder the backup is written to.</string>
+    <string name="schedule_backup_external_folder_not_allowed">This folder cannot be used for a scheduled backup. Choose another folder.</string>
+    <string name="schedule_backup_external_invalid_title">Backup folder needs to be selected again</string>
+    <string name="schedule_backup_external_invalid_message">The scheduled full backup could not write to its folder because access to the folder was lost or the folder no longer exists. Open Schedule setting, edit the schedule and choose the folder again.</string>
 </resources>

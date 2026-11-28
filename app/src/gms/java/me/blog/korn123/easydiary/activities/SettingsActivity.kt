@@ -8,6 +8,7 @@ import me.blog.korn123.easydiary.extensions.EMPTY
 import me.blog.korn123.easydiary.extensions.applyBottomNavigationInsets
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
+import me.blog.korn123.easydiary.helper.SettingConstants
 
 class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,6 +98,9 @@ class SettingsActivity : BaseSettingsActivity() {
             getProgressContainer().setOnTouchListener { _, _ -> true }
 
             applyBottomNavigationInsets(dotsIndicator)
+            // A scheduled backup that could not reach its folder opens this screen on the schedule page, so the
+            // schedule whose folder has to be picked again is one tap away. The page index is this flavor's list.
+            if (intent.getBooleanExtra(SettingConstants.OPEN_SCHEDULE_SETTINGS, false)) viewPager.currentItem = 5
         }
     }
 

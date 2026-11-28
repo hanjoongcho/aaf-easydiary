@@ -973,7 +973,8 @@
     <string name="schedule_description">अनुसूची का विवरण</string>
     <string name="schedule_description_hint">अलार्म विवरण</string>
     <string name="schedule_diary_writing_description">डायरी लेखन \n डायरी लेखन अनुसूची का अवलोकन करें। शेड्यूल पंजीकृत होने के बाद, निर्धारित दिन और समय के अनुसार एक अधिसूचना संदेश प्रदान किया जाता है।</string>
-    <string name="schedule_backup_local_description">डायरी बैकअप (डिवाइस भंडारण) \n शेड्यूलिंग समय और समय के अनुसार डिवाइस के स्थानीय स्टोरेज के लिए संलग्न तस्वीरों को छोड़कर डेटाबेस फाइलों को शेड्यूल करता है और ऑपरेशन के परिणाम को अधिसूचना संदेश के रूप में प्रदान करता है।</string>
+    <string name="schedule_backup_local_description">डायरी बैकअप (ऐप का आंतरिक स्टोरेज, केवल डेटाबेस — फ़ोटो नहीं)
+निर्धारित दिन और समय पर संलग्न फ़ोटो के बिना डेटाबेस फ़ाइल को ऐप के आंतरिक स्टोरेज में सहेजता है और परिणाम सूचना संदेश के रूप में देता है। इसे केवल Easy Diary पढ़ सकता है, फ़ोल्डर सिंक टूल नहीं।</string>
     <string name="schedule_empty_message">कोई शेड्यूल जानकारी नहीं है। नया शेड्यूल जोड़ने के लिए ऊपर दाईं ओर प्लस बटन क्लिक करें。</string>
     <string name="schedule_new">नया शेड्यूल</string>
     <string name="permission_confirmation_dialog_title">प्राधिकरण से अनुरोध करें</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">डिवाइस ने डोज़ मोड में प्रवेश किया और नेटवर्क का उपयोग करके बैकअप ऑपरेशन विफल हो गया। यदि आप सूचना विंडो को स्पर्श करते हैं, तो बैकअप ऑपरेशन फिर से शुरू होगा।</string>
     <string name="schedule_pending_guide_message">वेटिंग शेड्यूल शुरू होता है।</string>
     <string name="schedule_diary_writing_complete">डायरी स्क्रीन पर जाने के लिए अधिसूचना विंडो को स्पर्श करें।</string>
-    <string name="schedule_backup_local_complete">स्थानीय डिवाइस पर डायरी बैकअप पूरा।</string>
+    <string name="schedule_backup_local_complete">डायरी बैकअप ऐप के आंतरिक स्टोरेज में पूरा हुआ (केवल डेटाबेस, फ़ोटो नहीं)।</string>
     <string name="schedule_backup_gms_complete">डायरी बैकअप फ़ाइल और संलग्न फोटो Google ड्राइव में सहेजे गए।%s</string>
     <string name="ok">ठीक है</string>
     <string name="cancel">रद्द करना</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">विसंपीड़न हो रहा है</string>
     <string name="recovery_full_complete_title">आयात पूर्ण</string>
     <string name="recovery_full_complete_message">अब आप डायरी बरामद सुविधा से पुनर्स्थापना बिंदु चुन सकते हैं।</string>
+    <string name="schedule_backup_external_description">पूर्ण बैकअप (बाहरी फ़ोल्डर)\nनिर्धारित दिन और समय पर डेटाबेस, संलग्न फ़ोटो और पूरी कार्य निर्देशिका को एक zip फ़ाइल के रूप में आपके चुने हुए फ़ोल्डर में सहेजता है। यह संग्रह [BETA] Backup full data जैसा ही है, इसलिए [BETA] Recover full data से इसे वापस पाया जा सकता है और फ़ोल्डर सिंक टूल इसे ले जा सकता है।</string>
+    <string name="schedule_backup_external_complete">चुने गए फ़ोल्डर में पूर्ण बैकअप पूरा हुआ।</string>
+    <string name="schedule_backup_external_folder">बैकअप फ़ोल्डर</string>
+    <string name="schedule_backup_external_folder_none">कोई फ़ोल्डर नहीं चुना गया। चुनने के लिए टैप करें।</string>
+    <string name="schedule_backup_external_password">बैकअप पासवर्ड (वैकल्पिक)</string>
+    <string name="schedule_backup_external_password_description">पासवर्ड संग्रह को एन्क्रिप्ट करता है। खाली छोड़ने पर बिना एन्क्रिप्शन वाली zip फ़ाइल बनती है। भूला हुआ पासवर्ड वापस नहीं पाया जा सकता।</string>
+    <string name="schedule_backup_external_password_hint">पासवर्ड</string>
+    <string name="schedule_backup_external_file_mode">फ़ाइल प्रबंधन</string>
+    <string name="schedule_backup_external_file_mode_overwrite">स्थिर फ़ाइल नाम पर लिखें (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">हर बार नई फ़ाइल बनाएँ (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">कृपया वह फ़ोल्डर चुनें जिसमें बैकअप लिखा जाएगा।</string>
+    <string name="schedule_backup_external_folder_not_allowed">यह फ़ोल्डर निर्धारित बैकअप के लिए उपयोग नहीं किया जा सकता। दूसरा फ़ोल्डर चुनें।</string>
+    <string name="schedule_backup_external_invalid_title">बैकअप फ़ोल्डर फिर से चुनना होगा</string>
+    <string name="schedule_backup_external_invalid_message">निर्धारित पूर्ण बैकअप अपने फ़ोल्डर में नहीं लिख सका क्योंकि उस तक पहुँच चली गई या फ़ोल्डर अब मौजूद नहीं है। शेड्यूल सेटिंग खोलें, शेड्यूल संपादित करें और फ़ोल्डर फिर से चुनें।</string>
 </resources>

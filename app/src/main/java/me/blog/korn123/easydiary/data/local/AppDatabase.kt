@@ -26,7 +26,7 @@ import me.blog.korn123.easydiary.data.local.entity.TagEntity
         TagEntity::class,
         DiaryTagCrossRefEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = true
 )
 @TypeConverters(Converters::class)

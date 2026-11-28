@@ -973,7 +973,8 @@
     <string name="schedule_description">Descripción de Horario</string>
     <string name="schedule_description_hint">Descripción de la alarma</string>
     <string name="schedule_diary_writing_description">Escritura de diario\nRegistre el horario de escritura del diario.\nCuando se registra el horario, se proporciona un mensaje de notificación de acuerdo con el día y la hora configurados.</string>
-    <string name="schedule_backup_local_description">Copia de seguridad del diario (almacenamiento del dispositivo)\nEl registro de la programación hace una copia de seguridad de los archivos de la base de datos, excluidas las fotos adjuntas, en el almacenamiento local del dispositivo de acuerdo con el día y la hora establecidos y proporciona el resultado de la operación como un mensaje de notificación.</string>
+    <string name="schedule_backup_local_description">Copia de seguridad del diario (Almacenamiento interno de la aplicación, solo base de datos — sin fotos)
+Guarda el archivo de base de datos, sin las fotos adjuntas, en el almacenamiento interno de la aplicación según el día y la hora programados, y ofrece el resultado como mensaje de notificación. Solo Easy Diary puede leerlo; una herramienta de sincronización de carpetas no.</string>
     <string name="schedule_empty_message">No hay información de programación establecida.\nHaga clic en el botón más en la parte superior derecha para agregar un nuevo horario.</string>
     <string name="schedule_new">Nuevo horario</string>
     <string name="permission_confirmation_dialog_title">Solicitar autorización</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">El dispositivo entró en modo dormido y falló la operación de copia de seguridad mediante la red. Si toca la ventana de notificación, se reanudará la operación de copia de seguridad.</string>
     <string name="schedule_pending_guide_message">Comienza la espera programada.</string>
     <string name="schedule_diary_writing_complete">Toque la ventana de notificación para ir a la pantalla del diario.</string>
-    <string name="schedule_backup_local_complete">Copia de seguridad del diario completada en el dispositivo local.</string>
+    <string name="schedule_backup_local_complete">Copia de seguridad del diario completada en el almacenamiento interno de la aplicación (solo base de datos, sin fotos).</string>
     <string name="schedule_backup_gms_complete">El archivo de copia de seguridad del diario y la foto adjunta se guardaron en Google Drive.%s</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">Descomprimiendo</string>
     <string name="recovery_full_complete_title">Importación completada</string>
     <string name="recovery_full_complete_message">Ahora puedes seleccionar un punto de restauración con la función «Recuperar diario».</string>
+    <string name="schedule_backup_external_description">Copia de seguridad completa (Carpeta externa)\nGuarda la base de datos, las fotos adjuntas y todo el directorio de trabajo como un único archivo zip en la carpeta que elijas, según el día y la hora programados. El archivo tiene el mismo formato que [BETA] Backup full data, así que [BETA] Recover full data lo restaura, y una herramienta de sincronización de carpetas puede recogerlo.</string>
+    <string name="schedule_backup_external_complete">Copia de seguridad completa realizada en la carpeta seleccionada.</string>
+    <string name="schedule_backup_external_folder">Carpeta de copia de seguridad</string>
+    <string name="schedule_backup_external_folder_none">No hay ninguna carpeta seleccionada. Toca para elegir una.</string>
+    <string name="schedule_backup_external_password">Contraseña de la copia de seguridad (opcional)</string>
+    <string name="schedule_backup_external_password_description">La contraseña cifra el archivo. Si la dejas vacía se crea un archivo zip sin cifrar. Una contraseña olvidada no se puede recuperar.</string>
+    <string name="schedule_backup_external_password_hint">Contraseña</string>
+    <string name="schedule_backup_external_file_mode">Tratamiento del archivo</string>
+    <string name="schedule_backup_external_file_mode_overwrite">Sobrescribir un nombre de archivo fijo (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">Crear un archivo nuevo en cada ejecución (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">Selecciona la carpeta en la que se escribe la copia de seguridad.</string>
+    <string name="schedule_backup_external_folder_not_allowed">Esta carpeta no se puede usar para una copia programada. Elige otra carpeta.</string>
+    <string name="schedule_backup_external_invalid_title">Hay que volver a seleccionar la carpeta de copia</string>
+    <string name="schedule_backup_external_invalid_message">La copia completa programada no pudo escribir en su carpeta porque se perdió el acceso a ella o la carpeta ya no existe. Abre los ajustes de programación, edita la programación y elige la carpeta de nuevo.</string>
 </resources>

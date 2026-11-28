@@ -973,7 +973,8 @@
     <string name="schedule_description">Описание расписания</string>
     <string name="schedule_description_hint">Описание уведомления</string>
     <string name="schedule_diary_writing_description">Ведение дневника\nЗарегистрируйте расписание ведения дневника.\nКогда расписание зарегистрировано, уведомление появится в соответствии с установленным днём и временем.</string>
-    <string name="schedule_backup_local_description">Резервное копирование дневника (Хранилище устройства)\nПри регистрации расписания выполняется резервное копирование файлов базы данных, за исключением прикреплённых фотографий, в локальное хранилище устройства в соответствии с установленным днём и временем, результат операции отобразится в виде уведомления.</string>
+    <string name="schedule_backup_local_description">Резервная копия дневника (Внутреннее хранилище приложения, только база данных — без фото)
+Сохраняет файл базы данных без прикреплённых фото во внутреннее хранилище приложения в заданный день и час и сообщает результат уведомлением. Прочитать его может только Easy Diary, инструмент синхронизации папок его не увидит.</string>
     <string name="schedule_empty_message">Информация о расписании отсутствует.\nНажмите кнопку с плюсом в правом верхнем углу, чтобы добавить новое расписание.</string>
     <string name="schedule_new">Новое расписание</string>
     <string name="permission_confirmation_dialog_title">Требуется авторизация</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">Устройство перешло в спящий режим, и операция резервного копирования по сети не удалась. Если коснуться окна уведомления, операция резервного копирования возобновится.</string>
     <string name="schedule_pending_guide_message">Начинается ожидание расписания.</string>
     <string name="schedule_diary_writing_complete">Коснитесь окна уведомления, чтобы перейти к экрану дневника.</string>
-    <string name="schedule_backup_local_complete">Резервное копирование дневника выполнено на локальное устройство.</string>
+    <string name="schedule_backup_local_complete">Резервная копия дневника сохранена во внутреннее хранилище приложения (только база данных, без фото).</string>
     <string name="schedule_backup_gms_complete">Файл резервной копии дневника и прикреплённая фотография были сохранены на Google Диске.%s</string>
     <string name="ok">ОК</string>
     <string name="cancel">Отмена</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">Распаковка</string>
     <string name="recovery_full_complete_title">Импорт завершён</string>
     <string name="recovery_full_complete_message">Теперь вы можете выбрать точку восстановления с помощью функции «Восстановить Дневник».</string>
+    <string name="schedule_backup_external_description">Полная резервная копия (Внешняя папка)\nСохраняет базу данных, прикреплённые фото и весь рабочий каталог одним zip-файлом в выбранную папку в заданный день и час. Архив имеет тот же формат, что и [BETA] Backup full data, поэтому [BETA] Recover full data восстанавливает его, а инструмент синхронизации папок может его забрать.</string>
+    <string name="schedule_backup_external_complete">Полная резервная копия сохранена в выбранной папке.</string>
+    <string name="schedule_backup_external_folder">Папка резервных копий</string>
+    <string name="schedule_backup_external_folder_none">Папка не выбрана. Нажмите, чтобы выбрать.</string>
+    <string name="schedule_backup_external_password">Пароль архива (необязательно)</string>
+    <string name="schedule_backup_external_password_description">Пароль шифрует архив. Если оставить поле пустым, будет создан незашифрованный zip-файл. Забытый пароль восстановить нельзя.</string>
+    <string name="schedule_backup_external_password_hint">Пароль</string>
+    <string name="schedule_backup_external_file_mode">Обработка файла</string>
+    <string name="schedule_backup_external_file_mode_overwrite">Перезаписывать файл с постоянным именем (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">Создавать новый файл при каждом запуске (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">Выберите папку, в которую будет записываться резервная копия.</string>
+    <string name="schedule_backup_external_folder_not_allowed">Эту папку нельзя использовать для резервной копии по расписанию. Выберите другую папку.</string>
+    <string name="schedule_backup_external_invalid_title">Нужно заново выбрать папку резервных копий</string>
+    <string name="schedule_backup_external_invalid_message">Запланированная полная резервная копия не смогла записать файл в свою папку: доступ к папке потерян или папка удалена. Откройте настройки расписания, измените расписание и выберите папку заново.</string>
 </resources>

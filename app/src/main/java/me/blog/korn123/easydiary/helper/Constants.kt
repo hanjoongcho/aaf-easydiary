@@ -418,6 +418,18 @@ const val MARKDOWN_DIRECTORY = "${WORKING_DIRECTORY}Markdown/"
 const val BACKUP_EXCEL_DIRECTORY = "${WORKING_DIRECTORY}Backup/Excel/"
 const val BACKUP_DB_DIRECTORY = "${WORKING_DIRECTORY}Backup/Database/"
 
+/** Base name of the archive a scheduled full backup writes into the folder the user picked. */
+const val EXTERNAL_FULL_BACKUP_FILE_BASE_NAME = "easy_diary_backup"
+
+/** Timestamp added to the archive name in [AlarmConstants.BACKUP_FILE_MODE_TIMESTAMPED]. */
+const val EXTERNAL_FULL_BACKUP_TIMESTAMP_PATTERN = "yyyyMMdd_HHmmss"
+
+/**
+ * Name of the document a scheduled full backup is written to before it is renamed to its final name. A leading dot
+ * keeps it out of the way of a folder sync tool in the usual case.
+ */
+const val EXTERNAL_FULL_BACKUP_TEMP_FILE_NAME = ".easy_diary_backup.part"
+
 /***************************************************************************************************
  *   Request code constants
  *
@@ -688,6 +700,9 @@ object SettingConstants {
     const val ALARM_ID = "alarm_id"
     const val GENERIC_PERM_HANDLER = 100
     const val INITIALIZE_TIME_MILLIS = "initialize_time_millis"
+
+    /** Opens Settings on the schedule page instead of the first page, e.g. from a notification that needs the user to re-pick a folder. */
+    const val OPEN_SCHEDULE_SETTINGS = "open_schedule_settings"
 }
 
 object SettingLocalConstants {
@@ -745,6 +760,19 @@ object AlarmConstants {
     const val WORK_MODE_DIARY_BACKUP_GMS = 1
     const val WORK_MODE_DIARY_BACKUP_LOCAL = 2
     const val WORK_MODE_CALENDAR_SCHEDULE_SYNC = 3
+
+    /**
+     * Full backup (database export, photos and the whole working directory) of a scheduled run into the folder the
+     * user picked with ACTION_OPEN_DOCUMENT_TREE. It produces the same archive as the manual
+     * `[BETA] Backup full data`, so `[BETA] Recover full data` restores either of them.
+     */
+    const val WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL = 4
+
+    /** Replace one fixed file name on every run: one file, bounded space, friendly to a folder sync tool. */
+    const val BACKUP_FILE_MODE_OVERWRITE = 0
+
+    /** Write a new `easy_diary_backup_<timestamp>.zip` on every run, like the database export already does. */
+    const val BACKUP_FILE_MODE_TIMESTAMPED = 1
 }
 
 object TransitionConstants {
@@ -764,6 +792,16 @@ object WorkerConstants {
     const val PASSWORD_STRING = "password_string"
     const val WORK_MODE_BACKUP = "work_mode_backup"
     const val WORK_MODE_RECOVERY = "work_mode_recovery"
+
+    /** Tree uri of the folder a scheduled full backup writes into, instead of the single document uri above. */
+    const val FOLDER_URI_STRING = "folder_uri_string"
+
+    /** [AlarmConstants.BACKUP_FILE_MODE_OVERWRITE] or [AlarmConstants.BACKUP_FILE_MODE_TIMESTAMPED]. */
+    const val FILE_NAME_MODE = "file_name_mode"
+
+    /** Alarm id and label of the schedule that started the work, so a failure can report itself as that schedule. */
+    const val ALARM_ID = "alarm_id"
+    const val ALARM_LABEL = "alarm_label"
 }
 
 object DateUtilConstants {

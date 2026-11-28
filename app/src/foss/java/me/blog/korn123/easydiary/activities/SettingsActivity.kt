@@ -12,6 +12,7 @@ import me.blog.korn123.easydiary.fragments.SettingsFontFragment
 import me.blog.korn123.easydiary.fragments.SettingsLocalBackupFragment
 import me.blog.korn123.easydiary.fragments.SettingsLockFragment
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
+import me.blog.korn123.easydiary.helper.SettingConstants
 
 class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +90,9 @@ class SettingsActivity : BaseSettingsActivity() {
             pageChangeListener.onPageSelected(viewPager.currentItem)
             dotsIndicator.setViewPager(viewPager)
             getProgressContainer().setOnTouchListener { _, _ -> true }
+            // A scheduled backup that could not reach its folder opens this screen on the schedule page, so the
+            // schedule whose folder has to be picked again is one tap away. The page index is this flavor's list.
+            if (intent.getBooleanExtra(SettingConstants.OPEN_SCHEDULE_SETTINGS, false)) viewPager.currentItem = 4
         }
     }
 
