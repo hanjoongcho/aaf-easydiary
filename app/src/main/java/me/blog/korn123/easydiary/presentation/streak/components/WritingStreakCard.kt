@@ -19,8 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +47,8 @@ import me.blog.korn123.easydiary.extensions.innerCardDarkenFactor
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.storedTimeFormat
 import me.blog.korn123.easydiary.helper.ComposeConstants.ROUNDED_CORNER_SHAPE_SIZE
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryAlertDialog
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryDialogButton
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.streak.WritingStreakUiState
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
@@ -357,9 +357,7 @@ private fun StreakHeatmap(
     openedDay?.let { day ->
         StreakDayDiaryDialog(
             day = day,
-            primaryColor = primaryColor,
             textColor = textColor,
-            backgroundColor = Color(context.config.backgroundColor),
             onDismiss = { openedDay = null },
             onDiarySelected = { diaryId ->
                 openedDay = null
@@ -411,13 +409,15 @@ private fun StreakMonthLabels(
  * The dialog lists every entry of the day with its time and the title or the first line it was written with,
  * newest first, the order the diary list of the app uses. An entry is opened by tapping its line, and the
  * entry of a day that holds a single one never reaches this dialog: the card opens it at once.
+ *
+ * It is drawn with the app dialog ([EasyDiaryAlertDialog]) rather than a Material 3 `AlertDialog`, so it reads
+ * as every other dialog of the app: the title bar in the primary color carries the day it lists, and the
+ * entries and the cancel button take the text color of the theme.
  */
 @Composable
 private fun StreakDayDiaryDialog(
     day: StreakHeatmapDay,
-    primaryColor: Color,
     textColor: Color,
-    backgroundColor: Color,
     onDismiss: () -> Unit,
     onDiarySelected: (Long) -> Unit,
 ) {
@@ -426,50 +426,40 @@ private fun StreakDayDiaryDialog(
     val timeFormatMode = remember(context) { context.storedTimeFormat() }
     val dayLabel = remember(day.date, locale) { day.date.mediumDateLabel(locale) }
 
-    AlertDialog(
-        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-        containerColor = backgroundColor,
+    EasyDiaryAlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                SimpleText(text = stringResource(R.string.cancel), fontColor = primaryColor)
-            }
+        title = stringResource(R.string.writing_streak_day_diaries_title, dayLabel),
+        buttons = {
+            EasyDiaryDialogButton(text = stringResource(R.string.cancel), onClick = onDismiss)
         },
-        title = {
-            SimpleText(
-                text = stringResource(R.string.writing_streak_day_diaries_title, dayLabel),
-                fontWeight = FontWeight.Bold,
-                fontColor = textColor,
-            )
-        },
-        text = {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = DAY_LIST_MAX_HEIGHT)
-                        .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                day.diaries.forEach { diary ->
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp))
-                                .clickable { onDiarySelected(diary.diaryId) }
-                                .padding(horizontal = 8.dp, vertical = 10.dp),
-                    ) {
-                        SimpleText(
-                            text = diary.entryLabel(context, timeFormatMode, locale),
-                            fontColor = textColor,
-                            maxLines = 2,
-                        )
-                    }
+    ) {
+        // A day can hold many entries, so the list scrolls inside the dialog instead of growing off the screen.
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = DAY_LIST_MAX_HEIGHT)
+                    .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            day.diaries.forEach { diary ->
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp))
+                            .clickable { onDiarySelected(diary.diaryId) }
+                            .padding(horizontal = 8.dp, vertical = 10.dp),
+                ) {
+                    SimpleText(
+                        text = diary.entryLabel(context, timeFormatMode, locale),
+                        fontColor = textColor,
+                        maxLines = 2,
+                    )
                 }
             }
-        },
-    )
+        }
+    }
 }
 
 /** The line the dialog writes for an entry: its time, and the title or the first line it was written with. */
