@@ -43,7 +43,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
@@ -65,6 +64,8 @@ import me.blog.korn123.easydiary.helper.SELECTED_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper.Companion.finishActivityWithTransition
 import me.blog.korn123.easydiary.presentation.components.CustomElevatedSquareButton
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryAlertDialog
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryDialogButton
 import me.blog.korn123.easydiary.presentation.components.FastScroll
 import me.blog.korn123.easydiary.presentation.components.SimpleText
 import me.blog.korn123.easydiary.presentation.tree.FileNode
@@ -538,29 +539,19 @@ fun OptionDialog(
 ) {
     if (!showDialog) return
 
-    val config = LocalContext.current.config
-    AlertDialog(
-        shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE_SIZE.dp),
-        containerColor = Color(config.backgroundColor),
+    EasyDiaryAlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                SimpleText(text = "확인")
-            }
+        title = "트리뷰 옵션설정",
+        titleIconResId = R.drawable.ic_easydiary,
+        buttons = {
+            EasyDiaryDialogButton(text = "확인", onClick = onDismiss)
         },
-        icon = {
-            Icon(painterResource(R.drawable.ic_easydiary), contentDescription = null, tint = Color(config.textColor))
-        },
-        title = {
-            SimpleText(text = "트리뷰 옵션설정", fontWeight = FontWeight.Bold, fontSize = config.settingFontSize * 1.3f)
-        },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OptionSwitchRow("Node 전체경로 표시", visibleSubTitle, visibleSubTitleChaneCallback)
-                OptionSwitchRow("아이템 카드 스트레치", stretchCard, stretchCardChaneCallback)
-            }
-        },
-    )
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            OptionSwitchRow("Node 전체경로 표시", visibleSubTitle, visibleSubTitleChaneCallback)
+            OptionSwitchRow("아이템 카드 스트레치", stretchCard, stretchCardChaneCallback)
+        }
+    }
 }
 
 @Composable

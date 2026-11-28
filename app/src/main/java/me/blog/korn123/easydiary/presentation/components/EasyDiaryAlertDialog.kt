@@ -37,10 +37,11 @@ import me.blog.korn123.easydiary.extensions.config
  *
  * It is the Compose counterpart of `Context.updateAlertDialog`, and takes its look from the same places that
  * function paints: the window is the background color of the theme rounded by 3dp, the title bar above it the
- * primary color with the title in bold white 18dp (the size the XML title is set to, in dp and not in sp, so
- * the text size setting leaves it alone), the optional icon in white at the start of the title, the content on
- * the background color with the 15dp padding of `dialog_message.xml`, and the buttons at the bottom end of the
- * dialog in the text color.
+ * primary color with the title in bold white at 1.2 times the text size setting (`config.settingFontSize` is
+ * already a px value, so the title is `settingFontSize * 1.2` px: the setting scales the title as it scales the
+ * body, and the title stays a size above it; the bar is left out when the dialog carries no title), the
+ * optional icon in white at the start of the title, the content on the background color with the 15dp padding
+ * of `dialog_message.xml`, and the buttons at the bottom end of the dialog in the text color.
  *
  * ```
  * EasyDiaryAlertDialog(
@@ -60,7 +61,8 @@ import me.blog.korn123.easydiary.extensions.config
  *
  * @param onDismissRequest Invoked on a tap outside the dialog and on the back key, the places the XML dialog
  * reports through its cancel listener. A button is expected to call it as well once it is done.
- * @param title The text of the title bar, the app name by default as in `DialogMode.DEFAULT`.
+ * @param title The text of the title bar, the app name by default as in `DialogMode.DEFAULT`; null leaves the bar
+ * out for a dialog that only tells something, the way the screen had it before it moved to this dialog.
  * @param titleIconResId The drawable at the start of the title bar, shown white, or null for no icon.
  * @param dismissible Whether a tap outside the dialog or the back key closes it, the `cancelable` of
  * `Context.showAlertDialog`.
@@ -73,17 +75,16 @@ import me.blog.korn123.easydiary.extensions.config
 fun EasyDiaryAlertDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.app_name),
+    title: String? = stringResource(R.string.app_name),
     titleIconResId: Int? = null,
     dismissible: Boolean = true,
     buttons: (@Composable RowScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val context = LocalContext.current
-    val density = LocalDensity.current
     val backgroundColor = Color(context.config.backgroundColor)
     val primaryColor = Color(context.config.primaryColor)
-    val titleFontSize = with(density) { TITLE_FONT_SIZE_DP.dp.toPx() }
+    val titleFontSize = context.config.settingFontSize * TITLE_FONT_SIZE_SCALE
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -99,32 +100,34 @@ fun EasyDiaryAlertDialog(
             color = backgroundColor,
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(primaryColor)
-                            .padding(TITLE_BAR_PADDING_DP.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (titleIconResId != null) {
-                        Icon(
-                            painter = painterResource(id = titleIconResId),
-                            contentDescription = null,
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = TITLE_ICON_MARGIN_DP.dp)
-                                    .size(TITLE_ICON_SIZE_DP.dp),
-                            tint = Color.White,
+                if (title != null) {
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(primaryColor)
+                                .padding(TITLE_BAR_PADDING_DP.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (titleIconResId != null) {
+                            Icon(
+                                painter = painterResource(id = titleIconResId),
+                                contentDescription = null,
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = TITLE_ICON_MARGIN_DP.dp)
+                                        .size(TITLE_ICON_SIZE_DP.dp),
+                                tint = Color.White,
+                            )
+                        }
+                        SimpleText(
+                            modifier = Modifier.padding(start = TITLE_TEXT_MARGIN_DP.dp).weight(1F),
+                            text = title,
+                            fontSize = titleFontSize,
+                            fontWeight = FontWeight.Bold,
+                            fontColor = Color.White,
                         )
                     }
-                    SimpleText(
-                        modifier = Modifier.padding(start = TITLE_TEXT_MARGIN_DP.dp).weight(1F),
-                        text = title,
-                        fontSize = titleFontSize,
-                        fontWeight = FontWeight.Bold,
-                        fontColor = Color.White,
-                    )
                 }
 
                 Column(
@@ -189,11 +192,14 @@ private const val TITLE_BAR_PADDING_DP = 15F
 private const val TITLE_ICON_MARGIN_DP = 5F
 private const val TITLE_TEXT_MARGIN_DP = 5F
 
-/** The title icons are 24dp drawables, the height the title text takes at 18dp. */
+/** The title icons are drawn at 24dp, the height the XML title takes around the default text size. */
 private const val TITLE_ICON_SIZE_DP = 24F
 
-/** The XML title is set to 18dp, a dp size that the text size setting does not scale. */
-private const val TITLE_FONT_SIZE_DP = 18F
+/**
+ * The title is 1.2 times the text size setting: `config.settingFontSize` is a px value, so the title font size
+ * is `settingFontSize * 1.2` px and the setting scales it as it scales the body.
+ */
+private const val TITLE_FONT_SIZE_SCALE = 1.0F
 
 /** `dialog_message.xml` carries the message with the 15dp padding of the app cards. */
 private const val CONTENT_PADDING_DP = 15F

@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import me.blog.korn123.easydiary.R
@@ -33,6 +29,9 @@ import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryAlertDialog
+import me.blog.korn123.easydiary.presentation.components.EasyDiaryDialogButton
+import me.blog.korn123.easydiary.presentation.components.SimpleText
 
 data class MenuOptionItem(
     val iconRes: Int,
@@ -108,73 +107,51 @@ fun MainOptionDialog(
                 )
             }
 
-        AlertDialog(
+        EasyDiaryAlertDialog(
             onDismissRequest = onDismiss,
-            confirmButton = {
-                TextButton(
+            title = null,
+            buttons = {
+                EasyDiaryDialogButton(
+                    text = stringResource(id = R.string.cancel),
                     onClick = onDismiss,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.ok),
-                        style =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                color = Color(context.config.primaryColor),
-                            ),
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(
+                )
+                EasyDiaryDialogButton(
+                    text = stringResource(id = R.string.ok),
                     onClick = onDismiss,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.cancel),
-                        style =
-                            TextStyle(
-                                fontFamily = fontFamily,
-                                color = Color(context.config.primaryColor),
-                            ),
-                    )
-                }
+                )
             },
-            containerColor = Color(context.config.backgroundColor),
-            text = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    menuOptionItems.forEach { item ->
-                        val itemTitle = stringResource(id = item.titleRes)
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        context.makeToast(itemTitle)
-                                        item.onClick.invoke()
-                                        onDismiss()
-                                    }.padding(vertical = 12.dp, horizontal = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                painter = painterResource(id = item.iconRes),
-                                contentDescription = itemTitle,
-                                modifier = Modifier.size(24.dp),
-                                tint = Color(context.config.primaryColor),
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = itemTitle,
-                                style =
-                                    TextStyle(
-                                        fontFamily = fontFamily,
-                                        color = Color(context.config.textColor),
-                                    ),
-                            )
-                        }
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                menuOptionItems.forEach { item ->
+                    val itemTitle = stringResource(id = item.titleRes)
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    context.makeToast(itemTitle)
+                                    item.onClick.invoke()
+                                    onDismiss()
+                                }.padding(vertical = 12.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = item.iconRes),
+                            contentDescription = itemTitle,
+                            modifier = Modifier.size(24.dp),
+                            tint = Color(context.config.primaryColor),
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        SimpleText(
+                            text = itemTitle,
+                            fontFamily = fontFamily,
+                            fontColor = Color(context.config.textColor),
+                        )
                     }
                 }
-            },
-        )
+            }
+        }
     }
 }
