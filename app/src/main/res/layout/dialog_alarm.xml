@@ -121,6 +121,13 @@
                     android:layout_height="wrap_content"
                     />
                 <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_diary_full_backup_external"
+                    android:gravity="top"
+                    android:text="@string/schedule_backup_external_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radio_diary_backup_gms"
                     android:gravity="top"
                     android:text="@string/schedule_backup_gms_description"
@@ -135,6 +142,89 @@
                     android:layout_height="wrap_content"
                     />
             </RadioGroup>
+            <!--
+                Settings of the full backup into a folder the user picks. They are shown only while that schedule type is
+                selected, but they stay in the layout so switching the type back and forth keeps what was typed.
+            -->
+            <LinearLayout
+                android:id="@+id/linear_full_backup_external_options"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/schedule_backup_external_folder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingsTitle"
+                    />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/text_alarm_backup_folder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:ellipsize="middle"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/medium_margin"
+                    android:paddingBottom="@dimen/medium_margin"
+                    tools:text="backups"
+                    style="@style/SettingsSummary"
+                    />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/schedule_backup_external_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingsTitle"
+                    />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/schedule_backup_external_password_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingsSummary"
+                    />
+                <com.simplemobiletools.commons.views.MyEditText
+                    android:id="@+id/edit_alarm_backup_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/schedule_backup_external_password_hint"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:paddingTop="0dp"
+                    style="@style/SettingsSummary"
+                    >
+                </com.simplemobiletools.commons.views.MyEditText>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/schedule_backup_external_file_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingsTitle"
+                    />
+                <RadioGroup
+                    android:id="@+id/radio_group_backup_file_mode"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingsSummary"
+                    >
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_backup_file_overwrite"
+                        android:gravity="top"
+                        android:text="@string/schedule_backup_external_file_mode_overwrite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_backup_file_timestamped"
+                        android:gravity="top"
+                        android:text="@string/schedule_backup_external_file_mode_timestamped"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </RadioGroup>
+            </LinearLayout>
             <View
                 android:background="?attr/colorPrimary"
                 android:layout_marginVertical="15dp"

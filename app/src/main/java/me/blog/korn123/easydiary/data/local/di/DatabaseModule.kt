@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.data.local.MIGRATION_4_5
 import me.blog.korn123.easydiary.data.local.MIGRATION_5_6
 import me.blog.korn123.easydiary.data.local.MIGRATION_6_7
 import me.blog.korn123.easydiary.data.local.MIGRATION_7_8
+import me.blog.korn123.easydiary.data.local.MIGRATION_8_9
 import me.blog.korn123.easydiary.data.local.dao.ActionLogDao
 import me.blog.korn123.easydiary.data.local.dao.AlarmDao
 import me.blog.korn123.easydiary.data.local.dao.DDayDao
@@ -75,7 +76,7 @@ abstract class DatabaseModule {
                     context,
                     AppDatabase::class.java,
                     RoomConstants.DIARY_DB_NAME,
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                 .build()
 
         @Provides

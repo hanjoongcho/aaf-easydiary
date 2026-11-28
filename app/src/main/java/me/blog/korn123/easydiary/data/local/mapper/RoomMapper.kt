@@ -187,6 +187,10 @@ fun Alarm.toEntity(): AlarmEntity =
         label = this.label,
         workMode = this.workMode,
         retryCount = this.retryCount,
+        backupFolderUri = this.backupFolderUri,
+        backupFolderName = this.backupFolderName,
+        backupPassword = this.backupPassword,
+        backupFileNameMode = this.backupFileNameMode,
     )
 
 fun AlarmEntity.toDomain(): Alarm =
@@ -201,6 +205,10 @@ fun AlarmEntity.toDomain(): Alarm =
         label = this.label,
         workMode = this.workMode,
         retryCount = this.retryCount,
+        backupFolderUri = this.backupFolderUri,
+        backupFolderName = this.backupFolderName,
+        backupPassword = this.backupPassword,
+        backupFileNameMode = this.backupFileNameMode,
     )
 
 fun ActionLog.toEntity(): ActionLogEntity =

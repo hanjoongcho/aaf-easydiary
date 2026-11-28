@@ -97,6 +97,7 @@ class AlarmAdapter(
                                 when (alarm.workMode) {
                                     AlarmConstants.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
                                     AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                                    AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL -> "${prefix}diary-backup-external"
                                     AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
                                     AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
                                     else -> "${prefix}unclassified"

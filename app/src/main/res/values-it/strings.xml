@@ -973,7 +973,8 @@
     <string name="schedule_description">Descrizione attività pianificata</string>
     <string name="schedule_description_hint">Descrizione promemoria</string>
     <string name="schedule_diary_writing_description">Scrivi nel diario\nPianifica il momento in cui scrivere nel diario.\nQuando l\'attività pianificata viene salvata si genera un messaggio di notifica per data e orario selezionati.</string>
-    <string name="schedule_backup_local_description">Backup del diario (memoria del dispositivo)\nPianificando questa attività verrà eseguito il backup dei file di database nella memoria interna del dispositivo, escluse le foto allegate, nella data e orario selezionati e verrà inviato un messaggio di notifica al termine dell\'operazione.</string>
+    <string name="schedule_backup_local_description">Backup del diario (Archivio interno dell\'app, solo database — senza foto)
+Salva il file del database, senza le foto allegate, nell\'archivio interno dell\'app secondo il giorno e l\'ora programmati e mostra il risultato come notifica. Solo Easy Diary può leggerlo, non uno strumento di sincronizzazione delle cartelle.</string>
     <string name="schedule_empty_message">Nessuna attività pianificata.\nTocca il pulsante \+ in alto a destra per aggiungere una nuova attività.</string>
     <string name="schedule_new">Nuovo programma</string>
     <string name="permission_confirmation_dialog_title">Richiedi autorizzazione</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">Il dispositivo è entrato in modalità ibernazione e il backup sulla rete non è riuscito. Il backup può essere ripreso premendo sulla finestra di notifica.</string>
     <string name="schedule_pending_guide_message">Avviamento attività pianificata.</string>
     <string name="schedule_diary_writing_complete">Premi sulla finestra di notifica per passare al diario.</string>
-    <string name="schedule_backup_local_complete">Backup del diario sul dispositivo locale completato.</string>
+    <string name="schedule_backup_local_complete">Backup del diario completato nell\'archivio interno dell\'app (solo database, senza foto).</string>
     <string name="schedule_backup_gms_complete">Il file di backup del diario e la foto allegata sono stati salvati in Google Drive.%s</string>
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">Decompressione in corso</string>
     <string name="recovery_full_complete_title">Importazione completata</string>
     <string name="recovery_full_complete_message">Ora puoi selezionare un punto di ripristino con la funzione «Ripristina diario».</string>
+    <string name="schedule_backup_external_description">Backup completo (Cartella esterna)\nSalva database, foto allegate e l\'intera directory di lavoro in un unico file zip nella cartella scelta, secondo il giorno e l\'ora programmati. L\'archivio ha lo stesso formato di [BETA] Backup full data, quindi [BETA] Recover full data lo ripristina, e uno strumento di sincronizzazione delle cartelle può prelevarlo.</string>
+    <string name="schedule_backup_external_complete">Backup completo eseguito nella cartella scelta.</string>
+    <string name="schedule_backup_external_folder">Cartella di backup</string>
+    <string name="schedule_backup_external_folder_none">Nessuna cartella selezionata. Tocca per sceglierne una.</string>
+    <string name="schedule_backup_external_password">Password del backup (facoltativa)</string>
+    <string name="schedule_backup_external_password_description">La password crittografa l\'archivio. Se la lasci vuota viene creato un file zip non crittografato. Una password dimenticata non può essere recuperata.</string>
+    <string name="schedule_backup_external_password_hint">Password</string>
+    <string name="schedule_backup_external_file_mode">Gestione del file</string>
+    <string name="schedule_backup_external_file_mode_overwrite">Sovrascrivi un nome file fisso (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">Crea un nuovo file a ogni esecuzione (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">Seleziona la cartella in cui viene scritto il backup.</string>
+    <string name="schedule_backup_external_folder_not_allowed">Questa cartella non può essere usata per un backup programmato. Scegli un\'altra cartella.</string>
+    <string name="schedule_backup_external_invalid_title">La cartella di backup deve essere scelta di nuovo</string>
+    <string name="schedule_backup_external_invalid_message">Il backup completo programmato non ha potuto scrivere nella sua cartella perché l\'accesso è stato perso o la cartella non esiste più. Apri le impostazioni della programmazione, modifica la programmazione e scegli di nuovo la cartella.</string>
 </resources>

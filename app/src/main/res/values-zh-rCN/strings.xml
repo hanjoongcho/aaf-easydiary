@@ -973,7 +973,8 @@
     <string name="schedule_description">附表说明</string>
     <string name="schedule_description_hint">提醒描述</string>
     <string name="schedule_diary_writing_description">日记写作\n设定日记写作日程表。\n当日程表被设定时，会根据设定的日期和时间提供通知消息。</string>
-    <string name="schedule_backup_local_description">日记备份(设备储存)\n根据时间表设定的日期和时间，备份数据库文件，但不包括从本地储存附加的照片，并以通知信息形式提供操作结果。</string>
+    <string name="schedule_backup_local_description">日记备份 (应用内部存储，仅数据库 — 不含照片)
+注册计划后，将在设定的日期和时间把不含附件的数据库文件备份到应用内部存储，并以通知消息提供结果。除 Easy Diary 以外的应用和文件夹同步工具无法读取。</string>
     <string name="schedule_empty_message">没有设定日程信息。\n单击右上角的加号按钮添加新的日程。</string>
     <string name="schedule_new">新日程</string>
     <string name="permission_confirmation_dialog_title">申请授权</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">应用进入后台，使用网络的备份操作失败。如果您触摸通知窗口，备份操作将恢复。</string>
     <string name="schedule_pending_guide_message">等候时间开始</string>
     <string name="schedule_diary_writing_complete">点击通知窗口进入日记。</string>
-    <string name="schedule_backup_local_complete">日记备份在本地设备上完成。</string>
+    <string name="schedule_backup_local_complete">日记备份已在应用内部存储完成 (仅数据库，不含照片)。</string>
     <string name="schedule_backup_gms_complete">日记备份文件和附件照片被保存在Google Drive。%s</string>
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">正在解压</string>
     <string name="recovery_full_complete_title">导入完成</string>
     <string name="recovery_full_complete_message">现在可以在「恢复日记」功能中选择恢复点。</string>
+    <string name="schedule_backup_external_description">完整备份 (外部文件夹)\n注册计划后，将在设定的日期和时间把数据库、附件照片和整个工作目录打包为一个 zip 文件备份到所选文件夹。该压缩包与 [BETA] Backup full data 格式相同，因此可用 [BETA] Recover full data 直接还原，文件夹同步工具也可以取走。</string>
+    <string name="schedule_backup_external_complete">已在所选文件夹完成完整备份。</string>
+    <string name="schedule_backup_external_folder">备份文件夹</string>
+    <string name="schedule_backup_external_folder_none">尚未选择文件夹。点击即可选择。</string>
+    <string name="schedule_backup_external_password">备份密码 (可选)</string>
+    <string name="schedule_backup_external_password_description">密码用于加密压缩包。留空则生成不加密的 zip 文件。忘记的密码无法找回。</string>
+    <string name="schedule_backup_external_password_hint">密码</string>
+    <string name="schedule_backup_external_file_mode">文件处理方式</string>
+    <string name="schedule_backup_external_file_mode_overwrite">用固定文件名覆盖 (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">每次运行创建新文件 (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">请选择保存备份文件的文件夹。</string>
+    <string name="schedule_backup_external_folder_not_allowed">此文件夹不能用于计划备份。请选择其他文件夹。</string>
+    <string name="schedule_backup_external_invalid_title">请重新选择备份文件夹</string>
+    <string name="schedule_backup_external_invalid_message">计划完整备份因失去文件夹访问权限或文件夹已被删除而无法写入文件。请打开计划设置，编辑该计划并重新选择文件夹。</string>
 </resources>

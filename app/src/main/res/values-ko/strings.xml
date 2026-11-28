@@ -973,7 +973,8 @@
     <string name="schedule_description">스케줄 설명</string>
     <string name="schedule_description_hint">알림 메시지에 사용된 레이블 정보를 입력하세요.</string>
     <string name="schedule_diary_writing_description">다이어리 쓰기\n다이어리 작성 일정을 등록합니다.\n스케줄이 등록되면 설정된 날짜와 시간에 맞춰 알림 메시지가 제공됩니다.</string>
-    <string name="schedule_backup_local_description">다이어리 백업 (디바이스 저장소)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
+    <string name="schedule_backup_local_description">다이어리 백업 (앱 내부 저장소, 데이터베이스만 — 사진 제외)
+스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진을 제외한 데이터베이스 파일을 앱 내부 저장소에 백업하고 작업 결과를 알림 메시지로 제공합니다. Easy Diary 이외의 앱이나 폴더 동기화 도구에서는 확인할 수 없습니다.</string>
     <string name="schedule_empty_message">설정된 스케줄 정보가 없습니다.\n우측 상단 플러스 버튼을 클릭해서 새로운 스케줄을 추가하세요.</string>
     <string name="schedule_new">새로운 스케줄</string>
     <string name="permission_confirmation_dialog_title">권한승인 요청</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">디바이스가 잠자기 모드로 전환되어 네트워크를 이용한 스케줄 작업이 중단되었습니다. 알림창을 터치 하시면 예약된 스케줄 작업이 시작됩니다.</string>
     <string name="schedule_pending_guide_message">대기중인 스케줄 작업이 시작되었습니다.</string>
     <string name="schedule_diary_writing_complete">알림창을 터치 하시면 일기쓰기 화면으로 이동합니다.</string>
-    <string name="schedule_backup_local_complete">다이어리 백업 파일이 디바이스 로컬 저장소에 저장되었습니다.</string>
+    <string name="schedule_backup_local_complete">다이어리 백업이 앱 내부 저장소에 완료되었습니다. (데이터베이스만, 사진 제외)</string>
     <string name="schedule_backup_gms_complete">다이어리 백업 파일 및 첨부사진이 구글드라이브에 저장되었습니다.%s</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">압축 해제 중</string>
     <string name="recovery_full_complete_title">가져오기 완료</string>
     <string name="recovery_full_complete_message">이제 다이어리 복구하기 기능에서 복원 지점을 선택할 수 있습니다.</string>
+    <string name="schedule_backup_external_description">전체 백업 (외부 폴더)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 데이터베이스와 첨부사진, 작업 디렉터리 전체를 하나의 zip 파일로 선택한 폴더에 백업합니다. [BETA] 전체 데이터 백업과 같은 형식이라 [BETA] 전체 데이터 복구로 그대로 복원할 수 있고, 폴더 동기화 도구로도 가져갈 수 있습니다.</string>
+    <string name="schedule_backup_external_complete">선택한 폴더에 전체 백업을 완료했습니다.</string>
+    <string name="schedule_backup_external_folder">백업 폴더</string>
+    <string name="schedule_backup_external_folder_none">선택한 폴더가 없습니다. 눌러서 선택하세요.</string>
+    <string name="schedule_backup_external_password">백업 비밀번호 (선택)</string>
+    <string name="schedule_backup_external_password_description">비밀번호는 압축 파일을 암호화합니다. 비워 두면 암호화하지 않은 zip 파일을 만듭니다. 잊어버린 비밀번호는 되찾을 수 없습니다.</string>
+    <string name="schedule_backup_external_password_hint">비밀번호</string>
+    <string name="schedule_backup_external_file_mode">파일 처리 방식</string>
+    <string name="schedule_backup_external_file_mode_overwrite">고정 파일명으로 덮어쓰기 (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">실행할 때마다 새 파일 만들기 (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">백업 파일을 저장할 폴더를 선택해 주세요.</string>
+    <string name="schedule_backup_external_folder_not_allowed">이 폴더는 스케줄 백업에 사용할 수 없습니다. 다른 폴더를 선택해 주세요.</string>
+    <string name="schedule_backup_external_invalid_title">백업 폴더를 다시 선택해 주세요</string>
+    <string name="schedule_backup_external_invalid_message">스케줄 전체 백업이 폴더 접근 권한을 잃었거나 폴더가 삭제되어 파일을 쓰지 못했습니다. 스케줄 설정을 열어 해당 스케줄을 편집하고 폴더를 다시 선택해 주세요.</string>
 </resources>

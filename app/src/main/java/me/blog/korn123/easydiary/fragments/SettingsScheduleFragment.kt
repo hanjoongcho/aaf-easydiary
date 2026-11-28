@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
@@ -70,6 +71,7 @@ import me.blog.korn123.easydiary.presentation.alarm.AlarmViewModel
 import me.blog.korn123.easydiary.presentation.settings.components.AlarmCard
 import me.blog.korn123.easydiary.presentation.settings.components.SettingsBottomSpacer
 import me.blog.korn123.easydiary.presentation.theme.AppTheme
+import me.blog.korn123.easydiary.utils.ExternalBackupFolder
 import me.blog.korn123.easydiary.utils.FontUtils
 import kotlin.math.pow
 import me.blog.korn123.easydiary.domain.model.Alarm as AlarmDomain
@@ -84,6 +86,25 @@ class SettingsScheduleFragment : Fragment() {
     private val alarmViewModel: AlarmViewModel by viewModels()
     private val currentActivity: Activity
         get() = requireActivity()
+
+    /**
+     * Receives the folder picked for the schedule that is open in the alarm dialog. The grant of that folder is
+     * persisted in [backupFolderPickerLauncher] before this runs, so the dialog only has to show the choice.
+     */
+    private var backupFolderSelectedCallback: ((folderUri: String, folderName: String?) -> Unit)? = null
+
+    private val backupFolderPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val callback = backupFolderSelectedCallback ?: return@registerForActivityResult
+            val folderUri = result.data?.data
+            if (result.resultCode != Activity.RESULT_OK || folderUri == null) return@registerForActivityResult
+            if (!ExternalBackupFolder.takePersistablePermission(currentActivity, folderUri)) {
+                // Without a persistable grant the folder cannot be written by a run that has no UI.
+                currentActivity.toast(getString(R.string.schedule_backup_external_folder_not_allowed))
+                return@registerForActivityResult
+            }
+            callback(folderUri.toString(), ExternalBackupFolder.displayName(currentActivity, folderUri.toString()))
+        }
 
     /***************************************************************************************************
      *   override functions
@@ -138,6 +159,7 @@ class SettingsScheduleFragment : Fragment() {
                                 when (alarm.workMode) {
                                     AlarmConstants.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
                                     AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                                    AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL -> "${prefix}diary-backup-external"
                                     AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
                                     AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> "${prefix}calendar-schedule-sync"
                                     else -> "${prefix}unclassified"
@@ -218,7 +240,13 @@ class SettingsScheduleFragment : Fragment() {
                     AlertDialog.Builder(this).apply {
                         setCancelable(false)
                         setPositiveButton(getString(android.R.string.ok), null)
-                        setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
+                        setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
+                            // A folder picked in this dialog but never saved is not written by any schedule.
+                            targetAlarm.backupFolderUri
+                                ?.takeIf { it != storedAlarm?.backupFolderUri }
+                                ?.let { ExternalBackupFolder.releasePersistablePermission(currentActivity, it) }
+                            alertDialog?.dismiss()
+                        }
                     }
                 dialogAlarmBinding.run {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toMutableList()
@@ -283,6 +311,8 @@ class SettingsScheduleFragment : Fragment() {
                                         lifecycleScope.launch {
                                             cancelAlarmClock(targetAlarm)
                                             alertDialog?.dismiss()
+                                            // The folder of a deleted schedule is never written again.
+                                            ExternalBackupFolder.releasePersistablePermission(currentActivity, storedAlarm.backupFolderUri)
                                             alarmRepository.deleteAlarmById(storedAlarm.alarmId)
                                             onAlarmChanged?.invoke()
                                             refreshAlarmsCallback?.invoke()
@@ -297,16 +327,67 @@ class SettingsScheduleFragment : Fragment() {
                     when (targetAlarm.workMode) {
                         AlarmConstants.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
                         AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
+                        AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL -> radioDiaryFullBackupExternal.isChecked = true
                         AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
                         AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> radioCalendarScheduleSync.isChecked = true
                     }
+
+                    /** Shows the folder the schedule writes into, or that none has been picked yet. */
+                    fun showBackupFolder() {
+                        // A schedule restored from a backup carries the uri only, so the name is read back from it here.
+                        val folderName =
+                            targetAlarm.backupFolderName?.takeIf { it.isNotBlank() }
+                                ?: ExternalBackupFolder.displayName(currentActivity, targetAlarm.backupFolderUri)
+                        targetAlarm.backupFolderName = folderName
+                        textAlarmBackupFolder.text =
+                            folderName ?: getString(R.string.schedule_backup_external_folder_none)
+                    }
+
+                    /** The full backup settings only mean something to the schedule type that runs a full backup. */
+                    fun updateFullBackupOptionsVisibility() {
+                        linearFullBackupExternalOptions.visibility =
+                            if (targetAlarm.workMode == AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL) View.VISIBLE else View.GONE
+                    }
+
+                    when (targetAlarm.backupFileNameMode) {
+                        AlarmConstants.BACKUP_FILE_MODE_TIMESTAMPED -> radioBackupFileTimestamped.isChecked = true
+                        else -> radioBackupFileOverwrite.isChecked = true
+                    }
+                    radioGroupBackupFileMode.setOnCheckedChangeListener { _, checkedId ->
+                        targetAlarm.backupFileNameMode =
+                            when (checkedId) {
+                                R.id.radio_backup_file_timestamped -> AlarmConstants.BACKUP_FILE_MODE_TIMESTAMPED
+                                else -> AlarmConstants.BACKUP_FILE_MODE_OVERWRITE
+                            }
+                    }
+                    editAlarmBackupPassword.setText(targetAlarm.backupPassword.orEmpty())
+                    showBackupFolder()
+                    textAlarmBackupFolder.setOnClickListener {
+                        backupFolderSelectedCallback = { folderUri, folderName ->
+                            targetAlarm.backupFolderUri = folderUri
+                            targetAlarm.backupFolderName = folderName
+                            showBackupFolder()
+                        }
+                        backupFolderPickerLauncher.launch(
+                            Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                                addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+                            },
+                        )
+                    }
+                    updateFullBackupOptionsVisibility()
+
                     radioGroupWorkMode.setOnCheckedChangeListener { _, i ->
                         when (i) {
                             R.id.radio_diary_writing -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_WRITING
                             R.id.radio_diary_backup_local -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL
+                            R.id.radio_diary_full_backup_external -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL
                             R.id.radio_diary_backup_gms -> targetAlarm.workMode = AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS
                             R.id.radio_calendar_schedule_sync -> targetAlarm.workMode = AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC
                         }
+                        updateFullBackupOptionsVisibility()
                     }
 
                     root.setBackgroundColor(config.backgroundColor)
@@ -336,6 +417,12 @@ class SettingsScheduleFragment : Fragment() {
                                         }
                                     }
 
+                                    // A full backup needs a folder to write into, and only the user can pick it.
+                                    targetAlarm.workMode == AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL &&
+                                        targetAlarm.backupFolderUri.isNullOrBlank() -> {
+                                        toast(getString(R.string.schedule_backup_external_folder_required))
+                                    }
+
                                     else -> {
                                         // update alarm schedule
                                         if (targetAlarm.isEnabled) {
@@ -347,6 +434,11 @@ class SettingsScheduleFragment : Fragment() {
                                         // save alarm
                                         lifecycleScope.launch {
                                             targetAlarm.label = dialogAlarmBinding.editAlarmDescription.text.toString()
+                                            applyFullBackupOptions(targetAlarm, dialogAlarmBinding.editAlarmBackupPassword.text?.toString())
+                                            // The folder of the previous choice is of no use to this schedule anymore.
+                                            storedAlarm?.backupFolderUri
+                                                ?.takeIf { it != targetAlarm.backupFolderUri }
+                                                ?.let { ExternalBackupFolder.releasePersistablePermission(currentActivity, it) }
                                             alarmRepository.updateAlarm(targetAlarm)
                                             alertDialog?.dismiss()
                                             onAlarmChanged?.invoke()
@@ -358,6 +450,25 @@ class SettingsScheduleFragment : Fragment() {
                         }
                     }
             }
+        }
+    }
+
+    /**
+     * Keeps the settings of a full backup on the schedule that runs one, and clears them on every other type: a
+     * schedule switched to Google Drive or to the app-internal backup must not carry a folder and a password its runs
+     * never read.
+     */
+    private fun applyFullBackupOptions(
+        alarm: AlarmDomain,
+        passwordInput: String?,
+    ) {
+        if (alarm.workMode == AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL) {
+            // An empty field writes a plain zip, the same way the manual full backup treats an empty password.
+            alarm.backupPassword = passwordInput?.takeIf { it.isNotEmpty() }
+        } else {
+            alarm.backupFolderUri = null
+            alarm.backupFolderName = null
+            alarm.backupPassword = null
         }
     }
 

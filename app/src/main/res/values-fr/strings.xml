@@ -973,7 +973,8 @@
     <string name="schedule_description">Description de la planification</string>
     <string name="schedule_description_hint">Description de l\'alarme</string>
     <string name="schedule_diary_writing_description">Sauvegarde du journal\nEnregistrer la planification de la sauvegarde du journal.\nQuand la planification est paramétrée, un message de notification est envoyé en fonction du jour et de l\'heure fixés.</string>
-    <string name="schedule_backup_local_description">Sauvegarde du journal (Stockage de l\'appareil)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, sur le stockage local de l\'appareil en fonction du jour et de l\'heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
+    <string name="schedule_backup_local_description">Sauvegarde du journal (Stockage interne de l\'application, base de données uniquement — sans photos)
+Enregistre le fichier de base de données, sans les photos jointes, dans le stockage interne de l\'application au jour et à l\'heure programmés, et présente le résultat sous forme de notification. Seule Easy Diary peut le lire, pas un outil de synchronisation de dossiers.</string>
     <string name="schedule_empty_message">Aucune planification n\'est paramétrée.\nCliquer sur le bouton "plus" en haut à droite pour ajouter une nouvelle planification.</string>
     <string name="schedule_new">Nouvelle planification</string>
     <string name="permission_confirmation_dialog_title">Demande d\'autorisation</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
     <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
     <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
-    <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
+    <string name="schedule_backup_local_complete">Sauvegarde du journal terminée dans le stockage interne de l\'application (base de données uniquement, sans photos).</string>
     <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">Décompression en cours</string>
     <string name="recovery_full_complete_title">Importation terminée</string>
     <string name="recovery_full_complete_message">Vous pouvez maintenant sélectionner un point de restauration avec la fonction « Restaurer le journal ».</string>
+    <string name="schedule_backup_external_description">Sauvegarde complète (Dossier externe)\nEnregistre la base de données, les photos jointes et tout le répertoire de travail dans un seul fichier zip, dans le dossier que vous choisissez, au jour et à l\'heure programmés. L\'archive a le même format que [BETA] Backup full data : [BETA] Recover full data la restaure, et un outil de synchronisation de dossiers peut la récupérer.</string>
+    <string name="schedule_backup_external_complete">Sauvegarde complète terminée dans le dossier choisi.</string>
+    <string name="schedule_backup_external_folder">Dossier de sauvegarde</string>
+    <string name="schedule_backup_external_folder_none">Aucun dossier sélectionné. Touchez pour en choisir un.</string>
+    <string name="schedule_backup_external_password">Mot de passe de la sauvegarde (facultatif)</string>
+    <string name="schedule_backup_external_password_description">Le mot de passe chiffre l\'archive. Laissez le champ vide pour créer un zip non chiffré. Un mot de passe oublié ne peut pas être récupéré.</string>
+    <string name="schedule_backup_external_password_hint">Mot de passe</string>
+    <string name="schedule_backup_external_file_mode">Gestion du fichier</string>
+    <string name="schedule_backup_external_file_mode_overwrite">Écraser un nom de fichier fixe (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">Créer un nouveau fichier à chaque exécution (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">Veuillez choisir le dossier dans lequel la sauvegarde est écrite.</string>
+    <string name="schedule_backup_external_folder_not_allowed">Ce dossier ne peut pas servir à une sauvegarde programmée. Choisissez un autre dossier.</string>
+    <string name="schedule_backup_external_invalid_title">Le dossier de sauvegarde doit être choisi à nouveau</string>
+    <string name="schedule_backup_external_invalid_message">La sauvegarde complète programmée n\'a pas pu écrire dans son dossier, car l\'accès a été perdu ou le dossier n\'existe plus. Ouvrez les réglages de programmation, modifiez la programmation et choisissez à nouveau le dossier.</string>
 </resources>

@@ -143,6 +143,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
+import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.databinding.PartialDialogTitleBinding
 import me.blog.korn123.easydiary.di.ApplicationScope
@@ -436,6 +437,66 @@ fun Context.openSnoozeNotification(alarm: AlarmDomain) {
     notificationManager.notify(alarm.alarmId, builder.build())
 }
 
+/**
+ * Reports a scheduled full backup that could not write its archive because the destination folder is unusable: the
+ * persisted grant was revoked (cleared by the system, or the app was reinstalled) or the folder was deleted.
+ *
+ * It is posted on [notificationId], the id of the schedule's own result notification, so the run leaves one message
+ * about itself rather than a "completed" and a failure side by side, and it opens the schedule page of the settings
+ * where the folder is picked again.
+ */
+@SuppressLint("NewApi", "LaunchActivityFromNotification")
+fun Context.openBackupDestinationUnavailableNotification(
+    notificationId: Int,
+    scheduleLabel: String?,
+) {
+    val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+    if (isOreoPlus()) {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel =
+            NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
+        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    val message = getString(R.string.schedule_backup_external_invalid_message)
+    val label = scheduleLabel?.takeIf { it.isNotBlank() }
+    val title =
+        when {
+            config.enableDebugOptionVisibleAlarmSequence && label != null -> "[$notificationId] $label"
+            config.enableDebugOptionVisibleAlarmSequence -> "[$notificationId] ${getString(R.string.schedule_backup_external_invalid_title)}"
+            label != null -> label
+            else -> getString(R.string.schedule_backup_external_invalid_title)
+        }
+    val builder =
+        NotificationCompat
+            .Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_easydiary)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setStyle(
+                NotificationCompat
+                    .BigTextStyle()
+                    .bigText(message)
+                    .setSummaryText(getString(R.string.schedule_backup_external_invalid_title)),
+            ).setContentIntent(
+                PendingIntent.getActivity(
+                    this,
+                    notificationId,
+                    Intent(this, SettingsActivity::class.java).apply {
+                        putExtra(SettingConstants.OPEN_SCHEDULE_SETTINGS, true)
+                    },
+                    pendingIntentFlag(),
+                ),
+            )
+    notificationManager.notify(notificationId, builder.build())
+}
+
 fun Context.getOpenAlarmTabIntent(alarm: AlarmDomain): PendingIntent {
     val intent: Intent? =
         when (alarm.workMode) {
@@ -447,6 +508,14 @@ fun Context.getOpenAlarmTabIntent(alarm: AlarmDomain): PendingIntent {
 
             AlarmConstants.WORK_MODE_DIARY_BACKUP_LOCAL, AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS, AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {
                 Intent(this, DiaryMainActivity::class.java)
+            }
+
+            AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL -> {
+                // The result of this schedule is a file in a folder the user picked, and the reason a run cannot write
+                // it is that folder. The schedule page lists the schedule that has to be edited, so it opens there.
+                Intent(this, SettingsActivity::class.java).apply {
+                    putExtra(SettingConstants.OPEN_SCHEDULE_SETTINGS, true)
+                }
             }
 
             else -> {
@@ -555,6 +624,11 @@ fun Context.getAlarmNotification(
         AlarmConstants.WORK_MODE_DIARY_BACKUP_GMS -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
             description = getString(R.string.schedule_backup_gms_complete)
+        }
+
+        AlarmConstants.WORK_MODE_DIARY_FULL_BACKUP_EXTERNAL -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+            description = getString(R.string.schedule_backup_external_complete)
         }
 
         AlarmConstants.WORK_MODE_CALENDAR_SCHEDULE_SYNC -> {

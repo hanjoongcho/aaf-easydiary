@@ -973,7 +973,8 @@
     <string name="schedule_description">Schedule description</string>
     <string name="schedule_description_hint">提醒描述</string>
     <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached photos to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_backup_local_description">日記備份 (應用程式內部儲存空間，僅資料庫 — 不含照片)
+註冊排程後，會依設定的日期與時間將不含附加照片的資料庫檔案備份到應用程式內部儲存空間，並以通知訊息提供結果。Easy Diary 以外的應用程式與資料夾同步工具無法讀取。</string>
     <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
     <string name="schedule_new">New schedule</string>
     <string name="permission_confirmation_dialog_title">請求權限</string>
@@ -986,7 +987,7 @@
     <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
     <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
     <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
-    <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
+    <string name="schedule_backup_local_complete">日記備份已在應用程式內部儲存空間完成 (僅資料庫，不含照片)。</string>
     <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
     <string name="ok">OK</string>
     <string name="cancel">取消</string>
@@ -1246,4 +1247,18 @@
     <string name="recovery_full_notification_decompressing">正在解壓縮</string>
     <string name="recovery_full_complete_title">匯入完成</string>
     <string name="recovery_full_complete_message">現在可以在「還原日記」功能中選擇還原點。</string>
+    <string name="schedule_backup_external_description">完整備份 (外部資料夾)\n註冊排程後，會依設定的日期與時間將資料庫、附加照片與整個工作目錄打包成一個 zip 檔案備份到所選資料夾。此壓縮檔與 [BETA] Backup full data 格式相同，因此可用 [BETA] Recover full data 直接還原，資料夾同步工具也能取得。</string>
+    <string name="schedule_backup_external_complete">已在所選資料夾完成完整備份。</string>
+    <string name="schedule_backup_external_folder">備份資料夾</string>
+    <string name="schedule_backup_external_folder_none">尚未選擇資料夾。點一下即可選擇。</string>
+    <string name="schedule_backup_external_password">備份密碼 (選填)</string>
+    <string name="schedule_backup_external_password_description">密碼會加密壓縮檔。留空則建立未加密的 zip 檔案。忘記的密碼無法找回。</string>
+    <string name="schedule_backup_external_password_hint">密碼</string>
+    <string name="schedule_backup_external_file_mode">檔案處理方式</string>
+    <string name="schedule_backup_external_file_mode_overwrite">以固定檔名覆寫 (easy_diary_backup.zip)</string>
+    <string name="schedule_backup_external_file_mode_timestamped">每次執行建立新檔案 (easy_diary_backup_yyyyMMdd_HHmmss.zip)</string>
+    <string name="schedule_backup_external_folder_required">請選擇儲存備份檔案的資料夾。</string>
+    <string name="schedule_backup_external_folder_not_allowed">此資料夾不能用於排程備份。請選擇其他資料夾。</string>
+    <string name="schedule_backup_external_invalid_title">請重新選擇備份資料夾</string>
+    <string name="schedule_backup_external_invalid_message">排程完整備份因失去資料夾存取權或資料夾已刪除而無法寫入檔案。請開啟排程設定，編輯該排程並重新選擇資料夾。</string>
 </resources>

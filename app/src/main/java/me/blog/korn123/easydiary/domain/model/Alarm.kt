@@ -13,4 +13,8 @@ data class Alarm(
     var label: String? = null,
     var workMode: Int = AlarmConstants.WORK_MODE_DIARY_WRITING,
     var retryCount: Int = 0,
+    var backupFolderUri: String? = null,
+    var backupFolderName: String? = null,
+    var backupPassword: String? = null,
+    var backupFileNameMode: Int = AlarmConstants.BACKUP_FILE_MODE_OVERWRITE,
 )
