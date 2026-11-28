@@ -168,7 +168,8 @@ fun SymbolFilterPickerScreen(
     uiState.alertDialogMessage?.let { message ->
         EasyDiaryAlertDialog(
             onDismissRequest = onDismissAlertDialog,
-            title = null,
+            title = "WARNING",
+            titleIconResId = R.drawable.ic_warning,
             buttons = {
                 EasyDiaryDialogButton(
                     text = stringResource(id = android.R.string.ok),
