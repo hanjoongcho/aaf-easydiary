@@ -90,7 +90,13 @@ fun TagFilterBar(
     LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
-        contentPadding = PaddingValues(horizontal = 20.dp),
+        contentPadding =
+            PaddingValues(
+                start = 20.dp,
+                top = TAG_FILTER_BAR_VERTICAL_PADDING,
+                end = 20.dp,
+                bottom = TAG_FILTER_BAR_VERTICAL_PADDING,
+            ),
     ) {
         item(key = FILTER_ALL_KEY) {
             TagChip(
@@ -114,6 +120,13 @@ private const val FILTER_ALL_KEY = "tag_filter_all"
 
 /** The soft shadow of a card under every chip, so the chip row reads as the cards the app already draws. */
 private val TAG_CHIP_ELEVATION = 2.dp
+
+/**
+ * The blank band above and below the chip row. It keeps the 2dp shadow of the chips from being cut off at the
+ * edge of the row and gives the row the same breathing space on both sides. The padding inside a chip
+ * ([TagChip]) is unaffected.
+ */
+private val TAG_FILTER_BAR_VERTICAL_PADDING = 6.dp
 
 @Preview(showBackground = true)
 @Composable
