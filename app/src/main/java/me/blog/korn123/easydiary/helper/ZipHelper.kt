@@ -287,19 +287,49 @@ class ZipHelper(
             compressionMethod = CompressionMethod.DEFLATE
         }
 
-    private fun countFileEntry(uri: Uri?): Int {
-        val uriStream = context.contentResolver.openInputStream(uri!!)
+    /**
+     * Counts the entries of the archive behind [uri], which is the total the recovery notification shows as "n/total".
+     *
+     * A password switches to the encrypted reader for the same reason [decompress] does: the standard [ZipInputStream]
+     * cannot get past the encrypted entry header of an AES archive - it refuses the entry - so an encrypted backup used
+     * to answer 0 here and the progress read "1/0".
+     *
+     * zip4j's ZipInputStream has no way to step over an entry without reading it: [Zip4jInputStream.getNextEntry]
+     * first drains the entry that is open (reading it to its end, which is also where its AES MAC or CRC is verified)
+     * and only then reads the next local file header. Counting an encrypted archive therefore reads it once in full,
+     * exactly as counting a plain archive already did, and [decompress] reads it a second time to extract it.
+     */
+    private fun countFileEntry(
+        uri: Uri?,
+        password: String? = null,
+    ): Int {
+        if (uri == null) return 0
+        val uriStream = context.contentResolver.openInputStream(uri) ?: return 0
         var count = 0
         try {
-            val zipInputStream = ZipInputStream(uriStream)
-            while (zipInputStream.nextEntry != null && isOnProgress) {
-                zipInputStream.closeEntry()
-                count++
+            if (password.isNullOrEmpty()) {
+                val zipInputStream = ZipInputStream(uriStream)
+                while (zipInputStream.nextEntry != null && isOnProgress) {
+                    zipInputStream.closeEntry()
+                    count++
+                }
+                zipInputStream.close()
+            } else {
+                val zipInputStream = Zip4jInputStream(uriStream, password.toCharArray())
+                while (zipInputStream.getNextEntry() != null && isOnProgress) {
+                    count++
+                }
+                zipInputStream.close()
             }
-            zipInputStream.close()
-            uriStream?.close()
         } catch (e: IOException) {
+            // A wrong password or a damaged entry stops the count here; decompress reports it from its own read.
             e.printStackTrace()
+        } finally {
+            try {
+                uriStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
         return count
     }
@@ -374,7 +404,7 @@ class ZipHelper(
     ): ExtractionResult {
         if (uri == null) return ExtractionResult.INVALID_ARCHIVE
         showNotification(NOTIFICATION_DECOMPRESS_ID, "Full data recovery", "Recovery of all data is in progress.", NotificationConstants.ACTION_FULL_RECOVERY_CANCEL)
-        val fileCount = countFileEntry(uri)
+        val fileCount = countFileEntry(uri, password)
         return when {
             password.isNullOrEmpty() -> decompressPlain(uri, fileCount)
             else -> decompressEncrypted(uri, password, fileCount)
