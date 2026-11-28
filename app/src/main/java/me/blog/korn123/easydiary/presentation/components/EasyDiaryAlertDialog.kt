@@ -199,7 +199,7 @@ private const val TITLE_ICON_SIZE_DP = 24F
  * The title is 1.2 times the text size setting: `config.settingFontSize` is a px value, so the title font size
  * is `settingFontSize * 1.2` px and the setting scales it as it scales the body.
  */
-private const val TITLE_FONT_SIZE_SCALE = 1.2F
+private const val TITLE_FONT_SIZE_SCALE = 1.0F
 
 /** `dialog_message.xml` carries the message with the 15dp padding of the app cards. */
 private const val CONTENT_PADDING_DP = 15F
