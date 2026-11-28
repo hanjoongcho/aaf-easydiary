@@ -1228,4 +1228,22 @@
     <string name="backup_full_password_confirm_hint">Confirm password</string>
     <string name="backup_full_password_mismatch">The passwords do not match.</string>
     <string name="backup_full_password_continue">Continue</string>
+    <string name="recovery_full_password_title">Backup password</string>
+    <string name="recovery_full_password_description">This backup file is encrypted. Enter the password that was set when it was created.</string>
+    <string name="recovery_full_password_hint">Password</string>
+    <string name="recovery_full_password_empty">Enter the password of this backup file.</string>
+    <string name="recovery_full_password_wrong">Wrong password. Please try again.</string>
+    <string name="recovery_full_password_continue">Recover</string>
+    <string name="recovery_full_invalid_archive">This file is not a valid backup file.</string>
+    <string name="recovery_full_failed_title">Import failed</string>
+    <string name="backup_full_notification_title">Full data backup</string>
+    <string name="backup_full_notification_preparing">Preparing to backup all data ...</string>
+    <string name="backup_full_notification_compressing">Compressing</string>
+    <string name="backup_full_complete_title">Export complete</string>
+    <string name="backup_full_complete_message">The exported file size is %s</string>
+    <string name="recovery_full_notification_title">Full data recovery</string>
+    <string name="recovery_full_notification_progress">Recovery of all data is in progress.</string>
+    <string name="recovery_full_notification_decompressing">Decompressing</string>
+    <string name="recovery_full_complete_title">Import complete</string>
+    <string name="recovery_full_complete_message">You can now select a restore point using the Restore Diary feature.</string>
 </resources>

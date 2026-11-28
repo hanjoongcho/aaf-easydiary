@@ -1228,4 +1228,22 @@
     <string name="backup_full_password_confirm_hint">Confirmar contraseña</string>
     <string name="backup_full_password_mismatch">Las contraseñas no coinciden.</string>
     <string name="backup_full_password_continue">Continuar</string>
+    <string name="recovery_full_password_title">Contraseña de la copia de seguridad</string>
+    <string name="recovery_full_password_description">Este archivo de copia de seguridad está cifrado. Introduce la contraseña que se estableció al crearlo.</string>
+    <string name="recovery_full_password_hint">Contraseña</string>
+    <string name="recovery_full_password_empty">Introduce la contraseña de este archivo de copia de seguridad.</string>
+    <string name="recovery_full_password_wrong">Contraseña incorrecta. Inténtalo de nuevo.</string>
+    <string name="recovery_full_password_continue">Restaurar</string>
+    <string name="recovery_full_invalid_archive">Este archivo no es un archivo de copia de seguridad válido.</string>
+    <string name="recovery_full_failed_title">Error al importar</string>
+    <string name="backup_full_notification_title">Copia de seguridad de los datos completos</string>
+    <string name="backup_full_notification_preparing">Preparando la copia de seguridad de todos los datos...</string>
+    <string name="backup_full_notification_compressing">Comprimiendo</string>
+    <string name="backup_full_complete_title">Exportación completada</string>
+    <string name="backup_full_complete_message">El tamaño del archivo exportado es %s</string>
+    <string name="recovery_full_notification_title">Recuperación de los datos completos</string>
+    <string name="recovery_full_notification_progress">La recuperación de todos los datos está en curso.</string>
+    <string name="recovery_full_notification_decompressing">Descomprimiendo</string>
+    <string name="recovery_full_complete_title">Importación completada</string>
+    <string name="recovery_full_complete_message">Ahora puedes seleccionar un punto de restauración con la función «Recuperar diario».</string>
 </resources>

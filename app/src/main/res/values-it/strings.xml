@@ -1228,4 +1228,22 @@
     <string name="backup_full_password_confirm_hint">Conferma password</string>
     <string name="backup_full_password_mismatch">Le password non coincidono.</string>
     <string name="backup_full_password_continue">Continua</string>
+    <string name="recovery_full_password_title">Password del backup</string>
+    <string name="recovery_full_password_description">Questo file di backup è crittografato. Inserisci la password impostata al momento della creazione.</string>
+    <string name="recovery_full_password_hint">Password</string>
+    <string name="recovery_full_password_empty">Inserisci la password di questo file di backup.</string>
+    <string name="recovery_full_password_wrong">Password errata. Riprova.</string>
+    <string name="recovery_full_password_continue">Ripristina</string>
+    <string name="recovery_full_invalid_archive">Questo file non è un file di backup valido.</string>
+    <string name="recovery_full_failed_title">Importazione non riuscita</string>
+    <string name="backup_full_notification_title">Backup completo</string>
+    <string name="backup_full_notification_preparing">Preparazione del backup di tutti i dati...</string>
+    <string name="backup_full_notification_compressing">Compressione in corso</string>
+    <string name="backup_full_complete_title">Esportazione completata</string>
+    <string name="backup_full_complete_message">La dimensione del file esportato è %s</string>
+    <string name="recovery_full_notification_title">Ripristino completo dei dati</string>
+    <string name="recovery_full_notification_progress">Il ripristino di tutti i dati è in corso.</string>
+    <string name="recovery_full_notification_decompressing">Decompressione in corso</string>
+    <string name="recovery_full_complete_title">Importazione completata</string>
+    <string name="recovery_full_complete_message">Ora puoi selezionare un punto di ripristino con la funzione «Ripristina diario».</string>
 </resources>

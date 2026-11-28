@@ -7,6 +7,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.toDisplaySize
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
@@ -28,8 +29,8 @@ class FullBackupWorker(
         val notification =
             mZipHelper.createNotification(
                 NOTIFICATION_COMPRESS_ID,
-                "Full data backup",
-                "Preparing to backup all data ...",
+                context.getString(R.string.backup_full_notification_title),
+                context.getString(R.string.backup_full_notification_preparing),
                 NotificationConstants.ACTION_FULL_BACKUP_CANCEL,
             )
         try {
@@ -69,7 +70,11 @@ class FullBackupWorker(
 
             // WorkManager가 종료될 때 생성해둔 포그라운드 노티가 제거되므로,
             // 별도의 일반 Notification ID(NOTIFICATION_GMS_BACKUP_COMPLETE_ID)로 상단 바에 알림을 새로 띄워 유지시킵니다.
-            mZipHelper.updateNotification(NOTIFICATION_COMPRESS_COMPLETE_ID, "Export complete", "The exported file size is $compressFileSize")
+            mZipHelper.updateNotification(
+                NOTIFICATION_COMPRESS_COMPLETE_ID,
+                context.getString(R.string.backup_full_complete_title),
+                context.getString(R.string.backup_full_complete_message, compressFileSize),
+            )
         } else {
             compressFile.delete()
             NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)

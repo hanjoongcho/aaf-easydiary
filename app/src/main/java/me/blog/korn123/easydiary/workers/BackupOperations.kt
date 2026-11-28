@@ -15,8 +15,10 @@ internal class BackupOperations private constructor(
     val continuation: WorkContinuation,
 ) {
     /**
-     * @param password zip password of the full backup. It is handed to [FullBackupWorker] as one-off work data and
-     * never stored anywhere else; null or blank keeps the archive unencrypted.
+     * @param password zip password of the full backup. On [WorkerConstants.WORK_MODE_BACKUP] it encrypts the archive
+     * that is written, on [WorkerConstants.WORK_MODE_RECOVERY] it opens the encrypted archive that was chosen. It is
+     * handed to the worker as one-off work data and never stored anywhere else; null or blank keeps the archive
+     * unencrypted.
      */
     internal class Builder(
         private val context: Context,

@@ -1228,4 +1228,22 @@
     <string name="backup_full_password_confirm_hint">确认密码</string>
     <string name="backup_full_password_mismatch">两次输入的密码不一致。</string>
     <string name="backup_full_password_continue">继续</string>
+    <string name="recovery_full_password_title">备份密码</string>
+    <string name="recovery_full_password_description">这是加密的备份文件。请输入创建时设置的密码。</string>
+    <string name="recovery_full_password_hint">密码</string>
+    <string name="recovery_full_password_empty">请输入此备份文件的密码。</string>
+    <string name="recovery_full_password_wrong">密码不正确。请重试。</string>
+    <string name="recovery_full_password_continue">恢复</string>
+    <string name="recovery_full_invalid_archive">这不是有效的备份文件。</string>
+    <string name="recovery_full_failed_title">导入失败</string>
+    <string name="backup_full_notification_title">备份全部数据</string>
+    <string name="backup_full_notification_preparing">正在准备备份所有数据...</string>
+    <string name="backup_full_notification_compressing">正在压缩</string>
+    <string name="backup_full_complete_title">导出完成</string>
+    <string name="backup_full_complete_message">导出的文件大小为 %s</string>
+    <string name="recovery_full_notification_title">恢复全部数据</string>
+    <string name="recovery_full_notification_progress">正在恢复所有数据。</string>
+    <string name="recovery_full_notification_decompressing">正在解压</string>
+    <string name="recovery_full_complete_title">导入完成</string>
+    <string name="recovery_full_complete_message">现在可以在「恢复日记」功能中选择恢复点。</string>
 </resources>
