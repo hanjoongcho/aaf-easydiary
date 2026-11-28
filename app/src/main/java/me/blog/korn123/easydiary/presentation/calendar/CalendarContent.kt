@@ -44,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +63,6 @@ import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
-import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
@@ -161,7 +159,6 @@ fun CalendarContent(
     enableScroll: Boolean = true,
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val startMonth = calendarViewModel.startMonth
     val endMonth = calendarViewModel.endMonth
     val selection = calendarViewModel.selection
@@ -217,9 +214,22 @@ fun CalendarContent(
         )
 
     val visibleMonth = state.firstVisibleMonth.yearMonth
+    val pendingScrollMonth = calendarViewModel.pendingScrollMonth
 
     LaunchedEffect(visibleMonth) {
         calendarViewModel.observeEventsForMonth(visibleMonth)
+    }
+
+    // rememberCalendarState keys its saved state on startMonth/endMonth, so widening the range
+    // replaces the state with a new instance whose range contains the month we asked to jump to.
+    // Keying on the state instance lets this run again with that new range instead of scrolling on
+    // a state that would ignore the request as out of range.
+    LaunchedEffect(state, pendingScrollMonth) {
+        val targetMonth = pendingScrollMonth ?: return@LaunchedEffect
+        if (!targetMonth.isBefore(state.startMonth) && !targetMonth.isAfter(state.endMonth)) {
+            state.scrollToMonth(targetMonth)
+            calendarViewModel.clearPendingScrollMonth()
+        }
     }
 
     val bottomPadding = navigationBottomPadding()
@@ -249,9 +259,7 @@ fun CalendarContent(
                         { _, year, month, dayOfMonth ->
                             val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
                             calendarViewModel.setSelectedDate(selectedDate)
-                            coroutineScope.launch {
-                                state.scrollToMonth(YearMonth.of(year, month + 1))
-                            }
+                            calendarViewModel.jumpToMonth(YearMonth.of(year, month + 1))
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),

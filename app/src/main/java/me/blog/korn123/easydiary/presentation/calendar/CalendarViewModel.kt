@@ -36,11 +36,37 @@ class CalendarViewModel
         var eventsMap by mutableStateOf<Map<LocalDate, List<Diary>>>(emptyMap())
             private set
         var isLoading by mutableStateOf(false)
+        var pendingScrollMonth by mutableStateOf<YearMonth?>(null)
+            private set
 
         private var currentObservingMonth: YearMonth? = null
 
         fun setSelectedDate(date: LocalDate?) {
             selection = date
+        }
+
+        /**
+         * Requests a jump to [targetMonth] and widens the calendar range when the month sits
+         * outside it, so that the state can actually scroll there.
+         *
+         * The margins mirror [observeEventsForMonth]: a month that lands within three months of
+         * either edge would expand the range again as soon as it becomes visible, and a range
+         * change rebuilds the calendar state (which starts again at the current month), so the
+         * jump would be undone. Widening the range up front keeps the landing month away from
+         * both edges.
+         */
+        fun jumpToMonth(targetMonth: YearMonth) {
+            if (!targetMonth.isAfter(startMonth.plusMonths(3))) {
+                startMonth = minOf(startMonth, targetMonth.minusYears(2))
+            }
+            if (!targetMonth.isBefore(endMonth.minusMonths(3))) {
+                endMonth = maxOf(endMonth, targetMonth.plusYears(2))
+            }
+            pendingScrollMonth = targetMonth
+        }
+
+        fun clearPendingScrollMonth() {
+            pendingScrollMonth = null
         }
 
         fun observeEventsForMonth(visibleMonth: YearMonth) {
